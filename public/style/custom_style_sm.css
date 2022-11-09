@@ -1,0 +1,72 @@
+/*Custom Appearance of Web Page including Navbar,Header Logo*/
+.sidebar-brand {
+  height: 6.375rem !important;
+}
+
+.bg-gradient-primary {
+    background-color: #1c3789!important;
+    background-image: none !important; 
+    /* background-size: cover;*/
+}
+
+.logo img{
+	max-height: none;
+    background-color: #fff;
+    border-radius: 50px !important;
+    margin-right: none;
+    padding: 5px;
+}
+
+.header{    
+	height: 75px;
+}
+
+.logo{
+	width: inherit;
+}
+
+.header .toggle-sidebar-btn{
+	padding-right: 20px;
+}
+
+.bg-sm {
+    background-color: #1c3789!important;
+}
+
+.side_navar_icon{
+	color:#000 !important;
+	background-color: yellow;
+}
+
+
+.sidebar_bg{
+	box-shadow: none !important;
+    background-color: #041c68e0  !important;
+	/*transition: none !important;*/
+	top: 70px !important;
+	/*width: 220px !important;*/
+}
+
+.navbar_bg{
+	color: #ffffff !important;
+    background: #041c68 !important;
+	border-radius: none !important;	
+}
+
+.navbar_icon{
+	color: #c0ff00 !important;
+}
+
+.navbar_header_bg{
+	/*transition: none !important;*/
+    box-shadow: none !important;
+    background-color: #041c68  !important;
+}
+
+.navbar_header_title{
+	color: #fff !important;
+}
+
+.toggle_sidebar{
+	color: #c0ff00 !important;
+}

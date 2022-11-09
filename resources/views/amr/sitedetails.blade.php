@@ -248,15 +248,6 @@
 				
                 <div class="tab-pane fade {{ $gateway_tab }}" id="bordered-sitegatewaylist" role="tabpanel" aria-labelledby="sitegatewaylist-tab">
 					<div class="card-body">
-			
-			
-						<!-- <nav class="d-flex justify-content-end" style="--bs-breadcrumb-divider: '|';">
-							  <ol class="breadcrumb">
-							  <li class="breadcrumb-item">
-							  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#CreateGatewayModal"><i class="bi bi-plus-circle"></i>&nbsp;Gateway</button>
-							  </li>
-							  </ol>
-						 </nav> -->
 				 
 			 			<div class="p-d3">
 									<div class="table-responsive">

@@ -448,7 +448,7 @@ else if (Request::is('site_details/'.@$SiteData->id)){
 		$(document).ready(function() {
 			var table = $('#gatewaylist').DataTable( {
 				"language": {
-						"lengthMenu":'<label class="col-form-label">Limit</label> <select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<label class="col-form-label">Limit: </label> <select class="form-select form-control form-control-sm">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -482,7 +482,10 @@ else if (Request::is('site_details/'.@$SiteData->id)){
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 				]
 			} );
-			$('<button type="button" class="new_item" data-bs-toggle="modal" data-bs-target="#CreateGatewayModal"><i class="bi bi-plus-circle"></i></button>&nbsp;<button type="button" class="offline_item" data-bs-toggle="modal" data-bs-target="#OfflineGatewayModal"><i class="bi bi-cloud-slash"></i></button>').appendTo('.additional_page_options');
+			$('<div class="btn-group" role="group" aria-label="Basic outlined example">'+
+				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateGatewayModal"></button>'+
+				'<button type="button" class="btn btn-danger offline_item bi bi-cloud-slash" data-bs-toggle="modal" data-bs-target="#OfflineGatewayModal"></button>'+
+			   '</div>').appendTo('.additional_page_options');
 		} );	
 
 
