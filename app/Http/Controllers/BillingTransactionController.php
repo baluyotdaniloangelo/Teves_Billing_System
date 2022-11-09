@@ -27,7 +27,7 @@ class BillingTransactionController extends Controller
 			//return redirect('/');
 		}
 		 */
-		return view("amr.site", compact('data','title'));
+		return view("pages.billing", compact('data','title'));
 		
 	}   
 	
@@ -129,7 +129,7 @@ class BillingTransactionController extends Controller
 		}
 		
 		$SiteData = BillingTransactionModel::find($siteID);
-		return view("amr.sitedetails", compact('data','SiteData','title','status_tab','gateway_tab','meter_tab','status_aria_selected','gateway_aria_selected','meter_aria_selected'));
+		return view("pages.sitedetails", compact('data','SiteData','title','status_tab','gateway_tab','meter_tab','status_aria_selected','gateway_aria_selected','meter_aria_selected'));
 		
 		
 		
