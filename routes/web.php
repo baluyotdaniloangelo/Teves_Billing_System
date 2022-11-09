@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CAMRUserAuthController;
+use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\CAMRGatewayController;
 use App\Http\Controllers\CAMRGatewayDeviceController;
@@ -23,11 +23,11 @@ use App\Http\Controllers\CAMRSampleExcel;
 Route::get('/sample1', [CAMRSampleExcel::class,'sample1'])->name('site')->middleware('isLoggedIn');
 
 /*Login Page*/
-Route::get('/',[CAMRUserAuthController::class,'login'])->middleware('alreadyLoggedIn');
-Route::post('login-user', [CAMRUserAuthController::class,'loginUser'])->name('login-user');
+Route::get('/',[UserAuthController::class,'login'])->middleware('alreadyLoggedIn');
+Route::post('login-user', [UserAuthController::class,'loginUser'])->name('login-user');
 
 /*Logout*/
-Route::get('logout', [CAMRUserAuthController::class,'logout']);
+Route::get('logout', [UserAuthController::class,'logout']);
 
 /*Load Site*/
 Route::get('/billing_list', [BillingTransactionController::class,'billing_list'])->name('billing_list')->middleware('isLoggedIn');

@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class CAMRAuthCheck
+class AlreadyLoggedIn
 {
     /**
      * Handle an incoming request.
@@ -16,9 +16,10 @@ class CAMRAuthCheck
      */
     public function handle(Request $request, Closure $next)
     {
-		if(!Session()->has('loginID'))
+		if(Session()->has('loginID') && (url('/')==$request->url()))
 		{
-			return redirect('/')->with('fail', "You Have to Login First");
+			//return redirect('login')->with('fail', "You Have to Login First");
+			return back();
 		}
         return $next($request);
     }

@@ -8,7 +8,7 @@ use Hash;
 use Session;
 use Validator;
 
-class CAMRUserAuthController extends Controller
+class UserAuthController extends Controller
 {
     public function login(){
         return view("auth.login");
@@ -25,7 +25,7 @@ class CAMRUserAuthController extends Controller
 		if ($user){
 			if(Hash::check($request->InputPassword,$user->user_password)){
 				$request->session()->put('loginID', $user->id);
-				return redirect('site');
+				return redirect('billing_list');
 			}else{
 				return back()->with('fail', 'Incorrect Password');
 			}
