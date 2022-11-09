@@ -5,8 +5,8 @@
     <div class="d-flex align-items-center justify-content-between">
 	<i class="bi bi-list toggle-sidebar-btn toggle_sidebar"></i>
       <div class="logo d-flex align-items-center">
-		<img src="{{asset('client_logo/logo.png')}}" class="rounded" alt="..." style="width:82px;">
-        <span class="d-lg-block navbar_header_title">Centralize Automatic Meter Reading</span>
+		<img src="{{asset('client_logo/logo.png')}}" class="rounded" alt="..." style="width:145px;">
+        <span class="d-lg-block navbar_header_title">Billing System</span>
       </div>
       
     </div><!-- End Logo -->

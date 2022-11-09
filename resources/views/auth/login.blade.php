@@ -24,7 +24,7 @@
 					<img src="{{asset('client_logo/logo.png')}}" alt="" style="width:100px;">
 				  </div>
                   
-				  <h5 class="card-title text-center pb-0 fs-6" style="font-weight:bold !important; padding:0px !important">Centralize Automatic Meter Reading</h5>
+				  <h5 class="card-title text-center pb-0 fs-6" style="font-weight:bold !important; padding:0px !important">Billing System</h5>
                   </div>
 									@if(Session::has('success'))
 										

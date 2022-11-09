@@ -8,7 +8,7 @@
 
 <?php
 
-if (Request::is('site')){
+if (Request::is('billing_list')){
 
 ?>
 
@@ -19,7 +19,7 @@ if (Request::is('site')){
 
 	<!--Load Table-->
 	$(function () {
-    
+
 		var siteTable = $('#siteList').DataTable({
 			processing: true,
 			serverSide: true,
@@ -27,16 +27,21 @@ if (Request::is('site')){
 			ajax: "{{ route('SiteList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'company_no'},           
-					{data: 'business_entity'},
-					{data: 'site_code'},
-					{data: 'site_name'},
-					{data: 'site_cut_off'},
-					{data: 'status', name: 'status', orderable: true, searchable: true},
+					{data: 'order_date'},   
+					{data: 'drivers_name'},     
+					{data: 'order_po_number'},     
+					{data: 'plate_no'},     
+					{data: 'product_name'},     
+					{data: 'order_quantity'},    
+					{data: 'product_price'},     
+					{data: 'order_total_amount'},  
+					{data: 'order_time'},  
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			]
 		});
-		
+		$('<div class="btn-group" role="group" aria-label="Basic outlined example">'+
+				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
+				'</div>').appendTo('.additional_page_options');
 	});
 	
 	<!--Save New Site-->

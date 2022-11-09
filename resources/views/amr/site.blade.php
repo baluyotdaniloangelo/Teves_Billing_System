@@ -8,30 +8,27 @@
 			  <div class="card">
 			  
 				<div class="card-header ">
-				  <h5 class="card-title bi bi-building">&nbsp;Site Management</h5>           
+				  <h5 class="card-title bi bi-building">{{ $title }}</h5>           
 				  </div>
 				</div>			  
 		 
             <div class="card-body">
-				  <nav class="d-flex justify-content-end" style="--bs-breadcrumb-divider: '|';">
-					  <ol class="breadcrumb">
-					  <li class="breadcrumb-item">
-					  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#CreateSiteModal"><i class="bi bi-plus-circle"></i>&nbsp; Site</button>
-					  </li>
-					  </ol>
-				  </nav>
+				
 				<div class="p-d3">
 									<div class="table-responsive">
 										<table class="table table-bordered dataTable" id="siteList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Company No.</th>
-													<th>Business Entity</th>
-													<th>Site Code</th>
-													<th>Description</th>																						
-													<th>Cut Off</th>
-													<th>Status</th>
+													<th>Date</th>
+													<th>Driver's Name</th>
+													<th>P.O. No.</th>
+													<th>Plate Number</th>																						
+													<th>Product</th>
+													<th>Liters</th>
+													<th>Price</th>
+													<th>Amount</th>
+													<th>Time</th>
 													<th>Action</th>
 												</tr>
 											</thead>				

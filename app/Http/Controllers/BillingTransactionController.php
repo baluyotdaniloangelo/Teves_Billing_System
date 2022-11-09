@@ -4,29 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\SiteForAdminModel;
+use App\Models\BillingTransactionModel;
 use Session;
 use Validator;
 use DataTables;
 
-class CAMRSiteController extends Controller
+class BillingTransactionController extends Controller
 {
 	
 	/*Load Site Interface*/
-	public function site(){
+	public function billing_list(){
 		
-		$title = 'Site Management';
+		$title = 'Billing Transaction List';
 		$data = array();
 		if(Session::has('loginID')){
 			$data = User::where('id', '=', Session::get('loginID'))->first();
 		
 		}
 		
-		if(Session::has('site_current_tab')){
+/* 		if(Session::has('site_current_tab')){
 			Session::pull('site_current_tab');
 			//return redirect('/');
 		}
-		
+		 */
 		return view("amr.site", compact('data','title'));
 		
 	}   
@@ -35,18 +35,28 @@ class CAMRSiteController extends Controller
 	public function getSite(Request $request)
     {
 
-		$sites = SiteForAdminModel::get();
+		$sites = BillingTransactionModel::get();
 		if ($request->ajax()) {
+
+    	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_billing_table.product_idx',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.client_idx',
+					'teves_client_table.client_name',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time',
+					'teves_billing_table.updated_at']);
 		
-		$data= SiteForAdminModel::select(
-		'id',
-		'company_no',
-        'site_code',
-        'business_entity',
-        'site_name',
-        'site_cut_off',
-		'last_log_update'
-		);		
 
 		return DataTables::of($data)
 				->addIndexColumn()
@@ -60,48 +70,13 @@ class CAMRSiteController extends Controller
 										
 					$actionBtn = '
 					<div align="center" class="action_table_menu_site">
-					<a href="' . url('site_details/'.$row->id) .'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view"></a>
 					<a href="#" data-id="'.$row->id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSite"></a>
 					<a href="#" data-id="'.$row->id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSite"></a>
 					</div>';
                     return $actionBtn;
                 })
 				
-				->addColumn('status', function($row){
-                    
-					$last_log_update = $row->last_log_update;
-					
-						/*FROM LOGS*/
-						$_date_format = strtotime($last_log_update);
-						$date_format = date('Y-m-d H:i:s',$_date_format);
-						
-						/*SERVER DATETIME*/
-						$_server_time=date('Y-m-d H:i:s');
-						$server_time_current = strtotime($_server_time);
-						
-						$date1=date_create("$_server_time");
-						$date2=date_create("$date_format");
-								
-						$diff					= date_diff($date1,$date2);
-						$days_last_active 		= $diff->format("%a");
-						
-						if($last_log_update == "0000/00/00 00:00"){
-							$statusBtn = '<div style="color:black; font-weight:bold; text-align:center;" title="No Meter Connected on the Gateway/Spare">No Data</div>';
-						}
-						else if($diff->format("%a")<=0){
-							$statusBtn = '<a href="#" class="btn-circle btn-sm bi bi-cloud-check-fill btn_icon_table btn_icon_table_status_online" title="Last Status Update : '.$last_log_update.'"></a>';
-						}else{
-							$statusBtn = '<a href="#" class="btn-circle btn-sm bi bi-cloud-slash-fill btn_icon_table btn_icon_table_status_offline" title="Offline Since : '.$last_log_update.'"></a>';
-						}		
-										
-					$actionBtn = '
-					<div align="center" class="row_status_table_site">
-					'.$statusBtn.'
-					</div>';
-                    return $actionBtn;
-                })
-				
-				->rawColumns(['status','action'])
+				->rawColumns(['action'])
                 ->make(true);
 		
 		}
@@ -153,7 +128,7 @@ class CAMRSiteController extends Controller
 	
 		}
 		
-		$SiteData = SiteForAdminModel::find($siteID);
+		$SiteData = BillingTransactionModel::find($siteID);
 		return view("amr.sitedetails", compact('data','SiteData','title','status_tab','gateway_tab','meter_tab','status_aria_selected','gateway_aria_selected','meter_aria_selected'));
 		
 		
@@ -164,7 +139,7 @@ class CAMRSiteController extends Controller
 	public function site_info(Request $request){
 
 		$siteID = $request->siteID;
-		$data = SiteForAdminModel::find($siteID);
+		$data = BillingTransactionModel::find($siteID);
 		return response()->json($data);
 		
 	}
@@ -173,7 +148,7 @@ class CAMRSiteController extends Controller
 	public function delete_site_confirmed(Request $request){
 
 		$siteID = $request->siteID;
-		SiteForAdminModel::find($siteID)->delete();
+		BillingTransactionModel::find($siteID)->delete();
 		return 'Deleted';
 		
 	} 
@@ -196,7 +171,7 @@ class CAMRSiteController extends Controller
 			$data = $request->all();
 			#insert
 					
-			$site = new SiteForAdminModel();
+			$site = new BillingTransactionModel();
 			$site->business_entity = $request->business_entity;
 			$site->site_code = $request->site_code;
 			$site->site_name = $request->site_description;
@@ -235,8 +210,8 @@ class CAMRSiteController extends Controller
 			$data = $request->all();
 			#insert
 					
-			$site = new SiteForAdminModel();
-			$site = SiteForAdminModel::find($request->SiteID);
+			$site = new BillingTransactionModel();
+			$site = BillingTransactionModel::find($request->SiteID);
 			$site->business_entity = $request->business_entity;
 			$site->site_code = $request->site_code;
 			$site->site_name = $request->site_description;

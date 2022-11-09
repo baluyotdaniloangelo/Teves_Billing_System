@@ -14,7 +14,7 @@
     background-color: #fff;
     border-radius: 50px !important;
     margin-right: none;
-    padding: 5px;
+    padding: 6px;
 }
 
 .header{    
@@ -60,7 +60,7 @@
 .navbar_header_bg{
 	/*transition: none !important;*/
     box-shadow: none !important;
-    background-color: #041c68  !important;
+    background-color: #2b2a2a !important;
 }
 
 .navbar_header_title{

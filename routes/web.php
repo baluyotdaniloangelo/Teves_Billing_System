@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CAMRUserAuthController;
-use App\Http\Controllers\CAMRSiteController;
+use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\CAMRGatewayController;
 use App\Http\Controllers\CAMRGatewayDeviceController;
 
@@ -30,28 +30,28 @@ Route::post('login-user', [CAMRUserAuthController::class,'loginUser'])->name('lo
 Route::get('logout', [CAMRUserAuthController::class,'logout']);
 
 /*Load Site*/
-Route::get('/site', [CAMRSiteController::class,'site'])->name('site')->middleware('isLoggedIn');
-Route::get('site/list', [CAMRSiteController::class, 'getSite'])->name('SiteList')->middleware('isLoggedIn');
+Route::get('/billing_list', [BillingTransactionController::class,'billing_list'])->name('billing_list')->middleware('isLoggedIn');
+Route::get('site/list', [BillingTransactionController::class, 'getSite'])->name('SiteList')->middleware('isLoggedIn');
 
 /*Create Site*/
-#Route::get('/create_site', [CAMRSiteController::class,'create_site'])->name('create_site')->middleware('isLoggedIn');
-Route::post('/create_site_post', [CAMRSiteController::class,'create_site_post'])->name('create_site_post')->middleware('isLoggedIn');
+#Route::get('/create_site', [BillingTransactionController::class,'create_site'])->name('create_site')->middleware('isLoggedIn');
+Route::post('/create_site_post', [BillingTransactionController::class,'create_site_post'])->name('create_site_post')->middleware('isLoggedIn');
 
 /*Update Site*/
-#Route::get('/edit_site/{siteID}', [CAMRSiteController::class,'edit_site'])->name('edit_site')->middleware('isLoggedIn');
-Route::post('/update_site_post', [CAMRSiteController::class,'update_site_post'])->name('update_site_post')->middleware('isLoggedIn');
+#Route::get('/edit_site/{siteID}', [BillingTransactionController::class,'edit_site'])->name('edit_site')->middleware('isLoggedIn');
+Route::post('/update_site_post', [BillingTransactionController::class,'update_site_post'])->name('update_site_post')->middleware('isLoggedIn');
 
 /*GET Site Info*/
-Route::post('/site_info', [CAMRSiteController::class, 'site_info'])->name('site_info')->middleware('isLoggedIn');
+Route::post('/site_info', [BillingTransactionController::class, 'site_info'])->name('site_info')->middleware('isLoggedIn');
 
 /*Confirm Delete Site*/
-Route::post('/delete_site_confirmed', [CAMRSiteController::class, 'delete_site_confirmed'])->name('delete_site_confirmed')->middleware('isLoggedIn');
+Route::post('/delete_site_confirmed', [BillingTransactionController::class, 'delete_site_confirmed'])->name('delete_site_confirmed')->middleware('isLoggedIn');
 
 /*Site Dashboard*/
-Route::get('/site_details/{siteID}', [CAMRSiteController::class,'site_details'])->name('site_details')->middleware('isLoggedIn');
+Route::get('/site_details/{siteID}', [BillingTransactionController::class,'site_details'])->name('site_details')->middleware('isLoggedIn');
 
 /*Save Site Current Tab*/
-Route::post('/save_site_tab', [CAMRSiteController::class, 'save_site_tab'])->name('save_site_tab')->middleware('isLoggedIn');
+Route::post('/save_site_tab', [BillingTransactionController::class, 'save_site_tab'])->name('save_site_tab')->middleware('isLoggedIn');
 
 /*Load Gateway List Persite*/
 Route::get('getGateway/', [CAMRGatewayController::class,'getGateway'])->name('getGateway')->middleware('isLoggedIn');
