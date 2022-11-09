@@ -187,21 +187,21 @@
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-						
+		
+			<a href="{{ route('billing_list') }}" class="sidebar_li_a">
+              <i class="bi bi-circle"></i><span>Billing</span>
+            </a>
+		
             <a href="{{ route('site') }}" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Site</span>
+              <i class="bi bi-circle"></i><span>Product</span>
             </a>
 			
 			<a href="components-alerts.html" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Gateway</span>
+              <i class="bi bi-circle"></i><span>Client</span>
             </a>
 			
 			<a href="components-alerts.html" class="sidebar_li_a">
               <i class="bi bi-circle"></i><span>User</span>
-            </a>
-			
-			<a href="components-alerts.html" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Configuration File</span>
             </a>
 			
           </li>
@@ -215,17 +215,7 @@
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="charts-chartjs.html" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Chart.js</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-apexcharts.html" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>ApexCharts</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-echarts.html" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>ECharts</span>
+              <i class="bi bi-circle"></i><span>Billing</span>
             </a>
           </li>
         </ul>
