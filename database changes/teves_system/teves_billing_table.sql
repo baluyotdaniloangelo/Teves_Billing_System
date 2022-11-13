@@ -15,7 +15,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Dumping structure for table teves_system.teves_billing_table
-DROP TABLE IF EXISTS `teves_billing_table`;
 CREATE TABLE IF NOT EXISTS `teves_billing_table` (
   `billing_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_idx` int(11) NOT NULL DEFAULT 0,

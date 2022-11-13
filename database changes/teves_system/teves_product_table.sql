@@ -15,7 +15,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Dumping structure for table teves_system.teves_product_table
-DROP TABLE IF EXISTS `teves_product_table`;
 CREATE TABLE IF NOT EXISTS `teves_product_table` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` text NOT NULL COMMENT 'SITE CODE TO Used on Gateway',

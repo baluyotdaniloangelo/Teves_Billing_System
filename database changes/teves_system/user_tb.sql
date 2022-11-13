@@ -15,7 +15,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Dumping structure for table teves_system.user_tb
-DROP TABLE IF EXISTS `user_tb`;
 CREATE TABLE IF NOT EXISTS `user_tb` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(100) NOT NULL,
