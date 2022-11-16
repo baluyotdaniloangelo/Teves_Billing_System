@@ -29,9 +29,9 @@ Route::post('login-user', [UserAuthController::class,'loginUser'])->name('login-
 /*Logout*/
 Route::get('logout', [UserAuthController::class,'logout']);
 
-/*Load Site*/
-Route::get('/billing_list', [BillingTransactionController::class,'billing_list'])->name('billing_list')->middleware('isLoggedIn');
-Route::get('site/list', [BillingTransactionController::class, 'getSite'])->name('SiteList')->middleware('isLoggedIn');
+/*Load Billing Transaction*/
+Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
+Route::get('billing/list', [BillingTransactionController::class, 'getBillingTransactionList'])->name('getBillingTransactionList')->middleware('isLoggedIn');
 
 /*Create Site*/
 #Route::get('/create_site', [BillingTransactionController::class,'create_site'])->name('create_site')->middleware('isLoggedIn');

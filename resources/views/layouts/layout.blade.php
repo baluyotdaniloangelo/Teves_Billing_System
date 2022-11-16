@@ -8,7 +8,7 @@
 
 <?php
 
-if (Request::is('billing_list')){
+if (Request::is('billing')){
 
 ?>
 
@@ -20,11 +20,11 @@ if (Request::is('billing_list')){
 	<!--Load Table-->
 	$(function () {
 
-		var siteTable = $('#siteList').DataTable({
+		var BillingListTable = $('#getBillingTransactionList').DataTable({
 			processing: true,
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
-			ajax: "{{ route('SiteList') }}",
+			ajax: "{{ route('getBillingTransactionList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date'},   
@@ -39,9 +39,9 @@ if (Request::is('billing_list')){
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			]
 		});
-		$('<div class="btn-group" role="group" aria-label="Basic outlined example">'+
+		/*$('<div class="btn-group" role="group" aria-label="Basic outlined example">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
-				'</div>').appendTo('.additional_page_options');
+				'</div>').appendTo('.additional_page_options');*/
 	});
 	
 	<!--Save New Site-->

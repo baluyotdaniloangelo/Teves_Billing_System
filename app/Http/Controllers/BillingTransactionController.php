@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
+use App\Models\ProductModel;
+use App\Models\ClientModel;
 use Session;
 use Validator;
 use DataTables;
@@ -13,29 +15,29 @@ class BillingTransactionController extends Controller
 {
 	
 	/*Load Site Interface*/
-	public function billing_list(){
+	public function billing(){
 		
 		$title = 'Billing Transaction List';
 		$data = array();
 		if(Session::has('loginID')){
+			
 			$data = User::where('id', '=', Session::get('loginID'))->first();
+			
+			$product_data = ProductModel::all();
+			
+			$client_data = ClientModel::all();
 		
 		}
-		
-/* 		if(Session::has('site_current_tab')){
-			Session::pull('site_current_tab');
-			//return redirect('/');
-		}
-		 */
-		return view("pages.billing", compact('data','title'));
+
+		return view("pages.billing", compact('data','title','product_data','client_data'));
 		
 	}   
 	
 	/*Fetch Site List using Datatable*/
-	public function getSite(Request $request)
+	public function getBillingTransactionList(Request $request)
     {
 
-		$sites = BillingTransactionModel::get();
+		$list = BillingTransactionModel::get();
 		if ($request->ajax()) {
 
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
@@ -232,22 +234,5 @@ class BillingTransactionController extends Controller
 			}
 	}
 
-	public function save_site_tab(Request $request){ 
-		
-		/*
-		$request->validate([
-            'user_name'=>'required|min:1|max:12', 
-            'InputPassword'=>'required|min:6|max:20'
-        ]);
-		*/
-		
-        $tab = $request->tab;
-		
-		$request->session()->put('site_current_tab', $tab);
-		//return back()->with('fail', 'This Username is not Registered.');
-				
-    }
-
-
-    
+	
 }

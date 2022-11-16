@@ -13,10 +13,22 @@
 				</div>			  
 		 
             <div class="card-body">
-				
+			
+				<div class="row mb-2">
+						  
+					<div class="col-12">
+						<div class="d-flex justify-content-end">
+						<div class="btn-group" role="group" aria-label="Basic outlined example">
+							<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>
+						</div>
+						</div>
+					</div>
+				</div>
+	
+			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="siteList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable" id="getBillingTransactionList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -81,96 +93,106 @@
             </div>
         </div>
     </div>
-	
+
 	<!--Modal to Create Site-->
-	<div class="modal fade" id="CreateSiteModal" tabindex="-1">
-                <div class="modal-dialog modal-lg">
+	<div class="modal fade" id="CreateBillingModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Create Site</h5>
+                      <h5 class="modal-title">Create Gateway</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						<button type="button" class="btn btn-info bi bi-question navbar_icon" data-bs-toggle="modal" data-bs-target="#SiteManual" id="manualbtn"></button>
+						<button type="button" class="btn btn-info bi bi-question navbar_icon" data-bs-toggle="modal" data-bs-target="#GatewayManual" id="manualbtn"></button>
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
                     <div class="modal-body">
-
-					  <form class="g-3 needs-validation" id="siteform">
+					
+					  <form class="g-2 needs-validation" id="gatewayform">
 					  
 						<div class="row mb-2">
-					  
-							<div class="col-md-6">
-							<label for="business_entity" class="form-label">Business Entity</label>	
-							<input type="text" class="form-control" name="business_entity" id="business_entity" value="" required>
-							<span class="valid-feedback" id="business_entityError" title="Required"></span>
-							</div>
-						
-							<div class="col-md-6">
-					 
-							<label for="site_code" class="form-label">Site Code</label>
-							<input type="text" class="form-control " name="site_code" id="site_code" value="" required>
-							<span class="valid-feedback" id="site_codeError"></span>
-							</div>
-						
-					    </div>
-					  
-						<div class="col-md-12 mb-2" class="form-label">
-							<label for="site_description">Site Description</label>
-							<input type="text" class="form-control " name="site_description" id="site_description" value="" required>
-							<span class="valid-feedback" id="site_descriptionError"></span>
-						</div>
-					   
-					    <div class="row mb-2">
-					  
-							<div class="col-md-6">
-							<label for="building_type" class="form-label">Type</label>
-							<select class="form-control form-select " id="building_type">
-							<option value="MALL">Mall</option>
-							<option value="CPG">CPG</option>
-							</select>
-							</div>
-						
-							<div class="col-md-6">
-							<label for="site_cut_off" class="form-label">Cut Off</label>
-							<input type="number" class="form-control " name="site_cut_off" value="" min='1' max='31' readonly>
-							</div>
-						
-						</div>
-					   
-						<div class="col-12 mb-2">
-							<label for="device_ip_range">IP Address Range</label>
-							<input type="text" class="form-control " name="device_ip_range" value="" >
+						  <label for="gateway_sn" class="col-sm-3 col-form-label">order_date</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="order_date" id="order_date" value="" required>
+							<span class="valid-feedback" id="order_dateError" title="Required"></span>
+						  </div>
 						</div>
 						
-					    <div class="row mb-2">
-					  
-						<div class="col-4">
-						  <label for="ip_netmask">Netmask</label>
-						  <input type="text" class="form-control " name="ip_netmask" value="" >
-						</div>
-						<div class="col-md-4">
-						  <label for="ip_network">Network</label>
-						  <input type="text" class="form-control " name="ip_network" value="" >
-						</div>
-						<div class="col-md-4">
-						  <label for="ip_gateway">Gateway</label>
-						  <input type="text" class="form-control " name="ip_gateway" value="" >
+						<div class="row mb-2">
+						  <label for="gateway_mac" class="col-sm-3 col-form-label">order_time</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="order_time" id="order_time" value="" required>
+							<span class="valid-feedback" id="order_timeError"></span>
+						  </div>
 						</div>	
 						
+						<div class="row mb-2">
+						  <label for="gateway_ip" class="col-sm-3 col-form-label">order_po_number</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="order_po_number" id="order_po_number" value="" required>
+							<span class="valid-feedback" id="order_po_numberError"></span>
+						  </div>
 						</div>
+						
+						<div class="row mb-2">
+						  <label for="connection_type" class="col-sm-3 col-form-label">client_idx</label>
+						  <div class="col-sm-9">
+							<select class="form-control form-select " name="client_idx" id="client_idx" required>
+							<option selected="" disabled="" value="">Choose...</option>
+								@foreach ($client_data as $client_data_cols)
+									<option value="{{$client_data_cols->client_id}}">{{$client_data_cols->client_name}}</option>
+								@endforeach
+							</select>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="physical_location" class="col-sm-3 col-form-label">plate_no</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="plate_no" id="plate_no" value="" required>
+							<span class="valid-feedback" id="plate_noError"></span>
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="gateway_description" class="col-sm-3 col-form-label">drivers_name</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="drivers_name" id="drivers_name" value="">
+							<span class="valid-feedback" id="drivers_nameError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="connection_type" class="col-sm-3 col-form-label">product_idx X Quantity</label>
+						  <div class="col-sm-9">
+							<div class="input-group mb-3">
+							  <select class="form-control form-select" aria-label="Product">
+							  <option selected="">Open this select menu</option>
+							  
+								@foreach ($product_data as $product_data_cols)
+									<option value="{{$product_data_cols->product_id}}">{{$product_data_cols->product_name}}</option>
+								@endforeach
 								
+							  </select>
+							  <span class="input-group-text" id="basic-addon1">X</span>
+							  <input type="text" class="form-control" placeholder="Quantity" aria-label="Username" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" >
+							</div>
+						  </div>
+						</div>	
+						
+						
+									
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
 						
-						  <button type="submit" class="btn btn-success bi bi-save-fill navbar_icon btn-sm" id="save-site"> Submit</button>
-						  <button type="reset" class="btn btn-primary bi bi-backspace-fill navbar_icon btn-sm" id="clear-site"> Reset</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-gateway"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-gateway"> Reset</button>
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>
-              </div>
+             </div>
 	
 	
 	<!--Modal to Update Site-->

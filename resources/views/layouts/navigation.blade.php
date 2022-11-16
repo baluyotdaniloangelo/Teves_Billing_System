@@ -188,7 +188,7 @@
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
 		
-			<a href="{{ route('billing_list') }}" class="sidebar_li_a">
+			<a href="{{ route('billing') }}" class="sidebar_li_a">
               <i class="bi bi-circle"></i><span>Billing</span>
             </a>
 		
