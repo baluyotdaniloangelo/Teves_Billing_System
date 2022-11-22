@@ -21,6 +21,16 @@ if (Request::is('billing')){
 	$(function () {
 
 		var BillingListTable = $('#getBillingTransactionList').DataTable({
+			"language": {
+						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+		    },
 			processing: true,
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
@@ -39,51 +49,51 @@ if (Request::is('billing')){
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			]
 		});
-		/*$('<div class="btn-group" role="group" aria-label="Basic outlined example">'+
+		$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-left: 10px;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
-				'</div>').appendTo('.additional_page_options');*/
+				'</div>').appendTo('#getBillingTransactionList_length');
 	});
 	
 	<!--Save New Site-->
-	$("#save-site").click(function(event){
+	$("#save-billing-transaction").click(function(event){
 			
 			event.preventDefault();
 			
 					/*Reset Warnings*/
-					$('#business_entityError').text('');
-					$('#site_codeError').text('');
-					$('#site_descriptionError').text('');				  
-					$('#site_cut_offError').text('');
-					$('#device_ip_rangeError').text('');
-					$('#ip_netmaskError').text('');
-					$('#ip_networkError').text('');
-					$('#ip_gatewayError').text('');
+					$('#order_dateError').text('');
+					$('#order_timeError').text('');
+					$('#order_po_numberError').text('');				  
+					$('#client_idxError').text('');
+					$('#plate_noError').text('');
+					$('#drivers_nameError').text('');
+					$('#product_idxError').text('');
+					$('#order_quantityError').text('');
 
 			document.getElementById('siteform').className = "g-3 needs-validation was-validated";
 
-			let business_entity 	= $("input[name=business_entity]").val();
-			let site_code 			= $("input[name=site_code]").val();
-			let site_description 	= $("input[name=site_description]").val();
+			let order_date 	= $("input[name=order_date]").val();
+			let order_time 			= $("input[name=order_time]").val();
+			let order_po_number 	= $("input[name=order_po_number]").val();
 			let building_type 		= $("#building_type").val();
-			let site_cut_off 		= $("input[name=site_cut_off]").val();
-			let device_ip_range 	= $("input[name=device_ip_range]").val();
-			let ip_netmask 			= $("input[name=ip_netmask]").val();
-			let ip_network 			= $("input[name=ip_network]").val();
-			let ip_gateway 			= $("input[name=ip_gateway]").val();
+			let client_idx 		= $("input[name=client_idx]").val();
+			let plate_no 	= $("input[name=plate_no]").val();
+			let drivers_name 			= $("input[name=drivers_name]").val();
+			let product_idx 			= $("input[name=product_idx]").val();
+			let order_quantity 			= $("input[name=order_quantity]").val();
 			
 			  $.ajax({
 				url: "/create_site_post",
 				type:"POST",
 				data:{
-				  business_entity:business_entity,
-				  site_code:site_code,
-				  site_description:site_description,
+				  order_date:order_date,
+				  order_time:order_time,
+				  order_po_number:order_po_number,
 				  building_type:building_type,
-				  site_cut_off:site_cut_off,
-				  device_ip_range:device_ip_range,
-				  ip_netmask:ip_netmask,
-				  ip_network:ip_network,
-				  ip_gateway:ip_gateway,
+				  client_idx:client_idx,
+				  plate_no:plate_no,
+				  drivers_name:drivers_name,
+				  product_idx:product_idx,
+				  order_quantity:order_quantity,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -93,44 +103,44 @@ if (Request::is('billing')){
 					$('.success_modal_bg').html(response.success);
 					$('#SuccessModal').modal('toggle');
 					
-					$('#business_entityError').text('');					
-					$('#site_codeError').text('');
-					$('#site_descriptionError').text('');				  
+					$('#order_dateError').text('');					
+					$('#order_timeError').text('');
+					$('#order_po_numberError').text('');				  
 				  
 				  }
 				},
 				error: function(error) {
 				 console.log(error);	
 				 
-				  $('#business_entityError').text(error.responseJSON.errors.business_entity);
-				  document.getElementById('business_entityError').className = "invalid-feedback";
+				  $('#order_dateError').text(error.responseJSON.errors.order_date);
+				  document.getElementById('order_dateError').className = "invalid-feedback";
 				  			  
-				if(error.responseJSON.errors.site_code=="The site code has already been taken."){
+				if(error.responseJSON.errors.order_time=="The site code has already been taken."){
 							  
-				  $('#site_codeError').html("<b>"+ site_code +"</b> has already been taken.");
-				  document.getElementById('site_codeError').className = "invalid-feedback";
-				  document.getElementById('site_code').className = "form-control is-invalid";
-				  $('#site_code').val("");
+				  $('#order_timeError').html("<b>"+ order_time +"</b> has already been taken.");
+				  document.getElementById('order_timeError').className = "invalid-feedback";
+				  document.getElementById('order_time').className = "form-control is-invalid";
+				  $('#order_time').val("");
 				  
 				}else{
 					
-				  $('#site_codeError').text(error.responseJSON.errors.site_description);
-				  document.getElementById('site_codeError').className = "invalid-feedback";		
+				  $('#order_timeError').text(error.responseJSON.errors.order_po_number);
+				  document.getElementById('order_timeError').className = "invalid-feedback";		
 				
 				}
 				
 				
-				if(error.responseJSON.errors.site_description=="The site description has already been taken."){
+				if(error.responseJSON.errors.order_po_number=="The site description has already been taken."){
 							  
-				  $('#site_descriptionError').html("<b>"+ site_description +"</b> has already been taken.");
-				  document.getElementById('site_descriptionError').className = "invalid-feedback";
-				  document.getElementById('site_description').className = "form-control is-invalid";
-				  $('#site_description').val("");
+				  $('#order_po_numberError').html("<b>"+ order_po_number +"</b> has already been taken.");
+				  document.getElementById('order_po_numberError').className = "invalid-feedback";
+				  document.getElementById('order_po_number').className = "form-control is-invalid";
+				  $('#order_po_number').val("");
 				  
 				}else{
 					
-				  $('#site_descriptionError').text(error.responseJSON.errors.site_description);
-				  document.getElementById('site_descriptionError').className = "invalid-feedback";		
+				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
+				  document.getElementById('order_po_numberError').className = "invalid-feedback";		
 				
 				}
 				
@@ -172,28 +182,28 @@ if (Request::is('billing')){
 					$('#CloseManual').attr('data-bs-target','#UpdateSiteModal');
 					
 					/*Set Details*/
-					document.getElementById("update_business_entity").value = response.business_entity;
-					document.getElementById("update_site_code").value = response.site_code;
-					document.getElementById("update_site_description").value = response.site_name;
+					document.getElementById("update_order_date").value = response.order_date;
+					document.getElementById("update_order_time").value = response.order_time;
+					document.getElementById("update_order_po_number").value = response.site_name;
 					document.getElementById("update_building_type").value = response.building_type;
-					document.getElementById("update_site_cut_off").value = response.site_cut_off;
+					document.getElementById("update_client_idx").value = response.client_idx;
 					
-					document.getElementById("update_device_ip_range").value = response.device_ip_range;
-					document.getElementById("update_ip_network").value = response.ip_network;
-					document.getElementById("update_ip_netmask").value = response.ip_netmask;
-					document.getElementById("update_ip_gateway").value = response.ip_gateway;
+					document.getElementById("update_plate_no").value = response.plate_no;
+					document.getElementById("update_product_idx").value = response.product_idx;
+					document.getElementById("update_drivers_name").value = response.drivers_name;
+					document.getElementById("update_order_quantity").value = response.order_quantity;
 					
 					/*Information*/
 					document.getElementById("site_details_site_desciption").innerHTML = response.site_name;
-					document.getElementById("site_details_site_code").innerHTML = response.business_entity;
-					document.getElementById("site_details_business_entity").innerHTML = response.business_entity;
+					document.getElementById("site_details_order_time").innerHTML = response.order_date;
+					document.getElementById("site_details_order_date").innerHTML = response.order_date;
 					document.getElementById("site_details_building_type").innerHTML = response.building_type;
-					document.getElementById("site_details_device_ip_range").innerHTML = response.device_ip_range;
-					document.getElementById("site_details_ip_network").innerHTML = response.ip_network;
-					document.getElementById("site_details_ip_netmask").innerHTML = response.ip_netmask;
-					document.getElementById("site_details_ip_gateway").innerHTML = response.ip_gateway;
+					document.getElementById("site_details_plate_no").innerHTML = response.plate_no;
+					document.getElementById("site_details_product_idx").innerHTML = response.product_idx;
+					document.getElementById("site_details_drivers_name").innerHTML = response.drivers_name;
+					document.getElementById("site_details_order_quantity").innerHTML = response.order_quantity;
 					
-					document.getElementById("site_details_sap_business_entity").innerHTML = response.business_entity;
+					document.getElementById("site_details_sap_order_date").innerHTML = response.order_date;
 					document.getElementById("site_details_company_no").innerHTML = response.company_no;
 					document.getElementById("site_details_service_charge_key").innerHTML = response.service_charge_key;
 					document.getElementById("site_details_participation_group").innerHTML = response.participation_group;
@@ -225,41 +235,41 @@ if (Request::is('billing')){
 			
 					/*Reset Warnings*/
 					let siteID = document.getElementById("update-site").value;
-					$('#update_business_entityError').text('');
-					$('#update_site_codeError').text('');
-					$('#update_site_descriptionError').text('');				  
-					$('#update_site_cut_offError').text('');
-					$('#update_device_ip_rangeError').text('');
-					$('#update_ip_netmaskError').text('');
-					$('#update_ip_networkError').text('');
-					$('#update_ip_gatewayError').text('');
+					$('#update_order_dateError').text('');
+					$('#update_order_timeError').text('');
+					$('#update_order_po_numberError').text('');				  
+					$('#update_client_idxError').text('');
+					$('#update_plate_noError').text('');
+					$('#update_drivers_nameError').text('');
+					$('#update_product_idxError').text('');
+					$('#update_order_quantityError').text('');
 
 			document.getElementById('siteform').className = "row g-3 needs-validation was-validated";
 
-			let business_entity 	= $("input[name=update_business_entity]").val();
-			let site_code 			= $("input[name=update_site_code]").val();
-			let site_description 	= $("input[name=update_site_description]").val();
+			let order_date 	= $("input[name=update_order_date]").val();
+			let order_time 			= $("input[name=update_order_time]").val();
+			let order_po_number 	= $("input[name=update_order_po_number]").val();
 			let building_type 		= $("#update_building_type").val();
-			let site_cut_off 		= $("input[name=update_site_cut_off]").val();
-			let device_ip_range 	= $("input[name=update_device_ip_range]").val();
-			let ip_netmask 			= $("input[name=update_ip_netmask]").val();
-			let ip_network 			= $("input[name=update_ip_network]").val();
-			let ip_gateway 			= $("input[name=update_ip_gateway]").val();
+			let client_idx 		= $("input[name=update_client_idx]").val();
+			let plate_no 	= $("input[name=update_plate_no]").val();
+			let drivers_name 			= $("input[name=update_drivers_name]").val();
+			let product_idx 			= $("input[name=update_product_idx]").val();
+			let order_quantity 			= $("input[name=update_order_quantity]").val();
 			
 			  $.ajax({
 				url: "/update_site_post",
 				type:"POST",
 				data:{
 				  SiteID:siteID,
-				  business_entity:business_entity,
-				  site_code:site_code,
-				  site_description:site_description,
+				  order_date:order_date,
+				  order_time:order_time,
+				  order_po_number:order_po_number,
 				  building_type:building_type,
-				  site_cut_off:site_cut_off,
-				  device_ip_range:device_ip_range,
-				  ip_netmask:ip_netmask,
-				  ip_network:ip_network,
-				  ip_gateway:ip_gateway,
+				  client_idx:client_idx,
+				  plate_no:plate_no,
+				  drivers_name:drivers_name,
+				  product_idx:product_idx,
+				  order_quantity:order_quantity,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -269,44 +279,44 @@ if (Request::is('billing')){
 					$('.success_modal_bg').html(response.success);
 					$('#SuccessModal').modal('toggle');
 					
-					$('#business_entityError').text('');					
-					$('#site_codeError').text('');
-					$('#site_descriptionError').text('');				  
+					$('#order_dateError').text('');					
+					$('#order_timeError').text('');
+					$('#order_po_numberError').text('');				  
 				  
 				  }
 				},
 				error: function(error) {
 				 console.log(error);	
 				 
-				  $('#business_entityError').text(error.responseJSON.errors.business_entity);
-				  document.getElementById('business_entityError').className = "invalid-feedback";
+				  $('#order_dateError').text(error.responseJSON.errors.order_date);
+				  document.getElementById('order_dateError').className = "invalid-feedback";
 				  			  
-				if(error.responseJSON.errors.site_code=="The site code has already been taken."){
+				if(error.responseJSON.errors.order_time=="The site code has already been taken."){
 							  
-				  $('#site_codeError').html("<b>"+ site_code +"</b> has already been taken.");
-				  document.getElementById('site_codeError').className = "invalid-feedback";
-				  document.getElementById('site_code').className = "form-control is-invalid";
-				  $('#site_code').val("");
+				  $('#order_timeError').html("<b>"+ order_time +"</b> has already been taken.");
+				  document.getElementById('order_timeError').className = "invalid-feedback";
+				  document.getElementById('order_time').className = "form-control is-invalid";
+				  $('#order_time').val("");
 				  
 				}else{
 					
-				  $('#site_codeError').text(error.responseJSON.errors.site_description);
-				  document.getElementById('site_codeError').className = "invalid-feedback";		
+				  $('#order_timeError').text(error.responseJSON.errors.order_po_number);
+				  document.getElementById('order_timeError').className = "invalid-feedback";		
 				
 				}
 				
 				
-				if(error.responseJSON.errors.site_description=="The site description has already been taken."){
+				if(error.responseJSON.errors.order_po_number=="The site description has already been taken."){
 							  
-				  $('#site_descriptionError').html("<b>"+ site_description +"</b> has already been taken.");
-				  document.getElementById('site_descriptionError').className = "invalid-feedback";
-				  document.getElementById('site_description').className = "form-control is-invalid";
-				  $('#site_description').val("");
+				  $('#order_po_numberError').html("<b>"+ order_po_number +"</b> has already been taken.");
+				  document.getElementById('order_po_numberError').className = "invalid-feedback";
+				  document.getElementById('order_po_number').className = "form-control is-invalid";
+				  $('#order_po_number').val("");
 				  
 				}else{
 					
-				  $('#site_descriptionError').text(error.responseJSON.errors.site_description);
-				  document.getElementById('site_descriptionError').className = "invalid-feedback";		
+				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
+				  document.getElementById('order_po_numberError').className = "invalid-feedback";		
 				
 				}
 				
@@ -336,8 +346,8 @@ if (Request::is('billing')){
 				  if(response) {
 					
 					document.getElementById("deleteSiteConfirmed").value = siteID;
-					$('#site_description_info').html(response.site_name);
-					$('#site_description_info_confirmed').html(response.site_name);
+					$('#order_po_number_info').html(response.site_name);
+					$('#order_po_number_info_confirmed').html(response.site_name);
 					$('#SiteDeleteModal').modal('toggle');					
 				  
 				  }
@@ -527,7 +537,7 @@ else if (Request::is('site_details/'.@$SiteData->id)){
 				type:"POST",
 				data:{
 				  siteID:{{ $SiteData->id }},
-				  siteCode:'{{ $SiteData->site_code }}',
+				  siteCode:'{{ $SiteData->order_time }}',
 				  gateway_sn:gateway_sn,
 				  gateway_mac:gateway_mac,
 				  gateway_ip:gateway_ip,
@@ -548,7 +558,7 @@ else if (Request::is('site_details/'.@$SiteData->id)){
 					
 					$('#gateway_snError').text('');					
 					$('#gateway_macError').text('');
-					$('#site_descriptionError').text('');				  
+					$('#order_po_numberError').text('');				  
 				  
 				  }
 				},

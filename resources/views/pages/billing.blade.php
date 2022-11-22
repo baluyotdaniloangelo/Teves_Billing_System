@@ -12,20 +12,7 @@
 				  </div>
 				</div>			  
 		 
-            <div class="card-body">
-			
-				<div class="row mb-2">
-						  
-					<div class="col-12">
-						<div class="d-flex justify-content-end">
-						<div class="btn-group" role="group" aria-label="Basic outlined example">
-							<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>
-						</div>
-						</div>
-					</div>
-				</div>
-	
-			
+            <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
 										<table class="table table-bordered dataTable" id="getBillingTransactionList" width="100%" cellspacing="0">
@@ -165,7 +152,7 @@
 						  <label for="connection_type" class="col-sm-3 col-form-label">product_idx X Quantity</label>
 						  <div class="col-sm-9">
 							<div class="input-group mb-3">
-							  <select class="form-control form-select" aria-label="Product">
+							  <select class="form-control form-select" aria-label="Product" name="product_idx" id="product_idx">
 							  <option selected="">Open this select menu</option>
 							  
 								@foreach ($product_data as $product_data_cols)
@@ -185,7 +172,7 @@
 						
                     <div class="modal-footer modal-footer_form">
 						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-gateway"> Submit</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-billing-transaction"> Submit</button>
 						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-gateway"> Reset</button>
 						  
 					</div>

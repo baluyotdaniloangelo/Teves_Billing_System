@@ -86,57 +86,6 @@ class BillingTransactionController extends Controller
 		
     }
 
-
-	/*Site Dashboard*/
-	public function site_details($siteID){
-
-		$title = 'Site Details';
-		/*Get User Information*/
-		if(Session::has('loginID')){
-			$data = User::where('id', '=', Session::get('loginID'))->first();
-		}
-		
-		$site_current_tab = Session::get('site_current_tab');
-		
-		if($site_current_tab == 'status' || $site_current_tab == ''){
-			
-			$status_tab = " active show";
-			$gateway_tab = "";
-			$meter_tab = "";
-			
-			$status_aria_selected = "true";
-			$gateway_aria_selected = "false";
-			$meter_aria_selected = "false";
-			
-		}else if($site_current_tab == 'gateway'){
-			
-			$status_tab = "";
-			$gateway_tab = " active show";
-			$meter_tab = "";
-			
-			$status_aria_selected = "false";
-			$gateway_aria_selected = "true";
-			$meter_aria_selected = "false";
-					
-		}else{
-			
-			$status_tab = "";
-			$gateway_tab = "";
-			$meter_tab = " active show";
-			
-			$status_aria_selected = "false";
-			$gateway_aria_selected = "false";
-			$meter_aria_selected = "true";
-	
-		}
-		
-		$SiteData = BillingTransactionModel::find($siteID);
-		return view("pages.sitedetails", compact('data','SiteData','title','status_tab','gateway_tab','meter_tab','status_aria_selected','gateway_aria_selected','meter_aria_selected'));
-		
-		
-		
-	}
-
 	/*Fetch Site Information*/
 	public function site_info(Request $request){
 

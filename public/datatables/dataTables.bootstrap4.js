@@ -46,7 +46,7 @@ var DataTable = $.fn.dataTable;
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		"<'row table-top-search-and-limit'<'col-md-3'f><'col-md-3'l><'col-md-6 additional_page_options d-flex justify-content-end'>>" +
+		"<'row table-top-search-and-limit'<'col-md-6'><'col-md-6 d-flex justify-content-end' f l>>" +
 		"<'row'<'col-sm-12'tr>>" +
 		"<'row table-bottom-total-entries-and-pagination'<'col-md-5'i><'col-md-7'p>>",
 	renderer: 'bootstrap'
