@@ -28,5 +28,7 @@ class ProductModel extends Model
         'created_at',
 		'updated_at'
     ];
+	
+	protected $primaryKey = 'product_id';
     
 }

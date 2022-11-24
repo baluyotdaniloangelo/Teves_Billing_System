@@ -95,12 +95,12 @@
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-2 needs-validation" id="gatewayform">
+					  <form class="g-2 needs-validation" id="Billingform">
 					  
 						<div class="row mb-2">
 						  <label for="gateway_sn" class="col-sm-3 col-form-label">order_date</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="order_date" id="order_date" value="" required>
+							<input type="date" class="form-control" name="order_date" id="order_date" value="" required>
 							<span class="valid-feedback" id="order_dateError" title="Required"></span>
 						  </div>
 						</div>
@@ -108,7 +108,7 @@
 						<div class="row mb-2">
 						  <label for="gateway_mac" class="col-sm-3 col-form-label">order_time</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="order_time" id="order_time" value="" required>
+							<input type="time" class="form-control " name="order_time" id="order_time" value="" required>
 							<span class="valid-feedback" id="order_timeError"></span>
 						  </div>
 						</div>	
@@ -154,7 +154,7 @@
 						  <div class="col-sm-9">
 							<div class="input-group mb-3">
 							  <select class="form-control form-select" aria-label="Product" name="product_idx" id="product_idx">
-							  <option selected="">Open this select menu</option>
+							  <option selected="" disabled="" value="">Choose...</option>
 							  
 								@foreach ($product_data as $product_data_cols)
 									<option value="{{$product_data_cols->product_id}}">{{$product_data_cols->product_name}}</option>
@@ -199,7 +199,7 @@
 					<div class="row">
 
 					<div class="col-lg-6">
-					            <div class="card-body">
+			<div class="card-body">
 			
 			<ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
