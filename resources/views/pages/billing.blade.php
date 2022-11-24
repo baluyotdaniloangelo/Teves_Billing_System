@@ -8,7 +8,8 @@
 			  <div class="card">
 			  
 				<div class="card-header ">
-				  <h5 class="card-title bi bi-building">{{ $title }}</h5>           
+				  <h5 class="card-title bi bi-building">{{ $title }}</h5>
+					<div class="d-flex justify-content-end" id="billing_option"></div>				  
 				  </div>
 				</div>			  
 		 

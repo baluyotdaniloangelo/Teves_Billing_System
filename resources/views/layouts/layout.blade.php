@@ -49,9 +49,9 @@ if (Request::is('billing')){
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			]
 		});
-		$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-left: 10px;">'+
+		$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
-				'</div>').appendTo('#getBillingTransactionList_length');
+				'</div>').appendTo('#billing_option');
 	});
 	
 	<!--Save New Site-->
@@ -82,7 +82,7 @@ if (Request::is('billing')){
 			let order_quantity 			= $("input[name=order_quantity]").val();
 			
 			  $.ajax({
-				url: "/create_site_post",
+				url: "/billingtransactionpost",
 				type:"POST",
 				data:{
 				  order_date:order_date,
