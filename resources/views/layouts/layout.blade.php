@@ -174,19 +174,19 @@ if (Request::is('billing')){
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					alert('a');
+					
 					document.getElementById("update-billing-transaction").value = billID;
 					
 					/*Set Details*/
-					document.getElementById("update_order_date").value = response.order_date;
-					document.getElementById("update_order_time").value = response.order_time;
-					document.getElementById("update_order_po_number").value = response.order_po_number;
-					document.getElementById("update_client_idx").value = response.client_idx;
+					document.getElementById("update_order_date").value = response[0].order_date;
+					document.getElementById("update_order_time").value = response[0].order_time;
+					document.getElementById("update_order_po_number").value = response[0].order_po_number;
+					document.getElementById("update_client_idx").value = response[0].client_idx;
 					
-					document.getElementById("update_plate_no").value = response.plate_no;
-					document.getElementById("update_product_idx").value = response.product_idx;
-					document.getElementById("update_drivers_name").value = response.drivers_name;
-					document.getElementById("update_order_quantity").value = response.order_quantity;
+					document.getElementById("update_plate_no").value = response[0].plate_no;
+					document.getElementById("update_product_idx").value = response[0].product_idx;
+					document.getElementById("update_drivers_name").value = response[0].drivers_name;
+					document.getElementById("update_order_quantity").value = response[0].order_quantity;
 										
 					$('#UpdateBillingModal').modal('toggle');					
 				  
@@ -271,7 +271,7 @@ if (Request::is('billing')){
 				  $('#update_order_timeError').text(error.responseJSON.errors.order_time);
 				  document.getElementById('update_order_timeError').className = "invalid-feedback";		
 
-				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
+				  $('#update_order_po_numberError').text(error.responseJSON.errors.order_po_number);
 				  document.getElementById('update_order_po_numberError').className = "invalid-feedback";		
 				
 				  $('#update_client_idxError').text(error.responseJSON.errors.client_idx);
@@ -297,7 +297,7 @@ if (Request::is('billing')){
 		
 	  });
 	  
-	<!--Site Deletion Confirmation-->
+	<!--Bill Deletion Confirmation-->
 	$('body').on('click','#deleteBill',function(){
 			
 			event.preventDefault();
@@ -316,29 +316,29 @@ if (Request::is('billing')){
 					
 					document.getElementById("deleteBillConfirmed").value = billID;
 					
-					/*
-					$('#update_order_dateError').text('');					
-					$('#update_order_timeError').text('');
-					$('#update_order_po_numberError').text('');
-					$('#update_client_idxError').text('');
-					
-					$('#update_plate_noError').text('');
-					$('#update_drivers_nameError').text('');
-					$('#update_product_idxError').text('');
-					$('#update_order_quantityError').text('');
-					*/
-					
-					$('#order_date_info').html(response.order_date);
-					$('#order_time_info').html(response.order_time);
-					$('#order_po_number_info').html(response.order_po_number);
-					$('#order_time_info').html(response.order_time);
-					
-					$('#plate_no_info').html(response.plate_no);
-					$('#order_time_info').html(response.order_time);
-					$('#order_date_info').html(response.order_date);
-					$('#order_time_info').html(response.order_time);
+					/*Set Details*/
+					$('#bill_delete_order_date').text(response[0].order_date);
+					$('#bill_delete_order_time').text(response[0].order_time);
+					$('#bill_delete_order_po_number').text(response[0].order_po_number);
+					$('#bill_delete_client_name').text(response[0].client_name);
+					$('#bill_delete_plate_no').text(response[0].plate_no);
+					$('#bill_delete_product_name').text(response[0].product_name);
+					$('#bill_delete_drivers_name').text(response[0].drivers_name);
+					$('#bill_delete_order_quantity').text(response[0].order_quantity);					
+					$('#bill_delete_order_total_amount').text(response[0].order_total_amount);
 
-					$('#billDeleteModal').modal('toggle');					
+					/*Set Details Confirmed*/
+					$('#bill_delete_confirmed_order_date').text(response[0].order_date);
+					$('#bill_delete_confirmed_order_time').text(response[0].order_time);
+					$('#bill_delete_confirmed_order_po_number').text(response[0].order_po_number);
+					$('#bill_delete_confirmed_client_name').text(response[0].client_name);
+					$('#bill_delete_confirmed_plate_no').text(response[0].plate_no);
+					$('#bill_delete_confirmed_product_name').text(response[0].product_name);
+					$('#bill_delete_confirmed_drivers_name').text(response[0].drivers_name);
+					$('#bill_delete_confirmed_order_quantity').text(response[0].order_quantity);					
+					$('#bill_delete_confirmed_order_total_amount').text(response[0].order_total_amount);
+					
+					$('#BillDeleteModal').modal('toggle');					
 				  
 				  }
 				},
@@ -353,31 +353,31 @@ if (Request::is('billing')){
 	  });
 
 	  <!--Site Confirmed For Deletion-->
-	  $('body').on('click','#deleteSiteConfirmed',function(){
+	  $('body').on('click','#deleteBillConfirmed',function(){
 			
 			event.preventDefault();
 
-			let siteID = document.getElementById("deleteSiteConfirmed").value;
+			let billID = document.getElementById("deleteBillConfirmed").value;
 			
 			  $.ajax({
-				url: "/delete_site_confirmed",
+				url: "/delete_bill_confirmed",
 				type:"POST",
 				data:{
-				  siteID:siteID,
+				  billID:billID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					$('#SiteDeleteModalConfirmed').modal('toggle');
+					$('#BillDeleteModalConfirmed').modal('toggle');
 					
 					/*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#siteList").DataTable();
+					var table = $("#getBillingTransactionList").DataTable();
 				    table.ajax.reload(null, false);
 					
 				  }

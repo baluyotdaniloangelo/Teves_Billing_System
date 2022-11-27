@@ -43,8 +43,5 @@ Route::post('/update_bill_post', [BillingTransactionController::class,'update_bi
 Route::post('/bill_info', [BillingTransactionController::class, 'bill_info'])->name('bill_info')->middleware('isLoggedIn');
 
 /*Confirm Delete Site*/
-Route::post('/delete_site_confirmed', [BillingTransactionController::class, 'delete_site_confirmed'])->name('delete_site_confirmed')->middleware('isLoggedIn');
-
-/*Site Dashboard*/
-Route::get('/site_details/{siteID}', [BillingTransactionController::class,'site_details'])->name('site_details')->middleware('isLoggedIn');
+Route::post('/delete_bill_confirmed', [BillingTransactionController::class, 'delete_bill_confirmed'])->name('delete_bill_confirmed')->middleware('isLoggedIn');
 

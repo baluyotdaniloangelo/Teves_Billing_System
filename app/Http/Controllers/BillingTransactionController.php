@@ -92,7 +92,6 @@ class BillingTransactionController extends Controller
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
               		->get([
-					'teves_billing_table.billing_id',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_id as product_idx',
@@ -104,17 +103,17 @@ class BillingTransactionController extends Controller
 					'teves_client_table.client_name',
 					'teves_client_table.client_id as client_idx',
 					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',])
-					;
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
 		return response()->json($data);
 		
 	}
 
 	/*Delete Site Information*/
-	public function delete_site_confirmed(Request $request){
+	public function delete_bill_confirmed(Request $request){
 
-		$siteID = $request->siteID;
-		BillingTransactionModel::find($siteID)->delete();
+		$billID = $request->billID;
+		BillingTransactionModel::find($billID)->delete();
 		return 'Deleted';
 		
 	} 

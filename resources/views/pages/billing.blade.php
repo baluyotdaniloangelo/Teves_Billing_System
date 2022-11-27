@@ -44,25 +44,35 @@
           </div>
 
 	<!-- Site Delete Modal-->
-    <div class="modal fade" id="SiteDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="BillDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header header_modal_bg">
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
  					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
                 </div>
+				
+				
                 <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Bill?
+				Are you sure you want to Delete This Bill?<br>
+				</div>
+				<div align="left"style="margin: 10px;">
+				Date: <span id="bill_delete_order_date"></span><br>
+				Time: <span id="bill_delete_order_time"></span><br>
 				
-				Order Date : <span id="site_description_info"></span><br>
-				Order Time : <span id="site_description_info"></span><br>
-				PO Number : <span id="bill_description_info"></span><br>
-				Product Name : <span id="site_description_info"></span><br>
-				Quantity : <span id="site_description_info"></span><br>
-				Client : <span id="bill_description_info"></span><br>
-				Plate # : <span id="site_description_info"></span><br>
-				Drivers Name : <span id="bill_description_info"></span><br>
+				PO #: <span id="bill_delete_order_po_number"></span><br>
+				Client: <span id="bill_delete_client_name"></span><br>
 				
+				Plate #: <span id="bill_delete_plate_no"></span><br>
+				Driver: <span id="bill_delete_drivers_name"></span><br>
+				
+				Product: <span id="bill_delete_product_name"></span><br>
+				Quantity: <span id="bill_delete_order_quantity"></span><br>
+				
+				Total Amount: <span id="bill_delete_order_total_amount"></span><br>
+				
+				
+				</div>
                 <div class="modal-footer footer_modal_bg">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteBillConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
@@ -73,7 +83,7 @@
     </div>	
 
 	<!-- Site Delete Modal-->
-    <div class="modal fade" id="SiteDeleteModalConfirmed" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="BillDeleteModalConfirmed" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header header_modal_bg">
@@ -82,6 +92,24 @@
                 </div>
                 <div class="modal-body warning_modal_bg" id="modal-body">
 				Successfully Deleted <span id="site_description_info_confirmed"></span>!
+				</div>
+				
+				<div align="left"style="margin: 10px;">
+				Date: <span id="bill_delete_confirmed_order_date"></span><br>
+				Time: <span id="bill_delete_confirmed_order_time"></span><br>
+				
+				PO #: <span id="bill_delete_confirmed_order_po_number"></span><br>
+				Client: <span id="bill_delete_confirmed_client_name"></span><br>
+				
+				Plate #: <span id="bill_delete_confirmed_plate_no"></span><br>
+				Driver: <span id="bill_delete_confirmed_drivers_name"></span><br>
+				
+				Product: <span id="bill_delete_confirmed_product_name"></span><br>
+				Quantity: <span id="bill_delete_confirmed_order_quantity"></span><br>
+				
+				Total Amount: <span id="bill_delete_confirmed_order_total_amount"></span><br>
+				
+				
 				</div>
                 <div class="modal-footer footer_modal_bg">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Close</button>
