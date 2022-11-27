@@ -69,7 +69,7 @@ if (Request::is('billing')){
 					$('#product_idxError').text('');
 					$('#order_quantityError').text('');
 
-			document.getElementById('Billingform').className = "g-3 needs-validation was-validated";
+			document.getElementById('BillingformNew').className = "g-3 needs-validation was-validated";
 
 			let order_date 				= $("input[name=order_date]").val();
 			let order_time 				= $("input[name=order_time]").val();
@@ -81,7 +81,7 @@ if (Request::is('billing')){
 			let order_quantity 			= $("input[name=order_quantity]").val();
 			
 			  $.ajax({
-				url: "/billingtransaction_post",
+				url: "/create_bill_post",
 				type:"POST",
 				data:{
 				  order_date:order_date,
@@ -103,7 +103,13 @@ if (Request::is('billing')){
 					
 					$('#order_dateError').text('');					
 					$('#order_timeError').text('');
-					$('#order_po_numberError').text('');				  
+					$('#order_po_numberError').text('');
+					$('#client_idxError').text('');
+					
+					$('#plate_noError').text('');
+					$('#drivers_nameError').text('');
+					$('#product_idxError').text('');
+					$('#order_quantityError').text('');
 				  
 				  }
 				},
@@ -113,34 +119,27 @@ if (Request::is('billing')){
 				  $('#order_dateError').text(error.responseJSON.errors.order_date);
 				  document.getElementById('order_dateError').className = "invalid-feedback";
 				  			  
-				if(error.responseJSON.errors.order_time=="The site code has already been taken."){
-							  
-				  $('#order_timeError').html("<b>"+ order_time +"</b> has already been taken.");
-				  document.getElementById('order_timeError').className = "invalid-feedback";
-				  document.getElementById('order_time').className = "form-control is-invalid";
-				  $('#order_time').val("");
-				  
-				}else{
-					
-				  $('#order_timeError').text(error.responseJSON.errors.order_po_number);
+				  $('#order_timeError').text(error.responseJSON.errors.order_time);
 				  document.getElementById('order_timeError').className = "invalid-feedback";		
-				
-				}
-				
-				
-				if(error.responseJSON.errors.order_po_number=="The site description has already been taken."){
-							  
-				  $('#order_po_numberError').html("<b>"+ order_po_number +"</b> has already been taken.");
-				  document.getElementById('order_po_numberError').className = "invalid-feedback";
-				  document.getElementById('order_po_number').className = "form-control is-invalid";
-				  $('#order_po_number').val("");
-				  
-				}else{
-					
+
 				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
 				  document.getElementById('order_po_numberError').className = "invalid-feedback";		
 				
-				}
+				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
+				  document.getElementById('client_idxError').className = "invalid-feedback";				
+				  
+				  $('#plate_noError').text(error.responseJSON.errors.plate_no);
+				  document.getElementById('plate_noError').className = "invalid-feedback";				
+				 
+				  $('#drivers_nameError').text(error.responseJSON.errors.drivers_name);
+				  document.getElementById('drivers_nameError').className = "invalid-feedback";				
+				  
+				  $('#product_idxError').text(error.responseJSON.errors.product_idx);
+				  document.getElementById('product_idxError').className = "invalid-feedback";				
+				 
+ 				  $('#order_quantityError').text(error.responseJSON.errors.order_quantity);
+				  document.getElementById('order_quantityError').className = "invalid-feedback";
+				
 				
 				$('#InvalidModal').modal('toggle');				  	  
 				  
@@ -150,69 +149,46 @@ if (Request::is('billing')){
 	  });
 
 	<!--reset/set only the data-bs-target button for manual to CreateSiteModal-->
-	$('body').on('click','#CreateSiteModal',function(){
+	/* $('body').on('click','#CreateSiteModal',function(){
 			
 			event.preventDefault();
 			
 			document.getElementById("update-site").value = '';
 			$('#CloseManual').attr('data-bs-target','#CreateSiteModal');
 				  	
-	  });
+	  }); */
 
-	<!--Select Site For Update-->
-	$('body').on('click','#editSite',function(){
+	<!--Select Bill For Update-->
+	$('body').on('click','#editBill',function(){
 			
 			event.preventDefault();
-			let siteID = $(this).data('id');
+			let billID = $(this).data('id');
 			
 			  $.ajax({
-				url: "/site_info",
+				url: "/bill_info",
 				type:"POST",
 				data:{
-				  siteID:siteID,
+				  billID:billID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					
-					document.getElementById("update-site").value = siteID;
-					$('#CloseManual').attr('data-bs-target','#UpdateSiteModal');
+					alert('a');
+					document.getElementById("update-billing-transaction").value = billID;
 					
 					/*Set Details*/
 					document.getElementById("update_order_date").value = response.order_date;
 					document.getElementById("update_order_time").value = response.order_time;
-					document.getElementById("update_order_po_number").value = response.site_name;
-					document.getElementById("update_building_type").value = response.building_type;
+					document.getElementById("update_order_po_number").value = response.order_po_number;
 					document.getElementById("update_client_idx").value = response.client_idx;
 					
 					document.getElementById("update_plate_no").value = response.plate_no;
 					document.getElementById("update_product_idx").value = response.product_idx;
 					document.getElementById("update_drivers_name").value = response.drivers_name;
 					document.getElementById("update_order_quantity").value = response.order_quantity;
-					
-					/*Information*/
-					document.getElementById("site_details_site_desciption").innerHTML = response.site_name;
-					document.getElementById("site_details_order_time").innerHTML = response.order_date;
-					document.getElementById("site_details_order_date").innerHTML = response.order_date;
-					document.getElementById("site_details_building_type").innerHTML = response.building_type;
-					document.getElementById("site_details_plate_no").innerHTML = response.plate_no;
-					document.getElementById("site_details_product_idx").innerHTML = response.product_idx;
-					document.getElementById("site_details_drivers_name").innerHTML = response.drivers_name;
-					document.getElementById("site_details_order_quantity").innerHTML = response.order_quantity;
-					
-					document.getElementById("site_details_sap_order_date").innerHTML = response.order_date;
-					document.getElementById("site_details_company_no").innerHTML = response.company_no;
-					document.getElementById("site_details_service_charge_key").innerHTML = response.service_charge_key;
-					document.getElementById("site_details_participation_group").innerHTML = response.participation_group;
-					document.getElementById("site_details_settlement_unit").innerHTML = response.settlement_unit;
-					document.getElementById("site_details_settlement_variant_text").innerHTML = response.settlement_variant_text;
-					document.getElementById("site_details_sap_validity").innerHTML = response.settlement_valid_from +"-"+response.settlement_valid_to;
-					document.getElementById("site_details_sap_created_at").innerHTML = response.sap_created_at;
-					document.getElementById("site_details_sap_last_edited_at").innerHTML = response.sap_last_edited_at;
-					document.getElementById("site_details_sap_server").innerHTML = response.sap_server;
-					
-					$('#UpdateSiteModal').modal('toggle');					
+										
+					$('#UpdateBillingModal').modal('toggle');					
 				  
 				  }
 				},
@@ -227,42 +203,39 @@ if (Request::is('billing')){
 	  });
 
 
-	$("#update-site").click(function(event){
-			
+	$("#update-billing-transaction").click(function(event){			
 			event.preventDefault();
 			
 					/*Reset Warnings*/
-					let siteID = document.getElementById("update-site").value;
-					$('#update_order_dateError').text('');
-					$('#update_order_timeError').text('');
-					$('#update_order_po_numberError').text('');				  
-					$('#update_client_idxError').text('');
-					$('#update_plate_noError').text('');
-					$('#update_drivers_nameError').text('');
-					$('#update_product_idxError').text('');
-					$('#update_order_quantityError').text('');
+					$('#order_dateError').text('');
+					$('#order_timeError').text('');
+					$('#order_po_numberError').text('');				  
+					$('#client_idxError').text('');
+					$('#plate_noError').text('');
+					$('#drivers_nameError').text('');
+					$('#product_idxError').text('');
+					$('#order_quantityError').text('');
 
-			document.getElementById('siteform').className = "row g-3 needs-validation was-validated";
-
-			let order_date 	= $("input[name=update_order_date]").val();
-			let order_time 			= $("input[name=update_order_time]").val();
-			let order_po_number 	= $("input[name=update_order_po_number]").val();
-			let building_type 		= $("#update_building_type").val();
-			let client_idx 		= $("input[name=update_client_idx]").val();
-			let plate_no 	= $("input[name=update_plate_no]").val();
+			document.getElementById('BillingformEdit').className = "g-3 needs-validation was-validated";
+			
+			let billID 				= document.getElementById("update-billing-transaction").value;
+			let order_date 				= $("input[name=update_order_date]").val();
+			let order_time 				= $("input[name=update_order_time]").val();
+			let order_po_number 		= $("input[name=update_order_po_number]").val();
+			let client_idx 				= $("#update_client_idx").val();
+			let plate_no 				= $("input[name=update_plate_no]").val();
 			let drivers_name 			= $("input[name=update_drivers_name]").val();
-			let product_idx 			= $("input[name=update_product_idx]").val();
+			let product_idx 			= $("#update_product_idx").val();
 			let order_quantity 			= $("input[name=update_order_quantity]").val();
 			
 			  $.ajax({
-				url: "/update_site_post",
+				url: "/update_bill_post",
 				type:"POST",
 				data:{
-				  SiteID:siteID,
+				  billID:billID,
 				  order_date:order_date,
 				  order_time:order_time,
 				  order_po_number:order_po_number,
-				  building_type:building_type,
 				  client_idx:client_idx,
 				  plate_no:plate_no,
 				  drivers_name:drivers_name,
@@ -277,76 +250,95 @@ if (Request::is('billing')){
 					$('.success_modal_bg').html(response.success);
 					$('#SuccessModal').modal('toggle');
 					
-					$('#order_dateError').text('');					
-					$('#order_timeError').text('');
-					$('#order_po_numberError').text('');				  
+					$('#update_order_dateError').text('');					
+					$('#update_order_timeError').text('');
+					$('#update_order_po_numberError').text('');
+					$('#update_client_idxError').text('');
+					
+					$('#update_plate_noError').text('');
+					$('#update_drivers_nameError').text('');
+					$('#update_product_idxError').text('');
+					$('#update_order_quantityError').text('');
 				  
 				  }
 				},
 				error: function(error) {
 				 console.log(error);	
 				 
-				  $('#order_dateError').text(error.responseJSON.errors.order_date);
-				  document.getElementById('order_dateError').className = "invalid-feedback";
+				  $('#update_order_dateError').text(error.responseJSON.errors.order_date);
+				  document.getElementById('update_order_dateError').className = "invalid-feedback";
 				  			  
-				if(error.responseJSON.errors.order_time=="The site code has already been taken."){
-							  
-				  $('#order_timeError').html("<b>"+ order_time +"</b> has already been taken.");
-				  document.getElementById('order_timeError').className = "invalid-feedback";
-				  document.getElementById('order_time').className = "form-control is-invalid";
-				  $('#order_time').val("");
-				  
-				}else{
-					
-				  $('#order_timeError').text(error.responseJSON.errors.order_po_number);
-				  document.getElementById('order_timeError').className = "invalid-feedback";		
-				
-				}
-				
-				
-				if(error.responseJSON.errors.order_po_number=="The site description has already been taken."){
-							  
-				  $('#order_po_numberError').html("<b>"+ order_po_number +"</b> has already been taken.");
-				  document.getElementById('order_po_numberError').className = "invalid-feedback";
-				  document.getElementById('order_po_number').className = "form-control is-invalid";
-				  $('#order_po_number').val("");
-				  
-				}else{
-					
+				  $('#update_order_timeError').text(error.responseJSON.errors.order_time);
+				  document.getElementById('update_order_timeError').className = "invalid-feedback";		
+
 				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
-				  document.getElementById('order_po_numberError').className = "invalid-feedback";		
+				  document.getElementById('update_order_po_numberError').className = "invalid-feedback";		
 				
-				}
+				  $('#update_client_idxError').text(error.responseJSON.errors.client_idx);
+				  document.getElementById('update_client_idxError').className = "invalid-feedback";				
+				  
+				  $('#update_plate_noError').text(error.responseJSON.errors.plate_no);
+				  document.getElementById('update_plate_noError').className = "invalid-feedback";				
+				 
+				  $('#update_drivers_nameError').text(error.responseJSON.errors.drivers_name);
+				  document.getElementById('update_drivers_nameError').className = "invalid-feedback";				
+				  
+				  $('#update_product_idxError').text(error.responseJSON.errors.product_idx);
+				  document.getElementById('update_product_idxError').className = "invalid-feedback";				
+				 
+ 				  $('#update_order_quantityError').text(error.responseJSON.errors.order_quantity);
+				  document.getElementById('update_order_quantityError').className = "invalid-feedback";
 				
-				$('#InvalidModal').modal('toggle');				  
+				
+				$('#InvalidModal').modal('toggle');				  	  
 				  
 				}
 			   });
-				  
-				
 		
 	  });
+	  
 	<!--Site Deletion Confirmation-->
-	$('body').on('click','#deleteSite',function(){
+	$('body').on('click','#deleteBill',function(){
 			
 			event.preventDefault();
-			let siteID = $(this).data('id');
+			let billID = $(this).data('id');
 			
 			  $.ajax({
-				url: "/site_info",
+				url: "/bill_info",
 				type:"POST",
 				data:{
-				  siteID:siteID,
+				  billID:billID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("deleteSiteConfirmed").value = siteID;
-					$('#order_po_number_info').html(response.site_name);
-					$('#order_po_number_info_confirmed').html(response.site_name);
-					$('#SiteDeleteModal').modal('toggle');					
+					document.getElementById("deleteBillConfirmed").value = billID;
+					
+					/*
+					$('#update_order_dateError').text('');					
+					$('#update_order_timeError').text('');
+					$('#update_order_po_numberError').text('');
+					$('#update_client_idxError').text('');
+					
+					$('#update_plate_noError').text('');
+					$('#update_drivers_nameError').text('');
+					$('#update_product_idxError').text('');
+					$('#update_order_quantityError').text('');
+					*/
+					
+					$('#order_date_info').html(response.order_date);
+					$('#order_time_info').html(response.order_time);
+					$('#order_po_number_info').html(response.order_po_number);
+					$('#order_time_info').html(response.order_time);
+					
+					$('#plate_no_info').html(response.plate_no);
+					$('#order_time_info').html(response.order_time);
+					$('#order_date_info').html(response.order_date);
+					$('#order_time_info').html(response.order_time);
+
+					$('#billDeleteModal').modal('toggle');					
 				  
 				  }
 				},

@@ -33,14 +33,14 @@ Route::get('logout', [UserAuthController::class,'logout']);
 Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
 Route::get('billing/list', [BillingTransactionController::class, 'getBillingTransactionList'])->name('getBillingTransactionList')->middleware('isLoggedIn');
 
-/*Create Site*/
-Route::post('/billingtransaction_post', [BillingTransactionController::class,'billingtransaction_post'])->name('billingtransaction_post')->middleware('isLoggedIn');
+/*Create Bill*/
+Route::post('/create_bill_post', [BillingTransactionController::class,'create_bill_post'])->name('create_bill_post')->middleware('isLoggedIn');
 
-/*Update Site*/
-Route::post('/update_site_post', [BillingTransactionController::class,'update_site_post'])->name('update_site_post')->middleware('isLoggedIn');
+/*Update Bill*/
+Route::post('/update_bill_post', [BillingTransactionController::class,'update_bill_post'])->name('update_bill_post')->middleware('isLoggedIn');
 
 /*GET Site Info*/
-Route::post('/site_info', [BillingTransactionController::class, 'site_info'])->name('site_info')->middleware('isLoggedIn');
+Route::post('/bill_info', [BillingTransactionController::class, 'bill_info'])->name('bill_info')->middleware('isLoggedIn');
 
 /*Confirm Delete Site*/
 Route::post('/delete_site_confirmed', [BillingTransactionController::class, 'delete_site_confirmed'])->name('delete_site_confirmed')->middleware('isLoggedIn');

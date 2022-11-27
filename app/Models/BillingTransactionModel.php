@@ -11,10 +11,10 @@ class BillingTransactionModel extends Model
 	protected $table = 'teves_billing_table';
 
 	protected $fillable = [
-        'product_id',
+        'product_idx',
 		'drivers_name',
         'product_price',
-        'client_id',
+        'client_idx',
 		'order_quantity',
 		'order_total_amount',
         'order_date',
@@ -23,5 +23,5 @@ class BillingTransactionModel extends Model
         'created_at',
 		'updated_at'
     ];
-    
+    protected $primaryKey = 'billing_id';
 }
