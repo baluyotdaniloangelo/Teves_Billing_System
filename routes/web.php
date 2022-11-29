@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
-use App\Http\Controllers\CAMRGatewayController;
-use App\Http\Controllers\CAMRGatewayDeviceController;
+use App\Http\Controllers\ProductController;
 
 
 use App\Http\Controllers\CAMRSampleExcel;
@@ -45,3 +44,5 @@ Route::post('/bill_info', [BillingTransactionController::class, 'bill_info'])->n
 /*Confirm Delete Site*/
 Route::post('/delete_bill_confirmed', [BillingTransactionController::class, 'delete_bill_confirmed'])->name('delete_bill_confirmed')->middleware('isLoggedIn');
 
+/*Load Product List*/
+Route::get('/product', [ProductController::class,'product'])->name('product')->middleware('isLoggedIn');

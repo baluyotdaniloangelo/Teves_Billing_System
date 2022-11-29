@@ -126,7 +126,7 @@
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Create Bill</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						<button type="button" class="btn btn-info bi bi-question navbar_icon" data-bs-toggle="modal" data-bs-target="#GatewayManual" id="manualbtn"></button>
+						
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>

@@ -1,0 +1,228 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\ProductModel;
+use Session;
+use Validator;
+use DataTables;
+
+class ProductController extends Controller
+{
+	
+	/*Load Site Interface*/
+	public function product(){
+		
+		$title = 'Product List';
+		$data = array();
+		if(Session::has('loginID')){
+			
+			$data = User::where('id', '=', Session::get('loginID'))->first();
+			
+			$product_data = ProductModel::all();
+		
+		}
+
+		return view("pages.product", compact('data','title'));
+		
+	}   
+	
+	/*Fetch Site List using Datatable*/
+	public function getProductList(Request $request)
+    {
+
+		$list = ProductModel::get();
+		if ($request->ajax()) {
+
+    	$data = ProductModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_client_table.client_name',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time',
+					'teves_billing_table.updated_at']);
+		
+
+		return DataTables::of($data)
+				->addIndexColumn()
+                ->addColumn('action', function($row){
+                    
+					$last_log_update = $row->last_log_update;
+					
+						/*FROM LOGS*/
+						$_date_format = strtotime($last_log_update);
+						$date_format = date('Y-m-d H:i:s',$_date_format);		
+										
+					$actionBtn = '
+					<div align="center" class="action_table_menu_site">
+					<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+					<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+					</div>';
+                    return $actionBtn;
+                })
+				
+				->rawColumns(['action'])
+                ->make(true);
+		
+		}
+		
+		
+    }
+
+	/*Fetch Site Information*/
+	public function Product_info(Request $request){
+
+		$productID = $request->productID;
+		$data = ProductModel::where('billing_id', $request->productID)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
+              		->get([
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_client_table.client_name',
+					'teves_client_table.client_id as client_idx',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
+		return response()->json($data);
+		
+	}
+
+	/*Delete Site Information*/
+	public function delete_Product_confirmed(Request $request){
+
+		$productID = $request->productID;
+		ProductModel::find($productID)->delete();
+		return 'Deleted';
+		
+	} 
+
+	public function create_product_post(Request $request){
+
+		$request->validate([
+          'order_date'      		=> 'required',
+		  'order_time'      		=> 'required',
+		  'order_po_number'      	=> 'required',
+		  'client_idx'      		=> 'required',
+		  'plate_no'      			=> 'required',
+		  'drivers_name'      		=> 'required',
+		  'product_idx'      		=> 'required',
+		  'order_quantity'      	=> 'required',
+        ], 
+        [
+			'order_date.required' => 'Order Date is required',
+			'order_time.required' => 'Order Time is Required',
+			'order_po_number.required' => 'PO is Required',
+			'client_idx.required' => 'Client is required',
+			'plate_no.required' => 'Plate Number is Required',
+			'drivers_name.required' => "Driver's Name is Required",
+			'product_idx.required' => 'Product is Required',
+			'order_quantity.required' => 'Quantity is Required'
+        ]
+		);
+
+			//$data = $request->all();
+			
+			/*Product Details*/
+			$product_info = ProductModel::find($request->product_idx, ['product_price']);			
+			$order_total_amount = $request->order_quantity * $product_info->product_price;
+			
+			/*insert*/
+			$Billing = new ProductModel();
+			
+			$Billing->order_date 			= $request->order_date;
+			$Billing->order_time 			= $request->order_time;
+			$Billing->order_po_number 		= $request->order_po_number;	
+			$Billing->client_idx 			= $request->client_idx;
+			$Billing->plate_no 				= $request->plate_no;
+			$Billing->drivers_name 			= $request->drivers_name;
+			$Billing->product_idx 			= $request->product_idx;
+			$Billing->product_price 		= $product_info->product_price;
+			$Billing->order_quantity 		= $request->order_quantity;
+			$Billing->order_total_amount 	= $order_total_amount;
+			
+			$result = $Billing->save();
+			
+			if($result){
+				return response()->json(['success'=>'Bill Information Successfully Created!']);
+			}
+			else{
+				return response()->json(['success'=>'Error on Insert Bill Information']);
+			}
+	}
+
+	public function update_product_post(Request $request){
+		
+		
+		$request->validate([
+          'order_date'      		=> 'required',
+		  'order_time'      		=> 'required',
+		  'order_po_number'      	=> 'required',
+		  'client_idx'      		=> 'required',
+		  'plate_no'      			=> 'required',
+		  'drivers_name'      		=> 'required',
+		  'product_idx'      		=> 'required',
+		  'order_quantity'      	=> 'required',
+        ], 
+        [
+			'order_date.required' => 'Order Date is required',
+			'order_time.required' => 'Order Time is Required',
+			'order_po_number.required' => 'PO is Required',
+			'client_idx.required' => 'Client is required',
+			'plate_no.required' => 'Plate Number is Required',
+			'drivers_name.required' => "Driver's Name is Required",
+			'product_idx.required' => 'Product is Required',
+			'order_quantity.required' => 'Quantity is Required'
+        ]
+		);
+
+			$data = $request->all();
+			
+			/*Product Details*/
+			$product_info = ProductModel::find($request->product_idx, ['product_price']);			
+			$order_total_amount = $request->order_quantity * $product_info->product_price;
+			
+			$Billing = new ProductModel();
+			$Billing = ProductModel::find($request->productID);
+			
+			$Billing->order_date 			= $request->order_date;
+			$Billing->order_time 			= $request->order_time;
+			$Billing->order_po_number 		= $request->order_po_number;	
+			$Billing->client_idx 			= $request->client_idx;
+			$Billing->plate_no 				= $request->plate_no;
+			$Billing->drivers_name 			= $request->drivers_name;
+			$Billing->product_idx 			= $request->product_idx;
+			$Billing->product_price 		= $product_info->product_price;
+			$Billing->order_quantity 		= $request->order_quantity;
+			$Billing->order_total_amount 	= $order_total_amount;
+			
+			
+			$result = $Billing->update();
+			
+			if($result){
+				return response()->json(['success'=>'Bill Information Successfully Updated!']);
+			}
+			else{
+				return response()->json(['success'=>'Error on Update Bill Information']);
+			}
+	}
+
+	
+}
