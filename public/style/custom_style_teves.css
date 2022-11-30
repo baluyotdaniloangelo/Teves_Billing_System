@@ -18,7 +18,7 @@
 }
 
 .header{    
-	height: 75px;
+	height: 70px;
 }
 
 .logo{
@@ -42,9 +42,8 @@
 .sidebar_bg{
 	box-shadow: none !important;
     background-color: #041c68e0  !important;
-	/*transition: none !important;*/
 	top: 70px !important;
-	/*width: 220px !important;*/
+	width: 220px !important;
 }
 
 .navbar_bg{

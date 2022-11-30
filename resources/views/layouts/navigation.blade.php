@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center justify-content-between">
 	<i class="bi bi-list toggle-sidebar-btn toggle_sidebar"></i>
       <div class="logo d-flex align-items-center">
-		<img src="{{asset('client_logo/logo.png')}}" class="rounded" alt="..." style="width:145px;">
+		<img src="{{asset('client_logo/logo.png')}}" class="rounded" alt="..." style="width:125px;">
         <span class="d-lg-block navbar_header_title">Billing System</span>
       </div>
       
@@ -98,7 +98,7 @@
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="charts-chartjs.html" class="sidebar_li_a">
+            <a href="{{ route('report') }}" class="sidebar_li_a">
               <i class="bi bi-circle"></i><span>Billing</span>
             </a>
           </li>

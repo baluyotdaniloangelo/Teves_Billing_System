@@ -17,7 +17,7 @@ class BillingTransactionController extends Controller
 	/*Load Site Interface*/
 	public function billing(){
 		
-		$title = 'Billing Transaction List';
+		$title = 'Billing Transaction';
 		$data = array();
 		if(Session::has('loginID')){
 			

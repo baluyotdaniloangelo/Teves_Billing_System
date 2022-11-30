@@ -14,7 +14,7 @@ class ProductController extends Controller
 	/*Load Product Interface*/
 	public function product(){
 		
-		$title = 'Product List';
+		$title = 'Product';
 		$data = array();
 		if(Session::has('loginID')){
 			

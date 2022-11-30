@@ -25,7 +25,7 @@
 													<th>P.O. No.</th>
 													<th>Plate Number</th>																						
 													<th>Product</th>
-													<th>Liters</th>
+													<th>Quantity</th>
 													<th>Price</th>
 													<th>Amount</th>
 													<th>Time</th>

@@ -194,13 +194,13 @@
 	  });
 	  
 	<!--client Deletion Confirmation-->
-	$('body').on('click','#deleteClient',function(){
+	$('body').on('click','#deleteclient',function(){
 			
 			event.preventDefault();
 			let clientID = $(this).data('id');
 			
 			  $.ajax({
-				url: "/product_info",
+				url: "/client_info",
 				type:"POST",
 				data:{
 				  clientID:clientID,
@@ -220,7 +220,7 @@
 					$('#confirmed_delete_client_name').text(response.client_name);
 					$('#confirmed_delete_client_address').text(response.client_address);
 					
-					$('#ProductDeleteModal').modal('toggle');					
+					$('#ClientDeleteModal').modal('toggle');					
 				  
 				  }
 				},
@@ -232,11 +232,11 @@
 	  });
 
 	  <!--client Confirmed For Deletion-->
-	  $('body').on('click','#deleteProductConfirmed',function(){
+	  $('body').on('click','#deleteClientConfirmed',function(){
 			
 			event.preventDefault();
 
-			let clientID = document.getElementById("deleteProductConfirmed").value;
+			let clientID = document.getElementById("deleteClientConfirmed").value;
 			
 			  $.ajax({
 				url: "/delete_client_confirmed",
@@ -249,7 +249,7 @@
 				  console.log(response);
 				  if(response) {
 					
-					$('#ProductDeleteModalConfirmed').modal('toggle');
+					$('#ClientDeleteModalConfirmed').modal('toggle');
 					
 					/*
 					If you are using server side datatable, then you can use ajax.reload() 

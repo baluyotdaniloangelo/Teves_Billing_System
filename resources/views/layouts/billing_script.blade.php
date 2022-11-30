@@ -93,7 +93,15 @@
 					$('#drivers_nameError').text('');
 					$('#product_idxError').text('');
 					$('#order_quantityError').text('');
-				  
+					
+				    /*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					var table = $("#getBillingTransactionList").DataTable();
+				    table.ajax.reload(null, false);
+					
 				  }
 				},
 				error: function(error) {
@@ -230,6 +238,14 @@
 					$('#update_product_idxError').text('');
 					$('#update_order_quantityError').text('');
 				  
+					/*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					var table = $("#getBillingTransactionList").DataTable();
+				    table.ajax.reload(null, false);
+					
 				  }
 				},
 				error: function(error) {

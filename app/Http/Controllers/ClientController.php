@@ -14,7 +14,7 @@ class ClientController extends Controller
 	/*Load client Interface*/
 	public function client(){
 		
-		$title = 'Client List';
+		$title = 'Client';
 		$data = array();
 		if(Session::has('loginID')){
 			
