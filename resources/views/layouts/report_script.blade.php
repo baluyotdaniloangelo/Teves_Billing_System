@@ -1,134 +1,86 @@
-<script type="text/javascript"> 
-/* Ajax post */
-$(document).ready(function() {
-//myFunction();	
 
-$("#create_report_btn").click(function(event) {
-event.preventDefault();
-
-var date_log = $("#date_log").val();
-
-jQuery.ajax({
-type: "POST",
-url: "http://172.104.188.7/attendance/" + "index.php/employee_report_dec/generate_employee_attendance",
-dataType: 'html',
-data: {
-	'date_log': date_log
-	},
-	
-	success : function(result) {
-	result_message = result.split(/\t/);
-
-	report_result =result_message[0];
-	$('#report_result').html(report_result);
-
-	},
-	beforeSend:function()
-	{
-	 $("#report_result").html("<b align='center'>* * * Loading * * *</b>")
-	}
-
-});
-});
-});
-</script>
 
    <script type="text/javascript">
 
 	<!--Load Table-->
-	$("#save-billing-transaction").click(function(event){
-			
-			event.preventDefault();
+	$("#generate_report").click(function(event){
+		
+		event.preventDefault();
 			
 					/*Reset Warnings*/
-					$('#order_dateError').text('');
-					$('#order_timeError').text('');
-					$('#order_po_numberError').text('');				  
 					$('#client_idxError').text('');
-					$('#plate_noError').text('');
-					$('#drivers_nameError').text('');
-					$('#product_idxError').text('');
-					$('#order_quantityError').text('');
+					$('#start_dateError').text('');
+					$('#end_dateError').text('');				  
+					
+			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			document.getElementById('BillingformNew').className = "g-3 needs-validation was-validated";
-
-			let order_date 				= $("input[name=order_date]").val();
-			let order_time 				= $("input[name=order_time]").val();
-			let order_po_number 		= $("input[name=order_po_number]").val();
-			let client_idx 				= $("#client_idx").val();
-			let plate_no 				= $("input[name=plate_no]").val();
-			let drivers_name 			= $("input[name=drivers_name]").val();
-			let product_idx 			= $("#product_idx").val();
-			let order_quantity 			= $("input[name=order_quantity]").val();
-			
+			let client_idx 		= $("#client_idx").val();
+			let start_date 		= $("input[name=start_date]").val();
+			let end_date 		= $("input[name=end_date]").val();
+				
 			  $.ajax({
-				url: "/create_bill_post",
+				url: "/generate_report",
 				type:"POST",
+				//dataType: 'JSON',
 				data:{
-				  order_date:order_date,
-				  order_time:order_time,
-				  order_po_number:order_po_number,
 				  client_idx:client_idx,
-				  plate_no:plate_no,
-				  drivers_name:drivers_name,
-				  product_idx:product_idx,
-				  order_quantity:order_quantity,
+				  start_date:start_date,
+				  end_date:end_date,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
 					
-					$('#order_dateError').text('');					
-					$('#order_timeError').text('');
-					$('#order_po_numberError').text('');
 					$('#client_idxError').text('');
+					$('#start_dateError').text('');
+					$('#end_dateError').text('');	
 					
-					$('#plate_noError').text('');
-					$('#drivers_nameError').text('');
-					$('#product_idxError').text('');
-					$('#order_quantityError').text('');
-					
-				    /*
-					If you are using server side datatable, then you can use ajax.reload() 
-					function to reload the datatable and pass the true or false as a parameter for refresh paging.
-					*/
-					
-					var table = $("#getBillingTransactionList").DataTable();
-				    table.ajax.reload(null, false);
-					
+						var len = response.length;
+						for(var i=0; i<len; i++){
+							var id = response[i].id;
+							var drivers_name = response[i].drivers_name;
+							var order_date = response[i].order_date;
+							var order_po_number = response[i].order_po_number;
+							var plate_no = response[i].plate_no;
+							var product_name = response[i].product_name;
+							var order_quantity = response[i].order_quantity;
+							var product_price = response[i].product_price;
+							var order_total_amount = response[i].order_total_amount;
+							var order_time = response[i].order_time;
+
+							var tr_str = "<tr>" +
+								"<td align='center'>" + (i+1) + "</td>" +
+								"<td align='center'>" + drivers_name + "</td>" +
+								"<td align='center'>" + order_date + "</td>" +
+								"<td align='center'>" + order_po_number + "</td>" +
+								"<td align='center'>" + plate_no + "</td>" +
+								"<td align='center'>" + product_name + "</td>" +
+								"<td align='center'>" + order_quantity + "</td>" +
+								"<td align='center'>" + product_price + "</td>" +
+								"<td align='center'>" + order_total_amount + "</td>" +
+								"<td align='center'>" + order_time + "</td>" +
+								"</tr>";
+							
+							/*Close Form*/
+							$('#CreateReportModal').modal('toggle');
+							/*Attached the Data on the Table Body*/
+							$("#billingstatementreport tbody").append(tr_str);
+							
+						}				
 				  }
 				},
 				error: function(error) {
 				 console.log(error);	
 				 
-				  $('#order_dateError').text(error.responseJSON.errors.order_date);
-				  document.getElementById('order_dateError').className = "invalid-feedback";
-				  			  
-				  $('#order_timeError').text(error.responseJSON.errors.order_time);
-				  document.getElementById('order_timeError').className = "invalid-feedback";		
-
-				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
-				  document.getElementById('order_po_numberError').className = "invalid-feedback";		
-				
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
-				  document.getElementById('client_idxError').className = "invalid-feedback";				
-				  
-				  $('#plate_noError').text(error.responseJSON.errors.plate_no);
-				  document.getElementById('plate_noError').className = "invalid-feedback";				
-				 
-				  $('#drivers_nameError').text(error.responseJSON.errors.drivers_name);
-				  document.getElementById('drivers_nameError').className = "invalid-feedback";				
-				  
-				  $('#product_idxError').text(error.responseJSON.errors.product_idx);
-				  document.getElementById('product_idxError').className = "invalid-feedback";				
-				 
- 				  $('#order_quantityError').text(error.responseJSON.errors.order_quantity);
-				  document.getElementById('order_quantityError').className = "invalid-feedback";
-				
+				  document.getElementById('client_idxError').className = "invalid-feedback";
+				  			  
+				  $('#start_dateError').text(error.responseJSON.errors.start_date);
+				  document.getElementById('start_dateError').className = "invalid-feedback";		
+
+				  $('#end_dateError').text(error.responseJSON.errors.end_date);
+				  document.getElementById('end_dateError').className = "invalid-feedback";		
 				
 				$('#InvalidModal').modal('toggle');				  	  
 				  

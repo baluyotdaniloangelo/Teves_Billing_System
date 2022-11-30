@@ -5,7 +5,7 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ClientController;
-/*use App\Http\Controllers\CAMRSampleExcel;*/
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,3 +65,7 @@ Route::post('/client_info', [ClientController::class, 'client_info'])->name('cli
 Route::post('/update_client_post', [ClientController::class,'update_client_post'])->name('update_client_post')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_client_confirmed', [ClientController::class, 'delete_client_confirmed'])->name('delete_client_confirmed')->middleware('isLoggedIn');
+
+/*Load Report Interface*/
+Route::get('/report', [ReportController::class,'report'])->name('report')->middleware('isLoggedIn');
+Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
