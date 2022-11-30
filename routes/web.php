@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ClientController;
 /*use App\Http\Controllers\CAMRSampleExcel;*/
 
 /*
@@ -54,13 +55,13 @@ Route::post('/delete_product_confirmed', [ProductController::class, 'delete_prod
 
 /*Dev Date Nov 30 2022*/
 /*Load Client List*/
-Route::get('/product', [ProductController::class,'product'])->name('product')->middleware('isLoggedIn');
-Route::get('product/list', [ProductController::class, 'getProductList'])->name('getProductList')->middleware('isLoggedIn');
+Route::get('/client', [ClientController::class,'client'])->name('client')->middleware('isLoggedIn');
+Route::get('client/list', [ClientController::class, 'getClientList'])->name('getClientList')->middleware('isLoggedIn');
 /*Create Product*/
-Route::post('/create_product_post', [ProductController::class,'create_product_post'])->name('create_product_post')->middleware('isLoggedIn');
+Route::post('/create_client_post', [ClientController::class,'create_client_post'])->name('create_client_post')->middleware('isLoggedIn');
 /*GET Product Info*/
-Route::post('/product_info', [ProductController::class, 'product_info'])->name('product_info')->middleware('isLoggedIn');
+Route::post('/client_info', [ClientController::class, 'client_info'])->name('client_info')->middleware('isLoggedIn');
 /*Update Product*/
-Route::post('/update_product_post', [ProductController::class,'update_product_post'])->name('update_product_post')->middleware('isLoggedIn');
+Route::post('/update_client_post', [ClientController::class,'update_client_post'])->name('update_client_post')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
-Route::post('/delete_product_confirmed', [ProductController::class, 'delete_product_confirmed'])->name('delete_product_confirmed')->middleware('isLoggedIn');
+Route::post('/delete_client_confirmed', [ClientController::class, 'delete_client_confirmed'])->name('delete_client_confirmed')->middleware('isLoggedIn');

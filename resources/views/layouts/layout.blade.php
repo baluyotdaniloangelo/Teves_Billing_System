@@ -17,7 +17,11 @@ if (Request::is('billing')){
 @include('layouts.product_script')
 <?php
 }
-
+else if (Request::is('client')){
+?>
+@include('layouts.client_script')
+<?php
+}
 
 ?>
 </body>

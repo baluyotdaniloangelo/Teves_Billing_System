@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,7 +11,7 @@ use DataTables;
 class ProductController extends Controller
 {
 	
-	/*Load Site Interface*/
+	/*Load Product Interface*/
 	public function product(){
 		
 		$title = 'Product List';
@@ -29,7 +28,7 @@ class ProductController extends Controller
 		
 	}   
 	
-	/*Fetch Site List using Datatable*/
+	/*Fetch Product List using Datatable*/
 	public function getProductList(Request $request)
     {
 
@@ -47,7 +46,7 @@ class ProductController extends Controller
                 ->addColumn('action', function($row){
 					
 					$actionBtn = '
-					<div align="center" class="action_table_menu_site">
+					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->product_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editProduct"></a>
 					<a href="#" data-id="'.$row->product_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteProduct"></a>
 					</div>';
@@ -63,7 +62,7 @@ class ProductController extends Controller
 		
     }
 
-	/*Fetch Site Information*/
+	/*Fetch Product Information*/
 	public function product_info(Request $request){
 
 		$productID = $request->productID;
@@ -72,7 +71,7 @@ class ProductController extends Controller
 		
 	}
 
-	/*Delete Site Information*/
+	/*Delete Product Information*/
 	public function delete_product_confirmed(Request $request){
 
 		$productID = $request->productID;
@@ -93,7 +92,6 @@ class ProductController extends Controller
         ]
 		);
 
-			/*insert*/
 			$Product = new ProductModel();
 			
 			$Product->product_name 			= $request->product_name;

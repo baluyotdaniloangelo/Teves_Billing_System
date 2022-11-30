@@ -80,14 +80,14 @@
               <i class="bi bi-circle"></i><span>Product</span>
             </a>
 			
-			<a href="components-alerts.html" class="sidebar_li_a">
+			<a href="{{ route('client') }}" class="sidebar_li_a">
               <i class="bi bi-circle"></i><span>Client</span>
             </a>
-			
+			<!--
 			<a href="components-alerts.html" class="sidebar_li_a">
               <i class="bi bi-circle"></i><span>User</span>
             </a>
-			
+			-->
           </li>
         </ul>
       </li><!-- End Components Nav -->
