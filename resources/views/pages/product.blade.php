@@ -9,14 +9,14 @@
 			  
 				<div class="card-header ">
 				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
-					<div class="d-flex justify-content-end" id="Product_option"></div>				  
+					<div class="d-flex justify-content-end" id="product_option"></div>				  
 				  </div>
 				</div>			  
 		 
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getProductTransactionList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable" id="getProductList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -50,8 +50,8 @@
 				Are you sure you want to Delete This Product?<br>
 				</div>
 				<div align="left"style="margin: 10px;">
-				Date: <span id="Product_delete_product_name"></span><br>
-				Time: <span id="Product_delete_product_price"></span><br>
+				Product: <span id="confirm_delete_product_name"></span><br>
+				Price: <span id="confirm_delete_product_price"></span><br>
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">
@@ -76,9 +76,8 @@
 				</div>
 				
 				<div align="left"style="margin: 10px;">
-				Date: <span id="Product_delete_confirmed_product_name"></span><br>
-				Time: <span id="Product_delete_confirmed_product_price"></span><br>
-				
+				Product: <span id="confirmed_delete_product_name"></span><br>
+				Price: <span id="confirmed_delete_product_price"></span><br>
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">
@@ -107,7 +106,7 @@
 						<div class="row mb-2">
 						  <label for="product_name" class="col-sm-3 col-form-label">Product Name</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control" name="product_name" id="product_name" value="" required>
+							<input type="text" class="form-control" name="product_name" id="product_name" value="" required>
 							<span class="valid-feedback" id="product_nameError" title="Required"></span>
 						  </div>
 						</div>
@@ -115,7 +114,7 @@
 						<div class="row mb-2">
 						  <label for="product_price" class="col-sm-3 col-form-label">Product Price</label>
 						  <div class="col-sm-9">
-							<input type="time" class="form-control " name="product_price" id="product_price" value="" required>
+							<input type="numner" class="form-control " name="product_price" id="product_price" value="" required>
 							<span class="valid-feedback" id="product_priceError"></span>
 						  </div>
 						</div>						
@@ -151,7 +150,7 @@
 						<div class="row mb-2">
 						  <label for="update_product_name" class="col-sm-3 col-form-label">Product Name</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control" name="update_product_name" id="update_product_name" value="" required>
+							<input type="text" class="form-control" name="update_product_name" id="update_product_name" value="" required>
 							<span class="valid-feedback" id="update_product_nameError" title="Required"></span>
 						  </div>
 						</div>
@@ -159,7 +158,7 @@
 						<div class="row mb-2">
 						  <label for="update_product_price" class="col-sm-3 col-form-label">Product Price</label>
 						  <div class="col-sm-9">
-							<input type="time" class="form-control " name="update_product_price" id="update_product_price" value="" required>
+							<input type="number" class="form-control " name="update_product_price" id="update_product_price" value="" required>
 							<span class="valid-feedback" id="update_product_priceError"></span>
 						  </div>
 						</div>					
