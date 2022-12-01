@@ -6,11 +6,14 @@
 	$("#generate_report").click(function(event){
 		
 		event.preventDefault();
-			
+	
 					/*Reset Warnings*/
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
-					$('#end_dateError').text('');				  
+					$('#end_dateError').text('');		
+					
+					/*Reset Table Upon Resubmit form*/					
+					$("#billingstatementreport tbody").html("");					
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
@@ -30,7 +33,7 @@
 				},
 				success:function(response){
 				  console.log(response);
-				  if(response) {
+				  if(response!='') {
 					
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
@@ -68,6 +71,11 @@
 							$("#billingstatementreport tbody").append(tr_str);
 							
 						}				
+				  }else{
+							/*No Result Found*/
+							/*Close Form*/
+							$('#CreateReportModal').modal('toggle');
+							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 				  }
 				},
 				error: function(error) {

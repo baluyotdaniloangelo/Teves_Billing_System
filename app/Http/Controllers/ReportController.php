@@ -48,11 +48,19 @@ class ReportController extends Controller
 			'end_date.required' 	=> 'Please select a End Date'
         ]
 		);
+/*
 
+				  start_date:start_date,
+				  end_date:end_date,
+*/
 
 		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
 		
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('order_date', '>=', $start_date)
+                    ->where('order_date', '<=', $end_date)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->get([
 					'teves_billing_table.drivers_name',
