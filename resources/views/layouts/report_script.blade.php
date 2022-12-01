@@ -5,7 +5,7 @@
 	<!--Load Table-->
 	$("#generate_report").click(function(event){
 		
-		event.preventDefault();
+			event.preventDefault();
 	
 					/*Reset Warnings*/
 					$('#client_idxError').text('');
@@ -20,7 +20,10 @@
 			let client_idx 		= $("#client_idx").val();
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
-				
+			
+			/*Call Function to Get the Client Name and Address*/
+			/*Call Function to Get the Grand Total Ammount, PO Range*/  
+			
 			  $.ajax({
 				url: "/generate_report",
 				type:"POST",
@@ -39,6 +42,8 @@
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
 					
+						var grand_total_amount = 0;
+						
 						var len = response.length;
 						for(var i=0; i<len; i++){
 							var id = response[i].id;
@@ -51,11 +56,13 @@
 							var product_price = response[i].product_price;
 							var order_total_amount = response[i].order_total_amount;
 							var order_time = response[i].order_time;
+							
+							grand_total_amount += response[i].order_total_amount;
 
 							var tr_str = "<tr>" +
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td align='center'>" + drivers_name + "</td>" +
 								"<td align='center'>" + order_date + "</td>" +
+								"<td align='center'>" + drivers_name + "</td>" +
 								"<td align='center'>" + order_po_number + "</td>" +
 								"<td align='center'>" + plate_no + "</td>" +
 								"<td align='center'>" + product_name + "</td>" +
@@ -70,11 +77,16 @@
 							/*Attached the Data on the Table Body*/
 							$("#billingstatementreport tbody").append(tr_str);
 							
-						}				
+						}			
+							/*Set Grand Total and Billing Date*/
+							$('#grand_total_amount').text(grand_total_amount);
+							$('#billing_date_info').text('<?php echo date('Y-m-d'); ?>');	
+							
 				  }else{
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');
 							/*No Result Found*/
+							$('#grand_total_amount').text('');
 							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 				  }
 				},
@@ -96,5 +108,9 @@
 			   });
 		
 	  });
+	  
+	  
+	  function add_site( event )
+{}
   </script>
 	

@@ -21,6 +21,31 @@
 		 
             <div class="card-body">			
 				<div class="p-d3">
+				
+						<div class="row mb-2">
+						
+						<div class="col-sm-6">
+							<div class="ms-2">
+								<div class="fw-bold">Client: <span id="client_info" style="font-weight: normal;">P.O Period</span></div>
+							</div>
+							<div class="ms-2">
+								<div class="fw-bold">Grand Total: <span id="grand_total_amount" style="font-weight: normal;"></span></div>
+							</div>
+						</div>
+						
+						<div class="col-sm-6">
+							
+							<div class="ms-2">
+								<div class="fw-bold">P.O Period: <span id="po_info" style="font-weight: normal;"></span></div>			
+							</div>
+							
+							<div class="ms-2">
+								<div class="fw-bold">Billing Date: <span id="billing_date_info" style="font-weight: normal;"></span></div>
+							</div>
+	
+						</div>
+						</div>
+				
 									<div class="table-responsive">
 										<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0">
 											<thead>
@@ -50,7 +75,7 @@
 
 	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateReportModal" tabindex="-1">
-              <div class="modal-dialog modal-lg">
+              <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Report</h5>
@@ -78,7 +103,7 @@
 						<div class="row mb-2">
 						  <label for="start_date" class="col-sm-3 col-form-label">Start Date</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="start_date" id="start_date" value="" required>
+							<input type="date" class="form-control " name="start_date" id="start_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="start_dateError"></span>
 						  </div>
 						</div>						
@@ -86,7 +111,7 @@
 						<div class="row mb-2">
 						  <label for="end_date" class="col-sm-3 col-form-label">End Date</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="end_date" id="end_date" value="" required>
+							<input type="date" class="form-control " name="end_date" id="end_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="end_dateError"></span>
 						  </div>
 						</div>
@@ -94,10 +119,7 @@
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
-						
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="generate_report"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear"> Reset</button>
-						  
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
