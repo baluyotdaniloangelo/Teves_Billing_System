@@ -65,6 +65,20 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
+	  <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('billing') }}">
+          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <span>Billing</span>
+        </a>
+      </li>
+
+	  <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('report') }}">
+          <i class="bi bi-graph-up navbar_icon"></i>
+          <span>Report</span>
+        </a>
+      </li>
+	  
       <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-gear navbar_icon"></i><span>Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -72,16 +86,12 @@
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
 		
-			<a href="{{ route('billing') }}" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Billing</span>
-            </a>
-		
             <a href="{{ route('product') }}" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Product</span>
+              <i class="bi bi-cart navbar_icon"></i><span>Product</span>
             </a>
 			
 			<a href="{{ route('client') }}" class="sidebar_li_a">
-              <i class="bi bi-circle"></i><span>Client</span>
+              <i class="bi bi-people navbar_icon"></i><span>Client</span>
             </a>
 			<!--
 			<a href="components-alerts.html" class="sidebar_li_a">
@@ -91,7 +101,7 @@
           </li>
         </ul>
       </li><!-- End Components Nav -->
-
+<!--
       <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-bar-chart navbar_icon"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -103,7 +113,9 @@
             </a>
           </li>
         </ul>
-      </li><!-- End Charts Nav -->
+      </li>
+-->
+	  <!-- End Charts Nav -->
 
     </ul>
 
