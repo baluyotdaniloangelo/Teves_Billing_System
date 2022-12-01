@@ -76,7 +76,7 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="start_date" class="col-sm-3 col-form-label">Start</label>
+						  <label for="start_date" class="col-sm-3 col-form-label">Start Date</label>
 						  <div class="col-sm-9">
 							<input type="date" class="form-control " name="start_date" id="start_date" value="" required>
 							<span class="valid-feedback" id="start_dateError"></span>

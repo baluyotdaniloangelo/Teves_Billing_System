@@ -72,9 +72,9 @@
 							
 						}				
 				  }else{
-							/*No Result Found*/
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');
+							/*No Result Found*/
 							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 				  }
 				},
