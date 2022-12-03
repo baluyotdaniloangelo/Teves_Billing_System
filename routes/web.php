@@ -68,4 +68,7 @@ Route::post('/delete_client_confirmed', [ClientController::class, 'delete_client
 
 /*Load Report Interface*/
 Route::get('/report', [ReportController::class,'report'])->name('report')->middleware('isLoggedIn');
+/*Generate via Web Page View*/
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
+/*Download Directly via Excel*/
+Route::get('/generate_report_excel', [ReportController::class,'generate_report_excel'])->name('generate_report_excel')->middleware('isLoggedIn');

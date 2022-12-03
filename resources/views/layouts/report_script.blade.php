@@ -21,7 +21,7 @@
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 			
-			/*Call Function to Get the Client Name and Address*/
+			
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -35,6 +35,10 @@
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
+							
+				/*Call Function to Get the Client Name and Address*/
+				get_client_details();
+							
 				  console.log(response);
 				  if(response!='') {
 					
@@ -74,13 +78,16 @@
 							
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');
+							
 							/*Attached the Data on the Table Body*/
 							$("#billingstatementreport tbody").append(tr_str);
 							
 						}			
+							
 							/*Set Grand Total and Billing Date*/
 							$('#grand_total_amount').text(grand_total_amount);
 							$('#billing_date_info').text('<?php echo date('Y-m-d'); ?>');	
+							download_billing_report();
 							
 				  }else{
 							/*Close Form*/
@@ -108,9 +115,53 @@
 			   });
 		
 	  });
+	    
+	function get_client_details(){
+		  
+			let client_idx 		= $("#client_idx").val();
+			
+			  $.ajax({
+				url: "/client_info",
+				type:"POST",
+				data:{
+				  clientID:client_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {		
+					
+					/*Set Details*/
+					$('#client_info_report').text(response.client_name);
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
 	  
+	}
+	
+	function download_billing_report(){
+		  
+		  
+			let client_idx 		= $("#client_idx").val();
+			let start_date 		= $("input[name=start_date]").val();
+			let end_date 		= $("input[name=end_date]").val();
+		  
+		  
+		var query = {
+			client_idx:client_idx,
+			start_date:start_date,
+			end_date:end_date,
+			_token: "{{ csrf_token() }}"
+		}
+
+		var url = "{{URL::to('generate_report_excel')}}?" + $.param(query)
+		window.open(url);
 	  
-	  function add_site( event )
-{}
-  </script>
+	}
+</script>
 	

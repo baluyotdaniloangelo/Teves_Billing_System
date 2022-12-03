@@ -26,7 +26,7 @@
 						
 						<div class="col-sm-6">
 							<div class="ms-2">
-								<div class="fw-bold">Client: <span id="client_info" style="font-weight: normal;">P.O Period</span></div>
+								<div class="fw-bold">Client: <span id="client_info_report" style="font-weight: normal;"></span></div>
 							</div>
 							<div class="ms-2">
 								<div class="fw-bold">Grand Total: <span id="grand_total_amount" style="font-weight: normal;"></span></div>

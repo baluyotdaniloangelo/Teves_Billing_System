@@ -22,6 +22,7 @@
 													<th>#</th>
 													<th>Product Name</th>
 													<th>Price</th>
+													<th>Unit of Measurement</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -29,6 +30,16 @@
 											<tbody>
 												
 											</tbody>
+											
+											<tfoot>
+												<tr>
+													<th>#</th>
+													<th>Product Name</th>
+													<th>Price</th>
+													<th>Unit of Measurement</th>
+													<th>Action</th>
+												</tr>
+											</tfoot>	
 										</table>
 									</div>		
 				</div>									
@@ -55,8 +66,9 @@
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
+                    
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteProductConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
                   
                 </div>
             </div>
@@ -113,11 +125,22 @@
 						<div class="row mb-2">
 						  <label for="product_price" class="col-sm-3 col-form-label">Product Price</label>
 						  <div class="col-sm-9">
-							<input type="numner" class="form-control " name="product_price" id="product_price" value="" required>
+							<input type="number" class="form-control " name="product_price" id="product_price" value="" required>
 							<span class="valid-feedback" id="product_priceError"></span>
 						  </div>
 						</div>						
-									
+							
+						<div class="row mb-2">
+						  <label for="product_unit_measurement" class="col-sm-3 col-form-label">Unit of Measurement</label>
+						  <div class="col-sm-9">
+							<select class="form-control form-select " name="product_unit_measurement" id="product_unit_measurement" required>				
+									<option value="L">Liter</option>
+									<option value="PC">Pieces</option>
+							</select>
+							<span class="valid-feedback" id="product_unit_measurementError"></span>
+						  </div>
+						</div>
+							
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
@@ -126,6 +149,7 @@
 						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-product"> Reset</button>
 						  
 					</div>
+					
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>
@@ -161,7 +185,18 @@
 							<span class="valid-feedback" id="update_product_priceError"></span>
 						  </div>
 						</div>					
-									
+								
+						<div class="row mb-2">
+						  <label for="update_product_unit_measurement" class="col-sm-3 col-form-label">Unit of Measurement</label>
+						  <div class="col-sm-9">
+							<select class="form-control form-select " name="update_product_unit_measurement" id="update_product_unit_measurement" required>
+									<option value="L">Liter</option>
+									<option value="PC">Pieces</option>
+							</select>
+							<span class="valid-feedback" id="update_product_unit_measurementError"></span>
+						  </div>
+						</div>
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">

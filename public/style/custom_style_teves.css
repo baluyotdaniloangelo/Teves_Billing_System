@@ -1,4 +1,9 @@
 /*Custom Appearance of Web Page including Navbar,Header Logo*/
+@font-face {
+		font-family: Nunito;
+		src: url('fonts/Nunito/Nunito-VariableFont_wght.ttf');
+}
+
 .sidebar-brand {
   height: 6.375rem !important;
 }
@@ -40,8 +45,8 @@
 
 
 .sidebar_bg{
-	box-shadow: none !important;
-    background-color: #041c68e0  !important;
+	/* box-shadow: none !important; */
+    /* background-color: #a7e9af !important;!*/
 	top: 70px !important;
 	width: 220px !important;
 }
@@ -49,7 +54,6 @@
 .navbar_bg{
 	color: #ffffff !important;
     background: #041c68 !important;
-	border-radius: none !important;	
 }
 
 .navbar_icon{

@@ -25,11 +25,14 @@
 					{data: 'order_po_number'},     
 					{data: 'plate_no'},     
 					{data: 'product_name'},     
-					{data: 'order_quantity'},    
+					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
 					{data: 'product_price'},     
 					{data: 'order_total_amount'},  
 					{data: 'order_time'},  
 					{data: 'action', name: 'action', orderable: false, searchable: false},
+			],
+			columnDefs: [
+					{ className: 'text-center', targets: [0, 1, 5, 6, 7, 8, 9, 10] },
 			]
 		});
 		$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+

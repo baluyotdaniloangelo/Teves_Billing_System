@@ -23,7 +23,7 @@
 													<th>Date</th>
 													<th>Driver's Name</th>
 													<th>P.O. No.</th>
-													<th>Plate Number</th>																						
+													<th>Plate Number</th>																	
 													<th>Product</th>
 													<th>Quantity</th>
 													<th>Price</th>
@@ -36,6 +36,23 @@
 											<tbody>
 												
 											</tbody>
+											
+											
+											<tfoot>
+												<tr>
+													<th>#</th>
+													<th>Date</th>
+													<th>Driver's Name</th>
+													<th>P.O. No.</th>
+													<th>Plate Number</th>																	
+													<th>Product</th>
+													<th>Quantity</th>
+													<th>Price</th>
+													<th>Amount</th>
+													<th>Time</th>
+													<th>Action</th>
+												</tr>
+											</tfoot>
 										</table>
 									</div>		
 				</div>									

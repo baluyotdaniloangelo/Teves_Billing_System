@@ -26,11 +26,11 @@ body{
 .bg-sm {
     background-color: #1c3789!important;
 }
-
+/*
 .btn {
 	border-radius: 0;
 }
-
+*/
 .btn_icon{
 	font-size: 1rem !important;
 	color: #fff;
@@ -212,7 +212,12 @@ div.dataTables_wrapper div.dataTables_length select {
 	text-align: center;
 	/*border: none !important;*/
 }
-
+.table tfoot th{
+	background-color:#146c43;
+	color:#FFF347;
+	text-align: center;
+	/*border: none !important;*/
+}
 .table-bordered{
 	border: none !important;
 }
@@ -236,8 +241,9 @@ div.dataTables_wrapper div.dataTables_length select {
 */
 .sidebar_li_a{
 	color:#fff !important;
-	margin-bottom: 2px;
-    background-color: #041c68a6;
+	background-color: #041c68c7;
+    border-radius: 4px;
+	margin-bottom: 1px;
 }
 
 .loading_style{
@@ -310,6 +316,9 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 
 .card-header{
 	border-bottom: 2px solid #3f8f48  !important;
+}
+.card-title{
+	font-family: "Nunito", sans-serif !important;
 }
 /*
 #main {

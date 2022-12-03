@@ -23,6 +23,9 @@
 					{data: 'client_name'},   
 					{data: 'client_address'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
+			],
+			columnDefs: [
+					{ className: 'text-center', targets: [0, 1, 2, 3] },
 			]
 		});
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+

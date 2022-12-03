@@ -13,6 +13,7 @@ use DataTables;
 /*Excel*/
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ReportController extends Controller
 {
@@ -48,11 +49,6 @@ class ReportController extends Controller
 			'end_date.required' 	=> 'Please select a End Date'
         ]
 		);
-/*
-
-				  start_date:start_date,
-				  end_date:end_date,
-*/
 
 		$client_idx = $request->client_idx;
 		$start_date = $request->start_date;
@@ -78,15 +74,161 @@ class ReportController extends Controller
 		
 	}	
 	
-	public function sample1(Request $request){
+	public function generate_report_excel(Request $request){
 
-	
-	$spreadsheet = new Spreadsheet();
-	$sheet = $spreadsheet->getActiveSheet();
-	$sheet->setCellValue('A1', 'Hello World !');
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
 
-	$writer = new Xlsx($spreadsheet);
-	$writer->save('hello world.xlsx');
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		
+		$data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('order_date', '>=', $start_date)
+                    ->where('order_date', '<=', $end_date)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->get([
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);	
+
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
+		
+		$client_name = $client_data['client_name'];
+		
+		//$spreadsheet = new Spreadsheet();
+		//$sheet = $spreadsheet->getActiveSheet();
+		//$sheet->setCellValue('A1', 'Billing Statement');
+
+		//$writer = new Xlsx($spreadsheet);
+		/*To Save*/
+		//$writer->save("$client_name.xlsx");
+		/*to download directly*/
+		//$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		//$writer->save('php://output');
+		
+	   ini_set('max_execution_time', 0);
+       ini_set('memory_limit', '4000M');
+       try {
+		   
+           $spreadSheet = new Spreadsheet();
+           //$spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
+           //$spreadSheet->getActiveSheet()->fromArray($customer_data);
+		   
+		   
+		   $drawing = new Drawing();
+$drawing->setName('Logo');
+$drawing->setDescription('This is my logo');
+$drawing->setPath(public_path('/client_logo/logo.png'));
+$drawing->setHeight(36);
+$drawing->setCoordinates('A1');
+
+		   $spreadSheet->getActiveSheet()->setCellValue('A1', 'Billing Statement');
+           
+		   $spreadSheet->getActiveSheet()->mergeCells('B3:C3');
+		   $spreadSheet->getActiveSheet()->setCellValue('A3', "CLIENT'S NAME:");
+		   $spreadSheet->getActiveSheet()->setCellValue('B3', $client_name);
+		   
+		   $spreadSheet->getActiveSheet()->mergeCells('H3:I3');
+		   $spreadSheet->getActiveSheet()->setCellValue('H3', 'P.O PERIOD:');
+		   $spreadSheet->getActiveSheet()->mergeCells('J3:K3');
+		   $spreadSheet->getActiveSheet()->setCellValue('J3', 'p.o?');
+		   
+		   $spreadSheet->getActiveSheet()->mergeCells('H4:I4');
+		   $spreadSheet->getActiveSheet()->setCellValue('H4', 'BILLING DATE:');
+		   $spreadSheet->getActiveSheet()->mergeCells('J4:K4');
+		   $spreadSheet->getActiveSheet()->setCellValue('J4', date('Y-m-d'));
+		   
+		   //DATE	DRIVER'S NAME	P.O. No.	PLATE NUMBER	PRODUCT 	QUANTITY	UOM PRICE	AMOUNT	TIME
+		   $spreadSheet->getActiveSheet()->setCellValue('A6', "ITEM #");
+		   $spreadSheet->getActiveSheet()->setCellValue('B6', "DATE");
+		   $spreadSheet->getActiveSheet()->setCellValue('C6', "DRIVER'S NAME");
+		   $spreadSheet->getActiveSheet()->setCellValue('D6', "P.O. No.");
+		   $spreadSheet->getActiveSheet()->setCellValue('E6', "PLATE NUMBER");
+		   $spreadSheet->getActiveSheet()->setCellValue('F6', "PRODUCT");
+		   $spreadSheet->getActiveSheet()->setCellValue('G6', "QUANTITY");
+		   $spreadSheet->getActiveSheet()->setCellValue('H6', "UOM");
+		   $spreadSheet->getActiveSheet()->setCellValue('I6', "PRICE");
+		   $spreadSheet->getActiveSheet()->setCellValue('J6', "AMOUNT");
+		   $spreadSheet->getActiveSheet()->setCellValue('K6', "TIME");
+		   
+		   
+			$no_excl = 7;
+			$n = 1;
+			
+			$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('order_date', '>=', $start_date)
+                    ->where('order_date', '<=', $end_date)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->get([
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
+			
+			
+			foreach ($billing_data as $billing_data_column){
+			
+				$spreadSheet->getActiveSheet()
+					->setCellValue('A'.$no_excl, $n)
+					->setCellValue('B'.$no_excl, $billing_data_column['order_date'])
+					->setCellValue('C'.$no_excl, $billing_data_column['drivers_name'])
+					->setCellValue('D'.$no_excl, $billing_data_column['order_po_number'])
+					->setCellValue('E'.$no_excl, $billing_data_column['plate_no'])
+					->setCellValue('F'.$no_excl, $billing_data_column['product_name'])
+					->setCellValue('G'.$no_excl, $billing_data_column['order_quantity'])
+					->setCellValue('H'.$no_excl, $billing_data_column['product_unit_measurement'])
+					->setCellValue('I'.$no_excl, $billing_data_column['product_price'])
+					->setCellValue('J'.$no_excl, $billing_data_column['order_total_amount'])
+					->setCellValue('K'.$no_excl, $billing_data_column['order_time']);
+
+			/*Increment*/
+			$no_excl++;
+			$n++;
+			}
+		   
+		   
+		   
+		   
+		   $Excel_writer = new Xlsx($spreadSheet);
+           header('Content-Type: application/vnd.ms-excel');
+           header("Content-Disposition: attachment;filename=".$client_name.".xlsx");
+           header('Cache-Control: max-age=0');
+           ob_end_clean();
+           $Excel_writer->save('php://output');
+         //  exit();
+       
+	   } catch (Exception $e) {
+           return;
+       }
+		
+		
+		
+		exit;	
 	}	
 	
 }

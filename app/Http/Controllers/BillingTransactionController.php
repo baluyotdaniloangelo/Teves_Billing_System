@@ -47,6 +47,7 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',					
 					'teves_billing_table.order_total_amount',
@@ -59,7 +60,9 @@ class BillingTransactionController extends Controller
 		
 
 		return DataTables::of($data)
+				
 				->addIndexColumn()
+				
                 ->addColumn('action', function($row){
                     
 					$last_log_update = $row->last_log_update;
@@ -76,7 +79,13 @@ class BillingTransactionController extends Controller
                     return $actionBtn;
                 })
 				
-				->rawColumns(['action'])
+				 ->addColumn('quantity_measurement', function($row){
+                 											
+					return  $row->order_quantity." ".$row->product_unit_measurement;
+                    //return $actionBtn;
+                })
+				
+				->rawColumns(['action','quantity_measurement'])
                 ->make(true);
 		
 		}

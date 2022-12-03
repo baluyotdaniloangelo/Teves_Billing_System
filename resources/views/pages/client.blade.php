@@ -29,6 +29,16 @@
 											<tbody>
 												
 											</tbody>
+											
+											<tfoot>
+												<tr>
+													<th>#</th>
+													<th>Client Name</th>
+													<th>Address</th>
+													<th>Action</th>
+												</tr>
+											</tfoot>
+											
 										</table>
 									</div>		
 				</div>									
@@ -179,6 +189,4 @@
     </section>
 </main>
 
-
 @endsection
-

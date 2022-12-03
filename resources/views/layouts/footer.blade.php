@@ -19,8 +19,8 @@
 				Select "Logout" below if you are ready to end your current session.
 				</div>
                 <div class="modal-footer footer_modal_bg">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Close</button>
                     <a class="btn btn-danger" href="/logout"><i class="bi bi-arrow-right-circle navbar_icon"></i> Logout</a>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Close</button>
                 </div>
             </div>
         </div>

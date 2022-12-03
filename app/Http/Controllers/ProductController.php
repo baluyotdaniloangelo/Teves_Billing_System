@@ -38,7 +38,8 @@ class ProductController extends Controller
     	$data = ProductModel::select(
 		'product_id',
 		'product_name',
-		'product_price');
+		'product_price',
+		'product_unit_measurement');
 		
 
 		return DataTables::of($data)
@@ -66,7 +67,7 @@ class ProductController extends Controller
 	public function product_info(Request $request){
 
 		$productID = $request->productID;
-		$data = ProductModel::find($productID, ['product_name','product_price']);
+		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement']);
 		return response()->json($data);
 		
 	}
@@ -94,8 +95,9 @@ class ProductController extends Controller
 
 			$Product = new ProductModel();
 			
-			$Product->product_name 			= $request->product_name;
-			$Product->product_price 			= $request->product_price;
+			$Product->product_name 						= $request->product_name;
+			$Product->product_price 					= $request->product_price;
+			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 			
 			$result = $Product->save();
 			
@@ -125,6 +127,7 @@ class ProductController extends Controller
 			
 			$Product->product_name 			= $request->product_name;
 			$Product->product_price 		= $request->product_price;
+			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 						
 			$result = $Product->update();
 			

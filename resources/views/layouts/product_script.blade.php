@@ -22,7 +22,11 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'product_name'},   
 					{data: 'product_price'},
+					{data: 'product_unit_measurement'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
+			],
+			columnDefs: [
+					{ className: 'text-center', targets: [0, 1, 2, 3, 4] },
 			]
 		});
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
@@ -41,8 +45,9 @@
 
 			document.getElementById('ProductformNew').className = "g-3 needs-validation was-validated";
 
-			let product_name 			= $("input[name=product_name]").val();
-			let product_price 			= $("input[name=product_price]").val();
+			let product_name 				= $("input[name=product_name]").val();
+			let product_price 				= $("input[name=product_price]").val();
+			let product_unit_measurement 	= $("#product_unit_measurement").val();
 			
 			  $.ajax({
 				url: "/create_product_post",
@@ -50,6 +55,7 @@
 				data:{
 				  product_name:product_name,
 				  product_price:product_price,
+				  product_unit_measurement:product_unit_measurement,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -114,6 +120,7 @@
 					/*Set Details*/
 					document.getElementById("update_product_name").value = response.product_name;
 					document.getElementById("update_product_price").value = response.product_price;
+					document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement;
 										
 					$('#UpdateProductModal').modal('toggle');					
 				  
@@ -136,9 +143,10 @@
 
 			document.getElementById('ProductformEdit').className = "g-3 needs-validation was-validated";
 			
-			let productID 				= document.getElementById("update-product").value;
-			let product_name 			= $("input[name=update_product_name]").val();
-			let product_price 			= $("input[name=update_product_price]").val();
+			let productID 					= document.getElementById("update-product").value;
+			let product_name 				= $("input[name=update_product_name]").val();
+			let product_price 				= $("input[name=update_product_price]").val();
+			let product_unit_measurement 	= $("#update_product_unit_measurement").val();
 			
 			  $.ajax({
 				url: "/update_product_post",
@@ -147,6 +155,7 @@
 				  productID:productID,
 				  product_name:product_name,
 				  product_price:product_price,
+				  product_unit_measurement:product_unit_measurement ,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
