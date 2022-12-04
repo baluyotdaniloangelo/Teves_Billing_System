@@ -14,7 +14,7 @@ use DataTables;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-
+//use PhpOffice\PhpSpreadsheet\PHPExcel_IOFactory;
 class ReportController extends Controller
 {
 	/*Load Report Interface*/
@@ -113,33 +113,14 @@ class ReportController extends Controller
 		
 		$client_name = $client_data['client_name'];
 		
-		//$spreadsheet = new Spreadsheet();
-		//$sheet = $spreadsheet->getActiveSheet();
-		//$sheet->setCellValue('A1', 'Billing Statement');
-
-		//$writer = new Xlsx($spreadsheet);
-		/*To Save*/
-		//$writer->save("$client_name.xlsx");
-		/*to download directly*/
-		//$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-		//$writer->save('php://output');
-		
 	   ini_set('max_execution_time', 0);
        ini_set('memory_limit', '4000M');
        try {
 		   
            $spreadSheet = new Spreadsheet();
-           //$spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
-           //$spreadSheet->getActiveSheet()->fromArray($customer_data);
-		   
-		   
-		   $drawing = new Drawing();
-$drawing->setName('Logo');
-$drawing->setDescription('This is my logo');
-$drawing->setPath(public_path('/client_logo/logo.png'));
-$drawing->setHeight(36);
-$drawing->setCoordinates('A1');
-
+           
+           $spreadSheet = IOFactory::load(public_path('/template/Billing-Statement-form.xlsx'));
+		   /*
 		   $spreadSheet->getActiveSheet()->setCellValue('A1', 'Billing Statement');
            
 		   $spreadSheet->getActiveSheet()->mergeCells('B3:C3');
@@ -168,9 +149,13 @@ $drawing->setCoordinates('A1');
 		   $spreadSheet->getActiveSheet()->setCellValue('I6', "PRICE");
 		   $spreadSheet->getActiveSheet()->setCellValue('J6', "AMOUNT");
 		   $spreadSheet->getActiveSheet()->setCellValue('K6', "TIME");
+		   */
 		   
-		   
-			$no_excl = 7;
+		    $spreadSheet->getActiveSheet()->setCellValue('B7', $client_name);
+			$spreadSheet->getActiveSheet()->setCellValue('J7', 'p.o?');
+			$spreadSheet->getActiveSheet()->setCellValue('J8', date('Y-m-d')); 
+			
+			$no_excl = 11;
 			$n = 1;
 			
 			$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
@@ -209,26 +194,39 @@ $drawing->setCoordinates('A1');
 			/*Increment*/
 			$no_excl++;
 			$n++;
-			}
-		   
-		   
-		   
+			} 
 		   
 		   $Excel_writer = new Xlsx($spreadSheet);
            header('Content-Type: application/vnd.ms-excel');
-           header("Content-Disposition: attachment;filename=".$client_name.".xlsx");
+           header("Content-Disposition: attachment;filename=".$client_name."Billing Statement.xlsx");
            header('Cache-Control: max-age=0');
            ob_end_clean();
            $Excel_writer->save('php://output');
-         //  exit();
+           exit();
        
 	   } catch (Exception $e) {
            return;
        }
-		
-		
-		
-		exit;	
+	   
 	}	
 	
+	
+	public function test_draw(Request $request){
+
+	$objPHPExcel = IOFactory::load(public_path('/template/Billing-Statement-form.xlsx'));
+	$objPHPExcel->getActiveSheet()
+                            ->setCellValue('A12', "No")
+                            ->setCellValue('B12', "Name")
+                            ->setCellValue('C12', "Email")
+                            ->setCellValue('D12', "Phone")
+                            ->setCellValue('E12', "Address");
+							
+							$Excel_writer = new Xlsx($objPHPExcel);
+           header('Content-Type: application/vnd.ms-excel');
+           header("Content-Disposition: attachment;filename=ooo.xlsx");
+           header('Cache-Control: max-age=0');
+           ob_end_clean();
+           $Excel_writer->save('php://output');
+           exit();
+	}
 }

@@ -72,3 +72,5 @@ Route::get('/report', [ReportController::class,'report'])->name('report')->middl
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
 /*Download Directly via Excel*/
 Route::get('/generate_report_excel', [ReportController::class,'generate_report_excel'])->name('generate_report_excel')->middleware('isLoggedIn');
+
+Route::get('/test_draw', [ReportController::class,'test_draw'])->name('test_draw')->middleware('isLoggedIn');

@@ -21,7 +21,7 @@
                   <div class="pt-4 pb-2">
 				  
 				  <div class="d-flex justify-content-center py-4">
-					<img src="{{asset('client_logo/logo.png')}}" alt="" style="width:100px;">
+					<img src="{{asset('client_logo/logo.png')}}" alt="" style="width:150px;">
 				  </div>
                   
 				  <h5 class="card-title text-center pb-0 fs-6" style="font-weight:bold !important; padding:0px !important">Billing System</h5>
@@ -61,7 +61,7 @@
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" class="form-control form-control-user" id="InputPassword" name="InputPassword" placeholder="Password" style="text-align:center;" value="{{old('InputPassword')}}">
+                      <input type="password" class="form-control form-control-user" id="InputPassword" name="InputPassword" placeholder="Enter Password" style="text-align:center;" value="{{old('InputPassword')}}">
 					  <span class="text-danger">@error('InputPassword') {{$message}} @enderror</span>
                     </div>
 					
