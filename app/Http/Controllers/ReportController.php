@@ -209,6 +209,7 @@ class ReportController extends Controller
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',					
 					'teves_billing_table.order_total_amount',
@@ -222,13 +223,11 @@ class ReportController extends Controller
           
 		$title = 'Billing Statement';
 		  
-        //$pdf = PDF::loadView('pages.report_pdf', compact('title','client_data','billing_data'));
+       $pdf = PDF::loadView('pages.report_pdf', compact('title','client_data','billing_data', 'start_date', 'end_date'));
     
-       ///return $pdf->download("tes.pdf");
-			return view("pages.report_pdf", compact('title','client_data','billing_data'));
+       return $pdf->download("tes.pdf");
+		//	return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));
 	}
 	
-	
-
 	
 }
