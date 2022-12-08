@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,5 +73,21 @@ Route::get('/report', [ReportController::class,'report'])->name('report')->middl
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
 /*Download Directly via Excel*/
 Route::get('/generate_report_excel', [ReportController::class,'generate_report_excel'])->name('generate_report_excel')->middleware('isLoggedIn');
+/*Download via PDF*/
+Route::get('/generate_report_pdf/{clientID}/{datefrom}/{dateto}', [CAMRSiteController::class,'generate_report_pdf'])->name('generate_report_pdf')->middleware('isLoggedIn');
 
-Route::get('/test_draw', [ReportController::class,'test_draw'])->name('test_draw')->middleware('isLoggedIn');
+/*Load User Account List for Admin Only*/
+Route::get('/user', [UserController::class,'user'])->name('user')->middleware('isLoggedIn');
+/*Get List of User*/
+Route::post('user_list', [UserController::class, 'getUserList'])->name('UserList')->middleware('isLoggedIn');
+/*Create User*/
+Route::post('/create_user_post', [UserController::class,'create_user_post'])->name('create_user_post')->middleware('isLoggedIn');
+
+/*GET User Info*/
+Route::post('/user_info', [UserController::class, 'user_info'])->name('user_info')->middleware('isLoggedIn');
+/*Update User*/
+Route::post('/update_user_post', [UserController::class,'update_user_post'])->name('update_user_post')->middleware('isLoggedIn');
+/*Confirm Delete Switch*/
+Route::post('/delete_user_confirmed', [UserController::class, 'delete_user_confirmed'])->name('delete_user_confirmed')->middleware('isLoggedIn');
+/*Update User Account*/
+Route::post('/user_account_post', [UserController::class,'user_account_post'])->name('user_account_post')->middleware('isLoggedIn');

@@ -18,7 +18,7 @@ class ProductController extends Controller
 		$data = array();
 		if(Session::has('loginID')){
 			
-			$data = User::where('id', '=', Session::get('loginID'))->first();
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$product_data = ProductModel::all();
 		

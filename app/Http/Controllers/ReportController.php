@@ -14,7 +14,9 @@ use DataTables;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-//use PhpOffice\PhpSpreadsheet\PHPExcel_IOFactory;
+/*PDF*/
+use PDF;
+
 class ReportController extends Controller
 {
 	/*Load Report Interface*/
@@ -24,7 +26,7 @@ class ReportController extends Controller
 		$data = array();
 		if(Session::has('loginID')){
 			
-			$data = User::where('id', '=', Session::get('loginID'))->first();
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			/*$product_data = ProductModel::all();*/
 			
@@ -120,36 +122,6 @@ class ReportController extends Controller
            $spreadSheet = new Spreadsheet();
            
            $spreadSheet = IOFactory::load(public_path('/template/Billing-Statement-form.xlsx'));
-		   /*
-		   $spreadSheet->getActiveSheet()->setCellValue('A1', 'Billing Statement');
-           
-		   $spreadSheet->getActiveSheet()->mergeCells('B3:C3');
-		   $spreadSheet->getActiveSheet()->setCellValue('A3', "CLIENT'S NAME:");
-		   $spreadSheet->getActiveSheet()->setCellValue('B3', $client_name);
-		   
-		   $spreadSheet->getActiveSheet()->mergeCells('H3:I3');
-		   $spreadSheet->getActiveSheet()->setCellValue('H3', 'P.O PERIOD:');
-		   $spreadSheet->getActiveSheet()->mergeCells('J3:K3');
-		   $spreadSheet->getActiveSheet()->setCellValue('J3', 'p.o?');
-		   
-		   $spreadSheet->getActiveSheet()->mergeCells('H4:I4');
-		   $spreadSheet->getActiveSheet()->setCellValue('H4', 'BILLING DATE:');
-		   $spreadSheet->getActiveSheet()->mergeCells('J4:K4');
-		   $spreadSheet->getActiveSheet()->setCellValue('J4', date('Y-m-d'));
-		   
-		   //DATE	DRIVER'S NAME	P.O. No.	PLATE NUMBER	PRODUCT 	QUANTITY	UOM PRICE	AMOUNT	TIME
-		   $spreadSheet->getActiveSheet()->setCellValue('A6', "ITEM #");
-		   $spreadSheet->getActiveSheet()->setCellValue('B6', "DATE");
-		   $spreadSheet->getActiveSheet()->setCellValue('C6', "DRIVER'S NAME");
-		   $spreadSheet->getActiveSheet()->setCellValue('D6', "P.O. No.");
-		   $spreadSheet->getActiveSheet()->setCellValue('E6', "PLATE NUMBER");
-		   $spreadSheet->getActiveSheet()->setCellValue('F6', "PRODUCT");
-		   $spreadSheet->getActiveSheet()->setCellValue('G6', "QUANTITY");
-		   $spreadSheet->getActiveSheet()->setCellValue('H6', "UOM");
-		   $spreadSheet->getActiveSheet()->setCellValue('I6', "PRICE");
-		   $spreadSheet->getActiveSheet()->setCellValue('J6', "AMOUNT");
-		   $spreadSheet->getActiveSheet()->setCellValue('K6', "TIME");
-		   */
 		   
 		    $spreadSheet->getActiveSheet()->setCellValue('B7', $client_name);
 			$spreadSheet->getActiveSheet()->setCellValue('J7', 'p.o?');
@@ -210,23 +182,21 @@ class ReportController extends Controller
 	   
 	}	
 	
-	
-	public function test_draw(Request $request){
-
-	$objPHPExcel = IOFactory::load(public_path('/template/Billing-Statement-form.xlsx'));
-	$objPHPExcel->getActiveSheet()
-                            ->setCellValue('A12', "No")
-                            ->setCellValue('B12', "Name")
-                            ->setCellValue('C12', "Email")
-                            ->setCellValue('D12', "Phone")
-                            ->setCellValue('E12', "Address");
-							
-							$Excel_writer = new Xlsx($objPHPExcel);
-           header('Content-Type: application/vnd.ms-excel');
-           header("Content-Disposition: attachment;filename=ooo.xlsx");
-           header('Cache-Control: max-age=0');
-           ob_end_clean();
-           $Excel_writer->save('php://output');
-           exit();
+	public function generate_report_pdf(Request $request){
+		
+		$data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y')
+        ];
+          
+        $pdf = PDF::loadView('myPDF', $data);
+    
+        return $pdf->download('itsolutionstuff.pdf');
+		
+		
 	}
+	
+	
+
+	
 }

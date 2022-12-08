@@ -35,7 +35,7 @@
 					{ className: 'text-center', targets: [0, 1, 5, 6, 7, 8, 9, 10] },
 			]
 		});
-		$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
+				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
 				'</div>').appendTo('#billing_option');
 	});

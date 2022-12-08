@@ -24,7 +24,7 @@ class UserAuthController extends Controller
         $user = User::where('user_name', '=', $request->user_name)->first();
 		if ($user){
 			if(Hash::check($request->InputPassword,$user->user_password)){
-				$request->session()->put('loginID', $user->id);
+				$request->session()->put('loginID', $user->user_id);
 				return redirect('billing');
 			}else{
 				return back()->with('fail', 'Incorrect Password');

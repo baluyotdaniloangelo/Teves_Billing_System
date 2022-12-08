@@ -154,7 +154,7 @@
 						<div class="row mb-2">
 						  <label for="order_date" class="col-sm-3 col-form-label">Date</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control" name="order_date" id="order_date" value="" required>
+							<input type="date" class="form-control" name="order_date" id="order_date" value="<?php echo date('d/m/Y'); ?>" required>
 							<span class="valid-feedback" id="order_dateError" title="Required"></span>
 						  </div>
 						</div>

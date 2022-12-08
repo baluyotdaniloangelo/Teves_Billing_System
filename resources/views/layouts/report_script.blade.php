@@ -87,7 +87,14 @@
 							/*Set Grand Total and Billing Date*/
 							$('#grand_total_amount').text(grand_total_amount);
 							$('#billing_date_info').text('<?php echo date('Y-m-d'); ?>');	
-							download_billing_report();
+							/*download_billing_report();*/
+							
+							$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							'<a type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" href="">PDF</a>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report()">Excel</button>'+
+							'</div>').appendTo('#download_options');
+							
+							
 							
 				  }else{
 							/*Close Form*/
@@ -132,8 +139,8 @@
 				  if(response) {		
 					
 					/*Set Details*/
-					$('#client_info_report').text(response.client_name);
-					
+					$('#client_name_report').text(response.client_name);
+					$('#client_address_report').text(response.client_address);
 				  }
 				},
 				error: function(error) {
@@ -146,12 +153,10 @@
 	
 	function download_billing_report(){
 		  
-		  
 			let client_idx 		= $("#client_idx").val();
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
-		  
-		  
+		 		  
 		var query = {
 			client_idx:client_idx,
 			start_date:start_date,

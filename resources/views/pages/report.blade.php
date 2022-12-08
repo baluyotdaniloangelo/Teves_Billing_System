@@ -21,16 +21,28 @@
 		 
             <div class="card-body">			
 				<div class="p-d3">
-				
+						<div class="row">
+						
+						<div class="col-sm-12 d-flex justify-content-end">
+							<div id="download_options"></div>
+						</div>
+						
+						</div>
+						
 						<div class="row mb-2">
 						
 						<div class="col-sm-6">
 							<div class="ms-2">
-								<div class="fw-bold">Client: <span id="client_info_report" style="font-weight: normal;"></span></div>
+								<div class="fw-bold">Client: <span id="client_name_report" style="font-weight: normal;"></span></div>
 							</div>
+							
 							<div class="ms-2">
-								<div class="fw-bold">Grand Total: <span id="grand_total_amount" style="font-weight: normal;"></span></div>
+								<div class="fw-bold">Address: <span id="client_address_report" style="font-weight: normal;"></span></div>
 							</div>
+							
+							<!--Moved to bottom<div class="ms-2">
+								<div class="fw-bold">Grand Total: <span id="grand_total_amount" style="font-weight: normal;"></span></div>
+							</div>-->
 						</div>
 						
 						<div class="col-sm-6">
