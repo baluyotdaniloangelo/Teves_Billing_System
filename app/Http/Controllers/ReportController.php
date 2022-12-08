@@ -184,16 +184,48 @@ class ReportController extends Controller
 	
 	public function generate_report_pdf(Request $request){
 		
-		$data = [
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y')
-        ];
+		/**/
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		
+		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('order_date', '>=', $start_date)
+                    ->where('order_date', '<=', $end_date)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->get([
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);	
+
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
           
-        $pdf = PDF::loadView('myPDF', $data);
+		$title = 'Billing Statement';
+		  
+        //$pdf = PDF::loadView('pages.report_pdf', compact('title','client_data','billing_data'));
     
-        return $pdf->download('itsolutionstuff.pdf');
-		
-		
+       ///return $pdf->download("tes.pdf");
+			return view("pages.report_pdf", compact('title','client_data','billing_data'));
 	}
 	
 	

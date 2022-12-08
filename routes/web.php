@@ -74,7 +74,7 @@ Route::post('/generate_report', [ReportController::class,'generate_report'])->na
 /*Download Directly via Excel*/
 Route::get('/generate_report_excel', [ReportController::class,'generate_report_excel'])->name('generate_report_excel')->middleware('isLoggedIn');
 /*Download via PDF*/
-Route::get('/generate_report_pdf/{clientID}/{datefrom}/{dateto}', [CAMRSiteController::class,'generate_report_pdf'])->name('generate_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_report_pdf', [ReportController::class,'generate_report_pdf'])->name('generate_report_pdf')->middleware('isLoggedIn');
 
 /*Load User Account List for Admin Only*/
 Route::get('/user', [UserController::class,'user'])->name('user')->middleware('isLoggedIn');

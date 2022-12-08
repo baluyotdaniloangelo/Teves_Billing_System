@@ -90,8 +90,8 @@
 							/*download_billing_report();*/
 							
 							$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<a type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" href="">PDF</a>'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report()">Excel</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()">PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()">Excel</button>'+
 							'</div>').appendTo('#download_options');
 							
 							
@@ -151,7 +151,7 @@
 	  
 	}
 	
-	function download_billing_report(){
+	function download_billing_report_excel(){
 		  
 			let client_idx 		= $("#client_idx").val();
 			let start_date 		= $("input[name=start_date]").val();
@@ -165,6 +165,24 @@
 		}
 
 		var url = "{{URL::to('generate_report_excel')}}?" + $.param(query)
+		window.open(url);
+	  
+	}
+	
+	function download_billing_report_pdf(){
+		  
+			let client_idx 		= $("#client_idx").val();
+			let start_date 		= $("input[name=start_date]").val();
+			let end_date 		= $("input[name=end_date]").val();
+		 		  
+		var query = {
+			client_idx:client_idx,
+			start_date:start_date,
+			end_date:end_date,
+			_token: "{{ csrf_token() }}"
+		}
+
+		var url = "{{URL::to('generate_report_pdf')}}?" + $.param(query)
 		window.open(url);
 	  
 	}
