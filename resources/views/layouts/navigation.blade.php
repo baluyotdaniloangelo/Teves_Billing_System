@@ -66,36 +66,36 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('billing') }}">
+        <a class="nav-link navbar_bg" href="{{ route('billing') }}" title="Create Billing Transaction">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
-          <span>Billing</span>
+          <span title="Create Billing Transaction">Billing</span>
         </a>
       </li>
 
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('report') }}">
+        <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Create Billing Statement">
           <i class="bi bi-graph-up navbar_icon"></i>
-          <span>Report</span>
+          <span title="Create Billing Statement">Report</span>
         </a>
       </li>
 	  
       <li class="nav-item">
-        <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gear navbar_icon"></i><span>Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
+          <i class="bi bi-gear navbar_icon"></i><span title="Manage Product, Client and System User Account">Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
 		
-            <a href="{{ route('product') }}" class="sidebar_li_a">
-              <i class="bi bi-cart navbar_icon"></i><span>Product</span>
+            <a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
+              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span>Product</span>
             </a>
 			<?php if($data->user_type=="Admin"){ ?>
-			<a href="{{ route('client') }}" class="sidebar_li_a">
-              <i class="bi bi-file-person navbar_icon"></i><span>Client</span>
+			<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
+              <i class="bi bi-file-person navbar_icon" title="Manage Client list"></i><span>Client</span>
             </a>
 			
-			<a href="{{ route('user') }}" class="sidebar_li_a">
-              <i class="bi bi-people navbar_icon"></i><span>User</span>
+			<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
+              <i class="bi bi-people navbar_icon" title="Manage System User"></i><span>User</span>
             </a>
 			<?php } ?>
 

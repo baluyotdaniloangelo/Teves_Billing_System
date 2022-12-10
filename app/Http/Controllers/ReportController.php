@@ -34,7 +34,7 @@ class ReportController extends Controller
 		
 		}
 
-		return view("pages.report", compact('data','title','product_data','client_data'));
+		return view("pages.report", compact('data','title','client_data'));
 		
 	}   
 	
@@ -64,6 +64,7 @@ class ReportController extends Controller
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',					
 					'teves_billing_table.order_total_amount',
@@ -217,16 +218,20 @@ class ReportController extends Controller
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time']);	
-
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
           
 		$title = 'Billing Statement';
 		  
-       $pdf = PDF::loadView('pages.report_pdf', compact('title','client_data','billing_data', 'start_date', 'end_date'));
-    
-       return $pdf->download("tes.pdf");
-		//	return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));
+        $pdf = PDF::loadView('pages.report_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date'));
+		
+		/*Download Directly*/
+        /*return $pdf->download($client_data['client_name'].".pdf");*/
+		/*Stream for Saving/Printing*/
+		return $pdf->stream($client_data['client_name'].".pdf");
+		//return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));
 	}
 	
 	

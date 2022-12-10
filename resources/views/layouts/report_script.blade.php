@@ -56,6 +56,7 @@
 							var order_po_number = response[i].order_po_number;
 							var plate_no = response[i].plate_no;
 							var product_name = response[i].product_name;
+							var product_unit_measurement = response[i].product_unit_measurement;
 							var order_quantity = response[i].order_quantity;
 							var product_price = response[i].product_price;
 							var order_total_amount = response[i].order_total_amount;
@@ -66,14 +67,14 @@
 							var tr_str = "<tr>" +
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td align='center'>" + order_date + "</td>" +
+								"<td align='center'>" + order_time + "</td>" +
 								"<td align='center'>" + drivers_name + "</td>" +
 								"<td align='center'>" + order_po_number + "</td>" +
 								"<td align='center'>" + plate_no + "</td>" +
 								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>" + order_quantity + "</td>" +
-								"<td align='center'>" + product_price + "</td>" +
-								"<td align='center'>" + order_total_amount + "</td>" +
-								"<td align='center'>" + order_time + "</td>" +
+								"<td align='center'>&#8369; " + product_price + "</td>" +
+								"<td align='center'>" + order_quantity + " " + product_unit_measurement +"</td>" +
+								"<td align='center'>&#8369; " + order_total_amount + "</td>" +
 								"</tr>";
 							
 							/*Close Form*/
@@ -86,16 +87,22 @@
 							
 							/*Set Grand Total and Billing Date*/
 							$('#grand_total_amount').text(grand_total_amount);
-							$('#billing_date_info').text('<?php echo date('Y-m-d'); ?>');	
-							/*download_billing_report();*/
+			
+							var start_date_new  = new Date(start_date);
+							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 							
-							$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							var end_date_new  = new Date(end_date);
+							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+
+							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
+							$('#billing_date_info').text('<?php echo date('m/d/Y'); ?>');	
+							
+							
+							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()">PDF</button>'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()">Excel</button>'+
-							'</div>').appendTo('#download_options');
-							
-							
-							
+							'</div>');
+
 				  }else{
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');

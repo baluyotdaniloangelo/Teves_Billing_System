@@ -1,6 +1,5 @@
 /node_modules
 /vendor
-artisan
 composer.lock
 .env
 .phpunit.result.cache

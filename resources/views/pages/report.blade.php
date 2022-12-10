@@ -40,9 +40,6 @@
 								<div class="fw-bold">Address: <span id="client_address_report" style="font-weight: normal;"></span></div>
 							</div>
 							
-							<!--Moved to bottom<div class="ms-2">
-								<div class="fw-bold">Grand Total: <span id="grand_total_amount" style="font-weight: normal;"></span></div>
-							</div>-->
 						</div>
 						
 						<div class="col-sm-6">
@@ -64,24 +61,29 @@
 												<tr>
 													<th>#</th>
 													<th>Date</th>
+													<th>Time</th>
 													<th>Driver's Name</th>
 													<th>P.O No.</th>
 													<th>Plate Number</th>
 													<th>Product</th>
-													<th>Quantity</th>
 													<th>Price</th>
+													<th>Quantity</th>
 													<th>Amount</th>
-													<th>Time</th>
 												</tr>
 											</thead>				
 											
 											<tbody>
 												
 											</tbody>
+											<tfoot>
+											<tr class="" >
+												<td align="right" colspan="9"><b>Total Payable:</b></td>
+												<td align="center" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="grand_total_amount" style="font-weight: normal;"></span></td>
+											</tr>
+											</tfoot>
 										</table>
 									</div>		
 				</div>									
-                   
             </div>
           </div>
 

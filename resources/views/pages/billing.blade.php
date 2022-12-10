@@ -154,7 +154,7 @@
 						<div class="row mb-2">
 						  <label for="order_date" class="col-sm-3 col-form-label">Date</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control" name="order_date" id="order_date" value="<?php echo date('d/m/Y'); ?>" required>
+							<input type="date" class="form-control" name="order_date" id="order_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="order_dateError" title="Required"></span>
 						  </div>
 						</div>
@@ -162,7 +162,7 @@
 						<div class="row mb-2">
 						  <label for="order_time" class="col-sm-3 col-form-label">Time</label>
 						  <div class="col-sm-9">
-							<input type="time" class="form-control " name="order_time" id="order_time" value="" required>
+							<input type="time" class="form-control " name="order_time" id="order_time" value="<?=date('H:i a');?>" required>
 							<span class="valid-feedback" id="order_timeError"></span>
 						  </div>
 						</div>	
