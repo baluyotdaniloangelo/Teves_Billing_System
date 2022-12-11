@@ -21,14 +21,14 @@
 												<tr>
 													<th>#</th>
 													<th>Date</th>
+													<th>Time</th>
 													<th>Driver's Name</th>
 													<th>P.O. No.</th>
 													<th>Plate Number</th>																	
 													<th>Product</th>
-													<th>Quantity</th>
 													<th>Price</th>
+													<th>Quantity</th>
 													<th>Amount</th>
-													<th>Time</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -36,20 +36,19 @@
 											<tbody>
 												
 											</tbody>
-											
-											
+	
 											<tfoot>
 												<tr>
 													<th>#</th>
 													<th>Date</th>
+													<th>Time</th>
 													<th>Driver's Name</th>
 													<th>P.O. No.</th>
 													<th>Plate Number</th>																	
 													<th>Product</th>
-													<th>Quantity</th>
 													<th>Price</th>
+													<th>Quantity</th>
 													<th>Amount</th>
-													<th>Time</th>
 													<th>Action</th>
 												</tr>
 											</tfoot>

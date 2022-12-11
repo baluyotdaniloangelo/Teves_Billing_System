@@ -14,6 +14,7 @@ use DataTables;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+
 /*PDF*/
 use PDF;
 
@@ -115,18 +116,47 @@ class ReportController extends Controller
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
 		
 		$client_name = $client_data['client_name'];
+		$client_address = $client_data['client_address'];
 		
+		
+		$_po_start_date=date_create("$start_date");
+		$po_start_date = date_format($_po_start_date,"m/d/y");
+			
+		$_po_end_date=date_create("$end_date");
+		$po_end_date = date_format($_po_end_date,"m/d/y");
+			
 	   ini_set('max_execution_time', 0);
        ini_set('memory_limit', '4000M');
        try {
 		   
            $spreadSheet = new Spreadsheet();
            
-           $spreadSheet = IOFactory::load(public_path('/template/Billing-Statement-form.xlsx'));
-		   
+           $spreadSheet = IOFactory::load(public_path('/template/Billing Statement.xlsx'));
+
 		    $spreadSheet->getActiveSheet()->setCellValue('B7', $client_name);
-			$spreadSheet->getActiveSheet()->setCellValue('J7', 'p.o?');
-			$spreadSheet->getActiveSheet()->setCellValue('J8', date('Y-m-d')); 
+			$spreadSheet->getActiveSheet()->setCellValue('B8', $client_address);
+			
+			$spreadSheet->getActiveSheet()->setCellValue('J7', "$po_start_date - $po_end_date");
+			$spreadSheet->getActiveSheet()->setCellValue('J8', date('m/d/Y')); 
+				
+				
+				$styleBorder_prepared = array(
+					'borders' => array(
+						'bottom' => array(
+							'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+							'color' => array('argb' => '000000'),
+						),
+					),
+				);
+				
+				$styleBorder = [
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
+                        ],
+                    ],
+                ];
 			
 			$no_excl = 11;
 			$n = 1;
@@ -147,31 +177,89 @@ class ReportController extends Controller
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time']);
-			
+					
+			$total_payable = 0;						
 			
 			foreach ($billing_data as $billing_data_column){
 			
 				$spreadSheet->getActiveSheet()
 					->setCellValue('A'.$no_excl, $n)
 					->setCellValue('B'.$no_excl, $billing_data_column['order_date'])
-					->setCellValue('C'.$no_excl, $billing_data_column['drivers_name'])
-					->setCellValue('D'.$no_excl, $billing_data_column['order_po_number'])
-					->setCellValue('E'.$no_excl, $billing_data_column['plate_no'])
-					->setCellValue('F'.$no_excl, $billing_data_column['product_name'])
-					->setCellValue('G'.$no_excl, $billing_data_column['order_quantity'])
-					->setCellValue('H'.$no_excl, $billing_data_column['product_unit_measurement'])
-					->setCellValue('I'.$no_excl, $billing_data_column['product_price'])
-					->setCellValue('J'.$no_excl, $billing_data_column['order_total_amount'])
-					->setCellValue('K'.$no_excl, $billing_data_column['order_time']);
-
+					->setCellValue('C'.$no_excl, $billing_data_column['order_time'])
+					->setCellValue('D'.$no_excl, $billing_data_column['drivers_name'])
+					->setCellValue('E'.$no_excl, $billing_data_column['order_po_number'])
+					->setCellValue('F'.$no_excl, $billing_data_column['plate_no'])
+					->setCellValue('G'.$no_excl, $billing_data_column['product_name'])
+					->setCellValue('H'.$no_excl, $billing_data_column['product_price'])
+					->setCellValue('I'.$no_excl, $billing_data_column['order_quantity'])
+					->setCellValue('J'.$no_excl, $billing_data_column['product_unit_measurement'])
+					->setCellValue('K'.$no_excl, $billing_data_column['order_total_amount']);
+					
+					$spreadSheet->getActiveSheet()->getStyle("A$no_excl:K$no_excl")->applyFromArray($styleBorder);
+					$total_payable+= $billing_data_column['order_total_amount'];
+					
 			/*Increment*/
 			$no_excl++;
 			$n++;
 			} 
-		   
-		   $Excel_writer = new Xlsx($spreadSheet);
+			
+			$spreadSheet->getActiveSheet()->getStyle("J".$no_excl.":K".$no_excl)->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('J'.$no_excl, "Total Payable:")
+					->setCellValue('K'.$no_excl, $total_payable);
+			
+			/*USER INFO*/
+			$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+			$spreadSheet->getActiveSheet()
+					->setCellValue('A'.$no_excl+4, "Prepared by:")
+					->setCellValue('B'.$no_excl+4, $user_data['user_real_name']);
+			$spreadSheet->getActiveSheet()->getStyle('B'.$no_excl+4)->applyFromArray($styleBorder_prepared);
+			
+			$spreadSheet->getActiveSheet()
+					->setCellValue('B'.$no_excl+5, $user_data['user_job_title']);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("A11:A$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+			$spreadSheet->getActiveSheet()
+			->getStyle("B11:B$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("C11:C$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+			$spreadSheet->getActiveSheet()
+			->getStyle("H11:H$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("I11:I$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("J11:J$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("K11:K$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			/*
+			foreach(range('A','K') as $columnID) {
+				$spreadSheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			}
+			*/
+		  $Excel_writer = new Xlsx($spreadSheet);
            header('Content-Type: application/vnd.ms-excel');
-           header("Content-Disposition: attachment;filename=".$client_name."Billing Statement.xlsx");
+           header("Content-Disposition: attachment;filename=".$client_name." - Billing Statement.xlsx");
            header('Cache-Control: max-age=0');
            ob_end_clean();
            $Excel_writer->save('php://output');
