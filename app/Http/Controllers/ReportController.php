@@ -29,8 +29,6 @@ class ReportController extends Controller
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-			/*$product_data = ProductModel::all();*/
-			
 			$client_data = ClientModel::all();
 		
 		}
@@ -318,8 +316,9 @@ class ReportController extends Controller
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
 		/*Stream for Saving/Printing*/
+		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($client_data['client_name'].".pdf");
-		//return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));
+		/*return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));*/
 	}
 	
 	

@@ -103,9 +103,9 @@
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->plate_no}}</td>
 				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->product_name}}</td>
-				<td align="center" nowrap style="border:1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{$billing_data_cols->product_price}}</td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->product_price);?></td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_quantity}} {{$billing_data_cols->product_unit_measurement}}</td>
-				<td align="center" nowrap style="border:1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{$billing_data_cols->order_total_amount}}</td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_total_amount);?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -115,7 +115,7 @@
 			@endforeach
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="right" colspan="9">Total Payable:</td>
-				<td align="center" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=$total_payable;?></td>
+				<td align="center" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_payable);?></td>
 			</tr>
 			
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>

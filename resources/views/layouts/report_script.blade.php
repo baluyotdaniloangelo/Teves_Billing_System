@@ -72,9 +72,9 @@
 								"<td align='center'>" + order_po_number + "</td>" +
 								"<td align='center'>" + plate_no + "</td>" +
 								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>&#8369; " + product_price + "</td>" +
+								"<td align='center'>" + product_price.toLocaleString("en-US") + "</td>" +
 								"<td align='center'>" + order_quantity + " " + product_unit_measurement +"</td>" +
-								"<td align='center'>&#8369; " + order_total_amount + "</td>" +
+								"<td align='center'>" + order_total_amount.toLocaleString("en-US") + "</td>" +
 								"</tr>";
 							
 							/*Close Form*/
@@ -86,7 +86,8 @@
 						}			
 							
 							/*Set Grand Total and Billing Date*/
-							$('#grand_total_amount').text(grand_total_amount);
+							let grand_total_amount_str = grand_total_amount.toLocaleString("en-US");
+							$('#grand_total_amount').text(grand_total_amount_str);
 			
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
