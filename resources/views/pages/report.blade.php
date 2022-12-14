@@ -24,7 +24,8 @@
 						<div class="row">
 						
 						<div class="col-sm-12 d-flex justify-content-end">
-							<div id="download_options"></div>
+							<div id="download_options"></div>&nbsp;
+							<div id="save_options"></div>
 						</div>
 						
 						</div>
