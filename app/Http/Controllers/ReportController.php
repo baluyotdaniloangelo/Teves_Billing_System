@@ -204,17 +204,17 @@ class ReportController extends Controller
 			$spreadSheet->getActiveSheet()->getStyle("J".$no_excl.":K".$no_excl)->getFont()->setBold(true);
 			$spreadSheet->getActiveSheet()
 					->setCellValue('J'.$no_excl, "Total Payable:")
-					->setCellValue('K'.$no_excl, $total_payable);
+					->setCellValue('K'.$no_excl, "=SUM(K11:K".($no_excl-1).")");
 			
 			/*USER INFO*/
 			$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$spreadSheet->getActiveSheet()
-					->setCellValue('A'.$no_excl+4, "Prepared by:")
-					->setCellValue('B'.$no_excl+4, $user_data['user_real_name']);
-			$spreadSheet->getActiveSheet()->getStyle('B'.$no_excl+4)->applyFromArray($styleBorder_prepared);
+					->setCellValue('A'.($no_excl+4), "Prepared by:")
+					->setCellValue('B'.($no_excl+4), $user_data['user_real_name']);
+			$spreadSheet->getActiveSheet()->getStyle('B'.($no_excl+4))->applyFromArray($styleBorder_prepared);
 			
 			$spreadSheet->getActiveSheet()
-					->setCellValue('B'.$no_excl+5, $user_data['user_job_title']);
+					->setCellValue('B'.($no_excl+5), $user_data['user_job_title']);
 			
 			$spreadSheet->getActiveSheet()
 			->getStyle("A11:A$no_excl")

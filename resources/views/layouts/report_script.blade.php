@@ -103,6 +103,10 @@
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()">PDF</button>'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()">Excel</button>'+
 							'</div>');
+							
+							$("#save_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-save" onclick="">Receivable</button>'+
+							'</div>');
 
 				  }else{
 							/*Close Form*/
