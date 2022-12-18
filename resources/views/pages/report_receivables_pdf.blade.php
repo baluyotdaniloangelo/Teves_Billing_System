@@ -28,7 +28,7 @@
 	<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 	
 		<tr>
-			<td rowspan="3" align="center" colspan="5">
+			<td rowspan="4" align="center" colspan="5">
 			<img src="{{public_path('client_logo/logo.png')}}" style="width:150px;">
 			</td>
 			<td nowrap colspan="5" style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
@@ -39,8 +39,13 @@
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="2">Mobile: (+63) 948-199-0989 / (+63) 938-406-5237</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="2">VAT REG. TIN : 496-617-672-000</td>
 		</tr>
+		
+		<tr>
+			<td style="font-size:12px;" nowrap align="center" colspan="2">GLENN F. TEVES - Proprietor</td>
+		</tr>
+		
 		<tr style="font-size:14px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
