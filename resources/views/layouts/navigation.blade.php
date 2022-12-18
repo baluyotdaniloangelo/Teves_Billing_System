@@ -71,6 +71,13 @@
           <span title="Create Billing Transaction">Billing</span>
         </a>
       </li>
+	  
+	  <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Create Billing Transaction">
+          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <span title="Create Billing Transaction">Receivable</span>
+        </a>
+      </li>
 
 	  <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Create Billing Statement">

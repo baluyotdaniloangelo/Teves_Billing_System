@@ -7,7 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\ReceivablesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,3 +91,19 @@ Route::post('/update_user_post', [UserController::class,'update_user_post'])->na
 Route::post('/delete_user_confirmed', [UserController::class, 'delete_user_confirmed'])->name('delete_user_confirmed')->middleware('isLoggedIn');
 /*Update User Account*/
 Route::post('/user_account_post', [UserController::class,'user_account_post'])->name('user_account_post')->middleware('isLoggedIn');
+
+
+/*GET receivables Info*/
+/*December 17, 2022*/
+Route::get('/receivables', [ReceivablesController::class,'receivables'])->name('receivables')->middleware('isLoggedIn');
+Route::get('receivables/list', [ReceivablesController::class, 'getReceivablesList'])->name('getReceivablesList')->middleware('isLoggedIn');
+/*Create Product*/
+Route::post('/create_receivables_post', [ReceivablesController::class,'create_receivables_post'])->name('create_receivables_post')->middleware('isLoggedIn');
+/*Download via PDF*/
+Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
+/*GET Product Info*/
+//Route::post('/client_info', [ReceivablesController::class, 'client_info'])->name('client_info')->middleware('isLoggedIn');
+/*Update Product*/
+//Route::post('/update_client_post', [ReceivablesController::class,'update_client_post'])->name('update_client_post')->middleware('isLoggedIn');
+/*Confirm Delete Product*/
+//Route::post('/delete_client_confirmed', [ReceivablesController::class, 'delete_client_confirmed'])->name('delete_client_confirmed')->middleware('isLoggedIn');

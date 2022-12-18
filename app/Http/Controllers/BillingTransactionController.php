@@ -58,19 +58,12 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.order_time',
 					'teves_billing_table.updated_at']);
 		
-
 		return DataTables::of($data)
 				
 				->addIndexColumn()
 				
                 ->addColumn('action', function($row){
-                    
-					$last_log_update = $row->last_log_update;
-					
-						/*FROM LOGS*/
-						$_date_format = strtotime($last_log_update);
-						$date_format = date('Y-m-d H:i:s',$_date_format);		
-										
+                    						
 					$actionBtn = '
 					<div align="center" class="action_table_menu_site">
 					<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>

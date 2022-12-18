@@ -16,13 +16,18 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getProductList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable" id="getReceivablesList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Product Name</th>
-													<th>Price</th>
-													<th>Unit of Measurement</th>
+													<th>Billing Date</th>
+													<th>Control Number</th>
+													<th>Client</th>
+													<th>TIN Number</th>
+													<th>O.R. Number</th>
+													<th>Payment Term</th>
+													<th>Description</th>
+													<th>Amount</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -34,9 +39,14 @@
 											<tfoot>
 												<tr>
 													<th>#</th>
-													<th>Product Name</th>
-													<th>Price</th>
-													<th>Unit of Measurement</th>
+													<th>Billing Date</th>
+													<th>Control Number</th>
+													<th>Client</th>
+													<th>TIN Number</th>
+													<th>O.R. Number</th>
+													<th>Payment Term</th>
+													<th>Description</th>
+													<th>Amount</th>
 													<th>Action</th>
 												</tr>
 											</tfoot>	

@@ -98,43 +98,6 @@
         </div>
     </div>	
 
-	<!-- Site Delete Modal-->
-    <div class="modal fade" id="BillDeleteModalConfirmed" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header header_modal_bg">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
- 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
-                </div>
-                <div class="modal-body warning_modal_bg" id="modal-body">
-				Successfully Deleted <span id="site_description_info_confirmed"></span>!
-				</div>
-				
-				<div align="left"style="margin: 10px;">
-				Date: <span id="bill_delete_confirmed_order_date"></span><br>
-				Time: <span id="bill_delete_confirmed_order_time"></span><br>
-				
-				PO #: <span id="bill_delete_confirmed_order_po_number"></span><br>
-				Client: <span id="bill_delete_confirmed_client_name"></span><br>
-				
-				Plate #: <span id="bill_delete_confirmed_plate_no"></span><br>
-				Driver: <span id="bill_delete_confirmed_drivers_name"></span><br>
-				
-				Product: <span id="bill_delete_confirmed_product_name"></span><br>
-				Quantity: <span id="bill_delete_confirmed_order_quantity"></span><br>
-				
-				Total Amount: <span id="bill_delete_confirmed_order_total_amount"></span><br>
-				
-				
-				</div>
-                <div class="modal-footer footer_modal_bg">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Close</button>
-					     
-                </div>
-            </div>
-        </div>
-    </div>
-
 	<!--Modal to Create Bill-->
 	<div class="modal fade" id="CreateBillingModal" tabindex="-1">
               <div class="modal-dialog modal-lg">

@@ -81,15 +81,17 @@
 				  console.log(response);
 				 
 				  if(response) {
-					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
+
 					
 					$('#user_real_nameError').text('');				  
 					$('#user_nameError').text('');
 					$('#user_passwordError').text('');
 					$('#user_typeError').text('');		
 					$('#user_job_titleError').text('');
+					
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					document.getElementById("CreateUserform").reset();
 				
@@ -138,7 +140,9 @@
 				  $('#user_job_titleError').text(error.responseJSON.errors.user_job_title);
 				  document.getElementById('user_job_titleError').className = "invalid-feedback";	
 				
-				  $('#InvalidModal').modal('toggle');
+				  $('#switch_notice_off').show();
+				  $('#sw_off').html("Invalid Input");
+				  setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 				  
 				}
 			   });
@@ -216,12 +220,13 @@
 				  console.log(response);
 				  if(response) {
 					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
-					
 					$('#update_user_real_nameError').text('');
 					$('#update_switch_timerError').text('');					
 					$('#update_user_typeError').text('');
+					
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#UpdateUserModal').modal('toggle');
 					
@@ -270,7 +275,9 @@
 			      $('#update_user_job_titleError').text(error.responseJSON.errors.user_job_title);
 				  document.getElementById('update_user_job_titleError').className = "invalid-feedback";					  
 				
-				$('#InvalidModal').modal('toggle');
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 				  
 				}
 			   });
@@ -297,10 +304,6 @@
 					$('#user_real_name_info_confirm').html(response.user_real_name);
 					$('#user_name_info_confirm').html(response.user_real_name);
 					$('#user_type_info_confirm').html(response.user_type);
-
-					$('#user_real_name_info_confirmed').html(response.user_real_name);
-					$('#user_name_info_confirmed').html(response.user_real_name);
-					$('#user_type_info_confirmed').html(response.user_type);
 					
 					$('#UserDeleteModal').modal('toggle');					
 				  
@@ -332,7 +335,9 @@
 				  
 				  if(response) {
 					
-					$('#UserDeleteModalConfirmed').modal('toggle');
+					$('#switch_notice_off').show();
+					$('#sw_off').html("User Account Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 
 					var table = $("#userList").DataTable();
 				    table.ajax.reload(null, false);

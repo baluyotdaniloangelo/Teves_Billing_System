@@ -14,7 +14,7 @@
 			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
-			processing: true,
+			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getClientList') }}",
@@ -59,11 +59,14 @@
 				  console.log(response);
 				  if(response) {
 					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#client_nameError').text('');
 					$('#client_addressError').text('');
+					
+					document.getElementById("ClientformNew").reset();
 					
 					/*Refresh Table*/
 					var table = $("#getclientList").DataTable();
@@ -74,12 +77,12 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				 if(error.responseJSON.errors.client_name=="The Client name has already been taken."){
+				 if(error.responseJSON.errors.client_name=="The client name has already been taken."){
 							  
 				  $('#client_nameError').html("<b>"+ client_name +"</b> has already been taken.");
 				  document.getElementById('client_nameError').className = "invalid-feedback";
 				  document.getElementById('client_name').className = "form-control is-invalid";
-				  $('#update_gateway_sn').val("");
+				  $('#client_name').val("");
 				  
 				}else{
 				  $('#client_nameError').text(error.responseJSON.errors.client_name);
@@ -88,8 +91,10 @@
 				
 				  $('#client_addressError').text(error.responseJSON.errors.client_address);
 				  document.getElementById('client_addressError').className = "invalid-feedback";			
-				
-				$('#InvalidModal').modal('toggle');				  	  
+
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);
 				  
 				}
 			   });		
@@ -155,12 +160,13 @@
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
 					
 					$('#update_client_nameError').text('');	
 					$('#update_client_addressError').text('');
+					
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					/*Close form*/
 					$('#UpdateClientModal').modal('toggle');
@@ -174,12 +180,12 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				if(error.responseJSON.errors.client_name=="The product name has already been taken."){
+				if(error.responseJSON.errors.client_name=="The client name has already been taken."){
 							  
 					$('#client_nameError').html("<b>"+ client_name +"</b> has already been taken.");
 					document.getElementById('client_nameError').className = "invalid-feedback";
 					document.getElementById('client_name').className = "form-control is-invalid";
-					$('#update_gateway_sn').val("");
+					$('#update_client_name').val("");
 				  
 				}else{
 					$('#client_nameError').text(error.responseJSON.errors.client_name);
@@ -189,7 +195,9 @@
 					$('#client_addressError').text(error.responseJSON.errors.client_address);
 					document.getElementById('client_addressError').className = "invalid-feedback";			
 				
-				$('#InvalidModal').modal('toggle');				  	  
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		  	  
 				  
 				}
 			   });
@@ -217,13 +225,7 @@
 					
 					/*Set Details*/
 					$('#confirm_delete_client_name').text(response.client_name);
-					$('#confirm_delete_client_address').text(response.client_address);
-
-					/*Set Details Confirmed*/
-					$('#confirmed_delete_client_name').text(response.client_name);
-					$('#confirmed_delete_client_address').text(response.client_address);
-					
-					$('#ClientDeleteModal').modal('toggle');					
+					$('#confirm_delete_client_address').text(response.client_address);	
 				  
 				  }
 				},
@@ -252,8 +254,9 @@
 				  console.log(response);
 				  if(response) {
 					
-					$('#ClientDeleteModalConfirmed').modal('toggle');
-					
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Client Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					/*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
@@ -270,4 +273,3 @@
 			   });		
 	  });
   </script>
-	

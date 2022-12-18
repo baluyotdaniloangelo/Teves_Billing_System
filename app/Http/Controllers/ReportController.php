@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
+use App\Models\ReceivablesModel;
 /*use App\Models\ProductModel;*/
 use App\Models\ClientModel;
 use Session;
@@ -311,7 +312,7 @@ class ReportController extends Controller
           
 		$title = 'Billing Statement';
 		  
-        $pdf = PDF::loadView('pages.report_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date'));
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
@@ -321,5 +322,119 @@ class ReportController extends Controller
 		/*return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));*/
 	}
 	
+	public function generate_receivable_pdf(Request $request){
+
+		$request->validate([
+			'receivable_id'      		=> 'required'
+        ], 
+        [
+			'receivable_id.required' 	=> 'Please select a receivable_id'
+        ]
+		);
+
+		$receivable_id = $request->receivable_id;
+					
+				$receivable_data = ReceivablesModel::where('receivable_id', $request->receivable_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable.client_idx')
+              	->get([
+					'teves_receivable.receivable_id',
+					'teves_receivable.billing_date',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_receivable.control_number',
+					'teves_receivable.tin_number',
+					'teves_receivable.or_number',				
+					'teves_receivable.payment_term',
+					'teves_receivable.receivable_description',
+					'teves_receivable.receivable_amount'
+				]);
+		
+		@$amount_split_whole_to_decimal = explode('.', $receivable_data[0]['receivable_amount']);
+			
+		$receivable_amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0])." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$receivable_amount_in_word_decimal = "";
+		}else{
+			$receivable_amount_in_word_decimal = " and ".$this->numberToWord($amount_split_whole_to_decimal[1])." Centavos";
+		}
+		
+		$amount_in_words = $receivable_amount_in_word_whole."".$receivable_amount_in_word_decimal;
+        //print($word);
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'RECEIVABLE';
+		  
+        $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+		
+		/*Download Directly*/
+       // return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
+		//return view("pages.report_receivables_pdf", compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+	}
 	
+	public function numberToWord($num = '')
+    {
+        $num    = ( string ) ( ( int ) $num );
+        
+        if( ( int ) ( $num ) && ctype_digit( $num ) )
+        {
+            $words  = array( );
+             
+            $num    = str_replace( array( ',' , ' ' ) , '' , trim( $num ) );
+             
+            $list1  = array('','one','two','three','four','five','six','seven',
+                'eight','nine','ten','eleven','twelve','thirteen','fourteen',
+                'fifteen','sixteen','seventeen','eighteen','nineteen');
+             
+            $list2  = array('','ten','twenty','thirty','forty','fifty','sixty',
+                'seventy','eighty','ninety','hundred');
+             
+            $list3  = array('','thousand','million','billion','trillion',
+                'quadrillion','quintillion','sextillion','septillion',
+                'octillion','nonillion','decillion','undecillion',
+                'duodecillion','tredecillion','quattuordecillion',
+                'quindecillion','sexdecillion','septendecillion',
+                'octodecillion','novemdecillion','vigintillion');
+             
+            $num_length = strlen( $num );
+            $levels = ( int ) ( ( $num_length + 2 ) / 3 );
+            $max_length = $levels * 3;
+            $num    = substr( '00'.$num , -$max_length );
+            $num_levels = str_split( $num , 3 );
+             
+            foreach( $num_levels as $num_part )
+            {
+                $levels--;
+                $hundreds   = ( int ) ( $num_part / 100 );
+                $hundreds   = ( $hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ( $hundreds == 1 ? '' : 's' ) . ' ' : '' );
+                $tens       = ( int ) ( $num_part % 100 );
+                $singles    = '';
+                 
+                if( $tens < 20 ) { $tens = ( $tens ? ' ' . $list1[$tens] . ' ' : '' ); } else { $tens = ( int ) ( $tens / 10 ); $tens = ' ' . $list2[$tens] . ' '; $singles = ( int ) ( $num_part % 10 ); $singles = ' ' . $list1[$singles] . ' '; } $words[] = $hundreds . $tens . $singles . ( ( $levels && ( int ) ( $num_part ) ) ? ' ' . $list3[$levels] . ' ' : '' ); } $commas = count( $words ); if( $commas > 1 )
+            {
+                $commas = $commas - 1;
+            }
+             
+            $words  = implode( ', ' , $words );
+             
+            $words  = trim( str_replace( ' ,' , ',' , ucwords( $words ) )  , ', ' );
+            if( $commas )
+            {
+                //$words  = str_replace( ',' , ' and' , $words );
+				$words  = str_replace( ',' , ' ' , $words );
+            }
+             
+            return $words;
+        }
+        else if( ! ( ( int ) $num ) )
+        {
+            return 'Zero';
+        }
+        return '';
+    }
 }

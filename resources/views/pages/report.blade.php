@@ -89,6 +89,119 @@
           </div>
 
 	<!--Modal to Create Client-->
+	<div class="modal fade" id="CreateReceivablesModal" tabindex="-1">
+              <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Create Receivable</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+						<div class="row">
+					<div class="col-lg-4">
+					  
+					  <ol class="list-group list-group-numbered">
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Account Name</div>
+							<div id="client_name_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Address</div>
+							<div id="client_address_receivables"></div>
+						  </div>
+						 
+						</li>
+						  
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Billing Date</div>
+							<?php echo date('m/d/y'); ?>
+						  </div>
+						 
+						</li>
+						
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Control No.</div>
+							***Auto Generated after Save
+						  </div>
+						 
+						</li>
+						
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Amount</div>
+							<div id="amount_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+					  </ol>					
+					
+					</div>
+					<div class="col-lg-8">
+									
+					  <form class="g-2 needs-validation" id="ReceivableformNew">
+					  
+						<div class="row mb-2">
+						  <label for="tin_number" class="col-sm-3 col-form-label">Tin Number : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="tin_number" id="tin_number" value="" required>
+							<span class="valid-feedback" id="tin_numberError" title="Required"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="or_number" id="or_number" value="" required>
+							<span class="valid-feedback" id="or_numberError"></span>
+						  </div>
+						</div>	
+
+						<div class="row mb-2">
+						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="payment_term" id="payment_term" value="" required>
+							<span class="valid-feedback" id="payment_termError"></span>
+						  </div>
+						</div>							
+						
+						<div class="row mb-2">
+						  <label for="receivable_description" class="col-sm-3 col-form-label">Description : </label>
+						  <div class="col-sm-9">
+							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
+							<span class="valid-feedback" id="receivable_descriptionError"></span>
+						  </div>
+						</div>			
+						
+						</div>
+						
+					</div>
+					</div>
+                    <div class="modal-footer modal-footer_form">
+						
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-receivables"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>
+						  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>
+
+	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateReportModal" tabindex="-1">
               <div class="modal-dialog">
                   <div class="modal-content">

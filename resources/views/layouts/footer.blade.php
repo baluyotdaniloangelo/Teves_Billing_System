@@ -61,6 +61,25 @@
         </div>
     </div>
 
+	<!--Notice-->
+	<div id="switch_notice_off" style="display: none;">
+		<div class="switch_notice_background" align="center">
+			<!--OFF-->
+			<div class="switch_off_content" style="display: block;">
+				<strong id="sw_off">[Switch Name] OFF</strong>
+			</div>
+		</div>
+	</div>
+
+	<div id="switch_notice_on" style="display: none;">
+		<div class="switch_notice_background" align="center">
+			<!--OFF-->
+			<div class="switch_on_content" style="display: block;">
+				<strong id="sw_on">[Switch Name] ON</strong>
+			</div>
+		</div>
+	</div>
+
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->

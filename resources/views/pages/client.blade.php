@@ -54,8 +54,7 @@
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
  					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
                 </div>
-				
-				
+
                 <div class="modal-body warning_modal_bg" id="modal-body">
 				Are you sure you want to Delete This Client?<br>
 				</div>
@@ -72,32 +71,7 @@
             </div>
         </div>
     </div>	
-
-	<!-- Client Delete Modal-->
-    <div class="modal fade" id="ClientDeleteModalConfirmed" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header header_modal_bg">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
- 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
-                </div>
-                <div class="modal-body warning_modal_bg" id="modal-body">
-				Successfully Deleted <span id="Client_description_info_confirmed"></span>!
-				</div>
-				
-				<div align="left"style="margin: 10px;">
-				Client: <span id="confirmed_delete_client_name"></span><br>
-				Adrress: <span id="confirmed_delete_client_address"></span><br>
-				
-				</div>
-                <div class="modal-footer footer_modal_bg">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Close</button>
-					     
-                </div>
-            </div>
-        </div>
-    </div>
-
+	
 	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateClientModal" tabindex="-1">
               <div class="modal-dialog modal-lg">

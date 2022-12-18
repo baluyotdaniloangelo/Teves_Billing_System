@@ -89,6 +89,8 @@
 							let grand_total_amount_str = grand_total_amount.toLocaleString("en-US");
 							$('#grand_total_amount').text(grand_total_amount_str);
 			
+							$('#amount_receivables').html("&#8369; " + grand_total_amount_str);
+							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 							
@@ -100,12 +102,12 @@
 							
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()">PDF</button>'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()">Excel</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()"> PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()"> Excel</button>'+
 							'</div>');
 							
 							$("#save_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-save" onclick="">Receivable</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-save" onclick="ReceivableformOpen()"> Save as Receivables</button>'+
 							'</div>');
 
 				  }else{
@@ -153,6 +155,11 @@
 					/*Set Details*/
 					$('#client_name_report').text(response.client_name);
 					$('#client_address_report').text(response.client_address);
+					
+					/*Set Details for Receivables*/
+					$('#client_name_receivables').text(response.client_name);
+					$('#client_address_receivables').text(response.client_address);
+					
 				  }
 				},
 				error: function(error) {
@@ -198,5 +205,100 @@
 		window.open(url);
 	  
 	}
+	
+	/*Call Receivable Modal*/
+	function ReceivableformOpen(){
+			$('#CreateReceivablesModal').modal('toggle');
+	}
+	
+	<!--Save New receivables->
+	$("#save-receivables").click(function(event){
+			
+			event.preventDefault();
+			
+					/*Reset Warnings*/
+					$('#tin_numberError').text('');
+					$('#or_numberError').text('');
+					$('#payment_termError').text('');
+					$('#receivable_descriptionError').text('');
+
+			document.getElementById('ReceivableformNew').className = "g-3 needs-validation was-validated";
+
+			let client_idx 				= $("#client_idx").val();
+			let start_date 				= $("input[name=start_date]").val();
+			let end_date 				= $("input[name=end_date]").val();
+			
+			let tin_number 				= $("input[name=tin_number]").val();
+			let or_number 				= $("input[name=or_number]").val();			
+			let payment_term 			= $("input[name=payment_term]").val();
+			let receivable_description 	= $("#receivable_description").val();
+		
+			  $.ajax({
+				url: "/create_receivables_post",
+				type:"POST",
+				data:{
+				  client_idx:client_idx,
+				  start_date:start_date,
+				  end_date:end_date,
+				  tin_number:tin_number,
+				  or_number:or_number,
+				  payment_term:payment_term,
+				  receivable_description:receivable_description,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					/*Reset Warnings*/
+					$('#tin_numberError').text('');
+					$('#or_numberError').text('');
+					$('#payment_termError').text('');
+					$('#receivable_descriptionError').text('');
+					
+					//$('#switch_notice_on').show();
+					//$('#sw_on').html("Receivables Succesfully Saved");
+					//setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					document.getElementById("ReceivableformNew").reset();
+					
+					var query = {
+						receivable_id:response.receivable_id,
+						_token: "{{ csrf_token() }}"
+					}
+
+					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
+					window.open(url);
+					
+					/*Refresh Table
+					var table = $("#getProductList").DataTable();
+				    table.ajax.reload(null, false);
+					*/
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	
+						
+				$('#tin_numberError').text(error.responseJSON.errors.product_price);
+				document.getElementById('tin_numberError').className = "invalid-feedback";	
+
+				$('#or_numberError').text(error.responseJSON.errors.product_price);
+				document.getElementById('or_numberError').className = "invalid-feedback";	
+				
+				$('#payment_termError').text(error.responseJSON.errors.product_price);
+				document.getElementById('payment_termError').className = "invalid-feedback";	
+				
+				$('#receivable_descriptionError').text(error.responseJSON.errors.product_price);
+				document.getElementById('receivable_descriptionError').className = "invalid-feedback";					
+				
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });		
+	  });
+
 </script>
 	

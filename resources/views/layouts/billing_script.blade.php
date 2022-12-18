@@ -14,7 +14,7 @@
 			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
-			processing: true,
+			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getBillingTransactionList') }}",
@@ -84,8 +84,9 @@
 				  console.log(response);
 				  if(response) {
 					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#order_dateError').text('');					
 					$('#order_timeError').text('');
@@ -135,7 +136,9 @@
 				  document.getElementById('order_quantityError').className = "invalid-feedback";
 				
 				
-				$('#InvalidModal').modal('toggle');				  	  
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
 				  
 				}
 			   });
@@ -228,8 +231,9 @@
 				  console.log(response);
 				  if(response) {
 					  
-					$('.success_modal_bg').html(response.success);
-					$('#SuccessModal').modal('toggle');
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#update_order_dateError').text('');					
 					$('#update_order_timeError').text('');
@@ -279,7 +283,9 @@
 				  document.getElementById('update_order_quantityError').className = "invalid-feedback";
 				
 				
-				$('#InvalidModal').modal('toggle');				  	  
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
 				  
 				}
 			   });
@@ -316,7 +322,7 @@
 					$('#bill_delete_order_quantity').text(response[0].order_quantity);					
 					$('#bill_delete_order_total_amount').text(response[0].order_total_amount);
 
-					/*Set Details Confirmed*/
+					/*Set Details Confirmed
 					$('#bill_delete_confirmed_order_date').text(response[0].order_date);
 					$('#bill_delete_confirmed_order_time').text(response[0].order_time);
 					$('#bill_delete_confirmed_order_po_number').text(response[0].order_po_number);
@@ -326,7 +332,7 @@
 					$('#bill_delete_confirmed_drivers_name').text(response[0].drivers_name);
 					$('#bill_delete_confirmed_order_quantity').text(response[0].order_quantity);					
 					$('#bill_delete_confirmed_order_total_amount').text(response[0].order_total_amount);
-					
+					*/
 					$('#BillDeleteModal').modal('toggle');					
 				  
 				  }
@@ -356,7 +362,9 @@
 				  console.log(response);
 				  if(response) {
 					
-					$('#BillDeleteModalConfirmed').modal('toggle');
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Bill Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					
 					/*
 					If you are using server side datatable, then you can use ajax.reload() 

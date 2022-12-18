@@ -3,7 +3,7 @@
 	<!--Load Table-->
 	$(function () {
 
-		var ProductListTable = $('#getProductList').DataTable({
+		var ProductListTable = $('#getReceivablesList').DataTable({
 			"language": {
 						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
 			             '<option value="10">10</option>'+
@@ -17,21 +17,28 @@
 			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
-			ajax: "{{ route('getProductList') }}",
+			ajax: "{{ route('getReceivablesList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'product_name'},   
-					{data: 'product_price'},
-					{data: 'product_unit_measurement'},
+					{data: 'billing_date'},
+					{data: 'client_name'},   
+					{data: 'control_number'},
+					{data: 'tin_number'},
+					{data: 'or_number'},
+					{data: 'payment_term'},
+					{data: 'receivable_description'},
+					{data: 'receivable_amount'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1, 2, 3, 4] },
 			]
 		});
+				/*
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateProductModal"></button>'+
 				'</div>').appendTo('#product_option');
+				*/
 	});
 	
 	<!--Save New product->
