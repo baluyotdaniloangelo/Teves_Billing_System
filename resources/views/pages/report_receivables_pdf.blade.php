@@ -66,8 +66,8 @@
 		</tr>
 		
 		<tr style="font-size:14px;">
-			<td colspan="2" align="left">TIN No. :</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['tin_number'] }}</td>			
+			<td colspan="2" align="left">TIN:</td>
+			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['client_tin'] }}</td>			
 			<td colspan="2" nowrap align="left">O.R. NO. :</td>		
 			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['or_number'] }}</td>
 		</tr>

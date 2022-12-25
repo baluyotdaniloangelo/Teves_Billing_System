@@ -22,6 +22,7 @@
 													<th>#</th>
 													<th>Client Name</th>
 													<th>Address</th>
+													<th>TIN</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -35,6 +36,7 @@
 													<th>#</th>
 													<th>Client Name</th>
 													<th>Address</th>
+													<th>TIN</th>
 													<th>Action</th>
 												</tr>
 											</tfoot>
@@ -61,11 +63,12 @@
 				<div align="left"style="margin: 10px;">
 				Client: <span id="confirm_delete_client_name"></span><br>
 				Address: <span id="confirm_delete_client_address"></span><br>
-				
+				TIN: <span id="confirm_delete_client_tin"></span><br>
 				</div>
                 <div class="modal-footer footer_modal_bg">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
+                    
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteClientConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
                   
                 </div>
             </div>
@@ -99,6 +102,14 @@
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="client_address" id="client_address" value="" required>
 							<span class="valid-feedback" id="client_addressError"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="client_tin" class="col-sm-3 col-form-label">TIN</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="client_tin" id="client_tin" value="" required>
+							<span class="valid-feedback" id="client_tinError"></span>
 						  </div>
 						</div>						
 									
@@ -144,7 +155,15 @@
 							<input type="text" class="form-control " name="update_client_address" id="update_client_address" value="" required>
 							<span class="valid-feedback" id="update_client_addressError"></span>
 						  </div>
-						</div>					
+						</div>
+
+						<div class="row mb-2">
+						  <label for="update_client_tin" class="col-sm-3 col-form-label">TIN</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_client_tin" id="update_client_tin" value="" required>
+							<span class="valid-feedback" id="update_client_tinError"></span>
+						  </div>
+						</div>						
 									
 						</div>
 						

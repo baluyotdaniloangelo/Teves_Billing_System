@@ -11,6 +11,7 @@ class ClientModel extends Model
 	protected $fillable = [
         'client_name',
 		'client_address',
+		'client_tin',
     ];
 	
 	protected $primaryKey = 'client_id';

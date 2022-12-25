@@ -119,6 +119,14 @@
 						  </div>
 						 
 						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">TIN</div>
+							<div id="client_tin_receivables"></div>
+						  </div>
+						 
+						</li>
 						  
 						</li>
 						<li class="list-group-item d-flex justify-content-between align-items-start">
@@ -153,7 +161,7 @@
 					<div class="col-lg-8">
 									
 					  <form class="g-2 needs-validation" id="ReceivableformNew">
-					  
+						<!--
 						<div class="row mb-2">
 						  <label for="tin_number" class="col-sm-3 col-form-label">Tin Number : </label>
 						  <div class="col-sm-9">
@@ -161,7 +169,7 @@
 							<span class="valid-feedback" id="tin_numberError" title="Required"></span>
 						  </div>
 						</div>
-						
+						-->
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">

@@ -15,7 +15,7 @@ class ReceivablesController extends Controller
 	/*Load Product Interface*/
 	public function receivables(){
 		
-		$title = 'Receivables';
+		$title = 'Receivable';
 		$data = array();
 		if(Session::has('loginID')){
 			
@@ -39,7 +39,6 @@ class ReceivablesController extends Controller
 					'teves_receivable.billing_date',
 					'teves_client_table.client_name',
 					'teves_receivable.control_number',
-					'teves_receivable.tin_number',
 					'teves_receivable.or_number',				
 					'teves_receivable.payment_term',
 					'teves_receivable.receivable_description',
@@ -71,7 +70,7 @@ class ReceivablesController extends Controller
 					'teves_receivable.billing_date',
 					'teves_client_table.client_name',
 					'teves_receivable.control_number',
-					'teves_receivable.tin_number',
+					'teves_client_table.client_tin',
 					'teves_receivable.or_number',				
 					'teves_receivable.payment_term',
 					'teves_receivable.receivable_description',
@@ -92,13 +91,11 @@ class ReceivablesController extends Controller
 	public function create_receivables_post(Request $request){
 
 		$request->validate([
-			'tin_number'      			=> 'required',
 			'or_number'      			=> 'required',
 			'payment_term'      		=> 'required',
 			'receivable_description'  	=> 'required'
         ], 
         [
-			'tin_number.required' 				=> 'TIN Number is required',
 			'or_number.required' 				=> 'O.R Number is required',
 			'payment_term.required' 			=> 'Payment Term is Required',
 			'receivable_description.required' 	=> 'Description is Required'
@@ -121,7 +118,6 @@ class ReceivablesController extends Controller
 			$Receivables->client_idx 				= $request->client_idx;
 			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->billing_date 				= date('Y-m-d');
-			$Receivables->tin_number 				= $request->tin_number;
 			$Receivables->or_number 				= $request->or_number;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
@@ -139,6 +135,8 @@ class ReceivablesController extends Controller
 	}
 
 	public function update_receivables_post(Request $request){		
+		
+		
 		
 		$request->validate([
           'product_name'      		=> 'required|unique:teves_product_table,product_name,'.$request->productID.',product_id',

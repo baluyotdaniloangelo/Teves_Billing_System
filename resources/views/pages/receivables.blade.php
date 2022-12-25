@@ -23,7 +23,6 @@
 													<th>Billing Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<th>TIN Number</th>
 													<th>O.R. Number</th>
 													<th>Payment Term</th>
 													<th>Description</th>
@@ -42,7 +41,6 @@
 													<th>Billing Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<th>TIN Number</th>
 													<th>O.R. Number</th>
 													<th>Payment Term</th>
 													<th>Description</th>
@@ -58,7 +56,7 @@
           </div>
 
 	<!-- Site Delete Modal-->
-    <div class="modal fade" id="ProductDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="ReceivableDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header header_modal_bg">
@@ -68,11 +66,15 @@
 				
 				
                 <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Product?<br>
+				Are you sure you want to Delete This Receivable?<br>
 				</div>
+				
 				<div align="left"style="margin: 10px;">
-				Product: <span id="confirm_delete_product_name"></span><br>
-				Price: <span id="confirm_delete_product_price"></span><br>
+				
+				Billing Date: <span id="confirm_delete_billing_date"></span><br>
+				Control Number: <span id="confirm_delete_control_number"></span><br>
+				OR Number: <span id="confirm_delete_product_name"></span><br>
+				Client: <span id="confirm_delete_delete"></span><br>
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">

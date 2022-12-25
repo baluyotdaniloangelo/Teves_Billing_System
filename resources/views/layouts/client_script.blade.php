@@ -22,6 +22,7 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'client_name'},   
 					{data: 'client_address'},
+					{data: 'client_tin'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
@@ -41,11 +42,13 @@
 					/*Reset Warnings*/
 					$('#client_nameError').text('');
 					$('#client_addressError').text('');
+					$('#client_tinError').text('');
 
 			document.getElementById('ClientformNew').className = "g-3 needs-validation was-validated";
 
-			let client_name 			= $("input[name=client_name]").val();
-			let client_address 			= $("input[name=client_address]").val();
+			let client_name 		= $("input[name=client_name]").val();
+			let client_address 		= $("input[name=client_address]").val();
+			let client_tin 			= $("input[name=client_tin]").val();
 			
 			  $.ajax({
 				url: "/create_client_post",
@@ -53,6 +56,7 @@
 				data:{
 				  client_name:client_name,
 				  client_address:client_address,
+				  client_tin:client_tin,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -65,8 +69,11 @@
 					
 					$('#client_nameError').text('');
 					$('#client_addressError').text('');
+					$('#client_tinError').text('');
 					
 					document.getElementById("ClientformNew").reset();
+					
+					document.getElementById('ClientformNew').className = "g-3 needs-validation";
 					
 					/*Refresh Table*/
 					var table = $("#getclientList").DataTable();
@@ -90,7 +97,10 @@
 				}
 				
 				  $('#client_addressError').text(error.responseJSON.errors.client_address);
-				  document.getElementById('client_addressError').className = "invalid-feedback";			
+				  document.getElementById('client_addressError').className = "invalid-feedback";	
+				  
+				  $('#client_tinError').text(error.responseJSON.errors.client_tin);
+				  document.getElementById('client_tinError').className = "invalid-feedback";			
 
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
@@ -122,6 +132,7 @@
 					/*Set Details*/
 					document.getElementById("update_client_name").value = response.client_name;
 					document.getElementById("update_client_address").value = response.client_address;
+					document.getElementById("update_client_tin").value = response.client_tin;
 										
 					$('#UpdateClientModal').modal('toggle');					
 				  
@@ -141,12 +152,14 @@
 					/*Reset Warnings*/
 					$('#update_client_nameError').text('');
 					$('#update_client_addressError').text('');
+					$('#update_client_tinError').text('');
 
 			document.getElementById('ClientformEdit').className = "g-3 needs-validation was-validated";
 			
-			let clientID 				= document.getElementById("update-client").value;
-			let client_name 			= $("input[name=update_client_name]").val();
-			let client_address 			= $("input[name=update_client_address]").val();
+			let clientID 			= document.getElementById("update-client").value;
+			let client_name 		= $("input[name=update_client_name]").val();
+			let client_address 		= $("input[name=update_client_address]").val();
+			let client_tin 			= $("input[name=update_client_tin]").val();
 			
 			  $.ajax({
 				url: "/update_client_post",
@@ -155,6 +168,7 @@
 				  clientID:clientID,
 				  client_name:client_name,
 				  client_address:client_address,
+				  client_tin:client_tin,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -163,6 +177,7 @@
 					
 					$('#update_client_nameError').text('');	
 					$('#update_client_addressError').text('');
+					$('#update_client_tinError').text('');
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
@@ -170,6 +185,8 @@
 					
 					/*Close form*/
 					$('#UpdateClientModal').modal('toggle');
+					
+					document.getElementById('ClientformEdit').className = "g-3 needs-validation";
 					
 					/*Refresh Table*/
 					var table = $("#getclientList").DataTable();
@@ -194,6 +211,9 @@
 				
 					$('#client_addressError').text(error.responseJSON.errors.client_address);
 					document.getElementById('client_addressError').className = "invalid-feedback";			
+					
+					$('#client_tinError').text(error.responseJSON.errors.client_tin);
+					document.getElementById('client_tinError').className = "invalid-feedback";		
 				
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
@@ -226,6 +246,9 @@
 					/*Set Details*/
 					$('#confirm_delete_client_name').text(response.client_name);
 					$('#confirm_delete_client_address').text(response.client_address);	
+					$('#confirm_delete_client_tin').text(response.client_tin);	
+					
+					$('#ClientDeleteModal').modal('toggle');		
 				  
 				  }
 				},

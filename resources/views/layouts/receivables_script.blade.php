@@ -21,9 +21,8 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'billing_date'},
-					{data: 'client_name'},   
 					{data: 'control_number'},
-					{data: 'tin_number'},
+					{data: 'client_name'},   
 					{data: 'or_number'},
 					{data: 'payment_term'},
 					{data: 'receivable_description'},
@@ -111,7 +110,7 @@
 	  });
 
 	<!--Select Product For Update-->
-	$('body').on('click','#editProduct',function(){
+	$('body').on('click','#editReceivable',function(){
 			
 			event.preventDefault();
 			let productID = $(this).data('id');
@@ -146,7 +145,7 @@
 	  });
 
 
-	$("#update-product").click(function(event){			
+	$("#update-receivable").click(function(event){			
 			event.preventDefault();
 			
 					/*Reset Warnings*/
@@ -218,7 +217,7 @@
 	  });
 	  
 	<!--Product Deletion Confirmation-->
-	$('body').on('click','#deleteProduct',function(){
+	$('body').on('click','#deleteReceivable',function(){
 			
 			event.preventDefault();
 			let productID = $(this).data('id');
@@ -252,7 +251,7 @@
 	  });
 
 	  <!--Product Confirmed For Deletion-->
-	  $('body').on('click','#deleteProductConfirmed',function(){
+	  $('body').on('click','#deleteReceivableConfirmed',function(){
 			
 			event.preventDefault();
 

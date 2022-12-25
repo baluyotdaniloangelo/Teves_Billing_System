@@ -11,7 +11,6 @@ class ReceivablesModel extends Model
         'client_idx',
 		'billing_date',
 		'control_number',
-		'tin_number',
 		'or_number',
 		'payment_term',
 		'receivable_description',

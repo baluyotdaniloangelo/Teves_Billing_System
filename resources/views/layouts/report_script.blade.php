@@ -159,6 +159,7 @@
 					/*Set Details for Receivables*/
 					$('#client_name_receivables').text(response.client_name);
 					$('#client_address_receivables').text(response.client_address);
+					$('#client_tin_receivables').text(response.client_tin);
 					
 				  }
 				},
@@ -260,7 +261,7 @@
 					//$('#sw_on').html("Receivables Succesfully Saved");
 					//setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					document.getElementById("ReceivableformNew").reset();
+					//document.getElementById("ReceivableformNew").reset();
 					
 					var query = {
 						receivable_id:response.receivable_id,

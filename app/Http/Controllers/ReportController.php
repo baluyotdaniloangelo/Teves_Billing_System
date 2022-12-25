@@ -342,7 +342,7 @@ class ReportController extends Controller
 					'teves_client_table.client_name',
 					'teves_client_table.client_address',
 					'teves_receivable.control_number',
-					'teves_receivable.tin_number',
+					'teves_client_table.client_tin',
 					'teves_receivable.or_number',				
 					'teves_receivable.payment_term',
 					'teves_receivable.receivable_description',
