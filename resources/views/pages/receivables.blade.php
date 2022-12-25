@@ -73,13 +73,15 @@
 				
 				Billing Date: <span id="confirm_delete_billing_date"></span><br>
 				Control Number: <span id="confirm_delete_control_number"></span><br>
-				OR Number: <span id="confirm_delete_product_name"></span><br>
-				Client: <span id="confirm_delete_delete"></span><br>
+				OR Number: <span id="confirm_delete_or_no"></span><br>
+				Client: <span id="confirm_delete_client_info"></span><br>
+				Description: <span id="confirm_delete_description"></span><br>
+				Amount: <span id="confirm_delete_amount"></span><br>
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">
                     
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteProductConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteReceivableConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
                   
                 </div>
@@ -87,116 +89,126 @@
         </div>
     </div>	
 
-	<!--Modal to Create Product-->
-	<div class="modal fade" id="CreateProductModal" tabindex="-1">
-              <div class="modal-dialog modal-lg">
+<!--Modal to Create Client-->
+	<div class="modal fade" id="UpdateReceivablesModal" tabindex="-1">
+              <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Create Product</h5>
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">
+                      <h5 class="modal-title">Create Receivable</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
                     <div class="modal-body">
-					
-					  <form class="g-2 needs-validation" id="ProductformNew">
+						<div class="row">
+					<div class="col-lg-4">
 					  
-						<div class="row mb-2">
-						  <label for="product_name" class="col-sm-3 col-form-label">Product Name</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="product_name" id="product_name" value="" required>
-							<span class="valid-feedback" id="product_nameError" title="Required"></span>
+					  <ol class="list-group list-group-numbered">
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Account Name</div>
+							<div id="client_name_receivables"></div>
 						  </div>
-						</div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Address</div>
+							<div id="client_address_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">TIN</div>
+							<div id="client_tin_receivables"></div>
+						  </div>
+						 
+						</li>
+						  
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Billing Date</div>
+							<div id="billing_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Control No.</div>
+							<div id="control_no_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Amount</div>
+							<div id="amount_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+					  </ol>					
+					
+					</div>
+					<div class="col-lg-8">
+									
+					  <form class="g-2 needs-validation pt-4" id="ReceivableformEdit">
 						
 						<div class="row mb-2">
-						  <label for="product_price" class="col-sm-3 col-form-label">Product Price</label>
+						  <label for="billing_date" class="col-sm-3 col-form-label">Billing Date : </label>
 						  <div class="col-sm-9">
-							<input type="number" class="form-control " name="product_price" id="product_price" value="" required>
-							<span class="valid-feedback" id="product_priceError"></span>
+							<input type="date" class="form-control " name="billing_date" id="billing_date" value="" required>
+							<span class="valid-feedback" id="billing_dateError"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="or_number" id="or_number" value="" required>
+							<span class="valid-feedback" id="or_numberError"></span>
 						  </div>
 						</div>						
-							
+
 						<div class="row mb-2">
-						  <label for="product_unit_measurement" class="col-sm-3 col-form-label">Unit of Measurement</label>
+						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
-							<select class="form-control form-select " name="product_unit_measurement" id="product_unit_measurement" required>				
-									<option value="L">Liter</option>
-									<option value="PC">Pieces</option>
-							</select>
-							<span class="valid-feedback" id="product_unit_measurementError"></span>
+							<input type="text" class="form-control " name="payment_term" id="payment_term" value="" required>
+							<span class="valid-feedback" id="payment_termError"></span>
 						  </div>
-						</div>
-							
+						</div>							
+						
+						<div class="row mb-2">
+						  <label for="receivable_description" class="col-sm-3 col-form-label">Description : </label>
+						  <div class="col-sm-9">
+							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
+							<span class="valid-feedback" id="receivable_descriptionError"></span>
+						  </div>
+						</div>			
+						
 						</div>
 						
-                    <div class="modal-footer modal-footer_form">
-						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-product"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-product"> Reset</button>
-						  
 					</div>
-					
-					</form><!-- End Multi Columns Form -->
-                  </div>
-                </div>
-             </div>
-	
-	
-	<!--Modal to Upadate Site-->
-	<div class="modal fade" id="UpdateProductModal" tabindex="-1">
-              <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Update Product</h5>
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
-					  </div>
-                    </div>
-                    <div class="modal-body">
-					
-					  <form class="g-2 needs-validation" id="ProductformEdit">
-					  
-						<div class="row mb-2">
-						  <label for="update_product_name" class="col-sm-3 col-form-label">Product Name</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="update_product_name" id="update_product_name" value="" required>
-							<span class="valid-feedback" id="update_product_nameError" title="Required"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="update_product_price" class="col-sm-3 col-form-label">Product Price</label>
-						  <div class="col-sm-9">
-							<input type="number" class="form-control " name="update_product_price" id="update_product_price" value="" required>
-							<span class="valid-feedback" id="update_product_priceError"></span>
-						  </div>
-						</div>					
-								
-						<div class="row mb-2">
-						  <label for="update_product_unit_measurement" class="col-sm-3 col-form-label">Unit of Measurement</label>
-						  <div class="col-sm-9">
-							<select class="form-control form-select " name="update_product_unit_measurement" id="update_product_unit_measurement" required>
-									<option value="L">Liter</option>
-									<option value="PC">Pieces</option>
-							</select>
-							<span class="valid-feedback" id="update_product_unit_measurementError"></span>
-						  </div>
-						</div>
-						
-						</div>
-						
+					</div>
                     <div class="modal-footer modal-footer_form">
 						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-product"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-product"> Reset</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-receivables"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>
              </div>
-	
 
     </section>
 </main>

@@ -160,16 +160,8 @@
 					</div>
 					<div class="col-lg-8">
 									
-					  <form class="g-2 needs-validation" id="ReceivableformNew">
-						<!--
-						<div class="row mb-2">
-						  <label for="tin_number" class="col-sm-3 col-form-label">Tin Number : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="tin_number" id="tin_number" value="" required>
-							<span class="valid-feedback" id="tin_numberError" title="Required"></span>
-						  </div>
-						</div>
-						-->
+					  <form class="g-2 needs-validation pt-4" id="ReceivableformNew">
+						
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">

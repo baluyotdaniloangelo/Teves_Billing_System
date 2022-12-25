@@ -3,7 +3,7 @@
 	<!--Load Table-->
 	$(function () {
 
-		var ProductListTable = $('#getReceivablesList').DataTable({
+		var ReceivableListTable = $('#getReceivablesList').DataTable({
 			"language": {
 						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
 			             '<option value="10">10</option>'+
@@ -35,105 +35,47 @@
 		});
 				/*
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
-				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateProductModal"></button>'+
-				'</div>').appendTo('#product_option');
+				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateReceivableModal"></button>'+
+				'</div>').appendTo('#Receivable_option');
 				*/
 	});
 	
-	<!--Save New product->
-	$("#save-product").click(function(event){
+	<!--Select Receivable For Update-->
+	
+	$('body').on('click','#editReceivables',function(){
 			
 			event.preventDefault();
-			
-					/*Reset Warnings*/
-					$('#product_nameError').text('');
-					$('#product_priceError').text('');
-
-			document.getElementById('ProductformNew').className = "g-3 needs-validation was-validated";
-
-			let product_name 				= $("input[name=product_name]").val();
-			let product_price 				= $("input[name=product_price]").val();
-			let product_unit_measurement 	= $("#product_unit_measurement").val();
+			let ReceivableID = $(this).data('id');
 			
 			  $.ajax({
-				url: "/create_product_post",
+				url: "/receivable_info",
 				type:"POST",
 				data:{
-				  product_name:product_name,
-				  product_price:product_price,
-				  product_unit_measurement:product_unit_measurement,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					  
-					$('#product_nameError').text('');
-					$('#product_priceError').text('');
-					
-					$('#switch_notice_on').show();
-					$('#sw_on').html(response.success);
-					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-					
-					document.getElementById("ProductformNew").reset();
-					
-					/*Refresh Table*/
-					var table = $("#getProductList").DataTable();
-				    table.ajax.reload(null, false);
+				  receivable_id:ReceivableID,
 				  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);	
-				 
-				 if(error.responseJSON.errors.product_name=="The product name has already been taken."){
-							  
-				  $('#product_nameError').html("<b>"+ product_name +"</b> has already been taken.");
-				  document.getElementById('product_nameError').className = "invalid-feedback";
-				  document.getElementById('product_name').className = "form-control is-invalid";
-				  $('#update_gateway_sn').val("");
-				  
-				}else{
-				  $('#product_nameError').text(error.responseJSON.errors.product_name);
-				  document.getElementById('product_nameError').className = "invalid-feedback";
-				}
-				
-				  $('#product_priceError').text(error.responseJSON.errors.product_price);
-				  document.getElementById('product_priceError').className = "invalid-feedback";			
-				
-				$('#switch_notice_off').show();
-				$('#sw_off').html("Invalid Input");
-				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
-				  
-				}
-			   });		
-	  });
-
-	<!--Select Product For Update-->
-	$('body').on('click','#editReceivable',function(){
-			
-			event.preventDefault();
-			let productID = $(this).data('id');
-			
-			  $.ajax({
-				url: "/product_info",
-				type:"POST",
-				data:{
-				  productID:productID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("update-product").value = productID;
+					document.getElementById("update-receivables").value = ReceivableID;
 					
 					/*Set Details*/
-					document.getElementById("update_product_name").value = response.product_name;
-					document.getElementById("update_product_price").value = response.product_price;
-					document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement;
-										
-					$('#UpdateProductModal').modal('toggle');					
+							
+					document.getElementById("client_name_receivables").innerHTML = response[0].client_name;
+					document.getElementById("client_address_receivables").innerHTML = response[0].client_address;
+					document.getElementById("control_no_receivables").innerHTML = response[0].control_number;	
+					document.getElementById("billing_receivables").innerHTML = response[0].billing_date;					
+					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
+					document.getElementById("amount_receivables").innerHTML = response[0].receivable_amount;
+					
+					document.getElementById("billing_date").value = response[0].billing_date;
+					document.getElementById("or_number").value = response[0].or_number;
+					document.getElementById("payment_term").value = response[0].payment_term;
+					document.getElementById("receivable_description").textContent = response[0].receivable_description;
+					
+					$('#UpdateReceivablesModal').modal('toggle');					
 				  
 				  }
 				},
@@ -145,46 +87,48 @@
 	  });
 
 
-	$("#update-receivable").click(function(event){			
+	$("#update-receivables").click(function(event){			
 			event.preventDefault();
 			
 					/*Reset Warnings*/
-					$('#update_product_nameError').text('');
-					$('#update_product_priceError').text('');
+					$('#update_Receivable_nameError').text('');
+					$('#update_Receivable_priceError').text('');
 
-			document.getElementById('ProductformEdit').className = "g-3 needs-validation was-validated";
+			document.getElementById('ReceivableformEdit').className = "g-3 needs-validation was-validated";
 			
-			let productID 					= document.getElementById("update-product").value;
-			let product_name 				= $("input[name=update_product_name]").val();
-			let product_price 				= $("input[name=update_product_price]").val();
-			let product_unit_measurement 	= $("#update_product_unit_measurement").val();
+			let ReceivableID 			= document.getElementById("update-receivables").value;
+			let billing_date 			= $("input[name=billing_date]").val();	
+			let or_number 				= $("input[name=or_number]").val();				
+			let payment_term 			= $("input[name=payment_term]").val();
+			let receivable_description 	= $("#receivable_description").val();
 			
 			  $.ajax({
-				url: "/update_product_post",
+				url: "/update_receivables_post",
 				type:"POST",
 				data:{
-				  productID:productID,
-				  product_name:product_name,
-				  product_price:product_price,
-				  product_unit_measurement:product_unit_measurement ,
+				  ReceivableID:ReceivableID,
+				  billing_date:billing_date,
+				  or_number:or_number,
+				  payment_term:payment_term,
+				  receivable_description:receivable_description,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					$('#update_product_nameError').text('');	
-					$('#update_product_priceError').text('');
+					$('#update_Receivable_nameError').text('');	
+					$('#update_Receivable_priceError').text('');
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					/*Close form*/
-					$('#UpdateProductModal').modal('toggle');
+					$('#UpdateReceivablesModal').modal('toggle');
 					
 					/*Refresh Table*/
-					var table = $("#getProductList").DataTable();
+					var table = $("#getReceivablesList").DataTable();
 				    table.ajax.reload(null, false);
 				  
 				  }
@@ -192,54 +136,55 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				if(error.responseJSON.errors.product_name=="The product name has already been taken."){
-							  
-					$('#product_nameError').html("<b>"+ product_name +"</b> has already been taken.");
-					document.getElementById('product_nameError').className = "invalid-feedback";
-					document.getElementById('product_name').className = "form-control is-invalid";
-					$('#update_product_name').val("");
-				  
-				}else{
-					$('#product_nameError').text(error.responseJSON.errors.product_name);
-					document.getElementById('product_nameError').className = "invalid-feedback";
-				}
+				$('#or_numberError').text(error.responseJSON.errors.product_price);
+				document.getElementById('or_numberError').className = "invalid-feedback";	
 				
-					$('#product_priceError').text(error.responseJSON.errors.product_price);
-					document.getElementById('product_priceError').className = "invalid-feedback";			
+				$('#payment_termError').text(error.responseJSON.errors.product_price);
+				document.getElementById('payment_termError').className = "invalid-feedback";	
+				
+				$('#receivable_descriptionError').text(error.responseJSON.errors.product_price);
+				document.getElementById('receivable_descriptionError').className = "invalid-feedback";					
 				
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
-				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		  	  
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);				  	  
 				  
 				}
 			   });
 		
 	  });
 	  
-	<!--Product Deletion Confirmation-->
-	$('body').on('click','#deleteReceivable',function(){
+	<!--Receivable Deletion Confirmation-->
+	$('body').on('click','#deleteReceivables',function(){
 			
 			event.preventDefault();
-			let productID = $(this).data('id');
+			let ReceivableID = $(this).data('id');
 			
 			  $.ajax({
-				url: "/product_info",
+				url: "/receivable_info",
 				type:"POST",
 				data:{
-				  productID:productID,
+				  receivable_id:ReceivableID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("deleteProductConfirmed").value = productID;
+					document.getElementById("deleteReceivableConfirmed").value = ReceivableID;
 					
 					/*Set Details*/
-					$('#confirm_delete_product_name').text(response.product_name);
-					$('#confirm_delete_product_price').text(response.product_price);
+					document.getElementById("confirm_delete_billing_date").value = response[0].billing_date;
+					document.getElementById("confirm_delete_control_number").innerHTML = response[0].control_number;
+					document.getElementById("confirm_delete_or_no").value = response[0].or_number;	
+					document.getElementById("confirm_delete_client_info").innerHTML = response[0].client_name;
+					document.getElementById("confirm_delete_description").textContent = response[0].receivable_description;
+					document.getElementById("confirm_delete_amount").innerHTML = response[0].receivable_amount;
 					
-					$('#ProductDeleteModal').modal('toggle');					
+					$('#confirm_delete_Receivable_name').text(response.Receivable_name);
+					$('#confirm_delete_Receivable_price').text(response.Receivable_price);
+					
+					$('#ReceivableDeleteModal').modal('toggle');					
 				  
 				  }
 				},
@@ -250,18 +195,18 @@
 			   });		
 	  });
 
-	  <!--Product Confirmed For Deletion-->
+	  <!--Receivable Confirmed For Deletion-->
 	  $('body').on('click','#deleteReceivableConfirmed',function(){
 			
 			event.preventDefault();
 
-			let productID = document.getElementById("deleteProductConfirmed").value;
+			let ReceivableID = document.getElementById("deleteReceivableConfirmed").value;
 			
 			  $.ajax({
-				url: "/delete_product_confirmed",
+				url: "/delete_receivable_confirmed",
 				type:"POST",
 				data:{
-				  productID:productID,
+				  receivable_id:ReceivableID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -269,7 +214,7 @@
 				  if(response) {
 					
 					$('#switch_notice_off').show();
-					$('#sw_off').html("Product Deleted");
+					$('#sw_off').html("Receivable Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					
 					/*
@@ -277,7 +222,7 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getProductList").DataTable();
+					var table = $("#getReceivablesList").DataTable();
 				    table.ajax.reload(null, false);
 					
 				  }
@@ -286,6 +231,20 @@
 				 console.log(error);
 				}
 			   });		
+	  });
+	  
+	  /*Re-print*/
+	  $('body').on('click','#PrintReceivables',function(){	  
+	  
+			let ReceivableID = $(this).data('id');
+			var query = {
+						receivable_id:ReceivableID,
+						_token: "{{ csrf_token() }}"
+					}
+
+			var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
+			window.open(url);
+	  
 	  });
   </script>
 	

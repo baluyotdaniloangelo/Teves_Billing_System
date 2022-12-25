@@ -229,7 +229,7 @@
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 			
-			let tin_number 				= $("input[name=tin_number]").val();
+			//let tin_number 				= $("input[name=tin_number]").val();
 			let or_number 				= $("input[name=or_number]").val();			
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
@@ -241,7 +241,6 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
-				  tin_number:tin_number,
 				  or_number:or_number,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
@@ -261,8 +260,6 @@
 					//$('#sw_on').html("Receivables Succesfully Saved");
 					//setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					//document.getElementById("ReceivableformNew").reset();
-					
 					var query = {
 						receivable_id:response.receivable_id,
 						_token: "{{ csrf_token() }}"
@@ -271,19 +268,11 @@
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
 					
-					/*Refresh Table
-					var table = $("#getProductList").DataTable();
-				    table.ajax.reload(null, false);
-					*/
-					
 				  }
 				},
 				error: function(error) {
 				 console.log(error);	
-						
-				$('#tin_numberError').text(error.responseJSON.errors.product_price);
-				document.getElementById('tin_numberError').className = "invalid-feedback";	
-
+										
 				$('#or_numberError').text(error.responseJSON.errors.product_price);
 				document.getElementById('or_numberError').className = "invalid-feedback";	
 				
