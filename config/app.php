@@ -229,7 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 		'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 		'PDF' => Barryvdh\DomPDF\Facade::class,
-
+		'Carbon' => 'Carbon\Carbon',
     ],
 
 ];
