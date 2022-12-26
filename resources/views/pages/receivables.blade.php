@@ -193,7 +193,15 @@
 							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
-						</div>			
+						</div>
+
+						<div class="row mb-2">
+						  <label for="receivable_description" class="col-sm-3 col-form-label">status : </label>
+						  <div class="col-sm-9">
+							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
+							<span class="valid-feedback" id="receivable_descriptionError"></span>
+						  </div>
+						</div>						
 						
 						</div>
 						
