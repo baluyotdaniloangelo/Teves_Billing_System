@@ -182,7 +182,7 @@
 						<div class="row mb-2">
 						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="payment_term" id="payment_term" value="" required>
+							<input type="text" class="form-control " name="payment_term" id="payment_term" value="">
 							<span class="valid-feedback" id="payment_termError"></span>
 						  </div>
 						</div>							

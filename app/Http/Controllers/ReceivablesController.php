@@ -93,12 +93,10 @@ class ReceivablesController extends Controller
 	public function create_receivables_post(Request $request){
 
 		$request->validate([
-			'or_number'      			=> 'required',
 			'payment_term'      		=> 'required',
 			'receivable_description'  	=> 'required'
         ], 
         [
-			'or_number.required' 				=> 'O.R Number is required',
 			'payment_term.required' 			=> 'Payment Term is Required',
 			'receivable_description.required' 	=> 'Description is Required'
         ]
@@ -139,12 +137,10 @@ class ReceivablesController extends Controller
 	public function update_receivables_post(Request $request){		
 		
 	$request->validate([
-			'or_number'      			=> 'required',
 			'payment_term'      		=> 'required',
 			'receivable_description'  	=> 'required'
         ], 
         [
-			'or_number.required' 				=> 'O.R Number is required',
 			'payment_term.required' 			=> 'Payment Term is Required',
 			'receivable_description.required' 	=> 'Description is Required'
         ]

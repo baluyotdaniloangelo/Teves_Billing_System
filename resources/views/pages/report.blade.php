@@ -165,7 +165,7 @@
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="or_number" id="or_number" value="" required>
+							<input type="text" class="form-control " name="or_number" id="or_number" value="">
 							<span class="valid-feedback" id="or_numberError"></span>
 						  </div>
 						</div>	
