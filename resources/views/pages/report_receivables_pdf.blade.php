@@ -29,7 +29,7 @@
 	
 		<tr>
 			<td rowspan="4" align="center" colspan="5">
-			<img src="{{public_path('client_logo/logo.png')}}" style="width:150px;">
+			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:150px;">
 			</td>
 			<td nowrap colspan="5" style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
 		</tr>
