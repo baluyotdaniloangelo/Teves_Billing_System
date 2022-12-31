@@ -32,7 +32,9 @@
 	
 			<tr>
 			<td rowspan="3" align="right" colspan="5">
+
 			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:150px;">
+
 			</td>
 			<td style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
 		</tr>
