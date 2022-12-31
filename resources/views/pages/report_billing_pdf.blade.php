@@ -16,6 +16,8 @@
 		.data_th {
 			padding: 5px;
 			font-size: 10px;
+			color:#fff;
+			background-color:#000;
 		}
 		.data_tr {
 			padding: 5px;
@@ -30,10 +32,9 @@
 	
 			<tr>
 			<td rowspan="3" align="right" colspan="5">
-			<img src="{{public_path('client_logo/logo.png')}}" style="width:150px;">
-			<!--<img src="{{asset('client_logo/logo.png')}}" style="width:125px;">-->
+			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:150px;">
 			</td>
-			<td  colspan="5" style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
+			<td style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
 		</tr>
 		
 		<tr>
@@ -72,7 +73,7 @@
 			<td colspan="10">&nbsp;</td>
 		</tr>
 		
-		<thead class="data_thead">
+		
 			<tr>
 				<th class="data_th" style="border:1px solid #000;">#</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Date</th>
@@ -85,7 +86,7 @@
 				<th class="data_th" nowrap style="border:1px solid #000;">Quantity</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Amount</th>
 			</tr>
-		</thead>				
+			
 											
 		<tbody>
 			<?php 

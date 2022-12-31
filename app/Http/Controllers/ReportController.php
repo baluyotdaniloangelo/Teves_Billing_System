@@ -318,8 +318,9 @@ class ReportController extends Controller
         /*return $pdf->download($client_data['client_name'].".pdf");*/
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		$pdf->render();
 		return $pdf->stream($client_data['client_name'].".pdf");
-		/*return view("pages.report_pdf", compact('title','client_data','billing_data', 'start_date', 'end_date'));*/
+		//return view('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date'));
 	}
 	
 	public function generate_receivable_pdf(Request $request){
@@ -370,11 +371,11 @@ class ReportController extends Controller
         $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
 		
 		/*Download Directly*/
-       // return $pdf->download($client_data['client_name'].".pdf");
+        //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
-		//return view("pages.report_receivables_pdf", compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
 	}
 	
 	public function numberToWord($num = '')

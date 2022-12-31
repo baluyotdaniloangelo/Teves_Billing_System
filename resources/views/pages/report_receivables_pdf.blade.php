@@ -28,22 +28,22 @@
 	<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 	
 		<tr>
-			<td rowspan="4" align="center" colspan="5">
-			<img src="{{public_path('client_logo/logo.png')}}" style="width:150px;">
+			<td rowspan="4" align="center" colspan="4">
+			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:150px;">
 			</td>
-			<td nowrap colspan="5" style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
+			<td nowrap style="font-size:20px; font-weight:bold;" align="center" colspan="3">TEVES GASOLINE STATION</td>
 		</tr>
 		
 		<tr>
-			<td nowrap style="font-size:12px;" align="center" colspan="2">San Juan, Madrid Surigao del Sur</td>
+			<td nowrap style="font-size:12px;" align="center" colspan="3">San Juan, Madrid Surigao del Sur</td>
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="2">VAT REG. TIN : 496-617-672-000</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 496-617-672-000</td>
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="2">GLENN F. TEVES - Proprietor</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">GLENN F. TEVES - Proprietor</td>
 		</tr>
 		
 		<tr style="font-size:14px;">
