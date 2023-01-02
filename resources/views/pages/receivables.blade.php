@@ -27,6 +27,7 @@
 													<th>Payment Term</th>
 													<th>Description</th>
 													<th>Amount</th>
+													<th>Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -45,7 +46,8 @@
 													<th>Payment Term</th>
 													<th>Description</th>
 													<th>Amount</th>
-													<th>Action</th>
+													<th>Status</th>
+													<th>Action</th>												
 												</tr>
 											</tfoot>	
 										</table>
@@ -174,7 +176,7 @@
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="or_number" id="or_number" value="" required>
+							<input type="text" class="form-control " name="or_number" id="or_number" value="">
 							<span class="valid-feedback" id="or_numberError"></span>
 						  </div>
 						</div>						
@@ -196,10 +198,14 @@
 						</div>
 
 						<div class="row mb-2">
-						  <label for="receivable_description" class="col-sm-3 col-form-label">status : </label>
+						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
 						  <div class="col-sm-9">
-							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
-							<span class="valid-feedback" id="receivable_descriptionError"></span>
+							<select class="form-control form-select" aria-label="receivable_status" name="receivable_status" id="receivable_status">
+								<option selected="" disabled="" value="">Choose...</option>
+								<option value="Paid">Paid</option>
+								<option value="Pending">Pending</option>
+								<option value="Remaining Balance">Remaining Balance</option>
+							</select>
 						  </div>
 						</div>						
 						

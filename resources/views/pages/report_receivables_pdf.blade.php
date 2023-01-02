@@ -29,7 +29,7 @@
 	
 		<tr>
 			<td rowspan="4" align="center" colspan="4">
-			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:150px;">
+			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:160px;">
 			</td>
 			<td nowrap style="font-size:20px; font-weight:bold;" align="center" colspan="3">TEVES GASOLINE STATION</td>
 		</tr>
@@ -91,7 +91,7 @@
 		<tr style="font-size:14px;">
 			
 			<td colspan="6" align="left" style="border-left:1px solid #000;height: 200px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
-			<td colspan="4" align="center" style="border-right:1px solid #000;height: 200px;border-bottom:solid 1px;">{{ $receivable_data[0]['receivable_amount'] }}</td>			
+			<td colspan="4" align="center" style="border-right:1px solid #000;height: 200px;border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount']);?></td>			
 		
 		</tr>
 		
@@ -99,8 +99,8 @@
 			
 			<td colspan="3" align="right" style="border-left: 1px solid #000;"></td>
 			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold;">TOTAL DUE </td>
-			<td colspan="4" align="center" style="background-color: #c6e0b4; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> {{ $receivable_data[0]['receivable_amount'] }}</td>			
-		
+			<td colspan="4" align="center" style="background-color: #c6e0b4; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<?=number_format($receivable_data[0]['receivable_amount']);?>
 		</tr>		
 
 		<tr>

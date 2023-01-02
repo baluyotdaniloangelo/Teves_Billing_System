@@ -17,11 +17,11 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 		= $("#client_idx").val();
-			let start_date 		= $("input[name=start_date]").val();
-			let end_date 		= $("input[name=end_date]").val();
-			
-			
+			let client_idx 			= $("#client_idx").val();
+			let start_date 			= $("input[name=start_date]").val();
+			let end_date 			= $("input[name=end_date]").val();
+			let less_per_liter 		= $("input[name=less_per_liter]").val();
+						
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -46,7 +46,10 @@
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
 					
-						var grand_total_amount = 0;
+						var total_due = 0;
+						var total_liters = 0;
+						var total_liters_discount = 0;
+						//var total_amount_to_less = 0;
 						
 						var len = response.length;
 						for(var i=0; i<len; i++){
@@ -62,8 +65,14 @@
 							var order_total_amount = response[i].order_total_amount;
 							var order_time = response[i].order_time;
 							
-							grand_total_amount += response[i].order_total_amount;
-
+							total_due += response[i].order_total_amount;
+							
+							if(product_unit_measurement=='L'){
+								total_liters += order_quantity;
+							}else{
+								total_liters += 0;
+							}
+							
 							var tr_str = "<tr>" +
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td align='center'>" + order_date + "</td>" +
@@ -72,9 +81,9 @@
 								"<td align='center'>" + order_po_number + "</td>" +
 								"<td align='center'>" + plate_no + "</td>" +
 								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>" + product_price.toLocaleString("en-US") + "</td>" +
 								"<td align='center'>" + order_quantity + " " + product_unit_measurement +"</td>" +
-								"<td align='center'>" + order_total_amount.toLocaleString("en-US") + "</td>" +
+								"<td align='center'>" + product_price.toLocaleString("en-PH") + "</td>" +
+								"<td align='center'>" + order_total_amount.toLocaleString("en-PH") + "</td>" +
 								"</tr>";
 							
 							/*Close Form*/
@@ -84,12 +93,23 @@
 							$("#billingstatementreport tbody").append(tr_str);
 							
 						}			
+						
+							total_liters_discount = total_liters * less_per_liter;
+							total_amount_payable = total_due - total_liters_discount; 					
 							
 							/*Set Grand Total and Billing Date*/
-							let grand_total_amount_str = grand_total_amount.toLocaleString("en-US");
-							$('#grand_total_amount').text(grand_total_amount_str);
-			
-							$('#amount_receivables').html("&#8369; " + grand_total_amount_str);
+							let total_due_str = total_due.toLocaleString("en-PH");
+							
+							$('#total_due').text(total_due_str);
+							$('#total_payable').text(total_amount_payable);
+							
+							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH"));
+							
+							$('#total_volume').text(total_liters.toLocaleString("en-PH") + " L");
+							
+							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH") + " L");
+							
+							$('#amount_receivables').text(total_amount_payable);
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -99,7 +119,6 @@
 
 							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
 							$('#billing_date_info').text('<?php echo date('m/d/Y'); ?>');	
-							
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()"> PDF</button>'+
@@ -114,7 +133,7 @@
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');
 							/*No Result Found*/
-							$('#grand_total_amount').text('');
+							$('#total_due').text('');
 							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 				  }
 				},
@@ -194,11 +213,13 @@
 			let client_idx 		= $("#client_idx").val();
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
+			let less_per_liter 	= $("input[name=less_per_liter]").val();
 		 		  
 		var query = {
 			client_idx:client_idx,
 			start_date:start_date,
 			end_date:end_date,
+			less_per_liter:less_per_liter,
 			_token: "{{ csrf_token() }}"
 		}
 
@@ -229,12 +250,13 @@
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 			
-			//let tin_number 				= $("input[name=tin_number]").val();
+			
 			let or_number 				= $("input[name=or_number]").val();			
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
-		
-			  $.ajax({
+			let receivable_status 		= $("#receivable_status").val();
+			
+			$.ajax({
 				url: "/create_receivables_post",
 				type:"POST",
 				data:{
@@ -244,6 +266,7 @@
 				  or_number:or_number,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
+				  receivable_status:receivable_status,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -255,10 +278,6 @@
 					$('#or_numberError').text('');
 					$('#payment_termError').text('');
 					$('#receivable_descriptionError').text('');
-					
-					//$('#switch_notice_on').show();
-					//$('#sw_on').html("Receivables Succesfully Saved");
-					//setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					var query = {
 						receivable_id:response.receivable_id,

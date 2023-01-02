@@ -168,23 +168,32 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="product_idx" class="col-sm-3 col-form-label">Product</label>
-						  <div class="col-sm-9">
-							<select class="form-control form-select" aria-label="Product" name="product_idx" id="product_idx" required>
-							  <option selected="" disabled="" value="">Choose...</option>
-								@foreach ($product_data as $product_data_cols)
-									<option value="{{$product_data_cols->product_id}}">{{$product_data_cols->product_name}}</option>
-								@endforeach
-							  </select>
-							 <span class="valid-feedback" id="product_idxError"></span>
-						</div>
+						  <label for="product_idx" class="col-sm-3 col-form-label">Product</label>						  
+						  <div class="col-sm-9">  
+						  
+							  <div class="input-group">
+									<select class="form-control form-select" aria-label="Product" name="product_idx" id="product_idx" required>
+										  <option selected="" disabled="" value="">Choose...</option>
+											@foreach ($product_data as $product_data_cols)
+												<option value="{{$product_data_cols->product_id}}">
+												{{$product_data_cols->product_name}} | <span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>&nbsp;{{$product_data_cols->product_price}}
+												</option>
+											@endforeach
+									</select>
+									
+									<span class="input-group-text">Manual Price</span>
+									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="product_manual_price" id="product_manual_price" value="">
+									<span class="valid-feedback" id="product_idxError"></span>
+									
+								</div>
+							</div>
 						</div>	
 						
 						<div class="row mb-2">
 						  <label for="order_quantity" class="col-sm-3 col-form-label">Quantity</label>
 						  <div class="col-sm-9">
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" required>
-							  <span class="valid-feedback" id="order_quantityError"></span>
+							  <span class="valid-feedback" id="order_quantityError"></span>						  
 						  </div>
 						</div>							
 									
@@ -193,8 +202,7 @@
                     <div class="modal-footer modal-footer_form">
 						
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-billing-transaction"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-billing"> Reset</button>
-						  
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-billing-save"> Reset</button>					  
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
@@ -271,14 +279,21 @@
 						
 						<div class="row mb-2">
 						  <label for="update_product_idx" class="col-sm-3 col-form-label">Product</label>
-						  <div class="col-sm-9">
-							<select class="form-control form-select" aria-label="Product" name="update_product_idx" id="update_product_idx" required>
-							  <option selected="" disabled="" value="">Choose...</option>
-								@foreach ($product_data as $product_data_cols)
-									<option value="{{$product_data_cols->product_id}}">{{$product_data_cols->product_name}}</option>
-								@endforeach
-							  </select>
-							 <span class="valid-feedback" id="update_product_idxError"></span>
+						  <div class="col-sm-9">			 
+							<div class="input-group mb-3">
+									<select class="form-control form-select" aria-label="Product" name="update_product_idx" id="update_product_idx" required>
+										  <option selected="" disabled="" value="">Choose...</option>
+											@foreach ($product_data as $product_data_cols)
+												<option value="{{$product_data_cols->product_id}}">
+												{{$product_data_cols->product_name}} | <span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>&nbsp;{{$product_data_cols->product_price}}
+												</option>
+											@endforeach
+									</select>
+									
+									<span class="input-group-text">Manual Price</span>
+									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="">
+									<span class="valid-feedback" id="update_product_idxError"></span>
+							</div>
 						</div>
 						</div>	
 						
@@ -295,7 +310,7 @@
                     <div class="modal-footer modal-footer_form">
 						
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-billing-transaction"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-billing"> Reset</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-billing-update"> Reset</button>
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->

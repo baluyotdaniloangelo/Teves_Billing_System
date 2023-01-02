@@ -288,6 +288,7 @@ class ReportController extends Controller
 		$client_idx = $request->client_idx;
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
+		$less_per_liter = $request->less_per_liter;
 		
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('order_date', '>=', $start_date)
@@ -312,7 +313,7 @@ class ReportController extends Controller
           
 		$title = 'Billing Statement';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date'));
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
@@ -336,18 +337,18 @@ class ReportController extends Controller
 		$receivable_id = $request->receivable_id;
 					
 				$receivable_data = ReceivablesModel::where('receivable_id', $request->receivable_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable.client_idx')
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               	->get([
-					'teves_receivable.receivable_id',
-					'teves_receivable.billing_date',
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.billing_date',
 					'teves_client_table.client_name',
 					'teves_client_table.client_address',
-					'teves_receivable.control_number',
+					'teves_receivable_table.control_number',
 					'teves_client_table.client_tin',
-					'teves_receivable.or_number',				
-					'teves_receivable.payment_term',
-					'teves_receivable.receivable_description',
-					'teves_receivable.receivable_amount'
+					'teves_receivable_table.or_number',				
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount'
 				]);
 		
 		@$amount_split_whole_to_decimal = explode('.', $receivable_data[0]['receivable_amount']);

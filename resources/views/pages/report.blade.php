@@ -67,8 +67,8 @@
 													<th>P.O No.</th>
 													<th>Plate Number</th>
 													<th>Product</th>
-													<th>Price</th>
 													<th>Quantity</th>
+													<th>Price</th>
 													<th>Amount</th>
 												</tr>
 											</thead>				
@@ -77,10 +77,38 @@
 												
 											</tbody>
 											<tfoot>
+											
 											<tr class="" >
-												<td align="right" colspan="9"><b>Total Payable:</b></td>
-												<td align="center" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="grand_total_amount" style="font-weight: normal;"></span></td>
+												<td align="left" colspan="6"></td>
+												<td align="left"><b>Total Volume:</b></td>
+												<td align="left"><span id="total_volume" style="font-weight: normal;"></span></td>
+												<td align="left"><b>Total Due:</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="total_due" style="font-weight: normal;"></span></td>
 											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"><b>Less per liter:</b></td>
+												<td align="left" ><span id="report_less_per_liter" style="font-weight: normal;"></span></td>
+												<td align="left" colspan="1"></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_liters_discount" style="font-weight: normal;"></span></td>
+												
+											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"></td>
+												<td align="left" ></td>
+												
+												<td align="left" colspan="1"><b>Total Payable:</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_payable" style="font-weight: normal;"></span></td>
+											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="10"></td>
+	
+											</tr>
+											
 											</tfoot>
 										</table>
 									</div>		
@@ -184,7 +212,20 @@
 							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
-						</div>			
+						</div>		
+
+						<div class="row mb-2">
+						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
+						  <div class="col-sm-9">
+							<select class="form-control form-select" aria-label="receivable_status" name="receivable_status" id="receivable_status" required>
+								<option selected="" disabled="" value="">Choose...</option>
+								<option value="Paid">Paid</option>
+								<option value="Pending">Pending</option>
+								<option value="Remaining Balance">Remaining Balance</option>
+							</select>
+						  </div>
+						</div>
+						
 						
 						</div>
 						
@@ -241,6 +282,14 @@
 						  <div class="col-sm-9">
 							<input type="date" class="form-control " name="end_date" id="end_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="end_dateError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Less Per Liter</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
+							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>
 						</div>
 						

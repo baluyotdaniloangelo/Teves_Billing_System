@@ -27,6 +27,7 @@
 					{data: 'payment_term'},
 					{data: 'receivable_description'},
 					{data: 'receivable_amount'},
+					{data: 'receivable_status'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
@@ -101,6 +102,7 @@
 			let or_number 				= $("input[name=or_number]").val();				
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
+			let receivable_status 		= $("#receivable_status").val();
 			
 			  $.ajax({
 				url: "/update_receivables_post",
@@ -111,6 +113,7 @@
 				  or_number:or_number,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
+				  receivable_status:receivable_status,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

@@ -33,16 +33,17 @@ class ReceivablesController extends Controller
 		$list = ReceivablesModel::get();
 		if ($request->ajax()) {
 
-    	$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable.client_idx')
+    	$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               		->get([
-					'teves_receivable.receivable_id',
-					'teves_receivable.billing_date',
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.billing_date',
 					'teves_client_table.client_name',
-					'teves_receivable.control_number',
-					'teves_receivable.or_number',				
-					'teves_receivable.payment_term',
-					'teves_receivable.receivable_description',
-					'teves_receivable.receivable_amount']);
+					'teves_receivable_table.control_number',
+					'teves_receivable_table.or_number',				
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.receivable_status']);
 		
 		return DataTables::of($data)
 				->addIndexColumn()
@@ -65,18 +66,19 @@ class ReceivablesController extends Controller
 
 					$receivable_id = $request->receivable_id;
 					$data = ReceivablesModel::where('receivable_id', $request->receivable_id)
-					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable.client_idx')
+					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               		->get([
-					'teves_receivable.receivable_id',
-					'teves_receivable.billing_date',
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.billing_date',
 					'teves_client_table.client_address',
 					'teves_client_table.client_name',
-					'teves_receivable.control_number',
+					'teves_receivable_table.control_number',
 					'teves_client_table.client_tin',
-					'teves_receivable.or_number',				
-					'teves_receivable.payment_term',
-					'teves_receivable.receivable_description',
-					'teves_receivable.receivable_amount']);
+					'teves_receivable_table.or_number',				
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.receivable_status']);
 					return response()->json($data);
 		
 	}
@@ -93,11 +95,9 @@ class ReceivablesController extends Controller
 	public function create_receivables_post(Request $request){
 
 		$request->validate([
-			'payment_term'      		=> 'required',
 			'receivable_description'  	=> 'required'
         ], 
         [
-			'payment_term.required' 			=> 'Payment Term is Required',
 			'receivable_description.required' 	=> 'Description is Required'
         ]
 		);
@@ -122,6 +122,7 @@ class ReceivablesController extends Controller
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			$Receivables->receivable_amount 		= $receivable_amount;
+			$Receivables->receivable_status 		=  $request->receivable_status;
 			
 			$result = $Receivables->save();
 			
@@ -137,22 +138,20 @@ class ReceivablesController extends Controller
 	public function update_receivables_post(Request $request){		
 		
 	$request->validate([
-			'payment_term'      		=> 'required',
 			'receivable_description'  	=> 'required'
         ], 
         [
-			'payment_term.required' 			=> 'Payment Term is Required',
 			'receivable_description.required' 	=> 'Description is Required'
         ]
 		);
-		
-			
+					
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 				= $request->billing_date;
 			$Receivables->or_number 				= $request->or_number;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
+			$Receivables->receivable_status 		=  $request->receivable_status;
 			
 			$result = $Receivables->update();
 			

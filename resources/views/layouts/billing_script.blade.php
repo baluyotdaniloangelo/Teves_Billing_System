@@ -1,5 +1,4 @@
    <script type="text/javascript">
-
 	<!--Load Table-->
 	$(function () {
 
@@ -42,7 +41,7 @@
 	
 	<!--Save New Billing-->
 	$("#save-billing-transaction").click(function(event){
-			
+		
 			event.preventDefault();
 			
 					/*Reset Warnings*/
@@ -53,6 +52,7 @@
 					$('#plate_noError').text('');
 					$('#drivers_nameError').text('');
 					$('#product_idxError').text('');
+					$('#product_manual_priceError').text('');
 					$('#order_quantityError').text('');
 
 			document.getElementById('BillingformNew').className = "g-3 needs-validation was-validated";
@@ -64,6 +64,7 @@
 			let plate_no 				= $("input[name=plate_no]").val();
 			let drivers_name 			= $("input[name=drivers_name]").val();
 			let product_idx 			= $("#product_idx").val();
+			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 			
 			  $.ajax({
@@ -77,6 +78,7 @@
 				  plate_no:plate_no,
 				  drivers_name:drivers_name,
 				  product_idx:product_idx,
+				  product_manual_price:product_manual_price,
 				  order_quantity:order_quantity,
 				  _token: "{{ csrf_token() }}"
 				},
@@ -96,6 +98,7 @@
 					$('#plate_noError').text('');
 					$('#drivers_nameError').text('');
 					$('#product_idxError').text('');
+					$('#product_manual_priceError').text('');
 					$('#order_quantityError').text('');
 					
 				    /*
@@ -109,6 +112,7 @@
 				  }
 				},
 				error: function(error) {
+					
 				 console.log(error);	
 				 
 				  $('#order_dateError').text(error.responseJSON.errors.order_date);
@@ -130,19 +134,21 @@
 				  document.getElementById('drivers_nameError').className = "invalid-feedback";				
 				  
 				  $('#product_idxError').text(error.responseJSON.errors.product_idx);
-				  document.getElementById('product_idxError').className = "invalid-feedback";				
+				  document.getElementById('product_idxError').className = "invalid-feedback";	  
 				 
- 				  $('#order_quantityError').text(error.responseJSON.errors.order_quantity);
-				  document.getElementById('order_quantityError').className = "invalid-feedback";
-				
-				
+ 				 // $('#TestError').text('g');
+				 // document.getElementById('order_quantityError').className = "invalid-feedback";
+					
+				  $('#order_quantityError').text(error.responseJSON.errors.order_quantity);
+				  document.getElementById('order_quantityError').className = "invalid-feedback";					
+				//alert('m');				
+								
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
 				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
 				  
 				}
-			   });
-		
+			   });	
 	  });
 
 	<!--Select Bill For Update-->
@@ -172,6 +178,7 @@
 					
 					document.getElementById("update_plate_no").value = response[0].plate_no;
 					document.getElementById("update_product_idx").value = response[0].product_idx;
+					document.getElementById("update_product_manual_price").value = response[0].product_price;
 					document.getElementById("update_drivers_name").value = response[0].drivers_name;
 					document.getElementById("update_order_quantity").value = response[0].order_quantity;
 										
@@ -186,7 +193,6 @@
 			   });	
 	  });
 
-
 	$("#update-billing-transaction").click(function(event){			
 			event.preventDefault();
 			
@@ -198,19 +204,21 @@
 					$('#plate_noError').text('');
 					$('#drivers_nameError').text('');
 					$('#product_idxError').text('');
+					$('#update_product_manual_priceError').text('');
 					$('#order_quantityError').text('');
 
 			document.getElementById('BillingformEdit').className = "g-3 needs-validation was-validated";
 			
-			let billID 				= document.getElementById("update-billing-transaction").value;
-			let order_date 				= $("input[name=update_order_date]").val();
-			let order_time 				= $("input[name=update_order_time]").val();
-			let order_po_number 		= $("input[name=update_order_po_number]").val();
-			let client_idx 				= $("#update_client_idx").val();
-			let plate_no 				= $("input[name=update_plate_no]").val();
-			let drivers_name 			= $("input[name=update_drivers_name]").val();
-			let product_idx 			= $("#update_product_idx").val();
-			let order_quantity 			= $("input[name=update_order_quantity]").val();
+			let billID 							= document.getElementById("update-billing-transaction").value;
+			let order_date 						= $("input[name=update_order_date]").val();
+			let order_time 						= $("input[name=update_order_time]").val();
+			let order_po_number 				= $("input[name=update_order_po_number]").val();
+			let client_idx 						= $("#update_client_idx").val();
+			let plate_no 						= $("input[name=update_plate_no]").val();
+			let drivers_name 					= $("input[name=update_drivers_name]").val();
+			let product_idx 					= $("#update_product_idx").val();
+			let update_product_manual_price 	= $("#update_product_manual_price").val();
+			let order_quantity 					= $("input[name=update_order_quantity]").val();
 			
 			  $.ajax({
 				url: "/update_bill_post",
@@ -224,6 +232,7 @@
 				  plate_no:plate_no,
 				  drivers_name:drivers_name,
 				  product_idx:product_idx,
+				  product_manual_price:update_product_manual_price,
 				  order_quantity:order_quantity,
 				  _token: "{{ csrf_token() }}"
 				},
@@ -243,6 +252,7 @@
 					$('#update_plate_noError').text('');
 					$('#update_drivers_nameError').text('');
 					$('#update_product_idxError').text('');
+					$('#update_product_manual_priceError').text('');
 					$('#update_order_quantityError').text('');
 				  
 					/*
@@ -277,7 +287,7 @@
 				  document.getElementById('update_drivers_nameError').className = "invalid-feedback";				
 				  
 				  $('#update_product_idxError').text(error.responseJSON.errors.product_idx);
-				  document.getElementById('update_product_idxError').className = "invalid-feedback";				
+				  document.getElementById('update_product_idxError').className = "invalid-feedback";				  
 				 
  				  $('#update_order_quantityError').text(error.responseJSON.errors.order_quantity);
 				  document.getElementById('update_order_quantityError').className = "invalid-feedback";
@@ -288,8 +298,7 @@
 				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
 				  
 				}
-			   });
-		
+			   });	
 	  });
 	  
 	<!--Bill Deletion Confirmation-->
@@ -333,8 +342,7 @@
 					$('#bill_delete_confirmed_order_quantity').text(response[0].order_quantity);					
 					$('#bill_delete_confirmed_order_total_amount').text(response[0].order_total_amount);
 					*/
-					$('#BillDeleteModal').modal('toggle');					
-				  
+					$('#BillDeleteModal').modal('toggle');									  
 				  }
 				},
 				error: function(error) {

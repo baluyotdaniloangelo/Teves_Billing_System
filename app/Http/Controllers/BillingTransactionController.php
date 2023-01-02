@@ -147,8 +147,16 @@ class BillingTransactionController extends Controller
 			//$data = $request->all();
 			
 			/*Product Details*/
-			$product_info = ProductModel::find($request->product_idx, ['product_price']);			
-			$order_total_amount = $request->order_quantity * $product_info->product_price;
+			$product_info = ProductModel::find($request->product_idx, ['product_price']);					
+			
+			/*Check if Price is From Manual Price*/
+			if($request->product_manual_price!=0){
+				$product_price = $request->product_manual_price;
+			}else{
+				$product_price = $product_info->product_price;
+			}
+			
+			$order_total_amount = $request->order_quantity * $product_price;
 			
 			/*insert*/
 			$Billing = new BillingTransactionModel();
@@ -160,7 +168,7 @@ class BillingTransactionController extends Controller
 			$Billing->plate_no 				= $request->plate_no;
 			$Billing->drivers_name 			= $request->drivers_name;
 			$Billing->product_idx 			= $request->product_idx;
-			$Billing->product_price 		= $product_info->product_price;
+			$Billing->product_price 		= $product_price;
 			$Billing->order_quantity 		= $request->order_quantity;
 			$Billing->order_total_amount 	= $order_total_amount;
 			
@@ -202,8 +210,16 @@ class BillingTransactionController extends Controller
 			$data = $request->all();
 			
 			/*Product Details*/
-			$product_info = ProductModel::find($request->product_idx, ['product_price']);			
-			$order_total_amount = $request->order_quantity * $product_info->product_price;
+			$product_info = ProductModel::find($request->product_idx, ['product_price']);		
+
+			/*Check if Price is From Manual Price*/
+			if($request->product_manual_price!=0){
+				$product_price = $request->product_manual_price;
+			}else{
+				$product_price = $product_info->product_price;
+			}
+			
+			$order_total_amount = $request->order_quantity * $product_price;
 			
 			$Billing = new BillingTransactionModel();
 			$Billing = BillingTransactionModel::find($request->billID);
@@ -215,7 +231,7 @@ class BillingTransactionController extends Controller
 			$Billing->plate_no 				= $request->plate_no;
 			$Billing->drivers_name 			= $request->drivers_name;
 			$Billing->product_idx 			= $request->product_idx;
-			$Billing->product_price 		= $product_info->product_price;
+			$Billing->product_price 		= $product_price;
 			$Billing->order_quantity 		= $request->order_quantity;
 			$Billing->order_total_amount 	= $order_total_amount;
 			

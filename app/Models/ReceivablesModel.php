@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class ReceivablesModel extends Model
 {
 
-	protected $table = 'teves_receivable';
+	protected $table = 'teves_receivable_table';
 	
 	protected $fillable = [
         'client_idx',
