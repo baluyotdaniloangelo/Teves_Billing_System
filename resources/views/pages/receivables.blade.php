@@ -20,7 +20,7 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Billing Date</th>
+													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
 													<th>O.R. Number</th>
@@ -39,7 +39,7 @@
 											<tfoot>
 												<tr>
 													<th>#</th>
-													<th>Billing Date</th>
+													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
 													<th>O.R. Number</th>

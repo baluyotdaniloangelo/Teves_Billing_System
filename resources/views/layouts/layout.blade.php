@@ -39,6 +39,11 @@ else if (Request::is('receivables')){
 @include('layouts.receivables_script')
 <?php
 }
+else if (Request::is('salesorder')){
+?>
+@include('layouts.salesorder_script')
+<?php
+}
 ?>
 <script>
 	<!--Selected Account For Update-->

@@ -73,14 +73,21 @@
       </li>
 	  
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Create Billing Transaction">
+        <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Receivable List">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
           <span title="Create Billing Transaction">Receivable</span>
         </a>
       </li>
+	  
+	   <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('salesorder') }}" title="Create Sales Order">
+          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <span title="Create Sales Order">Sales Order</span>
+        </a>
+      </li>
 
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Create Billing Statement">
+        <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Create Billing Statement">
           <i class="bi bi-graph-up navbar_icon"></i>
           <span title="Create Billing Statement">Report</span>
         </a>
