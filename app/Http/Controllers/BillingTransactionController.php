@@ -183,8 +183,7 @@ class BillingTransactionController extends Controller
 	}
 
 	public function update_bill_post(Request $request){
-		
-		
+			
 		$request->validate([
           'order_date'      		=> 'required',
 		  'order_time'      		=> 'required',

@@ -17,6 +17,6 @@ class SalesOrderModel extends Model
 		'total_due',
     ];
 	
-	protected $primaryKey = 'receivable_id';
+	protected $primaryKey = 'sales_order_id';
     
 }

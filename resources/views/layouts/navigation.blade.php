@@ -87,7 +87,7 @@
       </li>
 
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Create Billing Statement">
+        <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Create Billing Statement">
           <i class="bi bi-graph-up navbar_icon"></i>
           <span title="Create Billing Statement">Report</span>
         </a>

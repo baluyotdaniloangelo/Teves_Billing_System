@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\SalesOrderModel;
 use App\Models\ProductModel;
 use App\Models\ClientModel;
+use App\Models\SalesOrderComponentModel;
 use Session;
 use Validator;
 use DataTables;
@@ -21,11 +22,12 @@ class SalesOrderController extends Controller
 		if(Session::has('loginID')){
 			
 			$client_data = ClientModel::all();
+			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		}
 
-		return view("pages.salesorder", compact('data','title','client_data'));
+		return view("pages.salesorder", compact('data','title','client_data','product_data'));
 		
 	}   
 	
@@ -63,7 +65,7 @@ class SalesOrderController extends Controller
     }
 
 	/*Fetch Product Information*/
-	public function receivable_info(Request $request){
+	public function sales_order_info(Request $request){
 
 					//$sales_order_id = $request->sales_order_id;
 					$data = SalesOrderModel::where('sales_order_id', $request->sales_order_id)
@@ -84,7 +86,7 @@ class SalesOrderController extends Controller
 	}
 
 	/*Delete Product Information*/
-	public function delete_receivable_confirmed(Request $request){
+	public function delete_sales_order_confirmed(Request $request){
 
 		$sales_order_id = $request->sales_order_id;
 		SalesOrderModel::find($sales_order_id)->delete();
@@ -92,50 +94,110 @@ class SalesOrderController extends Controller
 		
 	} 
 
-	public function create_receivables_post(Request $request){
+	public function create_sales_order_post(Request $request){
 
 		$request->validate([
-			'receivable_description'  	=> 'required'
+			'client_idx'  	=> 'required'
         ], 
         [
-			'receivable_description.required' 	=> 'Description is Required'
+			'client_idx.required' 	=> 'Client is Required'
         ]
 		);
 
 			@$last_id = SalesOrderModel::latest()->first()->sales_order_id;
 
 			$client_idx = $request->client_idx;
-			$start_date = $request->start_date;
-			$end_date = $request->end_date;
-		
-			$receivable_amount = BillingTransactionModel::where('client_idx', $client_idx)
-				->where('order_date', '>=', $start_date)
-                ->where('order_date', '<=', $end_date)
-				->groupBy('teves_billing_table.client_idx')
-				->sum('order_total_amount');
-
-			$Receivables = new SalesOrderModel();
-			$Receivables->client_idx 				= $request->client_idx;
-			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
-			$Receivables->billing_date 				= date('Y-m-d');
-			$Receivables->or_number 				= $request->or_number;
-			$Receivables->payment_term 				= $request->payment_term;
-			$Receivables->receivable_description 	= $request->receivable_description;
-			$Receivables->receivable_amount 		= $receivable_amount;
-			$Receivables->receivable_status 		=  $request->receivable_status;
 			
-			$result = $Receivables->save();
+			/*
+						client_idx
+						sales_order_date
+						dr_number
+						or_number
+						payment_term
+						delivery_method
+						hauler
+						required_date
+						instructions
+						note
+						mode_of_payment
+						date_of_payment
+						reference_no
+						payment_amount
+						
+						
+						 product_idx:product_idx,
+				  order_quantity:order_quantity,
+				  product_manual_price:product_manual_price,
+			*/
+			
+			$Salesorder = new SalesOrderModel();
+			$Salesorder->client_idx 				= $request->client_idx;
+			$Salesorder->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$Salesorder->sales_order_date 			= $request->sales_order_date;
+			$Salesorder->dr_number 					= $request->dr_number;
+			$Salesorder->or_number 					= $request->or_number;
+			$Salesorder->payment_term 				= $request->payment_term;
+			$Salesorder->delivery_method 			= $request->delivery_method;
+			$Salesorder->hauler 					= $request->hauler;
+			$Salesorder->required_date 				= $request->required_date;
+			$Salesorder->instructions 				= $request->instructions;
+			$Salesorder->note 						= $request->note;
+			$Salesorder->mode_of_payment 			= $request->mode_of_payment;
+			$Salesorder->date_of_payment 			= $request->date_of_payment;
+			$Salesorder->reference_no 				= $request->reference_no;
+			$Salesorder->payment_amount 			= $request->payment_amount;
+			
+			$result = $Salesorder->save();
+			
+			$product_idx 			= $request->product_idx;
+			$order_quantity 		= $request->order_quantity;
+			$product_manual_price 	= $request->product_manual_price;
+			
+			/*Get Last ID*/
+			$last_transaction_id = $Salesorder->sales_order_id;
+					
+			for($count = 0; $count < count($product_idx); $count++)
+			 {
+				
+					$sales_order_item_product_id 			= $product_idx[$count];
+					$sales_order_item_order_quantity 		= $order_quantity[$count];
+					$sales_order_item_product_manual_price 	= $product_manual_price[$count];
+
+				/*Product Details*/
+				$product_info = ProductModel::find($sales_order_item_product_id, ['product_price']);					
+				
+				/*Check if Price is From Manual Price*/
+				if($sales_order_item_product_manual_price!=0){
+					$product_price = $sales_order_item_product_manual_price;
+				}else{
+					$product_price = $product_info->product_price;
+				}
+				
+				$order_total_amount = $sales_order_item_order_quantity * $product_price;
+				
+				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
+				$SalesOrderComponentModel = new SalesOrderComponentModel();
+				
+				$SalesOrderComponentModel->sales_order_idx 			= $last_transaction_id;
+				$SalesOrderComponentModel->product_idx 				= $sales_order_item_product_id;
+				$SalesOrderComponentModel->client_idx 				= $request->client_idx;
+				$SalesOrderComponentModel->order_quantity 			= $sales_order_item_order_quantity;
+				$SalesOrderComponentModel->product_price 			= $product_price;
+				$SalesOrderComponentModel->order_total_amount 		= $order_total_amount;
+				
+				$result = $SalesOrderComponentModel->save();
+				
+			 }
 			
 			if($result){
-				//return response()->json(['success'=>'Receivables Information Successfully Created!']);
-				return response()->json(array('success' => true, 'sales_order_id' => $Receivables->sales_order_id), 200);
+				return response()->json(array('success' => "Sales Order Successfully Created!"), 200);
 			}
 			else{
-				return response()->json(['success'=>'Error on Insert Receivables Information']);
+				return response()->json(['success'=>'Error on Insert Sales Order Information']);
 			}
 	}
 
-	public function update_receivables_post(Request $request){		
+	public function update_sales_order_post(Request $request){		
 		
 	$request->validate([
 			'receivable_description'  	=> 'required'
@@ -162,4 +224,5 @@ class SalesOrderController extends Controller
 				return response()->json(['success'=>'Error on Update Receivables Information']);
 			}
 	}
+	
 }
