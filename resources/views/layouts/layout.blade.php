@@ -44,6 +44,11 @@ else if (Request::is('salesorder')){
 @include('layouts.salesorder_script')
 <?php
 }
+else if (Request::is('createsalesorder')){
+?>
+@include('layouts.salesorder_create_script')
+<?php
+}
 ?>
 <script>
 	<!--Selected Account For Update-->

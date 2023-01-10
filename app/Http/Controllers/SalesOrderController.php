@@ -30,6 +30,22 @@ class SalesOrderController extends Controller
 		return view("pages.salesorder", compact('data','title','client_data','product_data'));
 		
 	}   
+
+	public function createsalesorder(){
+		
+		$title = 'Sales Order';
+		$data = array();
+		if(Session::has('loginID')){
+			
+			$client_data = ClientModel::all();
+			$product_data = ProductModel::all();
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		}
+
+		return view("pages.createsalesorder", compact('data','title','client_data','product_data'));
+		
+	}   
 	
 	/*Fetch Product List using Datatable*/
 	public function getSalesOrderList(Request $request)
@@ -134,6 +150,8 @@ class SalesOrderController extends Controller
 			$Salesorder->client_idx 				= $request->client_idx;
 			$Salesorder->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Salesorder->sales_order_date 			= $request->sales_order_date;
+			$Salesorder->delivered_to 				= $request->delivered_to;
+			$Salesorder->delivered_to_address 		= $request->delivered_to_address;
 			$Salesorder->dr_number 					= $request->dr_number;
 			$Salesorder->or_number 					= $request->or_number;
 			$Salesorder->payment_term 				= $request->payment_term;

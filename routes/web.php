@@ -110,6 +110,7 @@ Route::post('/update_receivables_post', [ReceivablesController::class,'update_re
 /*GET receivables Info*/
 /*January 04, 2023*/
 Route::get('/salesorder', [SalesOrderController::class,'salesorder'])->name('salesorder')->middleware('isLoggedIn');
+Route::get('/createsalesorder', [SalesOrderController::class,'createsalesorder'])->name('createsalesorder')->middleware('isLoggedIn');
 Route::get('salesorder/list', [SalesOrderController::class, 'getSalesOrderList'])->name('getSalesOrderList')->middleware('isLoggedIn');
 /*GET receivables Info*/
 Route::post('/sales_order_info', [SalesOrderController::class, 'receivable_info'])->name('receivable_info')->middleware('isLoggedIn');
