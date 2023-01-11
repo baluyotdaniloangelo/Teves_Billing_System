@@ -82,13 +82,13 @@ class SalesOrderController extends Controller
 
 	/*Fetch Product Information*/
 	public function sales_order_info(Request $request){
-
-					//$sales_order_id = $request->sales_order_id;
+		
 					$data = SalesOrderModel::where('sales_order_id', $request->sales_order_id)
 					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.client_idx')
-              		->get([
+            
+					->get([
 					'teves_sales_order_table.sales_order_id',
-					'teves_sales_order_table.billing_date',
+					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_address',
 					'teves_client_table.client_name',
 					'teves_sales_order_table.control_number',
@@ -113,10 +113,12 @@ class SalesOrderController extends Controller
 	public function create_sales_order_post(Request $request){
 
 		$request->validate([
-			'client_idx'  	=> 'required'
+			'client_idx'  	=> 'required',
+			'product_idx'  	=> 'required'
         ], 
         [
-			'client_idx.required' 	=> 'Client is Required'
+			'client_idx.required' 	=> 'Client is Required',
+			'product_idx.required' 	=> 'Product is Required'
         ]
 		);
 

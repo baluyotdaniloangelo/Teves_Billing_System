@@ -29,6 +29,7 @@
 					{data: 'total_due'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
+			order: [[ 1, "asc" ]],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1, 2, 3, 4] },
 			]

@@ -142,7 +142,10 @@
 				 
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
 				  document.getElementById('client_idxError').className = "invalid-feedback";
-				  			  		
+				  
+				   
+				  //document.getElementById('product_idxError').className = "invalid-feedback";
+				  $('#product_idxError').html(error.responseJSON.errors.product_idx);
 								
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
