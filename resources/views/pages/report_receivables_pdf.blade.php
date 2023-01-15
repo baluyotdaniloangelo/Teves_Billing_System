@@ -80,10 +80,10 @@
 		</tr>
 	
 		<tr style="font-size:12px;">
-			<td colspan="10">&nbsp;</td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
-		<tr style="font-size:14px;border:1 solid #000;">
+		<tr style="font-size:14px;border:0 solid #000;">
 			<td colspan="6" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold;">DESCRIPTION</td>		
 			<td colspan="4" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">AMOUNT</td>		
 		</tr>									
@@ -91,7 +91,7 @@
 		<tr style="font-size:14px;">
 			
 			<td colspan="6" align="left" style="border-left:1px solid #000;height: 200px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
-			<td colspan="4" align="center" style="border-right:1px solid #000;height: 200px;border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount']);?></td>			
+			<td colspan="4" align="center" style="border-right:1px solid #000;height: 200px;border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		
@@ -100,7 +100,7 @@
 			<td colspan="3" align="right" style="border-left: 1px solid #000;"></td>
 			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold;">TOTAL DUE </td>
 			<td colspan="4" align="center" style="background-color: #c6e0b4; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($receivable_data[0]['receivable_amount']);?>
+			<?=number_format($receivable_data[0]['receivable_amount'],2);?>
 		</tr>		
 
 		<tr>
@@ -108,16 +108,16 @@
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="">&nbsp;</td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
-		<tr style="font-size:14px;border:1 solid #000;font-style: italic;">
+		<tr style="font-size:14px;border:0 solid #000;font-style: italic;">
 			<td colspan="2" align="center" style="border:1px solid #000;">In Words</td>
 			<td colspan="8" style="border:1px solid #000; text-align:center;">&nbsp;{{ $amount_in_words }}</td>
 		</tr>
 
 		<tr>
-			<td colspan="10" style="">&nbsp;</td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0px solid #000;font-style: italic;">
@@ -128,7 +128,7 @@
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="">&nbsp;</td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>	
 		
 		<tr style="font-size:14px;border:0 solid #000;">
@@ -207,7 +207,7 @@
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="">&nbsp;</td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 	  
 		<tr style="font-size:12px;">

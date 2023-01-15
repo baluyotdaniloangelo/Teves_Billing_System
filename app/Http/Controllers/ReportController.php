@@ -57,9 +57,10 @@ class ReportController extends Controller
 		$end_date = $request->end_date;
 		
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('order_date', '>=', $start_date)
-                    ->where('order_date', '<=', $end_date)
+					->where('teves_billing_table.order_date', '>=', $start_date)
+                    ->where('teves_billing_table.order_date', '<=', $end_date)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
@@ -96,9 +97,10 @@ class ReportController extends Controller
 		$end_date = $request->end_date;
 		
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('order_date', '>=', $start_date)
-                    ->where('order_date', '<=', $end_date)
+					->where('teves_billing_table.order_date', '>=', $start_date)
+                    ->where('teves_billing_table.order_date', '<=', $end_date)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
@@ -291,9 +293,10 @@ class ReportController extends Controller
 		$less_per_liter = $request->less_per_liter;
 		
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('order_date', '>=', $start_date)
-                    ->where('order_date', '<=', $end_date)
+					->where('teves_billing_table.order_date', '>=', $start_date)
+                    ->where('teves_billing_table.order_date', '<=', $end_date)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',

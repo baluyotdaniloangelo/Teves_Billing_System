@@ -105,9 +105,9 @@
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->plate_no}}</td>
 				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->product_name}}</td>
-				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_quantity}} {{$billing_data_cols->product_unit_measurement}}</td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->product_price);?></td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_total_amount);?></td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_quantity,2)?> {{$billing_data_cols->product_unit_measurement}}</td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->product_price,2);?></td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_total_amount,2);?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -118,7 +118,7 @@
 				$total_liters += 0;
 			}
 			
-			$total_payable+= $billing_data_cols->order_total_amount;
+			$total_payable += $billing_data_cols->order_total_amount;
 			?>
 			
 			@endforeach
@@ -127,9 +127,9 @@
 											<tr class="data_tr">
 												<td align="left" colspan="6"></td>
 												<td align="left"><b>Total Volume:</b></td>
-												<td align="left"><?=$total_liters;?> L</td>
+												<td align="left"><?=number_format($total_liters,2);?> L</td>
 												<td align="left"><b>Total Due:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <?=number_format($total_payable);?></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <?=number_format($total_payable,2);?></td>
 											</tr>
 											
 											<tr class="data_tr">
@@ -137,7 +137,7 @@
 												<td align="left" colspan="1"><b>Less per liter:</b></td>
 												<td align="left" ><?=($less_per_liter);?> L</td>
 												<td align="left" colspan="1"></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=($less_per_liter*$total_liters);?></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format(($less_per_liter*$total_liters),2);?></td>
 												
 											</tr>
 											
@@ -146,7 +146,7 @@
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1"><b>Total Payable:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=$total_payable-($less_per_liter*$total_liters);?></span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_payable-($less_per_liter*$total_liters),2);?></span></td>
 											</tr>
 			
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>

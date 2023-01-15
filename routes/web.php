@@ -94,7 +94,7 @@ Route::post('/delete_user_confirmed', [UserController::class, 'delete_user_confi
 Route::post('/user_account_post', [UserController::class,'user_account_post'])->name('user_account_post')->middleware('isLoggedIn');
 
 
-/*GET receivables Info*/
+/*Receivables*/
 /*December 17, 2022*/
 Route::get('/receivables', [ReceivablesController::class,'receivables'])->name('receivables')->middleware('isLoggedIn');
 Route::get('receivables/list', [ReceivablesController::class, 'getReceivablesList'])->name('getReceivablesList')->middleware('isLoggedIn');
@@ -107,19 +107,22 @@ Route::post('/create_receivables_post', [ReceivablesController::class,'create_re
 /*Create receivables*/
 Route::post('/update_receivables_post', [ReceivablesController::class,'update_receivables_post'])->name('update_receivables_post')->middleware('isLoggedIn');
 
-/*GET receivables Info*/
+/*Sales Order*/
 /*January 04, 2023*/
 Route::get('/salesorder', [SalesOrderController::class,'salesorder'])->name('salesorder')->middleware('isLoggedIn');
-Route::get('/createsalesorder', [SalesOrderController::class,'createsalesorder'])->name('createsalesorder')->middleware('isLoggedIn');
 Route::get('salesorder/list', [SalesOrderController::class, 'getSalesOrderList'])->name('getSalesOrderList')->middleware('isLoggedIn');
-/*GET receivables Info*/
-Route::post('/sales_order_info', [SalesOrderController::class, 'receivable_info'])->name('receivable_info')->middleware('isLoggedIn');
-/*Confirm Delete receivables*/
-Route::post('/delete_sales_order_confirmed', [SalesOrderController::class, 'delete_receivable_confirmed'])->name('delete_receivable_confirmed')->middleware('isLoggedIn');
-/*Create receivables*/
+/*GET Sales Order Info*/
+Route::post('/sales_order_info', [SalesOrderController::class, 'sales_order_info'])->name('sales_order_info')->middleware('isLoggedIn');
+/*Confirm Delete Sales Order*/
+Route::post('/delete_sales_order_confirmed', [SalesOrderController::class, 'delete_sales_order_confirmed'])->name('delete_sales_order_confirmed')->middleware('isLoggedIn');
+/*Create Sales Order*/
 Route::post('/create_sales_order_post', [SalesOrderController::class,'create_sales_order_post'])->name('create_sales_order_post')->middleware('isLoggedIn');
-/*Create receivables*/
-Route::post('/update_sales_order_post', [SalesOrderController::class,'update_receivables_post'])->name('update_receivables_post')->middleware('isLoggedIn');
+/*Update Sales Order*/
+Route::post('/update_sales_order_post', [SalesOrderController::class,'update_sales_order_post'])->name('update_sales_order_post')->middleware('isLoggedIn');
+/*Get Sales Order Product Item*/
+Route::post('/get_sales_order_product_list', [SalesOrderController::class,'get_sales_order_product_list'])->name('get_sales_order_product_list')->middleware('isLoggedIn');
+/*Delete Sales Order Product Item*/
+Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sales_order_item'])->name('delete_sales_order_item')->middleware('isLoggedIn');
 
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');

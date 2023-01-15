@@ -49,7 +49,6 @@
 						var total_due = 0;
 						var total_liters = 0;
 						var total_liters_discount = 0;
-						//var total_amount_to_less = 0;
 						
 						var len = response.length;
 						for(var i=0; i<len; i++){
@@ -81,9 +80,9 @@
 								"<td align='center'>" + order_po_number + "</td>" +
 								"<td align='center'>" + plate_no + "</td>" +
 								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>" + order_quantity + " " + product_unit_measurement +"</td>" +
-								"<td align='center'>" + product_price.toLocaleString("en-PH") + "</td>" +
-								"<td align='center'>" + order_total_amount.toLocaleString("en-PH") + "</td>" +
+								"<td align='center'>" + order_quantity.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " " + product_unit_measurement +"</td>" +
+								"<td align='center'>" + product_price.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
+								"<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
 								"</tr>";
 							
 							/*Close Form*/
@@ -98,16 +97,16 @@
 							total_amount_payable = total_due - total_liters_discount; 					
 							
 							/*Set Grand Total and Billing Date*/
-							let total_due_str = total_due.toLocaleString("en-PH");
+							let total_due_str = total_due.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
-							$('#total_due').text(total_due_str);
-							$('#total_payable').text(total_amount_payable);
+							$('#total_due').text(total_due_str.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
-							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH"));
+							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
-							$('#total_volume').text(total_liters.toLocaleString("en-PH") + " L");
+							$('#total_volume').text(total_liters.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
 							
-							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH") + " L");
+							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
 							
 							$('#amount_receivables').text(total_amount_payable);
 							
