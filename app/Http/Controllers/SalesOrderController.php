@@ -98,8 +98,13 @@ class SalesOrderController extends Controller
 	/*Delete Product Information*/
 	public function delete_sales_order_confirmed(Request $request){
 
+		/*Delete on Sales Order Table*/
 		$sales_order_id = $request->sales_order_id;
 		SalesOrderModel::find($sales_order_id)->delete();
+		
+		/*Delete on Sales Order Product Component*/
+		
+		
 		return 'Deleted';
 		
 	} 
