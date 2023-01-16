@@ -289,12 +289,11 @@ class SalesOrderController extends Controller
 				$SalesOrderComponentModel->save();
 				
 				}else{
-				echo "$sales_order_product_item_id $last_transaction_id $sales_order_item_product_id";
-				/*Update to teves_sales_order_component_table(SalesOrderComponentModel)*/
 				
+				/*Update*/
 				$SalesOrderComponentModel_update = new SalesOrderComponentModel();
 				$SalesOrderComponentModel_update = SalesOrderComponentModel::find($sales_order_product_item_id);
-				$SalesOrderComponentModel_update->sales_order_idx 			= $last_transaction_id;
+				
 				$SalesOrderComponentModel_update->product_idx 				= $sales_order_item_product_id;
 				$SalesOrderComponentModel_update->client_idx 				= $request->client_idx;
 				$SalesOrderComponentModel_update->order_quantity 			= $sales_order_item_order_quantity;
@@ -302,10 +301,8 @@ class SalesOrderController extends Controller
 				$SalesOrderComponentModel_update->order_total_amount 		= $order_total_amount;
 				
 				$SalesOrderComponentModel_update->update();
-				
-				
-				end here!!!!
-								}
+			
+				}
 			}
 			
 			/*Update Sales Order Gross, Net and Total Due*/

@@ -351,7 +351,6 @@
 								
 								</div>
 								
-							
 					</div>
 					<div class="modal-footer modal-footer_form">
 						

@@ -231,6 +231,10 @@
 					var table = $("#getSalesOrderList").DataTable();
 					table.ajax.reload(null, false);
 					
+					/*Close Modal*/
+					$('#UpdateSalesOrderModal').modal('toggle');
+					/*Open PDF for Printing*/
+					
 				  }
 				},
 				error: function(error) {
@@ -523,12 +527,9 @@
 				   		product_manual_price.push($(this).val());			  
 				  });	
 
- 
 				  $.each($("[id='product_item']"), function(){
 					sales_order_product_item_id.push($(this).attr("data-id"));
 				  });
-				  var sales_order_product_item_ids = sales_order_product_item_id.join(",");
-				 //alert(sales_order_product_item_ids);
 				 
 			  $.ajax({
 				url: "/update_sales_order_post",
@@ -554,13 +555,15 @@
 				  product_idx:product_idx,
 				  order_quantity:order_quantity,
 				  product_manual_price:product_manual_price, 
-				  sales_order_product_item_ids:sales_order_product_item_ids,
+				  sales_order_product_item_ids:sales_order_product_item_id,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					  
+					LoadProductRowForUpdate(sales_order_id);
+					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
@@ -583,6 +586,10 @@
 					
 					var table = $("#getSalesOrderList").DataTable();
 					table.ajax.reload(null, false);
+					
+					/*Close Modal*/
+					$('#UpdateSalesOrderModal').modal('toggle');
+					/*Open PDF for Printing*/
 					
 				  }
 				},

@@ -111,7 +111,6 @@ class ProductController extends Controller
 
 	public function update_product_post(Request $request){
 		
-		
 		$request->validate([
           'product_name'      		=> 'required|unique:teves_product_table,product_name,'.$request->productID.',product_id',
 		  'product_price'      		=> 'required'
@@ -138,6 +137,4 @@ class ProductController extends Controller
 				return response()->json(['success'=>'Error on Update Product Information']);
 			}
 	}
-
-	
 }
