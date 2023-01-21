@@ -192,7 +192,7 @@
 									
 									<div class="col-md-3">
 									  <label for="payment_amount" class="form-label">Amount</label>
-									  <input type="text" class="form-control" id="payment_amount" name="payment_amount">
+									  <input type="number" class="form-control" id="payment_amount" name="payment_amount">
 									</div>
 								
 								</div>
@@ -346,7 +346,7 @@
 									
 									<div class="col-md-3">
 									  <label for="update_payment_amount" class="form-label">Amount</label>
-									  <input type="text" class="form-control" id="update_payment_amount" name="update_payment_amount">
+									  <input type="number" class="form-control" id="update_payment_amount" name="update_payment_amount">
 									</div>
 								
 								</div>

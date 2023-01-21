@@ -15,6 +15,7 @@ class SalesOrderModel extends Model
 		'sales_order_or_number',
 		'sales_order_payment_term',
 		'sales_order_total_due',
+		'sales_order_gross_amount'
     ];
 	
 	protected $primaryKey = 'sales_order_id';

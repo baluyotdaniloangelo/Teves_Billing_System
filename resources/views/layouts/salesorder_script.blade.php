@@ -223,6 +223,9 @@
 					$('#product_manual_priceError').text('');
 					$('#order_quantityError').text('');
 					
+					
+					
+					
 				    /*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
@@ -232,8 +235,15 @@
 					table.ajax.reload(null, false);
 					
 					/*Close Modal*/
-					$('#UpdateSalesOrderModal').modal('toggle');
+					$('#CreateSalesOrderModal').modal('toggle');
 					/*Open PDF for Printing*/
+					var query = {
+						sales_order_id:response.sales_order_id,
+						_token: "{{ csrf_token() }}"
+					}
+
+					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
+					window.open(url);
 					
 				  }
 				},

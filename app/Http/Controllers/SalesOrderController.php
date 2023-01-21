@@ -202,11 +202,11 @@ class SalesOrderController extends Controller
 			$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
 			$SalesOrderUpdate->sales_order_gross_amount = $gross_amount;
 			$SalesOrderUpdate->sales_order_net_amount = $gross_amount/1.12;
-			$SalesOrderUpdate->sales_order_total_due = $gross_amount - (($gross_amount/1.12)*0.1);
+			$SalesOrderUpdate->sales_order_total_due = $gross_amount - (($gross_amount/1.12)*0.01);
 			$SalesOrderUpdate->update();
 			
 			if($result){
-				return response()->json(array('success' => "Sales Order Successfully Created!"), 200);
+				return response()->json(array('success' => "Sales Order Successfully Created!", 'sales_order_id' => $last_transaction_id), 200);
 			}
 			else{
 				return response()->json(['success'=>'Error on Insert Sales Order Information']);
@@ -322,7 +322,7 @@ class SalesOrderController extends Controller
 			$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
 			$SalesOrderUpdate->sales_order_gross_amount = $gross_amount;
 			$SalesOrderUpdate->sales_order_net_amount = $gross_amount/1.12;
-			$SalesOrderUpdate->sales_order_total_due = $gross_amount - (($gross_amount/1.12)*0.1);
+			$SalesOrderUpdate->sales_order_total_due = $gross_amount - (($gross_amount/1.12)*0.01);
 			$SalesOrderUpdate->update();
 			
 			if($result){

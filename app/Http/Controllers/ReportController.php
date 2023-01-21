@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesModel;
 /*use App\Models\ProductModel;*/
+use App\Models\SalesOrderModel;
+use App\Models\SalesOrderComponentModel;
 use App\Models\ClientModel;
 use Session;
 use Validator;
@@ -354,18 +356,20 @@ class ReportController extends Controller
 					'teves_receivable_table.receivable_amount'
 				]);
 		
-		@$amount_split_whole_to_decimal = explode('.', $receivable_data[0]['receivable_amount']);
-			
-		$receivable_amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0])." Pesos";
+		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
+		
+		@$amount_split_whole_to_decimal = explode('.',$receivable_amount_amt);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
 		
 		if(@$amount_split_whole_to_decimal[1]==0){
-			$receivable_amount_in_word_decimal = "";
+			$amount_in_word_decimal = "";
 		}else{
-			$receivable_amount_in_word_decimal = " and ".$this->numberToWord($amount_split_whole_to_decimal[1])." Centavos";
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
 		}
 		
-		$amount_in_words = $receivable_amount_in_word_whole."".$receivable_amount_in_word_decimal;
-        //print($word);
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;		
+	
 		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
@@ -381,6 +385,90 @@ class ReportController extends Controller
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
 		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
 	}
+
+	public function generate_sales_order_pdf(Request $request){
+
+		$request->validate([
+			'sales_order_id'      		=> 'required'
+        ], 
+        [
+			'sales_order_id.required' 	=> 'Please select a receivable_id'
+        ]
+		);
+
+		$sales_order_id = $request->sales_order_id;
+					
+				$sales_order_data = SalesOrderModel::where('teves_sales_order_table.sales_order_id', $sales_order_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+              	->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.sales_order_date',
+					'teves_sales_order_table.sales_order_client_idx',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_client_table.client_tin',
+					'teves_sales_order_table.sales_order_control_number',
+					'teves_sales_order_table.sales_order_dr_number',
+					'teves_sales_order_table.sales_order_or_number',		
+					'teves_sales_order_table.sales_order_payment_term',
+					'teves_sales_order_table.sales_order_delivered_to',
+					'teves_sales_order_table.sales_order_delivered_to_address',
+					'teves_sales_order_table.sales_order_delivery_method',
+					'teves_sales_order_table.sales_order_gross_amount',
+					'teves_sales_order_table.sales_order_net_amount',
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_hauler',
+					'teves_sales_order_table.sales_order_required_date',
+					'teves_sales_order_table.sales_order_instructions',
+					'teves_sales_order_table.sales_order_note',
+					'teves_sales_order_table.sales_order_mode_of_payment',
+					'teves_sales_order_table.sales_order_date_of_payment',
+					'teves_sales_order_table.sales_order_reference_no',
+					'teves_sales_order_table.sales_order_payment_amount'
+				]);
+				
+		$sales_order_amt =  number_format($sales_order_data[0]['sales_order_total_due'],2,".","");
+		
+		@$amount_split_whole_to_decimal = explode('.',$sales_order_amt);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$amount_in_word_decimal = "";
+		}else{
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
+		}
+		
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;
+		
+		$sales_order_component = SalesOrderComponentModel::where('teves_sales_order_component_table.sales_order_idx', $sales_order_id)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_sales_order_component_table.product_idx')	
+			->orderBy('sales_order_component_id', 'asc')
+              	->get([
+					'teves_sales_order_component_table.sales_order_component_id',
+					'teves_sales_order_component_table.product_idx',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_sales_order_component_table.product_price',
+					'teves_sales_order_component_table.order_quantity',
+					'teves_sales_order_component_table.order_total_amount'
+					]);
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'SALES ORDER';
+		  
+        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
+		
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER.pdf");
+		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
+	}
+
 	
 	public function numberToWord($num = '')
     {
@@ -416,7 +504,8 @@ class ReportController extends Controller
             {
                 $levels--;
                 $hundreds   = ( int ) ( $num_part / 100 );
-                $hundreds   = ( $hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ( $hundreds == 1 ? '' : 's' ) . ' ' : '' );
+				//$hundreds   = ( $hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ( $hundreds == 1 ? '' : 's' ) . ' ' : '' );
+                $hundreds   = ( $hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ( $hundreds == 1 ? '' : '' ) . ' ' : '' );
                 $tens       = ( int ) ( $num_part % 100 );
                 $singles    = '';
                  
