@@ -206,12 +206,12 @@
 		</tr>
 	  				
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="6" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
+			<td colspan="6" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
 			<td colspan="4" align="center" style="border:1px solid #000; font-weight:bold;">NOTE</td>	
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="left" style="border-top:0px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; height:100px !important;">{{$sales_order_data[0]->sales_order_instructions}}</td>
+			<td colspan="6" align="center" style="border-top:0px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; height:100px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
 			<td colspan="4" align="left" style="border-top:0px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:100px !important; height:90px !important;">{{$sales_order_data[0]->sales_order_note}}</td>
 		</tr>
 		<tr>
