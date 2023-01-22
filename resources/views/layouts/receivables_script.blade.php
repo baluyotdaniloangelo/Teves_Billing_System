@@ -76,6 +76,12 @@
 					document.getElementById("payment_term").value = response[0].payment_term;
 					document.getElementById("receivable_description").textContent = response[0].receivable_description;
 					
+					document.getElementById("receivable_status").value = response[0].receivable_status;
+					
+					document.getElementById("start_date").value = response[0].billing_period_start;
+					document.getElementById("end_date").value = response[0].billing_period_end;
+					document.getElementById("less_per_liter").value = response[0].less_per_liter;
+					
 					$('#UpdateReceivablesModal').modal('toggle');					
 				  
 				  }
@@ -104,6 +110,10 @@
 			let receivable_description 	= $("#receivable_description").val();
 			let receivable_status 		= $("#receivable_status").val();
 			
+			let start_date 			= $("#start_date").val();
+			let end_date 			= $("#end_date").val();
+			let less_per_liter 		= $("#less_per_liter").val();
+			
 			  $.ajax({
 				url: "/update_receivables_post",
 				type:"POST",
@@ -114,6 +124,9 @@
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				  receivable_status:receivable_status,
+				  less_per_liter:less_per_liter,
+				  start_date:start_date,
+				  end_date:end_date,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -133,6 +146,18 @@
 					/*Refresh Table*/
 					var table = $("#getReceivablesList").DataTable();
 				    table.ajax.reload(null, false);
+					
+					
+					
+					var query = {
+								receivable_id:ReceivableID,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
+					window.open(url);
+					
+					
 				  
 				  }
 				},
@@ -239,14 +264,65 @@
 	  /*Re-print*/
 	  $('body').on('click','#PrintReceivables',function(){	  
 	  
+			event.preventDefault();
+			
 			let ReceivableID = $(this).data('id');
-			var query = {
-						receivable_id:ReceivableID,
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-receivables").value = ReceivableID;
+					
+					/*Set Details*/
+					let client_idx 		= response[0].client_id;
+					let start_date 		= response[0].billing_period_start;
+					let end_date 		= response[0].billing_period_end;
+					let less_per_liter 	= response[0].less_per_liter;
+					
+					/*Open Billing Print Page*/				
+					var query_billing = {
+						client_idx:client_idx,
+						start_date:start_date,
+						end_date:end_date,
+						less_per_liter:less_per_liter,
 						_token: "{{ csrf_token() }}"
 					}
 
-			var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
-			window.open(url);
+					var url_billing = "{{URL::to('generate_report_pdf')}}?" + $.param(query_billing)
+					window.open(url_billing);
+		
+					/*Open Receivable Print Page*/
+					
+					var query_receivable = {
+								receivable_id:ReceivableID,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url_receivable = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query_receivable)
+					window.open(url_receivable);
+			
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+			
+			
+			
+			
+			
 	  
 	  });
   </script>

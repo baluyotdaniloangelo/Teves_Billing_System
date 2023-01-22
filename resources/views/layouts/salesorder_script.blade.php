@@ -153,7 +153,10 @@
 			let reference_no 			= $("input[name=reference_no]").val();
 			let payment_amount 			= $("input[name=payment_amount]").val();
 			
-				var product_idx = [];
+			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
+			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
+			
+			var product_idx = [];
 				var order_quantity = [];
 				var product_manual_price = [];
 				  
@@ -202,8 +205,13 @@
 				  product_idx:product_idx,
 				  order_quantity:order_quantity,
 				  product_manual_price:product_manual_price,
+				  sales_order_net_percentage:sales_order_net_percentage,
+				  sales_order_less_percentage:sales_order_less_percentage,
 				  _token: "{{ csrf_token() }}"
 				},
+				
+				
+			
 				success:function(response){
 				  console.log(response);
 				  if(response) {
@@ -222,9 +230,7 @@
 					$('#product_idxError').text('');
 					$('#product_manual_priceError').text('');
 					$('#order_quantityError').text('');
-					
-					
-					
+		
 					
 				    /*
 					If you are using server side datatable, then you can use ajax.reload() 
@@ -350,7 +356,6 @@
 			event.preventDefault();
 			let sales_order_id = $(this).data('id');
 			/*Call Product List for Sales Order*/
-			//$("#update_table_product_data").find("tr:gt(0)").remove();
 			LoadProductRowForUpdate(sales_order_id);
 			  $.ajax({
 				url: "/sales_order_info",
@@ -386,6 +391,8 @@
 					
 					document.getElementById("update-sales-order").value = response[0].sales_order_id;
 					
+					document.getElementById("update_sales_order_net_percentage").value = response[0].sales_order_net_percentage;
+					document.getElementById("update_sales_order_less_percentage").value = response[0].sales_order_less_percentage;
 					
 				var update_product_idx = [];
 				var update_order_quantity = [];
@@ -510,6 +517,9 @@
 			let reference_no 			= $("input[name=update_reference_no]").val();
 			let payment_amount 			= $("input[name=update_payment_amount]").val();
 			
+			let sales_order_net_percentage 	= $("input[name=update_sales_order_net_percentage]").val();
+			let sales_order_less_percentage = $("input[name=update_sales_order_less_percentage]").val();
+			
 				var product_idx = [];
 				var order_quantity = [];
 				var product_manual_price = [];
@@ -566,6 +576,8 @@
 				  order_quantity:order_quantity,
 				  product_manual_price:product_manual_price, 
 				  sales_order_product_item_ids:sales_order_product_item_id,
+				  sales_order_net_percentage:sales_order_net_percentage,
+				  sales_order_less_percentage:sales_order_less_percentage,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -600,6 +612,14 @@
 					/*Close Modal*/
 					$('#UpdateSalesOrderModal').modal('toggle');
 					/*Open PDF for Printing*/
+					//let salesOrderID = $(this).data('id');
+					var query = {
+								sales_order_id:sales_order_id,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
+					window.open(url);
 					
 				  }
 				},
@@ -621,5 +641,20 @@
 				}
 			   });	
 	  });	  
-  </script>
+ 
+
+	  /*Re-print*/
+	  $('body').on('click','#PrintSalesOrder',function(){	  
+	  
+			let salesOrderID = $(this).data('id');
+			var query = {
+						sales_order_id:salesOrderID,
+						_token: "{{ csrf_token() }}"
+					}
+
+			var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
+			window.open(url);
+	  
+	  });
+ </script>
 	

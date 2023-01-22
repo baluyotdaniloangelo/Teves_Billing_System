@@ -255,6 +255,9 @@
 			let receivable_description 	= $("#receivable_description").val();
 			let receivable_status 		= $("#receivable_status").val();
 			
+			
+			let less_per_liter 		= $("input[name=less_per_liter]").val();
+			
 			$.ajax({
 				url: "/create_receivables_post",
 				type:"POST",
@@ -266,6 +269,7 @@
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				  receivable_status:receivable_status,
+				  less_per_liter:less_per_liter,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -282,9 +286,11 @@
 						receivable_id:response.receivable_id,
 						_token: "{{ csrf_token() }}"
 					}
-
+					
+					download_billing_report_pdf();
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
+					
 					
 				  }
 				},

@@ -174,6 +174,30 @@
 						</div>
 
 						<div class="row mb-2">
+						  <label for="start_date" class="col-sm-3 col-form-label">Start Date</label>
+						  <div class="col-sm-9">
+							<input type="date" class="form-control " name="start_date" id="start_date" required>
+							<span class="valid-feedback" id="start_dateError"></span>
+						  </div>
+						</div>						
+								
+						<div class="row mb-2">
+						  <label for="end_date" class="col-sm-3 col-form-label">End Date</label>
+						  <div class="col-sm-9">
+							<input type="date" class="form-control " name="end_date" id="end_date" required>
+							<span class="valid-feedback" id="end_dateError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Less Per Liter</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
+							<span class="valid-feedback" id="less_per_literError"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="or_number" id="or_number" value="">

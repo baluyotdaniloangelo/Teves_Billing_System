@@ -72,13 +72,17 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.billing_date',
 					'teves_client_table.client_address',
 					'teves_client_table.client_name',
+					'teves_client_table.client_id',
 					'teves_receivable_table.control_number',
 					'teves_client_table.client_tin',
 					'teves_receivable_table.or_number',				
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
-					'teves_receivable_table.receivable_status']);
+					'teves_receivable_table.receivable_status',
+					'teves_receivable_table.billing_period_start',
+					'teves_receivable_table.billing_period_end',
+					'teves_receivable_table.less_per_liter']);
 					return response()->json($data);
 		
 	}
@@ -113,6 +117,15 @@ class ReceivablesController extends Controller
                 ->where('order_date', '<=', $end_date)
 				->groupBy('teves_billing_table.client_idx')
 				->sum('order_total_amount');
+					
+			$receivable_total_liter = BillingTransactionModel::where('client_idx', $client_idx)
+				->where('order_date', '>=', $start_date)
+                ->where('order_date', '<=', $end_date)
+                ->where('teves_product_table.product_unit_measurement', '=', 'L')
+				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+				->groupBy('teves_billing_table.client_idx')
+				->groupBy('teves_product_table.product_unit_measurement')
+				->sum('order_quantity');
 
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 				= $request->client_idx;
@@ -121,8 +134,13 @@ class ReceivablesController extends Controller
 			$Receivables->or_number 				= $request->or_number;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
-			$Receivables->receivable_amount 		= $receivable_amount;
-			$Receivables->receivable_status 		=  $request->receivable_status;
+			$Receivables->receivable_amount 		= $receivable_amount-($receivable_total_liter*$request->less_per_liter);
+			$Receivables->receivable_status 		= $request->receivable_status;
+			
+			$Receivables->billing_period_start 		= $request->start_date;
+			$Receivables->billing_period_end 		= $request->end_date;
+			
+			$Receivables->less_per_liter 		= $request->less_per_liter;
 			
 			$result = $Receivables->save();
 			
@@ -144,14 +162,45 @@ class ReceivablesController extends Controller
 			'receivable_description.required' 	=> 'Description is Required'
         ]
 		);
+			
+			/*Get Client ID from Receivable*/
+			$client_idx = ReceivablesModel::where('receivable_id', $request->ReceivableID)
+			  		->get([
+					'teves_receivable_table.client_idx']);
+			
+
+			$start_date = $request->start_date;
+			$end_date = $request->end_date;
+		
+			$receivable_amount = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
+				->where('order_date', '>=', $start_date)
+                ->where('order_date', '<=', $end_date)
+				->groupBy('teves_billing_table.client_idx')
+				->sum('order_total_amount');
 					
+			$receivable_total_liter = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
+				->where('order_date', '>=', $start_date)
+                ->where('order_date', '<=', $end_date)
+                ->where('teves_product_table.product_unit_measurement', '=', 'L')
+				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+				->groupBy('teves_billing_table.client_idx')
+				->groupBy('teves_product_table.product_unit_measurement')
+				->sum('order_quantity');
+				
+			//echo "$receivable_amount $receivable_total_liter";
+				
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 				= $request->billing_date;
 			$Receivables->or_number 				= $request->or_number;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
-			$Receivables->receivable_status 		=  $request->receivable_status;
+			$Receivables->receivable_status 		= $request->receivable_status;
+			$Receivables->receivable_amount 		= $receivable_amount-($receivable_total_liter*$request->less_per_liter);
+			$Receivables->billing_period_start 		= $request->start_date;
+			$Receivables->billing_period_end 		= $request->end_date;
+			
+			$Receivables->less_per_liter 			= $request->less_per_liter;
 			
 			$result = $Receivables->update();
 			

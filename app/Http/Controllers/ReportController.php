@@ -374,7 +374,7 @@ class ReportController extends Controller
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
-		$title = 'RECEIVABLE';
+		$title = 'Receivable';
 		  
         $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
 		
@@ -383,7 +383,6 @@ class ReportController extends Controller
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
-		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
 	}
 
 	public function generate_sales_order_pdf(Request $request){
@@ -424,7 +423,9 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_mode_of_payment',
 					'teves_sales_order_table.sales_order_date_of_payment',
 					'teves_sales_order_table.sales_order_reference_no',
-					'teves_sales_order_table.sales_order_payment_amount'
+					'teves_sales_order_table.sales_order_payment_amount',
+					'teves_sales_order_table.sales_order_net_percentage',
+					'teves_sales_order_table.sales_order_less_percentage'
 				]);
 				
 		$sales_order_amt =  number_format($sales_order_data[0]['sales_order_total_due'],2,".","");
@@ -457,7 +458,7 @@ class ReportController extends Controller
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
-		$title = 'SALES ORDER';
+		$title = 'Sales Order';
 		  
         $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		
@@ -466,7 +467,6 @@ class ReportController extends Controller
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER.pdf");
-		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 	}
 
 	

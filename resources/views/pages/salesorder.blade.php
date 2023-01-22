@@ -142,7 +142,19 @@
 									
 								</table>
 								<div style="color:red;" id="product_idxError"></div>
-								<hr>						
+								<hr>
+							<div class="row">
+									<div class="col-md-6">
+									  <label for="update_sales_order_date" class="form-label">Net Value</label>
+									  <input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" step=".01">
+									</div>
+									
+									<div class="col-md-6">
+									  <label for="update_or_number" class="form-label">Less Value</label>
+									  <input type="number" class="form-control" id="order_less_percentage" name="sales_order_less_percentage" step=".01">
+									</div>
+								</div>
+								<hr>								
 								<div class="row">
 									<div class="col-md-4">
 									  <label for="sales_order_date" class="form-label">Delivery Method</label>
@@ -296,7 +308,19 @@
 									
 								</table>
 								<div style="color:red;" id="update_product_idxError"></div>
-								<hr>						
+								<hr>
+								<div class="row">
+									<div class="col-md-6">
+									  <label for="update_sales_order_net_percentage" class="form-label">Net Value</label>
+									  <input type="number" class="form-control" id="update_sales_order_net_percentage" name="update_sales_order_net_percentage" step=".01">
+									</div>
+									
+									<div class="col-md-6">
+									  <label for="update_sales_order_less_percentage" class="form-label">Less Value</label>
+									  <input type="number" class="form-control" id="update_sales_order_less_percentage" name="update_sales_order_less_percentage" step=".01">
+									</div>
+								</div>
+								<hr>
 								<div class="row">
 									<div class="col-md-4">
 									  <label for="update_sales_order_date" class="form-label">Delivery Method</label>

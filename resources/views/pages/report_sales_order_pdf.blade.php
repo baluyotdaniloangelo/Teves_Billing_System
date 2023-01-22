@@ -127,8 +127,8 @@
 				<td colspan="2" align="center" nowrap style=" height:<?=$component_height;?>px !important; border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">{{$sales_order_component_cols->product_name}}</td>
 				<td colspan="2" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">{{$sales_order_component_cols->product_unit_measurement}}</td>
-				<td colspan="3" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
-				<td colspan="2" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
+				<td colspan="3" align="right" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
+				<td colspan="2" align="right" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -153,7 +153,7 @@
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Less 1% </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
-			<?=number_format($sales_order_data[0]['sales_order_net_amount']*0.01,2);?>
+			<?=number_format($sales_order_data[0]['sales_order_net_amount']*$sales_order_data[0]['sales_order_less_percentage']/100,2);?>
 		</tr>		
 
 		<tr style="font-size:10px;">			
@@ -211,8 +211,8 @@
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="center" style="border-top:0px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; height:100px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
-			<td colspan="4" align="left" style="border-top:0px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:100px !important; height:90px !important;">{{$sales_order_data[0]->sales_order_note}}</td>
+			<td colspan="6" align="center" style="border-top:0px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; height:90px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
+			<td colspan="4" align="left" style="border-top:0px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:90px !important; height:90px !important;">{{$sales_order_data[0]->sales_order_note}}</td>
 		</tr>
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>
@@ -230,7 +230,7 @@
 		</tr> 
 		 
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:100px !important;">{{$sales_order_data[0]->sales_order_mode_of_payment}}</td>
+			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:90px !important;">{{$sales_order_data[0]->sales_order_mode_of_payment}}</td>
 			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_date_of_payment}}</td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_reference_no}}</td>
 			<td colspan="2" align="right" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_payment_amount}}</td>			
