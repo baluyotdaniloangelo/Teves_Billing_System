@@ -310,7 +310,6 @@
 					var url_receivable = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query_receivable)
 					window.open(url_receivable);
 			
-				  
 				  }
 				},
 				error: function(error) {

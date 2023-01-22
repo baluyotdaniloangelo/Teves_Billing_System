@@ -35,7 +35,10 @@
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
-							
+				
+				/*Close Form*/
+				$('#CreateReportModal').modal('toggle');
+				
 				/*Call Function to Get the Client Name and Address*/
 				get_client_details();
 							
@@ -85,8 +88,7 @@
 								"<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
 								"</tr>";
 							
-							/*Close Form*/
-							$('#CreateReportModal').modal('toggle');
+							
 							
 							/*Attached the Data on the Table Body*/
 							$("#billingstatementreport tbody").append(tr_str);
@@ -291,7 +293,7 @@
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
 					
-					
+					/*Close Form*/
 				  }
 				},
 				error: function(error) {
