@@ -44,9 +44,9 @@ else if (Request::is('salesorder')){
 @include('layouts.salesorder_script')
 <?php
 }
-else if (Request::is('createsalesorder')){
+else if (Request::is('purchaseorder')){
 ?>
-@include('layouts.salesorder_create_script')
+@include('layouts.purchaseorder_script')
 <?php
 }
 ?>

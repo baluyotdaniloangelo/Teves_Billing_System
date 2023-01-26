@@ -9,6 +9,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
+
+use App\Http\Controllers\PurchaseOrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -126,6 +128,24 @@ Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sal
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 
+/*Sales Order*/
+/*January 24, 2023*/
+Route::get('/purchaseorder', [PurchaseOrderController::class,'purchaseorder'])->name('purchaseorder')->middleware('isLoggedIn');
+Route::get('purchaseorder/list', [PurchaseOrderController::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');
+/*GET Sales Order Info*/
+Route::post('/sales_order_info', [SalesOrderController::class, 'sales_order_info'])->name('sales_order_info')->middleware('isLoggedIn');
+/*Confirm Delete Sales Order*/
+Route::post('/delete_sales_order_confirmed', [SalesOrderController::class, 'delete_sales_order_confirmed'])->name('delete_sales_order_confirmed')->middleware('isLoggedIn');
+/*Create Sales Order*/
+Route::post('/create_sales_order_post', [SalesOrderController::class,'create_sales_order_post'])->name('create_sales_order_post')->middleware('isLoggedIn');
+/*Update Sales Order*/
+Route::post('/update_sales_order_post', [SalesOrderController::class,'update_sales_order_post'])->name('update_sales_order_post')->middleware('isLoggedIn');
+/*Get Sales Order Product Item*/
+Route::post('/get_sales_order_product_list', [SalesOrderController::class,'get_sales_order_product_list'])->name('get_sales_order_product_list')->middleware('isLoggedIn');
+/*Delete Sales Order Product Item*/
+Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sales_order_item'])->name('delete_sales_order_item')->middleware('isLoggedIn');
+/*Download Sales Order via PDF*/
+Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
 /*GET Product Info*/
