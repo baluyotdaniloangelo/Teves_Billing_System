@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class PurchaseOrderComponentModel extends Model
 {
     //use HasFactory;
-	protected $table = 'teves_sales_order_component_table';
+	protected $table = 'teves_purchase_order_component_table';
 
 	protected $fillable = [
-        'sales_order_component_id',
-		'sales_order_idx',
+        'purchase_order_component_id',
+		'purchase_order_idx',
         'product_idx',
-        'client_idx',
 		'order_quantity',
 		'product_price',
         'order_quantity',
@@ -22,5 +21,5 @@ class PurchaseOrderComponentModel extends Model
         'created_at',
 		'updated_at'
     ];
-    protected $primaryKey = 'sales_order_component_id';
+    protected $primaryKey = 'purchase_order_component_id';
 }

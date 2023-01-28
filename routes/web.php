@@ -133,24 +133,21 @@ Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales
 Route::get('/purchaseorder', [PurchaseOrderController::class,'purchaseorder'])->name('purchaseorder')->middleware('isLoggedIn');
 Route::get('purchaseorder/list', [PurchaseOrderController::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');
 /*GET Sales Order Info*/
-Route::post('/sales_order_info', [SalesOrderController::class, 'sales_order_info'])->name('sales_order_info')->middleware('isLoggedIn');
+Route::post('/purchase_order_info', [PurchaseOrderController::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');
 /*Confirm Delete Sales Order*/
-Route::post('/delete_sales_order_confirmed', [SalesOrderController::class, 'delete_sales_order_confirmed'])->name('delete_sales_order_confirmed')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController::class, 'delete_purchase_order_confirmed'])->name('delete_purchase_order_confirmed')->middleware('isLoggedIn');
 /*Create Sales Order*/
-Route::post('/create_sales_order_post', [SalesOrderController::class,'create_sales_order_post'])->name('create_sales_order_post')->middleware('isLoggedIn');
+Route::post('/create_purchase_order_post', [PurchaseOrderController::class,'create_purchase_order_post'])->name('create_purchase_order_post')->middleware('isLoggedIn');
 /*Update Sales Order*/
-Route::post('/update_sales_order_post', [SalesOrderController::class,'update_sales_order_post'])->name('update_sales_order_post')->middleware('isLoggedIn');
+Route::post('/update_purchase_order_post', [PurchaseOrderController::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');
 /*Get Sales Order Product Item*/
-Route::post('/get_sales_order_product_list', [SalesOrderController::class,'get_sales_order_product_list'])->name('get_sales_order_product_list')->middleware('isLoggedIn');
+Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
 /*Delete Sales Order Product Item*/
-Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sales_order_item'])->name('delete_sales_order_item')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_item', [PurchaseOrderController::class,'delete_purchase_order_item'])->name('delete_purchase_order_item')->middleware('isLoggedIn');
+
+
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
-/*GET Product Info*/
-//Route::post('/client_info', [ReceivablesController::class, 'client_info'])->name('client_info')->middleware('isLoggedIn');
-/*Update Product*/
-//Route::post('/update_client_post', [ReceivablesController::class,'update_client_post'])->name('update_client_post')->middleware('isLoggedIn');
-/*Confirm Delete Product*/
-//Route::post('/delete_client_confirmed', [ReceivablesController::class, 'delete_client_confirmed'])->name('delete_client_confirmed')->middleware('isLoggedIn');
+

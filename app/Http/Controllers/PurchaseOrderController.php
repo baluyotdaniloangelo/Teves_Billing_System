@@ -5,7 +5,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\PurchaseOrderModel;
 use App\Models\ProductModel;
-use App\Models\ClientModel;
 use App\Models\PurchaseOrderComponentModel;
 use Session;
 use Validator;
@@ -21,13 +20,12 @@ class PurchaseOrderController extends Controller
 		$data = array();
 		if(Session::has('loginID')){
 			
-			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		}
 
-		return view("pages.purchaseorder", compact('data','title','client_data','product_data'));
+		return view("pages.purchaseorder", compact('data','title','product_data'));
 		
 	}   
 	
@@ -52,8 +50,8 @@ class PurchaseOrderController extends Controller
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
-					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
+					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditPurchaseOrder"></a>
+					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deletePurchaseOrder"></a>
 					</div>';
                     return $actionBtn;
                 })
@@ -63,151 +61,183 @@ class PurchaseOrderController extends Controller
     }
 
 	/*Fetch Product Information*/
-	public function sales_order_info(Request $request){
+	public function purchase_order_info(Request $request){
 		
-					$data = PurchaseOrderController::where('purchase_order_id', $request->purchase_order_id)
-					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
-						
-					->get([
-					'teves_sales_order_table.purchase_order_id',
-					'teves_sales_order_table.sales_order_date',
-					'teves_sales_order_table.sales_order_client_idx',
-					'teves_client_table.client_name',
-					'teves_sales_order_table.sales_order_control_number',
-					'teves_sales_order_table.sales_order_dr_number',
-					'teves_sales_order_table.sales_order_or_number',		
-					'teves_sales_order_table.sales_order_payment_term',
-					'teves_sales_order_table.sales_order_delivered_to',
-					'teves_sales_order_table.sales_order_delivered_to_address',
-					'teves_sales_order_table.sales_order_delivery_method',
-					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_hauler',
-					'teves_sales_order_table.sales_order_required_date',
-					'teves_sales_order_table.sales_order_instructions',
-					'teves_sales_order_table.sales_order_note',
-					'teves_sales_order_table.sales_order_mode_of_payment',
-					'teves_sales_order_table.sales_order_date_of_payment',
-					'teves_sales_order_table.sales_order_reference_no',
-					'teves_sales_order_table.sales_order_payment_amount',
-					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage']);
-					return response()->json($data);
+					//$data = PurchaseOrderModel::where('purchase_order_id', $request->purchase_order_id)
+					$data = PurchaseOrderModel::find($request->purchase_order_id, [
+						'purchase_supplier_name',
+						'purchase_supplier_tin',
+						'purchase_supplier_address',
+						'purchase_order_control_number',
+						'purchase_order_date',
+						'purchase_order_sales_order_number',
+						'purchase_order_official_receipt_no',
+						'purchase_order_delivery_receipt_no',
+						'purchase_order_bank',
+						'purchase_order_date_of_payment',
+						'purchase_order_reference_no',
+						'purchase_order_payment_amount',
+						'purchase_order_delivery_method',
+						'purchase_order_hauler',
+						'purchase_order_date_of_pickup',
+						'purchase_order_date_of_arrival',
+						'purchase_order_gross_amount',
+						'purchase_order_total_liters',
+						'purchase_order_net_percentage', 
+						'purchase_order_net_amount',
+						'purchase_order_less_percentage',
+						'purchase_order_total_payable',
+						'purchase_driver',
+						'purchase_lorry_plate_no',
+						'purchase_loading_terminal',
+						'purchase_terminal_address',
+						'purchase_destination',
+						'purchase_destination_address',
+						'purchase_date_of_departure',
+						'purchase_date_of_arrival',
+						'purchase_order_instructions',
+						'purchase_order_note']);
+					return response()->json($data);	
+					
+					//return response()->json($data);
 		
 	}
 
 	/*Delete Product Information*/
-	public function delete_sales_order_confirmed(Request $request){
+	public function delete_purchase_order_confirmed(Request $request){
 
 		/*Delete on Sales Order Table*/
 		$purchase_order_id = $request->purchase_order_id;
-		PurchaseOrderController::find($purchase_order_id)->delete();
+		PurchaseOrderModel::find($purchase_order_id)->delete();
 		
 		/*Delete on Sales Order Product Component*/
-		
+	
 		
 		return 'Deleted';
 		
 	} 
 
-	public function create_sales_order_post(Request $request){
+	public function create_purchase_order_post(Request $request){
 
 		$request->validate([
-			'client_idx'  	=> 'required',
-			'product_idx'  	=> 'required'
+			'purchase_supplier_name'  	=> 'required'
         ], 
         [
-			'client_idx.required' 	=> 'Client is Required',
-			'product_idx.required' 	=> 'Product is Required'
+			'purchase_supplier_name.required' 	=> "Supplier's Name is Required"
         ]
 		);
 
-			@$last_id = PurchaseOrderController::latest()->first()->purchase_order_id;
-
-			$client_idx = $request->client_idx;
+			@$last_id = PurchaseOrderModel::latest()->first()->purchase_order_id;
 			
-			$Salesorder = new PurchaseOrderController();
-			$Salesorder->sales_order_client_idx 				= $request->client_idx;
-			$Salesorder->sales_order_control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
-			$Salesorder->sales_order_date 						= $request->sales_order_date;
-			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
-			$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
-			$Salesorder->sales_order_dr_number 					= $request->dr_number;
-			$Salesorder->sales_order_or_number 					= $request->or_number;
-			$Salesorder->sales_order_payment_term 				= $request->payment_term;
-			$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
-			$Salesorder->sales_order_hauler 					= $request->hauler;
-			$Salesorder->sales_order_required_date 				= $request->required_date;
-			$Salesorder->sales_order_instructions 				= $request->instructions;
-			$Salesorder->sales_order_note 						= $request->note;
-			$Salesorder->sales_order_mode_of_payment 			= $request->mode_of_payment;
-			$Salesorder->sales_order_date_of_payment 			= $request->date_of_payment;
-			$Salesorder->sales_order_reference_no 				= $request->reference_no;
-			$Salesorder->sales_order_payment_amount 			= $request->payment_amount;
+			$Purchaseorder = new PurchaseOrderModel();
+			$Purchaseorder->purchase_order_control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$Purchaseorder->purchase_supplier_name 					= $request->purchase_supplier_name;
 			
-			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
-			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
+			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
+			$Purchaseorder->purchase_supplier_tin					= $request->purchase_supplier_tin;
+			$Purchaseorder->purchase_supplier_name					= $request->purchase_supplier_name;
+			$Purchaseorder->purchase_supplier_address				= $request->purchase_supplier_address;
+					
+			$Purchaseorder->purchase_order_sales_order_number		= $request->purchase_order_sales_order_number;
+			$Purchaseorder->purchase_order_collection_receipt_no	= $request->purchase_order_collection_receipt_no;
+			$Purchaseorder->purchase_order_official_receipt_no		= $request->purchase_order_official_receipt_no;
+			$Purchaseorder->purchase_order_delivery_receipt_no		= $request->purchase_order_delivery_receipt_no;
+				
+			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
+			$Purchaseorder->purchase_order_hauler					= $request->purchase_order_hauler;
+			$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
+			$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
+					
+			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
+			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
+					
+			$Purchaseorder->purchase_order_bank						= $request->purchase_order_bank;
+			$Purchaseorder->purchase_order_date_of_payment			= $request->purchase_order_date_of_payment;			
 			
-			$result = $Salesorder->save();
+			$Purchaseorder->purchase_order_reference_no				= $request->purchase_order_reference_no;
+			$Purchaseorder->purchase_order_payment_amount			= $request->purchase_order_payment_amount;
+			
+			$Purchaseorder->purchase_driver							= $request->purchase_driver;
+			$Purchaseorder->purchase_lorry_plate_no					= $request->purchase_lorry_plate_no;			
+			
+			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
+			$Purchaseorder->purchase_terminal_address				= $request->purchase_terminal_address;
+					
+			$Purchaseorder->purchase_destination					= $request->purchase_destination;
+			$Purchaseorder->purchase_destination_address			= $request->purchase_destination_address;
+			$Purchaseorder->purchase_date_of_departure				= $request->purchase_date_of_departure;
+			$Purchaseorder->purchase_date_of_arrival				= $request->purchase_date_of_arrival;
+									
+			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
+			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
+			
+			
+			$result = $Purchaseorder->save();
 			
 			$product_idx 			= $request->product_idx;
 			$order_quantity 		= $request->order_quantity;
 			$product_manual_price 	= $request->product_manual_price;
 			
 			/*Get Last ID*/
-			$last_transaction_id = $Salesorder->purchase_order_id;
+			$last_transaction_id = $Purchaseorder->purchase_order_id;
 			
 			$gross_amount = 0;
 			
 			for($count = 0; $count < count($product_idx); $count++)
 			 {
 				
-					$sales_order_item_product_id 			= $product_idx[$count];
-					$sales_order_item_order_quantity 		= $order_quantity[$count];
-					$sales_order_item_product_manual_price 	= $product_manual_price[$count];
+					$puchase_order_item_product_id 			= $product_idx[$count];
+					$puchase_order_item_order_quantity 		= $order_quantity[$count];
+					$puchase_order_item_product_manual_price 	= $product_manual_price[$count];
 
+				
 				/*Product Details*/
-				$product_info = ProductModel::find($sales_order_item_product_id, ['product_price']);					
+				$product_info = ProductModel::find($puchase_order_item_product_id, ['product_price']);					
 				
 				/*Check if Price is From Manual Price*/
-				if($sales_order_item_product_manual_price!=0){
-					$product_price = $sales_order_item_product_manual_price;
+				if($puchase_order_item_product_manual_price!=0){
+					$product_price = $puchase_order_item_product_manual_price;
+					//echo "G";
 				}else{
 					$product_price = $product_info->product_price;
+					//echo "H";
 				}
 				
-				$order_total_amount = $sales_order_item_order_quantity * $product_price;
+				$order_total_amount = $puchase_order_item_order_quantity * $product_price;
 				
 				$gross_amount += $order_total_amount;
 				
+				//echo "$sales_order_item_product_id $sales_order_item_order_quantity $sales_order_item_product_manual_price ($gross_amount)<br>";
+				
 				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
-				$SalesOrderComponentModel = new SalesOrderComponentModel();
+				$PurchaseOrderComponent = new PurchaseOrderComponentModel();
 				
-				$SalesOrderComponentModel->purchase_order_idx 			= $last_transaction_id;
-				$SalesOrderComponentModel->product_idx 				= $sales_order_item_product_id;
-				$SalesOrderComponentModel->client_idx 				= $request->client_idx;
-				$SalesOrderComponentModel->order_quantity 			= $sales_order_item_order_quantity;
-				$SalesOrderComponentModel->product_price 			= $product_price;
-				$SalesOrderComponentModel->order_total_amount 		= $order_total_amount;
+				$PurchaseOrderComponent->purchase_order_idx 		= $last_transaction_id;
+				$PurchaseOrderComponent->product_idx 				= $puchase_order_item_product_id;
+				$PurchaseOrderComponent->order_quantity 			= $puchase_order_item_order_quantity;
+				$PurchaseOrderComponent->product_price 				= $product_price;
+				$PurchaseOrderComponent->order_total_amount 		= $order_total_amount;
 				
-				$SalesOrderComponentModel->save();
+				$PurchaseOrderComponent->save();
 				
 			 }
 
-			$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
-			$less_in_percentage 			= $request->sales_order_less_percentage/100;
+		
+			$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
+			$less_in_percentage 			= $request->purchase_order_less_percentage/100;
 			
-			$SalesOrderUpdate = new PurchaseOrderController();
-			$SalesOrderUpdate = PurchaseOrderController::find($last_transaction_id);
-			$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
-			$SalesOrderUpdate->sales_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
-			$SalesOrderUpdate->sales_order_total_due = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
-			$SalesOrderUpdate->update();
-			
+			$PurchaseOrderUpdate = new PurchaseOrderModel();
+			$PurchaseOrderUpdate = PurchaseOrderModel::find($last_transaction_id);
+			$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,2,".","");
+			$PurchaseOrderUpdate->purchase_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
+			$PurchaseOrderUpdate->purchase_order_total_payable = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+			$PurchaseOrderUpdate->update();
+
 			if($result){
-				return response()->json(array('success' => "Sales Order Successfully Created!", 'purchase_order_id' => $last_transaction_id), 200);
+				return response()->json(array('success' => "Purchase Order Successfully Created!", 'purchase_order_id' => @$last_transaction_id), 200);
 			}
 			else{
-				return response()->json(['success'=>'Error on Insert Sales Order Information']);
+				return response()->json(['success'=>'Error on Insert Purchase Order Information']);
 			}
 	}
 
@@ -329,12 +359,12 @@ class PurchaseOrderController extends Controller
 			}
 	}
 	
-	public function get_sales_order_product_list(Request $request){		
+	public function get_purchase_order_product_list(Request $request){		
 	
-			$data = SalesOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
-					->orderBy('sales_order_component_id', 'asc')
+			$data = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
+					->orderBy('purchase_order_component_id', 'asc')
               		->get([
-					'sales_order_component_id',
+					'purchase_order_component_id',
 					'product_idx',
 					'product_price',
 					'order_quantity']);

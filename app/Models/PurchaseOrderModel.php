@@ -12,9 +12,10 @@ class PurchaseOrderModel extends Model
 		'purchase_order_control_number',
 		'purchase_supplier_name',
 		'purchase_order_or_number',
-		'purchase_order_total_due'
+		'purchase_order_gross_amount',
+		'purchase_order_total_payable'
     ];
 	
-	protected $primaryKey = 'sales_order_id';
+	protected $primaryKey = 'purchase_order_id';
     
 }
