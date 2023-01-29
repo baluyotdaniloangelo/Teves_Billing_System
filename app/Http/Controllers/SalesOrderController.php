@@ -104,8 +104,8 @@ class SalesOrderController extends Controller
 		$sales_order_id = $request->sales_order_id;
 		SalesOrderModel::find($sales_order_id)->delete();
 		
-		/*Delete on Sales Order Product Component*/
-		
+		/*Delete on Sales Order Product Component*/	
+		SalesOrderComponentModel::where('sales_order_idx', $sales_order_id)->delete();
 		
 		return 'Deleted';
 		

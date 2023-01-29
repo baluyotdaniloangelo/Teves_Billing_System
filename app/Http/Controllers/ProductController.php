@@ -124,8 +124,8 @@ class ProductController extends Controller
 			$Product = new ProductModel();
 			$Product = ProductModel::find($request->productID);
 			
-			$Product->product_name 			= $request->product_name;
-			$Product->product_price 		= $request->product_price;
+			$Product->product_name 						= $request->product_name;
+			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 						
 			$result = $Product->update();

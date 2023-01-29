@@ -1,5 +1,5 @@
    <script type="text/javascript">
-
+<!--COFFEE-->
 	<!--Load Table-->
 	$(function () {
 
@@ -98,7 +98,7 @@
 			/*Delete the Selected Item*/
 			
 			  $.ajax({
-				url: "/delete_sales_order_item",
+				url: "/delete_purchase_order_item",
 				type:"POST",
 				data:{
 				  productitemID:productitemID,
@@ -128,9 +128,6 @@
 
 			event.preventDefault();
 			
-					/*Reset Warnings*/
-					$('#client_idxError').text('');
-
 			document.getElementById('PurchaseOrderformNew').className = "g-3 needs-validation was-validated";
 
 			let purchase_order_date 					= $("input[name=purchase_order_date]").val();
@@ -270,14 +267,14 @@
 					
 					/*Close Modal*/
 					$('#CreatePurchaseOrderModal').modal('toggle');
-					/*Open PDF for Printing
+					/*Open PDF for Printing*/
 					var query = {
 						purchase_order_id:response.purchase_order_id,
 						_token: "{{ csrf_token() }}"
 					}
 
 					var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
-					window.open(url);*/
+					window.open(url);
 					
 				  }
 				},
@@ -287,6 +284,8 @@
 				
 				$('#purchase_supplier_nameError').html(error.responseJSON.errors.purchase_supplier_name);	
 				document.getElementById('purchase_supplier_nameError').className = "invalid-feedback";
+				
+				$('#product_idxError').html(error.responseJSON.errors.product_idx);
 				
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
@@ -377,6 +376,7 @@
 			
 			event.preventDefault();
 			let purchase_order_id = $(this).data('id');
+			
 			/*Call Product List for Sales Order*/
 			LoadProductRowForUpdate(purchase_order_id);
 			  $.ajax({
@@ -390,43 +390,43 @@
 				  console.log(response);
 				  if(response) {					
 
-			document.getElementById("update_purchase_order_date").value = response[0].purchase_order_date;
-			document.getElementById("update_purchase_supplier_tin").value = response[0].purchase_supplier_tin;
-			document.getElementById("update_purchase_supplier_name").value = response[0].purchase_supplier_name;
-			document.getElementById("update_purchase_supplier_address").value = response[0].purchase_supplier_address;
+			document.getElementById("update_purchase_order_date").value = response.purchase_order_date;
+			document.getElementById("update_purchase_supplier_tin").value = response.purchase_supplier_tin;
+			document.getElementById("update_purchase_supplier_name").value = response.purchase_supplier_name;
+			document.getElementById("update_purchase_supplier_address").value = response.purchase_supplier_address;
 			
-			document.getElementById("update_purchase_order_sales_order_number").value = response[0].purchase_order_sales_order_number;
-			document.getElementById("update_purchase_order_collection_receipt_no").value = response[0].purchase_order_collection_receipt_no;
-			document.getElementById("update_purchase_order_official_receipt_no").value = response[0].purchase_order_official_receipt_no;
-			document.getElementById("update_purchase_order_delivery_receipt_no").value = response[0].purchase_order_delivery_receipt_no;
+			document.getElementById("update_purchase_order_sales_order_number").value = response.purchase_order_sales_order_number;
+			document.getElementById("update_purchase_order_collection_receipt_no").value = response.purchase_order_collection_receipt_no;
+			document.getElementById("update_purchase_order_official_receipt_no").value = response.purchase_order_official_receipt_no;
+			document.getElementById("update_purchase_order_delivery_receipt_no").value = response.purchase_order_delivery_receipt_no;
 		
-			document.getElementById("update_purchase_order_delivery_method").value = response[0].purchase_order_delivery_method;
-			document.getElementById("update_purchase_order_hauler").value = response[0].purchase_order_hauler;
-			document.getElementById("update_purchase_order_date_of_pickup").value = response[0].purchase_order_date_of_pickup;
-			document.getElementById("update_purchase_order_date_of_arrival").value = response[0].purchase_order_date_of_arrival;
+			document.getElementById("update_purchase_order_delivery_method").value = response.purchase_order_delivery_method;
+			document.getElementById("update_purchase_order_hauler").value = response.purchase_order_hauler;
+			document.getElementById("update_purchase_order_date_of_pickup").value = response.purchase_order_date_of_pickup;
+			document.getElementById("update_purchase_order_date_of_arrival").value = response.purchase_order_date_of_arrival;
 			
-			document.getElementById("update_purchase_order_net_percentage").value = response[0].purchase_order_net_percentage;
-			document.getElementById("update_purchase_order_less_percentage").value = response[0].purchase_order_less_percentage;
+			document.getElementById("update_purchase_order_net_percentage").value = response.purchase_order_net_percentage;
+			document.getElementById("update_purchase_order_less_percentage").value = response.purchase_order_less_percentage;
 			
-			document.getElementById("update_purchase_order_bank").value = response[0].purchase_order_bank;
-			document.getElementById("update_purchase_order_date_of_payment").value = response[0].purchase_order_date_of_payment;
-			document.getElementById("update_purchase_order_reference_no").value = response[0].purchase_order_reference_no;
-			document.getElementById("update_purchase_order_payment_amount").value = response[0].purchase_order_payment_amount;
+			document.getElementById("update_purchase_order_bank").value = response.purchase_order_bank;
+			document.getElementById("update_purchase_order_date_of_payment").value = response.purchase_order_date_of_payment;
+			document.getElementById("update_purchase_order_reference_no").value = response.purchase_order_reference_no;
+			document.getElementById("update_purchase_order_payment_amount").value = response.purchase_order_payment_amount;
 			
-			document.getElementById("update_purchase_driver").value = response[0].purchase_driver;
-			document.getElementById("update_purchase_lorry_plate_no").value = response[0].purchase_lorry_plate_no;
-			document.getElementById("update_purchase_loading_terminal").value = response[0].purchase_loading_terminal;
-			document.getElementById("update_purchase_terminal_address").value = response[0].purchase_terminal_address;		
+			document.getElementById("update_purchase_driver").value = response.purchase_driver;
+			document.getElementById("update_purchase_lorry_plate_no").value = response.purchase_lorry_plate_no;
+			document.getElementById("update_purchase_loading_terminal").value = response.purchase_loading_terminal;
+			document.getElementById("update_purchase_terminal_address").value = response.purchase_terminal_address;		
 			
-			document.getElementById("update_purchase_destination").value = response[0].purchase_destination;
-			document.getElementById("update_purchase_destination_address").value = response[0].purchase_destination_address;
-			document.getElementById("update_purchase_date_of_departure").value = response[0].purchase_date_of_departure;
-			document.getElementById("update_purchase_date_of_arrival").value = response[0].purchase_date_of_arrival;
+			document.getElementById("update_purchase_destination").value = response.purchase_destination;
+			document.getElementById("update_purchase_destination_address").value = response.purchase_destination_address;
+			document.getElementById("update_purchase_date_of_departure").value = response.purchase_date_of_departure;
+			document.getElementById("update_purchase_date_of_arrival").value = response.purchase_date_of_arrival;
 			
-			document.getElementById("update_purchase_order_instructions").value = response[0].purchase_order_instructions;
-			document.getElementById("update_purchase_order_note").value = response[0].purchase_order_note;		
+			document.getElementById("update_purchase_order_instructions").value = response.purchase_order_instructions;
+			document.getElementById("update_purchase_order_note").value = response.purchase_order_note;		
 					
-			document.getElementById("update-puchase-order").value = response[0].purchase_order_id;		
+			document.getElementById("update-purchase-order").value = purchase_order_id;		
 					
 				var update_product_idx = [];
 				var update_order_quantity = [];
@@ -454,7 +454,7 @@
 							update_product_manual_price.push($(this).val());			  
 					});		
 
-					$('#UpdateSalesOrderModal').modal('toggle');					
+					$('#UpdatePurchaseOrderModal').modal('toggle');					
 				  
 				  }
 				},
@@ -486,7 +486,7 @@
 						var len = response.length;
 						for(var i=0; i<len; i++){
 							
-							var id = response[i].sales_order_component_id;
+							var id = response[i].purchase_order_component_id;
 							
 							var product_idx = response[i].product_idx;
 							var product_price = response[i].product_price;
@@ -523,16 +523,200 @@
 	  }  	  
 	  
 
-	  /*Re-print*/
-	  $('body').on('click','#PrintPurchaseOrder',function(){	  
-	  
-			let salesOrderID = $(this).data('id');
-			var query = {
-						sales_order_id:salesOrderID,
+	<!--Save New Sales Order-->
+	$("#update-purchase-order").click(function(event){
+
+			event.preventDefault();
+
+			document.getElementById('PurchaseOrderformUpdate').className = "g-3 needs-validation was-validated";
+			
+			let purchase_order_id			= document.getElementById("update-purchase-order").value;
+			
+			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
+			let purchase_supplier_tin 					= $("input[name=update_purchase_supplier_tin]").val();
+			let purchase_supplier_name 					= $("input[name=update_purchase_supplier_name]").val();
+			let purchase_supplier_address 				= $("input[name=update_purchase_supplier_address]").val();
+			
+			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
+			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
+			let purchase_order_official_receipt_no 		= $("input[name=update_purchase_order_official_receipt_no]").val();
+			let purchase_order_delivery_receipt_no 		= $("input[name=update_purchase_order_delivery_receipt_no]").val();
+		
+			let purchase_order_delivery_method 			= $("#update_purchase_order_delivery_method").val();
+			let purchase_order_hauler 					= $("#update_purchase_order_hauler").val();
+			let purchase_order_date_of_pickup 			= $("input[name=update_purchase_order_date_of_pickup]").val();
+			let purchase_order_date_of_arrival 			= $("input[name=update_purchase_order_date_of_arrival]").val();
+			
+			let purchase_order_net_percentage 			= $("input[name=update_purchase_order_net_percentage]").val();
+			let purchase_order_less_percentage 			= $("input[name=update_purchase_order_less_percentage]").val();
+			
+			let purchase_order_bank 				= $("input[name=update_purchase_order_bank]").val();
+			let purchase_order_date_of_payment 		= $("input[name=update_purchase_order_date_of_payment]").val();
+			let purchase_order_reference_no 		= $("input[name=update_purchase_order_reference_no]").val();
+			let purchase_order_payment_amount 		= $("input[name=update_purchase_order_payment_amount]").val();
+			
+			let purchase_driver 					= $("input[name=update_purchase_driver]").val();
+			let purchase_lorry_plate_no 			= $("input[name=update_purchase_lorry_plate_no]").val();
+			let purchase_loading_terminal 			= $("input[name=update_purchase_loading_terminal]").val();
+			let purchase_terminal_address 			= $("input[name=update_purchase_terminal_address]").val();
+			
+			
+			
+			let purchase_destination 				= $("input[name=update_purchase_destination]").val();
+			let purchase_destination_address 		= $("input[name=update_purchase_destination_address]").val();
+			let purchase_date_of_departure 			= $("input[name=update_purchase_date_of_departure]").val();
+			let purchase_date_of_arrival 			= $("input[name=update_purchase_date_of_arrival]").val();
+			
+			
+			let purchase_order_instructions 			= $("#update_purchase_order_instructions").val();
+			let purchase_order_note 					= $("#update_purchase_order_note").val();
+
+				var product_idx = [];
+				var order_quantity = [];
+				var product_manual_price = [];
+				var purchase_order_item_id = [];
+				
+				$('.update_product_idx').each(function(){
+					if($(this).val() == ''){
+						alert('Please Select a Product');
+						exit();
+					}else{  				  
+				   		product_idx.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.update_order_quantity').each(function(){
+					if($(this).val() == ''){
+						alert('Quantity is Empty');
+						exit(); 
+					}else{  				  
+				   		order_quantity.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.update_product_manual_price').each(function(){ 				  
+				   		product_manual_price.push($(this).val());			  
+				  });		
+				 
+				  $.each($("[id='product_item']"), function(){
+					purchase_order_item_id.push($(this).attr("data-id"));
+				  });
+				  
+				 
+			  $.ajax({
+				url: "/update_purchase_order_post",
+				type:"POST",
+				data:{
+			
+					purchase_order_id:purchase_order_id,
+					
+					purchase_order_date:purchase_order_date,
+					purchase_supplier_tin:purchase_supplier_tin,
+					purchase_supplier_name:purchase_supplier_name,
+					purchase_supplier_address:purchase_supplier_address,
+					
+					purchase_order_sales_order_number:purchase_order_sales_order_number,
+					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
+					purchase_order_official_receipt_no:purchase_order_official_receipt_no,
+					purchase_order_delivery_receipt_no:purchase_order_delivery_receipt_no,
+				
+					purchase_order_delivery_method:purchase_order_delivery_method,
+					purchase_order_hauler:purchase_order_hauler,
+					purchase_order_date_of_pickup:purchase_order_date_of_pickup,
+					purchase_order_date_of_arrival:purchase_order_date_of_arrival,
+					
+					purchase_order_net_percentage:purchase_order_net_percentage,
+					purchase_order_less_percentage:purchase_order_less_percentage,
+					
+					purchase_order_bank:purchase_order_bank,
+					purchase_order_date_of_payment:purchase_order_date_of_payment,
+					
+					
+					purchase_order_reference_no:purchase_order_reference_no,
+					purchase_order_payment_amount:purchase_order_payment_amount,
+			
+					purchase_driver:purchase_driver,
+					purchase_lorry_plate_no:purchase_lorry_plate_no,
+					
+					
+					purchase_loading_terminal:purchase_loading_terminal,
+					purchase_terminal_address:purchase_terminal_address,
+					
+					purchase_destination:purchase_destination,
+					purchase_destination_address:purchase_destination_address,
+					purchase_date_of_departure:purchase_date_of_departure,
+					purchase_date_of_arrival:purchase_date_of_arrival,
+									
+					purchase_order_instructions:purchase_order_instructions,
+					purchase_order_note:purchase_order_note,
+				  
+					purchase_order_item_ids:purchase_order_item_id,
+				  
+					product_idx:product_idx,
+					order_quantity:order_quantity,
+					product_manual_price:product_manual_price,
+					_token: "{{ csrf_token() }}"
+				},		
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					$('#update_purchase_supplier_nameError').text('');					
+
+					
+				    /*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					var table = $("#getPurchaseOrderList").DataTable();
+					table.ajax.reload(null, false);
+					
+					/*Close Modal*/
+					$('#UpdatePurchaseOrderModal').modal('toggle');
+					/*Open PDF for Printing*/
+					var query = {
+						purchase_order_id:response.purchase_order_id,
 						_token: "{{ csrf_token() }}"
 					}
 
-			var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
+					var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
+					window.open(url);
+					
+				  }
+				},
+				error: function(error) {
+					
+				 console.log(error);	
+				
+				$('#update_purchase_supplier_nameError').html(error.responseJSON.errors.purchase_supplier_name);	
+				document.getElementById('purchase_supplier_nameError').className = "invalid-feedback";
+				
+				$('#product_idxError').html(error.responseJSON.errors.product_idx);
+				
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });	
+	  });
+	
+
+	  /*Re-print*/
+	  $('body').on('click','#PrintPurchaseOrder',function(){	  
+	  
+			let purchaseOrderID = $(this).data('id');
+			var query = {
+						purchase_order_id:purchaseOrderID,
+						_token: "{{ csrf_token() }}"
+					}
+
+			var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
 			window.open(url);
 	  
 	  });

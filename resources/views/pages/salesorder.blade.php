@@ -146,7 +146,7 @@
 							<div class="row">
 									<div class="col-md-6">
 									  <label for="update_sales_order_date" class="form-label">Net Value</label>
-									  <input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" step=".01">
+									  <input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" step=".01" value="1.12">
 									</div>
 									
 									<div class="col-md-6">
@@ -233,7 +233,7 @@
 					  </div>
                     </div>
                     <div class="modal-body">
-					<form class="g-2 needs-validation" id="UpdateSalesOrderformUpdate">		
+					<form class="g-2 needs-validation" id="PurchaseOrderformUpdate">		
 									<div class="row">
 									
 										<div class="col-md-3">

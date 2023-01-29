@@ -6,13 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesModel;
-/*use App\Models\ProductModel;*/
+
 use App\Models\SalesOrderModel;
 use App\Models\SalesOrderComponentModel;
+
+use App\Models\PurchaseOrderModel;
+use App\Models\PurchaseOrderComponentModel;
+
 use App\Models\ClientModel;
 use Session;
 use Validator;
 use DataTables;
+
 /*Excel*/
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -374,7 +379,7 @@ class ReportController extends Controller
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
-		$title = 'Receivable';
+		$title = 'RECEIVABLE';
 		  
         $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
 		
@@ -469,7 +474,86 @@ class ReportController extends Controller
 		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER.pdf");
 	}
 
-	
+	public function generate_purchase_order_pdf(Request $request){
+
+		$purchase_order_id = $request->purchase_order_id;
+					
+				$purchase_order_data = PurchaseOrderModel::find($purchase_order_id, [
+						'purchase_supplier_name',
+						'purchase_supplier_tin',
+						'purchase_supplier_address',
+						'purchase_order_control_number',
+						'purchase_order_date',
+						'purchase_order_sales_order_number',
+						'purchase_order_collection_receipt_no',
+						'purchase_order_official_receipt_no',
+						'purchase_order_delivery_receipt_no',
+						'purchase_order_bank',
+						'purchase_order_date_of_payment',
+						'purchase_order_reference_no',
+						'purchase_order_payment_amount',
+						'purchase_order_delivery_method',
+						'purchase_order_hauler',
+						'purchase_order_date_of_pickup',
+						'purchase_order_date_of_arrival',
+						'purchase_order_gross_amount',
+						'purchase_order_total_liters',
+						'purchase_order_net_percentage', 
+						'purchase_order_net_amount',
+						'purchase_order_less_percentage',
+						'purchase_order_total_payable',
+						'purchase_driver',
+						'purchase_lorry_plate_no',
+						'purchase_loading_terminal',
+						'purchase_terminal_address',
+						'purchase_destination',
+						'purchase_destination_address',
+						'purchase_date_of_departure',
+						'purchase_date_of_arrival',
+						'purchase_order_instructions',
+						'purchase_order_note']);	
+
+		$purchase_order_amt =  number_format($purchase_order_data['purchase_order_total_payable'],2,".","");
+		
+		@$amount_split_whole_to_decimal = explode('.',$purchase_order_amt);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$amount_in_word_decimal = "";
+		}else{
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
+		}
+		
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;
+		
+		$purchase_order_component = PurchaseOrderComponentModel::where('teves_purchase_order_component_table.purchase_order_idx', $purchase_order_id)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_purchase_order_component_table.product_idx')	
+			->orderBy('purchase_order_component_id', 'asc')
+              	->get([
+					'teves_purchase_order_component_table.purchase_order_component_id',
+					'teves_purchase_order_component_table.product_idx',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_purchase_order_component_table.product_price',
+					'teves_purchase_order_component_table.order_quantity',
+					'teves_purchase_order_component_table.order_total_amount'
+					]);
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'PURCHASE ORDER';
+		  
+        $pdf = PDF::loadView('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component'));
+		
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($purchase_order_data['purchase_supplier_name']."_PURCHASE_ORDER.pdf");
+	}
+		
 	public function numberToWord($num = '')
     {
         $num    = ( string ) ( ( int ) $num );

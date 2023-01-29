@@ -161,17 +161,7 @@
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($sales_order_data[0]['sales_order_total_due'],2);?>
 		</tr>		
-		<!--
-		Payable
-		<tr style="font-size:10px;">			
-			<td colspan="3" align="left" style="border-left: 1px solid #000;">Total Volume</td>
-			<td colspan="2" align="right" style="border-left: 0px solid #000; font-weight:bold;"><//?=number_format($total_liters,2,".",",");?></td>
-			<td colspan="1" align="center" style="border-left: 0px solid #000;">Liters</td>
-			<td colspan="2" align="right" style="background-color: #c6e0b4; font-weight:bold;">Total Due </td>
-			<td colspan="2" align="right" style="background-color: #c6e0b4; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans sans-serif;">&#8369;</span> 
-			<//?=number_format($sales_order_data[0]['sales_order_total_due'],2);?>
-		</tr>	
-		-->
+		
 		<tr>
 			<td colspan="10" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;"></td>
 		</tr>
