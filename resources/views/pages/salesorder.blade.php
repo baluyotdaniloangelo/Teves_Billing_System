@@ -106,13 +106,23 @@
 									</div>
 									<div class="col-md-4">
 										<label for="delivered_to" class="form-label">Delivered To</label>
-										<input type="text" class="form-control" id="delivered_to" name="delivered_to">
+										<input type="text" class="form-control" id="delivered_to" name="delivered_to" list="sales_order_delivered_to_list">
+											<datalist id="sales_order_delivered_to_list">
+												@foreach ($sales_order_delivered_to as $sales_order_delivered_to_cols)
+													<option value="{{$sales_order_delivered_to_cols->sales_order_delivered_to}}">
+												@endforeach
+											  </datalist>
 										<span class="valid-feedback" id="delivered_toError"></span>
 									</div>
 									
 									<div class="col-md-4">
 									  <label for="delivered_to_address" class="form-label">Delivered To Address</label>
-									  <input type="text" class="form-control" id="delivered_to_address" name="delivered_to_address">
+									  <input type="text" class="form-control" id="delivered_to_address" name="delivered_to_address" list="delivered_to_address_list">
+											<datalist id="delivered_to_address_list">
+												@foreach ($sales_order_delivered_to_address as $sales_order_delivered_to_address_cols)
+													<option value="{{$sales_order_delivered_to_address_cols->sales_order_delivered_to_address}}">
+												@endforeach
+											  </datalist>
 									  <span class="valid-feedback" id="delivered_to_addressError"></span>
 									</div>
 									

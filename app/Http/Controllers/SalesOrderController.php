@@ -24,10 +24,13 @@ class SalesOrderController extends Controller
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			
+			$sales_order_delivered_to = SalesOrderModel::select('sales_order_delivered_to')->distinct()->get();
+			$sales_order_delivered_to_address = SalesOrderModel::select('sales_order_delivered_to_address')->distinct()->get();
 		
 		}
 
-		return view("pages.salesorder", compact('data','title','client_data','product_data'));
+		return view("pages.salesorder", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address'));
 		
 	}   
 	

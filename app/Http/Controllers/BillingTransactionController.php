@@ -26,10 +26,13 @@ class BillingTransactionController extends Controller
 			$product_data = ProductModel::all();
 			
 			$client_data = ClientModel::all();
+			
+			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
+			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
 		}
 
-		return view("pages.billing", compact('data','title','product_data','client_data'));
+		return view("pages.billing", compact('data','title','product_data','client_data','drivers_name','plate_no'));
 		
 	}   
 	

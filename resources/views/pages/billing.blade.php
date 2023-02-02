@@ -154,7 +154,12 @@
 						<div class="row mb-2">
 						  <label for="plate_no" class="col-sm-3 col-form-label">Plate Number</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="plate_no" id="plate_no" value="" required>
+							<input type="text" class="form-control " name="plate_no" id="plate_no" value="" required list="plate_no_list">
+							<datalist id="plate_no_list">
+								@foreach ($plate_no as $plate_no_cols)
+									<option value="{{$plate_no_cols->plate_no}}">
+								@endforeach
+							  </datalist>
 							<span class="valid-feedback" id="plate_noError"></span>
 						  </div>
 						</div>	
@@ -162,7 +167,12 @@
 						<div class="row mb-2">
 						  <label for="drivers_name" class="col-sm-3 col-form-label">Drivers Name</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="drivers_name" id="drivers_name" value="" required>
+							<input type="text" class="form-control " name="drivers_name" id="drivers_name" value="" required list="drivers_list">
+							<datalist id="drivers_list">
+								@foreach ($drivers_name as $drivers_name_cols)
+									<option value="{{$drivers_name_cols->drivers_name}}">
+								@endforeach
+							  </datalist>
 							<span class="valid-feedback" id="drivers_nameError"></span>
 						  </div>
 						</div>
@@ -264,7 +274,12 @@
 						<div class="row mb-2">
 						  <label for="update_plate_no" class="col-sm-3 col-form-label">Plate Number</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_plate_no" id="update_plate_no" value="" required>
+							<input type="text" class="form-control " name="update_plate_no" id="update_plate_no" value="" required list="plate_no_list">
+							<datalist id="plate_no_list">
+								@foreach ($plate_no as $plate_no_cols)
+									<option value="{{$plate_no_cols->plate_no}}">
+								@endforeach
+							  </datalist>
 							<span class="valid-feedback" id="update_plate_noError"></span>
 						  </div>
 						</div>	
@@ -272,7 +287,12 @@
 						<div class="row mb-2">
 						  <label for="update_drivers_name" class="col-sm-3 col-form-label">Drivers Name</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_drivers_name" id="update_drivers_name" value="" required>
+							<input type="text" class="form-control " name="update_drivers_name" id="update_drivers_name" value="" required list="drivers_list">
+							<datalist id="drivers_list">
+								@foreach ($drivers_name as $drivers_name_cols)
+									<option value="{{$drivers_name_cols->drivers_name}}">
+								@endforeach
+							  </datalist>
 							<span class="valid-feedback" id="update_drivers_nameError"></span>
 						  </div>
 						</div>
