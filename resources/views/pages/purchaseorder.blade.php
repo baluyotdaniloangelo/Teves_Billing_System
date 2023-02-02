@@ -73,18 +73,33 @@
 									
 										<div class="col-md-3">
 										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
-										  <input type="text" class="form-control" id="purchase_supplier_name" name="purchase_supplier_name" required >
+										  <input type="text" class="form-control" id="purchase_supplier_name" name="purchase_supplier_name" required list="purchase_supplier_name_list">
+											<datalist id="purchase_supplier_name_list">
+												@foreach ($purchase_supplier_name as $purchase_supplier_name_cols)
+													<option value="{{$purchase_supplier_name_cols->purchase_supplier_name}}">
+												@endforeach
+											  </datalist>
 										  <span class="valid-feedback" id="purchase_supplier_nameError"></span>
 										</div>
 										
 										<div class="col-md-3">
 										  <label for="purchase_supplier_tin" class="form-label" title="Supplier's Tax Identification">TIN</label>
-										  <input type="text" class="form-control" id="purchase_supplier_tin" name="purchase_supplier_tin" >
+										  <input type="text" class="form-control" id="purchase_supplier_tin" name="purchase_supplier_tin" list="purchase_supplier_tin_list">
+											<datalist id="purchase_supplier_tin_list">
+												@foreach ($purchase_supplier_tin as $purchase_supplier_tin_cols)
+													<option value="{{$purchase_supplier_tin_cols->purchase_supplier_tin}}">
+												@endforeach
+											  </datalist>
 										</div>
 										
 										<div class="col-md-3">
 										  <label for="purchase_supplier_address" class="form-label">Address</label>
-										  <input type="text" class="form-control" id="purchase_supplier_address" name="purchase_supplier_address">
+										  <input type="text" class="form-control" id="purchase_supplier_address" name="purchase_supplier_address" list="purchase_supplier_address_list">
+											<datalist id="purchase_supplier_address_list">
+												@foreach ($purchase_supplier_address as $purchase_supplier_address_cols)
+													<option value="{{$purchase_supplier_address_cols->purchase_supplier_address}}">
+												@endforeach
+											  </datalist>
 										</div>	
 										
 									</div>

@@ -22,10 +22,14 @@ class PurchaseOrderController extends Controller
 			
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			
+				$purchase_supplier_name = PurchaseOrderModel::select('purchase_supplier_name')->distinct()->get();
+				$purchase_supplier_tin = PurchaseOrderModel::select('purchase_supplier_tin')->distinct()->get();
+				$purchase_supplier_address = PurchaseOrderModel::select('purchase_supplier_address')->distinct()->get();
 		
 		}
 
-		return view("pages.purchaseorder", compact('data','title','product_data'));
+		return view("pages.purchaseorder", compact('data','title','product_data','purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address'));
 		
 	}   
 	
