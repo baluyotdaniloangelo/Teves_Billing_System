@@ -75,7 +75,7 @@
 										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
 										  <input type="text" class="form-control" id="purchase_supplier_name" name="purchase_supplier_name" required list="purchase_supplier_name_list">
 											<datalist id="purchase_supplier_name_list">
-												@foreach ($purchase_supplier_name as $purchase_supplier_name_cols)
+												@foreach ($purchase_data_suggestion as $purchase_supplier_name_cols)
 													<option value="{{$purchase_supplier_name_cols->purchase_supplier_name}}">
 												@endforeach
 											  </datalist>
@@ -86,7 +86,7 @@
 										  <label for="purchase_supplier_tin" class="form-label" title="Supplier's Tax Identification">TIN</label>
 										  <input type="text" class="form-control" id="purchase_supplier_tin" name="purchase_supplier_tin" list="purchase_supplier_tin_list">
 											<datalist id="purchase_supplier_tin_list">
-												@foreach ($purchase_supplier_tin as $purchase_supplier_tin_cols)
+												@foreach ($purchase_data_suggestion as $purchase_supplier_tin_cols)
 													<option value="{{$purchase_supplier_tin_cols->purchase_supplier_tin}}">
 												@endforeach
 											  </datalist>
@@ -96,7 +96,7 @@
 										  <label for="purchase_supplier_address" class="form-label">Address</label>
 										  <input type="text" class="form-control" id="purchase_supplier_address" name="purchase_supplier_address" list="purchase_supplier_address_list">
 											<datalist id="purchase_supplier_address_list">
-												@foreach ($purchase_supplier_address as $purchase_supplier_address_cols)
+												@foreach ($purchase_data_suggestion as $purchase_supplier_address_cols)
 													<option value="{{$purchase_supplier_address_cols->purchase_supplier_address}}">
 												@endforeach
 											  </datalist>
@@ -141,7 +141,12 @@
 								
 									<div class="col-md-3">
 									  <label for="purchase_order_bank" class="form-label">Bank</label>
-									  <input type="text" class="form-control" id="purchase_order_bank" name="purchase_order_bank">
+									  <input type="text" class="form-control" id="purchase_order_bank" name="purchase_order_bank" list="purchase_order_bank_list">
+											<datalist id="purchase_order_bank_list">
+												@foreach ($purchase_data_suggestion as $purchase_order_bank_cols)
+													<option value="{{$purchase_order_bank_cols->purchase_order_bank}}">
+												@endforeach
+											  </datalist>
 									</div>
 									<div class="col-md-3">
 									  <label for="purchase_order_date_of_payment" class="form-label">Date of Payment</label>
@@ -171,7 +176,12 @@
 									
 									<div class="col-md-3">
 									  <label for="purchase_order_hauler" class="form-label">Hauler</label>
-									  <input type="text" class="form-control" id="purchase_order_hauler" name="purchase_order_hauler" >
+									  <input type="text" class="form-control" id="purchase_order_hauler" name="purchase_order_hauler" list="purchase_order_hauler_list">
+											<datalist id="purchase_order_hauler_list">
+												@foreach ($purchase_data_suggestion as $purchase_order_hauler_cols)
+													<option value="{{$purchase_order_hauler_cols->purchase_order_hauler}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
@@ -230,21 +240,41 @@
 								
 									<div class="col-md-3">
 									  <label for="purchase_driver" class="form-label">Driver</label>
-									  <input type="text" class="form-control" id="purchase_driver" name="purchase_driver">
+									  <input type="text" class="form-control" id="purchase_driver" name="purchase_driver" list="purchase_driver_list">
+											<datalist id="purchase_driver_list">
+												@foreach ($purchase_data_suggestion as $purchase_driver_cols)
+													<option value="{{$purchase_driver_cols->purchase_driver}}">
+												@endforeach
+											  </datalist>
 									</div>
 									<div class="col-md-3">
 									  <label for="purchase_lorry_plate_no" class="form-label">Lory Plate #</label>
-									  <input type="date" class="form-control" id="purchase_lorry_plate_no" name="purchase_lorry_plate_no" value="<?=date('Y-m-d');?>">
+									  <input type="text" class="form-control" id="purchase_lorry_plate_no" name="purchase_lorry_plate_no" list="purchase_lorry_plate_no_list">
+											<datalist id="purchase_lorry_plate_no_list">
+												@foreach ($purchase_data_suggestion as $purchase_lorry_plate_no_cols)
+													<option value="{{$purchase_lorry_plate_no_cols->purchase_lorry_plate_no}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
 									  <label for="purchase_loading_terminal" class="form-label">Loading Terminal</label>
-									  <input type="text" class="form-control" id="purchase_loading_terminal" name="purchase_loading_terminal">
+									  <input type="text" class="form-control" id="purchase_loading_terminal" name="purchase_loading_terminal" list="purchase_loading_terminal_list">
+											<datalist id="purchase_loading_terminal_list">
+												@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
+													<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
 									  <label for="purchase_terminal_address" class="form-label">Address</label>
-									  <input type="number" class="form-control" id="purchase_terminal_address" name="purchase_terminal_address">
+									  <input type="number" class="form-control" id="purchase_terminal_address" name="purchase_terminal_address" list="purchase_terminal_address_list">
+											<datalist id="purchase_terminal_address_list">
+												@foreach ($purchase_data_suggestion as $purchase_terminal_address_cols)
+													<option value="{{$purchase_terminal_address_cols->purchase_terminal_address}}">
+												@endforeach
+											  </datalist>
 									</div>
 								
 								</div>
@@ -253,11 +283,21 @@
 								
 									<div class="col-md-3">
 									  <label for="purchase_destination" class="form-label">Destination</label>
-									  <input type="text" class="form-control" id="purchase_destination" name="purchase_destination">
+									  <input type="text" class="form-control" id="purchase_destination" name="purchase_destination" list="purchase_destination_list">
+											<datalist id="purchase_destination_list">
+												@foreach ($purchase_data_suggestion as $purchase_destination_cols)
+													<option value="{{$purchase_destination_cols->purchase_destination}}">
+												@endforeach
+											  </datalist>
 									</div>
 									<div class="col-md-3">
 									  <label for="purchase_destination_address" class="form-label">Address</label>
-									  <input type="text" class="form-control" id="purchase_destination_address" name="purchase_destination_address" value="">
+									  <input type="text" class="form-control" id="purchase_destination_address" name="purchase_destination_address" list="purchase_destination_address_list">
+											<datalist id="purchase_destination_address_list">
+												@foreach ($purchase_data_suggestion as $purchase_destination_address_cols)
+													<option value="{{$purchase_destination_address_cols->purchase_destination_address}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
@@ -320,18 +360,33 @@
 									
 										<div class="col-md-3">
 										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
-										  <input type="text" class="form-control" id="update_purchase_supplier_name" name="update_purchase_supplier_name" required >
+										  <input type="text" class="form-control" id="update_purchase_supplier_name" name="update_purchase_supplier_name" required list="purchase_supplier_name_list">
+											<datalist id="purchase_supplier_name_list">
+												@foreach ($purchase_data_suggestion as $purchase_supplier_name_cols)
+													<option value="{{$purchase_supplier_name_cols->purchase_supplier_name}}">
+												@endforeach
+											  </datalist>
 										  <span class="valid-feedback" id="update_purchase_supplier_nameError"></span>
 										</div>
 										
 										<div class="col-md-3">
 										  <label for="purchase_supplier_tin" class="form-label" title="Supplier's Tax Identification">TIN</label>
-										  <input type="text" class="form-control" id="update_purchase_supplier_tin" name="update_purchase_supplier_tin" >
+										  <input type="text" class="form-control" id="update_purchase_supplier_tin" name="update_purchase_supplier_tin" list="purchase_supplier_tin_list">
+											<datalist id="purchase_supplier_tin_list">
+												@foreach ($purchase_data_suggestion as $purchase_supplier_tin_cols)
+													<option value="{{$purchase_supplier_tin_cols->purchase_supplier_tin}}">
+												@endforeach
+											  </datalist>
 										</div>
 										
 										<div class="col-md-3">
 										  <label for="purchase_supplier_address" class="form-label">Address</label>
-										  <input type="text" class="form-control" id="update_purchase_supplier_address" name="update_purchase_supplier_address">
+										  <input type="text" class="form-control" id="update_purchase_supplier_address" name="update_purchase_supplier_address" list="purchase_supplier_address_list">
+											<datalist id="purchase_supplier_address_list">
+												@foreach ($purchase_data_suggestion as $purchase_supplier_address_cols)
+													<option value="{{$purchase_supplier_address_cols->purchase_supplier_address}}">
+												@endforeach
+											  </datalist>
 										</div>	
 										
 									</div>
@@ -373,7 +428,12 @@
 								
 									<div class="col-md-3">
 									  <label for="purchase_order_bank" class="form-label">Bank</label>
-									  <input type="text" class="form-control" id="update_purchase_order_bank" name="update_purchase_order_bank">
+									  <input type="text" class="form-control" id="update_purchase_order_bank" name="update_purchase_order_bank" list="purchase_order_bank_list">
+											<datalist id="purchase_order_bank_list">
+												@foreach ($purchase_data_suggestion as $purchase_order_bank_cols)
+													<option value="{{$purchase_order_bank_cols->purchase_order_bank}}">
+												@endforeach
+											  </datalist>
 									</div>
 									<div class="col-md-3">
 									  <label for="purchase_order_date_of_payment" class="form-label">Date of Payment</label>
@@ -403,7 +463,12 @@
 									
 									<div class="col-md-3">
 									  <label for="purchase_order_hauler" class="form-label">Hauler</label>
-									  <input type="text" class="form-control" id="update_purchase_order_hauler" name="update_purchase_order_hauler" >
+									  <input type="text" class="form-control" id="update_purchase_order_hauler" name="update_purchase_order_hauler" list="purchase_order_hauler_list">
+											<datalist id="purchase_order_hauler_list">
+												@foreach ($purchase_data_suggestion as $purchase_order_hauler_cols)
+													<option value="{{$purchase_order_hauler_cols->purchase_order_hauler}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
@@ -466,17 +531,32 @@
 									</div>
 									<div class="col-md-3">
 									  <label for="purchase_lorry_plate_no" class="form-label">Lory Plate #</label>
-									  <input type="date" class="form-control" id="update_purchase_lorry_plate_no" name="update_purchase_lorry_plate_no" value="<?=date('Y-m-d');?>">
+									  <input type="text" class="form-control" id="update_purchase_lorry_plate_no" name="update_purchase_lorry_plate_no" list="purchase_lorry_plate_no_list">
+											<datalist id="purchase_lorry_plate_no_list">
+												@foreach ($purchase_data_suggestion as $purchase_lorry_plate_no_cols)
+													<option value="{{$purchase_lorry_plate_no_cols->purchase_lorry_plate_no}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
 									  <label for="purchase_loading_terminal" class="form-label">Loading Terminal</label>
-									  <input type="text" class="form-control" id="update_purchase_loading_terminal" name="update_purchase_loading_terminal">
+									  <input type="text" class="form-control" id="update_purchase_loading_terminal" name="update_purchase_loading_terminal" list="purchase_loading_terminal_list">
+											<datalist id="purchase_loading_terminal_list">
+												@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
+													<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
 									  <label for="purchase_terminal_address" class="form-label">Address</label>
-									  <input type="text" class="form-control" id="update_purchase_terminal_address" name="update_purchase_terminal_address">
+									  <input type="text" class="form-control" id="update_purchase_terminal_address" name="update_purchase_terminal_address" list="purchase_terminal_address_list">
+											<datalist id="purchase_terminal_address_list">
+												@foreach ($purchase_data_suggestion as $purchase_terminal_address_cols)
+													<option value="{{$purchase_terminal_address_cols->purchase_terminal_address}}">
+												@endforeach
+											  </datalist>
 									</div>
 								
 								</div>
@@ -485,11 +565,21 @@
 								
 									<div class="col-md-3">
 									  <label for="purchase_destination" class="form-label">Destination</label>
-									  <input type="text" class="form-control" id="update_purchase_destination" name="update_purchase_destination">
+									  <input type="text" class="form-control" id="update_purchase_destination" name="update_purchase_destination" list="purchase_destination_list">
+											<datalist id="purchase_destination_list">
+												@foreach ($purchase_data_suggestion as $purchase_destination_cols)
+													<option value="{{$purchase_destination_cols->purchase_destination}}">
+												@endforeach
+											  </datalist>
 									</div>
 									<div class="col-md-3">
 									  <label for="purchase_destination_address" class="form-label">Address</label>
-									  <input type="text" class="form-control" id="update_purchase_destination_address" name="update_purchase_destination_address" value="">
+									  <input type="text" class="form-control" id="update_purchase_destination_address" name="update_purchase_destination_address" value=""list="purchase_destination_address_list">
+											<datalist id="purchase_destination_address_list">
+												@foreach ($purchase_data_suggestion as $purchase_destination_address_cols)
+													<option value="{{$purchase_destination_address_cols->purchase_destination_address}}">
+												@endforeach
+											  </datalist>
 									</div>
 									
 									<div class="col-md-3">

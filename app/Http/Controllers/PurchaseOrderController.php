@@ -23,13 +23,15 @@ class PurchaseOrderController extends Controller
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-				$purchase_supplier_name = PurchaseOrderModel::select('purchase_supplier_name')->distinct()->get();
-				$purchase_supplier_tin = PurchaseOrderModel::select('purchase_supplier_tin')->distinct()->get();
-				$purchase_supplier_address = PurchaseOrderModel::select('purchase_supplier_address')->distinct()->get();
+			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address','purchase_order_bank','purchase_order_hauler','purchase_driver','purchase_lorry_plate_no','purchase_loading_terminal','purchase_terminal_address','purchase_destination','purchase_destination_address')->distinct()->get();
+			//$purchase_supplier_tin = PurchaseOrderModel::select('purchase_supplier_tin')->distinct()->get();
+			//$purchase_supplier_address = PurchaseOrderModel::select('purchase_supplier_address')->distinct()->get();
+			//$purchase_order_bank = PurchaseOrderModel::select('purchase_order_bank')->distinct()->get();
+			//$purchase_order_hauler = PurchaseOrderModel::select('purchase_order_hauler')->distinct()->get();
 		
 		}
 
-		return view("pages.purchaseorder", compact('data','title','product_data','purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address'));
+		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion'));
 		
 	}   
 	
