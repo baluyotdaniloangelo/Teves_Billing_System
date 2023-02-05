@@ -463,7 +463,7 @@ class ReportController extends Controller
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
-		$title = 'Sales Order';
+		$title = 'SALES ORDER';
 		  
         $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		

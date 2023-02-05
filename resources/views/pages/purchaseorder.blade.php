@@ -269,7 +269,7 @@
 									
 									<div class="col-md-3">
 									  <label for="purchase_terminal_address" class="form-label">Address</label>
-									  <input type="number" class="form-control" id="purchase_terminal_address" name="purchase_terminal_address" list="purchase_terminal_address_list">
+									  <input type="text" class="form-control" id="purchase_terminal_address" name="purchase_terminal_address" list="purchase_terminal_address_list">
 											<datalist id="purchase_terminal_address_list">
 												@foreach ($purchase_data_suggestion as $purchase_terminal_address_cols)
 													<option value="{{$purchase_terminal_address_cols->purchase_terminal_address}}">

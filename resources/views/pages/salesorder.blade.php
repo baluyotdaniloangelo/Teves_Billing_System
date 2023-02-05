@@ -161,7 +161,7 @@
 									
 									<div class="col-md-6">
 									  <label for="update_or_number" class="form-label">Less Value</label>
-									  <input type="number" class="form-control" id="order_less_percentage" name="sales_order_less_percentage" step=".01">
+									  <input type="number" class="form-control" id="order_less_percentage" name="sales_order_less_percentage" step=".01" value="1">
 									</div>
 								</div>
 								<hr>								
@@ -243,7 +243,7 @@
 					  </div>
                     </div>
                     <div class="modal-body">
-					<form class="g-2 needs-validation" id="PurchaseOrderformUpdate">		
+					<form class="g-2 needs-validation" id="UpdateSalesOrderformUpdate">		
 									<div class="row">
 									
 										<div class="col-md-3">

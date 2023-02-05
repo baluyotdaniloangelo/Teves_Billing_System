@@ -228,13 +228,21 @@ class PurchaseOrderController extends Controller
 
 			$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
 			$less_in_percentage 			= $request->purchase_order_less_percentage/100;
-			
-			$PurchaseOrderUpdate = new PurchaseOrderModel();
-			$PurchaseOrderUpdate = PurchaseOrderModel::find($last_transaction_id);
-			$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,2,".","");
-			$PurchaseOrderUpdate->purchase_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
-			$PurchaseOrderUpdate->purchase_order_total_payable = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
-			$PurchaseOrderUpdate->update();
+
+					if($request->purchase_order_net_percentage==0){
+						$purchase_order_net_amount 				= 0;
+						$purchase_order_total_payable 			=  number_format($gross_amount,2,".","");
+					}else{
+						$purchase_order_net_amount 				=  number_format($gross_amount/$net_in_percentage,2,".","");
+						$purchase_order_total_payable 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+					}
+				
+				$PurchaseOrderUpdate = new PurchaseOrderModel();
+				$PurchaseOrderUpdate = PurchaseOrderModel::find($last_transaction_id);
+				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,2,".","");
+				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
+				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_payable;
+				$PurchaseOrderUpdate->update();
 
 			if($result){
 				return response()->json(array('success' => "Purchase Order Successfully Created!", 'purchase_order_id' => @$last_transaction_id), 200);
@@ -306,7 +314,7 @@ class PurchaseOrderController extends Controller
 			$product_manual_price 				= $request->product_manual_price;
 			$purchase_order_item_ids 			= $request->purchase_order_item_ids;
 		
-		/*Get Last ID*/
+			/*Get Last ID*/
 			$last_transaction_id = $Purchaseorder->purchase_order_id;
 			
 			$gross_amount = 0;
@@ -335,7 +343,6 @@ class PurchaseOrderController extends Controller
 				
 				if($purchase_order_item_id==0){
 				
-				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
 				$PurchaseOrderComponent = new PurchaseOrderComponentModel();
 				
 				$PurchaseOrderComponent->purchase_order_idx 		= $last_transaction_id;
@@ -354,7 +361,6 @@ class PurchaseOrderController extends Controller
 				
 				$PurchaseOrderComponent = PurchaseOrderComponentModel::find($purchase_order_item_id);
 				
-				//$PurchaseOrderComponent->purchase_order_idx 		= $last_transaction_id;
 				$PurchaseOrderComponent->product_idx 				= $puchase_order_item_product_id;
 				$PurchaseOrderComponent->order_quantity 			= $puchase_order_item_order_quantity;
 				$PurchaseOrderComponent->product_price 				= $product_price;
@@ -364,28 +370,26 @@ class PurchaseOrderController extends Controller
 			
 				}
 				
-				$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $request->purchase_order_less_percentage/100;
+			 }
 			
+			$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $request->purchase_order_less_percentage/100;
+
+					if($request->purchase_order_net_percentage==0){
+						$purchase_order_net_amount 				= 0;
+						$purchase_order_total_payable 			=  number_format($gross_amount,2,".","");
+					}else{
+						$purchase_order_net_amount 				=  number_format($gross_amount/$net_in_percentage,2,".","");
+						$purchase_order_total_payable 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+					}
+				
 				$PurchaseOrderUpdate = new PurchaseOrderModel();
 				$PurchaseOrderUpdate = PurchaseOrderModel::find($last_transaction_id);
 				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,2,".","");
-				$PurchaseOrderUpdate->purchase_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
-				$PurchaseOrderUpdate->purchase_order_total_payable = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
+				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_payable;
 				$PurchaseOrderUpdate->update();
-		
-			 }
-
-			$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
-			$less_in_percentage 			= $request->purchase_order_less_percentage/100;
 			
-			$PurchaseOrderUpdate = new PurchaseOrderModel();
-			$PurchaseOrderUpdate = PurchaseOrderModel::find($last_transaction_id);
-			$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,2,".","");
-			$PurchaseOrderUpdate->purchase_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
-			$PurchaseOrderUpdate->purchase_order_total_payable = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
-			$PurchaseOrderUpdate->update();
-
 			if($result){
 				return response()->json(array('success' => "Purchase Order Successfully Updated!", 'purchase_order_id' => @$last_transaction_id), 200);
 			}

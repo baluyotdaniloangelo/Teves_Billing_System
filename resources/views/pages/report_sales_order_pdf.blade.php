@@ -124,11 +124,11 @@
 			
 			?>
 			<tr class="data_tr" style="font-size:10px;">
-				<td colspan="2" align="center" nowrap style=" height:<?=$component_height;?>px !important; border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">{{$sales_order_component_cols->product_name}}</td>
-				<td colspan="2" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
-				<td colspan="1" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">{{$sales_order_component_cols->product_unit_measurement}}</td>
-				<td colspan="3" align="right" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
-				<td colspan="2" align="right" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
+				<td colspan="2" align="center" nowrap style=" height:<?=$component_height;?>px !important; border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">{{$sales_order_component_cols->product_name}}</td>
+				<td colspan="2" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
+				<td colspan="1" align="center" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">{{$sales_order_component_cols->product_unit_measurement}}</td>
+				<td colspan="3" align="right" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
+				<td colspan="2" align="right" nowrap style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:0px solid #000;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -138,21 +138,21 @@
 
 		<tr style="font-size:10px;">
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Gross Amount </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_gross_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Net Amount </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_net_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Less 1% </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_net_amount']*$sales_order_data[0]['sales_order_less_percentage']/100,2);?>
 		</tr>		
 
@@ -223,7 +223,7 @@
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:90px !important;">{{$sales_order_data[0]->sales_order_mode_of_payment}}</td>
 			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_date_of_payment}}</td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_reference_no}}</td>
-			<td colspan="2" align="right" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_payment_amount}}</td>			
+			<td colspan="2" align="right" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=number_format($sales_order_data[0]['sales_order_payment_amount'],2);?></td>			
 		</tr>
 				
 		<tr>

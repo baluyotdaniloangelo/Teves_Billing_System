@@ -201,11 +201,19 @@ class SalesOrderController extends Controller
 			$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
 			$less_in_percentage 			= $request->sales_order_less_percentage/100;
 			
+			if($request->sales_order_net_percentage==0){
+						$sales_order_net_amount 		= 0;
+						$sales_order_total_due 			=  number_format($gross_amount,2,".","");
+			}else{
+						$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
+						$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+			}
+			
 			$SalesOrderUpdate = new SalesOrderModel();
 			$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
 			$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
-			$SalesOrderUpdate->sales_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
-			$SalesOrderUpdate->sales_order_total_due = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+			$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
+			$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
 			$SalesOrderUpdate->update();
 			
 			if($result){
@@ -318,12 +326,19 @@ class SalesOrderController extends Controller
 			
 			$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
 			$less_in_percentage 			= $request->sales_order_less_percentage/100;
-				//number_format($sales_order_data[0]['sales_order_total_due'],2)
+						
+			if($request->sales_order_net_percentage==0){
+						$sales_order_net_amount 		= 0;
+						$sales_order_total_due 			=  number_format($gross_amount,2,".","");
+			}else{
+						$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
+						$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+			}
 			$SalesOrderUpdate = new SalesOrderModel();
 			$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
 			$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
-			$SalesOrderUpdate->sales_order_net_amount = number_format($gross_amount/$net_in_percentage,2,".","");
-			$SalesOrderUpdate->sales_order_total_due = number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+			$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
+			$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
 			$SalesOrderUpdate->update();
 			
 			if($result){

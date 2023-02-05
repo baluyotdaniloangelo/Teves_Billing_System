@@ -59,38 +59,36 @@
 			<td colspan="10">&nbsp;</td>
 		</tr>
 		<tr style="font-size:10px;">
-			<td colspan="2.5" align="left">SUPPLIER'S NAME :</td>
-			<td colspan="2.5 align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_name'] }}</td>			
-			<td colspan="2.5" nowrap align="left">DATE :</td>		
-			<td colspan="2.5" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_order_date'] }}</td>
+			<td colspan="2" align="left">SUPPLIER'S NAME :</td>
+			<td colspan="4 align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_name'] }}</td>			
+			<td colspan="3" nowrap align="left">DATE :</td>		
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_order_date'] }}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left">TIN No.:</td>
-			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_tin'] }}</td>			
+			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_tin'] }}</td>			
 			<td colspan="3" nowrap align="left">SALES ORDER NO.:</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_order_sales_order_number'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_order_sales_order_number'] }}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">
-			<td colspan="2" align="left">ADDRESS :</td>
-			<td colspan="3" align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_supplier_address'] }}</td>			
+			<td colspan="2" align="left" rowspan='2'>ADDRESS :</td>
+			<td colspan="4" align="left" style="border-bottom:1px solid #000; "  rowspan='2'>{{ $purchase_order_data['purchase_supplier_address'] }}</td>			
 			<td colspan="3" nowrap align="left">COLLECTION RECEIPT NO. :</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_collection_receipt_no'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_collection_receipt_no'] }}</td>
 		</tr>
 	
-		<tr style="font-size:10px;">
-			<td colspan="2" align="left"></td>
-			<td colspan="3" align="left"></td>			
+		<tr style="font-size:10px;">	
 			<td colspan="3" nowrap align="left">OFFICIAL RECEIPT NO.:</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_official_receipt_no'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_official_receipt_no'] }}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left"></td>
-			<td colspan="3" align="left"></td>			
+			<td colspan="4" align="left"></td>			
 			<td colspan="3" nowrap align="left">DELIVERY RECEIPT NO.:</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_delivery_receipt_no'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_delivery_receipt_no'] }}</td>
 		</tr>
 	
 		<tr style="font-size:12px;">
@@ -177,21 +175,21 @@
 
 		<tr style="font-size:10px;">
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Gross Amount </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($purchase_order_data['purchase_order_gross_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Net Amount </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($purchase_order_data['purchase_order_net_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Less 1% </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 1px solid #000;">
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($purchase_order_data['purchase_order_net_amount']*$purchase_order_data['purchase_order_less_percentage']/100,2);?>
 		</tr>		
 
