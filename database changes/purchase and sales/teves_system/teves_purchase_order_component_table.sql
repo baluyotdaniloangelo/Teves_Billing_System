@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `teves_purchase_order_component_table` (
   PRIMARY KEY (`purchase_order_component_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table teves_system.teves_purchase_order_component_table: ~0 rows (approximately)
+-- Dumping data for table teves_system.teves_purchase_order_component_table: ~5 rows (approximately)
 INSERT INTO `teves_purchase_order_component_table` (`purchase_order_component_id`, `purchase_order_idx`, `product_idx`, `client_idx`, `product_price`, `order_quantity`, `order_total_amount`, `created_at`, `updated_at`) VALUES
 	(1, 2, 4, 0, 67.66, 1, 67.66, '2023-01-29 15:06:01', '2023-01-29 15:06:01'),
 	(2, 2, 1, 0, 3, 23, 69, '2023-01-29 16:06:24', '2023-01-29 16:06:24'),
