@@ -23,12 +23,12 @@
 					{data: 'purchase_order_date'},
 					{data: 'purchase_order_control_number'},
 					{data: 'purchase_supplier_name'},
-					{data: 'purchase_order_total_payable'},   
+					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },   
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "asc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1] },
+					{ className: 'text-center', targets: [0, 1,4] },
 			]
 		});
 				/**/

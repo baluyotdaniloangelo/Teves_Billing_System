@@ -61,7 +61,7 @@
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left">SOLD TO :</td>
 			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['client_name'] }}</td>			
-			<td colspan="3" nowrap align="left">BILLING DATE :</td>		
+			<td colspan="3" nowrap align="left">DATE PRINTED:</td>		
 			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['sales_order_date'] }}</td>
 		</tr>
 		
@@ -238,7 +238,11 @@
 			<td colspan="10" align="center" style="border-bottom:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000;">&nbsp;{{$user_data->user_real_name}}<br></td>	
 				
 		</tr>
+		<tr style="font-size:10px;font-style: italic;">
+			<td colspan="10" style="">This Sales Order is not valid for claims of taxes. Please refer to sales invoice / official receipts issued.</td>
+		</tr>
 		</table>
+		
 		
 </body>
 </html>

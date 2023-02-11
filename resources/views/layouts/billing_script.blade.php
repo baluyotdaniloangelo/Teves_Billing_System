@@ -4,6 +4,8 @@
 
 		var BillingListTable = $('#getBillingTransactionList').DataTable({
 			"language": {
+						 "decimal": ".",
+            "thousands": ",",
 						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
@@ -25,13 +27,16 @@
 					{data: 'order_po_number'},     
 					{data: 'plate_no'},     
 					{data: 'product_name'}, 
-					{data: 'product_price'}, 					
+					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }, 					
 					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
-					{data: 'order_total_amount'},  
+					//{data: 'order_total_amount'},  
+					{ data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1, 5, 6, 7, 8, 9, 10] },
+					 { type: 'numeric-comma', targets: [8,9] }
 			]
 		});
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+

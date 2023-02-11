@@ -26,7 +26,7 @@
 					{data: 'or_number'},
 					{data: 'payment_term'},
 					{data: 'receivable_description'},
-					{data: 'receivable_amount'},
+					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_status'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
