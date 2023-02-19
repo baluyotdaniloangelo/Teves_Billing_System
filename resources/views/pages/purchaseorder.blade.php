@@ -24,6 +24,7 @@
 													<th>Control Number</th>
 													<th>Supplier</th>
 													<th>Total Payable</th>
+													<th>Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -39,7 +40,8 @@
 													<th>Control Number</th>
 													<th>Supplier</th>
 													<th>Total Payable</th>
-													<th>Action</th>											
+													<th>Status</th>
+													<th>Action</th>	
 												</tr>
 											</tfoot>	
 										</table>
@@ -135,63 +137,53 @@
 								</div>
 								
 								<hr>
-								<div class="row">
+								
 								
 								<h6 class="modal-title">Payment Details</h6>
-								
-									<div class="col-md-3">
-									  <label for="purchase_order_bank" class="form-label">Bank</label>
-									  <input type="text" class="form-control" id="purchase_order_bank" name="purchase_order_bank" list="purchase_order_bank_list">
-											<datalist id="purchase_order_bank_list">
-												@foreach ($purchase_data_suggestion as $purchase_order_bank_cols)
-													<option value="{{$purchase_order_bank_cols->purchase_order_bank}}">
-												@endforeach
-											  </datalist>
-									</div>
-									<div class="col-md-3">
-									  <label for="purchase_order_date_of_payment" class="form-label">Date of Payment</label>
-									  <input type="date" class="form-control" id="purchase_order_date_of_payment" name="purchase_order_date_of_payment" value="<?=date('Y-m-d');?>">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_reference_no" class="form-label">Reference No.</label>
-									  <input type="text" class="form-control" id="purchase_order_reference_no" name="purchase_order_reference_no">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_payment_amount" class="form-label">Amount</label>
-									  <input type="number" class="form-control" id="purchase_order_payment_amount" name="purchase_order_payment_amount">
-									</div>
-								
+								<div align="right">
+								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="AddPaymentRow();" title="Add a Product(1-5 items)"></button>
 								</div>
+								<br>
 								
+								<table class="table" id="table_payment">
+								
+									<thead>
+										<tr class='report'>
+										<th style="text-align:center !important;">Bank</th>
+										<th style="text-align:center !important;">Date of Payment</th>
+										<th style="text-align:center !important;">Reference No.</th>
+										<th style="text-align:center !important;">Amount</th>
+										<th style="text-align:center !important;">Action</th>
+										
+										</tr>
+									</thead>
+										
+									<tbody id="table_payment_body_data">
+										 <tr style="display: none;"><td>HIDDEN</td></tr>
+									</tbody>
+									
+								</table>
+								<div style="color:red;" id="table_paymentxError"></div>
+
 								<hr>
-								
+							
 								<div class="row">
+								
 								<h6 class="modal-title">Delivery Details</h6>
-									<div class="col-md-3">
+								
+									<div class="col-md-6">
 									  <label for="purchase_order_delivery_method" class="form-label">Delivery Method</label>
 									  <input type="text" class="form-control" id="purchase_order_delivery_method" name="purchase_order_delivery_method">
 									</div>
 									
-									<div class="col-md-3">
-									  <label for="purchase_order_hauler" class="form-label">Hauler</label>
-									  <input type="text" class="form-control" id="purchase_order_hauler" name="purchase_order_hauler" list="purchase_order_hauler_list">
-											<datalist id="purchase_order_hauler_list">
-												@foreach ($purchase_data_suggestion as $purchase_order_hauler_cols)
-													<option value="{{$purchase_order_hauler_cols->purchase_order_hauler}}">
+									<div class="col-md-6">
+									  <label for="purchase_loading_terminal" class="form-label">Loading Terminal</label>
+									  <input type="text" class="form-control" id="purchase_loading_terminal" name="purchase_loading_terminal" list="purchase_loading_terminal_list">
+											<datalist id="purchase_loading_terminal_list">
+												@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
+													<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
 												@endforeach
 											  </datalist>
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_date_of_pickup" class="form-label">Date of Pick-up</label>
-									  <input type="date" class="form-control" id="purchase_order_date_of_pickup" name="purchase_order_date_of_pickup" value="<?=date('Y-m-d');?>">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_date_of_arrival" class="form-label">Date of Arrival</label>
-									  <input type="date" class="form-control" id="purchase_order_date_of_arrival" name="purchase_order_date_of_arrival" value="<?=date('Y-m-d');?>">
 									</div>
 									
 								</div>
@@ -212,6 +204,7 @@
 										<th style="text-align:center !important;">Quantity</th>
 										<th style="text-align:center !important;">Price</th>
 										<th style="text-align:center !important;">Action</th>
+										
 										</tr>
 									</thead>
 										
@@ -221,7 +214,9 @@
 									
 								</table>
 								<div style="color:red;" id="product_idxError"></div>
+								
 								<hr>
+								
 								<div class="row">
 									<div class="col-md-6">
 									  <label for="purchase_order_net_percentage" class="form-label">Net Value</label>
@@ -239,40 +234,41 @@
 								<h6 class="modal-title">Hauler Details</h6>
 								
 									<div class="col-md-3">
-									  <label for="purchase_driver" class="form-label">Driver</label>
-									  <input type="text" class="form-control" id="purchase_driver" name="purchase_driver" list="purchase_driver_list">
-											<datalist id="purchase_driver_list">
-												@foreach ($purchase_data_suggestion as $purchase_driver_cols)
-													<option value="{{$purchase_driver_cols->purchase_driver}}">
-												@endforeach
-											  </datalist>
-									</div>
-									<div class="col-md-3">
-									  <label for="purchase_lorry_plate_no" class="form-label">Lory Plate #</label>
-									  <input type="text" class="form-control" id="purchase_lorry_plate_no" name="purchase_lorry_plate_no" list="purchase_lorry_plate_no_list">
-											<datalist id="purchase_lorry_plate_no_list">
-												@foreach ($purchase_data_suggestion as $purchase_lorry_plate_no_cols)
-													<option value="{{$purchase_lorry_plate_no_cols->purchase_lorry_plate_no}}">
+									  <label for="hauler_operator" class="form-label">Hauler / Operator</label>
+									  <input type="text" class="form-control" id="hauler_operator" name="hauler_operator" list="hauler_operator_list">
+											<datalist id="hauler_operator_list">
+												@foreach ($purchase_data_suggestion as $hauler_operator_cols)
+													<option value="{{$hauler_operator_cols->hauler_operator}}">
 												@endforeach
 											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
-									  <label for="purchase_loading_terminal" class="form-label">Loading Terminal</label>
-									  <input type="text" class="form-control" id="purchase_loading_terminal" name="purchase_loading_terminal" list="purchase_loading_terminal_list">
-											<datalist id="purchase_loading_terminal_list">
-												@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
-													<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
+									  <label for="lorry_driver" class="form-label">Lorry Driver</label>
+									  <input type="text" class="form-control" id="lorry_driver" name="lorry_driver" list="lorry_driver_list">
+											<datalist id="lorry_driver_list">
+												@foreach ($purchase_data_suggestion as $lorry_driver_cols)
+													<option value="{{$lorry_driver_cols->lorry_driver}}">
 												@endforeach
 											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
-									  <label for="purchase_terminal_address" class="form-label">Address</label>
-									  <input type="text" class="form-control" id="purchase_terminal_address" name="purchase_terminal_address" list="purchase_terminal_address_list">
-											<datalist id="purchase_terminal_address_list">
-												@foreach ($purchase_data_suggestion as $purchase_terminal_address_cols)
-													<option value="{{$purchase_terminal_address_cols->purchase_terminal_address}}">
+									  <label for="plate_number" class="form-label">Plate Number</label>
+									  <input type="text" class="form-control" id="plate_number" name="plate_number" list="plate_number_list">
+											<datalist id="plate_number_list">
+												@foreach ($purchase_data_suggestion as $plate_number_cols)
+													<option value="{{$plate_number_cols->plate_number}}">
+												@endforeach
+											  </datalist>
+									</div>
+									
+									<div class="col-md-3">
+									  <label for="contact_number" class="form-label">Contact Number</label>
+									  <input type="text" class="form-control" id="contact_number" name="contact_number" list="contact_number_list">
+											<datalist id="contact_number_list">
+												@foreach ($purchase_data_suggestion as $contact_number_cols)
+													<option value="{{$contact_number_cols->contact_number}}">
 												@endforeach
 											  </datalist>
 									</div>
@@ -422,64 +418,63 @@
 								</div>
 								
 								<hr>
-								<div class="row">
+								
 								
 								<h6 class="modal-title">Payment Details</h6>
-								
-									<div class="col-md-3">
-									  <label for="purchase_order_bank" class="form-label">Bank</label>
-									  <input type="text" class="form-control" id="update_purchase_order_bank" name="update_purchase_order_bank" list="purchase_order_bank_list">
-											<datalist id="purchase_order_bank_list">
-												@foreach ($purchase_data_suggestion as $purchase_order_bank_cols)
-													<option value="{{$purchase_order_bank_cols->purchase_order_bank}}">
-												@endforeach
-											  </datalist>
-									</div>
-									<div class="col-md-3">
-									  <label for="purchase_order_date_of_payment" class="form-label">Date of Payment</label>
-									  <input type="date" class="form-control" id="update_purchase_order_date_of_payment" name="update_purchase_order_date_of_payment" value="<?=date('Y-m-d');?>">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_reference_no" class="form-label">Reference No.</label>
-									  <input type="text" class="form-control" id="update_purchase_order_reference_no" name="update_purchase_order_reference_no">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_payment_amount" class="form-label">Amount</label>
-									  <input type="number" class="form-control" id="update_purchase_order_payment_amount" name="update_purchase_order_payment_amount">
-									</div>
-								
+								<div align="right">
+								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="UpdatePaymentRow();" title="Add a Product(1-5 items)"></button>
 								</div>
+								<br>
 								
+								<table class="table" id="update_table_payment">
+								
+									<thead>
+										<tr class='report'>
+										<th style="text-align:center !important;">Bank</th>
+										<th style="text-align:center !important;">Date of Payment</th>
+										<th style="text-align:center !important;">Reference No.</th>
+										<th style="text-align:center !important;">Amount</th>
+										<th style="text-align:center !important;">Action</th>
+										
+										</tr>
+									</thead>
+										
+									<tbody id="update_table_payment_body_data">
+										 <tr style="display: none;"><td>HIDDEN</td></tr>
+									</tbody>
+									
+								</table>
+								<div style="color:red;" id="table_paymentxError"></div>
+
 								<hr>
 								
 								<div class="row">
 								<h6 class="modal-title">Delivery Details</h6>
-									<div class="col-md-3">
+									<div class="col-md-6">
 									  <label for="purchase_order_delivery_method" class="form-label">Delivery Method</label>
 									  <input type="text" class="form-control" id="update_purchase_order_delivery_method" name="update_purchase_order_delivery_method">
 									</div>
 									
-									<div class="col-md-3">
-									  <label for="purchase_order_hauler" class="form-label">Hauler</label>
-									  <input type="text" class="form-control" id="update_purchase_order_hauler" name="update_purchase_order_hauler" list="purchase_order_hauler_list">
-											<datalist id="purchase_order_hauler_list">
-												@foreach ($purchase_data_suggestion as $purchase_order_hauler_cols)
-													<option value="{{$purchase_order_hauler_cols->purchase_order_hauler}}">
+									<div class="col-md-6">
+									  <label for="purchase_loading_terminal" class="form-label">Loading Terminal</label>
+									  <input type="text" class="form-control" id="update_purchase_loading_terminal" name="update_purchase_loading_terminal" list="purchase_loading_terminal_list">
+											<datalist id="purchase_loading_terminal_list">
+												@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
+													<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
 												@endforeach
-											  </datalist>
+											</datalist>
 									</div>
 									
+									<!--
 									<div class="col-md-3">
 									  <label for="purchase_order_date_of_pickup" class="form-label">Date of Pick-up</label>
-									  <input type="date" class="form-control" id="update_purchase_order_date_of_pickup" name="update_purchase_order_date_of_pickup" value="<?=date('Y-m-d');?>">
+									  <input type="date" class="form-control" id="update_purchase_order_date_of_pickup" name="update_purchase_order_date_of_pickup" value="<//?=date('Y-m-d');?>">
 									</div>
 									
 									<div class="col-md-3">
 									  <label for="purchase_order_date_of_arrival" class="form-label">Date of Arrival</label>
-									  <input type="date" class="form-control" id="update_purchase_order_date_of_arrival" name="update_purchase_order_date_of_arrival" value="<?=date('Y-m-d');?>">
-									</div>
+									  <input type="date" class="form-control" id="update_purchase_order_date_of_arrival" name="update_purchase_order_date_of_arrival" value="<//?=date('Y-m-d');?>">
+									</div>-->
 									
 								</div>
 								
@@ -526,35 +521,35 @@
 								<h6 class="modal-title">Hauler Details</h6>
 								
 									<div class="col-md-3">
-									  <label for="purchase_driver" class="form-label">Driver</label>
-									  <input type="text" class="form-control" id="update_purchase_driver" name="update_purchase_driver">
+									  <label for="hauler_operator" class="form-label">Driver</label>
+									  <input type="text" class="form-control" id="update_hauler_operator" name="update_hauler_operator">
 									</div>
 									<div class="col-md-3">
-									  <label for="purchase_lorry_plate_no" class="form-label">Lory Plate #</label>
-									  <input type="text" class="form-control" id="update_purchase_lorry_plate_no" name="update_purchase_lorry_plate_no" list="purchase_lorry_plate_no_list">
-											<datalist id="purchase_lorry_plate_no_list">
-												@foreach ($purchase_data_suggestion as $purchase_lorry_plate_no_cols)
-													<option value="{{$purchase_lorry_plate_no_cols->purchase_lorry_plate_no}}">
+									  <label for="lorry_driver" class="form-label">Lory Plate #</label>
+									  <input type="text" class="form-control" id="update_lorry_driver" name="update_lorry_driver" list="lorry_driver_list">
+											<datalist id="lorry_driver_list">
+												@foreach ($purchase_data_suggestion as $lorry_driver_cols)
+													<option value="{{$lorry_driver_cols->lorry_driver}}">
 												@endforeach
 											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
-									  <label for="purchase_loading_terminal" class="form-label">Loading Terminal</label>
-									  <input type="text" class="form-control" id="update_purchase_loading_terminal" name="update_purchase_loading_terminal" list="purchase_loading_terminal_list">
-											<datalist id="purchase_loading_terminal_list">
-												@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
-													<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
+									  <label for="plate_number" class="form-label">Loading Terminal</label>
+									  <input type="text" class="form-control" id="update_plate_number" name="update_plate_number" list="plate_number_list">
+											<datalist id="plate_number_list">
+												@foreach ($purchase_data_suggestion as $plate_number_cols)
+													<option value="{{$plate_number_cols->plate_number}}">
 												@endforeach
 											  </datalist>
 									</div>
 									
 									<div class="col-md-3">
-									  <label for="purchase_terminal_address" class="form-label">Address</label>
-									  <input type="text" class="form-control" id="update_purchase_terminal_address" name="update_purchase_terminal_address" list="purchase_terminal_address_list">
-											<datalist id="purchase_terminal_address_list">
-												@foreach ($purchase_data_suggestion as $purchase_terminal_address_cols)
-													<option value="{{$purchase_terminal_address_cols->purchase_terminal_address}}">
+									  <label for="contact_number" class="form-label">Address</label>
+									  <input type="text" class="form-control" id="update_contact_number" name="update_contact_number" list="contact_number_list">
+											<datalist id="contact_number_list">
+												@foreach ($purchase_data_suggestion as $contact_number_cols)
+													<option value="{{$contact_number_cols->contact_number}}">
 												@endforeach
 											  </datalist>
 									</div>

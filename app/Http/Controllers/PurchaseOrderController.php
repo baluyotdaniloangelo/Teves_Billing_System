@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\PurchaseOrderModel;
 use App\Models\ProductModel;
 use App\Models\PurchaseOrderComponentModel;
+use App\Models\PurchaseOrderPaymentModel;
 use Session;
 use Validator;
 use DataTables;
@@ -23,11 +24,7 @@ class PurchaseOrderController extends Controller
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address','purchase_order_bank','purchase_order_hauler','purchase_driver','purchase_lorry_plate_no','purchase_loading_terminal','purchase_terminal_address','purchase_destination','purchase_destination_address')->distinct()->get();
-			//$purchase_supplier_tin = PurchaseOrderModel::select('purchase_supplier_tin')->distinct()->get();
-			//$purchase_supplier_address = PurchaseOrderModel::select('purchase_supplier_address')->distinct()->get();
-			//$purchase_order_bank = PurchaseOrderModel::select('purchase_order_bank')->distinct()->get();
-			//$purchase_order_hauler = PurchaseOrderModel::select('purchase_order_hauler')->distinct()->get();
+			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address','purchase_order_bank','purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();
 		
 		}
 
@@ -47,12 +44,33 @@ class PurchaseOrderController extends Controller
 		'purchase_order_date',
 		'purchase_order_control_number',
 		'purchase_supplier_name',
-		'purchase_order_total_payable');
-		
+		'purchase_order_total_payable',
+		'purchase_status');
+
 		
 		return DataTables::of($data)
 				->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('status', function($row){
+					
+							
+		if($row->purchase_status=='Pending'){
+			$purchase_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
+		}else if($row->purchase_status=='Paid'){
+			$purchase_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
+		}else{
+			$purchase_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
+		}
+					
+					$actionBtn = '
+					<div align="center" class="action_table_menu_Product">
+					<select class="purchase_order_status_'.$row->purchase_order_id.'" name="purchase_order_status_'.$row->purchase_order_id.'" id="purchase_order_status_'.$row->purchase_order_id.'" onchange="purchase_update_status('.$row->purchase_order_id.')">
+						
+						'.$purchase_status_selected.'
+						</select>
+					</div>';
+                    return $actionBtn;
+                })
+				->addColumn('action', function($row){
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
@@ -61,7 +79,7 @@ class PurchaseOrderController extends Controller
 					</div>';
                     return $actionBtn;
                 })
-				->rawColumns(['action'])
+				->rawColumns(['action','status'])
                 ->make(true);
 		}		
     }
@@ -79,24 +97,18 @@ class PurchaseOrderController extends Controller
 						'purchase_order_collection_receipt_no',
 						'purchase_order_official_receipt_no',
 						'purchase_order_delivery_receipt_no',
-						'purchase_order_bank',
-						'purchase_order_date_of_payment',
-						'purchase_order_reference_no',
-						'purchase_order_payment_amount',
 						'purchase_order_delivery_method',
-						'purchase_order_hauler',
-						'purchase_order_date_of_pickup',
-						'purchase_order_date_of_arrival',
+						'purchase_loading_terminal',
 						'purchase_order_gross_amount',
 						'purchase_order_total_liters',
 						'purchase_order_net_percentage', 
 						'purchase_order_net_amount',
 						'purchase_order_less_percentage',
 						'purchase_order_total_payable',
-						'purchase_driver',
-						'purchase_lorry_plate_no',
-						'purchase_loading_terminal',
-						'purchase_terminal_address',
+						'hauler_operator',
+						'lorry_driver',
+						'plate_number',
+						'contact_number',
 						'purchase_destination',
 						'purchase_destination_address',
 						'purchase_date_of_departure',
@@ -104,8 +116,6 @@ class PurchaseOrderController extends Controller
 						'purchase_order_instructions',
 						'purchase_order_note']);
 					return response()->json($data);	
-					
-					//return response()->json($data);
 		
 	}
 
@@ -118,6 +128,9 @@ class PurchaseOrderController extends Controller
 		
 		/*Delete on Purchase Order Product Component*/
 		PurchaseOrderComponentModel::where('purchase_order_idx', $purchase_order_id)->delete();
+		
+		/*Delete on Purchase Order Payment Component*/
+		PurchaseOrderPaymentModel::where('purchase_order_idx', $purchase_order_id)->delete();
 
 		return 'Deleted';
 		
@@ -152,24 +165,18 @@ class PurchaseOrderController extends Controller
 			$Purchaseorder->purchase_order_delivery_receipt_no		= $request->purchase_order_delivery_receipt_no;
 				
 			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
-			$Purchaseorder->purchase_order_hauler					= $request->purchase_order_hauler;
-			$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
-			$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
+			$Purchaseorder->purchase_loading_terminal					= $request->purchase_loading_terminal;
+			//$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
+			//$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
 					
 			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
 			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
-					
-			$Purchaseorder->purchase_order_bank						= $request->purchase_order_bank;
-			$Purchaseorder->purchase_order_date_of_payment			= $request->purchase_order_date_of_payment;			
 			
-			$Purchaseorder->purchase_order_reference_no				= $request->purchase_order_reference_no;
-			$Purchaseorder->purchase_order_payment_amount			= $request->purchase_order_payment_amount;
+			$Purchaseorder->hauler_operator							= $request->hauler_operator;
+			$Purchaseorder->lorry_driver					= $request->lorry_driver;			
 			
-			$Purchaseorder->purchase_driver							= $request->purchase_driver;
-			$Purchaseorder->purchase_lorry_plate_no					= $request->purchase_lorry_plate_no;			
-			
-			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
-			$Purchaseorder->purchase_terminal_address				= $request->purchase_terminal_address;
+			$Purchaseorder->plate_number				= $request->plate_number;
+			$Purchaseorder->contact_number				= $request->contact_number;
 					
 			$Purchaseorder->purchase_destination					= $request->purchase_destination;
 			$Purchaseorder->purchase_destination_address			= $request->purchase_destination_address;
@@ -182,17 +189,45 @@ class PurchaseOrderController extends Controller
 			
 			$result = $Purchaseorder->save();
 			
+			/*Get Last ID*/
+			$last_transaction_id = $Purchaseorder->purchase_order_id;
+			
+			/*Payment Option*/
+			$purchase_order_bank 			= $request->purchase_order_bank;
+			$purchase_order_date_of_payment = $request->purchase_order_date_of_payment;
+			$purchase_order_reference_no 	= $request->purchase_order_reference_no;
+			$purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
+			
+			for($count = 0; $count < count($purchase_order_bank); $count++)
+			{
+				
+					$purchase_order_bank_item 				= $purchase_order_bank[$count];
+					$purchase_order_date_of_payment_item 	= $purchase_order_date_of_payment[$count];
+					$purchase_order_reference_no_item 		= $purchase_order_reference_no[$count];
+					$purchase_order_payment_amount_item 	= $purchase_order_payment_amount[$count];
+				
+				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
+				$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
+				
+				$PurchaseOrderPaymentComponent->purchase_order_idx 		= $last_transaction_id;
+				$PurchaseOrderPaymentComponent->purchase_order_bank 			= $purchase_order_bank_item;
+				$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $purchase_order_date_of_payment_item;
+				$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $purchase_order_reference_no_item;
+				$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $purchase_order_payment_amount_item;
+				
+				$PurchaseOrderPaymentComponent->save();
+				
+			}
+			
+			
 			$product_idx 			= $request->product_idx;
 			$order_quantity 		= $request->order_quantity;
 			$product_manual_price 	= $request->product_manual_price;
 			
-			/*Get Last ID*/
-			$last_transaction_id = $Purchaseorder->purchase_order_id;
-			
 			$gross_amount = 0;
 			
 			for($count = 0; $count < count($product_idx); $count++)
-			 {
+			{
 				
 					$puchase_order_item_product_id 			= $product_idx[$count];
 					$puchase_order_item_order_quantity 		= $order_quantity[$count];
@@ -279,24 +314,18 @@ class PurchaseOrderController extends Controller
 			$Purchaseorder->purchase_order_delivery_receipt_no		= $request->purchase_order_delivery_receipt_no;
 				
 			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
-			$Purchaseorder->purchase_order_hauler					= $request->purchase_order_hauler;
-			$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
-			$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
+			$Purchaseorder->purchase_loading_terminal					= $request->purchase_loading_terminal;
+			//$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
+			//$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
 					
 			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
 			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
-					
-			$Purchaseorder->purchase_order_bank						= $request->purchase_order_bank;
-			$Purchaseorder->purchase_order_date_of_payment			= $request->purchase_order_date_of_payment;			
 			
-			$Purchaseorder->purchase_order_reference_no				= $request->purchase_order_reference_no;
-			$Purchaseorder->purchase_order_payment_amount			= $request->purchase_order_payment_amount;
+			$Purchaseorder->hauler_operator							= $request->hauler_operator;
+			$Purchaseorder->lorry_driver					= $request->lorry_driver;			
 			
-			$Purchaseorder->purchase_driver							= $request->purchase_driver;
-			$Purchaseorder->purchase_lorry_plate_no					= $request->purchase_lorry_plate_no;			
-			
-			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
-			$Purchaseorder->purchase_terminal_address				= $request->purchase_terminal_address;
+			$Purchaseorder->plate_number				= $request->plate_number;
+			$Purchaseorder->contact_number				= $request->contact_number;
 					
 			$Purchaseorder->purchase_destination					= $request->purchase_destination;
 			$Purchaseorder->purchase_destination_address			= $request->purchase_destination_address;
@@ -305,8 +334,7 @@ class PurchaseOrderController extends Controller
 									
 			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
 			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
-			
-			
+					
 			$result = $Purchaseorder->update();
 			
 			$product_idx 						= $request->product_idx;
@@ -317,6 +345,53 @@ class PurchaseOrderController extends Controller
 			/*Get Last ID*/
 			$last_transaction_id = $Purchaseorder->purchase_order_id;
 			
+			/*Payment Option*/
+			$purchase_order_bank 			= $request->purchase_order_bank;
+			$purchase_order_date_of_payment = $request->purchase_order_date_of_payment;
+			$purchase_order_reference_no 	= $request->purchase_order_reference_no;
+			$purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
+			$purchase_order_payment_item_id 	= $request->purchase_order_payment_item_id;
+			
+			for($count = 0; $count < count($purchase_order_bank); $count++)
+			{
+				
+					$purchase_order_payment_item_id_item 				= $purchase_order_payment_item_id[$count];
+					$purchase_order_bank_item 				= $purchase_order_bank[$count];
+					$purchase_order_date_of_payment_item 	= $purchase_order_date_of_payment[$count];
+					$purchase_order_reference_no_item 		= $purchase_order_reference_no[$count];
+					$purchase_order_payment_amount_item 	= $purchase_order_payment_amount[$count];
+				
+				if($purchase_order_payment_item_id_item==0){
+						
+					$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
+					
+					$PurchaseOrderPaymentComponent->purchase_order_idx 				= $last_transaction_id;
+					$PurchaseOrderPaymentComponent->purchase_order_bank 			= $purchase_order_bank_item;
+					$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $purchase_order_date_of_payment_item;
+					$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $purchase_order_reference_no_item;
+					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $purchase_order_payment_amount_item;
+					
+					$PurchaseOrderPaymentComponent->save();
+				
+				}
+				else{
+					
+					$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
+					
+					$PurchaseOrderPaymentComponent = PurchaseOrderPaymentModel::find($purchase_order_payment_item_id_item);
+					
+					$PurchaseOrderPaymentComponent->purchase_order_bank 						= $purchase_order_bank_item;
+					$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 				= $purchase_order_date_of_payment_item;
+					$PurchaseOrderPaymentComponent->purchase_order_reference_no 				= $purchase_order_reference_no_item;
+					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 				= $purchase_order_payment_amount_item;
+					
+					$PurchaseOrderPaymentComponent->update();
+
+				}
+				
+			}
+			
+					
 			$gross_amount = 0;
 			
 			for($count = 0; $count < count($product_idx); $count++)
@@ -410,12 +485,47 @@ class PurchaseOrderController extends Controller
 		
 			return response()->json($data);
 	}
+	
+	public function get_purchase_order_payment_list(Request $request){		
+	
+			$data =  PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $request->purchase_order_id)
+				->orderBy('purchase_order_payment_details_id', 'asc')
+              	->get([
+					'teves_purchase_order_payment_details.purchase_order_payment_details_id',
+					'teves_purchase_order_payment_details.purchase_order_bank',
+					'teves_purchase_order_payment_details.purchase_order_date_of_payment',
+					'teves_purchase_order_payment_details.purchase_order_reference_no',
+					'teves_purchase_order_payment_details.purchase_order_payment_amount',
+					]);
+		
+			return response()->json($data);
+	}
 
 	public function delete_purchase_order_item(Request $request){		
 			
 		$productitemID = $request->productitemID;
 		PurchaseOrderComponentModel::find($productitemID)->delete();
 		return 'Deleted';
+		
+	}
+	
+	public function delete_purchase_order_payment_item(Request $request){		
+			
+		$paymentitemID = $request->paymentitemID;
+		PurchaseOrderPaymentModel::find($paymentitemID)->delete();
+		return 'Deleted';
+		
+	}
+	
+	public function update_purchase_status(Request $request){		
+			
+		$purchase_order_id = $request->purchase_order_id;
+		$purchase_status = $request->purchase_status;
+				
+				$PurchaseOrderUpdate = new PurchaseOrderModel();
+				$PurchaseOrderUpdate = PurchaseOrderModel::find($purchase_order_id);
+				$PurchaseOrderUpdate->purchase_status = $purchase_status;
+				$PurchaseOrderUpdate->update();
 		
 	}
 }

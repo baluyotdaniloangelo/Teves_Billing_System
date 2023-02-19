@@ -96,12 +96,14 @@
 								<div class="row">
 								<div class="col-md-4">
 										<label for="client_idx" class="form-label">Sold To</label>
-										<select class="form-control form-select " name="client_idx" id="client_idx" required>
-											<option selected="" disabled="" value="">Choose...</option>
-												@foreach ($client_data as $client_data_cols)
-											<option value="{{$client_data_cols->client_id}}">{{$client_data_cols->client_name}}</option>
-												@endforeach
-										</select>
+	
+										 <input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
+											<datalist id="client_name">
+											  @foreach ($client_data as $client_data_cols)
+											  <option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+											  @endforeach
+											</datalist>
+																				
 										<span class="valid-feedback" id="client_idxError"></span>
 									</div>
 									<div class="col-md-4">
@@ -272,12 +274,14 @@
 								<div class="row">
 								<div class="col-md-4">
 										<label for="update_client_idx" class="form-label">Sold To</label>
-										<select class="form-control form-select " name="update_client_idx" id="update_client_idx" required>
-											<option selected="" disabled="" value="">Choose...</option>
-												@foreach ($client_data as $client_data_cols)
-											<option value="{{$client_data_cols->client_id}}">{{$client_data_cols->client_name}}</option>
-												@endforeach
-										</select>
+										
+										<input class="form-control" list="update_client_name" name="update_client_name" id="update_client_idx" required autocomplete="off">
+											<datalist id="update_client_name">
+											  @foreach ($client_data as $client_data_cols)
+											  <option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+											  @endforeach
+											</datalist>
+										
 										<span class="valid-feedback" id="update_client_idxError"></span>
 									</div>
 									<div class="col-md-4">

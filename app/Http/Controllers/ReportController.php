@@ -12,6 +12,7 @@ use App\Models\SalesOrderComponentModel;
 
 use App\Models\PurchaseOrderModel;
 use App\Models\PurchaseOrderComponentModel;
+use App\Models\PurchaseOrderPaymentModel;
 
 use App\Models\ClientModel;
 use Session;
@@ -270,7 +271,8 @@ class ReportController extends Controller
            header("Content-Disposition: attachment;filename=".$client_name." - Billing Statement.xlsx");
            header('Cache-Control: max-age=0');
            ob_end_clean();
-           $Excel_writer->save('php://output');
+           $Excel_writer->save('php://output')->export('pdf');;
+		   //
            exit();
        
 	   } catch (Exception $e) {
@@ -493,7 +495,7 @@ class ReportController extends Controller
 						'purchase_order_reference_no',
 						'purchase_order_payment_amount',
 						'purchase_order_delivery_method',
-						'purchase_order_hauler',
+						'purchase_loading_terminal',
 						'purchase_order_date_of_pickup',
 						'purchase_order_date_of_arrival',
 						'purchase_order_gross_amount',
@@ -502,10 +504,10 @@ class ReportController extends Controller
 						'purchase_order_net_amount',
 						'purchase_order_less_percentage',
 						'purchase_order_total_payable',
-						'purchase_driver',
-						'purchase_lorry_plate_no',
-						'purchase_loading_terminal',
-						'purchase_terminal_address',
+						'hauler_operator',
+						'lorry_driver',
+						'plate_number',
+						'contact_number',
 						'purchase_destination',
 						'purchase_destination_address',
 						'purchase_date_of_departure',
@@ -527,7 +529,7 @@ class ReportController extends Controller
 		
 		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;
 		
-		$purchase_order_component = PurchaseOrderComponentModel::where('teves_purchase_order_component_table.purchase_order_idx', $purchase_order_id)
+		$purchase_order_component = PurchaseOrderComponentModel::where('teves_purchase_order_component_table.purchase_order_idx', $purchase_order_id)	
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_purchase_order_component_table.product_idx')	
 			->orderBy('purchase_order_component_id', 'asc')
               	->get([
@@ -539,13 +541,22 @@ class ReportController extends Controller
 					'teves_purchase_order_component_table.order_quantity',
 					'teves_purchase_order_component_table.order_total_amount'
 					]);
-		
+
+		$purchase_payment_component = PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $purchase_order_id)
+			->orderBy('purchase_order_payment_details_id', 'asc')
+              	->get([
+					'teves_purchase_order_payment_details.purchase_order_bank',
+					'teves_purchase_order_payment_details.purchase_order_date_of_payment',
+					'teves_purchase_order_payment_details.purchase_order_reference_no',
+					'teves_purchase_order_payment_details.purchase_order_payment_amount',
+					]);
+					
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'PURCHASE ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component'));
+        $pdf = PDF::loadView('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

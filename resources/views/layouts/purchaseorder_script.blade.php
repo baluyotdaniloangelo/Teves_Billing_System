@@ -23,10 +23,11 @@
 					{data: 'purchase_order_date'},
 					{data: 'purchase_order_control_number'},
 					{data: 'purchase_supplier_name'},
-					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },   
+					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'status', name: 'status', orderable: false, searchable: false},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
-			order: [[ 1, "asc" ]],
+			order: [[ 1, "desc" ]],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1,4] },
 			]
@@ -38,6 +39,93 @@
 				
 	});
 	
+	function AddPaymentRow() {
+		
+		var x = document.getElementById("table_payment_body_data").rows.length;
+		/*Limit to 5 rows*/
+		
+		if(x > 3){
+		   return;
+		}else{
+		
+			$('#table_payment_body_data tr:last').after("<tr>"+
+			"<td class='bank_td' align='center'>"+
+			"<input type='text' class='form-control purchase_order_bank' id='purchase_order_bank' name='purchase_order_bank' list='purchase_order_bank_list'>"+
+							"<datalist id='purchase_order_bank_list'>"+
+								<?php foreach ($purchase_data_suggestion as $purchase_order_bank_cols) {?>
+									"<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>"+
+								<?php } ?>
+							"</datalist>"+
+			"</td>"+
+			"<td class='date_of_payment_td' align='center'><input type='date' class='form-control purchase_order_date_of_payment' id='purchase_order_date_of_payment' name='purchase_order_date_of_payment' value='<?=date('Y-m-d');?>'></td>"+
+			"<td class='purchase_order_reference_no_td' align='center'><input type='text' class='form-control purchase_order_reference_no' id='purchase_order_reference_no' name='purchase_order_reference_no'></td>"+
+			"<td class='purchase_order_payment_amount_td' align='center'><input type='number' class='form-control purchase_order_payment_amount' id='purchase_order_payment_amount' name='purchase_order_payment_amount'></td>"+
+			"<td><div onclick='deletePaymentRow(this)' data-id='0' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+		
+		}	
+	}		
+	
+	function UpdatePaymentRow() {
+		
+		var x = document.getElementById("update_table_payment_body_data").rows.length;
+		/*Limit to 5 rows*/
+		if(x > 3){
+		   return;
+		}else{
+						
+			$('#update_table_payment_body_data tr:last').after("<tr>"+
+							"<td class='bank_td' align='center'>"+
+							"<input type='text' class='form-control update_purchase_order_bank' id='update_purchase_order_bank' name='update_purchase_order_bank' list='update_purchase_order_bank_list'  value=''>"+
+											"<datalist id='update_purchase_order_bank_list'>"+
+												<?php foreach ($purchase_data_suggestion as $purchase_order_bank_cols) {?>
+													"<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>"+
+												<?php } ?>
+											"</datalist>"+
+							"</td>"+
+							"<td class='update_date_of_payment_td' align='center'><input type='date' class='form-control update_purchase_order_date_of_payment' id='update_purchase_order_date_of_payment' name='update_purchase_order_date_of_payment' value=''></td>"+
+							"<td class='update_purchase_order_reference_no_td' align='center'><input type='text' class='form-control update_purchase_order_reference_no' id='update_purchase_order_reference_no' name='update_purchase_order_reference_no' value=''></td>"+
+							"<td class='update_purchase_order_payment_amount_td' align='center'><input type='number' class='form-control update_purchase_order_payment_amount' id='update_purchase_order_payment_amount' name='update_purchase_order_payment_amount' value=''></td>"+
+							"<td><div onclick='deletePaymentRow(this)' data-id='' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+					
+		}	
+	}
+	
+	function deletePaymentRow(btn) {
+			
+		var paymentitemID= $(btn).data("id");			
+		
+		var row = btn.parentNode.parentNode;
+		row.parentNode.removeChild(row);
+		
+		if(paymentitemID!=0){
+			/*Delete the Selected Item*/
+			
+			  $.ajax({
+				url: "/delete_purchase_order_payment_item",
+				type:"POST",
+				data:{
+				  paymentitemID:paymentitemID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					//$('#switch_notice_off').show();
+					//$('#sw_off').html("Item Deleted");
+					//setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					//alert(error);
+				}
+			   });		
+		}
+		
+	}
+
 	function AddProductRow() {
 		
 		var x = document.getElementById("table_product_body_data").rows.length;
@@ -70,6 +158,7 @@
 		if(x > 5){
 		   return;
 		}else{
+
 		
 			$('#update_table_product_body_data tr:last').after("<tr>"+
 			"<td class='product_td' align='center'>"+
@@ -141,24 +230,22 @@
 			let purchase_order_delivery_receipt_no 		= $("input[name=purchase_order_delivery_receipt_no]").val();
 		
 			let purchase_order_delivery_method 			= $("#purchase_order_delivery_method").val();
-			let purchase_order_hauler 					= $("#purchase_order_hauler").val();
-			let purchase_order_date_of_pickup 			= $("input[name=purchase_order_date_of_pickup]").val();
-			let purchase_order_date_of_arrival 			= $("input[name=purchase_order_date_of_arrival]").val();
+			let purchase_loading_terminal 					= $("#purchase_loading_terminal").val();
+			//let purchase_order_date_of_pickup 			= $("input[name=purchase_order_date_of_pickup]").val();
+			//let purchase_order_date_of_arrival 			= $("input[name=purchase_order_date_of_arrival]").val();
 			
 			let purchase_order_net_percentage 				= $("input[name=purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 			= $("input[name=purchase_order_less_percentage]").val();
 			
-			let purchase_order_bank 				= $("input[name=purchase_order_bank]").val();
-			let purchase_order_date_of_payment 		= $("input[name=purchase_order_date_of_payment]").val();
-			let purchase_order_reference_no 		= $("input[name=purchase_order_reference_no]").val();
-			let purchase_order_payment_amount 		= $("input[name=purchase_order_payment_amount]").val();
+			//let purchase_order_bank 				= $("input[name=purchase_order_bank]").val();
+			//let purchase_order_date_of_payment 		= $("input[name=purchase_order_date_of_payment]").val();
+			//let purchase_order_reference_no 		= $("input[name=purchase_order_reference_no]").val();
+			//let purchase_order_payment_amount 		= $("input[name=purchase_order_payment_amount]").val();
 			
-			let purchase_driver 					= $("input[name=purchase_driver]").val();
-			let purchase_lorry_plate_no 			= $("input[name=purchase_lorry_plate_no]").val();
-			let purchase_loading_terminal 			= $("input[name=purchase_loading_terminal]").val();
-			let purchase_terminal_address 			= $("input[name=purchase_terminal_address]").val();
-			
-			
+			let hauler_operator 					= $("input[name=hauler_operator]").val();
+			let lorry_driver 			= $("input[name=lorry_driver]").val();
+			let plate_number 			= $("input[name=plate_number]").val();
+			let contact_number 			= $("input[name=contact_number]").val();
 			
 			let purchase_destination 				= $("input[name=purchase_destination]").val();
 			let purchase_destination_address 		= $("input[name=purchase_destination_address]").val();
@@ -169,7 +256,7 @@
 			let purchase_order_instructions 			= $("#purchase_order_instructions").val();
 			let purchase_order_note 					= $("#purchase_order_note").val();
 
-			var product_idx = [];
+				var product_idx = [];
 				var order_quantity = [];
 				var product_manual_price = [];
 				  
@@ -195,6 +282,48 @@
 				   		product_manual_price.push($(this).val());			  
 				  });		
 				 
+				/*Payment Options*/
+				var purchase_order_bank = [];
+				var purchase_order_date_of_payment = [];
+				var purchase_order_reference_no = [];
+				var purchase_order_payment_amount = [];
+				  
+				  $('.purchase_order_bank').each(function(){
+					if($(this).val() == ''){
+						alert('Please Select a Bank');
+						exit();
+					}else{  				  
+				   		purchase_order_bank.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.purchase_order_date_of_payment').each(function(){
+					if($(this).val() == ''){
+						alert('Date of Payment is Empty');
+						exit(); 
+					}else{  				  
+				   		purchase_order_date_of_payment.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.purchase_order_reference_no').each(function(){
+					if($(this).val() == ''){
+						alert('Reference is Empty');
+						exit(); 
+					}else{  				  
+				   		purchase_order_reference_no.push($(this).val());
+					}				  
+				  });	
+				  
+				  $('.purchase_order_payment_amount').each(function(){
+					if($(this).val() == ''){
+						alert('Payment Amount is Empty');
+						exit(); 
+					}else{  				  
+				   		purchase_order_payment_amount.push($(this).val());
+					}				  
+				  });	
+				 	 
 			  $.ajax({
 				url: "/create_purchase_order_post",
 				type:"POST",
@@ -211,26 +340,24 @@
 					purchase_order_delivery_receipt_no:purchase_order_delivery_receipt_no,
 				
 					purchase_order_delivery_method:purchase_order_delivery_method,
-					purchase_order_hauler:purchase_order_hauler,
-					purchase_order_date_of_pickup:purchase_order_date_of_pickup,
-					purchase_order_date_of_arrival:purchase_order_date_of_arrival,
+					purchase_loading_terminal:purchase_loading_terminal,
+					//purchase_order_date_of_pickup:purchase_order_date_of_pickup,
+					//purchase_order_date_of_arrival:purchase_order_date_of_arrival,
 					
 					purchase_order_net_percentage:purchase_order_net_percentage,
 					purchase_order_less_percentage:purchase_order_less_percentage,
 					
 					purchase_order_bank:purchase_order_bank,
-					purchase_order_date_of_payment:purchase_order_date_of_payment,
-					
-					
+					purchase_order_date_of_payment:purchase_order_date_of_payment,	
 					purchase_order_reference_no:purchase_order_reference_no,
 					purchase_order_payment_amount:purchase_order_payment_amount,
 			
-					purchase_driver:purchase_driver,
-					purchase_lorry_plate_no:purchase_lorry_plate_no,
+					hauler_operator:hauler_operator,
+					lorry_driver:lorry_driver,
 					
 					
-					purchase_loading_terminal:purchase_loading_terminal,
-					purchase_terminal_address:purchase_terminal_address,
+					plate_number:plate_number,
+					contact_number:contact_number,
 					
 					purchase_destination:purchase_destination,
 					purchase_destination_address:purchase_destination_address,
@@ -333,7 +460,7 @@
 	  
 	  
 	  <!--Product Confirmed For Deletion-->
-	  $('body').on('click','#deletePurchaseOrderConfirmed',function(){
+	$('body').on('click','#deletePurchaseOrderConfirmed',function(){
 			
 			event.preventDefault();
 
@@ -379,6 +506,10 @@
 			
 			/*Call Product List for Sales Order*/
 			LoadProductRowForUpdate(purchase_order_id);
+			
+			/*Call Product List for Sales Order*/
+			LoadPaymentRowForUpdate(purchase_order_id);
+			
 			  $.ajax({
 				url: "/purchase_order_info",
 				type:"POST",
@@ -401,22 +532,22 @@
 			document.getElementById("update_purchase_order_delivery_receipt_no").value = response.purchase_order_delivery_receipt_no;
 		
 			document.getElementById("update_purchase_order_delivery_method").value = response.purchase_order_delivery_method;
-			document.getElementById("update_purchase_order_hauler").value = response.purchase_order_hauler;
-			document.getElementById("update_purchase_order_date_of_pickup").value = response.purchase_order_date_of_pickup;
-			document.getElementById("update_purchase_order_date_of_arrival").value = response.purchase_order_date_of_arrival;
+			document.getElementById("update_purchase_loading_terminal").value = response.purchase_loading_terminal;
+			//document.getElementById("update_purchase_order_date_of_pickup").value = response.purchase_order_date_of_pickup;
+			//document.getElementById("update_purchase_order_date_of_arrival").value = response.purchase_order_date_of_arrival;
 			
 			document.getElementById("update_purchase_order_net_percentage").value = response.purchase_order_net_percentage;
 			document.getElementById("update_purchase_order_less_percentage").value = response.purchase_order_less_percentage;
 			
-			document.getElementById("update_purchase_order_bank").value = response.purchase_order_bank;
-			document.getElementById("update_purchase_order_date_of_payment").value = response.purchase_order_date_of_payment;
-			document.getElementById("update_purchase_order_reference_no").value = response.purchase_order_reference_no;
-			document.getElementById("update_purchase_order_payment_amount").value = response.purchase_order_payment_amount;
+			//document.getElementById("update_purchase_order_bank").value = response.purchase_order_bank;
+			//document.getElementById("update_purchase_order_date_of_payment").value = response.purchase_order_date_of_payment;
+			//document.getElementById("update_purchase_order_reference_no").value = response.purchase_order_reference_no;
+			//document.getElementById("update_purchase_order_payment_amount").value = response.purchase_order_payment_amount;
 			
-			document.getElementById("update_purchase_driver").value = response.purchase_driver;
-			document.getElementById("update_purchase_lorry_plate_no").value = response.purchase_lorry_plate_no;
-			document.getElementById("update_purchase_loading_terminal").value = response.purchase_loading_terminal;
-			document.getElementById("update_purchase_terminal_address").value = response.purchase_terminal_address;		
+			document.getElementById("update_hauler_operator").value = response.hauler_operator;
+			document.getElementById("update_lorry_driver").value = response.lorry_driver;
+			document.getElementById("update_plate_number").value = response.plate_number;
+			document.getElementById("update_contact_number").value = response.contact_number;		
 			
 			document.getElementById("update_purchase_destination").value = response.purchase_destination;
 			document.getElementById("update_purchase_destination_address").value = response.purchase_destination_address;
@@ -522,6 +653,58 @@
 			   });
 	  }  	  
 	  
+	function LoadPaymentRowForUpdate(purchase_order_id) {
+		
+		event.preventDefault();
+		$("#update_table_payment_body_data tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
+		
+			  $.ajax({
+				url: "/get_purchase_order_payment_list",
+				type:"POST",
+				data:{
+				  purchase_order_id:purchase_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+							
+				  console.log(response);
+				  if(response!='') {
+					  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+							
+							var id = response[i].purchase_order_payment_details_id;
+							
+							var purchase_order_bank 			= response[i].purchase_order_bank;
+							var purchase_order_date_of_payment 	= response[i].purchase_order_date_of_payment;
+							var purchase_order_reference_no		= response[i].purchase_order_reference_no;
+							var purchase_order_payment_amount 	= response[i].purchase_order_payment_amount;
+							
+							
+							$('#update_table_payment_body_data tr:last').after("<tr>"+
+							"<td class='bank_td' align='center'>"+
+							"<input type='text' class='form-control update_purchase_order_bank' id='update_purchase_order_bank' name='update_purchase_order_bank' list='update_purchase_order_bank_list'  value='"+purchase_order_bank+"'>"+
+											"<datalist id='update_purchase_order_bank_list'>"+
+												
+												
+											"</datalist>"+
+							"</td>"+
+							"<td class='update_date_of_payment_td' align='center'><input type='date' class='form-control update_purchase_order_date_of_payment' id='update_purchase_order_date_of_payment' name='update_purchase_order_date_of_payment' value='"+purchase_order_date_of_payment+"'></td>"+
+							"<td class='update_purchase_order_reference_no_td' align='center'><input type='text' class='form-control update_purchase_order_reference_no' id='update_purchase_order_reference_no' name='update_purchase_order_reference_no' value='"+purchase_order_reference_no+"'></td>"+
+							"<td class='update_purchase_order_payment_amount_td' align='center'><input type='number' class='form-control update_purchase_order_payment_amount' id='update_purchase_order_payment_amount' name='update_purchase_order_payment_amount' value='"+purchase_order_payment_amount+"'></td>"+
+							"<td><div onclick='deletePaymentRow(this)' data-id='"+id+"' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+
+						}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  }  	  
 
 	<!--Save New Sales Order-->
 	$("#update-purchase-order").click(function(event){
@@ -543,25 +726,23 @@
 			let purchase_order_delivery_receipt_no 		= $("input[name=update_purchase_order_delivery_receipt_no]").val();
 		
 			let purchase_order_delivery_method 			= $("#update_purchase_order_delivery_method").val();
-			let purchase_order_hauler 					= $("#update_purchase_order_hauler").val();
-			let purchase_order_date_of_pickup 			= $("input[name=update_purchase_order_date_of_pickup]").val();
-			let purchase_order_date_of_arrival 			= $("input[name=update_purchase_order_date_of_arrival]").val();
+			let purchase_loading_terminal 					= $("#update_purchase_loading_terminal").val();
+			//let purchase_order_date_of_pickup 			= $("input[name=update_purchase_order_date_of_pickup]").val();
+			//let purchase_order_date_of_arrival 			= $("input[name=update_purchase_order_date_of_arrival]").val();
 			
 			let purchase_order_net_percentage 			= $("input[name=update_purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 			= $("input[name=update_purchase_order_less_percentage]").val();
 			
-			let purchase_order_bank 				= $("input[name=update_purchase_order_bank]").val();
-			let purchase_order_date_of_payment 		= $("input[name=update_purchase_order_date_of_payment]").val();
-			let purchase_order_reference_no 		= $("input[name=update_purchase_order_reference_no]").val();
-			let purchase_order_payment_amount 		= $("input[name=update_purchase_order_payment_amount]").val();
+			//let purchase_order_bank 				= $("input[name=update_purchase_order_bank]").val();
+			//let purchase_order_date_of_payment 		= $("input[name=update_purchase_order_date_of_payment]").val();
+			//let purchase_order_reference_no 		= $("input[name=update_purchase_order_reference_no]").val();
+			//let purchase_order_payment_amount 		= $("input[name=update_purchase_order_payment_amount]").val();
 			
-			let purchase_driver 					= $("input[name=update_purchase_driver]").val();
-			let purchase_lorry_plate_no 			= $("input[name=update_purchase_lorry_plate_no]").val();
-			let purchase_loading_terminal 			= $("input[name=update_purchase_loading_terminal]").val();
-			let purchase_terminal_address 			= $("input[name=update_purchase_terminal_address]").val();
-			
-			
-			
+			let hauler_operator 					= $("input[name=update_hauler_operator]").val();
+			let lorry_driver 			= $("input[name=update_lorry_driver]").val();
+			let plate_number 			= $("input[name=update_plate_number]").val();
+			let contact_number 			= $("input[name=update_contact_number]").val();
+						
 			let purchase_destination 				= $("input[name=update_purchase_destination]").val();
 			let purchase_destination_address 		= $("input[name=update_purchase_destination_address]").val();
 			let purchase_date_of_departure 			= $("input[name=update_purchase_date_of_departure]").val();
@@ -601,7 +782,53 @@
 				  $.each($("[id='product_item']"), function(){
 					purchase_order_item_id.push($(this).attr("data-id"));
 				  });
+				
+				/*Payment Options*/
+				var purchase_order_bank = [];
+				var purchase_order_date_of_payment = [];
+				var purchase_order_reference_no = [];
+				var purchase_order_payment_amount = [];
+				var purchase_order_payment_item_id = [];
 				  
+				  $('.update_purchase_order_bank').each(function(){
+					if($(this).val() == ''){
+						alert('Please Select a Bank');
+						exit();
+					}else{  				  
+				   		purchase_order_bank.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.update_purchase_order_date_of_payment').each(function(){
+					if($(this).val() == ''){
+						alert('Date of Payment is Empty');
+						exit(); 
+					}else{  				  
+				   		purchase_order_date_of_payment.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.update_purchase_order_reference_no').each(function(){
+					if($(this).val() == ''){
+						alert('Reference is Empty');
+						exit(); 
+					}else{  				  
+				   		purchase_order_reference_no.push($(this).val());
+					}				  
+				  });	
+				  
+				  $('.update_purchase_order_payment_amount').each(function(){
+					if($(this).val() == ''){
+						alert('Payment Amount is Empty');
+						exit(); 
+					}else{  				  
+				   		purchase_order_payment_amount.push($(this).val());
+					}				  
+				  });	
+				 	 
+				  $.each($("[id='payment_item']"), function(){
+					purchase_order_payment_item_id.push($(this).attr("data-id"));
+				  });	
 				 
 			  $.ajax({
 				url: "/update_purchase_order_post",
@@ -621,9 +848,9 @@
 					purchase_order_delivery_receipt_no:purchase_order_delivery_receipt_no,
 				
 					purchase_order_delivery_method:purchase_order_delivery_method,
-					purchase_order_hauler:purchase_order_hauler,
-					purchase_order_date_of_pickup:purchase_order_date_of_pickup,
-					purchase_order_date_of_arrival:purchase_order_date_of_arrival,
+					purchase_loading_terminal:purchase_loading_terminal,
+					//purchase_order_date_of_pickup:purchase_order_date_of_pickup,
+					//purchase_order_date_of_arrival:purchase_order_date_of_arrival,
 					
 					purchase_order_net_percentage:purchase_order_net_percentage,
 					purchase_order_less_percentage:purchase_order_less_percentage,
@@ -635,12 +862,12 @@
 					purchase_order_reference_no:purchase_order_reference_no,
 					purchase_order_payment_amount:purchase_order_payment_amount,
 			
-					purchase_driver:purchase_driver,
-					purchase_lorry_plate_no:purchase_lorry_plate_no,
+					hauler_operator:hauler_operator,
+					lorry_driver:lorry_driver,
 					
 					
-					purchase_loading_terminal:purchase_loading_terminal,
-					purchase_terminal_address:purchase_terminal_address,
+					plate_number:plate_number,
+					contact_number:contact_number,
 					
 					purchase_destination:purchase_destination,
 					purchase_destination_address:purchase_destination_address,
@@ -651,6 +878,7 @@
 					purchase_order_note:purchase_order_note,
 				  
 					purchase_order_item_ids:purchase_order_item_id,
+					purchase_order_payment_item_id:purchase_order_payment_item_id,
 				  
 					product_idx:product_idx,
 					order_quantity:order_quantity,
@@ -720,5 +948,35 @@
 			window.open(url);
 	  
 	  });
+	  
+	  function purchase_update_status(id){
+		  
+			event.preventDefault();
+			var purchase_status = document.getElementById("purchase_order_status_"+id).value;
+		
+			  $.ajax({
+				url: "/update_purchase_status",
+				type:"POST",
+				data:{
+				  purchase_order_id:id,
+				  purchase_status:purchase_status,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+							
+				  console.log(response);
+				  if(response!='') {
+					  
+				  		
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+		  
+	  }
  </script>
 	

@@ -17,7 +17,7 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 			= $("#client_idx").val();
+			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
@@ -88,8 +88,6 @@
 								"<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
 								"</tr>";
 							
-							
-							
 							/*Attached the Data on the Table Body*/
 							$("#billingstatementreport tbody").append(tr_str);
 							
@@ -159,7 +157,7 @@
 	    
 	function get_client_details(){
 		  
-			let client_idx 		= $("#client_idx").val();
+			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			
 			  $.ajax({
 				url: "/client_info",

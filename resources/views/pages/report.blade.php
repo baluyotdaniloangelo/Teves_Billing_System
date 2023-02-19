@@ -259,12 +259,12 @@
 						<div class="row mb-2">
 						  <label for="client_idx" class="col-sm-3 col-form-label">Client</label>
 						  <div class="col-sm-9">
-							<select class="form-control form-select " name="client_idx" id="client_idx" required>
-							<option selected="" disabled="" value="">Choose...</option>
-								@foreach ($client_data as $client_data_cols)
-									<option value="{{$client_data_cols->client_id}}">{{$client_data_cols->client_name}}</option>
-								@endforeach
-							</select>
+							<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
+								<datalist id="client_name">
+									@foreach ($client_data as $client_data_cols)
+										<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+									@endforeach
+								</datalist>
 							<span class="valid-feedback" id="client_idxError"></span>
 						  </div>
 						</div>

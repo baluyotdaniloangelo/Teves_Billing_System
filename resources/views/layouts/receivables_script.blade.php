@@ -30,6 +30,7 @@
 					{data: 'receivable_status'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
+			order: [[ 1, "desc" ]],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1, 2, 3, 4] },
 			]

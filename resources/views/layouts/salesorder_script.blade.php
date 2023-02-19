@@ -136,7 +136,8 @@
 
 			document.getElementById('SalesOrderformNew').className = "g-3 needs-validation was-validated";
 
-			let client_idx 				= $("#client_idx").val();
+			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));			
+			
 			let sales_order_date 		= $("input[name=sales_order_date]").val();
 			let delivered_to 			= $("input[name=delivered_to]").val();
 			let delivered_to_address 	= $("input[name=delivered_to_address]").val();
@@ -373,7 +374,7 @@
 					document.getElementById("update_or_number").value = response[0].sales_order_or_number;
 					document.getElementById("update_payment_term").value = response[0].sales_order_payment_term;
 					
-					document.getElementById("update_client_idx").value = response[0].sales_order_client_idx;
+					document.getElementById("update_client_idx").value = response[0].client_name;
 					document.getElementById("update_delivered_to").value = response[0].sales_order_delivered_to_address;
 					document.getElementById("update_delivered_to_address").value = response[0].sales_order_delivered_to_address;
 					
@@ -500,7 +501,8 @@
 
 			let sales_order_id			= document.getElementById("update-sales-order").value;
 			
-			let client_idx 				= $("#update_client_idx").val();
+			//let client_idx 				= $("#update_client_idx").val();
+			let client_idx 				= ($("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id'));	
 			let sales_order_date 		= $("input[name=update_sales_order_date]").val();
 			let delivered_to 			= $("input[name=update_delivered_to]").val();
 			let delivered_to_address 	= $("input[name=update_delivered_to_address]").val();

@@ -34,9 +34,10 @@
 
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
+			order: [[ 1, "desc" ]],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1, 5, 6, 7, 8, 9, 10] },
-					 { type: 'numeric-comma', targets: [8,9] }
+					{ type: 'numeric-comma', targets: [8,9] }
 			]
 		});
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
@@ -65,7 +66,7 @@
 			let order_date 				= $("input[name=order_date]").val();
 			let order_time 				= $("input[name=order_time]").val();
 			let order_po_number 		= $("input[name=order_po_number]").val();
-			let client_idx 				= $("#client_idx").val();
+			let client_idx 				= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let plate_no 				= $("input[name=plate_no]").val();
 			let drivers_name 			= $("input[name=drivers_name]").val();
 			let product_idx 			= $("#product_idx").val();
@@ -179,7 +180,7 @@
 					document.getElementById("update_order_date").value = response[0].order_date;
 					document.getElementById("update_order_time").value = response[0].order_time;
 					document.getElementById("update_order_po_number").value = response[0].order_po_number;
-					document.getElementById("update_client_idx").value = response[0].client_idx;
+					document.getElementById("update_client_idx").value = response[0].client_name;
 					
 					document.getElementById("update_plate_no").value = response[0].plate_no;
 					document.getElementById("update_product_idx").value = response[0].product_idx;
@@ -218,7 +219,8 @@
 			let order_date 						= $("input[name=update_order_date]").val();
 			let order_time 						= $("input[name=update_order_time]").val();
 			let order_po_number 				= $("input[name=update_order_po_number]").val();
-			let client_idx 						= $("#update_client_idx").val();
+			//let client_idx 					= $("#update_client_idx").val();
+			let client_idx 						= $("#update_client_name option[value='" + $('#update_client_id').val() + "']").attr('data-id');
 			let plate_no 						= $("input[name=update_plate_no]").val();
 			let drivers_name 					= $("input[name=update_drivers_name]").val();
 			let product_idx 					= $("#update_product_idx").val();
