@@ -24,11 +24,13 @@ class PurchaseOrderController extends Controller
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address','purchase_order_bank','purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();
+			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address','purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();
+			
+			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 		
 		}
 
-		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion'));
+		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion'));
 		
 	}   
 	
@@ -219,7 +221,6 @@ class PurchaseOrderController extends Controller
 				
 			}
 			
-			
 			$product_idx 			= $request->product_idx;
 			$order_quantity 		= $request->order_quantity;
 			$product_manual_price 	= $request->product_manual_price;
@@ -350,7 +351,7 @@ class PurchaseOrderController extends Controller
 			$purchase_order_date_of_payment = $request->purchase_order_date_of_payment;
 			$purchase_order_reference_no 	= $request->purchase_order_reference_no;
 			$purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-			$purchase_order_payment_item_id 	= $request->purchase_order_payment_item_id;
+			$purchase_order_payment_item_id = $request->purchase_order_payment_item_id;
 			
 			for($count = 0; $count < count($purchase_order_bank); $count++)
 			{

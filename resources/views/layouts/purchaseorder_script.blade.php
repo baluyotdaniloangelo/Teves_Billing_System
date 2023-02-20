@@ -24,7 +24,7 @@
 					{data: 'purchase_order_control_number'},
 					{data: 'purchase_supplier_name'},
 					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					{data: 'status', name: 'status', orderable: false, searchable: false},
+					{data: 'status', name: 'status', orderable: true, searchable: true},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],
@@ -50,9 +50,9 @@
 		
 			$('#table_payment_body_data tr:last').after("<tr>"+
 			"<td class='bank_td' align='center'>"+
-			"<input type='text' class='form-control purchase_order_bank' id='purchase_order_bank' name='purchase_order_bank' list='purchase_order_bank_list'>"+
+			"<input type='text' class='form-control purchase_order_bank' id='purchase_order_bank' name='purchase_order_bank' list='purchase_order_bank_list' autocomplete='off'>"+
 							"<datalist id='purchase_order_bank_list'>"+
-								<?php foreach ($purchase_data_suggestion as $purchase_order_bank_cols) {?>
+								<?php foreach ($purchase_payment_suggestion as $purchase_order_bank_cols) {?>
 									"<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>"+
 								<?php } ?>
 							"</datalist>"+
@@ -75,9 +75,9 @@
 						
 			$('#update_table_payment_body_data tr:last').after("<tr>"+
 							"<td class='bank_td' align='center'>"+
-							"<input type='text' class='form-control update_purchase_order_bank' id='update_purchase_order_bank' name='update_purchase_order_bank' list='update_purchase_order_bank_list'  value=''>"+
+							"<input type='text' class='form-control update_purchase_order_bank' id='update_purchase_order_bank' name='update_purchase_order_bank' list='update_purchase_order_bank_list' value='' autocomplete='off'>"+
 											"<datalist id='update_purchase_order_bank_list'>"+
-												<?php foreach ($purchase_data_suggestion as $purchase_order_bank_cols) {?>
+												<?php foreach ($purchase_payment_suggestion as $purchase_order_bank_cols) {?>
 													"<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>"+
 												<?php } ?>
 											"</datalist>"+
@@ -680,14 +680,14 @@
 							var purchase_order_date_of_payment 	= response[i].purchase_order_date_of_payment;
 							var purchase_order_reference_no		= response[i].purchase_order_reference_no;
 							var purchase_order_payment_amount 	= response[i].purchase_order_payment_amount;
-							
-							
+													
 							$('#update_table_payment_body_data tr:last').after("<tr>"+
 							"<td class='bank_td' align='center'>"+
 							"<input type='text' class='form-control update_purchase_order_bank' id='update_purchase_order_bank' name='update_purchase_order_bank' list='update_purchase_order_bank_list'  value='"+purchase_order_bank+"'>"+
 											"<datalist id='update_purchase_order_bank_list'>"+
-												
-												
+											<?php foreach ($purchase_payment_suggestion as $purchase_order_bank_cols) {?>
+												"<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>"+
+											<?php } ?>	
 											"</datalist>"+
 							"</td>"+
 							"<td class='update_date_of_payment_td' align='center'><input type='date' class='form-control update_purchase_order_date_of_payment' id='update_purchase_order_date_of_payment' name='update_purchase_order_date_of_payment' value='"+purchase_order_date_of_payment+"'></td>"+

@@ -197,31 +197,35 @@
 									</div>
 					
 								</div>
+								
 								<hr>
-								<div class="row">
-								
-									<div class="col-md-3">
-									  <label for="mode_of_payment" class="form-label">Mode of Payment</label>
-									  <input type="text" class="form-control" id="mode_of_payment" name="mode_of_payment">
-									</div>
-									<div class="col-md-3">
-									  <label for="date_of_payment" class="form-label">Date of Payment</label>
-									  <input type="date" class="form-control" id="date_of_payment" name="date_of_payment" value="<?=date('Y-m-d');?>">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="reference_no" class="form-label">Reference No.</label>
-									  <input type="text" class="form-control" id="reference_no" name="reference_no">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="payment_amount" class="form-label">Amount</label>
-									  <input type="number" class="form-control" id="payment_amount" name="payment_amount">
-									</div>
-								
+								<h6 class="modal-title">Payment Details</h6>
+								<div align="right">
+								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="AddPaymentRow();" title="Add a Paymnet Option(1-3 items)"></button>
 								</div>
+								<br>
+								<table class="table" id="table_payment">
 								
-							
+									<thead>
+										<tr class='report'>
+										<th style="text-align:center !important;">Mode of Payment</th>
+										<th style="text-align:center !important;">Date of Payment</th>
+										<th style="text-align:center !important;">Reference No.</th>
+										<th style="text-align:center !important;">Amount</th>
+										<th style="text-align:center !important;">Action</th>
+										
+										</tr>
+									</thead>
+										
+									<tbody id="table_payment_body_data">
+										 <tr style="display: none;"><td>HIDDEN</td></tr>
+									</tbody>
+									
+								</table>
+								<div style="color:red;" id="table_paymentxError"></div>
+
+								<hr>
+								
 					</div>
 					<div class="modal-footer modal-footer_form">
 						
@@ -366,28 +370,29 @@
 					
 								</div>
 								<hr>
-								<div class="row">
-								
-									<div class="col-md-3">
-									  <label for="update_mode_of_payment" class="form-label">Mode of Payment</label>
-									  <input type="text" class="form-control" id="update_mode_of_payment" name="update_mode_of_payment">
-									</div>
-									<div class="col-md-3">
-									  <label for="update_date_of_payment" class="form-label">Date of Payment</label>
-									  <input type="date" class="form-control" id="update_date_of_payment" name="update_date_of_payment" value="<?=date('Y-m-d');?>">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="update_reference_no" class="form-label">Reference No.</label>
-									  <input type="text" class="form-control" id="update_reference_no" name="update_reference_no">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="update_payment_amount" class="form-label">Amount</label>
-									  <input type="number" class="form-control" id="update_payment_amount" name="update_payment_amount">
-									</div>
-								
+								<h6 class="modal-title">Payment Details</h6>
+								<div align="right">
+								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="UpdatePaymentRow();" title="Add a Paymnet Option(1-3 items)"></button>
 								</div>
+								<br>
+								<table class="table" id="update_table_payment">
+									<thead>
+										<tr class='report'>
+										<th style="text-align:center !important;">Mode of Payment</th>
+										<th style="text-align:center !important;">Date of Payment</th>
+										<th style="text-align:center !important;">Reference No.</th>
+										<th style="text-align:center !important;">Amount</th>
+										<th style="text-align:center !important;">Action</th>
+										
+										</tr>
+									</thead>
+										
+									<tbody id="update_table_payment_body_data">
+										 <tr style="display: none;"><td>HIDDEN</td></tr>
+									</tbody>
+									
+								</table>
+								<div style="color:red;" id="table_paymentxError"></div>
 								
 					</div>
 					<div class="modal-footer modal-footer_form">
@@ -400,8 +405,6 @@
                   </div>
               </div>
     </div>
-
-
 
 	<!-- Sales Order Delete Modal-->
     <div class="modal fade" id="SalesOrderDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">

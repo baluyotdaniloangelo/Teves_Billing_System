@@ -9,6 +9,7 @@ use App\Models\ReceivablesModel;
 
 use App\Models\SalesOrderModel;
 use App\Models\SalesOrderComponentModel;
+use App\Models\SalesOrderPaymentModel;
 
 use App\Models\PurchaseOrderModel;
 use App\Models\PurchaseOrderComponentModel;
@@ -427,10 +428,6 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_required_date',
 					'teves_sales_order_table.sales_order_instructions',
 					'teves_sales_order_table.sales_order_note',
-					'teves_sales_order_table.sales_order_mode_of_payment',
-					'teves_sales_order_table.sales_order_date_of_payment',
-					'teves_sales_order_table.sales_order_reference_no',
-					'teves_sales_order_table.sales_order_payment_amount',
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_less_percentage'
 				]);
@@ -462,12 +459,21 @@ class ReportController extends Controller
 					'teves_sales_order_component_table.order_total_amount'
 					]);
 		
+		$sales_payment_component = SalesOrderPaymentModel::where('teves_sales_order_payment_details.sales_order_idx', $sales_order_id)
+			->orderBy('sales_order_idx', 'asc')
+              	->get([
+					'teves_sales_order_payment_details.sales_order_mode_of_payment',
+					'teves_sales_order_payment_details.sales_order_date_of_payment',
+					'teves_sales_order_payment_details.sales_order_reference_no',
+					'teves_sales_order_payment_details.sales_order_payment_amount',
+					]);
+		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'SALES ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
+        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','sales_payment_component'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

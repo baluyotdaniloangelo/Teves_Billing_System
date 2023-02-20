@@ -141,7 +141,7 @@
 								
 								<h6 class="modal-title">Payment Details</h6>
 								<div align="right">
-								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="AddPaymentRow();" title="Add a Product(1-5 items)"></button>
+								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="AddPaymentRow();" title="Add a Paymnet Option(1-3 items)"></button>
 								</div>
 								<br>
 								

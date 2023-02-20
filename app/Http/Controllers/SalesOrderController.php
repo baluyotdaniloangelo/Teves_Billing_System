@@ -7,6 +7,7 @@ use App\Models\SalesOrderModel;
 use App\Models\ProductModel;
 use App\Models\ClientModel;
 use App\Models\SalesOrderComponentModel;
+use App\Models\SalesOrderPaymentModel;
 use Session;
 use Validator;
 use DataTables;
@@ -27,10 +28,11 @@ class SalesOrderController extends Controller
 			
 			$sales_order_delivered_to = SalesOrderModel::select('sales_order_delivered_to')->distinct()->get();
 			$sales_order_delivered_to_address = SalesOrderModel::select('sales_order_delivered_to_address')->distinct()->get();
+			$sales_order_mode_of_payment_suggestion = SalesOrderPaymentModel::select('sales_order_mode_of_payment')->distinct()->get();
 		
 		}
 
-		return view("pages.salesorder", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address'));
+		return view("pages.salesorder", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','sales_order_mode_of_payment_suggestion'));
 		
 	}   
 	
@@ -110,6 +112,9 @@ class SalesOrderController extends Controller
 		/*Delete on Sales Order Product Component*/	
 		SalesOrderComponentModel::where('sales_order_idx', $sales_order_id)->delete();
 		
+		/*Delete on Sales Order Payment Component*/	
+		SalesOrderPaymentModel::where('sales_order_idx', $sales_order_id)->delete();
+		
 		return 'Deleted';
 		
 	} 
@@ -144,27 +149,53 @@ class SalesOrderController extends Controller
 			$Salesorder->sales_order_required_date 				= $request->required_date;
 			$Salesorder->sales_order_instructions 				= $request->instructions;
 			$Salesorder->sales_order_note 						= $request->note;
-			$Salesorder->sales_order_mode_of_payment 			= $request->mode_of_payment;
-			$Salesorder->sales_order_date_of_payment 			= $request->date_of_payment;
-			$Salesorder->sales_order_reference_no 				= $request->reference_no;
-			$Salesorder->sales_order_payment_amount 			= $request->payment_amount;
+			//$Salesorder->sales_order_mode_of_payment 			= $request->mode_of_payment;
+			//$Salesorder->sales_order_date_of_payment 			= $request->date_of_payment;
+			//$Salesorder->sales_order_reference_no 			= $request->reference_no;
+			//$Salesorder->sales_order_payment_amount 			= $request->payment_amount;
 			
 			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
 			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
 			
 			$result = $Salesorder->save();
 			
-			$product_idx 			= $request->product_idx;
-			$order_quantity 		= $request->order_quantity;
-			$product_manual_price 	= $request->product_manual_price;
-			
 			/*Get Last ID*/
 			$last_transaction_id = $Salesorder->sales_order_id;
 			
+			/*Payment Option*/
+			$mode_of_payment 			= $request->mode_of_payment;
+			$date_of_payment 			= $request->date_of_payment;
+			$reference_no 				= $request->reference_no;
+			$payment_amount 			= $request->payment_amount;
+			
+			for($count = 0; $count < count($mode_of_payment); $count++)
+			{
+				
+					$mode_of_payment_item 	= $mode_of_payment[$count];
+					$date_of_payment_item 	= $date_of_payment[$count];
+					$reference_no_item 		= $reference_no[$count];
+					$payment_amount_item 	= $payment_amount[$count];
+				
+				$SalesOrderPaymentComponent = new SalesOrderPaymentModel();
+				
+				$SalesOrderPaymentComponent->sales_order_idx 				= $last_transaction_id;
+				$SalesOrderPaymentComponent->sales_order_mode_of_payment 	= $mode_of_payment_item;
+				$SalesOrderPaymentComponent->sales_order_date_of_payment 	= $date_of_payment_item;
+				$SalesOrderPaymentComponent->sales_order_reference_no 		= $reference_no_item;
+				$SalesOrderPaymentComponent->sales_order_payment_amount 	= $payment_amount_item;
+				
+				$SalesOrderPaymentComponent->save();
+				
+			}			
+			
+			$product_idx 			= $request->product_idx;
+			$order_quantity 		= $request->order_quantity;
+			$product_manual_price 	= $request->product_manual_price;
+
 			$gross_amount = 0;
 			
 			for($count = 0; $count < count($product_idx); $count++)
-			 {
+			{
 				
 					$sales_order_item_product_id 			= $product_idx[$count];
 					$sales_order_item_order_quantity 		= $order_quantity[$count];
@@ -196,7 +227,7 @@ class SalesOrderController extends Controller
 				
 				$SalesOrderComponentModel->save();
 				
-			 }
+			}
 
 			$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
 			$less_in_percentage 			= $request->sales_order_less_percentage/100;
@@ -260,13 +291,58 @@ class SalesOrderController extends Controller
 			
 			$result = $Salesorder->update();
 			
+			/*Get Last ID*/
+			$last_transaction_id = $request->sales_order_id;
+			
+			/*Payment Option*/
+			$payment_id = $request->payment_item_id;
+			$mode_of_payment 			= $request->mode_of_payment;
+			$date_of_payment 			= $request->date_of_payment;
+			$reference_no 				= $request->reference_no;
+			$payment_amount 			= $request->payment_amount;
+			
+			for($count = 0; $count < count($mode_of_payment); $count++)
+			{
+				
+					$mode_of_payment_item 	= $mode_of_payment[$count];
+					$date_of_payment_item 	= $date_of_payment[$count];
+					$reference_no_item 		= $reference_no[$count];
+					$payment_amount_item 	= $payment_amount[$count];
+					$payment_id_item 	= $payment_id[$count];
+			
+				if($payment_id_item==0){
+						
+					$SalesOrderPaymentComponent = new SalesOrderPaymentModel();
+					
+					$SalesOrderPaymentComponent->sales_order_idx 				= $last_transaction_id;
+					$SalesOrderPaymentComponent->sales_order_mode_of_payment 	= $mode_of_payment_item;
+					$SalesOrderPaymentComponent->sales_order_date_of_payment 	= $date_of_payment_item;
+					$SalesOrderPaymentComponent->sales_order_reference_no 		= $reference_no_item;
+					$SalesOrderPaymentComponent->sales_order_payment_amount 	= $payment_amount_item;
+					
+					$SalesOrderPaymentComponent->save();
+					
+				}else{
+					
+					$SalesOrderPaymentComponent = new SalesOrderPaymentModel();
+					
+					$SalesOrderPaymentComponent = SalesOrderPaymentModel::find($payment_id_item);
+					
+					$SalesOrderPaymentComponent->sales_order_mode_of_payment 	= $mode_of_payment_item;
+					$SalesOrderPaymentComponent->sales_order_date_of_payment 	= $date_of_payment_item;
+					$SalesOrderPaymentComponent->sales_order_reference_no 		= $reference_no_item;
+					$SalesOrderPaymentComponent->sales_order_payment_amount 	= $payment_amount_item;
+					
+					$SalesOrderPaymentComponent->update();
+					
+				}
+			
+			}		
+			
 			$product_idx 					= $request->product_idx;
 			$order_quantity 				= $request->order_quantity;
 			$product_manual_price 			= $request->product_manual_price;
 			$sales_order_product_item_ids 	= $request->sales_order_product_item_ids;
-			
-			/*Get Last ID*/
-			$last_transaction_id = $request->sales_order_id;
 			
 			$gross_amount = 0;
 			
@@ -369,4 +445,28 @@ class SalesOrderController extends Controller
 		return 'Deleted';
 		
 	}
+	
+	public function get_sales_order_payment_list(Request $request){		
+	
+			$data =  SalesOrderPaymentModel::where('teves_sales_order_payment_details.sales_order_idx', $request->sales_order_id)
+				->orderBy('sales_order_payment_details_id', 'asc')
+              	->get([
+					'teves_sales_order_payment_details.sales_order_payment_details_id',
+					'teves_sales_order_payment_details.sales_order_mode_of_payment',
+					'teves_sales_order_payment_details.sales_order_date_of_payment',
+					'teves_sales_order_payment_details.sales_order_reference_no',
+					'teves_sales_order_payment_details.sales_order_payment_amount',
+					]);
+		
+			return response()->json($data);
+	}
+
+	public function delete_sales_order_payment_item(Request $request){		
+			
+		$paymentitemID = $request->paymentitemID;
+		SalesOrderPaymentModel::find($paymentitemID)->delete();
+		return 'Deleted';
+		
+	}
+	
 }
