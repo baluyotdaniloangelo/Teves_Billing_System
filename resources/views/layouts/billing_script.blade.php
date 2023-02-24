@@ -69,7 +69,8 @@
 			let client_idx 				= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let plate_no 				= $("input[name=plate_no]").val();
 			let drivers_name 			= $("input[name=drivers_name]").val();
-			let product_idx 			= $("#product_idx").val();
+			//let product_idx 			= $("#product_idx").val();
+			let product_idx 				= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-id');
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 			
@@ -183,7 +184,7 @@
 					document.getElementById("update_client_idx").value = response[0].client_name;
 					
 					document.getElementById("update_plate_no").value = response[0].plate_no;
-					document.getElementById("update_product_idx").value = response[0].product_idx;
+					document.getElementById("update_product_idx").value = response[0].product_name;
 					document.getElementById("update_product_manual_price").value = response[0].product_price;
 					document.getElementById("update_drivers_name").value = response[0].drivers_name;
 					document.getElementById("update_order_quantity").value = response[0].order_quantity;
@@ -223,7 +224,8 @@
 			let client_idx 						= $("#update_client_name option[value='" + $('#update_client_id').val() + "']").attr('data-id');
 			let plate_no 						= $("input[name=update_plate_no]").val();
 			let drivers_name 					= $("input[name=update_drivers_name]").val();
-			let product_idx 					= $("#update_product_idx").val();
+			//let product_idx 					= $("#update_product_idx").val();
+			let product_idx 					= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-id');
 			let update_product_manual_price 	= $("#update_product_manual_price").val();
 			let order_quantity 					= $("input[name=update_order_quantity]").val();
 			

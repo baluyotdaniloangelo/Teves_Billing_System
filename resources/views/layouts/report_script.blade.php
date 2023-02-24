@@ -191,7 +191,7 @@
 	
 	function download_billing_report_excel(){
 		  
-			let client_idx 		= $("#client_idx").val();
+			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 		 		  
@@ -209,7 +209,7 @@
 	
 	function download_billing_report_pdf(){
 		  
-			let client_idx 		= $("#client_idx").val();
+			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 			let less_per_liter 	= $("input[name=less_per_liter]").val();
@@ -245,7 +245,7 @@
 
 			document.getElementById('ReceivableformNew').className = "g-3 needs-validation was-validated";
 
-			let client_idx 				= $("#client_idx").val();
+			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 			

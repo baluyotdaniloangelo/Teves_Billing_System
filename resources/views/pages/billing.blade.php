@@ -182,14 +182,13 @@
 						  <div class="col-sm-9">  
 						  
 							  <div class="input-group">
-									<select class="form-control form-select" aria-label="Product" name="product_idx" id="product_idx" required>
-										  <option selected="" disabled="" value="">Choose...</option>
-											@foreach ($product_data as $product_data_cols)
-												<option value="{{$product_data_cols->product_id}}">
-												{{$product_data_cols->product_name}} | <span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>&nbsp;{{$product_data_cols->product_price}}
-												</option>
-											@endforeach
-									</select>
+							  
+									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off">
+									<datalist id="product_name">
+										@foreach ($product_data as $product_data_cols)
+											<option label="{{$product_data_cols->product_name}} | {{$product_data_cols->product_price}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}">
+										@endforeach
+									</datalist>
 									
 									<span class="input-group-text">Manual Price</span>
 									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="product_manual_price" id="product_manual_price" value="">
@@ -205,8 +204,14 @@
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" required>
 							  <span class="valid-feedback" id="order_quantityError"></span>						  
 						  </div>
-						</div>							
-									
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="order_date" class="col-sm-3 col-form-label">Amount</label>
+						  <div class="col-sm-9">
+							
+						  </div>
+						</div>			
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
@@ -301,15 +306,12 @@
 						  <label for="update_product_idx" class="col-sm-3 col-form-label">Product</label>
 						  <div class="col-sm-9">			 
 							<div class="input-group mb-3">
-									<select class="form-control form-select" aria-label="Product" name="update_product_idx" id="update_product_idx" required>
-										  <option selected="" disabled="" value="">Choose...</option>
-											@foreach ($product_data as $product_data_cols)
-												<option value="{{$product_data_cols->product_id}}">
-												{{$product_data_cols->product_name}} | <span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>&nbsp;{{$product_data_cols->product_price}}
-												</option>
-											@endforeach
-									</select>
-									
+									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off">
+									<datalist id="update_product_name">
+										@foreach ($product_data as $product_data_cols)
+											<option label="{{$product_data_cols->product_name}} | {{$product_data_cols->product_price}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}">
+										@endforeach
+									</datalist>
 									<span class="input-group-text">Manual Price</span>
 									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="">
 									<span class="valid-feedback" id="update_product_idxError"></span>
