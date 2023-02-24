@@ -112,7 +112,7 @@
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-2 needs-validation" id="BillingformNew">
+					  <form class="g-3 needs-validation" id="BillingformNew">
 					  
 						<div class="row mb-2">
 						  <label for="order_date" class="col-sm-3 col-form-label">Date</label>
@@ -141,7 +141,7 @@
 						<div class="row mb-2">
 						  <label for="client_idx" class="col-sm-3 col-form-label">Client</label>
 						  <div class="col-sm-9">
-							<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
+							<input class="form-control" list="client_name" name="client_name" id="client_idx" required autocomplete="off" value="">
 								<datalist id="client_name">
 									@foreach ($client_data as $client_data_cols)
 										<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
@@ -183,15 +183,17 @@
 						  
 							  <div class="input-group">
 							  
-									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off">
+									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()">
 									<datalist id="product_name">
 										@foreach ($product_data as $product_data_cols)
-											<option label="{{$product_data_cols->product_name}} | {{$product_data_cols->product_price}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}">
+											<span style="font-family: DejaVu Sans; sans-serif;">
+											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+											</span>
 										@endforeach
 									</datalist>
 									
 									<span class="input-group-text">Manual Price</span>
-									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="product_manual_price" id="product_manual_price" value="">
+									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="product_manual_price" id="product_manual_price" value="" step=".01" onchange="TotalAmount()">
 									<span class="valid-feedback" id="product_idxError"></span>
 									
 								</div>
@@ -201,7 +203,7 @@
 						<div class="row mb-2">
 						  <label for="order_quantity" class="col-sm-3 col-form-label">Quantity</label>
 						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" required>
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" required step=".01" onchange="TotalAmount()" >
 							  <span class="valid-feedback" id="order_quantityError"></span>						  
 						  </div>
 						</div>	
@@ -209,9 +211,9 @@
 						<div class="row mb-2">
 						  <label for="order_date" class="col-sm-3 col-form-label">Amount</label>
 						  <div class="col-sm-9">
-							
+								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount">0.00</span>
 						  </div>
-						</div>			
+						</div>
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
@@ -303,30 +305,43 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="update_product_idx" class="col-sm-3 col-form-label">Product</label>
-						  <div class="col-sm-9">			 
-							<div class="input-group mb-3">
-									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off">
+						  <label for="update_product_idx" class="col-sm-3 col-form-label">Product</label>						  
+						  <div class="col-sm-9">  
+						  
+							  <div class="input-group">
+							  
+									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
 									<datalist id="update_product_name">
 										@foreach ($product_data as $product_data_cols)
-											<option label="{{$product_data_cols->product_name}} | {{$product_data_cols->product_price}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}">
+											<span style="font-family: DejaVu Sans; sans-serif;">
+											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}" data-price="{{$product_data_cols->product_price}}" >
+											</span>
 										@endforeach
 									</datalist>
+									
 									<span class="input-group-text">Manual Price</span>
-									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="">
+									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="" step=".01" onchange="UpdateTotalAmount()">
 									<span class="valid-feedback" id="update_product_idxError"></span>
+									
+								</div>
 							</div>
-						</div>
 						</div>	
 						
 						<div class="row mb-2">
 						  <label for="update_order_quantity" class="col-sm-3 col-form-label">Quantity</label>
 						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_order_quantity" id="update_order_quantity" required>
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_order_quantity" id="update_order_quantity" required step=".01" onchange="UpdateTotalAmount()">
 							  <span class="valid-feedback" id="update_order_quantityError"></span>
 						  </div>
-						</div>							
-									
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="" class="col-sm-3 col-form-label">Amount</label>
+						  <div class="col-sm-9">
+								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount">0.00</span>
+						  </div>
+						</div>	
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">

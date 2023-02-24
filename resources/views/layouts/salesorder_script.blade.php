@@ -31,7 +31,7 @@
 			],
 			order: [[ 1, "asc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 3, 4,7] },
+					{ className: 'text-center', targets: [0, 1, 2, 4, 7] },
 			]
 		});
 				/**/

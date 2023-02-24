@@ -1,6 +1,4 @@
-
-
-   <script type="text/javascript">
+<script type="text/javascript">
 
 	<!--Load Table-->
 	$("#generate_report").click(function(event){
@@ -313,6 +311,4 @@
 				}
 			   });		
 	  });
-
 </script>
-	
