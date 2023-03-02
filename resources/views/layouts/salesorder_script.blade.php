@@ -23,10 +23,11 @@
 					{data: 'sales_order_date'},
 					{data: 'sales_order_control_number'},
 					{data: 'client_name'},   
-					{data: 'sales_order_dr_number'},
-					{data: 'sales_order_or_number'},
+					//{data: 'sales_order_dr_number'},
+					//{data: 'sales_order_or_number'},
 					{data: 'sales_order_payment_term'},
 					{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'status', name: 'status', orderable: true, searchable: true},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "asc" ]],
@@ -886,7 +887,6 @@
 			   });	
 	  });	  
  
-
 	  /*Re-print*/
 	  $('body').on('click','#PrintSalesOrder',function(){	  
 	  
@@ -900,5 +900,34 @@
 			window.open(url);
 	  
 	  });
+	  
+	  function sales_update_status(id){
+		  
+			event.preventDefault();
+			var sales_status = document.getElementById("sales_order_status_"+id).value;
+		
+			  $.ajax({
+				url: "/update_sales_status",
+				type:"POST",
+				data:{
+				  sales_order_id:id,
+				  sales_status:sales_status,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+							
+				  console.log(response);
+				  if(response!='') {
+
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+		  
+	  }	    
  </script>
 	

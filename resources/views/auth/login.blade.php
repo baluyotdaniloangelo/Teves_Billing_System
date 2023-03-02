@@ -21,7 +21,7 @@
                   <div class="pt-4 pb-2">
 				  
 				  <div class="d-flex justify-content-center py-4">
-					<img src="{{asset('client_logo/logo.jpg')}}" alt="" style="width:150px; border-radius:5px;">
+					<img src="{{asset('client_logo/logo.png')}}" alt="" style="width:150px; border-radius:5px;">
 				  </div>
                   
 				  <h5 class="card-title text-center pb-0 fs-6" style="font-weight:bold !important; padding:0px !important">Billing System</h5>

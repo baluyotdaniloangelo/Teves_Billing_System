@@ -569,6 +569,7 @@ class ReportController extends Controller
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($purchase_order_data['purchase_supplier_name']."_PURCHASE_ORDER.pdf");
+		//return view('pages.report_billing_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component'));
 	}
 		
 	public function numberToWord($num = '')

@@ -23,10 +23,11 @@
 													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<th>D.R. Number</th>
-													<th>O.R. Number</th>
+													<!--<th>D.R. Number</th>
+													<th>O.R. Number</th>-->
 													<th>Payment Term</th>
 													<th>Total Due</th>
+													<th>Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -41,10 +42,11 @@
 													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<th>D.R. Number</th>
-													<th>O.R. Number</th>
+													<!--<th>D.R. Number</th>
+													<th>O.R. Number</th>-->
 													<th>Payment Term</th>
 													<th>Total Due</th>
+													<th>Status</th>
 													<th>Action</th>												
 												</tr>
 											</tfoot>	

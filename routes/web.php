@@ -125,6 +125,8 @@ Route::post('/update_sales_order_post', [SalesOrderController::class,'update_sal
 Route::post('/get_sales_order_product_list', [SalesOrderController::class,'get_sales_order_product_list'])->name('get_sales_order_product_list')->middleware('isLoggedIn');
 /*Delete Sales Order Product Item*/
 Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sales_order_item'])->name('delete_sales_order_item')->middleware('isLoggedIn');
+/*Update Sales Order Status*/
+Route::post('/update_sales_status', [SalesOrderController::class,'update_sales_status'])->name('update_sales_status')->middleware('isLoggedIn');
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 
@@ -133,8 +135,6 @@ Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_s
 
 /*Delete Purchase Order Payment Item*/
 Route::post('/delete_sales_order_payment_item', [SalesOrderController::class,'delete_sales_order_payment_item'])->name('delete_sales_order_payment_item')->middleware('isLoggedIn');
-
-
 
 /*Purchase Order*/
 /*January 24, 2023*/

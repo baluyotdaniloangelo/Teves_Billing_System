@@ -47,14 +47,32 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
-					'teves_sales_order_table.sales_order_control_number',
-					'teves_sales_order_table.sales_order_dr_number',
-					'teves_sales_order_table.sales_order_or_number',					
+					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
-					'teves_sales_order_table.sales_order_total_due']);
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_status']);
 		
 		return DataTables::of($data)
 				->addIndexColumn()
+				->addColumn('status', function($row){
+					
+									
+				if($row->sales_order_status=='Pending'){
+					$sales_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
+				}else if($row->sales_order_status=='Paid'){
+					$sales_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
+				}else{
+					$sales_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
+				}
+					
+					$actionBtn = '
+					<div align="center" class="action_table_menu_Product">
+					<select class="sales_order_status_'.$row->sales_order_id.'" name="sales_order_status_'.$row->sales_order_id.'" id="sales_order_status_'.$row->sales_order_id.'" onchange="sales_update_status('.$row->sales_order_id.')">	
+						'.$sales_status_selected.'
+						</select>
+					</div>';
+                    return $actionBtn;
+                })
                 ->addColumn('action', function($row){
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
@@ -64,7 +82,7 @@ class SalesOrderController extends Controller
 					</div>';
                     return $actionBtn;
                 })
-				->rawColumns(['action'])
+				->rawColumns(['action','status'])
                 ->make(true);
 		}		
     }
@@ -466,6 +484,18 @@ class SalesOrderController extends Controller
 		$paymentitemID = $request->paymentitemID;
 		SalesOrderPaymentModel::find($paymentitemID)->delete();
 		return 'Deleted';
+		
+	}
+
+	public function update_sales_status(Request $request){		
+			
+		$sales_order_id = $request->sales_order_id;
+		$sales_status = $request->sales_status;
+				
+				$salesOrderUpdate = new SalesOrderModel();
+				$salesOrderUpdate = SalesOrderModel::find($sales_order_id);
+				$salesOrderUpdate->sales_order_status = $sales_status;
+				$salesOrderUpdate->update();
 		
 	}
 	

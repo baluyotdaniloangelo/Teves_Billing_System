@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center justify-content-between">
 	<i class="bi bi-list toggle-sidebar-btn toggle_sidebar"></i>
       <div class="logo d-flex align-items-center">
-		<img src="{{asset('client_logo/logo.jpg')}}" class="rounded" alt="..." style="width:145px;">
+		<img src="{{asset('client_logo/logo-2.png')}}" class="rounded" alt="..." style="width:120px;">
         <span class="d-lg-block navbar_header_title">Billing System</span>
       </div>
       

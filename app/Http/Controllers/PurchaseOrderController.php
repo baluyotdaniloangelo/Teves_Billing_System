@@ -54,24 +54,24 @@ class PurchaseOrderController extends Controller
 				->addIndexColumn()
                 ->addColumn('status', function($row){
 					
-							
-		if($row->purchase_status=='Pending'){
-			$purchase_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
-		}else if($row->purchase_status=='Paid'){
-			$purchase_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
-		}else{
-			$purchase_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
-		}
+									
+				if($row->purchase_status=='Pending'){
+					$purchase_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
+				}else if($row->purchase_status=='Paid'){
+					$purchase_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
+				}else{
+					$purchase_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
+				}
 					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
-					<select class="purchase_order_status_'.$row->purchase_order_id.'" name="purchase_order_status_'.$row->purchase_order_id.'" id="purchase_order_status_'.$row->purchase_order_id.'" onchange="purchase_update_status('.$row->purchase_order_id.')">
-						
+					<select class="purchase_order_status_'.$row->purchase_order_id.'" name="purchase_order_status_'.$row->purchase_order_id.'" id="purchase_order_status_'.$row->purchase_order_id.'" onchange="purchase_update_status('.$row->purchase_order_id.')">	
 						'.$purchase_status_selected.'
 						</select>
 					</div>';
                     return $actionBtn;
                 })
+				
 				->addColumn('action', function($row){
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">

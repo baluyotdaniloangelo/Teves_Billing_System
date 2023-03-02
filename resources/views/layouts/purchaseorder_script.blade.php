@@ -955,7 +955,7 @@
 			var purchase_status = document.getElementById("purchase_order_status_"+id).value;
 		
 			  $.ajax({
-				url: "/update_purchase_status",
+				url: "/update_sales_status",
 				type:"POST",
 				data:{
 				  purchase_order_id:id,
