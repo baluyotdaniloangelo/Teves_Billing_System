@@ -200,6 +200,7 @@ class PurchaseOrderController extends Controller
 			$purchase_order_reference_no 	= $request->purchase_order_reference_no;
 			$purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
 			
+			if($purchase_order_bank!=''){
 			for($count = 0; $count < count($purchase_order_bank); $count++)
 			{
 				
@@ -219,6 +220,7 @@ class PurchaseOrderController extends Controller
 				
 				$PurchaseOrderPaymentComponent->save();
 				
+			}
 			}
 			
 			$product_idx 			= $request->product_idx;
@@ -352,7 +354,8 @@ class PurchaseOrderController extends Controller
 			$purchase_order_reference_no 	= $request->purchase_order_reference_no;
 			$purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
 			$purchase_order_payment_item_id = $request->purchase_order_payment_item_id;
-			
+
+			if($purchase_order_bank!=''){
 			for($count = 0; $count < count($purchase_order_bank); $count++)
 			{
 				
@@ -391,7 +394,7 @@ class PurchaseOrderController extends Controller
 				}
 				
 			}
-			
+			}
 					
 			$gross_amount = 0;
 			

@@ -29,9 +29,9 @@
 	
 		<tr>
 			<td rowspan="4" align="center" colspan="4">
-			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:160px;">
+			<img src="{{public_path('client_logo/logo-2.png')}}" style="width:120px;">
 			</td>
-			<td nowrap style="font-size:20px; font-weight:bold;" align="center" colspan="3">TEVES GASOLINE STATION</td>
+			<td nowrap style="font-size:20px; font-weight:bold;" align="center" colspan="3">G-T PETROLEUM PRODUCTS RETAILING</td>
 		</tr>
 		
 		<tr>
@@ -39,11 +39,11 @@
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 496-617-672-000</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 740-213-285-000</td>
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="3">GLENN F. TEVES - Proprietor</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">GLEZA F. TEVES - Proprietress</td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -61,8 +61,12 @@
 		<tr style="font-size:12px;">
 			<td colspan="2" align="left">ACCOUNT NAME :</td>
 			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['client_name'] }}</td>			
-			<td colspan="2" nowrap align="left">BILLING DATE :</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['billing_date'] }}</td>
+			<td colspan="2" nowrap align="left">BILLING DATE :</td>	
+				<?php
+				$_billing_date=date_create($receivable_data[0]['billing_date']);
+				$billing_date = strtoupper(date_format($_billing_date,"M/d/y"));
+				?>
+			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$billing_date;?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">

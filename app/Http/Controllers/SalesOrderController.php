@@ -186,6 +186,7 @@ class SalesOrderController extends Controller
 			$reference_no 				= $request->reference_no;
 			$payment_amount 			= $request->payment_amount;
 			
+			if($payment_amount!=''){
 			for($count = 0; $count < count($mode_of_payment); $count++)
 			{
 				
@@ -205,6 +206,7 @@ class SalesOrderController extends Controller
 				$SalesOrderPaymentComponent->save();
 				
 			}			
+			}
 			
 			$product_idx 			= $request->product_idx;
 			$order_quantity 		= $request->order_quantity;
@@ -319,6 +321,7 @@ class SalesOrderController extends Controller
 			$reference_no 				= $request->reference_no;
 			$payment_amount 			= $request->payment_amount;
 			
+			if($payment_amount!=''){
 			for($count = 0; $count < count($mode_of_payment); $count++)
 			{
 				
@@ -356,6 +359,7 @@ class SalesOrderController extends Controller
 				}
 			
 			}		
+			}
 			
 			$product_idx 					= $request->product_idx;
 			$order_quantity 				= $request->order_quantity;

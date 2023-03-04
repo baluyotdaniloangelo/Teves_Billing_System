@@ -61,8 +61,12 @@
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left">SUPPLIER'S NAME :</td>
 			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_name'] }}</td>			
-			<td colspan="3" nowrap align="left">DATE :</td>		
-			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_order_date'] }}</td>
+			<td colspan="3" nowrap align="left">DATE :</td>	
+				<?php
+				$_purchase_order_date=date_create($purchase_order_data['purchase_order_date']);
+				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/y"));
+				?>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;"><?=$purchase_order_date;?></td>
 		</tr>
 		
 		<tr style="font-size:10px;">
@@ -115,7 +119,11 @@
 					
 			<tr style="font-size:10px;border:0 solid #000;">
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:25px !important;">{{$purchase_payment_component_cols->purchase_order_bank}}</td>
-			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_payment_component_cols->purchase_order_date_of_payment}}</td>
+				<?php
+				$_purchase_order_date_of_payment=date_create($purchase_payment_component_cols['purchase_order_date_of_payment']);
+				$purchase_order_date_of_payment = strtoupper(date_format($_purchase_order_date_of_payment,"M/d/y"));
+				?>
+			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_order_date_of_payment;?></td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_payment_component_cols->purchase_order_reference_no}}</td>
 			<td colspan="2" align="right" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">	
 			<?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],2);?>
@@ -262,19 +270,26 @@
 			
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Date of Departure:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
-			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->purchase_date_of_departure}}</td>
+				<?php
+				$_purchase_date_of_departure=date_create($purchase_order_data['purchase_date_of_departure']);
+				$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/y"));
+				?>
+			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_departure;?></td>
 			
 		</tr>
 
 		<tr style="font-size:10px;border:0 solid #000;">
 		
-			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Plate No.:</td>
+			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Contact No.:</td>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->contact_number}}</td>
 			
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Date of Arrival:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
-			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->purchase_date_of_arrival}}</td>
-			
+				<?php
+				$_purchase_date_of_arrival=date_create($purchase_order_data['purchase_date_of_arrival']);
+				$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/y"));
+				?>
+			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_arrival;?></td>	
 		</tr>		
 		
 		<tr style="font-size:10px;border:0 solid #000;">

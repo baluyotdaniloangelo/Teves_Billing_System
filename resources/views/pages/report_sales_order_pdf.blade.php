@@ -61,8 +61,12 @@
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left">SOLD TO :</td>
 			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['client_name'] }}</td>			
-			<td colspan="3" nowrap align="left">DATE PRINTED:</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['sales_order_date'] }}</td>
+			<td colspan="3" nowrap align="left">DATE PRINTED:</td>
+				<?php
+				$_sales_order_date=date_create($sales_order_data[0]['sales_order_date']);
+				$sales_order_date = strtoupper(date_format($_sales_order_date,"M/d/y"));
+				?>
+			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$sales_order_date;?></td>
 		</tr>
 		
 		<tr style="font-size:10px;">
@@ -99,7 +103,7 @@
 		
 		<tr style="font-size:10px;border:0 solid #000;">		
 
-			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">DESCRIPTION</td>		
+			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:32px !important;">DESCRIPTION</td>		
 			<td colspan="2" nowrap align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">QUANTITY</td>
 			<td colspan="1" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;  background-color: #c6e0b4; font-weight:bold;">UNIT</td>		
 			<td colspan="3" nowrap align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; background-color: #c6e0b4; font-weight:bold;">UNIT PRICE</td>
@@ -120,7 +124,7 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 125 / count($sales_order_component);
+			$component_height = 135 / count($sales_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:10px;">
@@ -180,15 +184,19 @@
 		</tr>
 
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">DELIVERY METHOD</td>
+			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; font-weight:bold; background-color: #c6e0b4; height:32px !important;">DELIVERY METHOD</td>
 			<td colspan="4" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; font-weight:bold; background-color: #c6e0b4;">HAULER | DRIVER</td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; font-weight:bold; background-color: #c6e0b4;">REQUIRED DATE</td>			
 		</tr>		
 		 
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:25px !important;">{{$sales_order_data[0]->sales_order_delivery_method}}</td>
+			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:32px !important;">{{$sales_order_data[0]->sales_order_delivery_method}}</td>
 			<td colspan="4" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_hauler}}</td>
-			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_required_date}}</td>	
+			<?php
+				$_sales_order_required_date=date_create($sales_order_data[0]['sales_order_required_date']);
+				$sales_order_required_date = strtoupper(date_format($_sales_order_required_date,"M/d/y"));
+			?>
+			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$sales_order_required_date;?></td>	
 		</tr>
 		
 		<tr>
@@ -196,7 +204,7 @@
 		</tr>
 	  				
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="6" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
+			<td colspan="6" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:32px !important;">Instructions;</td>
 			<td colspan="4" align="center" style="border:1px solid #000; font-weight:bold;">NOTE</td>	
 		</tr>
 	    
@@ -209,11 +217,11 @@
 		</tr>
 		
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="10" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILS</td>			
+			<td colspan="10" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; font-weight:bold; background-color: #c6e0b4; height:32px !important;">PAYMENT DETAILS</td>			
 		</tr>		
 		 
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; font-weight:bold; height:25px !important;">MODE OF PAYMENT</td>
+			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; font-weight:bold; height:32px !important;">MODE OF PAYMENT</td>
 			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; font-weight:bold;">DATE OF PAYMENT</td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; font-weight:bold;">REFERENCE NO.</td>
 			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; font-weight:bold;">AMOUNT</td>			
@@ -224,10 +232,13 @@
 			
 			?>
 			@foreach ($sales_payment_component as $sales_payment_component_cols)
-					
+			<?php
+				$_sales_order_date_of_payment = date_create($sales_payment_component_cols['sales_order_date_of_payment']);
+				$sales_order_date_of_payment = strtoupper(date_format($_sales_order_date_of_payment,"M/d/y"));
+			?>	
 			<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:25px !important;">{{$sales_payment_component_cols->sales_order_mode_of_payment}}</td>
-			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_payment_component_cols->sales_order_date_of_payment}}</td>
+			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:32px !important;">{{$sales_payment_component_cols->sales_order_mode_of_payment}}</td>
+			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$sales_order_date_of_payment;?></td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_payment_component_cols->sales_order_reference_no}}</td>
 			<td colspan="2" align="right" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">	
 			<?=number_format($sales_payment_component_cols['sales_order_payment_amount'],2);?>
@@ -244,7 +255,7 @@
 		</tr>
 			
 		<tr style="font-size:10px;">
-			<td colspan="10" align="left" style="border-top:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">&nbsp;Sales order printed by:</td>	
+			<td colspan="10" align="left" style="border-top:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000; border-bottom:0px solid #000; font-style: italic; height:30px !important;">&nbsp;Sales order printed by:</td>	
 				
 		</tr>
 		<tr style="font-size:10px;">

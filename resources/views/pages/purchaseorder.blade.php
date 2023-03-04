@@ -535,7 +535,7 @@
 									</div>
 									
 									<div class="col-md-3">
-									  <label for="plate_number" class="form-label">Loading Terminal</label>
+									  <label for="plate_number" class="form-label">Plate Number</label>
 									  <input type="text" class="form-control" id="update_plate_number" name="update_plate_number" list="plate_number_list">
 											<datalist id="plate_number_list">
 												@foreach ($purchase_data_suggestion as $plate_number_cols)
@@ -545,7 +545,7 @@
 									</div>
 									
 									<div class="col-md-3">
-									  <label for="contact_number" class="form-label">Address</label>
+									  <label for="contact_number" class="form-label">Contact Number</label>
 									  <input type="text" class="form-control" id="update_contact_number" name="update_contact_number" list="contact_number_list">
 											<datalist id="contact_number_list">
 												@foreach ($purchase_data_suggestion as $contact_number_cols)

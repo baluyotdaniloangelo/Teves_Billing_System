@@ -33,10 +33,10 @@
 			<tr>
 			<td rowspan="3" align="right" colspan="5">
 
-			<img src="{{public_path('client_logo/logo.jpg')}}" style="width:160px;">
+			<img src="{{public_path('client_logo/logo-2.png')}}" style="width:160px;">
 
 			</td>
-			<td style="font-size:20px; font-weight:bold;" align="center" colspan="2">TEVES GASOLINE STATION</td>
+			<td style="font-size:20px; font-weight:bold;" align="center" colspan="2">G-T PETROLEUM PRODUCTS RETAILING</td>
 		</tr>
 		
 		<tr>
@@ -56,10 +56,10 @@
 			<td colspan="1" nowrap align="right">P.O Period:</td>
 			<?php
 			$_po_start_date=date_create("$start_date");
-			$po_start_date = date_format($_po_start_date,"m/d/y");
+			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/y"));
 			
 			$_po_end_date=date_create("$end_date");
-			$po_end_date = date_format($_po_end_date,"m/d/y");
+			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/y"));
 			?>
 			<td colspan="3" nowrap align="left" style="border-bottom:1px solid #000;">&nbsp;<?=$po_start_date;?> - <?=$po_end_date;?></td>
 		</tr>
@@ -68,7 +68,7 @@
 			<td colspan="1" align="left">Address:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_address'] }}</td>			
 			<td colspan="1" align="right">Billing Date:</td>
-			<td colspan="3" align="left" style="border-bottom:1px solid #000;">&nbsp;<?php echo date('m/d/y'); ?></td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">&nbsp;<?php echo strtoupper(date('M/d/y')); ?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -97,9 +97,13 @@
 			$total_liters = 0;
 			?>
 			@foreach ($billing_data as $billing_data_cols)
+			<?php
+			$_order_date=date_create("$billing_data_cols->order_date");
+			$order_date = strtoupper(date_format($_order_date,"M/d/y"));
+			?>
 			<tr class="data_tr" >
 				<td align="center" nowrap style="border:1px solid #000;"><?=$no;?></td>
-				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_date}}</td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=$order_date;?></td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_time}}</td>
 				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->drivers_name}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
