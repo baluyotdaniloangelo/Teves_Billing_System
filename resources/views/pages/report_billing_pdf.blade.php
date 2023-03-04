@@ -33,7 +33,7 @@
 			<tr>
 			<td rowspan="3" align="right" colspan="5">
 
-			<img src="{{public_path('client_logo/logo-2.png')}}" style="width:160px;">
+			<img src="{{public_path('client_logo/logo-2.jpg')}}" style="width:160px;">
 
 			</td>
 			<td style="font-size:20px; font-weight:bold;" align="center" colspan="2">G-T PETROLEUM PRODUCTS RETAILING</td>
