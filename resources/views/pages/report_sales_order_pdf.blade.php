@@ -64,7 +64,7 @@
 			<td colspan="3" nowrap align="left">DATE PRINTED:</td>
 				<?php
 				$_sales_order_date=date_create($sales_order_data[0]['sales_order_date']);
-				$sales_order_date = strtoupper(date_format($_sales_order_date,"M/d/y"));
+				$sales_order_date = strtoupper(date_format($_sales_order_date,"M/d/Y"));
 				?>
 			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$sales_order_date;?></td>
 		</tr>
@@ -194,7 +194,7 @@
 			<td colspan="4" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$sales_order_data[0]->sales_order_hauler}}</td>
 			<?php
 				$_sales_order_required_date=date_create($sales_order_data[0]['sales_order_required_date']);
-				$sales_order_required_date = strtoupper(date_format($_sales_order_required_date,"M/d/y"));
+				$sales_order_required_date = strtoupper(date_format($_sales_order_required_date,"M/d/Y"));
 			?>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$sales_order_required_date;?></td>	
 		</tr>
@@ -234,7 +234,7 @@
 			@foreach ($sales_payment_component as $sales_payment_component_cols)
 			<?php
 				$_sales_order_date_of_payment = date_create($sales_payment_component_cols['sales_order_date_of_payment']);
-				$sales_order_date_of_payment = strtoupper(date_format($_sales_order_date_of_payment,"M/d/y"));
+				$sales_order_date_of_payment = strtoupper(date_format($_sales_order_date_of_payment,"M/d/Y"));
 			?>	
 			<tr style="font-size:10px;border:0 solid #000;">
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:32px !important;">{{$sales_payment_component_cols->sales_order_mode_of_payment}}</td>

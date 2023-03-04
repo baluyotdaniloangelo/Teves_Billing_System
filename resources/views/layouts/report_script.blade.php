@@ -115,7 +115,7 @@
 							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 
 							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
-							$('#billing_date_info').text('<?php echo date('m/d/Y'); ?>');	
+							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf()"> PDF</button>'+

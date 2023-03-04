@@ -64,7 +64,7 @@
 			<td colspan="3" nowrap align="left">DATE :</td>	
 				<?php
 				$_purchase_order_date=date_create($purchase_order_data['purchase_order_date']);
-				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/y"));
+				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
 				?>
 			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;"><?=$purchase_order_date;?></td>
 		</tr>
@@ -121,7 +121,7 @@
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;height:25px !important;">{{$purchase_payment_component_cols->purchase_order_bank}}</td>
 				<?php
 				$_purchase_order_date_of_payment=date_create($purchase_payment_component_cols['purchase_order_date_of_payment']);
-				$purchase_order_date_of_payment = strtoupper(date_format($_purchase_order_date_of_payment,"M/d/y"));
+				$purchase_order_date_of_payment = strtoupper(date_format($_purchase_order_date_of_payment,"M/d/Y"));
 				?>
 			<td colspan="2" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_order_date_of_payment;?></td>
 			<td colspan="3" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_payment_component_cols->purchase_order_reference_no}}</td>
@@ -272,7 +272,7 @@
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
 				$_purchase_date_of_departure=date_create($purchase_order_data['purchase_date_of_departure']);
-				$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/y"));
+				$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/Y"));
 				?>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_departure;?></td>
 			
@@ -287,7 +287,7 @@
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
 				$_purchase_date_of_arrival=date_create($purchase_order_data['purchase_date_of_arrival']);
-				$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/y"));
+				$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/Y"));
 				?>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_arrival;?></td>	
 		</tr>		

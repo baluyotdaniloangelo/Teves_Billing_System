@@ -56,10 +56,10 @@
 			<td colspan="1" nowrap align="right">P.O Period:</td>
 			<?php
 			$_po_start_date=date_create("$start_date");
-			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/y"));
+			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
 			
 			$_po_end_date=date_create("$end_date");
-			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/y"));
+			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/Y"));
 			?>
 			<td colspan="3" nowrap align="left" style="border-bottom:1px solid #000;">&nbsp;<?=$po_start_date;?> - <?=$po_end_date;?></td>
 		</tr>
@@ -68,7 +68,7 @@
 			<td colspan="1" align="left">Address:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_address'] }}</td>			
 			<td colspan="1" align="right">Billing Date:</td>
-			<td colspan="3" align="left" style="border-bottom:1px solid #000;">&nbsp;<?php echo strtoupper(date('M/d/y')); ?></td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">&nbsp;<?php echo strtoupper(date('M/d/Y')); ?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -99,7 +99,7 @@
 			@foreach ($billing_data as $billing_data_cols)
 			<?php
 			$_order_date=date_create("$billing_data_cols->order_date");
-			$order_date = strtoupper(date_format($_order_date,"M/d/y"));
+			$order_date = strtoupper(date_format($_order_date,"M/d/Y"));
 			?>
 			<tr class="data_tr" >
 				<td align="center" nowrap style="border:1px solid #000;"><?=$no;?></td>

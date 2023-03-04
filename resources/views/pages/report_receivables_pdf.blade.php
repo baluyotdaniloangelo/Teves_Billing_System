@@ -64,7 +64,7 @@
 			<td colspan="2" nowrap align="left">BILLING DATE :</td>	
 				<?php
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
-				$billing_date = strtoupper(date_format($_billing_date,"M/d/y"));
+				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 				?>
 			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$billing_date;?></td>
 		</tr>
