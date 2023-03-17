@@ -16,8 +16,8 @@
 		.data_th {
 			padding: 5px;
 			font-size: 10px;
-			color:#fff;
-			background-color:#000;
+			color:#000;
+			background-color:#c6e0b4;
 		}
 		.data_tr {
 			padding: 5px;

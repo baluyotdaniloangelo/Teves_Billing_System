@@ -104,6 +104,7 @@ class ReportController extends Controller
 		$client_idx = $request->client_idx;
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
+		$less_per_liter = $request->less_per_liter;
 		
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
@@ -138,7 +139,7 @@ class ReportController extends Controller
 	   ini_set('max_execution_time', 0);
        ini_set('memory_limit', '4000M');
        try {
-		   
+		   ob_start();
            $spreadSheet = new Spreadsheet();
            
            $spreadSheet = IOFactory::load(public_path('/template/Billing Statement.xlsx'));
@@ -154,7 +155,7 @@ class ReportController extends Controller
 					'borders' => array(
 						'bottom' => array(
 							'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-							'color' => array('argb' => '000000'),
+							'color' => array('rgb' => '000000'),
 						),
 					),
 				);
@@ -188,7 +189,8 @@ class ReportController extends Controller
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time']);
 					
-			$total_payable = 0;						
+			$total_liters = 0;						
+			$total_payable = 0;
 			
 			foreach ($billing_data as $billing_data_column){
 			
@@ -206,27 +208,53 @@ class ReportController extends Controller
 					->setCellValue('K'.$no_excl, $billing_data_column['order_total_amount']);
 					
 					$spreadSheet->getActiveSheet()->getStyle("A$no_excl:K$no_excl")->applyFromArray($styleBorder);
+					
 					$total_payable+= $billing_data_column['order_total_amount'];
 					
+					if($billing_data_column['product_unit_measurement']=='L'){
+						$total_liters += $billing_data_column['order_quantity'];
+					}else{
+						$total_liters += 0;
+					}
 			/*Increment*/
 			$no_excl++;
 			$n++;
 			} 
 			
+			$spreadSheet->getActiveSheet()->getStyle("H".$no_excl.":I".$no_excl)->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('H'.$no_excl, 'Total Volume:')
+					->setCellValue('I'.$no_excl, $total_liters);
+					
+			$spreadSheet->getActiveSheet()->getStyle('H'.($no_excl+1).":I".($no_excl+1))->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('H'.($no_excl+1), 'Less per liter:')
+					->setCellValue('I'.($no_excl+1), number_format(($less_per_liter*$total_liters),2));		
+			
 			$spreadSheet->getActiveSheet()->getStyle("J".$no_excl.":K".$no_excl)->getFont()->setBold(true);
 			$spreadSheet->getActiveSheet()
-					->setCellValue('J'.$no_excl, "Total Payable:")
-					->setCellValue('K'.$no_excl, "=SUM(K11:K".($no_excl-1).")");
+					->setCellValue('J'.($no_excl), 'Total Due:')
+					->setCellValue('K'.($no_excl), number_format(($total_payable),2));
+			
+			$spreadSheet->getActiveSheet()->getStyle("J".($no_excl+1).":K".($no_excl+1))->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('J'.($no_excl+1), '')
+					->setCellValue('K'.($no_excl+1), number_format(($less_per_liter*$total_liters),2));			
+			
+			$spreadSheet->getActiveSheet()->getStyle("J".($no_excl+2).":K".($no_excl+2))->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('J'.($no_excl+2), 'Total Payable:')
+					->setCellValue('K'.($no_excl+2), number_format($total_payable-($less_per_liter*$total_liters),2));
 			
 			/*USER INFO*/
 			$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$spreadSheet->getActiveSheet()
-					->setCellValue('A'.($no_excl+4), "Prepared by:")
-					->setCellValue('B'.($no_excl+4), $user_data['user_real_name']);
-			$spreadSheet->getActiveSheet()->getStyle('B'.($no_excl+4))->applyFromArray($styleBorder_prepared);
+					->setCellValue('A'.($no_excl+6), 'Prepared by:')
+					->setCellValue('B'.($no_excl+6), $user_data['user_real_name']);
+			$spreadSheet->getActiveSheet()->getStyle('B'.($no_excl+6))->applyFromArray($styleBorder_prepared);
 			
 			$spreadSheet->getActiveSheet()
-					->setCellValue('B'.($no_excl+5), $user_data['user_job_title']);
+					->setCellValue('B'.($no_excl+7), $user_data['user_job_title']);
 			
 			$spreadSheet->getActiveSheet()
 			->getStyle("A11:A$no_excl")
@@ -262,18 +290,15 @@ class ReportController extends Controller
 			->getStyle("K11:K$no_excl")
 			->getAlignment()
 			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-			/*
-			foreach(range('A','K') as $columnID) {
-				$spreadSheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
-			}
-			*/
+			
 		  $Excel_writer = new Xlsx($spreadSheet);
-           header('Content-Type: application/vnd.ms-excel');
+		  
+		   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
            header("Content-Disposition: attachment;filename=".$client_name." - Billing Statement.xlsx");
            header('Cache-Control: max-age=0');
            ob_end_clean();
-           $Excel_writer->save('php://output')->export('pdf');;
-		   //
+           $Excel_writer->save('php://output');
+		   //$Excel_writer->save('php://output')->export('pdf');
            exit();
        
 	   } catch (Exception $e) {
