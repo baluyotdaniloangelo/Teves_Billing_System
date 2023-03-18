@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesModel;
+use App\Models\ProductModel;
 
 use App\Models\SalesOrderModel;
 use App\Models\SalesOrderComponentModel;
@@ -40,10 +41,15 @@ class ReportController extends Controller
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$client_data = ClientModel::all();
+			
+			$product_data = ProductModel::all();
+			
+			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
+			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
 		}
 
-		return view("pages.report", compact('data','title','client_data'));
+		return view("pages.report", compact('data','title','client_data','drivers_name','plate_no','product_data'));
 		
 	}   
 	
@@ -71,6 +77,7 @@ class ReportController extends Controller
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
+					'teves_billing_table.billing_id',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -272,22 +279,22 @@ class ReportController extends Controller
 			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 			$spreadSheet->getActiveSheet()
-			->getStyle("H11:H$no_excl")
+			->getStyle("H11:H".($no_excl+2))
 			->getAlignment()
 			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 			
 			$spreadSheet->getActiveSheet()
-			->getStyle("I11:I$no_excl")
+			->getStyle("I11:I".($no_excl+2))
 			->getAlignment()
 			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 			
 			$spreadSheet->getActiveSheet()
-			->getStyle("J11:J$no_excl")
+			->getStyle("J11:J".($no_excl+2))
 			->getAlignment()
 			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 			
 			$spreadSheet->getActiveSheet()
-			->getStyle("K11:K$no_excl")
+			->getStyle("K11:K".($no_excl+2))
 			->getAlignment()
 			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 			
@@ -298,7 +305,6 @@ class ReportController extends Controller
            header('Cache-Control: max-age=0');
            ob_end_clean();
            $Excel_writer->save('php://output');
-		   //$Excel_writer->save('php://output')->export('pdf');
            exit();
        
 	   } catch (Exception $e) {
@@ -333,6 +339,7 @@ class ReportController extends Controller
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
+					'teves_billing_table.billing_id',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
