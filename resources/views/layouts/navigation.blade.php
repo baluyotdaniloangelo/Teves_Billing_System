@@ -114,7 +114,11 @@
 			<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
               <i class="bi bi-file-person navbar_icon" title="Manage Client list"></i><span>Client</span>
             </a>
-			
+			<?php } ?>
+			<?php if($data->user_type=="Admin"){ ?>
+			<a href="{{ route('supplier') }}" class="sidebar_li_a" title="Manage Supplier list">
+              <i class="bi bi-file-person navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
+            </a>
 			<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
               <i class="bi bi-people navbar_icon" title="Manage System User"></i><span>User</span>
             </a>

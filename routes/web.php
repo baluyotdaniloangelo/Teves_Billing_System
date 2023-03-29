@@ -5,6 +5,7 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
@@ -167,4 +168,17 @@ Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales
 Route::get('/generate_purchase_order_pdf', [ReportController::class,'generate_purchase_order_pdf'])->name('generate_purchase_order_pdf')->middleware('isLoggedIn');
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
+
+/*Dev Date Mar 27 2023*/
+/*Load Supplier List*/
+Route::get('/supplier', [SupplierController::class,'supplier'])->name('supplier')->middleware('isLoggedIn');
+Route::get('supplier/list', [SupplierController::class, 'getSupplierList'])->name('getSupplierList')->middleware('isLoggedIn');
+/*Create Product*/
+Route::post('/create_supplier_post', [SupplierController::class,'create_supplier_post'])->name('create_supplier_post')->middleware('isLoggedIn');
+/*GET Product Info*/
+Route::post('/supplier_info', [SupplierController::class, 'supplier_info'])->name('supplier_info')->middleware('isLoggedIn');
+/*Update Product*/
+Route::post('/update_supplier_post', [SupplierController::class,'update_supplier_post'])->name('update_supplier_post')->middleware('isLoggedIn');
+/*Confirm Delete Product*/
+Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_supplier_confirmed'])->name('delete_supplier_confirmed')->middleware('isLoggedIn');
 

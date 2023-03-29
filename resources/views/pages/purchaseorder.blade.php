@@ -67,12 +67,25 @@
 
 									<div class="row">
 
-
-										<div class="col-md-3">
+										<div class="col-md-6">
 										  <label for="purchase_order_date" class="form-label">Date</label>
 										  <input type="date" class="form-control" id="purchase_order_date" name="purchase_order_date" value="<?=date('Y-m-d');?>">
 										</div>
-									
+										
+										<div class="col-md-6">
+										<label for="supplier_idx" class="form-label">Supplier's Name</label>
+	
+										 <input class="form-control" list="supplier_name" name="supplier_name" id="supplier_idx" required autocomplete="off">
+											<datalist id="supplier_name">
+											  @foreach ($supplier_data as $supplier_data_cols)
+											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">
+											  @endforeach
+											</datalist>
+																				
+										<span class="valid-feedback" id="supplier_idxError"></span>
+										</div>
+										
+										<!--
 										<div class="col-md-3">
 										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
 										  <input type="text" class="form-control" id="purchase_supplier_name" name="purchase_supplier_name" required list="purchase_supplier_name_list">
@@ -103,6 +116,7 @@
 												@endforeach
 											  </datalist>
 										</div>	
+										-->
 										
 									</div>
 									
@@ -348,12 +362,25 @@
 
 									<div class="row">
 
-
-										<div class="col-md-3">
+										<div class="col-md-6">
 										  <label for="purchase_order_date" class="form-label">Date</label>
 										  <input type="date" class="form-control" id="update_purchase_order_date" name="update_purchase_order_date" value="<?=date('Y-m-d');?>">
 										</div>
 									
+										<div class="col-md-6">
+										<label for="supplier_idx" class="form-label">Supplier's Name</label>
+	
+										 <input class="form-control" list="supplier_name" name="supplier_idx" id="supplier_idx" required autocomplete="off">
+											<datalist id="supplier_name">
+											  @foreach ($supplier_data as $supplier_data_cols)
+											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">
+											  @endforeach
+											</datalist>
+																				
+										<span class="valid-feedback" id="supplier_idxError"></span>
+										</div>
+										
+										<!--
 										<div class="col-md-3">
 										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
 										  <input type="text" class="form-control" id="update_purchase_supplier_name" name="update_purchase_supplier_name" required list="purchase_supplier_name_list">
@@ -384,6 +411,7 @@
 												@endforeach
 											  </datalist>
 										</div>	
+										-->
 										
 									</div>
 									

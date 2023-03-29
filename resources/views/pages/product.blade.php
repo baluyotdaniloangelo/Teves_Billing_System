@@ -109,8 +109,14 @@
 						  <label for="product_unit_measurement" class="col-sm-3 col-form-label">Unit of Measurement</label>
 						  <div class="col-sm-9">
 							<select class="form-control form-select " name="product_unit_measurement" id="product_unit_measurement" required>				
-									<option value="L">Liter</option>
-									<option value="PC">Pieces</option>
+									<option value="L">Liter | L</option>
+									<option value="mL">Milliliter | mL</option>
+									<option value="g">Gram | g</option>
+									<option value="kg">Kilo | kg</option>
+									<option value="PC">Pieces | PC</option>
+									<option value="oz">Ounce | oz</option>
+									<option value="Pail">Pail</option>
+									<option value="Drum">Drum</option>
 							</select>
 							<span class="valid-feedback" id="product_unit_measurementError"></span>
 						  </div>
@@ -165,8 +171,14 @@
 						  <label for="update_product_unit_measurement" class="col-sm-3 col-form-label">Unit of Measurement</label>
 						  <div class="col-sm-9">
 							<select class="form-control form-select " name="update_product_unit_measurement" id="update_product_unit_measurement" required>
-									<option value="L">Liter</option>
-									<option value="PC">Pieces</option>
+									<option value="L">Liter | L</option>
+									<option value="mL">Milliliter | mL</option>
+									<option value="g">Gram | g</option>
+									<option value="kg">Kilo | kg</option>
+									<option value="PC">Pieces | PC</option>
+									<option value="oz">Ounce | oz</option>
+									<option value="Pail">Pail</option>
+									<option value="Drum">Drum</option>
 							</select>
 							<span class="valid-feedback" id="update_product_unit_measurementError"></span>
 						  </div>
@@ -184,11 +196,6 @@
                   </div>
                 </div>
              </div>
-	
-
     </section>
 </main>
-
-
 @endsection
-

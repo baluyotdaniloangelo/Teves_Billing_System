@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\PurchaseOrderModel;
 use App\Models\ProductModel;
+use App\Models\SupplierModel;
 use App\Models\PurchaseOrderComponentModel;
 use App\Models\PurchaseOrderPaymentModel;
 use Session;
@@ -22,15 +23,15 @@ class PurchaseOrderController extends Controller
 		if(Session::has('loginID')){
 			
 			$product_data = ProductModel::all();
+			$supplier_data = SupplierModel::all();	
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_supplier_name','purchase_supplier_tin','purchase_supplier_address','purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();
-			
+			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 		
 		}
 
-		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion'));
+		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion','supplier_data'));
 		
 	}   
 	
@@ -141,11 +142,11 @@ class PurchaseOrderController extends Controller
 	public function create_purchase_order_post(Request $request){
 
 		$request->validate([
-			'purchase_supplier_name'  	=> 'required',
+			'supplier_idx'  	=> 'required',
 			'product_idx'  	=> 'required'
         ], 
         [
-			'purchase_supplier_name.required' 	=> "Supplier's Name is Required",
+			'supplier_idx.required' 	=> "Supplier's Name is Required",
 			'product_idx.required'  	=> 'Product is Required'
         ]
 		);
@@ -154,12 +155,12 @@ class PurchaseOrderController extends Controller
 			
 			$Purchaseorder = new PurchaseOrderModel();
 			$Purchaseorder->purchase_order_control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
-			$Purchaseorder->purchase_supplier_name 					= $request->purchase_supplier_name;
+			//$Purchaseorder->purchase_supplier_name 					= $request->purchase_supplier_name;
 			
 			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
-			$Purchaseorder->purchase_supplier_tin					= $request->purchase_supplier_tin;
-			$Purchaseorder->purchase_supplier_name					= $request->purchase_supplier_name;
-			$Purchaseorder->purchase_supplier_address				= $request->purchase_supplier_address;
+			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
+			//$Purchaseorder->purchase_supplier_name					= $request->purchase_supplier_name;
+			//$Purchaseorder->purchase_supplier_address				= $request->purchase_supplier_address;
 					
 			$Purchaseorder->purchase_order_sales_order_number		= $request->purchase_order_sales_order_number;
 			$Purchaseorder->purchase_order_collection_receipt_no	= $request->purchase_order_collection_receipt_no;
@@ -293,23 +294,20 @@ class PurchaseOrderController extends Controller
 	public function update_purchase_order_post(Request $request){
 
 		$request->validate([
-			'purchase_supplier_name'  	=> 'required',
+			'supplier_idx'  	=> 'required',
 			'product_idx'  	=> 'required'
         ], 
         [
-			'purchase_supplier_name.required' 	=> "Supplier's Name is Required",
+			'supplier_idx.required' 	=> "Supplier's Name is Required",
 			'product_idx.required'  	=> 'Product is Required'
         ]
 		);
 
 			$Purchaseorder = new PurchaseOrderModel();
 			$Purchaseorder = PurchaseOrderModel::find($request->purchase_order_id);
-			$Purchaseorder->purchase_supplier_name 					= $request->purchase_supplier_name;
 			
 			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
-			$Purchaseorder->purchase_supplier_tin					= $request->purchase_supplier_tin;
-			$Purchaseorder->purchase_supplier_name					= $request->purchase_supplier_name;
-			$Purchaseorder->purchase_supplier_address				= $request->purchase_supplier_address;
+			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
 					
 			$Purchaseorder->purchase_order_sales_order_number		= $request->purchase_order_sales_order_number;
 			$Purchaseorder->purchase_order_collection_receipt_no	= $request->purchase_order_collection_receipt_no;
@@ -317,9 +315,9 @@ class PurchaseOrderController extends Controller
 			$Purchaseorder->purchase_order_delivery_receipt_no		= $request->purchase_order_delivery_receipt_no;
 				
 			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
-			$Purchaseorder->purchase_loading_terminal					= $request->purchase_loading_terminal;
+			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
 			//$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
-			//$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
+			//$Purchaseorder->purchase_order_date_of_arrival		= $request->purchase_order_date_of_arrival;
 					
 			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
 			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;

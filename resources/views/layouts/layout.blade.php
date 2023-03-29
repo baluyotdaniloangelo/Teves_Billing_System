@@ -24,6 +24,11 @@ else if (Request::is('client')){
 @include('layouts.client_script')
 <?php
 }
+else if (Request::is('supplier')){
+?>
+@include('layouts.supplier_script')
+<?php
+}
 else if (Request::is('report')){
 ?>
 @include('layouts.report_script')

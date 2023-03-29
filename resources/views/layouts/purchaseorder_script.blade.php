@@ -220,9 +220,7 @@
 			document.getElementById('PurchaseOrderformNew').className = "g-3 needs-validation was-validated";
 
 			let purchase_order_date 					= $("input[name=purchase_order_date]").val();
-			let purchase_supplier_tin 					= $("input[name=purchase_supplier_tin]").val();
-			let purchase_supplier_name 					= $("input[name=purchase_supplier_name]").val();
-			let purchase_supplier_address 				= $("input[name=purchase_supplier_address]").val();
+			let supplier_idx 							= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
 			
 			let purchase_order_sales_order_number 		= $("input[name=purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=purchase_order_collection_receipt_no]").val();
@@ -230,27 +228,20 @@
 			let purchase_order_delivery_receipt_no 		= $("input[name=purchase_order_delivery_receipt_no]").val();
 		
 			let purchase_order_delivery_method 			= $("#purchase_order_delivery_method").val();
-			let purchase_loading_terminal 					= $("#purchase_loading_terminal").val();
-			//let purchase_order_date_of_pickup 			= $("input[name=purchase_order_date_of_pickup]").val();
-			//let purchase_order_date_of_arrival 			= $("input[name=purchase_order_date_of_arrival]").val();
-			
-			let purchase_order_net_percentage 				= $("input[name=purchase_order_net_percentage]").val();
+			let purchase_loading_terminal 				= $("#purchase_loading_terminal").val();
+				
+			let purchase_order_net_percentage 			= $("input[name=purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 			= $("input[name=purchase_order_less_percentage]").val();
 			
-			//let purchase_order_bank 				= $("input[name=purchase_order_bank]").val();
-			//let purchase_order_date_of_payment 		= $("input[name=purchase_order_date_of_payment]").val();
-			//let purchase_order_reference_no 		= $("input[name=purchase_order_reference_no]").val();
-			//let purchase_order_payment_amount 		= $("input[name=purchase_order_payment_amount]").val();
+			let hauler_operator 						= $("input[name=hauler_operator]").val();
+			let lorry_driver 							= $("input[name=lorry_driver]").val();
+			let plate_number 							= $("input[name=plate_number]").val();
+			let contact_number 							= $("input[name=contact_number]").val();
 			
-			let hauler_operator 					= $("input[name=hauler_operator]").val();
-			let lorry_driver 			= $("input[name=lorry_driver]").val();
-			let plate_number 			= $("input[name=plate_number]").val();
-			let contact_number 			= $("input[name=contact_number]").val();
-			
-			let purchase_destination 				= $("input[name=purchase_destination]").val();
-			let purchase_destination_address 		= $("input[name=purchase_destination_address]").val();
-			let purchase_date_of_departure 			= $("input[name=purchase_date_of_departure]").val();
-			let purchase_date_of_arrival 			= $("input[name=purchase_date_of_arrival]").val();
+			let purchase_destination 					= $("input[name=purchase_destination]").val();
+			let purchase_destination_address 			= $("input[name=purchase_destination_address]").val();
+			let purchase_date_of_departure 				= $("input[name=purchase_date_of_departure]").val();
+			let purchase_date_of_arrival 				= $("input[name=purchase_date_of_arrival]").val();
 			
 			
 			let purchase_order_instructions 			= $("#purchase_order_instructions").val();
@@ -330,9 +321,10 @@
 				data:{
 			
 					purchase_order_date:purchase_order_date,
-					purchase_supplier_tin:purchase_supplier_tin,
-					purchase_supplier_name:purchase_supplier_name,
-					purchase_supplier_address:purchase_supplier_address,
+					supplier_idx:supplier_idx,
+					//purchase_supplier_tin:purchase_supplier_tin,
+					//purchase_supplier_name:purchase_supplier_name,
+					//purchase_supplier_address:purchase_supplier_address,
 					
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
@@ -716,9 +708,10 @@
 			let purchase_order_id			= document.getElementById("update-purchase-order").value;
 			
 			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
-			let purchase_supplier_tin 					= $("input[name=update_purchase_supplier_tin]").val();
-			let purchase_supplier_name 					= $("input[name=update_purchase_supplier_name]").val();
-			let purchase_supplier_address 				= $("input[name=update_purchase_supplier_address]").val();
+			//let purchase_supplier_tin 					= $("input[name=update_purchase_supplier_tin]").val();
+			//let purchase_supplier_name 					= $("input[name=update_purchase_supplier_name]").val();
+			//let purchase_supplier_address 				= $("input[name=update_purchase_supplier_address]").val();
+			let supplier_idx 				= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
 			
 			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
@@ -726,22 +719,15 @@
 			let purchase_order_delivery_receipt_no 		= $("input[name=update_purchase_order_delivery_receipt_no]").val();
 		
 			let purchase_order_delivery_method 			= $("#update_purchase_order_delivery_method").val();
-			let purchase_loading_terminal 					= $("#update_purchase_loading_terminal").val();
-			//let purchase_order_date_of_pickup 			= $("input[name=update_purchase_order_date_of_pickup]").val();
-			//let purchase_order_date_of_arrival 			= $("input[name=update_purchase_order_date_of_arrival]").val();
+			let purchase_loading_terminal 				= $("#update_purchase_loading_terminal").val();
 			
 			let purchase_order_net_percentage 			= $("input[name=update_purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 			= $("input[name=update_purchase_order_less_percentage]").val();
 			
-			//let purchase_order_bank 				= $("input[name=update_purchase_order_bank]").val();
-			//let purchase_order_date_of_payment 		= $("input[name=update_purchase_order_date_of_payment]").val();
-			//let purchase_order_reference_no 		= $("input[name=update_purchase_order_reference_no]").val();
-			//let purchase_order_payment_amount 		= $("input[name=update_purchase_order_payment_amount]").val();
-			
 			let hauler_operator 					= $("input[name=update_hauler_operator]").val();
-			let lorry_driver 			= $("input[name=update_lorry_driver]").val();
-			let plate_number 			= $("input[name=update_plate_number]").val();
-			let contact_number 			= $("input[name=update_contact_number]").val();
+			let lorry_driver 						= $("input[name=update_lorry_driver]").val();
+			let plate_number 						= $("input[name=update_plate_number]").val();
+			let contact_number 						= $("input[name=update_contact_number]").val();
 						
 			let purchase_destination 				= $("input[name=update_purchase_destination]").val();
 			let purchase_destination_address 		= $("input[name=update_purchase_destination_address]").val();
@@ -838,9 +824,10 @@
 					purchase_order_id:purchase_order_id,
 					
 					purchase_order_date:purchase_order_date,
-					purchase_supplier_tin:purchase_supplier_tin,
-					purchase_supplier_name:purchase_supplier_name,
-					purchase_supplier_address:purchase_supplier_address,
+					supplier_idx:supplier_idx,
+					//purchase_supplier_tin:purchase_supplier_tin,
+					//purchase_supplier_name:purchase_supplier_name,
+					//purchase_supplier_address:purchase_supplier_address,
 					
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
@@ -955,7 +942,7 @@
 			var purchase_status = document.getElementById("purchase_order_status_"+id).value;
 		
 			  $.ajax({
-				url: "/update_sales_status",
+				url: "/update_purchase_status",
 				type:"POST",
 				data:{
 				  purchase_order_id:id,

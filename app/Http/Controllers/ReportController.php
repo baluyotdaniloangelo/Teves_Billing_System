@@ -517,43 +517,47 @@ class ReportController extends Controller
 	public function generate_purchase_order_pdf(Request $request){
 
 		$purchase_order_id = $request->purchase_order_id;
-					
-				$purchase_order_data = PurchaseOrderModel::find($purchase_order_id, [
-						'purchase_supplier_name',
-						'purchase_supplier_tin',
-						'purchase_supplier_address',
-						'purchase_order_control_number',
-						'purchase_order_date',
-						'purchase_order_sales_order_number',
-						'purchase_order_collection_receipt_no',
-						'purchase_order_official_receipt_no',
-						'purchase_order_delivery_receipt_no',
-						'purchase_order_bank',
-						'purchase_order_date_of_payment',
-						'purchase_order_reference_no',
-						'purchase_order_payment_amount',
-						'purchase_order_delivery_method',
-						'purchase_loading_terminal',
-						'purchase_order_date_of_pickup',
-						'purchase_order_date_of_arrival',
-						'purchase_order_gross_amount',
-						'purchase_order_total_liters',
-						'purchase_order_net_percentage', 
-						'purchase_order_net_amount',
-						'purchase_order_less_percentage',
-						'purchase_order_total_payable',
-						'hauler_operator',
-						'lorry_driver',
-						'plate_number',
-						'contact_number',
-						'purchase_destination',
-						'purchase_destination_address',
-						'purchase_date_of_departure',
-						'purchase_date_of_arrival',
-						'purchase_order_instructions',
-						'purchase_order_note']);	
+				
+				$purchase_order_data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+				->join('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+              	->get([
+						'teves_supplier_table.supplier_name',
+						'teves_supplier_table.supplier_tin',
+						'teves_supplier_table.supplier_address',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_collection_receipt_no',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
+						'teves_purchase_order_table.purchase_order_delivery_receipt_no',
+						'teves_purchase_order_table.purchase_order_bank',
+						'teves_purchase_order_table.purchase_order_date_of_payment',
+						'teves_purchase_order_table.purchase_order_reference_no',
+						'teves_purchase_order_table.purchase_order_payment_amount',
+						'teves_purchase_order_table.purchase_order_delivery_method',
+						'teves_purchase_order_table.purchase_loading_terminal',
+						'teves_purchase_order_table.purchase_order_date_of_pickup',
+						'teves_purchase_order_table.purchase_order_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_gross_amount',
+						'teves_purchase_order_table.purchase_order_total_liters',
+						'teves_purchase_order_table.purchase_order_net_percentage', 
+						'teves_purchase_order_table.purchase_order_net_amount',
+						'teves_purchase_order_table.purchase_order_less_percentage',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.hauler_operator',
+						'teves_purchase_order_table.lorry_driver',
+						'teves_purchase_order_table.plate_number',
+						'teves_purchase_order_table.contact_number',
+						'teves_purchase_order_table.purchase_destination',
+						'teves_purchase_order_table.purchase_destination_address',
+						'teves_purchase_order_table.purchase_date_of_departure',
+						'teves_purchase_order_table.purchase_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_instructions',
+						'teves_purchase_order_table.purchase_order_note'
+				]);
 
-		$purchase_order_amt =  number_format($purchase_order_data['purchase_order_total_payable'],2,".","");
+
+		$purchase_order_amt =  number_format($purchase_order_data[0]['purchase_order_total_payable'],2,".","");
 		
 		@$amount_split_whole_to_decimal = explode('.',$purchase_order_amt);
 		
@@ -600,7 +604,7 @@ class ReportController extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($purchase_order_data['purchase_supplier_name']."_PURCHASE_ORDER.pdf");
+		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER.pdf");
 		//return view('pages.report_billing_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component'));
 	}
 		

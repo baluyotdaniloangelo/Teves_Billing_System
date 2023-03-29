@@ -53,17 +53,17 @@
 			<td colspan="4" style="border:1px solid #000; background-color: #c6e0b4; text-align:center; font-weight:bold; padding:5px; height:30px !important;"> {{ $title }} </td>
 			<td colspan="2"></td>
 			<td colspan="2" nowrap align="left" style="color:red">CONTROL NO :</td>
-			<td colspan="2"><div align="center" style="color:red">{{ $purchase_order_data['purchase_order_control_number'] }}</td>
+			<td colspan="2"><div align="center" style="color:red">{{ $purchase_order_data[0]['purchase_order_control_number'] }}</td>
 		</tr>
 		<tr style="font-size:10px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left">SUPPLIER'S NAME :</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_name'] }}</td>			
+			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data[0]['supplier_name'] }}</td>			
 			<td colspan="3" nowrap align="left">DATE :</td>	
 				<?php
-				$_purchase_order_date=date_create($purchase_order_data['purchase_order_date']);
+				$_purchase_order_date=date_create($purchase_order_data[0]['purchase_order_date']);
 				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
 				?>
 			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;"><?=$purchase_order_date;?></td>
@@ -71,28 +71,28 @@
 		
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left">TIN No.:</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_supplier_tin'] }}</td>			
+			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data[0]['supplier_tin'] }}</td>			
 			<td colspan="3" nowrap align="left">SALES ORDER NO.:</td>		
-			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data['purchase_order_sales_order_number'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000;">{{ $purchase_order_data[0]['purchase_order_sales_order_number'] }}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left" rowspan='2'>ADDRESS :</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000; "  rowspan='2'>{{ $purchase_order_data['purchase_supplier_address'] }}</td>			
+			<td colspan="4" align="left" style="border-bottom:1px solid #000; "  rowspan='2'>{{ $purchase_order_data[0]['supplier_address'] }}</td>			
 			<td colspan="3" nowrap align="left">COLLECTION RECEIPT NO. :</td>		
-			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_collection_receipt_no'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data[0]['purchase_order_collection_receipt_no'] }}</td>
 		</tr>
 	
 		<tr style="font-size:10px;">	
 			<td colspan="3" nowrap align="left">OFFICIAL RECEIPT NO.:</td>		
-			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_official_receipt_no'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data[0]['purchase_order_official_receipt_no'] }}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			<td colspan="2" align="left"></td>
 			<td colspan="4" align="left"></td>			
 			<td colspan="3" nowrap align="left">DELIVERY RECEIPT NO.:</td>		
-			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data['purchase_order_delivery_receipt_no'] }}</td>
+			<td colspan="1" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $purchase_order_data[0]['purchase_order_delivery_receipt_no'] }}</td>
 		</tr>
 	
 		<tr style="font-size:10px;">
@@ -145,8 +145,8 @@
 		</tr>		
 		 
 		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="5" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:25px !important;">{{$purchase_order_data->purchase_order_delivery_method}}</td>
-			<td colspan="5" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->purchase_loading_terminal}}</td>
+			<td colspan="5" align="center" style="border-top:1px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:25px !important;">{{ $purchase_order_data[0]['purchase_order_delivery_method'] }}</td>
+			<td colspan="5" align="center" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{ $purchase_order_data[0]['purchase_loading_terminal'] }}</td>
 			</td>			
 		</tr>
 		
@@ -195,21 +195,21 @@
 		<tr style="font-size:10px;">
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Gross Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data['purchase_order_gross_amount'],2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_gross_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Net Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data['purchase_order_net_amount'],2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_net_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:10px;">
 			
 			<td colspan="8" align="right" style="border-left: 1px solid #000; font-weight:bold; height:25px !important;">Less 1% </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 1px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data['purchase_order_net_amount']*$purchase_order_data['purchase_order_less_percentage']/100,2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100,2);?>
 		</tr>		
 
 		<tr style="font-size:10px;">			
@@ -218,7 +218,7 @@
 			<td colspan="1" align="center" style="border-left: 0px solid #000; border-top: 1px solid #000;">Liters</td>
 			<td colspan="2" align="right" style="background-color: #a9d08e; border-top: 1px solid #000; font-weight:bold;">Total Due </td>
 			<td colspan="2" align="right" style="background-color: #a9d08e; border-top: 1px solid #000; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($purchase_order_data['purchase_order_total_payable'],2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_total_payable'],2);?>
 		</tr>	
 		
 		<tr>
@@ -246,32 +246,32 @@
 		<tr style="font-size:10px;border:0 solid #000;">
 		
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Hauler / Operator:</td>
-			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->hauler_operator}}</td>
+			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data[0]['hauler_operator']}}</td>
 			
 			<td colspan="1" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Destination</td>
-			<td colspan="4" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->lorry_driver}}</td>
+			<td colspan="4" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data[0]['lorry_driver']}}</td>
 			
 		</tr>	
 
 		<tr style="font-size:10px;border:0 solid #000;">
 		
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Lorry Driver:</td>
-			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->plate_number}}</td>
+			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data[0]['plate_number']}}</td>
 			
 			<td colspan="1" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Address</td>
-			<td colspan="4" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->contact_number}}</td>
+			<td colspan="4" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data[0]['contact_number']}}</td>
 			
 		</tr>
 
 		<tr style="font-size:10px;border:0 solid #000;">
 		
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Plate No.:</td>
-			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->plate_number}}</td>
+			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data[0]['plate_number']}}</td>
 			
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Date of Departure:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
-				$_purchase_date_of_departure=date_create($purchase_order_data['purchase_date_of_departure']);
+				$_purchase_date_of_departure=date_create($purchase_order_data[0]['purchase_date_of_departure']);
 				$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/Y"));
 				?>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_departure;?></td>
@@ -281,12 +281,12 @@
 		<tr style="font-size:10px;border:0 solid #000;">
 		
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Contact No.:</td>
-			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data->contact_number}}</td>
+			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;">{{$purchase_order_data[0]['contact_number']}}</td>
 			
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Date of Arrival:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
-				$_purchase_date_of_arrival=date_create($purchase_order_data['purchase_date_of_arrival']);
+				$_purchase_date_of_arrival=date_create($purchase_order_data[0]['purchase_date_of_arrival']);
 				$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/Y"));
 				?>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_arrival;?></td>	
@@ -298,8 +298,8 @@
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="3">
-			<td colspan="6" align="center" style="border-top:0px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; height:90px !important; text-align: justify;">{{$purchase_order_data->purchase_order_instructions}}</td>
-			<td colspan="4" align="left" style="border-top:0px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:90px !important;">{{$purchase_order_data->purchase_order_note}}</td>
+			<td colspan="6" align="center" style="border-top:0px solid #000; border-left:1px solid #000; border-right:0px solid #000; border-bottom:1px solid #000; height:90px !important; text-align: justify;">{{$purchase_order_data[0]['purchase_order_instructions']}}</td>
+			<td colspan="4" align="left" style="border-top:0px solid #000; border-left:1px solid #000; border-right:1px solid #000; border-bottom:1px solid #000; height:90px !important;">{{$purchase_order_data[0]['purchase_order_note']}}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">
