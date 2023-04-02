@@ -41,14 +41,25 @@ class PurchaseOrderController extends Controller
 		$list = PurchaseOrderModel::get();
 		if ($request->ajax()) {
 
+		$data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+              	->get([
+						'teves_purchase_order_table.purchase_order_id',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_supplier_table.supplier_name',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.purchase_status'
+				]);
 		
-    	$data = PurchaseOrderModel::select(
+		
+		
+    	/*$data = PurchaseOrderModel::select(
 		'purchase_order_id',
 		'purchase_order_date',
 		'purchase_order_control_number',
 		'purchase_supplier_name',
 		'purchase_order_total_payable',
-		'purchase_status');
+		'purchase_status');*/
 
 		
 		return DataTables::of($data)
@@ -90,34 +101,48 @@ class PurchaseOrderController extends Controller
 	/*Fetch Product Information*/
 	public function purchase_order_info(Request $request){
 		
-					$data = PurchaseOrderModel::find($request->purchase_order_id, [
-						'purchase_supplier_name',
-						'purchase_supplier_tin',
-						'purchase_supplier_address',
-						'purchase_order_control_number',
-						'purchase_order_date',
-						'purchase_order_sales_order_number',
-						'purchase_order_collection_receipt_no',
-						'purchase_order_official_receipt_no',
-						'purchase_order_delivery_receipt_no',
-						'purchase_order_delivery_method',
-						'purchase_loading_terminal',
-						'purchase_order_gross_amount',
-						'purchase_order_total_liters',
-						'purchase_order_net_percentage', 
-						'purchase_order_net_amount',
-						'purchase_order_less_percentage',
-						'purchase_order_total_payable',
-						'hauler_operator',
-						'lorry_driver',
-						'plate_number',
-						'contact_number',
-						'purchase_destination',
-						'purchase_destination_address',
-						'purchase_date_of_departure',
-						'purchase_date_of_arrival',
-						'purchase_order_instructions',
-						'purchase_order_note']);
+				$data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+				->leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+              	->get([
+						'teves_supplier_table.supplier_name',
+						'teves_supplier_table.supplier_tin',
+						'teves_supplier_table.supplier_address',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_collection_receipt_no',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
+						'teves_purchase_order_table.purchase_order_delivery_receipt_no',
+						'teves_purchase_order_table.purchase_order_bank',
+						'teves_purchase_order_table.purchase_order_date_of_payment',
+						'teves_purchase_order_table.purchase_order_reference_no',
+						'teves_purchase_order_table.purchase_order_payment_amount',
+						'teves_purchase_order_table.purchase_order_delivery_method',
+						'teves_purchase_order_table.purchase_loading_terminal',
+						'teves_purchase_order_table.purchase_order_date_of_pickup',
+						'teves_purchase_order_table.purchase_order_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_gross_amount',
+						'teves_purchase_order_table.purchase_order_total_liters',
+						'teves_purchase_order_table.purchase_order_net_percentage', 
+						'teves_purchase_order_table.purchase_order_net_amount',
+						'teves_purchase_order_table.purchase_order_less_percentage',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.hauler_operator',
+						'teves_purchase_order_table.lorry_driver',
+						'teves_purchase_order_table.plate_number',
+						'teves_purchase_order_table.contact_number',
+						'teves_purchase_order_table.purchase_destination',
+						'teves_purchase_order_table.purchase_destination_address',
+						'teves_purchase_order_table.purchase_date_of_departure',
+						'teves_purchase_order_table.purchase_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_instructions',
+						'teves_purchase_order_table.purchase_order_note'
+				]);	
+						
+						
+						
+						
+						
 					return response()->json($data);	
 		
 	}
@@ -155,12 +180,9 @@ class PurchaseOrderController extends Controller
 			
 			$Purchaseorder = new PurchaseOrderModel();
 			$Purchaseorder->purchase_order_control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
-			//$Purchaseorder->purchase_supplier_name 					= $request->purchase_supplier_name;
 			
 			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
 			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
-			//$Purchaseorder->purchase_supplier_name					= $request->purchase_supplier_name;
-			//$Purchaseorder->purchase_supplier_address				= $request->purchase_supplier_address;
 					
 			$Purchaseorder->purchase_order_sales_order_number		= $request->purchase_order_sales_order_number;
 			$Purchaseorder->purchase_order_collection_receipt_no	= $request->purchase_order_collection_receipt_no;
@@ -169,17 +191,15 @@ class PurchaseOrderController extends Controller
 				
 			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
 			$Purchaseorder->purchase_loading_terminal					= $request->purchase_loading_terminal;
-			//$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
-			//$Purchaseorder->purchase_order_date_of_arrival			= $request->purchase_order_date_of_arrival;
 					
 			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
 			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
 			
 			$Purchaseorder->hauler_operator							= $request->hauler_operator;
-			$Purchaseorder->lorry_driver					= $request->lorry_driver;			
+			$Purchaseorder->lorry_driver							= $request->lorry_driver;			
 			
-			$Purchaseorder->plate_number				= $request->plate_number;
-			$Purchaseorder->contact_number				= $request->contact_number;
+			$Purchaseorder->plate_number							= $request->plate_number;
+			$Purchaseorder->contact_number							= $request->contact_number;
 					
 			$Purchaseorder->purchase_destination					= $request->purchase_destination;
 			$Purchaseorder->purchase_destination_address			= $request->purchase_destination_address;
@@ -316,17 +336,15 @@ class PurchaseOrderController extends Controller
 				
 			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
 			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
-			//$Purchaseorder->purchase_order_date_of_pickup			= $request->purchase_order_date_of_pickup;
-			//$Purchaseorder->purchase_order_date_of_arrival		= $request->purchase_order_date_of_arrival;
 					
 			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
 			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
 			
 			$Purchaseorder->hauler_operator							= $request->hauler_operator;
-			$Purchaseorder->lorry_driver					= $request->lorry_driver;			
+			$Purchaseorder->lorry_driver							= $request->lorry_driver;			
 			
-			$Purchaseorder->plate_number				= $request->plate_number;
-			$Purchaseorder->contact_number				= $request->contact_number;
+			$Purchaseorder->plate_number							= $request->plate_number;
+			$Purchaseorder->contact_number							= $request->contact_number;
 					
 			$Purchaseorder->purchase_destination					= $request->purchase_destination;
 			$Purchaseorder->purchase_destination_address			= $request->purchase_destination_address;

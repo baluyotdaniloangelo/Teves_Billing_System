@@ -38,9 +38,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.billing_date',
 					'teves_client_table.client_name',
-					'teves_receivable_table.control_number',
-					'teves_receivable_table.or_number',				
-					'teves_receivable_table.payment_term',
+					'teves_receivable_table.control_number',		
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.receivable_status']);

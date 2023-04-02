@@ -23,10 +23,10 @@
 													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<th>O.R. Number</th>
-													<th>Payment Term</th>
+													<!--<th>O.R. Number</th>
+													<th>Payment Term</th>-->
 													<th>Description</th>
-													<th>Amount</th>
+													<th>Total Due</th>
 													<th>Status</th>
 													<th>Action</th>
 												</tr>
@@ -42,10 +42,10 @@
 													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<th>O.R. Number</th>
-													<th>Payment Term</th>
+													<!--<th>O.R. Number</th>
+													<th>Payment Term</th>-->
 													<th>Description</th>
-													<th>Amount</th>
+													<th>Total Due</th>
 													<th>Status</th>
 													<th>Action</th>												
 												</tr>
@@ -109,7 +109,7 @@
 						
 						<li class="list-group-item d-flex justify-content-between align-items-start">
 						  <div class="ms-2 me-auto">
-							<div class="fw-bold">Account Name</div>
+							<div class="fw-bold">Client</div>
 							<div id="client_name_receivables"></div>
 						  </div>
 						 
@@ -152,7 +152,7 @@
 						</li>
 						<li class="list-group-item d-flex justify-content-between align-items-start">
 						  <div class="ms-2 me-auto">
-							<div class="fw-bold">Amount</div>
+							<div class="fw-bold">Total Due</div>
 							<div id="amount_receivables"></div>
 						  </div>
 						 
@@ -228,7 +228,7 @@
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Paid">Paid</option>
 								<option value="Pending">Pending</option>
-								<option value="Remaining Balance">Remaining Balance</option>
+								<!--<option value="Remaining Balance">Remaining Balance</option>-->
 							</select>
 						  </div>
 						</div>						

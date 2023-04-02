@@ -23,8 +23,8 @@
 					{data: 'billing_date'},
 					{data: 'control_number'},
 					{data: 'client_name'},   
-					{data: 'or_number'},
-					{data: 'payment_term'},
+					/*{data: 'or_number'},
+					{data: 'payment_term'},*/
 					{data: 'receivable_description'},
 					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_status'},
@@ -32,14 +32,9 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 4] },
+					{ className: 'text-center', targets: [0, 1, 2] },
 			]
 		});
-				/*
-				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
-				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateReceivableModal"></button>'+
-				'</div>').appendTo('#Receivable_option');
-				*/
 	});
 	
 	<!--Select Receivable For Update-->
@@ -318,11 +313,6 @@
 					alert(error);
 				}
 			   });		
-			
-			
-			
-			
-			
 	  
 	  });
   </script>

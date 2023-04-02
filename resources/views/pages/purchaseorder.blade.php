@@ -85,39 +85,6 @@
 										<span class="valid-feedback" id="supplier_idxError"></span>
 										</div>
 										
-										<!--
-										<div class="col-md-3">
-										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
-										  <input type="text" class="form-control" id="purchase_supplier_name" name="purchase_supplier_name" required list="purchase_supplier_name_list">
-											<datalist id="purchase_supplier_name_list">
-												@foreach ($purchase_data_suggestion as $purchase_supplier_name_cols)
-													<option value="{{$purchase_supplier_name_cols->purchase_supplier_name}}">
-												@endforeach
-											  </datalist>
-										  <span class="valid-feedback" id="purchase_supplier_nameError"></span>
-										</div>
-										
-										<div class="col-md-3">
-										  <label for="purchase_supplier_tin" class="form-label" title="Supplier's Tax Identification">TIN</label>
-										  <input type="text" class="form-control" id="purchase_supplier_tin" name="purchase_supplier_tin" list="purchase_supplier_tin_list">
-											<datalist id="purchase_supplier_tin_list">
-												@foreach ($purchase_data_suggestion as $purchase_supplier_tin_cols)
-													<option value="{{$purchase_supplier_tin_cols->purchase_supplier_tin}}">
-												@endforeach
-											  </datalist>
-										</div>
-										
-										<div class="col-md-3">
-										  <label for="purchase_supplier_address" class="form-label">Address</label>
-										  <input type="text" class="form-control" id="purchase_supplier_address" name="purchase_supplier_address" list="purchase_supplier_address_list">
-											<datalist id="purchase_supplier_address_list">
-												@foreach ($purchase_data_suggestion as $purchase_supplier_address_cols)
-													<option value="{{$purchase_supplier_address_cols->purchase_supplier_address}}">
-												@endforeach
-											  </datalist>
-										</div>	
-										-->
-										
 									</div>
 									
 								<hr>
@@ -370,48 +337,15 @@
 										<div class="col-md-6">
 										<label for="supplier_idx" class="form-label">Supplier's Name</label>
 	
-										 <input class="form-control" list="supplier_name" name="supplier_idx" id="supplier_idx" required autocomplete="off">
-											<datalist id="supplier_name">
+										 <input class="form-control" list="update_supplier_name" name="update_supplier_name" id="update_supplier_idx" required autocomplete="off">
+											<datalist id="update_supplier_name">
 											  @foreach ($supplier_data as $supplier_data_cols)
 											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">
 											  @endforeach
 											</datalist>
 																				
-										<span class="valid-feedback" id="supplier_idxError"></span>
+										<span class="valid-feedback" id="update_supplier_idxError"></span>
 										</div>
-										
-										<!--
-										<div class="col-md-3">
-										  <label for="purchase_supplier_name" class="form-label">Supplier's Name</label>
-										  <input type="text" class="form-control" id="update_purchase_supplier_name" name="update_purchase_supplier_name" required list="purchase_supplier_name_list">
-											<datalist id="purchase_supplier_name_list">
-												@foreach ($purchase_data_suggestion as $purchase_supplier_name_cols)
-													<option value="{{$purchase_supplier_name_cols->purchase_supplier_name}}">
-												@endforeach
-											  </datalist>
-										  <span class="valid-feedback" id="update_purchase_supplier_nameError"></span>
-										</div>
-										
-										<div class="col-md-3">
-										  <label for="purchase_supplier_tin" class="form-label" title="Supplier's Tax Identification">TIN</label>
-										  <input type="text" class="form-control" id="update_purchase_supplier_tin" name="update_purchase_supplier_tin" list="purchase_supplier_tin_list">
-											<datalist id="purchase_supplier_tin_list">
-												@foreach ($purchase_data_suggestion as $purchase_supplier_tin_cols)
-													<option value="{{$purchase_supplier_tin_cols->purchase_supplier_tin}}">
-												@endforeach
-											  </datalist>
-										</div>
-										
-										<div class="col-md-3">
-										  <label for="purchase_supplier_address" class="form-label">Address</label>
-										  <input type="text" class="form-control" id="update_purchase_supplier_address" name="update_purchase_supplier_address" list="purchase_supplier_address_list">
-											<datalist id="purchase_supplier_address_list">
-												@foreach ($purchase_data_suggestion as $purchase_supplier_address_cols)
-													<option value="{{$purchase_supplier_address_cols->purchase_supplier_address}}">
-												@endforeach
-											  </datalist>
-										</div>	
-										-->
 										
 									</div>
 									
@@ -492,17 +426,6 @@
 												@endforeach
 											</datalist>
 									</div>
-									
-									<!--
-									<div class="col-md-3">
-									  <label for="purchase_order_date_of_pickup" class="form-label">Date of Pick-up</label>
-									  <input type="date" class="form-control" id="update_purchase_order_date_of_pickup" name="update_purchase_order_date_of_pickup" value="<//?=date('Y-m-d');?>">
-									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_order_date_of_arrival" class="form-label">Date of Arrival</label>
-									  <input type="date" class="form-control" id="update_purchase_order_date_of_arrival" name="update_purchase_order_date_of_arrival" value="<//?=date('Y-m-d');?>">
-									</div>-->
 									
 								</div>
 								

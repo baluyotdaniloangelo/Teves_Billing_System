@@ -22,7 +22,7 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'purchase_order_date'},
 					{data: 'purchase_order_control_number'},
-					{data: 'purchase_supplier_name'},
+					{data: 'supplier_name'},
 					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'status', name: 'status', orderable: true, searchable: true},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
@@ -220,7 +220,10 @@
 			document.getElementById('PurchaseOrderformNew').className = "g-3 needs-validation was-validated";
 
 			let purchase_order_date 					= $("input[name=purchase_order_date]").val();
+			
 			let supplier_idx 							= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
+			/*Supplier's Name and Product Name*/
+			let supplier_name 					= $("input[name=supplier_name]").val();
 			
 			let purchase_order_sales_order_number 		= $("input[name=purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=purchase_order_collection_receipt_no]").val();
@@ -322,9 +325,6 @@
 			
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
-					//purchase_supplier_tin:purchase_supplier_tin,
-					//purchase_supplier_name:purchase_supplier_name,
-					//purchase_supplier_address:purchase_supplier_address,
 					
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
@@ -333,8 +333,6 @@
 				
 					purchase_order_delivery_method:purchase_order_delivery_method,
 					purchase_loading_terminal:purchase_loading_terminal,
-					//purchase_order_date_of_pickup:purchase_order_date_of_pickup,
-					//purchase_order_date_of_arrival:purchase_order_date_of_arrival,
 					
 					purchase_order_net_percentage:purchase_order_net_percentage,
 					purchase_order_less_percentage:purchase_order_less_percentage,
@@ -373,7 +371,7 @@
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					$('#purchase_supplier_nameError').text('');					
+					$('#supplier_idxError').text('');					
 
 					
 				    /*
@@ -399,10 +397,20 @@
 				},
 				error: function(error) {
 					
-				 console.log(error);	
+				console.log(error);	
 				
-				$('#purchase_supplier_nameError').html(error.responseJSON.errors.purchase_supplier_name);	
-				document.getElementById('purchase_supplier_nameError').className = "invalid-feedback";
+					if(error.responseJSON.errors.supplier_idx=="Supplier's Name is Required"){
+						
+							if(supplier_idx==''){
+								$('#supplier_idxError').html(error.responseJSON.errors.supplier_idx);
+							}else{
+								$('#supplier_idxError').html("Incorrect Supplier's Name <b>" + supplier_name + "</b>");
+							}
+						
+							document.getElementById("supplier_idx").value = "";
+							document.getElementById('supplier_idxError').className = "invalid-feedback";
+							
+					}
 				
 				$('#product_idxError').html(error.responseJSON.errors.product_idx);
 				
@@ -513,41 +521,32 @@
 				  console.log(response);
 				  if(response) {					
 
-			document.getElementById("update_purchase_order_date").value = response.purchase_order_date;
-			document.getElementById("update_purchase_supplier_tin").value = response.purchase_supplier_tin;
-			document.getElementById("update_purchase_supplier_name").value = response.purchase_supplier_name;
-			document.getElementById("update_purchase_supplier_address").value = response.purchase_supplier_address;
-			
-			document.getElementById("update_purchase_order_sales_order_number").value = response.purchase_order_sales_order_number;
-			document.getElementById("update_purchase_order_collection_receipt_no").value = response.purchase_order_collection_receipt_no;
-			document.getElementById("update_purchase_order_official_receipt_no").value = response.purchase_order_official_receipt_no;
-			document.getElementById("update_purchase_order_delivery_receipt_no").value = response.purchase_order_delivery_receipt_no;
+			document.getElementById("update_purchase_order_date").value = response[0].purchase_order_date;
+			document.getElementById("update_supplier_idx").value = response[0].supplier_name;
+				
+			document.getElementById("update_purchase_order_sales_order_number").value = response[0].purchase_order_sales_order_number;
+			document.getElementById("update_purchase_order_collection_receipt_no").value = response[0].purchase_order_collection_receipt_no;
+			document.getElementById("update_purchase_order_official_receipt_no").value = response[0].purchase_order_official_receipt_no;
+			document.getElementById("update_purchase_order_delivery_receipt_no").value = response[0].purchase_order_delivery_receipt_no;
 		
-			document.getElementById("update_purchase_order_delivery_method").value = response.purchase_order_delivery_method;
-			document.getElementById("update_purchase_loading_terminal").value = response.purchase_loading_terminal;
-			//document.getElementById("update_purchase_order_date_of_pickup").value = response.purchase_order_date_of_pickup;
-			//document.getElementById("update_purchase_order_date_of_arrival").value = response.purchase_order_date_of_arrival;
+			document.getElementById("update_purchase_order_delivery_method").value = response[0].purchase_order_delivery_method;
+			document.getElementById("update_purchase_loading_terminal").value = response[0].purchase_loading_terminal;
 			
-			document.getElementById("update_purchase_order_net_percentage").value = response.purchase_order_net_percentage;
-			document.getElementById("update_purchase_order_less_percentage").value = response.purchase_order_less_percentage;
+			document.getElementById("update_purchase_order_net_percentage").value = response[0].purchase_order_net_percentage;
+			document.getElementById("update_purchase_order_less_percentage").value = response[0].purchase_order_less_percentage;
+				
+			document.getElementById("update_hauler_operator").value = response[0].hauler_operator;
+			document.getElementById("update_lorry_driver").value = response[0].lorry_driver;
+			document.getElementById("update_plate_number").value = response[0].plate_number;
+			document.getElementById("update_contact_number").value = response[0].contact_number;		
 			
-			//document.getElementById("update_purchase_order_bank").value = response.purchase_order_bank;
-			//document.getElementById("update_purchase_order_date_of_payment").value = response.purchase_order_date_of_payment;
-			//document.getElementById("update_purchase_order_reference_no").value = response.purchase_order_reference_no;
-			//document.getElementById("update_purchase_order_payment_amount").value = response.purchase_order_payment_amount;
+			document.getElementById("update_purchase_destination").value = response[0].purchase_destination;
+			document.getElementById("update_purchase_destination_address").value = response[0].purchase_destination_address;
+			document.getElementById("update_purchase_date_of_departure").value = response[0].purchase_date_of_departure;
+			document.getElementById("update_purchase_date_of_arrival").value = response[0].purchase_date_of_arrival;
 			
-			document.getElementById("update_hauler_operator").value = response.hauler_operator;
-			document.getElementById("update_lorry_driver").value = response.lorry_driver;
-			document.getElementById("update_plate_number").value = response.plate_number;
-			document.getElementById("update_contact_number").value = response.contact_number;		
-			
-			document.getElementById("update_purchase_destination").value = response.purchase_destination;
-			document.getElementById("update_purchase_destination_address").value = response.purchase_destination_address;
-			document.getElementById("update_purchase_date_of_departure").value = response.purchase_date_of_departure;
-			document.getElementById("update_purchase_date_of_arrival").value = response.purchase_date_of_arrival;
-			
-			document.getElementById("update_purchase_order_instructions").value = response.purchase_order_instructions;
-			document.getElementById("update_purchase_order_note").value = response.purchase_order_note;		
+			document.getElementById("update_purchase_order_instructions").value = response[0].purchase_order_instructions;
+			document.getElementById("update_purchase_order_note").value = response[0].purchase_order_note;		
 					
 			document.getElementById("update-purchase-order").value = purchase_order_id;		
 					
@@ -705,13 +704,13 @@
 
 			document.getElementById('PurchaseOrderformUpdate').className = "g-3 needs-validation was-validated";
 			
-			let purchase_order_id			= document.getElementById("update-purchase-order").value;
+			let purchase_order_id						= document.getElementById("update-purchase-order").value;
 			
 			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
-			//let purchase_supplier_tin 					= $("input[name=update_purchase_supplier_tin]").val();
-			//let purchase_supplier_name 					= $("input[name=update_purchase_supplier_name]").val();
-			//let purchase_supplier_address 				= $("input[name=update_purchase_supplier_address]").val();
-			let supplier_idx 				= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
+			
+			let supplier_idx 							= ($("#update_supplier_name option[value='" + $('#update_supplier_idx').val() + "']").attr('data-id'));
+			/*Supplier's Name and Product Name*/
+			let supplier_name 							= $("input[name=update_supplier_name]").val();
 			
 			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
@@ -825,10 +824,7 @@
 					
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
-					//purchase_supplier_tin:purchase_supplier_tin,
-					//purchase_supplier_name:purchase_supplier_name,
-					//purchase_supplier_address:purchase_supplier_address,
-					
+				
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
 					purchase_order_official_receipt_no:purchase_order_official_receipt_no,
@@ -836,8 +832,6 @@
 				
 					purchase_order_delivery_method:purchase_order_delivery_method,
 					purchase_loading_terminal:purchase_loading_terminal,
-					//purchase_order_date_of_pickup:purchase_order_date_of_pickup,
-					//purchase_order_date_of_arrival:purchase_order_date_of_arrival,
 					
 					purchase_order_net_percentage:purchase_order_net_percentage,
 					purchase_order_less_percentage:purchase_order_less_percentage,
@@ -908,8 +902,18 @@
 					
 				 console.log(error);	
 				
-				$('#update_purchase_supplier_nameError').html(error.responseJSON.errors.purchase_supplier_name);	
-				document.getElementById('purchase_supplier_nameError').className = "invalid-feedback";
+					if(error.responseJSON.errors.supplier_idx=="Supplier's Name is Required"){
+						
+							if(supplier_idx==''){
+								$('#update_supplier_idxError').html(error.responseJSON.errors.supplier_idx);
+							}else{
+								$('#update_supplier_idxError').html("Incorrect Supplier's Name <b>" + supplier_name + "</b>");
+							}
+						
+							document.getElementById("update_supplier_idx").value = "";
+							document.getElementById('update_supplier_idxError').className = "invalid-feedback";
+							
+					}
 				
 				$('#product_idxError').html(error.responseJSON.errors.product_idx);
 				

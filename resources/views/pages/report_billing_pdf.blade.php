@@ -31,7 +31,7 @@
 	<table class="" width="100%" cellspacing="0" cellpadding="1" >
 	
 			<tr>
-			<td rowspan="3" align="right" colspan="5">
+			<td rowspan="4" align="right" colspan="5">
 
 			<img src="{{public_path('client_logo/logo-2.jpg')}}" style="width:160px;">
 
@@ -44,9 +44,11 @@
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="2">Mobile: (+63) 948-199-0989 / (+63) 938-406-5237</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="2">VAT REG. TIN : 740-213-285-000</td>
 		</tr>
-		
+		<tr>
+			<td style="font-size:12px;" nowrap align="center" colspan="2">GLEZA F. TEVES - Proprietress</td>
+		</tr>
 		<tr>
 			<td colspan="10"><div align="center"><h5>{{ $title }}</h5></div></td>
 		</tr>
