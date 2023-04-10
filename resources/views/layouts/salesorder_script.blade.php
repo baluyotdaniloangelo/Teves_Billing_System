@@ -240,11 +240,6 @@
 			let instructions 			= $("#instructions").val();
 			let note 					= $("#note").val();
 			
-			//let mode_of_payment 		= $("input[name=mode_of_payment]").val();
-			//let date_of_payment 		= $("input[name=date_of_payment]").val();
-			//let reference_no 			= $("input[name=reference_no]").val();
-			//let payment_amount 			= $("input[name=payment_amount]").val();
-			
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
 			
@@ -521,12 +516,6 @@
 					
 					document.getElementById("update_instructions").value = response[0].sales_order_instructions;
 					document.getElementById("update_note").value = response[0].sales_order_note;
-					
-					//document.getElementById("update_mode_of_payment").value = response[0].sales_order_mode_of_payment;
-					//document.getElementById("update_date_of_payment").value = response[0].sales_order_date_of_payment;
-					//document.getElementById("update_reference_no").value = response[0].sales_order_reference_no;
-					//document.getElementById("update_payment_amount").value = response[0].sales_order_payment_amount;
-					
 					document.getElementById("update-sales-order").value = response[0].sales_order_id;
 					
 					document.getElementById("update_sales_order_net_percentage").value = response[0].sales_order_net_percentage;
@@ -693,7 +682,6 @@
 
 			let sales_order_id			= document.getElementById("update-sales-order").value;
 			
-			//let client_idx 				= $("#update_client_idx").val();
 			let client_idx 				= ($("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id'));	
 			let sales_order_date 		= $("input[name=update_sales_order_date]").val();
 			let delivered_to 			= $("input[name=update_delivered_to]").val();
@@ -706,11 +694,6 @@
 			let required_date 			= $("input[name=update_required_date]").val();
 			let instructions 			= $("#update_instructions").val();
 			let note 					= $("#update_note").val();
-			//let mode_of_payment 		= $("input[name=update_mode_of_payment]").val();
-			//let date_of_payment 		= $("input[name=update_date_of_payment]").val();
-			//let reference_no 			= $("input[name=update_reference_no]").val();
-			//let payment_amount 			= $("input[name=update_payment_amount]").val();
-			
 			let sales_order_net_percentage 	= $("input[name=update_sales_order_net_percentage]").val();
 			let sales_order_less_percentage = $("input[name=update_sales_order_less_percentage]").val();
 			

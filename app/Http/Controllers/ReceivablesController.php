@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ReceivablesModel;
 use App\Models\BillingTransactionModel;
+use App\Models\ReceivablesPaymentModel;
 use Session;
 use Validator;
 use DataTables;
@@ -45,20 +46,59 @@ class ReceivablesController extends Controller
 		
 		return DataTables::of($data)
 				->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function($row){	
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
-					<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintReceivables""></a>
+					<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-subtract btn_icon_table btn_icon_table_view" id="payReceivables"></a>
 					<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editReceivables"></a>
 					<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables"></a>
 					</div>';
                     return $actionBtn;
                 })
-				->rawColumns(['action'])
+				
+				->addColumn('action_print', function($row){
+					$actionBtn = '
+					<div align="center" class="action_table_menu_Product">
+					<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
+						<option disabled="" selected value="">Choose...</option>
+						<option value="PrintStatement" title="Statement of Account">SOA</option>
+						<option value="PrintBilling">Billing</option>
+						<option value="PrintReceivables">Receivable</option>
+						</select>
+					</div>';
+                    return $actionBtn;
+                })
+				
+				
+				->rawColumns(['action','action_print'])
                 ->make(true);
 		}		
     }
 
+	public function get_receivable_payment_list(Request $request){		
+	
+			$data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
+				->orderBy('receivable_payment_id', 'asc')
+              	->get([
+					'teves_receivable_payment.receivable_payment_id',
+					'teves_receivable_payment.receivable_date_of_payment',
+					'teves_receivable_payment.receivable_mode_of_payment',
+					'teves_receivable_payment.receivable_reference',
+					'teves_receivable_payment.receivable_payment_amount',
+					]);
+		
+			return response()->json($data);
+			
+	}
+	
+	public function delete_receivable_payment_item(Request $request){		
+			
+		$paymentitemID = $request->paymentitemID;
+		ReceivablesPaymentModel::find($paymentitemID)->delete();
+		return 'Deleted';
+		
+	}
+	
 	/*Fetch Product Information*/
 	public function receivable_info(Request $request){
 

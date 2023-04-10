@@ -111,10 +111,6 @@
 				  console.log(response);
 				  if(response) {
 					
-					//$('#switch_notice_off').show();
-					//$('#sw_off').html("Item Deleted");
-					//setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
-					
 				  }
 				},
 				error: function(error) {
@@ -196,10 +192,6 @@
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					
-					//$('#switch_notice_off').show();
-					//$('#sw_off').html("Item Deleted");
-					//setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					
 				  }
 				},
@@ -967,7 +959,5 @@
 				 console.log(error);	 
 				}
 			   });
-		  
 	  }
  </script>
-	

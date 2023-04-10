@@ -109,6 +109,11 @@ Route::post('/delete_receivable_confirmed', [ReceivablesController::class, 'dele
 Route::post('/create_receivables_post', [ReceivablesController::class,'create_receivables_post'])->name('create_receivables_post')->middleware('isLoggedIn');
 /*Create receivables*/
 Route::post('/update_receivables_post', [ReceivablesController::class,'update_receivables_post'])->name('update_receivables_post')->middleware('isLoggedIn');
+/*Get Receivables Payment*/
+Route::post('/get_receivable_payment_list', [ReceivablesController::class,'get_receivable_payment_list'])->name('get_receivable_payment_list')->middleware('isLoggedIn');
+/*Delete Receivables Payment*/
+Route::post('/delete_receivable_payment_item', [ReceivablesController::class,'delete_receivable_payment_item'])->name('delete_receivable_payment_item')->middleware('isLoggedIn');
+
 
 /*Sales Order*/
 /*January 04, 2023*/

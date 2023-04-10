@@ -28,6 +28,7 @@
 													<th>Description</th>
 													<th>Total Due</th>
 													<th>Status</th>
+													<th>Print</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -47,6 +48,7 @@
 													<th>Description</th>
 													<th>Total Due</th>
 													<th>Status</th>
+													<th>Print</th>
 													<th>Action</th>												
 												</tr>
 											</tfoot>	
@@ -91,8 +93,9 @@
         </div>
     </div>	
 
-<!--Modal to Create Client-->
+	<!--Modal to Update Receivables-->
 	<div class="modal fade" id="UpdateReceivablesModal" tabindex="-1">
+	
               <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
@@ -247,10 +250,124 @@
                   </div>
                 </div>
              </div>
-
+			 
+<div class="modal fade" id="PayReceivablesModal" tabindex="-1">
+	
+              <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Update Payment</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+						<div class="row">
+					<div class="col-lg-4">
+					  
+					  <ol class="list-group list-group-numbered">
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Client</div>
+							<div id="Pay_client_name_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Address</div>
+							<div id="Pay_client_address_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">TIN</div>
+							<div id="Pay_client_tin_receivables"></div>
+						  </div>
+						 
+						</li>
+						  
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Billing Date</div>
+							<div id="Pay_billing_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Billing Period</div>
+							<div id="Pay_billing_period"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Control No.</div>
+							<div id="Pay_control_no_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Total Due</div>
+							<div id="Pay_amount_receivables"></div>
+						  </div>
+						 
+						</li>
+						
+					  </ol>					
+					
+					</div>
+					<div class="col-lg-8">
+								<div align="right">
+								<button type="button" class="btn btn-success new_item bi bi-plus-square" onclick="NewPaymentRow();" title="Add a Paymnet Option(1-3 items)"></button>
+								</div>
+								<br>
+								<table class="table" id="receivable_payment_table">
+									<thead>
+										<tr class='report'>
+										
+										<th style="text-align:center !important;">Date</th>
+										<th style="text-align:center !important;">Mode of Payment</th>
+										<th style="text-align:center !important;">Reference No.</th>
+										<th style="text-align:center !important;">Amount</th>
+										<th style="text-align:center !important;">Action</th>
+										
+										</tr>
+									</thead>
+										
+									<tbody id="receivable_payment_table_body_data">
+										 <tr style="display: none;"><td>HIDDEN</td></tr>
+									</tbody>
+									
+								</table>
+								<div style="color:red;" id="table_paymentxError"></div>
+					  
+					</div>
+						
+					</div>
+					</div>
+					
+                    <div class="modal-footer modal-footer_form">
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-receivables-payment" value="14"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>	  
+					</div>
+					<!-- End Multi Columns Form -->
+                  
+				  </div>
+                </div>
+             </div>
+			 
     </section>
 </main>
-
-
 @endsection
 
