@@ -358,7 +358,7 @@
 					</div>
 					
                     <div class="modal-footer modal-footer_form">
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-receivables-payment" value="14"> Submit</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-receivables-payment" value=""> Submit</button>
 						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>	  
 					</div>
 					<!-- End Multi Columns Form -->

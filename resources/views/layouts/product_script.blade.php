@@ -21,7 +21,7 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'product_name'},   
-					{data: 'product_price'},
+					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
 					{data: 'product_unit_measurement'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],

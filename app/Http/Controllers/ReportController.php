@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesModel;
+use App\Models\ReceivablesPaymentModel;
 use App\Models\ProductModel;
 
 use App\Models\SalesOrderModel;
@@ -417,6 +418,73 @@ class ReportController extends Controller
 		$title = 'RECEIVABLE';
 		  
         $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+		
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
+	}
+	
+	public function generate_receivable_soa_pdf(Request $request){
+
+		$request->validate([
+			'receivable_id'      		=> 'required'
+        ], 
+        [
+			'receivable_id.required' 	=> 'Please select a receivable_id'
+        ]
+		);
+
+		$receivable_id = $request->receivable_id;
+					
+				$receivable_data = ReceivablesModel::where('receivable_id', $request->receivable_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+              	->get([
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.billing_date',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_receivable_table.control_number',
+					'teves_client_table.client_tin',
+					'teves_receivable_table.or_number',				
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount'
+				]);
+		
+		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
+				->orderBy('receivable_payment_id', 'asc')
+              	->get([
+					'teves_receivable_payment.receivable_payment_id',
+					'teves_receivable_payment.receivable_date_of_payment',
+					'teves_receivable_payment.receivable_mode_of_payment',
+					'teves_receivable_payment.receivable_reference',
+					'teves_receivable_payment.receivable_payment_amount',
+					]);
+		
+		
+		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
+		
+		@$amount_split_whole_to_decimal = explode('.',$receivable_amount_amt);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$amount_in_word_decimal = "";
+		}else{
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
+		}
+		
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;		
+	
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'STATEMENT OF ACCOUNT';
+		  
+        $pdf = PDF::loadView('pages.report_receivables_soa_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

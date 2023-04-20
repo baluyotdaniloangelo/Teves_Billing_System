@@ -42,7 +42,10 @@ class SalesOrderController extends Controller
 		$list = SalesOrderModel::get();
 		if ($request->ajax()) {
 
-    	$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+		if(Session::get('UserType')=="Admin"){
+
+			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+					
               		->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
@@ -51,7 +54,22 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_status']);
-		
+					
+		}else{
+			
+			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+              		->whereDate('teves_sales_order_table.created_at', date('Y-m-d'))
+					->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.sales_order_date',
+					'teves_client_table.client_name',
+					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_payment_term',
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_status']);	
+			
+		}			
+	
 		return DataTables::of($data)
 				->addIndexColumn()
 				->addColumn('status', function($row){

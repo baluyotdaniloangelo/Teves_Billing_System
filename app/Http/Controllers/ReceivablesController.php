@@ -99,6 +99,67 @@ class ReceivablesController extends Controller
 		
 	}
 	
+	public function save_receivable_payment_post(Request $request){		
+			
+			$request->validate([
+			'payment_amount'  	=> 'required'
+			], 
+			[
+				'payment_amount.required' 	=> 'Payment Account is Required'
+			]
+			);
+			
+			/*Payment Option*/
+			$receivable_id 				= $request->receivable_id;
+			$payment_id 				= $request->payment_id;
+			$mode_of_payment 			= $request->mode_of_payment;
+			$date_of_payment 			= $request->date_of_payment;
+			$reference_no 				= $request->reference_no;
+			$payment_amount 			= $request->payment_amount;
+			
+			if($payment_amount!=''){
+				for($count = 0; $count < count($mode_of_payment); $count++)
+				{
+					
+						$mode_of_payment_item 	= $mode_of_payment[$count];
+						$date_of_payment_item 	= $date_of_payment[$count];
+						$reference_no_item 		= $reference_no[$count];
+						$payment_amount_item 	= $payment_amount[$count];
+						$payment_id_item 		= $payment_id[$count];
+				//echo "payment_id_item";
+					if($payment_id_item==0){
+							
+						$ReceivablePaymentComponent = new ReceivablesPaymentModel();
+						
+						$ReceivablePaymentComponent->receivable_idx 				= $receivable_id;
+						$ReceivablePaymentComponent->receivable_mode_of_payment 	= $mode_of_payment_item;
+						$ReceivablePaymentComponent->receivable_date_of_payment 	= $date_of_payment_item;
+						$ReceivablePaymentComponent->receivable_reference 			= $reference_no_item;
+						$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
+						
+						$ReceivablePaymentComponent->save();
+						//echo "ffff";
+						
+					}else{
+						
+						$ReceivablePaymentComponent = new ReceivablesPaymentModel();
+						
+						$ReceivablePaymentComponent = ReceivablesPaymentModel::find($payment_id_item);
+						
+						$ReceivablePaymentComponent->receivable_mode_of_payment 	= $mode_of_payment_item;
+						$ReceivablePaymentComponent->receivable_date_of_payment 	= $date_of_payment_item;
+						$ReceivablePaymentComponent->receivable_reference 			= $reference_no_item;
+						$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
+						
+						$ReceivablePaymentComponent->update();
+	
+					}
+				}		
+				return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
+			}
+		
+	}
+	
 	/*Fetch Product Information*/
 	public function receivable_info(Request $request){
 

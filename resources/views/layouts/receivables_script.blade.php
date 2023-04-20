@@ -135,27 +135,29 @@
 	$("#save-receivables-payment").click(function(event){
 
 			event.preventDefault();
-			
-					/*Reset Warnings*/
-					$('#client_idxError').text('');
-
-			//document.getElementById('SalesOrderformNew').className = "g-3 needs-validation was-validated";
-
+				
+				let receivable_id 			= document.getElementById("save-receivables-payment").value;
+				
 				/*Payment Options*/
 				var mode_of_payment = [];
 				var date_of_payment = [];
 				var reference_no = [];
 				var payment_amount = [];
-				  
+				var payment_id = [];
+				
+				 $.each($("[id='payment_item']"), function(){
+					payment_id.push($(this).attr("data-id"));
+				  });
+				alert(payment_id);
 				  $('.mode_of_payment').each(function(){
 					if($(this).val() == ''){
-						alert('Please Select a Bank');
+						alert('Please input Mode of Payment');
 						exit();
 					}else{  				  
 				   		mode_of_payment.push($(this).val());
 					}				  
 				  });
-				  
+				  alert(mode_of_payment);
 				  $('.date_of_payment').each(function(){
 					if($(this).val() == ''){
 						alert('Date of Payment is Empty');
@@ -184,13 +186,15 @@
 				  });		
 		
 			  $.ajax({
-				url: "/create_sales_order_post",
+				url: "/save_receivable_payment_post",
 				type:"POST",
 				data:{
+				  receivable_id:receivable_id,
 				  mode_of_payment:mode_of_payment,
 				  date_of_payment:date_of_payment,
 				  reference_no:reference_no,
 				  payment_amount:payment_amount,
+				  payment_id:payment_id,
 				  _token: "{{ csrf_token() }}"
 				},
 			
@@ -202,16 +206,7 @@
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					//$('#order_dateError').text('');					
-					//$('#order_timeError').text('');
-					//$('#order_po_numberError').text('');
-					//$('#client_idxError').text('');
-					
-					//$('#plate_noError').text('');
-					//$('#drivers_nameError').text('');
-					//$('#product_idxError').text('');
-					//$('#product_manual_priceError').text('');
-					//$('#order_quantityError').text('');
+					loadReceivablesPayment(receivable_id);
 		
 					/*Close Modal*/
 					//$('#CreateSalesOrderModal').modal('toggle');
@@ -220,13 +215,7 @@
 				},
 				error: function(error) {
 					
-				 console.log(error);	
-				 
-				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
-				  document.getElementById('client_idxError').className = "invalid-feedback";
-  
-				  //document.getElementById('product_idxError').className = "invalid-feedback";
-				  $('#product_idxError').html(error.responseJSON.errors.product_idx);
+				 console.log(error);
 								
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
@@ -236,12 +225,10 @@
 			   });	
 	  });
 	 
-	 
-	 
 	function NewPaymentRow() {
 		
 		var x = document.getElementById("receivable_payment_table_body_data").rows.length;
-		/*Limit to 5 rows*/
+		/*Limit to 10 rows*/
 		if(x > 10){
 		   return;
 		}else{
@@ -250,7 +237,7 @@
 							"<td class='bank_td' align='center'><input type='text' class='form-control mode_of_payment' id='mode_of_payment' name=' mode_of_payment' list='mode_of_payment_list' autocomplete='off' value=''></td>"+
 							"<td class='reference_no_td' align='center'><input type='text' class='form-control reference_no' id='reference_no' name='reference_no' value=''></td>"+
 							"<td class='payment_amount_td' align='center'><input type='number' class='form-control payment_amount' id='payment_amount' name='payment_amount' value=''></td>"+
-							"<td><div onclick='deletePaymentRow(this)' data-id='' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+							"<td><div onclick='deletePaymentRow(this)' data-id='0' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
 		}	
 	}
 	
@@ -506,6 +493,7 @@
 			var to_print = document.getElementById("receivable_print_"+id).value;
 				
 				if(to_print=='PrintStatement'){
+					print_soa(id);
 				}
 				else if(to_print=='PrintBilling'){
 					print_billing(id)
@@ -624,6 +612,64 @@
 							}
 
 					var url_receivable = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query_receivable)
+					window.open(url_receivable);
+			
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  
+	  }
+	  
+	  	  function print_soa(id){
+	  
+			event.preventDefault();
+			
+			let ReceivableID = id;
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-receivables").value = ReceivableID;
+					
+					/*Set Details*/
+					let client_idx 		= response[0].client_id;
+					let start_date 		= response[0].billing_period_start;
+					let end_date 		= response[0].billing_period_end;
+					let less_per_liter 	= response[0].less_per_liter;
+					
+					/*Open Billing Print Page*/				
+					var query_billing = {
+						client_idx:client_idx,
+						start_date:start_date,
+						end_date:end_date,
+						less_per_liter:less_per_liter,
+						_token: "{{ csrf_token() }}"
+					}
+
+					/*var url_billing = "{{URL::to('generate_report_pdf')}}?" + $.param(query_billing)
+					window.open(url_billing);*/
+		
+					/*Open Receivable Print Page*/
+					
+					var query_receivable = {
+								receivable_id:ReceivableID,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url_receivable = "{{URL::to('generate_receivable_soa_pdf')}}?" + $.param(query_receivable)
 					window.open(url_receivable);
 			
 				  }
