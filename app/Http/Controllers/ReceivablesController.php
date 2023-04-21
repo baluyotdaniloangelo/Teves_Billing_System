@@ -95,7 +95,30 @@ class ReceivablesController extends Controller
 	public function delete_receivable_payment_item(Request $request){		
 			
 		$paymentitemID = $request->paymentitemID;
+		$receivableID = $request->receivable_id;
+		
 		ReceivablesPaymentModel::find($paymentitemID)->delete();
+		
+		/*Remaining Balance*/
+			/*Get Receivable Details*/
+			$receivable_details = ReceivablesModel::find($receivableID, ['receivable_amount']);							
+			$receivable_amount = $receivable_details->receivable_amount;
+			
+			/*Get Receivable Payment Details*/
+			$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivableID)
+              	->sum('receivable_payment_amount');
+
+			$remaining_balance = $receivable_amount - $receivable_payment_amount+0;
+			
+			/*Update Recievable Table*/
+			$Receivables_update = new ReceivablesModel();
+			$Receivables_update = ReceivablesModel::find($receivableID);
+			
+			$Receivables_update->receivable_remaining_balance 		= $remaining_balance;
+			
+			$result_update = $Receivables_update->update();
+
+
 		return 'Deleted';
 		
 	}
@@ -213,6 +236,10 @@ class ReceivablesController extends Controller
 
 		$receivableID = $request->receivable_id;
 		ReceivablesModel::find($receivableID)->delete();
+		
+		/*Delete Payment*/	
+		ReceivablesPaymentModel::where('receivable_idx', $receivableID)->delete();
+		
 		return 'Deleted';
 		
 	} 

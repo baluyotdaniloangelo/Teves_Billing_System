@@ -208,6 +208,9 @@
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					loadReceivablesPayment(receivable_id);
+					
+					var table = $("#getReceivablesList").DataTable();
+				    table.ajax.reload(null, false);
 		
 					/*Close Modal*/
 					//$('#CreateSalesOrderModal').modal('toggle');
@@ -245,7 +248,7 @@
 	function deletePaymentRow(btn) {
 			
 		var paymentitemID= $(btn).data("id");			
-		
+		let receivable_id 			= document.getElementById("save-receivables-payment").value;
 		var row = btn.parentNode.parentNode;
 		row.parentNode.removeChild(row);
 		
@@ -257,6 +260,7 @@
 				type:"POST",
 				data:{
 				  paymentitemID:paymentitemID,
+				  receivable_id:receivable_id,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -264,6 +268,8 @@
 				  if(response) {
 					
 				  }
+					var table = $("#getReceivablesList").DataTable();
+				    table.ajax.reload(null, false);
 				},
 				error: function(error) {
 				 console.log(error);

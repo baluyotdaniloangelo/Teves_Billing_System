@@ -490,7 +490,7 @@ class ReportController extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
+		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE_SOA.pdf");
 	}
 
 	public function generate_sales_order_pdf(Request $request){
