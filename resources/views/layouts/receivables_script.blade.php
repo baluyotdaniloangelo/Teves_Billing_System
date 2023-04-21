@@ -27,6 +27,7 @@
 					{data: 'payment_term'},*/
 					{data: 'receivable_description'},
 					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_status'},
 					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
@@ -148,8 +149,8 @@
 				 $.each($("[id='payment_item']"), function(){
 					payment_id.push($(this).attr("data-id"));
 				  });
-				alert(payment_id);
-				  $('.mode_of_payment').each(function(){
+				
+ 				 $('.mode_of_payment').each(function(){
 					if($(this).val() == ''){
 						alert('Please input Mode of Payment');
 						exit();
@@ -157,7 +158,7 @@
 				   		mode_of_payment.push($(this).val());
 					}				  
 				  });
-				  alert(mode_of_payment);
+				 
 				  $('.date_of_payment').each(function(){
 					if($(this).val() == ''){
 						alert('Date of Payment is Empty');

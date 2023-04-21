@@ -15,6 +15,7 @@ class ReceivablesModel extends Model
 		'payment_term',
 		'receivable_description',
 		'receivable_amount',
+		'receivable_remaining_balance',
     ];
 	
 	protected $primaryKey = 'receivable_id';

@@ -42,6 +42,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.control_number',		
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.receivable_remaining_balance',
 					'teves_receivable_table.receivable_status']);
 		
 		return DataTables::of($data)
@@ -126,7 +127,7 @@ class ReceivablesController extends Controller
 						$reference_no_item 		= $reference_no[$count];
 						$payment_amount_item 	= $payment_amount[$count];
 						$payment_id_item 		= $payment_id[$count];
-				//echo "payment_id_item";
+				
 					if($payment_id_item==0){
 							
 						$ReceivablePaymentComponent = new ReceivablesPaymentModel();
@@ -138,7 +139,6 @@ class ReceivablesController extends Controller
 						$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
 						
 						$ReceivablePaymentComponent->save();
-						//echo "ffff";
 						
 					}else{
 						
@@ -155,9 +155,31 @@ class ReceivablesController extends Controller
 	
 					}
 				}		
-				return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
+				
+			/*Remaining Balance*/
+			/*Get Receivable Details*/
+			$receivable_details = ReceivablesModel::find($receivable_id, ['receivable_amount']);							
+			$receivable_amount = $receivable_details->receivable_amount;
+			
+			/*Get Receivable Payment Details*/
+			$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivable_id)
+              	->sum('receivable_payment_amount');
+
+			$remaining_balance = $receivable_amount - $receivable_payment_amount;
+			
+			/*Update Recievable Table*/
+			$Receivables_update = new ReceivablesModel();
+			$Receivables_update = ReceivablesModel::find($receivable_id);
+			
+			$Receivables_update->receivable_remaining_balance 		= $remaining_balance;
+			
+			$result_update = $Receivables_update->update();
+			
+			
+			
+			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
 			}
-		
+							
 	}
 	
 	/*Fetch Product Information*/
@@ -285,8 +307,6 @@ class ReceivablesController extends Controller
 				->groupBy('teves_billing_table.client_idx')
 				->groupBy('teves_product_table.product_unit_measurement')
 				->sum('order_quantity');
-				
-			//echo "$receivable_amount $receivable_total_liter";
 				
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);

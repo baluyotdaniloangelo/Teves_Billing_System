@@ -23,10 +23,9 @@
 													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<!--<th>O.R. Number</th>
-													<th>Payment Term</th>-->
 													<th>Description</th>
 													<th>Total Due</th>
+													<th>Remaining Balance</th>
 													<th>Status</th>
 													<th>Print</th>
 													<th>Action</th>
@@ -43,10 +42,9 @@
 													<th>Date</th>
 													<th>Control Number</th>
 													<th>Client</th>
-													<!--<th>O.R. Number</th>
-													<th>Payment Term</th>-->
 													<th>Description</th>
 													<th>Total Due</th>
+													<th>Remaining Balance</th>
 													<th>Status</th>
 													<th>Print</th>
 													<th>Action</th>												
@@ -358,8 +356,8 @@
 					</div>
 					
                     <div class="modal-footer modal-footer_form">
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-receivables-payment" value=""> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>	  
+						<button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-receivables-payment" value=""> Submit</button>
+						<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>	
 					</div>
 					<!-- End Multi Columns Form -->
                   

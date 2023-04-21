@@ -212,8 +212,9 @@
 		
 		<tr class="data_tr" style="font-size:12px;">
 				
-				<td align="left" colspan="6" style=" ">G-T Petroleum Products Retailing Proprietor</td>
-				<td align="left" colspan="4"></td>
+				<td align="center" colspan="3" style=" ">{{$user_data->user_job_title}}</td>
+				<td align="left" colspan="5"></td>
+				<td align="left" colspan="2"></td>
 		</tr>
 		
 		<tr>
