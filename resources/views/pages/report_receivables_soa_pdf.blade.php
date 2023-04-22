@@ -118,9 +118,10 @@
 		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="1" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">#</td>		
-			<td colspan="3" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date</td>		
+			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date</td>		
+			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Reference No.</td>		
 			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>
-			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
+			<td colspan="2" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
 		</tr>
 		<?php 
 			$no = 1;
@@ -134,9 +135,10 @@
 		<tr style="font-size:12px;">
 			
 			<td colspan="1" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$no;?></td>
-			<td colspan="3" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$paymnent_date;?></td>
+			<td colspan="2" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$paymnent_date;?></td>
+			<td colspan="2" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
 			<td colspan="3" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
-			<td colspan="3" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
+			<td colspan="2" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
 		
 		</tr>
 			<?php
