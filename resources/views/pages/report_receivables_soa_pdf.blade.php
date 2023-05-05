@@ -118,7 +118,7 @@
 		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="1" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">#</td>		
-			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date</td>		
+			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date of Payment</td>		
 			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Reference No.</td>		
 			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>
 			<td colspan="2" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
