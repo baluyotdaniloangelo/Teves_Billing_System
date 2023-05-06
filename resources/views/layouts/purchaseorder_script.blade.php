@@ -217,6 +217,9 @@
 			/*Supplier's Name and Product Name*/
 			let supplier_name 					= $("input[name=supplier_name]").val();
 			
+			/*Added May 6, 2023*/
+			let company_header 							= $("#company_header").val();
+			
 			let purchase_order_sales_order_number 		= $("input[name=purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=purchase_order_collection_receipt_no]").val();
 			let purchase_order_official_receipt_no 		= $("input[name=purchase_order_official_receipt_no]").val();
@@ -317,7 +320,7 @@
 			
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
-					
+					company_header:company_header,
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
 					purchase_order_official_receipt_no:purchase_order_official_receipt_no,
@@ -541,7 +544,8 @@
 			document.getElementById("update_purchase_order_note").value = response[0].purchase_order_note;		
 					
 			document.getElementById("update-purchase-order").value = purchase_order_id;		
-					
+			document.getElementById("update_company_header").value = response[0].company_header;	
+			
 				var update_product_idx = [];
 				var update_order_quantity = [];
 				var update_product_manual_price = [];
@@ -703,7 +707,8 @@
 			let supplier_idx 							= ($("#update_supplier_name option[value='" + $('#update_supplier_idx').val() + "']").attr('data-id'));
 			/*Supplier's Name and Product Name*/
 			let supplier_name 							= $("input[name=update_supplier_name]").val();
-			
+			/*Added May 6, 2023*/
+			let company_header 							= $("#update_company_header").val();
 			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
 			let purchase_order_official_receipt_no 		= $("input[name=update_purchase_order_official_receipt_no]").val();
@@ -816,7 +821,7 @@
 					
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
-				
+					company_header:company_header,
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
 					purchase_order_official_receipt_no:purchase_order_official_receipt_no,

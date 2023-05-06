@@ -333,6 +333,7 @@ class ReportController extends Controller
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
 		$less_per_liter = $request->less_per_liter;
+		$company_header = $request->company_header;
 		
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
@@ -359,7 +360,7 @@ class ReportController extends Controller
           
 		$title = 'Billing Statement';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter'));
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
@@ -394,7 +395,8 @@ class ReportController extends Controller
 					'teves_receivable_table.or_number',				
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
-					'teves_receivable_table.receivable_amount'
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.company_header'
 				]);
 		
 		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
@@ -529,7 +531,8 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_instructions',
 					'teves_sales_order_table.sales_order_note',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage'
+					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.company_header'
 				]);
 				
 		$sales_order_amt =  number_format($sales_order_data[0]['sales_order_total_due'],2,".","");
@@ -574,6 +577,7 @@ class ReportController extends Controller
 		$title = 'SALES ORDER';
 		  
         $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','sales_payment_component'));
+		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','sales_payment_component'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -621,9 +625,9 @@ class ReportController extends Controller
 						'teves_purchase_order_table.purchase_date_of_departure',
 						'teves_purchase_order_table.purchase_date_of_arrival',
 						'teves_purchase_order_table.purchase_order_instructions',
-						'teves_purchase_order_table.purchase_order_note'
+						'teves_purchase_order_table.purchase_order_note',
+						'teves_purchase_order_table.company_header'
 				]);
-
 
 		$purchase_order_amt =  number_format($purchase_order_data[0]['purchase_order_total_payable'],2,".","");
 		

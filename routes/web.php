@@ -11,6 +11,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
 
+
+use App\Http\Controllers\SalesSummaryController;
+
 use App\Http\Controllers\PurchaseOrderController;
 /*
 |--------------------------------------------------------------------------
@@ -190,3 +193,5 @@ Route::post('/update_supplier_post', [SupplierController::class,'update_supplier
 /*Confirm Delete Product*/
 Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_supplier_confirmed'])->name('delete_supplier_confirmed')->middleware('isLoggedIn');
 
+/* Sales Summary */
+Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

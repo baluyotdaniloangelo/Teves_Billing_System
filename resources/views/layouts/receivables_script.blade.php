@@ -79,6 +79,7 @@
 					document.getElementById("start_date").value = response[0].billing_period_start;
 					document.getElementById("end_date").value = response[0].billing_period_end;
 					document.getElementById("less_per_liter").value = response[0].less_per_liter;
+					document.getElementById("company_header").value = response[0].company_header;
 					
 					$('#UpdateReceivablesModal').modal('toggle');					
 				  
@@ -346,7 +347,8 @@
 			let start_date 			= $("#start_date").val();
 			let end_date 			= $("#end_date").val();
 			let less_per_liter 		= $("#less_per_liter").val();
-			
+			/*Added May 6, 2023*/
+			let company_header 		= $("#company_header").val();
 			  $.ajax({
 				url: "/update_receivables_post",
 				type:"POST",
@@ -360,6 +362,7 @@
 				  less_per_liter:less_per_liter,
 				  start_date:start_date,
 				  end_date:end_date,
+				  company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -540,13 +543,14 @@
 					let start_date 		= response[0].billing_period_start;
 					let end_date 		= response[0].billing_period_end;
 					let less_per_liter 	= response[0].less_per_liter;
+					let company_header 	= response[0].company_header;
 					
 					/*Open Billing Print Page*/				
 					var query_billing = {
 						client_idx:client_idx,
 						start_date:start_date,
 						end_date:end_date,
-						less_per_liter:less_per_liter,
+						company_header:company_header,
 						_token: "{{ csrf_token() }}"
 					}
 

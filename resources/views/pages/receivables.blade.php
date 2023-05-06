@@ -167,6 +167,16 @@
 					  <form class="g-2 needs-validation pt-4" id="ReceivableformEdit">
 						
 						<div class="row mb-2">
+						  <label for="billing_date" class="col-sm-3 col-form-label">Header/Company : </label>
+						  <div class="col-sm-9">
+							<select class="form-select form-control" required="" name="company_header" id="company_header">
+								<option value="GT">GT</option>
+								<option value="Teves">Teves</option>
+							</select>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
 						  <label for="billing_date" class="col-sm-3 col-form-label">Billing Date : </label>
 						  <div class="col-sm-9">
 							<input type="date" class="form-control " name="billing_date" id="billing_date" value="" required>
@@ -217,7 +227,7 @@
 						<div class="row mb-2">
 						  <label for="receivable_description" class="col-sm-3 col-form-label">Description : </label>
 						  <div class="col-sm-9">
-							<textarea class="form-control" id="receivable_description" style="height: 100px;" required></textarea>
+							<textarea class="form-control" id="receivable_description" style="height: 50px;" required></textarea>
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>

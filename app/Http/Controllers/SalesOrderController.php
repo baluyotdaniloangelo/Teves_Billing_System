@@ -113,6 +113,7 @@ class SalesOrderController extends Controller
 						
 					->get([
 					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.company_header',
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
 					'teves_client_table.client_name',
@@ -173,6 +174,7 @@ class SalesOrderController extends Controller
 			
 			$Salesorder = new SalesOrderModel();
 			$Salesorder->sales_order_client_idx 				= $request->client_idx;
+			$Salesorder->company_header 						= $request->company_header;
 			$Salesorder->sales_order_control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Salesorder->sales_order_date 						= $request->sales_order_date;
 			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
@@ -258,6 +260,7 @@ class SalesOrderController extends Controller
 				
 				$SalesOrderComponentModel->sales_order_idx 			= $last_transaction_id;
 				$SalesOrderComponentModel->product_idx 				= $sales_order_item_product_id;
+				$SalesOrderComponentModel->sales_order_date 		= $request->sales_order_date;
 				$SalesOrderComponentModel->client_idx 				= $request->client_idx;
 				$SalesOrderComponentModel->order_quantity 			= $sales_order_item_order_quantity;
 				$SalesOrderComponentModel->product_price 			= $product_price;
@@ -308,6 +311,7 @@ class SalesOrderController extends Controller
 			$Salesorder = new SalesOrderModel();
 			$Salesorder = SalesOrderModel::find($request->sales_order_id);
 			$Salesorder->sales_order_client_idx 				= $request->client_idx;
+			$Salesorder->company_header 						= $request->company_header;
 			$Salesorder->sales_order_date 						= $request->sales_order_date;
 			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
 			$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
@@ -415,6 +419,7 @@ class SalesOrderController extends Controller
 				$SalesOrderComponentModel = new SalesOrderComponentModel();
 				
 				$SalesOrderComponentModel->sales_order_idx 			= $last_transaction_id;
+				$SalesOrderComponentModel->sales_order_date 		= $request->sales_order_date;
 				$SalesOrderComponentModel->product_idx 				= $sales_order_item_product_id;
 				$SalesOrderComponentModel->client_idx 				= $request->client_idx;
 				$SalesOrderComponentModel->order_quantity 			= $sales_order_item_order_quantity;
@@ -430,6 +435,7 @@ class SalesOrderController extends Controller
 				$SalesOrderComponentModel_update = SalesOrderComponentModel::find($sales_order_product_item_id);
 				
 				$SalesOrderComponentModel_update->product_idx 				= $sales_order_item_product_id;
+				$SalesOrderComponentModel_update->sales_order_date 				= $request->sales_order_date;
 				$SalesOrderComponentModel_update->client_idx 				= $request->client_idx;
 				$SalesOrderComponentModel_update->order_quantity 			= $sales_order_item_order_quantity;
 				$SalesOrderComponentModel_update->product_price 			= $product_price;

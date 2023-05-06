@@ -256,10 +256,21 @@
                     <div class="modal-body">
 					
 					  <form class="g-2 needs-validation" id="generate_report_form">
+
 					  
 						<div class="row mb-2">
-						  <label for="client_idx" class="col-sm-3 col-form-label">Client</label>
-						  <div class="col-sm-9">
+						  <label for="company_header" class="col-sm-4 col-form-label">Header/Company</label>
+						  <div class="col-sm-8">
+							<select class="form-select form-control" required="" name="company_header" id="company_header">
+								<option value="GT">GT</option>
+								<option value="Teves">Teves</option>
+							</select>
+						  </div>
+						</div>
+					  
+						<div class="row mb-2">
+						  <label for="client_idx" class="col-sm-4 col-form-label">Client</label>
+						  <div class="col-sm-8">
 							<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
 								<datalist id="client_name">
 									@foreach ($client_data as $client_data_cols)
@@ -271,24 +282,24 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="start_date" class="col-sm-3 col-form-label">Start Date</label>
-						  <div class="col-sm-9">
+						  <label for="start_date" class="col-sm-4 col-form-label">Start Date</label>
+						  <div class="col-sm-8">
 							<input type="date" class="form-control " name="start_date" id="start_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="start_dateError"></span>
 						  </div>
 						</div>						
 								
 						<div class="row mb-2">
-						  <label for="end_date" class="col-sm-3 col-form-label">End Date</label>
-						  <div class="col-sm-9">
+						  <label for="end_date" class="col-sm-4 col-form-label">End Date</label>
+						  <div class="col-sm-8">
 							<input type="date" class="form-control " name="end_date" id="end_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="end_dateError"></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Less Per Liter</label>
-						  <div class="col-sm-9">
+						  <label for="less_per_liter" class="col-sm-4 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Less Per Liter</label>
+						  <div class="col-sm-8">
 							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
 							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>

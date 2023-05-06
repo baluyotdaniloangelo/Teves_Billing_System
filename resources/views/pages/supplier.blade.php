@@ -80,7 +80,7 @@
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Create supplier</h5>
+                      <h5 class="modal-title">Create Supplier</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -132,7 +132,7 @@
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Update supplier</h5>
+                      <h5 class="modal-title">Update Supplier</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>

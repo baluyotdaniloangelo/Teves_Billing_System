@@ -54,6 +54,11 @@ else if (Request::is('purchaseorder')){
 @include('layouts.purchaseorder_script')
 <?php
 }
+else if (Request::is('monthly_sales')){
+?>
+<script src="{{asset('NiceAdmin-pro/assets/vendor/chart.js/chart.min.js')}}"></script>
+<?php
+}
 ?>
 <script>
 	<!--Selected Account For Update-->

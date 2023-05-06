@@ -64,7 +64,20 @@
                     </div>
                     <div class="modal-body">
 					<form class="g-2 needs-validation" id="PurchaseOrderformNew">		
-
+									<div class="row">
+									
+										<div class="col-md-3">
+											<label for="company_header" class="form-label">Header/Company</label>
+											<select class="form-select form-control" required="" name="company_header" id="company_header">
+											<option value="GT">GT</option>
+											<option value="Teves">Teves</option>
+											</select>
+										</div>
+										
+									</div>
+									
+									<hr>
+									
 									<div class="row">
 
 										<div class="col-md-6">
@@ -326,7 +339,19 @@
                     </div>
                     <div class="modal-body">
 					<form class="g-2 needs-validation" id="PurchaseOrderformUpdate">		
-
+									<div class="row">
+									
+										<div class="col-md-3">
+											<label for="update_company_header" class="form-label">Header/Company</label>
+											<select class="form-select form-control" required="" name="update_company_header" id="update_company_header">
+											<option value="GT">GT</option>
+											<option value="Teves">Teves</option>
+											</select>
+										</div>
+										
+									</div>
+									
+									<hr>
 									<div class="row">
 
 										<div class="col-md-6">

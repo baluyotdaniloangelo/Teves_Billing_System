@@ -136,7 +136,8 @@ class PurchaseOrderController extends Controller
 						'teves_purchase_order_table.purchase_date_of_departure',
 						'teves_purchase_order_table.purchase_date_of_arrival',
 						'teves_purchase_order_table.purchase_order_instructions',
-						'teves_purchase_order_table.purchase_order_note'
+						'teves_purchase_order_table.purchase_order_note',
+						'teves_purchase_order_table.company_header'
 				]);	
 						
 						
@@ -208,7 +209,7 @@ class PurchaseOrderController extends Controller
 									
 			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
 			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
-			
+			$Purchaseorder->company_header							= $request->company_header;
 			
 			$result = $Purchaseorder->save();
 			
@@ -353,7 +354,7 @@ class PurchaseOrderController extends Controller
 									
 			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
 			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
-					
+			$Purchaseorder->company_header							= $request->company_header;		
 			$result = $Purchaseorder->update();
 			
 			$product_idx 						= $request->product_idx;

@@ -228,6 +228,9 @@
 
 			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));			
 			
+			/*Added May 6, 2023*/
+			let company_header 					= $("#company_header").val();
+			
 			let sales_order_date 		= $("input[name=sales_order_date]").val();
 			let delivered_to 			= $("input[name=delivered_to]").val();
 			let delivered_to_address 	= $("input[name=delivered_to_address]").val();
@@ -317,6 +320,7 @@
 				type:"POST",
 				data:{
 				  client_idx:client_idx,
+				  company_header:company_header,
 				  sales_order_date:sales_order_date,
 				  delivered_to:delivered_to,
 				  delivered_to_address:delivered_to_address,
@@ -521,6 +525,8 @@
 					document.getElementById("update_sales_order_net_percentage").value = response[0].sales_order_net_percentage;
 					document.getElementById("update_sales_order_less_percentage").value = response[0].sales_order_less_percentage;
 					
+					document.getElementById("update_company_header").value = response[0].company_header;
+					
 				var update_product_idx = [];
 				var update_order_quantity = [];
 				var update_product_manual_price = [];
@@ -681,7 +687,8 @@
 			document.getElementById('UpdateSalesOrderformUpdate').className = "g-3 needs-validation was-validated";
 
 			let sales_order_id			= document.getElementById("update-sales-order").value;
-			
+			/*Added May 6, 2023*/
+			let company_header 			= $("#update_company_header").val();
 			let client_idx 				= ($("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id'));	
 			let sales_order_date 		= $("input[name=update_sales_order_date]").val();
 			let delivered_to 			= $("input[name=update_delivered_to]").val();
@@ -781,6 +788,7 @@
 				type:"POST",
 				data:{
 				  sales_order_id:sales_order_id,
+				  company_header:company_header,
 				  client_idx:client_idx,
 				  sales_order_date:sales_order_date,
 				  delivered_to:delivered_to,

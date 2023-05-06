@@ -226,7 +226,8 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_status',
 					'teves_receivable_table.billing_period_start',
 					'teves_receivable_table.billing_period_end',
-					'teves_receivable_table.less_per_liter']);
+					'teves_receivable_table.less_per_liter',
+					'teves_receivable_table.company_header']);
 					return response()->json($data);
 		
 	}
@@ -289,6 +290,7 @@ class ReceivablesController extends Controller
 			$Receivables->billing_period_end 		= $request->end_date;
 			
 			$Receivables->less_per_liter 		= $request->less_per_liter;
+			$Receivables->company_header 		= $request->company_header;
 			
 			$result = $Receivables->save();
 			
@@ -347,6 +349,7 @@ class ReceivablesController extends Controller
 			$Receivables->billing_period_end 		= $request->end_date;
 			
 			$Receivables->less_per_liter 			= $request->less_per_liter;
+			$Receivables->company_header 			= $request->company_header;
 			
 			$result = $Receivables->update();
 			

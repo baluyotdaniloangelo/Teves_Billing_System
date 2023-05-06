@@ -13,6 +13,7 @@ class SalesOrderComponentModel extends Model
 	protected $fillable = [
         'sales_order_component_id',
 		'sales_order_idx',
+		'sales_order_date',
         'product_idx',
         'client_idx',
 		'order_quantity',

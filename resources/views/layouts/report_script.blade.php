@@ -365,12 +365,14 @@
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 			let less_per_liter 	= $("input[name=less_per_liter]").val();
-		 		  
+		 	/*Added May 6, 2023*/
+			let company_header 					= $("#company_header").val();	  
 		var query = {
 			client_idx:client_idx,
 			start_date:start_date,
 			end_date:end_date,
 			less_per_liter:less_per_liter,
+			company_header:company_header,
 			_token: "{{ csrf_token() }}"
 		}
 
@@ -410,6 +412,9 @@
 			
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
 			
+			/*Added May 6, 2023*/
+			let company_header 					= $("#company_header").val();
+			
 			$.ajax({
 				url: "/create_receivables_post",
 				type:"POST",
@@ -422,6 +427,7 @@
 				  receivable_description:receivable_description,
 				  receivable_status:receivable_status,
 				  less_per_liter:less_per_liter,
+				  company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
