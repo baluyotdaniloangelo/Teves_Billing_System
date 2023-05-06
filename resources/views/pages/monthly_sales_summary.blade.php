@@ -10,45 +10,30 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Monthly</h5>
+              <h5 class="card-title"> {{ $title }} </h5>
+				<div class="d-flex justify-content-end" id="user_option">
+				<div class="btn-group" role="group" aria-label="Basic outlined example"style="margin-top: -50px; position: absolute;">
+					    <select class="select_year form-select form-control" name="year">
+						<option value="2022">Year 2022</option>
+						<option value="2022">Year 2022</option>
+						<option value="2021">Year 2021</option>
+						<option value="2020">Year 2020</option>
+						</select>
+				  <button type="button" class="btn btn-success new_item bi bi-arrow-repeat" data-bs-toggle="modal" data-bs-target="#CreateUserModal"></button>
+				  </div>
+				</div>
+		
+				
+				
+				 <div  style="max-height: 400px;">
+					{!! $chart->container() !!}
+				</div>
+				
+				
+				
+				{!! $chart->script() !!}
 
-              <!-- Line Chart -->
-              <canvas id="MonthlyChart" style="max-height: 520px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#MonthlyChart'), {
-                    type: 'line',
-                    data: {
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                      datasets: [{
-                        label: 'Monthly Sales',
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                      }]
-                    },
-                    options: {
-                      scales: {
-                        y: {
-                          beginAtZero: true
-                        }
-                      }
-                    }
-                  });
-                });
-              </script>
-              <!-- End Line CHart -->
-				SELECT
-				  DATE_FORMAT(created_at, '%m-%Y') AS production_month,
-				  IFNULL(SUM(order_total_amount),0) AS count
-				FROM teves_sales_order_component_table
-				WHERE created_at<='2023-04-30 08:54:55'
-				GROUP BY
-				  MONTH(created_at),
-				  YEAR(created_at);
-				  
-				  Query must be starting from the 1st day of the year to last
+
             </div>
           </div>
         </div>

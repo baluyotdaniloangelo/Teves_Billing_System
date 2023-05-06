@@ -6,57 +6,72 @@ Use to automatically hide the Side Nav Bar
 <body class="">
 @yield('content')
  
-@include('layouts.footer')
-
 <?php
 
 if (Request::is('billing')){
 ?>
+@include('layouts.footer')
 @include('layouts.billing_script')
 <?php
 }else if (Request::is('product')){
 ?>
+@include('layouts.footer')
 @include('layouts.product_script')
 <?php
 }
 else if (Request::is('client')){
 ?>
+@include('layouts.footer')
 @include('layouts.client_script')
 <?php
 }
 else if (Request::is('supplier')){
 ?>
+@include('layouts.footer')
 @include('layouts.supplier_script')
 <?php
 }
 else if (Request::is('report')){
 ?>
+@include('layouts.footer')
 @include('layouts.report_script')
 <?php
 }
 else if (Request::is('user')){
 ?>
+@include('layouts.footer')
 @include('layouts.user_script')
 <?php
 }
 else if (Request::is('receivables')){
 ?>
+@include('layouts.footer')
 @include('layouts.receivables_script')
 <?php
 }
+
 else if (Request::is('salesorder')){
 ?>
+@include('layouts.footer')
 @include('layouts.salesorder_script')
 <?php
 }
 else if (Request::is('purchaseorder')){
 ?>
+@include('layouts.footer')
 @include('layouts.purchaseorder_script')
 <?php
 }
 else if (Request::is('monthly_sales')){
 ?>
-<script src="{{asset('NiceAdmin-pro/assets/vendor/chart.js/chart.min.js')}}"></script>
+@include('layouts.footer_chart')
+<script type="text/javascript">
+    var original_api_url = {{ $chart->id }}_api_url;
+    $(".select_year").change(function(){
+        var year = $(this).val();
+    {{ $chart->id }}_refresh(original_api_url + "?year="+year);
+    });
+</script>
 <?php
 }
 ?>

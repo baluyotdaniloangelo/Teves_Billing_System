@@ -556,17 +556,7 @@
 
 					var url_billing = "{{URL::to('generate_report_pdf')}}?" + $.param(query_billing)
 					window.open(url_billing);
-		
-					/*Open Receivable Print Page
-					
-					var query_receivable = {
-								receivable_id:ReceivableID,
-								_token: "{{ csrf_token() }}"
-							}
 
-					var url_receivable = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query_receivable)
-					window.open(url_receivable);
-			*/
 				  }
 				},
 				error: function(error) {
@@ -611,9 +601,6 @@
 						less_per_liter:less_per_liter,
 						_token: "{{ csrf_token() }}"
 					}
-
-					/*var url_billing = "{{URL::to('generate_report_pdf')}}?" + $.param(query_billing)
-					window.open(url_billing);*/
 		
 					/*Open Receivable Print Page*/
 					
@@ -670,9 +657,6 @@
 						_token: "{{ csrf_token() }}"
 					}
 
-					/*var url_billing = "{{URL::to('generate_report_pdf')}}?" + $.param(query_billing)
-					window.open(url_billing);*/
-		
 					/*Open Receivable Print Page*/
 					
 					var query_receivable = {

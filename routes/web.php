@@ -195,3 +195,9 @@ Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_su
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');
+Route::get('monthly-chart-line-ajax', 'SalesSummaryController@MonthlySaleschartLineAjax');
+
+/*CHARTS TEST*/
+
+Route::get('chart-line', 'ChartController@chartLine');
+Route::get('chart-line-ajax', 'ChartController@chartLineAjax');
