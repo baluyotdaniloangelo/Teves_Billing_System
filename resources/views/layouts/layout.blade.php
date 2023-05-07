@@ -66,11 +66,47 @@ else if (Request::is('monthly_sales')){
 ?>
 @include('layouts.footer_chart')
 <script type="text/javascript">
-    var original_api_url = {{ $chart->id }}_api_url;
+
+	var original_api_url = {{ $chart->id }}_api_url;
+	/*On Load page view current year*/
+	$(function () {
+			{{ $chart->id }}_refresh(original_api_url + "?year="+<?php echo date("Y"); ?>);
+	});
+
     $(".select_year").change(function(){
         var year = $(this).val();
     {{ $chart->id }}_refresh(original_api_url + "?year="+year);
     });
+	
+	
+	$('body').on('click','#reloadMonthlyData',function(){
+			
+			event.preventDefault();
+			let year 		= $("#select_year").val();
+			
+			  $.ajax({
+				url: "/reload_monthly_sales_per_year",
+				type:"POST",
+				data:{
+				  year:year,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-receivables").value = ReceivableID;
+					
+					/*Reload Chart*/
+
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	});
 </script>
 <?php
 }

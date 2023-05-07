@@ -435,7 +435,7 @@ class SalesOrderController extends Controller
 				$SalesOrderComponentModel_update = SalesOrderComponentModel::find($sales_order_product_item_id);
 				
 				$SalesOrderComponentModel_update->product_idx 				= $sales_order_item_product_id;
-				$SalesOrderComponentModel_update->sales_order_date 				= $request->sales_order_date;
+				$SalesOrderComponentModel_update->sales_order_date 			= $request->sales_order_date;
 				$SalesOrderComponentModel_update->client_idx 				= $request->client_idx;
 				$SalesOrderComponentModel_update->order_quantity 			= $sales_order_item_order_quantity;
 				$SalesOrderComponentModel_update->product_price 			= $product_price;

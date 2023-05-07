@@ -396,7 +396,9 @@ class ReportController extends Controller
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
-					'teves_receivable_table.company_header'
+					'teves_receivable_table.company_header',
+					'billing_period_start',
+					'billing_period_end'
 				]);
 		
 		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
@@ -452,7 +454,9 @@ class ReportController extends Controller
 					'teves_receivable_table.or_number',				
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
-					'teves_receivable_table.receivable_amount'
+					'teves_receivable_table.receivable_amount',
+					'billing_period_start',
+					'billing_period_end'
 				]);
 		
 		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)

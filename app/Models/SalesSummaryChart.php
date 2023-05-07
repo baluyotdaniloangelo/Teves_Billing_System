@@ -22,6 +22,8 @@ class SalesSummaryChart extends Authenticatable
      */
     protected $fillable = [
         'sales_month_year',
+		'billing_total_sales',
+		'sales_order_total_sales',
         'monthly_sales_total',
     ];
 

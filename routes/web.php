@@ -10,11 +10,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
-
+use App\Http\Controllers\PurchaseOrderController;
 
 use App\Http\Controllers\SalesSummaryController;
-
-use App\Http\Controllers\PurchaseOrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -195,9 +193,16 @@ Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_su
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');
+Route::get('/monthly-chart-line-ajax', [SalesSummaryController::class,'MonthlySaleschartLineAjax'])->name('MonthlySaleschartLineAjax')->middleware('isLoggedIn');
+Route::post('/reload_monthly_sales_per_year', [SalesSummaryController::class,'ReloadMonthlySales'])->name('ReloadMonthlySales')->middleware('isLoggedIn');
+
+
+
 Route::get('monthly-chart-line-ajax', 'SalesSummaryController@MonthlySaleschartLineAjax');
 
-/*CHARTS TEST*/
+/*CHARTS TEST
 
 Route::get('chart-line', 'ChartController@chartLine');
 Route::get('chart-line-ajax', 'ChartController@chartLineAjax');
+
+*/

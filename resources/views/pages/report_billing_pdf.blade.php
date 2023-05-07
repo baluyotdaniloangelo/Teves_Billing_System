@@ -21,6 +21,7 @@ if($company_header=='Teves'){
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_name'] }}</td>			
 			<td colspan="1" nowrap align="right">P.O Period:</td>
 			<?php
+			
 			$_po_start_date=date_create("$start_date");
 			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
 			

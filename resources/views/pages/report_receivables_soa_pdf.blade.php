@@ -27,10 +27,13 @@ if($company_header=='Teves'){
 			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['client_name'] }}</td>			
 			<td colspan="2" nowrap align="left">DATE :</td>	
 				<?php
+				$_print_date=date_create(date('Y-m-d'));
+				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
+				
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 				?>
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$billing_date;?></td>
+			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$print_date;?></td>
 		</tr>
 
 		
@@ -45,24 +48,24 @@ if($company_header=='Teves'){
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Billing Date</td>		
-			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">P.O Period</td>
-			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Description</td>
-			<td colspan="2" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
+			<td colspan="3" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Billing Date</td>		
+			<!--<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">P.O Period</td>-->
+			<td colspan="4" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Description</td>
+			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
 		</tr>									
 		<?php
-			$_po_start_date=date_create($receivable_data[0]['start_date']);
+			$_po_start_date=date_create($receivable_data[0]['billing_period_start']);
 			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
 			
-			$_po_end_date=date_create($receivable_data[0]['end_date']);
+			$_po_end_date=date_create($receivable_data[0]['billing_period_end']);
 			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/Y"));
 			?>
 		<tr style="font-size:12px;">
 			
-			<td colspan="2" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; height: 20px; padding:10px;"><?=$billing_date;?></td>
-			<td colspan="3" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
-			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
-			<td colspan="2" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
+			<td colspan="3" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; height: 20px; padding:10px;"><?=$billing_date;?></td>
+			<td colspan="4" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
+			<!--<td colspan="4" align="left" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>-->
+			<td colspan="3" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		

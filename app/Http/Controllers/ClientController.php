@@ -100,8 +100,8 @@ class ClientController extends Controller
 		);
 			$client = new ClientModel();
 			$client = ClientModel::find($request->clientID);
-			$client->client_name 			= $request->client_name;
-			$client->client_address 		= $request->client_address;
+			$client->client_name 		= $request->client_name;
+			$client->client_address 	= $request->client_address;
 			$client->client_tin 		= $request->client_tin;
 			$result = $client->update();
 			if($result){
