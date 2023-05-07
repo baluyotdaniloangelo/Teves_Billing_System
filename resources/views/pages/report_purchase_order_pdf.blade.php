@@ -237,8 +237,12 @@ if($company_header=='Teves'){
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Date of Departure:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
-				$_purchase_date_of_departure=date_create($purchase_order_data[0]['purchase_date_of_departure']);
-				$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/Y"));
+				if($purchase_order_data[0]['purchase_date_of_departure']==''){
+					$purchase_date_of_departure = '';
+				}else{
+					$_purchase_date_of_departure=date_create($purchase_order_data[0]['purchase_date_of_departure']);
+					$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/Y"));
+				}
 				?>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_departure;?></td>
 			
@@ -252,8 +256,13 @@ if($company_header=='Teves'){
 			<td colspan="2" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid #000;">Date of Arrival:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
-				$_purchase_date_of_arrival=date_create($purchase_order_data[0]['purchase_date_of_arrival']);
-				$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/Y"));
+				
+				if($purchase_order_data[0]['purchase_date_of_arrival']==''){
+					$purchase_date_of_arrival = '';
+				}else{
+					$_purchase_date_of_arrival=date_create($purchase_order_data[0]['purchase_date_of_arrival']);
+					$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/Y"));
+				}
 				?>
 			<td colspan="3" align="left" style="border-top:1px solid #000; border-left:0px solid #000; border-right:1px solid #000; border-bottom:1px solid #000;"><?=$purchase_date_of_arrival;?></td>	
 		</tr>		

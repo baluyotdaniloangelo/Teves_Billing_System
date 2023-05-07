@@ -7,7 +7,7 @@
 <section class="section">
       <div class="row">
 
-        <div class="col-lg-12">
+        <div class="col-lg-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"> {{ $title }} </h5>
@@ -37,11 +37,11 @@
 				  </div>
 				</div>
 
-				 <div  style="max-height: 400px;">
-					{!! $chart->container() !!}
+				 <div  style="max-height: 300px;">
+					{!! $MonthlyChart->container() !!}
 				</div>
 
-				{!! $chart->script() !!}
+				{!! $MonthlyChart->script() !!}
 				
             </div>
           </div>

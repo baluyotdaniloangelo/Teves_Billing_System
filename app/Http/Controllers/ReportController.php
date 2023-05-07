@@ -456,7 +456,8 @@ class ReportController extends Controller
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
 					'billing_period_start',
-					'billing_period_end'
+					'billing_period_end',
+					'company_header'
 				]);
 		
 		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)

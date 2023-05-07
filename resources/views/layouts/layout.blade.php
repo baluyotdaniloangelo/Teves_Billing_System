@@ -67,17 +67,13 @@ else if (Request::is('monthly_sales')){
 @include('layouts.footer_chart')
 <script type="text/javascript">
 
-	var original_api_url = {{ $chart->id }}_api_url;
+	var original_api_url = {{ $MonthlyChart->id }}_api_url;
 	/*On Load page view current year*/
-	$(function () {
-			{{ $chart->id }}_refresh(original_api_url + "?year="+<?php echo date("Y"); ?>);
-	});
-
+ 
     $(".select_year").change(function(){
         var year = $(this).val();
-    {{ $chart->id }}_refresh(original_api_url + "?year="+year);
+    {{ $MonthlyChart->id }}_refresh(original_api_url + "?year="+year);
     });
-	
 	
 	$('body').on('click','#reloadMonthlyData',function(){
 			
@@ -93,13 +89,10 @@ else if (Request::is('monthly_sales')){
 				},
 				success:function(response){
 				  console.log(response);
-				  if(response) {
-					
-					document.getElementById("update-receivables").value = ReceivableID;
-					
-					/*Reload Chart*/
 
-				  }
+					/*Reload Chart*/
+					reload_monthly_chart(year);
+
 				},
 				error: function(error) {
 				 console.log(error);
@@ -107,6 +100,11 @@ else if (Request::is('monthly_sales')){
 				}
 			   });	
 	});
+	
+	 function reload_monthly_chart(year){
+		 {{ $MonthlyChart->id }}_refresh(original_api_url + "?year="+year);
+	 }
+	 
 </script>
 <?php
 }

@@ -39,10 +39,10 @@
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 496-617-672-000</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 740-213-285-002</td>
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="3">GLENN F. TEVES - Proprietor</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">GLEZA F. TEVES - Proprietress</td>
 		</tr>
 		

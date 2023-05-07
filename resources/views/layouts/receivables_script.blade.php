@@ -506,7 +506,7 @@
 					print_soa(id);
 				}
 				else if(to_print=='PrintBilling'){
-					print_billing(id)
+					print_billing(id);
 				}
 				else if(to_print=='PrintReceivables'){
 					print_receivable(id);
