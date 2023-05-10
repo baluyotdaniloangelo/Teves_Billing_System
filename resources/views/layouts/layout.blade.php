@@ -62,6 +62,12 @@ else if (Request::is('purchaseorder')){
 @include('layouts.purchaseorder_script')
 <?php
 }
+else if (Request::is('cashier_report')){
+?>
+@include('layouts.footer')
+@include('layouts.cashier_report_script')
+<?php
+}
 else if (Request::is('monthly_sales')){
 ?>
 @include('layouts.footer_chart')

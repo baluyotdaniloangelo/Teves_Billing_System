@@ -39,7 +39,7 @@
 		</tr>
 		
 		<tr>
-			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 740-213-285-002</td>
+			<td style="font-size:12px;" nowrap align="center" colspan="3">VAT REG. TIN : 740-213-285-001</td>
 		</tr>
 		
 		<tr>

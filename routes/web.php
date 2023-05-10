@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\CashiersReportController;
 
 use App\Http\Controllers\SalesSummaryController;
 /*
@@ -190,6 +191,18 @@ Route::post('/supplier_info', [SupplierController::class, 'supplier_info'])->nam
 Route::post('/update_supplier_post', [SupplierController::class,'update_supplier_post'])->name('update_supplier_post')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_supplier_confirmed'])->name('delete_supplier_confirmed')->middleware('isLoggedIn');
+
+/*Load Cashier's Report List*/
+/*Dev Date May 10, 2023*/
+Route::get('/cashier_report', [CashiersReportController::class,'cashierReport'])->name('cashierReport')->middleware('isLoggedIn');
+Route::get('cashier_report/list', [CashiersReportController::class, 'getCashierReport'])->name('getCashierReport')->middleware('isLoggedIn');
+
+
+
+
+
+
+
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');
