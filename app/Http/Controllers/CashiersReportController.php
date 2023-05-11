@@ -13,6 +13,7 @@ class CashiersReportController extends Controller
 	
 	/*Load client Interface*/
 	public function cashierReport(){
+		
 		$title = "Cashier' Report";
 		$data = array();
 		if(Session::has('loginID')){
@@ -20,16 +21,17 @@ class CashiersReportController extends Controller
 			
 		}
 		return view("pages.cashiers_report", compact('data','title'));
+		
 	}   
 	
 	/*Fetch client List using Datatable*/
 	public function getCashierReport(Request $request)
     {
+		
 		$list = CashiersReportModel::get();
 		if ($request->ajax()) {
 			
 			    	$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-              		/*->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')*/
               		->get([				
 					'teves_cashiers_report.cashiers_report_id',
 					'user_tb.user_real_name',
@@ -53,13 +55,55 @@ class CashiersReportController extends Controller
 					->rawColumns(['action'])
 					->make(true);
 		}
+		
     }
 
+	public function create_cashier_report_post(Request $request){
+		
+		$request->validate([
+			'report_date'   => 'required'
+        ], 
+        [
+			'report_date.required' => 'Report Date is required'
+        ]
+		);
+		
+			$CashiersReportCreate = new CashiersReportModel();
+			$CashiersReportCreate->user_idx 				= Session::get('loginID');
+			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
+			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
+			$CashiersReportCreate->report_date 				= $request->report_date;
+			$CashiersReportCreate->shift 				= $request->shift;
+			$result = $CashiersReportCreate->save();
+			
+			if($result){
+				return response()->json(['success'=>"Cashier's Report Information Successfully Created!"]);
+			}
+			else{
+				return response()->json(['success'=>"Error on Insert Cashier's Report Information"]);
+			}
+			
+	}
+
 	/*Fetch client Information*/
-	public function client_info(Request $request){
-		$clientID = $request->clientID;
-		$data = ClientModel::find($clientID, ['client_name','client_address','client_tin']);
+	public function cashiers_report_info(Request $request){
+		
+		$CashiersReportID = $request->CashiersReportID;
+		
+		$data = CashiersReportModel::where('cashiers_report_id', $request->CashiersReportID)
+			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+            ->get([				
+			'teves_cashiers_report.cashiers_report_id',
+			'user_tb.user_real_name',
+			'teves_cashiers_report.teves_branch',
+			'teves_cashiers_report.forecourt_attendant',
+			'teves_cashiers_report.report_date',
+			'teves_cashiers_report.shift',
+			'teves_cashiers_report.created_at',
+			'teves_cashiers_report.updated_at']);
+		
 		return response()->json($data);
+					
 	}
 
 	/*Delete client Information*/
@@ -69,30 +113,6 @@ class CashiersReportController extends Controller
 		return 'Deleted';
 	} 
 
-	public function create_client_post(Request $request){
-		$request->validate([
-          'client_name'      => 'required|unique:teves_client_table,client_name',
-		  'client_address'   => 'required',
-		  'client_tin'    => 'required'
-        ], 
-        [
-			'client_name.required' => 'Client Name is required',
-			'client_address.required' => 'Address is Required',
-			'client_tin.required' => 'TIN is Required'
-        ]
-		);
-			$client = new ClientModel();
-			$client->client_name 			= $request->client_name;
-			$client->client_address 		= $request->client_address;
-			$client->client_tin 		= $request->client_tin;
-			$result = $client->save();
-			if($result){
-				return response()->json(['success'=>'Client Information Successfully Created!']);
-			}
-			else{
-				return response()->json(['success'=>'Error on Insert client Information']);
-			}
-	}
 
 	public function update_client_post(Request $request){
 		$request->validate([

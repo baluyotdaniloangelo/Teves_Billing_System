@@ -196,11 +196,10 @@ Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_su
 /*Dev Date May 10, 2023*/
 Route::get('/cashier_report', [CashiersReportController::class,'cashierReport'])->name('cashierReport')->middleware('isLoggedIn');
 Route::get('cashier_report/list', [CashiersReportController::class, 'getCashierReport'])->name('getCashierReport')->middleware('isLoggedIn');
-
-
-
-
-
+/*Create Cashier's Report Primary Information*/
+Route::post('/create_cashier_report_post', [CashiersReportController::class,'create_cashier_report_post'])->name('create_cashier_report_post')->middleware('isLoggedIn');
+/*GET Cashier's Report Primary Information*/
+Route::post('/cashiers_report_info', [CashiersReportController::class, 'cashiers_report_info'])->name('cashiers_report_info')->middleware('isLoggedIn');
 
 
 
@@ -208,8 +207,6 @@ Route::get('cashier_report/list', [CashiersReportController::class, 'getCashierR
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');
 Route::get('/monthly-chart-line-ajax', [SalesSummaryController::class,'MonthlySaleschartLineAjax'])->name('MonthlySaleschartLineAjax')->middleware('isLoggedIn');
 Route::post('/reload_monthly_sales_per_year', [SalesSummaryController::class,'ReloadMonthlySales'])->name('ReloadMonthlySales')->middleware('isLoggedIn');
-
-
 
 Route::get('monthly-chart-line-ajax', 'SalesSummaryController@MonthlySaleschartLineAjax');
 

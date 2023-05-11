@@ -37,28 +37,30 @@
 	});
 	
 	<!--Save New Client->
-	$("#save-client").click(function(event){
+	$("#save-cashiers-report").click(function(event){
 			
 			event.preventDefault();
 			
 					/*Reset Warnings*/
-					$('#client_nameError').text('');
-					$('#client_addressError').text('');
-					$('#client_tinError').text('');
+					$('#teves_branchError').text('');
+					$('#forecourt_attendantError').text('');
+					$('#report_dateError').text('');
 
-			document.getElementById('ClientformNew').className = "g-3 needs-validation was-validated";
+			document.getElementById('CashierReportformNew').className = "g-3 needs-validation was-validated";
 
-			let client_name 		= $("input[name=client_name]").val();
-			let client_address 		= $("input[name=client_address]").val();
-			let client_tin 			= $("input[name=client_tin]").val();
+			let teves_branch 				= $("#teves_branch").val();
+			let forecourt_attendant 		= $("input[name=forecourt_attendant]").val();
+			let report_date 				= $("input[name=report_date]").val();
+			let shift 						= $("input[name=shift]").val();
 			
 			  $.ajax({
-				url: "/create_client_post",
+				url: "/create_cashier_report_post",
 				type:"POST",
 				data:{
-				  client_name:client_name,
-				  client_address:client_address,
-				  client_tin:client_tin,
+				  teves_branch:teves_branch,
+				  forecourt_attendant:forecourt_attendant,
+				  report_date:report_date,
+				  shift:shift,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -69,16 +71,16 @@
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					$('#client_nameError').text('');
-					$('#client_addressError').text('');
-					$('#client_tinError').text('');
+					$('#teves_branchError').text('');
+					$('#forecourt_attendantError').text('');
+					$('#report_dateError').text('');
 					
-					document.getElementById("ClientformNew").reset();
+					document.getElementById("CashierReportformNew").reset();
 					
-					document.getElementById('ClientformNew').className = "g-3 needs-validation";
+					document.getElementById('CashierReportformNew').className = "g-3 needs-validation";
 					
 					/*Refresh Table*/
-					var table = $("#getclientList").DataTable();
+					var table = $("#getCashierReport").DataTable();
 				    table.ajax.reload(null, false);
 				  
 				  }
@@ -86,23 +88,23 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				 if(error.responseJSON.errors.client_name=="The client name has already been taken."){
+				 if(error.responseJSON.errors.teves_branch=="The client name has already been taken."){
 							  
-				  $('#client_nameError').html("<b>"+ client_name +"</b> has already been taken.");
-				  document.getElementById('client_nameError').className = "invalid-feedback";
-				  document.getElementById('client_name').className = "form-control is-invalid";
-				  $('#client_name').val("");
+				  $('#teves_branchError').html("<b>"+ teves_branch +"</b> has already been taken.");
+				  document.getElementById('teves_branchError').className = "invalid-feedback";
+				  document.getElementById('teves_branch').className = "form-control is-invalid";
+				  $('#teves_branch').val("");
 				  
 				}else{
-				  $('#client_nameError').text(error.responseJSON.errors.client_name);
-				  document.getElementById('client_nameError').className = "invalid-feedback";
+				  $('#teves_branchError').text(error.responseJSON.errors.teves_branch);
+				  document.getElementById('teves_branchError').className = "invalid-feedback";
 				}
 				
-				  $('#client_addressError').text(error.responseJSON.errors.client_address);
-				  document.getElementById('client_addressError').className = "invalid-feedback";	
+				  $('#forecourt_attendantError').text(error.responseJSON.errors.forecourt_attendant);
+				  document.getElementById('forecourt_attendantError').className = "invalid-feedback";	
 				  
-				  $('#client_tinError').text(error.responseJSON.errors.client_tin);
-				  document.getElementById('client_tinError').className = "invalid-feedback";			
+				  $('#report_dateError').text(error.responseJSON.errors.report_date);
+				  document.getElementById('report_dateError').className = "invalid-feedback";			
 
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
@@ -112,145 +114,31 @@
 			   });		
 	  });
 
-	<!--Select Client For Update-->
-	$('body').on('click','#editclient',function(){
-			
-			event.preventDefault();
-			let clientID = $(this).data('id');
-			
-			  $.ajax({
-				url: "/client_info",
-				type:"POST",
-				data:{
-				  clientID:clientID,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					
-					document.getElementById("update-client").value = clientID;
-					
-					/*Set Details*/
-					document.getElementById("update_client_name").value = response.client_name;
-					document.getElementById("update_client_address").value = response.client_address;
-					document.getElementById("update_client_tin").value = response.client_tin;
-										
-					$('#UpdateClientModal').modal('toggle');					
-				  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });	
-	  });
-
-
-	$("#update-client").click(function(event){			
-			event.preventDefault();
-			
-					/*Reset Warnings*/
-					$('#update_client_nameError').text('');
-					$('#update_client_addressError').text('');
-					$('#update_client_tinError').text('');
-
-			document.getElementById('ClientformEdit').className = "g-3 needs-validation was-validated";
-			
-			let clientID 			= document.getElementById("update-client").value;
-			let client_name 		= $("input[name=update_client_name]").val();
-			let client_address 		= $("input[name=update_client_address]").val();
-			let client_tin 			= $("input[name=update_client_tin]").val();
-			
-			  $.ajax({
-				url: "/update_client_post",
-				type:"POST",
-				data:{
-				  clientID:clientID,
-				  client_name:client_name,
-				  client_address:client_address,
-				  client_tin:client_tin,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					
-					$('#update_client_nameError').text('');	
-					$('#update_client_addressError').text('');
-					$('#update_client_tinError').text('');
-					
-					$('#switch_notice_on').show();
-					$('#sw_on').html(response.success);
-					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-					
-					/*Close form*/
-					$('#UpdateClientModal').modal('toggle');
-					
-					document.getElementById('ClientformEdit').className = "g-3 needs-validation";
-					
-					/*Refresh Table*/
-					var table = $("#getclientList").DataTable();
-				    table.ajax.reload(null, false);
-				  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);	
-				 
-				if(error.responseJSON.errors.client_name=="The client name has already been taken."){
-							  
-					$('#client_nameError').html("<b>"+ client_name +"</b> has already been taken.");
-					document.getElementById('client_nameError').className = "invalid-feedback";
-					document.getElementById('client_name').className = "form-control is-invalid";
-					$('#update_client_name').val("");
-				  
-				}else{
-					$('#client_nameError').text(error.responseJSON.errors.client_name);
-					document.getElementById('client_nameError').className = "invalid-feedback";
-				}
-				
-					$('#client_addressError').text(error.responseJSON.errors.client_address);
-					document.getElementById('client_addressError').className = "invalid-feedback";			
-					
-					$('#client_tinError').text(error.responseJSON.errors.client_tin);
-					document.getElementById('client_tinError').className = "invalid-feedback";		
-				
-				$('#switch_notice_off').show();
-				$('#sw_off').html("Invalid Input");
-				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		  	  
-				  
-				}
-			   });
-		
-	  });
-	  
 	<!--client Deletion Confirmation-->
-	$('body').on('click','#deleteclient',function(){
+	$('body').on('click','#deleteCashiersReport',function(){
 			
 			event.preventDefault();
-			let clientID = $(this).data('id');
-			
+			let CashiersReportID = $(this).data('id');
+			alert(CashiersReportID);
 			  $.ajax({
-				url: "/client_info",
+				url: "/cashiers_report_info",
 				type:"POST",
 				data:{
-				  clientID:clientID,
+				  CashiersReportID:CashiersReportID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("deleteClientConfirmed").value = clientID;
-					
 					/*Set Details*/
-					$('#confirm_delete_client_name').text(response.client_name);
-					$('#confirm_delete_client_address').text(response.client_address);	
-					$('#confirm_delete_client_tin').text(response.client_tin);	
+					$('#confirm_delete_teves_branch').text(response[0].teves_branch);
+					$('#confirm_delete_forecourt_attendant').text(response[0].forecourt_attendant);	
+					$('#confirm_delete_report_date').text(response[0].report_date);
+					$('#confirm_delete_cashiers_name').text(response[0].user_real_name);
+					$('#confirm_delete_shift').text(response[0].shift);
 					
-					$('#ClientDeleteModal').modal('toggle');		
+					$('#CashiersReportDeleteModal').modal('toggle');		
 				  
 				  }
 				},
@@ -261,8 +149,8 @@
 			   });		
 	  });
 
-	  <!--client Confirmed For Deletion-->
-	  $('body').on('click','#deleteClientConfirmed',function(){
+	<!--client Confirmed For Deletion-->
+	$('body').on('click','#deleteClientConfirmed',function(){
 			
 			event.preventDefault();
 
@@ -296,5 +184,6 @@
 				 console.log(error);
 				}
 			   });		
-	  });
-  </script>
+	});
+
+</script>

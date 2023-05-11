@@ -4,9 +4,7 @@
 <main id="main" class="main">	
     <section class="section">	  
           <div class="card">
-		  
 			  <div class="card">
-			  
 				<div class="card-header ">
 				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
 					<div class="d-flex justify-content-end" id="cashier_report_option"></div>				  
@@ -44,16 +42,14 @@
 													<th>Action</th>
 												</tr>
 											</tfoot>
-											
 										</table>
 									</div>		
-				</div>									
-                   
+				</div>									        
             </div>
           </div>
 
-	<!-- Client Delete Modal-->
-    <div class="modal fade" id="ClientDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<!-- Client Delete Modal -->
+    <div class="modal fade" id="CashiersReportDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header header_modal_bg">
@@ -62,12 +58,14 @@
                 </div>
 
                 <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Client?<br>
+				Are you sure you want to Delete This Cashiers's Report?<br>
 				</div>
 				<div align="left"style="margin: 10px;">
-				Client: <span id="confirm_delete_client_name"></span><br>
-				Address: <span id="confirm_delete_client_address"></span><br>
-				TIN: <span id="confirm_delete_client_tin"></span><br>
+				Report Date: <span id="confirm_delete_report_date"></span><br>
+				Branch: <span id="confirm_delete_teves_branch"></span><br>
+				Cashier's Name: <span id="confirm_delete_cashiers_name"></span><br>
+				Forecourt Attendant: <span id="confirm_delete_forecourt_attendant"></span><br>
+				Shift: <span id="confirm_delete_shift"></span><br>
 				</div>
                 <div class="modal-footer footer_modal_bg">
                     
@@ -84,105 +82,59 @@
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Create Client</h5>
+                      <h5 class="modal-title">Create Cashier's Report</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-2 needs-validation" id="ClientformNew">
-					  
+					  <form class="g-2 needs-validation" id="CashierReportformNew">
 						<div class="row mb-2">
-						  <label for="client_name" class="col-sm-3 col-form-label">Client Name</label>
+						  <label for="teves_branch" class="col-sm-3 col-form-label">Branch</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="client_name" id="client_name" value="" required>
-							<span class="valid-feedback" id="client_nameError" title="Required"></span>
+							<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
+								<option value="GT">GT</option>
+								<option value="Teves">Teves</option>
+							</select>
+							
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="client_address" class="col-sm-3 col-form-label">Address</label>
+						  <label for="forecourt_attendant" class="col-sm-3 col-form-label">Forecourt Attendant</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="client_address" id="client_address" value="" required>
-							<span class="valid-feedback" id="client_addressError"></span>
+							<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="">
+							<span class="valid-feedback" id="forecourt_attendantError" title="Required"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="report_date" class="col-sm-3 col-form-label">Report Date</label>
+						  <div class="col-sm-9">
+							<input type="date" class="form-control " name="report_date" id="report_date" value="" required>
+							<span class="valid-feedback" id="report_dateError"></span>
 						  </div>
 						</div>
 
 						<div class="row mb-2">
-						  <label for="client_tin" class="col-sm-3 col-form-label">TIN</label>
+						  <label for="shift" class="col-sm-3 col-form-label">Shift</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="client_tin" id="client_tin" value="" required>
-							<span class="valid-feedback" id="client_tinError"></span>
+							<input type="text" class="form-control " name="shift" id="shift" value="">
+							<span class="valid-feedback" id="shiftError"></span>
 						  </div>
 						</div>						
 									
 						</div>
 						
-                    <div class="modal-footer modal-footer_form">
-						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-client"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-client"> Reset</button>
-						  
+                    <div class="modal-footer modal-footer_form">				
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-cashiers-report"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-cashiers-report"> Reset</button>
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>
              </div>
-	
-	
-	<!--Modal to Upadate Client-->
-	<div class="modal fade" id="UpdateClientModal" tabindex="-1">
-              <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Update Client</h5>
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
-					  </div>
-                    </div>
-                    <div class="modal-body">
-					
-					  <form class="g-2 needs-validation" id="ClientformEdit">
-					  
-						<div class="row mb-2">
-						  <label for="update_client_name" class="col-sm-3 col-form-label">Client Name</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="update_client_name" id="update_client_name" value="" required>
-							<span class="valid-feedback" id="update_client_nameError" title="Required"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="update_client_address" class="col-sm-3 col-form-label">Address</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_client_address" id="update_client_address" value="" required>
-							<span class="valid-feedback" id="update_client_addressError"></span>
-						  </div>
-						</div>
-
-						<div class="row mb-2">
-						  <label for="update_client_tin" class="col-sm-3 col-form-label">TIN</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_client_tin" id="update_client_tin" value="" required>
-							<span class="valid-feedback" id="update_client_tinError"></span>
-						  </div>
-						</div>						
-									
-						</div>
-						
-                    <div class="modal-footer modal-footer_form">
-						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-client"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-client"> Reset</button>
-						  
-					</div>
-					</form><!-- End Multi Columns Form -->
-                  </div>
-                </div>
-             </div>
-	
-
     </section>
 </main>
 
