@@ -229,7 +229,7 @@
 			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));			
 			
 			/*Added May 6, 2023*/
-			let company_header 					= $("#company_header").val();
+			let company_header 			= $("#company_header").val();
 			
 			let sales_order_date 		= $("input[name=sales_order_date]").val();
 			let delivered_to 			= $("input[name=delivered_to]").val();

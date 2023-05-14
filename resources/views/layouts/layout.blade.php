@@ -3,48 +3,55 @@
 <!--
 Use to automatically hide the Side Nav Bar
 <body class="toggle-sidebar">-->
-<body class="">
+
 @yield('content')
  
 <?php
 
 if (Request::is('billing')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.billing_script')
 <?php
 }else if (Request::is('product')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.product_script')
 <?php
 }
 else if (Request::is('client')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.client_script')
 <?php
 }
 else if (Request::is('supplier')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.supplier_script')
 <?php
 }
 else if (Request::is('report')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.report_script')
 <?php
 }
 else if (Request::is('user')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.user_script')
 <?php
 }
 else if (Request::is('receivables')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.receivables_script')
 <?php
@@ -52,24 +59,35 @@ else if (Request::is('receivables')){
 
 else if (Request::is('salesorder')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.salesorder_script')
 <?php
 }
 else if (Request::is('purchaseorder')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.purchaseorder_script')
 <?php
 }
 else if (Request::is('cashier_report')){
 ?>
+<body class="">
 @include('layouts.footer')
 @include('layouts.cashier_report_script')
 <?php
 }
+else if (Request::is('cashiers_report_form/*')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.cashier_report_form_script')
+<?php
+}
 else if (Request::is('monthly_sales')){
 ?>
+<body class="">
 @include('layouts.footer_chart')
 <script type="text/javascript">
 

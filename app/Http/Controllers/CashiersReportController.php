@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CashiersReportModel;
+use App\Models\ProductModel;
 use Session;
 use Validator;
 use DataTables;
@@ -76,8 +77,13 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->shift 				= $request->shift;
 			$result = $CashiersReportCreate->save();
 			
+			/*Get Last ID*/
+			$last_transaction_id = $CashiersReportCreate->cashiers_report_id;
+			
+			
 			if($result){
-				return response()->json(['success'=>"Cashier's Report Information Successfully Created!"]);
+				//return response()->json(['success'=>"Cashier's Report Information Successfully Created!"]);
+				return response()->json(array('success' => "Cashier's Report Information Successfully Created!", 'cashiers_report_id' => $last_transaction_id), 200);
 			}
 			else{
 				return response()->json(['success'=>"Error on Insert Cashier's Report Information"]);
@@ -89,6 +95,7 @@ class CashiersReportController extends Controller
 	public function cashiers_report_info(Request $request){
 		
 		$CashiersReportID = $request->CashiersReportID;
+		
 		
 		$data = CashiersReportModel::where('cashiers_report_id', $request->CashiersReportID)
 			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
@@ -103,7 +110,35 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.updated_at']);
 		
 		return response()->json($data);
+		
 					
+	}
+
+	/*Fetch client Information*/
+	public function cashiers_report_form($CashiersReportId){
+		
+		$data = array();
+		if(Session::has('loginID')){
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			
+		}
+		
+		$title = "Cashier' Report";
+		$product_data = ProductModel::all();
+		$CashiersReportData = CashiersReportModel::where('cashiers_report_id', $CashiersReportId)
+			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+            ->get([				
+			'teves_cashiers_report.cashiers_report_id',
+			'user_tb.user_real_name',
+			'teves_cashiers_report.teves_branch',
+			'teves_cashiers_report.forecourt_attendant',
+			'teves_cashiers_report.report_date',
+			'teves_cashiers_report.shift',
+			'teves_cashiers_report.created_at',
+			'teves_cashiers_report.updated_at']);
+			
+		return view("pages.cashiers_report_form", compact('data','title','CashiersReportData','product_data'));	
+		
 	}
 
 	/*Delete client Information*/

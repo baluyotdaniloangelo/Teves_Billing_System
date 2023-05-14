@@ -75,13 +75,14 @@
 					$('#forecourt_attendantError').text('');
 					$('#report_dateError').text('');
 					
-					document.getElementById("CashierReportformNew").reset();
-					
+					document.getElementById("CashierReportformNew").reset();				
 					document.getElementById('CashierReportformNew').className = "g-3 needs-validation";
 					
-					/*Refresh Table*/
-					var table = $("#getCashierReport").DataTable();
-				    table.ajax.reload(null, false);
+					cashier_report_id = response.cashiers_report_id;
+					
+					/*Open Cashier's Report*/
+					var url = "{{URL::to('cashiers_report_form')}}";
+					window.location.href = url+'/'+cashier_report_id;
 				  
 				  }
 				},

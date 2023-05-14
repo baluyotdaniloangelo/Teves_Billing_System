@@ -39,7 +39,7 @@ Route::get('logout', [UserAuthController::class,'logout']);
 Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
 Route::get('billing/list', [BillingTransactionController::class, 'getBillingTransactionList'])->name('getBillingTransactionList')->middleware('isLoggedIn');
 /*Create Bill*/
-Route::post('/create_bill_post', [BillingTransactionController::class,'create_bill_post'])->name('create_bill_post')->middleware('isLoggedIn');
+Route::post('/create_bill_post', [BillingTransactionController::class,'_bill_post'])->name('create_bill_post')->middleware('isLoggedIn');
 /*Update Bill*/
 Route::post('/update_bill_post', [BillingTransactionController::class,'update_bill_post'])->name('update_bill_post')->middleware('isLoggedIn');
 /*GET Bill Info*/
@@ -117,7 +117,6 @@ Route::post('/get_receivable_payment_list', [ReceivablesController::class,'get_r
 Route::post('/delete_receivable_payment_item', [ReceivablesController::class,'delete_receivable_payment_item'])->name('delete_receivable_payment_item')->middleware('isLoggedIn');
 /*Save Receivables Payment*/
 Route::post('/save_receivable_payment_post', [ReceivablesController::class,'save_receivable_payment_post'])->name('save_receivable_payment_post')->middleware('isLoggedIn');
-
 
 /*Sales Order*/
 /*January 04, 2023*/
@@ -199,9 +198,9 @@ Route::get('cashier_report/list', [CashiersReportController::class, 'getCashierR
 /*Create Cashier's Report Primary Information*/
 Route::post('/create_cashier_report_post', [CashiersReportController::class,'create_cashier_report_post'])->name('create_cashier_report_post')->middleware('isLoggedIn');
 /*GET Cashier's Report Primary Information*/
-Route::post('/cashiers_report_info', [CashiersReportController::class, 'cashiers_report_info'])->name('cashiers_report_info')->middleware('isLoggedIn');
-
-
+Route::post('/create_cashiers_report', [CashiersReportController::class, 'cashiers_report_info'])->name('cashiers_report_info')->middleware('isLoggedIn');
+/**/
+Route::get('/cashiers_report_form/{id}', [CashiersReportController::class, 'cashiers_report_form'])->name('cashiers_report_form')->middleware('isLoggedIn');
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');
