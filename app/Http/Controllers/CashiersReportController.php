@@ -91,11 +91,43 @@ class CashiersReportController extends Controller
 			
 	}
 
+	public function update_cashier_report_post(Request $request){
+		
+		$request->validate([
+			'report_date'   => 'required'
+        ], 
+        [
+			'report_date.required' => 'Report Date is required'
+        ]
+		);
+		
+			$CashiersReportCreate = new CashiersReportModel();
+			$CashiersReportCreate = CashiersReportModel::find($request->CashiersReportId);
+			$CashiersReportCreate->user_idx 				= Session::get('loginID');
+			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
+			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
+			$CashiersReportCreate->report_date 				= $request->report_date;
+			$CashiersReportCreate->shift 					= $request->shift;
+			$result = $CashiersReportCreate->update();
+			
+			/*Get Last ID
+			$last_transaction_id = $CashiersReportCreate->cashiers_report_id;*/
+			
+			
+			if($result){
+				//return response()->json(['success'=>"Cashier's Report Information Successfully Created!"]);
+				return response()->json(array('success' => "Cashier's Report Information Successfully Updated!", 'cashiers_report_id' => $request->CashiersReportId), 200);
+			}
+			else{
+				return response()->json(['success'=>"Error on Insert Cashier's Report Information"]);
+			}
+			
+	}
+
 	/*Fetch client Information*/
 	public function cashiers_report_info(Request $request){
 		
 		$CashiersReportID = $request->CashiersReportID;
-		
 		
 		$data = CashiersReportModel::where('cashiers_report_id', $request->CashiersReportID)
 			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
@@ -110,7 +142,6 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.updated_at']);
 		
 		return response()->json($data);
-		
 					
 	}
 
@@ -137,7 +168,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
-		return view("pages.cashiers_report_form", compact('data','title','CashiersReportData','product_data'));	
+		return view("pages.cashiers_report_form", compact('data','title','CashiersReportData','product_data','CashiersReportId'));	
 		
 	}
 

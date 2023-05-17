@@ -197,6 +197,8 @@ Route::get('/cashier_report', [CashiersReportController::class,'cashierReport'])
 Route::get('cashier_report/list', [CashiersReportController::class, 'getCashierReport'])->name('getCashierReport')->middleware('isLoggedIn');
 /*Create Cashier's Report Primary Information*/
 Route::post('/create_cashier_report_post', [CashiersReportController::class,'create_cashier_report_post'])->name('create_cashier_report_post')->middleware('isLoggedIn');
+/*Update Cashier's Report Primary Information*/
+Route::post('/update_cashier_report_post', [CashiersReportController::class,'update_cashier_report_post'])->name('update_cashier_report_post')->middleware('isLoggedIn');
 /*GET Cashier's Report Primary Information*/
 Route::post('/create_cashiers_report', [CashiersReportController::class, 'cashiers_report_info'])->name('cashiers_report_info')->middleware('isLoggedIn');
 /**/

@@ -2,26 +2,34 @@
 
 	
 	<!--Save New Client->
-	$("#save-cashiers-report").click(function(event){
+	$("#update-cashiers-report").click(function(event){
 			
 			event.preventDefault();
 			
-					/*Reset Warnings*/
-					$('#teves_branchError').text('');
-					$('#forecourt_attendantError').text('');
-					$('#report_dateError').text('');
+			/*Reset Warnings*/
+				$('#teves_branchError').text('');
+				$('#forecourt_attendantError').text('');
+				$('#report_dateError').text('');
 
 			document.getElementById('CashierReportformNew').className = "g-3 needs-validation was-validated";
-
+			
+			let CashiersReportId 			= {{ $CashiersReportId }};
+			
 			let teves_branch 				= $("#teves_branch").val();
 			let forecourt_attendant 		= $("input[name=forecourt_attendant]").val();
 			let report_date 				= $("input[name=report_date]").val();
 			let shift 						= $("input[name=shift]").val();
 			
+			/*Call Function for Product Cahier's Report*/
+			
+			
+
+			
 			  $.ajax({
-				url: "/create_cashier_report_post",
+				url: "/update_cashier_report_post",
 				type:"POST",
 				data:{
+				  CashiersReportId:CashiersReportId,
 				  teves_branch:teves_branch,
 				  forecourt_attendant:forecourt_attendant,
 				  report_date:report_date,
@@ -48,15 +56,15 @@
 					//var table = $("#getCashierReport").DataTable();
 				    //table.ajax.reload(null, false);
 				  
-					cashier_report_id = response.cashiers_report_id;
+					//cashier_report_id = response.cashiers_report_id;
 					//var query = {
 					//	cashier_report_id:cashier_report_id,
 					//	_token: "{{ csrf_token() }}"
 					//}
 					
 					/*Open Cashier's Report*/
-					var url = "{{URL::to('cashiers_report_form')}}";
-					window.location.href = url+'/'+cashier_report_id;
+					//var url = "{{URL::to('cashiers_report_form')}}";
+					//window.location.href = url+'/'+cashier_report_id;
 				  
 				  }
 				},
