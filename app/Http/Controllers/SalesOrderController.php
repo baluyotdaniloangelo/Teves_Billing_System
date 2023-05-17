@@ -187,10 +187,6 @@ class SalesOrderController extends Controller
 			$Salesorder->sales_order_required_date 				= $request->required_date;
 			$Salesorder->sales_order_instructions 				= $request->instructions;
 			$Salesorder->sales_order_note 						= $request->note;
-			//$Salesorder->sales_order_mode_of_payment 			= $request->mode_of_payment;
-			//$Salesorder->sales_order_date_of_payment 			= $request->date_of_payment;
-			//$Salesorder->sales_order_reference_no 			= $request->reference_no;
-			//$Salesorder->sales_order_payment_amount 			= $request->payment_amount;
 			
 			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
 			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
@@ -337,7 +333,7 @@ class SalesOrderController extends Controller
 			$last_transaction_id = $request->sales_order_id;
 			
 			/*Payment Option*/
-			$payment_id = $request->payment_item_id;
+			$payment_id					= $request->payment_item_id;
 			$mode_of_payment 			= $request->mode_of_payment;
 			$date_of_payment 			= $request->date_of_payment;
 			$reference_no 				= $request->reference_no;
@@ -351,7 +347,7 @@ class SalesOrderController extends Controller
 					$date_of_payment_item 	= $date_of_payment[$count];
 					$reference_no_item 		= $reference_no[$count];
 					$payment_amount_item 	= $payment_amount[$count];
-					$payment_id_item 	= $payment_id[$count];
+					$payment_id_item 		= $payment_id[$count];
 			
 				if($payment_id_item==0){
 						

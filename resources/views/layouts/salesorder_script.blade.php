@@ -75,8 +75,7 @@
 		if(x > 3){
 		   return;
 		}else{
-		
-					
+	
 						$('#update_table_payment_body_data tr:last').after("<tr>"+
 							"<td class='bank_td' align='center'>"+
 							"<input type='text' class='form-control update_mode_of_payment' id='update_mode_of_payment' name='update_mode_of_payment' list='mode_of_payment_list' autocomplete='off' value=''>"+
@@ -96,8 +95,7 @@
 	
 	function deletePaymentRow(btn) {
 			
-		var paymentitemID= $(btn).data("id");			
-		
+		var paymentitemID= $(btn).data("id");				
 		var row = btn.parentNode.parentNode;
 		row.parentNode.removeChild(row);
 		
@@ -645,10 +643,10 @@
 							
 							var id = response[i].sales_order_payment_details_id;
 							
-							var mode_of_payment 			= response[i].sales_order_mode_of_payment;
+							var mode_of_payment 				= response[i].sales_order_mode_of_payment;
 							var sales_order_date_of_payment 	= response[i].sales_order_date_of_payment;
 							var sales_order_reference_no		= response[i].sales_order_reference_no;
-							var sales_order_payment_amount 	= response[i].sales_order_payment_amount;
+							var sales_order_payment_amount 		= response[i].sales_order_payment_amount;
 							
 							$('#update_table_payment_body_data tr:last').after("<tr>"+
 							"<td class='bank_td' align='center'>"+
@@ -681,8 +679,8 @@
 
 			event.preventDefault();
 			
-					/*Reset Warnings*/
-					$('#client_idxError').text('');
+			/*Reset Warnings*/
+			$('#client_idxError').text('');
 
 			document.getElementById('UpdateSalesOrderformUpdate').className = "g-3 needs-validation was-validated";
 
@@ -734,7 +732,6 @@
 				  $.each($("[id='product_item']"), function(){
 					sales_order_product_item_id.push($(this).attr("data-id"));
 				  });
-				  
 				  
 				  /*Payment Options*/
 				var mode_of_payment = [];
