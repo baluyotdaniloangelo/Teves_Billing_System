@@ -85,7 +85,7 @@
 										<th style="text-align:center !important;">BEGINNING</th>
 										<th style="text-align:center !important;">CLOSING</th>
 										<th style="text-align:center !important;">CALIBRATION</th>
-										<th style="text-align:center !important;">SALES IN LITERS</th>
+										<!--<th style="text-align:center !important;">SALES IN LITERS</th>-->
 										<th style="text-align:center !important;">PUMP PRICE</th>
 										<th style="text-align:center !important;">ACTION</th>
 										</tr>

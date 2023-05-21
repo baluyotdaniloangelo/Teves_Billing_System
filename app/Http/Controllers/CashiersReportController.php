@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CashiersReportModel;
+use App\Models\CashiersReportModel_P1;
 use App\Models\ProductModel;
 use Session;
 use Validator;
@@ -48,7 +49,7 @@ class CashiersReportController extends Controller
 					->addColumn('action', function($row){
 						$actionBtn = '
 						<div align="center" class="action_table_menu_client">
-						<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
+						<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
 						<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
 						</div>';
 						return $actionBtn;
@@ -82,7 +83,6 @@ class CashiersReportController extends Controller
 			
 			
 			if($result){
-				//return response()->json(['success'=>"Cashier's Report Information Successfully Created!"]);
 				return response()->json(array('success' => "Cashier's Report Information Successfully Created!", 'cashiers_report_id' => $last_transaction_id), 200);
 			}
 			else{
@@ -204,5 +204,119 @@ class CashiersReportController extends Controller
 			else{
 				return response()->json(['success'=>'Error on Update client Information']);
 			}
+	}
+	
+	public function save_product_chashiers_report(Request $request){	
+
+		$request->validate([
+			'product_idx'  	=> 'required',
+			
+        ], 
+        [
+			'product_idx.required' 	=> 'Product is Required',
+        ]
+		);
+			
+			/*Get Last ID*/
+			$CashiersReportId = $request->CashiersReportId;
+			
+			$product_idx				= $request->product_idx;
+			$beginning_reading 			= $request->beginning_reading;
+			$closing_reading 			= $request->closing_reading;
+			$calibration 				= $request->calibration;
+			$product_manual_price 		= $request->product_manual_price;
+			$component_id 				= $request->component_id;
+				
+				for($count = 0; $count < count($product_idx); $count++)
+				{
+					
+						$product_idx_item 				= $product_idx[$count];
+						$beginning_reading_item 		= $beginning_reading[$count];
+						$closing_reading_item 			= $closing_reading[$count];
+						$calibration_item 				= $calibration[$count];
+						$product_manual_price_item 		= $product_manual_price[$count];
+						$component_id_item 				= $component_id[$count];
+					
+					if($product_idx_item!=0){
+						
+								/*Product Details*/
+								$product_info = ProductModel::find($product_idx_item, ['product_price']);					
+								
+								/*Check if Price is From Manual Price*/
+								if($product_manual_price_item!=0){
+									$product_price = $product_manual_price_item;
+								}else{
+									$product_price = $product_info->product_price;
+								}
+						
+								$order_quantity = ($closing_reading_item - $beginning_reading_item) - $calibration_item;
+								$peso_sales = ($order_quantity * $product_price);
+								
+							if($component_id_item==0){
+									
+								$CashiersReportModel_P1 = new CashiersReportModel_P1();
+								
+								$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
+								$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
+								$CashiersReportModel_P1->product_idx 				= $product_idx_item;
+								$CashiersReportModel_P1->beginning_reading 			= $beginning_reading_item;
+								$CashiersReportModel_P1->closing_reading 			= $closing_reading_item;
+								$CashiersReportModel_P1->calibration 				= $calibration_item;
+								$CashiersReportModel_P1->order_quantity 			= $order_quantity;
+								$CashiersReportModel_P1->product_price 				= $product_price;
+								$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
+								
+								$CashiersReportModel_P1->save();
+								
+							}else{
+								
+								$CashiersReportModel_P1 = new CashiersReportModel_P1();
+								$CashiersReportModel_P1 = CashiersReportModel_P1::find($component_id_item);
+								
+								$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
+								$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
+								$CashiersReportModel_P1->product_idx 				= $product_idx_item;
+								$CashiersReportModel_P1->beginning_reading 			= $beginning_reading_item;
+								$CashiersReportModel_P1->closing_reading 			= $closing_reading_item;
+								$CashiersReportModel_P1->calibration 				= $calibration_item;
+								$CashiersReportModel_P1->order_quantity 			= $order_quantity;
+								$CashiersReportModel_P1->product_price 				= $product_price;
+								$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
+								
+								$CashiersReportModel_P1->update();
+								
+							}		
+					}							
+					
+				}		
+			
+	}	
+	
+	public function get_cashiers_report_product_p1(Request $request){		
+	
+			$data =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+				->orderBy('cashiers_report_p1_id', 'asc')
+              	->get([
+					'cashiers_report_p1_id',
+					'cashiers_report_id',
+					'product_idx',
+					'beginning_reading',
+					'closing_reading',
+					'calibration',
+					'order_quantity',
+					'product_price',
+					'order_total_amount'
+					]);
+		
+			return response()->json($data);
+	}
+	
+	
+	public function delete_cashiers_report_product_p1(Request $request){		
+			
+		$component_id = $request->component_id;
+		CashiersReportModel_P1::find($component_id)->delete();
+		return 'Deleted';
+		
 	}
 }
