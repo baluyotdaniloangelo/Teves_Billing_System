@@ -209,11 +209,14 @@ class CashiersReportController extends Controller
 	public function save_product_chashiers_report(Request $request){	
 
 		$request->validate([
-			'product_idx'  	=> 'required',
-			
+			'product_idx'  			=> 'required',
+			'beginning_reading'  	=> 'required',
+			'closing_reading'  		=> 'required',		
         ], 
         [
 			'product_idx.required' 	=> 'Product is Required',
+			'beginning_reading.required' 	=> 'Beginning Reading is Required',
+			'closing_reading.required' 	=> 'Closing Reading is Required',
         ]
 		);
 			
@@ -226,70 +229,42 @@ class CashiersReportController extends Controller
 			$calibration 				= $request->calibration;
 			$product_manual_price 		= $request->product_manual_price;
 			$component_id 				= $request->component_id;
-				
-				for($count = 0; $count < count($product_idx); $count++)
-				{
-					
-						$product_idx_item 				= $product_idx[$count];
-						$beginning_reading_item 		= $beginning_reading[$count];
-						$closing_reading_item 			= $closing_reading[$count];
-						$calibration_item 				= $calibration[$count];
-						$product_manual_price_item 		= $product_manual_price[$count];
-						$component_id_item 				= $component_id[$count];
-					
-					if($product_idx_item!=0){
-						
+
 								/*Product Details*/
-								$product_info = ProductModel::find($product_idx_item, ['product_price']);					
+								$product_info = ProductModel::find($product_idx, ['product_price']);					
 								
 								/*Check if Price is From Manual Price*/
-								if($product_manual_price_item!=0){
-									$product_price = $product_manual_price_item;
+								if($product_manual_price!=0){
+									$product_price = $product_manual_price;
 								}else{
 									$product_price = $product_info->product_price;
 								}
 						
-								$order_quantity = ($closing_reading_item - $beginning_reading_item) - $calibration_item;
+								$order_quantity = ($closing_reading - $beginning_reading) - $calibration;
 								$peso_sales = ($order_quantity * $product_price);
 								
-							if($component_id_item==0){
 									
 								$CashiersReportModel_P1 = new CashiersReportModel_P1();
 								
 								$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
 								$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
-								$CashiersReportModel_P1->product_idx 				= $product_idx_item;
-								$CashiersReportModel_P1->beginning_reading 			= $beginning_reading_item;
-								$CashiersReportModel_P1->closing_reading 			= $closing_reading_item;
-								$CashiersReportModel_P1->calibration 				= $calibration_item;
+								$CashiersReportModel_P1->product_idx 				= $product_idx;
+								$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
+								$CashiersReportModel_P1->closing_reading 			= $closing_reading;
+								$CashiersReportModel_P1->calibration 				= $calibration;
 								$CashiersReportModel_P1->order_quantity 			= $order_quantity;
 								$CashiersReportModel_P1->product_price 				= $product_price;
 								$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
 								
-								$CashiersReportModel_P1->save();
+								$result = $CashiersReportModel_P1->save();
 								
-							}else{
+								if($result){
+									return response()->json(['success'=>'Product Successfully Updated!']);
+								}
+								else{
+									return response()->json(['success'=>'Error on Product Information']);
+								}
 								
-								$CashiersReportModel_P1 = new CashiersReportModel_P1();
-								$CashiersReportModel_P1 = CashiersReportModel_P1::find($component_id_item);
-								
-								$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
-								$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
-								$CashiersReportModel_P1->product_idx 				= $product_idx_item;
-								$CashiersReportModel_P1->beginning_reading 			= $beginning_reading_item;
-								$CashiersReportModel_P1->closing_reading 			= $closing_reading_item;
-								$CashiersReportModel_P1->calibration 				= $calibration_item;
-								$CashiersReportModel_P1->order_quantity 			= $order_quantity;
-								$CashiersReportModel_P1->product_price 				= $product_price;
-								$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
-								
-								$CashiersReportModel_P1->update();
-								
-							}		
-					}							
-					
-				}		
-			
 	}	
 	
 	public function get_cashiers_report_product_p1(Request $request){		

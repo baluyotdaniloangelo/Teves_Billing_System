@@ -39,7 +39,7 @@ Route::get('logout', [UserAuthController::class,'logout']);
 Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
 Route::get('billing/list', [BillingTransactionController::class, 'getBillingTransactionList'])->name('getBillingTransactionList')->middleware('isLoggedIn');
 /*Create Bill*/
-Route::post('/create_bill_post', [BillingTransactionController::class,'_bill_post'])->name('create_bill_post')->middleware('isLoggedIn');
+Route::post('/create_bill_post', [BillingTransactionController::class,'create_bill_post'])->name('create_bill_post')->middleware('isLoggedIn');
 /*Update Bill*/
 Route::post('/update_bill_post', [BillingTransactionController::class,'update_bill_post'])->name('update_bill_post')->middleware('isLoggedIn');
 /*GET Bill Info*/

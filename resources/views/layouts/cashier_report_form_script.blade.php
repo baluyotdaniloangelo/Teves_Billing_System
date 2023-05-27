@@ -43,7 +43,7 @@
 					$('#forecourt_attendantError').text('');
 					$('#report_dateError').text('');
 					
-					AddProductReport();
+					//AddProductReport();
 					LoadProductRowForUpdate();
 					//document.getElementById("CashierReportformNew").reset();				
 					//document.getElementById('CashierReportformNew').className = "g-3 needs-validation";
@@ -89,61 +89,46 @@
 			   });		
 	  });
 
+
+	function TotalAmount(){
+		
+		let product_price 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-price');
+		let product_manual_price 	= $("#product_manual_price").val();
+		
+		var beginning_reading 		= $("input[name=beginning_reading]").val();
+		var closing_reading 		= $("input[name=closing_reading]").val();
+		var calibration 			= $("input[name=calibration]").val();
+		
+		let order_quantity 			= (closing_reading - beginning_reading) - calibration;
+		
+		if(order_quantity!=0 || order_quantity!=''){
+			if(product_manual_price!='' && product_manual_price!=0){
+				var total_amount = product_manual_price * order_quantity;
+				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}else{
+				var total_amount = product_price * order_quantity;
+				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}
+		}
+		
+	}
 	/*Call Function for Product Cahier's Report*/
-	function AddProductReport() {
-					
+	$("#save-billing-transaction").click(function(event){
+		
+			event.preventDefault();
+			
+			$('#product_idxError').text('');
+			$('#beginning_readingError').text('');
+			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
 		
-			var product_idx 			= [];
-			var beginning_reading 		= [];
-			var closing_reading 		= [];
-			var calibration 			= [];
-			var product_manual_price 	= [];
-			var component_id 			= [];
+			var product_idx 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-id');
+			var beginning_reading 		= $("input[name=beginning_reading]").val();
+			var closing_reading 		= $("input[name=closing_reading]").val();
+			var calibration 			= $("input[name=calibration]").val();
+			var product_manual_price 	= $("input[name=product_manual_price]").val();
 			
-			$('.product_idx').each(function(){
-					if($(this).val() == ''){
-						alert('Please Select a Product 1');
-						exit();
-					}else{  				  
-				   		product_idx.push($(this).val());
-					}				  
-			});
-			
-			$('.beginning_reading').each(function(){
-					if($(this).val() == ''){
-						alert('Please Select a Product');
-						exit();
-					}else{  				  
-				   		beginning_reading.push($(this).val());
-					}				  
-			});
-			
-			$('.closing_reading').each(function(){
-					if($(this).val() == ''){
-						alert('Please Select a Product');
-						exit();
-					}else{  				  
-				   		closing_reading.push($(this).val());
-					}				  
-			});
-			
-			$('.calibration').each(function(){
-					if($(this).val() == ''){
-						alert('Please Select a Product');
-						exit();
-					}else{  				  
-				   		calibration.push($(this).val());
-					}				  
-			});
-			
-			$('.product_manual_price').each(function(){ 				  
-				   		product_manual_price.push($(this).val());			  
-			});	
-			
-			 $.each($("[id='component_id']"), function(){
-					component_id.push($(this).attr("data-id"));
-				  });
+			document.getElementById('BillingformNew').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
@@ -156,21 +141,32 @@
 					  closing_reading:closing_reading,
 					  calibration:calibration,
 					  product_manual_price:product_manual_price, 
-					  component_id:component_id,
 					  _token: "{{ csrf_token() }}"
 					},
 					success:function(response){
 					  console.log(response);
 					  if(response) {
-						  /**/
+						  
+						$('#switch_notice_on').show();
+						$('#sw_on').html(response.success);
+						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+						
+						$('#product_idxError').text('');					
+						$('#beginning_readingError').text('');		
+						
 					  }
 					},
 					error: function(error) {
 					 console.log(error);
 						/*alert(error);*/
+							$('#product_idxError').text(error.responseJSON.errors.product_idx);
+							document.getElementById('product_idxError').className = "invalid-feedback";
+							
+							$('#beginning_readingError').text(error.responseJSON.errors.beginning_reading);
+							document.getElementById('beginning_readingError').className = "invalid-feedback";
 					}
 				   });		
-		}
+		 });
 
 	function AddProductRow() {
 		

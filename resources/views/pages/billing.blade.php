@@ -23,7 +23,7 @@
 													<th>Date</th>
 													<th>Time</th>
 													<th>Driver's Name</th>
-													<th>P.O. No.</th>
+													<th>S.O No.</th>
 													<th>Plate Number</th>																	
 													<th>Product</th>
 													<th>Price</th>
@@ -43,7 +43,7 @@
 													<th>Date</th>
 													<th>Time</th>
 													<th>Driver's Name</th>
-													<th>P.O. No.</th>
+													<th>S.O. No.</th>
 													<th>Plate Number</th>																	
 													<th>Product</th>
 													<th>Price</th>
@@ -131,7 +131,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="order_po_number" class="col-sm-3 col-form-label">PO Number</label>
+						  <label for="order_po_number" class="col-sm-3 col-form-label">SO Number</label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="order_po_number" id="order_po_number" value="" required>
 							<span class="valid-feedback" id="order_po_numberError"></span>
@@ -258,7 +258,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_order_po_number" class="col-sm-3 col-form-label">PO Number</label>
+						  <label for="update_order_po_number" class="col-sm-3 col-form-label">SO Number</label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="update_order_po_number" id="update_order_po_number" value="" required>
 							<span class="valid-feedback" id="update_order_po_numberError"></span>

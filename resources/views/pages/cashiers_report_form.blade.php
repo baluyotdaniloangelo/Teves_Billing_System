@@ -73,9 +73,186 @@
 						  <div class="tab-content pt-2" id="myTabjustifiedContent">
 							<div class="tab-pane fade active show" id="Product-justified" role="tabpanel" aria-labelledby="Product-tab">
 							  <div align="right">
-								<button type="button" class="btn btn-success new_item bi bi-cart-plus-fill" onclick="AddProductRow();" title="Add a Product(1-5 items)"></button>
+								<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>
 								</div>
 								<br>
+								
+	<!--Modal to Create Bill-->
+	<div class="modal fade" id="CreateBillingModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Create Bill</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="BillingformNew">
+					  
+					  <div class="row mb-2">
+						  <label for="order_quantity" class="col-sm-3 col-form-label">PRODUCT</label>
+						  <div class="col-sm-9">
+									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()">
+									<datalist id="product_name">
+										@foreach ($product_data as $product_data_cols)
+											<span style="font-family: DejaVu Sans; sans-serif;">
+											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+											</span>
+										@endforeach
+									</datalist>
+
+									</div>	
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="beginning_reading" class="col-sm-3 col-form-label">BEGINNING</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="beginning_reading" id="beginning_reading" required step=".01" onchange="TotalAmount()" >
+							  <span class="valid-feedback" id="beginning_readingError"></span>						  
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="closing_reading" class="col-sm-3 col-form-label">CLOSING</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="closing_reading" id="closing_reading" required step=".01" onchange="TotalAmount()" >
+							  <span class="valid-feedback" id="closing_readingError"></span>						  
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="calibration" class="col-sm-3 col-form-label">CALIBRATION</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="calibration" id="calibration" step=".01" onchange="TotalAmount()" >
+							  <span class="valid-feedback" id="calibrationError"></span>						  
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="product_manual_price" class="col-sm-3 col-form-label" title="Msnual Price">PUMP PRICE</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="product_manual_price" id="product_manual_price" step=".01" onchange="TotalAmount()" >
+							  <span class="valid-feedback" id="product_manual_priceError"></span>						  
+						  </div>
+						</div>						
+						<!---->
+						<div class="row mb-2">
+						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
+						  <div class="col-sm-9">
+								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount">0.00</span>
+						  </div>
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+						
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-billing-transaction"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-billing-save"> Reset</button>					  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>
+	
+	
+	<!--Modal to Upadate Site-->
+	<div class="modal fade" id="UpdateBillingModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Update Bill</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-2 needs-validation" id="BillingformEdit">
+					  
+						<div class="row mb-2">
+						  <label for="update_order_date" class="col-sm-3 col-form-label">Date</label>
+						  <div class="col-sm-9">
+							<input type="date" class="form-control" name="update_order_date" id="update_order_date" value="" required>
+							<span class="valid-feedback" id="update_order_dateError" title="Required"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="update_order_time" class="col-sm-3 col-form-label">Time</label>
+						  <div class="col-sm-9">
+							<input type="time" class="form-control " name="update_order_time" id="update_order_time" value="" required>
+							<span class="valid-feedback" id="update_order_timeError"></span>
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="update_order_po_number" class="col-sm-3 col-form-label">SO Number</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_order_po_number" id="update_order_po_number" value="" required>
+							<span class="valid-feedback" id="update_order_po_numberError"></span>
+						  </div>
+						</div>
+						
+				
+						
+					
+						<div class="row mb-2">
+						  <label for="update_product_idx" class="col-sm-3 col-form-label">Product</label>						  
+						  <div class="col-sm-9">  
+						  
+							  <div class="input-group">
+							  
+									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
+									<datalist id="update_product_name">
+										@foreach ($product_data as $product_data_cols)
+											<span style="font-family: DejaVu Sans; sans-serif;">
+											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}" data-price="{{$product_data_cols->product_price}}" >
+											</span>
+										@endforeach
+									</datalist>
+									
+									<span class="input-group-text">Manual Price</span>
+									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="" step=".01" onchange="UpdateTotalAmount()">
+									<span class="valid-feedback" id="update_product_idxError"></span>
+									
+								</div>
+							</div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="update_order_quantity" class="col-sm-3 col-form-label">Quantity</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_order_quantity" id="update_order_quantity" required step=".01" onchange="UpdateTotalAmount()">
+							  <span class="valid-feedback" id="update_order_quantityError"></span>
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="" class="col-sm-3 col-form-label">Amount</label>
+						  <div class="col-sm-9">
+								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount">0.00</span>
+						  </div>
+						</div>	
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+						
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-billing-transaction"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-billing-update"> Reset</button>
+						  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>
+	
+								
+								
 								
 								<table class="table" id="table_product_data">
 								

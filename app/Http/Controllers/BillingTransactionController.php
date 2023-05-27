@@ -138,7 +138,7 @@ class BillingTransactionController extends Controller
         [
 			'order_date.required' => 'Order Date is required',
 			'order_time.required' => 'Order Time is Required',
-			'order_po_number.required' => 'PO is Required',
+			'order_po_number.required' => 'SO is Required',
 			'client_idx.required' => 'Client is Required',
 			'plate_no.required' => 'Plate Number is Required',
 			'drivers_name.required' => "Driver's Name is Required",
@@ -200,7 +200,7 @@ class BillingTransactionController extends Controller
         [
 			'order_date.required' => 'Order Date is required',
 			'order_time.required' => 'Order Time is Required',
-			'order_po_number.required' => 'PO is Required',
+			'order_po_number.required' => 'SO is Required',
 			'client_idx.required' => 'Client is Required',
 			'plate_no.required' => 'Plate Number is Required',
 			'drivers_name.required' => "Driver's Name is Required",
