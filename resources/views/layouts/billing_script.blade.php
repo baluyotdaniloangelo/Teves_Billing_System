@@ -424,17 +424,6 @@
 					$('#bill_delete_order_quantity').text(response[0].order_quantity);					
 					$('#bill_delete_order_total_amount').text(response[0].order_total_amount);
 
-					/*Set Details Confirmed
-					$('#bill_delete_confirmed_order_date').text(response[0].order_date);
-					$('#bill_delete_confirmed_order_time').text(response[0].order_time);
-					$('#bill_delete_confirmed_order_po_number').text(response[0].order_po_number);
-					$('#bill_delete_confirmed_client_name').text(response[0].client_name);
-					$('#bill_delete_confirmed_plate_no').text(response[0].plate_no);
-					$('#bill_delete_confirmed_product_name').text(response[0].product_name);
-					$('#bill_delete_confirmed_drivers_name').text(response[0].drivers_name);
-					$('#bill_delete_confirmed_order_quantity').text(response[0].order_quantity);					
-					$('#bill_delete_confirmed_order_total_amount').text(response[0].order_total_amount);
-					*/
 					$('#BillDeleteModal').modal('toggle');									  
 				  }
 				},
