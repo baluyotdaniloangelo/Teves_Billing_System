@@ -19,20 +19,29 @@
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getSalesOrderList') }}",
 			columns: [
-					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'sales_order_date'},
-					{data: 'sales_order_control_number'},
-					{data: 'client_name'},   
-					//{data: 'sales_order_dr_number'},
-					//{data: 'sales_order_or_number'},
-					{data: 'sales_order_payment_term'},
-					{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					{data: 'status', name: 'status', orderable: true, searchable: true},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+				{data: 'sales_order_date'},
+					
+				{data: 'sales_order_control_number'},
+				{data: 'client_name'},   
+					
+				{data: 'sales_order_payment_term'},   
+				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
+				{data: ({sales_order_net_amount,sales_order_less_percentage}) => (Number(sales_order_net_amount)*Number(sales_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
+					
+				
+				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					
+				
+				{data: 'delivery_status', name: 'delivery_status', orderable: true, searchable: true},
+				{data: 'payment_status', name: 'payment_status', orderable: true, searchable: true},
+				
+				{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
-			order: [[ 1, "asc" ]],
+			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 4, 7] },
+					{ className: 'text-center', targets: [0, 1, 2, 4] },
 			]
 		});
 				/**/
@@ -367,8 +376,8 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getSalesOrderList").DataTable();
-					table.ajax.reload(null, false);
+					//var table = $("#getSalesOrderList").DataTable();
+					//table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#CreateSalesOrderModal').modal('toggle');
@@ -381,6 +390,9 @@
 					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
 					window.open(url);
 					
+					/*Reload Page*/
+					location.reload();
+					
 				  }
 				},
 				error: function(error) {
@@ -390,8 +402,6 @@
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
 				  document.getElementById('client_idxError').className = "invalid-feedback";
 				  
-				   
-				  //document.getElementById('product_idxError').className = "invalid-feedback";
 				  $('#product_idxError').html(error.responseJSON.errors.product_idx);
 								
 				$('#switch_notice_off').show();
@@ -441,8 +451,8 @@
 	  });	
 	  
 	  
-	  <!--Product Confirmed For Deletion-->
-	  $('body').on('click','#deleteSalesOrderConfirmed',function(){
+	<!--Product Confirmed For Deletion-->
+	$('body').on('click','#deleteSalesOrderConfirmed',function(){
 			
 			event.preventDefault();
 
@@ -468,8 +478,10 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getSalesOrderList").DataTable();
-				    table.ajax.reload(null, false);
+					//var table = $("#getSalesOrderList").DataTable();
+				    //table.ajax.reload(null, false);
+					/*Reload Page*/
+					location.reload();
 					
 				  }
 				},
@@ -839,8 +851,8 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getSalesOrderList").DataTable();
-					table.ajax.reload(null, false);
+					//var table = $("#getSalesOrderList").DataTable();
+					//table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#UpdateSalesOrderModal').modal('toggle');
@@ -854,6 +866,8 @@
 					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
 					window.open(url);
 					
+					/*Reload Page*/
+					location.reload();
 				  }
 				},
 				error: function(error) {
@@ -917,5 +931,33 @@
 			   });
 		  
 	  }	    
+	  
+	  function sales_order_delivery_status(id){
+		  
+			event.preventDefault();
+			var sales_order_delivery_status = document.getElementById("sales_order_delivery_status_"+id).value;
+		
+			  $.ajax({
+				url: "/update_sales_order_delivery_status",
+				type:"POST",
+				data:{
+				  sales_order_id:id,
+				  sales_order_delivery_status:sales_order_delivery_status,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+							
+				  console.log(response);
+				  if(response!='') {
+
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+		  
+	  }	    
  </script>
-	

@@ -355,12 +355,17 @@ class ReportController extends Controller
 					'teves_billing_table.order_time']);	
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		/*Recievable Data*/
+		$receivable_id = $request->receivable_id;		
+		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term']);
+		
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
           
 		$title = 'Billing Statement';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header'));
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/

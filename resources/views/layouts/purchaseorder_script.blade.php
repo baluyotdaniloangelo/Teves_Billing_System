@@ -1,5 +1,4 @@
    <script type="text/javascript">
-<!--COFFEE-->
 	<!--Load Table-->
 	$(function () {
 
@@ -374,8 +373,8 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getPurchaseOrderList").DataTable();
-					table.ajax.reload(null, false);
+					//var table = $("#getPurchaseOrderList").DataTable();
+					//table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#CreatePurchaseOrderModal').modal('toggle');
@@ -387,6 +386,9 @@
 
 					var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
 					window.open(url);
+					
+					/*Reload Page*/
+					location.reload();
 					
 				  }
 				},
@@ -481,8 +483,11 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getPurchaseOrderList").DataTable();
-				    table.ajax.reload(null, false);
+					//var table = $("#getPurchaseOrderList").DataTable();
+				    //table.ajax.reload(null, false);
+					
+					/*Reload Page*/
+					location.reload();
 					
 				  }
 				},
@@ -879,8 +884,8 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getPurchaseOrderList").DataTable();
-					table.ajax.reload(null, false);
+					//var table = $("#getPurchaseOrderList").DataTable();
+					//table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#UpdatePurchaseOrderModal').modal('toggle');
@@ -892,6 +897,9 @@
 
 					var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
 					window.open(url);
+					
+					/*Reload Page*/
+					location.reload();
 					
 				  }
 				},
@@ -922,7 +930,6 @@
 			   });	
 	  });
 	
-
 	  /*Re-print*/
 	  $('body').on('click','#PrintPurchaseOrder',function(){	  
 	  

@@ -145,6 +145,13 @@ class CashiersReportController extends Controller
 					
 	}
 
+	public function delete_cashiers_report_info(Request $request){		
+			
+		$CashiersReportID = $request->CashiersReportID;
+		CashiersReportModel::find($CashiersReportID)->delete();
+		return 'Deleted';
+		
+	}
 	/*Fetch client Information*/
 	public function cashiers_report_form($CashiersReportId){
 		
@@ -303,7 +310,6 @@ class CashiersReportController extends Controller
 		
 			return response()->json($data);
 	}
-	
 	
 	public function delete_cashiers_report_product_p1(Request $request){		
 			

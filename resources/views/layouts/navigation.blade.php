@@ -95,7 +95,7 @@
         </a>
       </li>
 		<?php } ?>
-		
+		<!---->
 		<li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Sales Order">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>

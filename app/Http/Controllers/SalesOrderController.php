@@ -50,10 +50,15 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
+					'teves_sales_order_table.sales_order_payment_term',	
+					'teves_sales_order_table.sales_order_gross_amount',	
+					'teves_sales_order_table.sales_order_net_amount',	
+					'teves_sales_order_table.sales_order_less_percentage',
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_status']);
+					'teves_sales_order_table.sales_order_status',
+					'teves_sales_order_table.sales_order_delivery_status']);
 					
 		}else{
 			
@@ -63,18 +68,42 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
+					'teves_sales_order_table.sales_order_payment_term',	
+					'teves_sales_order_table.sales_order_gross_amount',	
+					'teves_sales_order_table.sales_order_net_amount',
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_status']);	
+					'teves_sales_order_table.sales_order_status',
+					'teves_sales_order_table.sales_order_delivery_status']);	
 			
 		}			
 	
 		return DataTables::of($data)
 				->addIndexColumn()
-				->addColumn('status', function($row){
+				
+				->addColumn('delivery_status', function($row){
 					
 									
+				if($row->sales_order_delivery_status=='Pending'){
+					$sales_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Delivered">Delivered</option>';
+				}else if($row->sales_order_delivery_status=='Delivered'){
+					$sales_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Delivered">Delivered</option>';
+				}else{
+					$sales_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Delivered">Delivered</option>';
+				}
+					
+					$actionBtn = '
+					<div align="center" class="action_table_menu_Product">
+					<select class="sales_order_delivery_status_'.$row->sales_order_id.'" name="sales_order_delivery_status_'.$row->sales_order_id.'" id="sales_order_delivery_status_'.$row->sales_order_id.'" onchange="sales_order_delivery_status('.$row->sales_order_id.')">	
+						'.$sales_status_selected.'
+						</select>
+					</div>';
+                    return $actionBtn;
+                })
+				
+				->addColumn('payment_status', function($row){
+				
 				if($row->sales_order_status=='Pending'){
 					$sales_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
 				}else if($row->sales_order_status=='Paid'){
@@ -91,6 +120,7 @@ class SalesOrderController extends Controller
 					</div>';
                     return $actionBtn;
                 })
+				
                 ->addColumn('action', function($row){
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
@@ -100,7 +130,7 @@ class SalesOrderController extends Controller
 					</div>';
                     return $actionBtn;
                 })
-				->rawColumns(['action','status'])
+				->rawColumns(['action','delivery_status','payment_status'])
                 ->make(true);
 		}		
     }
@@ -523,4 +553,15 @@ class SalesOrderController extends Controller
 		
 	}
 	
+	public function update_sales_order_delivery_status(Request $request){		
+			
+		$sales_order_id = $request->sales_order_id;
+		$sales_order_delivery_status = $request->sales_order_delivery_status;
+				
+				$salesOrderUpdate = new SalesOrderModel();
+				$salesOrderUpdate = SalesOrderModel::find($sales_order_id);
+				$salesOrderUpdate->sales_order_delivery_status = $sales_order_delivery_status;
+				$salesOrderUpdate->update();
+		
+	}
 }

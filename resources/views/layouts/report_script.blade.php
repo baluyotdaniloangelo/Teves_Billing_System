@@ -94,11 +94,21 @@
 						}			
 						
 							total_liters_discount = total_liters * less_per_liter;
-							total_amount_payable = total_due - total_liters_discount; 					
+															
+							vatable_sales = total_due / 1.12;
+							$('#vatable_sales').text(vatable_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							vatable_amount = vatable_sales * 0.12;
+							$('#vatable_amount').text(vatable_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							with_holding_tax = vatable_sales * 0.01;
+							$('#with_holding_tax').text(with_holding_tax.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
 							/*Set Grand Total and Billing Date*/
 							let total_due_str = total_due.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
+							total_amount_payable = total_due - (total_liters_discount + with_holding_tax); 				
+													
 							$('#total_due').text(total_due_str.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
@@ -108,7 +118,7 @@
 							
 							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
 							
-							$('#amount_receivables').text(total_amount_payable);
+							$('#amount_receivables').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -188,9 +198,6 @@
 				},
 				success:function(response){
 				
-				/*Close Form*/
-				//$('#CreateReportModal').modal('toggle');
-				
 				/*Call Function to Get the Client Name and Address*/
 				get_client_details();
 							
@@ -248,11 +255,21 @@
 						}			
 						
 							total_liters_discount = total_liters * less_per_liter;
-							total_amount_payable = total_due - total_liters_discount; 					
+															
+							vatable_sales = total_due / 1.12;
+							$('#vatable_sales').text(vatable_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							vatable_amount = vatable_sales * 0.12;
+							$('#vatable_amount').text(vatable_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							with_holding_tax = vatable_sales * 0.01;
+							$('#with_holding_tax').text(with_holding_tax.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
 							/*Set Grand Total and Billing Date*/
 							let total_due_str = total_due.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
+							total_amount_payable = total_due - (total_liters_discount + with_holding_tax); 				
+													
 							$('#total_due').text(total_due_str.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
@@ -262,7 +279,7 @@
 							
 							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
 							
-							$('#amount_receivables').text(total_amount_payable);
+							$('#amount_receivables').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -359,8 +376,8 @@
 	  
 	}
 	
-	function download_billing_report_pdf(){
-		  
+	function download_billing_report_pdf(receivable_id){
+			
 			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
@@ -368,6 +385,7 @@
 		 	/*Added May 6, 2023*/
 			let company_header 					= $("#company_header").val();	  
 		var query = {
+			receivable_id:receivable_id,
 			client_idx:client_idx,
 			start_date:start_date,
 			end_date:end_date,
@@ -445,9 +463,16 @@
 						_token: "{{ csrf_token() }}"
 					}
 					
-					download_billing_report_pdf();
+					/*Reload Details or link for PDF*/
+					
+					download_billing_report_pdf(response.receivable_id);
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
+					
+					$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf('+response.receivable_id+')"> PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()"> Excel</button>'+
+							'</div>');
 					
 					/*Close Form*/
 				  }

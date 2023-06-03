@@ -19,15 +19,18 @@
 										<table class="table table-bordered dataTable" id="getReceivablesList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
+													<th>No.</th>
 													<th>Date</th>
 													<th>Control Number</th>
-													<th>Client</th>
+													<th>Account Name</th>
 													<th>Description</th>
-													<th>Total Due</th>
+													<th>Gross Amount</th>
+													<th>1% Withholding Tax</th>
+													<th>Net Amount Payable</th>
+													<th>Total Amount Rendered</th>
 													<th>Remaining Balance</th>
 													<th>Status</th>
-													<th>Print</th>
+													<th>Generate</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -38,15 +41,18 @@
 											
 											<tfoot>
 												<tr>
-													<th>#</th>
+													<th>No.</th>
 													<th>Date</th>
 													<th>Control Number</th>
-													<th>Client</th>
+													<th>Account Name</th>
 													<th>Description</th>
-													<th>Total Due</th>
+													<th>Gross Amount</th>
+													<th>1% Withholding Tax</th>
+													<th>Net Amount Payable</th>
+													<th>Total Amount Rendered</th>
 													<th>Remaining Balance</th>
 													<th>Status</th>
-													<th>Print</th>
+													<th>Generate</th>
 													<th>Action</th>												
 												</tr>
 											</tfoot>	

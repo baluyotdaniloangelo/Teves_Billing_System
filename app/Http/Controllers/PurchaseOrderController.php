@@ -50,18 +50,7 @@ class PurchaseOrderController extends Controller
 						'teves_purchase_order_table.purchase_order_total_payable',
 						'teves_purchase_order_table.purchase_status'
 				]);
-		
-		
-		
-    	/*$data = PurchaseOrderModel::select(
-		'purchase_order_id',
-		'purchase_order_date',
-		'purchase_order_control_number',
-		'purchase_supplier_name',
-		'purchase_order_total_payable',
-		'purchase_status');*/
-
-		
+	
 		return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('status', function($row){

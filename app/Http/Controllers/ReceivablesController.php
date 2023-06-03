@@ -41,6 +41,10 @@ class ReceivablesController extends Controller
 					'teves_client_table.client_name',
 					'teves_receivable_table.control_number',		
 					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_gross_amount',
+					'teves_receivable_table.receivable_vatable_sales',
+					'teves_receivable_table.receivable_vatable_amount',
+					'teves_receivable_table.receivable_withholding_tax',
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.receivable_remaining_balance',
 					'teves_receivable_table.receivable_status']);
@@ -276,6 +280,13 @@ class ReceivablesController extends Controller
 				->groupBy('teves_product_table.product_unit_measurement')
 				->sum('order_quantity');
 
+			$gross_amount = $receivable_amount;
+			$vatable_sales = $gross_amount / 1.12;
+			$vatable_amount = ($gross_amount / 1.12) * 0.12;
+			$withholding_tax = $vatable_sales * 0.01;
+			
+			$total_amount_due = $receivable_amount - (($receivable_total_liter*$request->less_per_liter) + ($withholding_tax));
+					
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 				= $request->client_idx;
 			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
@@ -283,9 +294,14 @@ class ReceivablesController extends Controller
 			$Receivables->or_number 				= $request->or_number;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
-			$Receivables->receivable_amount 		= $receivable_amount-($receivable_total_liter*$request->less_per_liter);
-			$Receivables->receivable_status 		= $request->receivable_status;
 			
+			$Receivables->receivable_gross_amount 		= $gross_amount;			
+			$Receivables->receivable_vatable_sales 		= $vatable_sales;
+			$Receivables->receivable_vatable_amount 	= $vatable_amount;
+			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
+			$Receivables->receivable_amount 			= $total_amount_due;
+			
+			$Receivables->receivable_status 		= $request->receivable_status;		
 			$Receivables->billing_period_start 		= $request->start_date;
 			$Receivables->billing_period_end 		= $request->end_date;
 			
@@ -336,20 +352,33 @@ class ReceivablesController extends Controller
 				->groupBy('teves_billing_table.client_idx')
 				->groupBy('teves_product_table.product_unit_measurement')
 				->sum('order_quantity');
-				
+			
+			$gross_amount = $receivable_amount;
+			$vatable_sales = $gross_amount / 1.12;
+			$vatable_amount = ($gross_amount / 1.12) * 0.12;
+			$withholding_tax = $vatable_sales * 0.01;
+			
+			$total_amount_due = $receivable_amount - (($receivable_total_liter*$request->less_per_liter) + ($withholding_tax));
+		
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
-			$Receivables->billing_date 				= $request->billing_date;
-			$Receivables->or_number 				= $request->or_number;
-			$Receivables->payment_term 				= $request->payment_term;
-			$Receivables->receivable_description 	= $request->receivable_description;
-			$Receivables->receivable_status 		= $request->receivable_status;
-			$Receivables->receivable_amount 		= $receivable_amount-($receivable_total_liter*$request->less_per_liter);
-			$Receivables->billing_period_start 		= $request->start_date;
-			$Receivables->billing_period_end 		= $request->end_date;
+			$Receivables->billing_date 					= $request->billing_date;
+			$Receivables->or_number 					= $request->or_number;
+			$Receivables->payment_term 					= $request->payment_term;
+			$Receivables->receivable_description 		= $request->receivable_description;
 			
-			$Receivables->less_per_liter 			= $request->less_per_liter;
-			$Receivables->company_header 			= $request->company_header;
+			$Receivables->receivable_gross_amount 		= $gross_amount;			
+			$Receivables->receivable_vatable_sales 		= $vatable_sales;
+			$Receivables->receivable_vatable_amount 	= $vatable_amount;
+			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
+			$Receivables->receivable_amount 			= $total_amount_due;
+			
+			$Receivables->receivable_status 			= $request->receivable_status;
+			$Receivables->billing_period_start 			= $request->start_date;
+			$Receivables->billing_period_end 			= $request->end_date;
+			
+			$Receivables->less_per_liter 				= $request->less_per_liter;
+			$Receivables->company_header 				= $request->company_header;
 			
 			$result = $Receivables->update();
 			

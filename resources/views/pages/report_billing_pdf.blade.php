@@ -17,9 +17,9 @@ if($company_header=='Teves'){
 			<td colspan="10"><div align="center"><h5>{{ $title }}</h5></div></td>
 		</tr>
 		<tr style="font-size:12px;">
-			<td colspan="1" align="left">Client:</td>
+			<td colspan="1" align="left">ACCOUNT NAME:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_name'] }}</td>			
-			<td colspan="1" nowrap align="right">P.O Period:</td>
+			<td colspan="1" nowrap align="left">SALES ORDER PERIOD:</td>
 			<?php
 			
 			$_po_start_date=date_create("$start_date");
@@ -30,11 +30,16 @@ if($company_header=='Teves'){
 			?>
 			<td colspan="3" nowrap align="left" style="border-bottom:1px solid #000;">&nbsp;<?=$po_start_date;?> - <?=$po_end_date;?></td>
 		</tr>
-		
 		<tr style="font-size:12px;">
-			<td colspan="1" align="left">Address:</td>
+			<td colspan="1" align="left">TIN:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_address'] }}</td>			
-			<td colspan="1" align="right">Billing Date:</td>
+			<td colspan="1" align="left">PAYMENT TERMS:</td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ @$receivable_data['payment_term'] }}</td>
+		</tr>
+		<tr style="font-size:12px;">
+			<td colspan="1" align="left">ADDRESS:</td>
+			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_address'] }}</td>			
+			<td colspan="1" align="left">BILLING DATE:</td>
 			<td colspan="3" align="left" style="border-bottom:1px solid #000;">&nbsp;<?php echo strtoupper(date('M/d/Y')); ?></td>
 		</tr>
 		
@@ -99,16 +104,16 @@ if($company_header=='Teves'){
 												<td align="left" colspan="6"></td>
 												<td align="left"><b>Total Volume:</b></td>
 												<td align="left"><?=number_format($total_liters,2);?> L</td>
-												<td align="left"><b>Total Due:</b></td>
+												<td align="left"><b>Total Sales:</b></td>
 												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <?=number_format($total_payable,2);?></td>
 											</tr>
 											
 											<tr class="data_tr">
 												<td align="left" colspan="6"></td>
-												<td align="left" colspan="1"><b>Less per liter:</b></td>
+												<td align="left" colspan="1"><b>Discount per liter:</b></td>
 												<td align="left" ><?=($less_per_liter);?> L</td>
-												<td align="left" colspan="1"></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format(($less_per_liter*$total_liters),2);?></td>
+												<td align="left" colspan="1"><b>VATable Sales</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format(($total_payable/1.12),2);?></td>
 												
 											</tr>
 											
@@ -116,9 +121,38 @@ if($company_header=='Teves'){
 												<td align="left" colspan="6"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
-												<td align="left" colspan="1"><b>Total Payable:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_payable-($less_per_liter*$total_liters),2);?></span></td>
+												<td align="left" colspan="1"><b>VAT Amount</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format((($total_payable/1.12)*0.12),2);?></td>
+												
 											</tr>
+									
+											<tr class="data_tr">
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"></td>
+												<td align="left" ></td>
+												<td align="left" colspan="1"><b>Less: Discount</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_liters*$less_per_liter,2);?></td>
+												
+											</tr>
+											
+											<tr class="data_tr">
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"></td>
+												<td align="left" ></td>
+												<td align="left" colspan="1"><b>Less: With Holding Tax</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format( ( ($total_payable/1.12)*0.01) ,2 );?></td>
+												
+											</tr>
+									
+											<tr class="data_tr">
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"></td>
+												<td align="left" ></td>
+												<td align="left" colspan="1"><b>Total Payable:</b></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_payable-($less_per_liter*$total_liters)-(($total_payable/1.12)*0.01),2);?></span></td>
+											</tr>
+			
+			
 			
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>

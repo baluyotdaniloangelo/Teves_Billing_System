@@ -15,6 +15,12 @@
 			             '</select> '
 		    },
 			/*processing: true,*/
+			/*
+			
+					'teves_receivable_table.receivable_vatable_sales',
+					'teves_receivable_table.receivable_vatable_amount',
+					'teves_receivable_table.receivable_withholding_tax',
+			*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getReceivablesList') }}",
@@ -22,11 +28,16 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'billing_date'},
 					{data: 'control_number'},
-					{data: 'client_name'},   
-					/*{data: 'or_number'},
-					{data: 'payment_term'},*/
+					{data: 'client_name'},
 					{data: 'receivable_description'},
+
+					{data: 'receivable_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'receivable_withholding_tax', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					
 					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					
+					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				
 					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_status'},
 					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
@@ -547,6 +558,7 @@
 					
 					/*Open Billing Print Page*/				
 					var query_billing = {
+						receivable_id:ReceivableID,
 						client_idx:client_idx,
 						start_date:start_date,
 						end_date:end_date,

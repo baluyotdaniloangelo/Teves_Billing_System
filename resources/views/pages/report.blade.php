@@ -34,11 +34,13 @@
 						
 						<div class="col-sm-6">
 							<div class="ms-2">
-								<div class="fw-bold">Client: <span id="client_name_report" style="font-weight: normal;"></span></div>
+								<div class="fw-bold">ACCOUNT NAME: <span id="client_name_report" style="font-weight: normal;"></span></div>
 							</div>
-							
 							<div class="ms-2">
-								<div class="fw-bold">Address: <span id="client_address_report" style="font-weight: normal;"></span></div>
+								<div class="fw-bold">TIN: <span id="client_tin_receivables" style="font-weight: normal;"></span></div>			
+							</div>
+							<div class="ms-2">
+								<div class="fw-bold">ADDRESS: <span id="client_address_report" style="font-weight: normal;"></span></div>
 							</div>
 							
 						</div>
@@ -46,18 +48,20 @@
 						<div class="col-sm-6">
 							
 							<div class="ms-2">
-								<div class="fw-bold">P.O Period: <span id="po_info" style="font-weight: normal;"></span></div>			
+								<div class="fw-bold">SALES ORDER PERIOD: <span id="po_info" style="font-weight: normal;"></span></div>			
 							</div>
-							
 							<div class="ms-2">
-								<div class="fw-bold">Billing Date: <span id="billing_date_info" style="font-weight: normal;"></span></div>
+								<div class="fw-bold">PAYMENT TERMS: Not Available. Please save as receivables</div>
+							</div>
+							<div class="ms-2">
+								<div class="fw-bold">BILLING DATE: <span id="billing_date_info" style="font-weight: normal;"></span></div>
 							</div>
 	
 						</div>
 						</div>
 						
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0" style="font-size:12px !important">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -81,18 +85,45 @@
 											
 											<tr class="" >
 												<td align="left" colspan="6"></td>
-												<td align="left"><b>Total Volume:</b></td>
-												<td align="left"><span id="total_volume" style="font-weight: normal;"></span></td>
-												<td align="left"><b>Total Due:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="total_due" style="font-weight: normal;"></span></td>
+												<td align="left" nowrap><b>Total Volume (L) (Fuel):</b></td>
+												<td align="left" nowrap><span id="total_volume" style="font-weight: normal;"></span></td>
+												<td align="left" nowrap><b>Total Sales:</b></td>
+												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="total_due" style="font-weight: normal;"></span></td>
 											</tr>
 											
 											<tr class="" >
 												<td align="left" colspan="6"></td>
-												<td align="left" colspan="1"><b>Less per liter:</b></td>
-												<td align="left" ><span id="report_less_per_liter" style="font-weight: normal;"></span></td>
-												<td align="left" colspan="1"></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_liters_discount" style="font-weight: normal;"></span></td>
+												<td align="left" colspan="1" nowrap><b>Discount Per liter (Fuel):</b></td>
+												<td align="left" nowrap><span id="report_less_per_liter" style="font-weight: normal;"></span></td>
+												<td align="left" colspan="1" nowrap>VATable Sales</td>
+												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vatable_sales" style="font-weight: normal;"></span></td>
+												
+											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"><b></b></td>
+												<td align="left" ></td>
+												<td align="left" nowrap colspan="1">VAT Amount</td>
+												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vatable_amount" style="font-weight: normal;"></span></td>
+												
+											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"><b></b></td>
+												<td align="left" ></td>
+												<td align="left" nowrap colspan="1">Less: Discount </td>
+												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_liters_discount" style="font-weight: normal;"></span></td>
+												
+											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="6"></td>
+												<td align="left" colspan="1"><b></b></td>
+												<td align="left" ></td>
+												<td align="left" nowrap colspan="1">Less: With Holding Tax </td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="with_holding_tax" style="font-weight: normal;"></span></td>
 												
 											</tr>
 											
@@ -101,7 +132,7 @@
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												
-												<td align="left" colspan="1"><b>Total Payable:</b></td>
+												<td align="left" nowrap colspan="1"><b>TOTAL AMOUNT DUE:</b></td>
 												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_payable" style="font-weight: normal;"></span></td>
 											</tr>
 											
@@ -298,7 +329,7 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-4 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Less Per Liter</label>
+						  <label for="less_per_liter" class="col-sm-4 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Discount Per Liter</label>
 						  <div class="col-sm-8">
 							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
 							<span class="valid-feedback" id="less_per_literError"></span>

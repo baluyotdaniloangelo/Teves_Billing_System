@@ -120,7 +120,7 @@
 			
 			event.preventDefault();
 			let CashiersReportID = $(this).data('id');
-			alert(CashiersReportID);
+			
 			  $.ajax({
 				url: "/cashiers_report_info",
 				type:"POST",
@@ -139,6 +139,8 @@
 					$('#confirm_delete_cashiers_name').text(response[0].user_real_name);
 					$('#confirm_delete_shift').text(response[0].shift);
 					
+					document.getElementById("deleteCashiersReportConfirmed").value = CashiersReportID;
+					
 					$('#CashiersReportDeleteModal').modal('toggle');		
 				  
 				  }
@@ -151,17 +153,17 @@
 	  });
 
 	<!--client Confirmed For Deletion-->
-	$('body').on('click','#deleteClientConfirmed',function(){
+	$('body').on('click','#deleteCashiersReportConfirmed',function(){
 			
 			event.preventDefault();
 
-			let clientID = document.getElementById("deleteClientConfirmed").value;
+			let CashiersReportID = document.getElementById("deleteCashiersReportConfirmed").value;
 			
 			  $.ajax({
-				url: "/delete_client_confirmed",
+				url: "/delete_cashiers_report_info",
 				type:"POST",
 				data:{
-				  clientID:clientID,
+				  CashiersReportID:CashiersReportID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -169,7 +171,7 @@
 				  if(response) {
 					
 					$('#switch_notice_off').show();
-					$('#sw_off').html("Client Deleted");
+					$('#sw_off').html("Cashier's Report Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					/*
 					If you are using server side datatable, then you can use ajax.reload() 

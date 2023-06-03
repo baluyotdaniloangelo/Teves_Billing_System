@@ -19,15 +19,17 @@
 										<table class="table table-bordered dataTable" id="getSalesOrderList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
+													<th>No.</th>
 													<th>Date</th>
 													<th>Control Number</th>
-													<th>Client</th>
-													<!--<th>D.R. Number</th>
-													<th>O.R. Number</th>-->
+													<th>Account Name</th>
 													<th>Payment Term</th>
+													<th>Gross Amount</th>
+													<th>1% Withholding Tax</th>
+													<th>Net Amount</th>
 													<th>Total Due</th>
-													<th>Status</th>
+													<th>Delivery Status</th>
+													<th>Payment Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -38,16 +40,18 @@
 											
 											<tfoot>
 												<tr>
-													<th>#</th>
+													<th>No.</th>
 													<th>Date</th>
 													<th>Control Number</th>
-													<th>Client</th>
-													<!--<th>D.R. Number</th>
-													<th>O.R. Number</th>-->
+													<th>Account Name</th>
 													<th>Payment Term</th>
+													<th>Gross Amount</th>
+													<th>1% Withholding Tax</th>
+													<th>Net Amount</th>
 													<th>Total Due</th>
-													<th>Status</th>
-													<th>Action</th>												
+													<th>Delivery Status</th>
+													<th>Payment Status</th>
+													<th>Action</th>										
 												</tr>
 											</tfoot>	
 										</table>

@@ -69,7 +69,7 @@
 				</div>
                 <div class="modal-footer footer_modal_bg">
                     
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteClientConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCashiersReportConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
                   
                 </div>

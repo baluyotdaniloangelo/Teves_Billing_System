@@ -136,6 +136,8 @@ Route::post('/get_sales_order_product_list', [SalesOrderController::class,'get_s
 Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sales_order_item'])->name('delete_sales_order_item')->middleware('isLoggedIn');
 /*Update Sales Order Status*/
 Route::post('/update_sales_status', [SalesOrderController::class,'update_sales_status'])->name('update_sales_status')->middleware('isLoggedIn');
+/*Update Sales Order Delivery Status*/
+Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,'update_sales_order_delivery_status'])->name('update_sales_order_delivery_status')->middleware('isLoggedIn');
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 
@@ -200,8 +202,12 @@ Route::post('/create_cashier_report_post', [CashiersReportController::class,'cre
 /*Update Cashier's Report Primary Information*/
 Route::post('/update_cashier_report_post', [CashiersReportController::class,'update_cashier_report_post'])->name('update_cashier_report_post')->middleware('isLoggedIn');
 /*GET Cashier's Report Primary Information*/
-Route::post('/create_cashiers_report', [CashiersReportController::class, 'cashiers_report_info'])->name('cashiers_report_info')->middleware('isLoggedIn');
+Route::post('/cashiers_report_info', [CashiersReportController::class, 'cashiers_report_info'])->name('cashiers_report_info')->middleware('isLoggedIn');
 /**/
+Route::post('/delete_cashiers_report_info', [CashiersReportController::class, 'delete_cashiers_report_info'])->name('delete_cashiers_report_info')->middleware('isLoggedIn');
+
+
+
 Route::get('/cashiers_report_form/{id}', [CashiersReportController::class, 'cashiers_report_form'])->name('cashiers_report_form')->middleware('isLoggedIn');
 /*Save Cashier's Report Product*/
 Route::post('/save_product_cashiers_report', [CashiersReportController::class,'save_product_cashiers_report'])->name('save_product_cashiers_report')->middleware('isLoggedIn');
