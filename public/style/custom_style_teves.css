@@ -22,6 +22,10 @@
     padding: 0px;
 }
 
+.search_control{
+	font-size:12px;
+}
+
 .header{    
 	height: 70px;
 }

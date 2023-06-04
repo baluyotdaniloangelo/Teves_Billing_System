@@ -18,8 +18,12 @@
 			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
-			let less_per_liter 		= $("input[name=less_per_liter]").val();
-						
+			let less_per_liter 		= $("input[name=less_per_liter]").val() / 100;
+			
+			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val() / 100;
+			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
+			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
+			
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -95,30 +99,30 @@
 						
 							total_liters_discount = total_liters * less_per_liter;
 															
-							vatable_sales = total_due / 1.12;
-							$('#vatable_sales').text(vatable_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							vatable_sales = total_due / net_value_percentage;
+							$('#vatable_sales').text(vatable_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							vatable_amount = vatable_sales * 0.12;
-							$('#vatable_amount').text(vatable_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							vat_amount = vatable_sales * vat_value_percentage;
+							$('#vat_amount').text(vat_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							with_holding_tax = vatable_sales * 0.01;
-							$('#with_holding_tax').text(with_holding_tax.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							with_holding_tax = vatable_sales * withholding_tax_percentage;
+							$('#with_holding_tax').text(with_holding_tax.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							/*Set Grand Total and Billing Date*/
-							let total_due_str = total_due.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							let total_due_str = total_due.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							total_amount_payable = total_due - (total_liters_discount + with_holding_tax); 				
 													
-							$('#total_due').text(total_due_str.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#total_due').text(total_due_str.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							$('#total_volume').text(total_liters.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
+							$('#total_volume').text(total_liters.toLocaleString("en-PH", {maximumFractionDigits: 2}) + " L");
 							
-							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
+							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {maximumFractionDigits: 2}) + " L");
 							
-							$('#amount_receivables').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#amount_receivables').text(total_amount_payable.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -182,8 +186,11 @@
 			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
-			let less_per_liter 		= $("input[name=less_per_liter]").val();
-						
+			let less_per_liter 		= $("input[name=less_per_liter]").val() / 100;
+			
+			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val() / 100;
+			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
+			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -256,30 +263,30 @@
 						
 							total_liters_discount = total_liters * less_per_liter;
 															
-							vatable_sales = total_due / 1.12;
-							$('#vatable_sales').text(vatable_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							vatable_sales = total_due / net_value_percentage;
+							$('#vatable_sales').text(vatable_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							vatable_amount = vatable_sales * 0.12;
-							$('#vatable_amount').text(vatable_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							vat_amount = vatable_sales * vat_value_percentage;
+							$('#vat_amount').text(vat_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							with_holding_tax = vatable_sales * 0.01;
-							$('#with_holding_tax').text(with_holding_tax.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							with_holding_tax = vatable_sales * withholding_tax_percentage;
+							$('#with_holding_tax').text(with_holding_tax.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							/*Set Grand Total and Billing Date*/
-							let total_due_str = total_due.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							let total_due_str = total_due.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							total_amount_payable = total_due - (total_liters_discount + with_holding_tax); 				
 													
-							$('#total_due').text(total_due_str.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#total_due').text(total_due_str.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_payable').text(total_amount_payable.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#total_liters_discount').text(total_liters_discount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
-							$('#total_volume').text(total_liters.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
+							$('#total_volume').text(total_liters.toLocaleString("en-PH", {maximumFractionDigits: 2}) + " L");
 							
-							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " L");
+							$('#report_less_per_liter').text(less_per_liter.toLocaleString("en-PH", {maximumFractionDigits: 2}) + " L");
 							
-							$('#amount_receivables').text(total_amount_payable.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							$('#amount_receivables').text(total_amount_payable.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -381,7 +388,11 @@
 			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
-			let less_per_liter 	= $("input[name=less_per_liter]").val();
+			let less_per_liter 	= $("input[name=less_per_liter]").val() / 100;
+			
+			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val()/100;
+			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
+			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val()/100;
 		 	/*Added May 6, 2023*/
 			let company_header 					= $("#company_header").val();	  
 		var query = {
@@ -391,6 +402,9 @@
 			end_date:end_date,
 			less_per_liter:less_per_liter,
 			company_header:company_header,
+			withholding_tax_percentage:withholding_tax_percentage,
+			net_value_percentage:net_value_percentage,
+			vat_value_percentage:vat_value_percentage,
 			_token: "{{ csrf_token() }}"
 		}
 
@@ -428,10 +442,14 @@
 			let receivable_status 		= $("#receivable_status").val();
 			
 			
-			let less_per_liter 		= $("input[name=less_per_liter]").val();
+			let less_per_liter 		= $("input[name=less_per_liter]").val() / 100;
 			
 			/*Added May 6, 2023*/
 			let company_header 					= $("#company_header").val();
+			/*Added June 4, 2023*/
+			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val()/100;
+			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
+			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val()/100;
 			
 			$.ajax({
 				url: "/create_receivables_post",
@@ -446,6 +464,9 @@
 				  receivable_status:receivable_status,
 				  less_per_liter:less_per_liter,
 				  company_header:company_header,
+				  withholding_tax_percentage:withholding_tax_percentage,
+				  net_value_percentage:net_value_percentage,
+				  vat_value_percentage:vat_value_percentage,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

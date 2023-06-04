@@ -43,7 +43,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_gross_amount',
 					'teves_receivable_table.receivable_vatable_sales',
-					'teves_receivable_table.receivable_vatable_amount',
+					'teves_receivable_table.receivable_vat_amount',
 					'teves_receivable_table.receivable_withholding_tax',
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.receivable_remaining_balance',
@@ -231,6 +231,9 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.billing_period_start',
 					'teves_receivable_table.billing_period_end',
 					'teves_receivable_table.less_per_liter',
+					'teves_receivable_table.receivable_net_value_percentage',
+					'teves_receivable_table.receivable_vat_value_percentage',
+					'teves_receivable_table.receivable_withholding_tax_percentage',
 					'teves_receivable_table.company_header']);
 					return response()->json($data);
 		
@@ -264,6 +267,11 @@ class ReceivablesController extends Controller
 			$client_idx = $request->client_idx;
 			$start_date = $request->start_date;
 			$end_date = $request->end_date;
+			
+			$less_per_liter = $request->less_per_liter;
+			$withholding_tax_percentage = $request->withholding_tax_percentage;
+			$net_value_percentage = $request->net_value_percentage;
+			$vat_value_percentage = $request->vat_value_percentage;
 		
 			$receivable_amount = BillingTransactionModel::where('client_idx', $client_idx)
 				->where('order_date', '>=', $start_date)
@@ -281,11 +289,11 @@ class ReceivablesController extends Controller
 				->sum('order_quantity');
 
 			$gross_amount = $receivable_amount;
-			$vatable_sales = $gross_amount / 1.12;
-			$vatable_amount = ($gross_amount / 1.12) * 0.12;
-			$withholding_tax = $vatable_sales * 0.01;
+			$vatable_sales = $gross_amount / $net_value_percentage;
+			$vatable_amount = ($gross_amount / $net_value_percentage) * $vat_value_percentage;
+			$withholding_tax = $vatable_sales * $withholding_tax_percentage;
 			
-			$total_amount_due = $receivable_amount - (($receivable_total_liter*$request->less_per_liter) + ($withholding_tax));
+			$total_amount_due = $receivable_amount - (($receivable_total_liter*$less_per_liter) + ($withholding_tax));
 					
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 				= $request->client_idx;
@@ -297,15 +305,21 @@ class ReceivablesController extends Controller
 			
 			$Receivables->receivable_gross_amount 		= $gross_amount;			
 			$Receivables->receivable_vatable_sales 		= $vatable_sales;
-			$Receivables->receivable_vatable_amount 	= $vatable_amount;
+			$Receivables->receivable_vat_amount 		= $vatable_amount;
 			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
 			$Receivables->receivable_amount 			= $total_amount_due;
+			$Receivables->receivable_remaining_balance 	= $total_amount_due;
 			
-			$Receivables->receivable_status 		= $request->receivable_status;		
-			$Receivables->billing_period_start 		= $request->start_date;
-			$Receivables->billing_period_end 		= $request->end_date;
+			$Receivables->receivable_net_value_percentage 			= $net_value_percentage;
+			$Receivables->receivable_withholding_tax_percentage 	= $withholding_tax_percentage * 100;
+			$Receivables->receivable_vat_value_percentage 			= $vat_value_percentage * 100;
 			
-			$Receivables->less_per_liter 		= $request->less_per_liter;
+			
+			$Receivables->receivable_status 			= $request->receivable_status;		
+			$Receivables->billing_period_start 			= $request->start_date;
+			$Receivables->billing_period_end 			= $request->end_date;
+			
+			$Receivables->less_per_liter 		= $request->less_per_liter * 100;
 			$Receivables->company_header 		= $request->company_header;
 			
 			$result = $Receivables->save();
@@ -353,12 +367,28 @@ class ReceivablesController extends Controller
 				->groupBy('teves_product_table.product_unit_measurement')
 				->sum('order_quantity');
 			
-			$gross_amount = $receivable_amount;
-			$vatable_sales = $gross_amount / 1.12;
-			$vatable_amount = ($gross_amount / 1.12) * 0.12;
-			$withholding_tax = $vatable_sales * 0.01;
+			$less_per_liter = $request->less_per_liter;
 			
-			$total_amount_due = $receivable_amount - (($receivable_total_liter*$request->less_per_liter) + ($withholding_tax));
+			/*Sum Rendered Payment*/
+			$_receivable_total_payment_amount = ReceivablesPaymentModel::where('receivable_idx', $request->ReceivableID)
+				->sum('receivable_payment_amount');
+			
+			$withholding_tax_percentage = $request->withholding_tax_percentage;
+			$net_value_percentage = $request->net_value_percentage;
+			$vat_value_percentage = $request->vat_value_percentage;
+			
+			$gross_amount = $receivable_amount;
+			$vatable_sales = $gross_amount / $net_value_percentage;
+			$vatable_amount = ($gross_amount / $net_value_percentage) * $vat_value_percentage;
+			$withholding_tax = $vatable_sales * $withholding_tax_percentage;
+			
+			$total_amount_due = $receivable_amount - (($receivable_total_liter*$less_per_liter) + ($withholding_tax));
+		
+			if($_receivable_total_payment_amount==0){
+				$receivable_total_payment_amount = $total_amount_due;
+			}else{
+				$receivable_total_payment_amount = $total_amount_due - $_receivable_total_payment_amount;
+			}
 		
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
@@ -369,9 +399,15 @@ class ReceivablesController extends Controller
 			
 			$Receivables->receivable_gross_amount 		= $gross_amount;			
 			$Receivables->receivable_vatable_sales 		= $vatable_sales;
-			$Receivables->receivable_vatable_amount 	= $vatable_amount;
+			$Receivables->receivable_vat_amount 		= $vatable_amount;
 			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
 			$Receivables->receivable_amount 			= $total_amount_due;
+			
+			$Receivables->receivable_remaining_balance 	= $receivable_total_payment_amount;
+			
+			$Receivables->receivable_net_value_percentage 			= $net_value_percentage;
+			$Receivables->receivable_withholding_tax_percentage 	= $withholding_tax_percentage * 100;
+			$Receivables->receivable_vat_value_percentage 			= $vat_value_percentage * 100;			
 			
 			$Receivables->receivable_status 			= $request->receivable_status;
 			$Receivables->billing_period_start 			= $request->start_date;

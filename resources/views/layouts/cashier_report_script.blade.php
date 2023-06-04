@@ -173,12 +173,13 @@
 					$('#switch_notice_off').show();
 					$('#sw_off').html("Cashier's Report Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					
 					/*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					var table = $("#getclientList").DataTable();
+					var table = $("#getCashierReport").DataTable();
 				    table.ajax.reload(null, false);
 					
 				  }

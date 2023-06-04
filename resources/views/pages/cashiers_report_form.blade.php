@@ -108,7 +108,7 @@
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Create Bill</h5>
+                      <h5 class="modal-title">Add Product</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
@@ -189,7 +189,7 @@
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Update Bill</h5>
+                      <h5 class="modal-title">Update Product</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -298,7 +298,7 @@
 							<div class="tab-pane fade" id="other_sales-justified" role="tabpanel" aria-labelledby="other_sales-tab">
 							<br>
 							<div align="right">
-								<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH1_Modal"></button>
+								<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH2_Modal"></button>
 							</div>
 							<br>
 								
@@ -320,7 +320,69 @@
 								</table>
 								<div style="color:red;" id="product_idxError"></div>
 								<hr>
-								
+	<!--Modal to Create Bill-->
+	<div class="modal fade" id="CRPH2_Modal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Create Other Sales</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="CRPH1_form">
+					  
+					  <div class="row mb-2">
+						  <label for="order_quantity" class="col-sm-3 col-form-label">PRODUCT</label>
+						  <div class="col-sm-9">
+									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()">
+									<datalist id="product_name">
+										@foreach ($product_data as $product_data_cols)
+											<span style="font-family: DejaVu Sans; sans-serif;">
+											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+											</span>
+										@endforeach
+									</datalist>
+									<span class="valid-feedback" id="product_idxError"></span>
+									</div>	
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="beginning_reading" class="col-sm-3 col-form-label">QUANTITY</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="beginning_reading" id="beginning_reading" required step=".01" onchange="TotalAmount()" >
+							  <span class="valid-feedback" id="beginning_readingError"></span>						  
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="product_manual_price" class="col-sm-3 col-form-label" title="Msnual Price">UNIT PRICE</label>
+						  <div class="col-sm-9">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="product_manual_price" id="product_manual_price" step=".01" onchange="TotalAmount()" >
+							  <span class="valid-feedback" id="product_manual_priceError"></span>						  
+						  </div>
+						</div>						
+						<!---->
+						<div class="row mb-2">
+						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
+						  <div class="col-sm-9">
+								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount">0.00</span>
+						  </div>
+						</div>
+						
+						</div>
+						
+						<div class="modal-footer modal-footer_form">
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-CRPH1"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-CRPH1-save"> Reset</button>					  
+						</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>								
 							  
 							</div>
 							<div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">

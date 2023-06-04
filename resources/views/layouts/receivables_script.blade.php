@@ -50,58 +50,6 @@
 		});
 	});
 	
-	<!--Select Receivable For Update-->
-	
-	$('body').on('click','#editReceivables',function(){
-			
-			event.preventDefault();
-			let ReceivableID = $(this).data('id');
-			
-			  $.ajax({
-				url: "/receivable_info",
-				type:"POST",
-				data:{
-				  receivable_id:ReceivableID,
-				  
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					
-					document.getElementById("update-receivables").value = ReceivableID;
-					
-					/*Set Details*/
-							
-					document.getElementById("client_name_receivables").innerHTML = response[0].client_name;
-					document.getElementById("client_address_receivables").innerHTML = response[0].client_address;
-					document.getElementById("control_no_receivables").innerHTML = response[0].control_number;	
-					document.getElementById("billing_receivables").innerHTML = response[0].billing_date;					
-					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
-					document.getElementById("amount_receivables").innerHTML = response[0].receivable_amount;
-					
-					document.getElementById("billing_date").value = response[0].billing_date;
-					document.getElementById("or_number").value = response[0].or_number;
-					document.getElementById("payment_term").value = response[0].payment_term;
-					document.getElementById("receivable_description").textContent = response[0].receivable_description;
-					
-					document.getElementById("receivable_status").value = response[0].receivable_status;
-					
-					document.getElementById("start_date").value = response[0].billing_period_start;
-					document.getElementById("end_date").value = response[0].billing_period_end;
-					document.getElementById("less_per_liter").value = response[0].less_per_liter;
-					document.getElementById("company_header").value = response[0].company_header;
-					
-					$('#UpdateReceivablesModal').modal('toggle');					
-				  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });	
-	  });
 	<!--Pay Receivables-->
 	$('body').on('click','#payReceivables',function(){
 			
@@ -339,6 +287,62 @@
 			   });
 	  }  	  
 
+	<!--Select Receivable For Update-->	
+	$('body').on('click','#editReceivables',function(){
+			
+			event.preventDefault();
+			let ReceivableID = $(this).data('id');
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-receivables").value = ReceivableID;
+					
+					/*Set Details*/
+							
+					document.getElementById("client_name_receivables").innerHTML = response[0].client_name;
+					document.getElementById("client_address_receivables").innerHTML = response[0].client_address;
+					document.getElementById("control_no_receivables").innerHTML = response[0].control_number;	
+					document.getElementById("billing_receivables").innerHTML = response[0].billing_date;					
+					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
+					document.getElementById("amount_receivables").innerHTML = response[0].receivable_amount;
+					
+					document.getElementById("billing_date").value = response[0].billing_date;
+					document.getElementById("or_number").value = response[0].or_number;
+					document.getElementById("payment_term").value = response[0].payment_term;
+					document.getElementById("receivable_description").textContent = response[0].receivable_description;
+					
+					document.getElementById("receivable_status").value = response[0].receivable_status;
+					
+					document.getElementById("start_date").value = response[0].billing_period_start;
+					document.getElementById("end_date").value = response[0].billing_period_end;
+					document.getElementById("less_per_liter").value = response[0].less_per_liter;
+					document.getElementById("company_header").value = response[0].company_header;
+					
+					document.getElementById("withholding_tax_percentage").value = response[0].receivable_withholding_tax_percentage;
+					document.getElementById("net_value_percentage").value = response[0].receivable_net_value_percentage;
+					document.getElementById("vat_value_percentage").value = response[0].receivable_vat_value_percentage;				
+					
+					$('#UpdateReceivablesModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+
 	$("#update-receivables").click(function(event){			
 			event.preventDefault();
 			
@@ -360,7 +364,12 @@
 			let less_per_liter 		= $("#less_per_liter").val();
 			/*Added May 6, 2023*/
 			let company_header 		= $("#company_header").val();
-			  $.ajax({
+			/*Added June 4, 2023*/
+			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val() / 100;
+			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
+			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
+			 
+			 $.ajax({
 				url: "/update_receivables_post",
 				type:"POST",
 				data:{
@@ -373,7 +382,10 @@
 				  less_per_liter:less_per_liter,
 				  start_date:start_date,
 				  end_date:end_date,
-				  company_header:company_header,
+				  company_header:company_header,				  
+				  withholding_tax_percentage:withholding_tax_percentage,				  
+				  net_value_percentage:net_value_percentage,			  
+				  vat_value_percentage:vat_value_percentage,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -394,17 +406,13 @@
 					var table = $("#getReceivablesList").DataTable();
 				    table.ajax.reload(null, false);
 					
-					
-					
 					var query = {
 								receivable_id:ReceivableID,
 								_token: "{{ csrf_token() }}"
 							}
 
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
-					window.open(url);
-					
-					
+					window.open(url);				
 				  
 				  }
 				},
@@ -556,6 +564,10 @@
 					let less_per_liter 	= response[0].less_per_liter;
 					let company_header 	= response[0].company_header;
 					
+					let withholding_tax_percentage 	= response[0].receivable_withholding_tax_percentage/100;
+					let net_value_percentage 		= response[0].receivable_net_value_percentage;
+					let vat_value_percentage 		= response[0].receivable_vat_value_percentage/100;
+					
 					/*Open Billing Print Page*/				
 					var query_billing = {
 						receivable_id:ReceivableID,
@@ -563,6 +575,9 @@
 						start_date:start_date,
 						end_date:end_date,
 						company_header:company_header,
+						withholding_tax_percentage:withholding_tax_percentage,
+						net_value_percentage:net_value_percentage,
+						vat_value_percentage:vat_value_percentage,
 						_token: "{{ csrf_token() }}"
 					}
 

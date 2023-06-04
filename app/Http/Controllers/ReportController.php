@@ -335,6 +335,10 @@ class ReportController extends Controller
 		$less_per_liter = $request->less_per_liter;
 		$company_header = $request->company_header;
 		
+		$withholding_tax_percentage = $request->withholding_tax_percentage;
+		$net_value_percentage = $request->net_value_percentage;
+		$vat_value_percentage = $request->vat_value_percentage;
+		
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
                     ->where('teves_billing_table.order_date', '<=', $end_date)
@@ -365,7 +369,7 @@ class ReportController extends Controller
           
 		$title = 'Billing Statement';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data'));
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
@@ -373,7 +377,7 @@ class ReportController extends Controller
 		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		$pdf->render();
 		return $pdf->stream($client_data['client_name'].".pdf");
-		//return view('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date'));
+		//return view('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
 	}
 	
 	public function generate_receivable_pdf(Request $request){

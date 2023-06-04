@@ -15,7 +15,7 @@
 		 
             <div class="card-body">			
 				<div class="p-d3">
-									<div class="table-responsive">
+									<div class="table-responsive" style="">
 										<table class="table table-bordered dataTable" id="getReceivablesList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
@@ -24,9 +24,9 @@
 													<th>Control Number</th>
 													<th>Account Name</th>
 													<th>Description</th>
-													<th>Gross Amount</th>
-													<th>1% Withholding Tax</th>
-													<th>Net Amount Payable</th>
+													<th>Total Sales</th>
+													<th>Withholding Tax</th>
+													<th>Total Amount Due</th>
 													<th>Total Amount Rendered</th>
 													<th>Remaining Balance</th>
 													<th>Status</th>
@@ -46,10 +46,10 @@
 													<th>Control Number</th>
 													<th>Account Name</th>
 													<th>Description</th>
-													<th>Gross Amount</th>
-													<th>1% Withholding Tax</th>
+													<th>Total Sales</th>
+													<th>Withholding Tax</th>
 													<th>Net Amount Payable</th>
-													<th>Total Amount Rendered</th>
+													<th>Total Amount Due</th>
 													<th>Remaining Balance</th>
 													<th>Status</th>
 													<th>Generate</th>
@@ -191,28 +191,53 @@
 						</div>
 
 						<div class="row mb-2">
-						  <label for="start_date" class="col-sm-3 col-form-label">Start Date</label>
+						  <label for="start_date" class="col-sm-3 col-form-label">Period:</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="start_date" id="start_date" required>
-							<span class="valid-feedback" id="start_dateError"></span>
+						  
+						  <div class="input-group">
+							  
+									<input type="date" class="form-control " name="start_date" id="start_date" required>
+
+								
+									<input type="date" class="form-control " name="end_date" id="end_date" required>
+							<span class="valid-feedback" id="end_dateError"></span>
+							<span class="valid-feedback" id="start_dateError"></span>		
+							</div>
+
 						  </div>
 						</div>						
 								
 						<div class="row mb-2">
-						  <label for="end_date" class="col-sm-3 col-form-label">End Date</label>
-						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="end_date" id="end_date" required>
-							<span class="valid-feedback" id="end_dateError"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Less Per Liter</label>
+						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Discount Per Liter</label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
 							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>
 						</div>
+
+						<div class="row mb-2">
+						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Net Value</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12">
+							<span class="valid-feedback" id=""></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">VAT Value</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12">
+							<span class="valid-feedback" id=""></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Withholding Tax</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1">
+							<span class="valid-feedback" id="less_per_literError"></span>
+						  </div>
+						</div>						
 
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>

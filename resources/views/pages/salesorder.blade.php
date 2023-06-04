@@ -25,7 +25,7 @@
 													<th>Account Name</th>
 													<th>Payment Term</th>
 													<th>Gross Amount</th>
-													<th>1% Withholding Tax</th>
+													<th>Withholding Tax</th>
 													<th>Net Amount</th>
 													<th>Total Due</th>
 													<th>Delivery Status</th>
@@ -46,7 +46,7 @@
 													<th>Account Name</th>
 													<th>Payment Term</th>
 													<th>Gross Amount</th>
-													<th>1% Withholding Tax</th>
+													<th>Withholding Tax</th>
 													<th>Net Amount</th>
 													<th>Total Due</th>
 													<th>Delivery Status</th>

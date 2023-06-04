@@ -85,7 +85,7 @@
 											
 											<tr class="" >
 												<td align="left" colspan="6"></td>
-												<td align="left" nowrap><b>Total Volume (L) (Fuel):</b></td>
+												<td align="left" nowrap>Total Volume (L) (Fuel):</td>
 												<td align="left" nowrap><span id="total_volume" style="font-weight: normal;"></span></td>
 												<td align="left" nowrap><b>Total Sales:</b></td>
 												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="total_due" style="font-weight: normal;"></span></td>
@@ -93,7 +93,7 @@
 											
 											<tr class="" >
 												<td align="left" colspan="6"></td>
-												<td align="left" colspan="1" nowrap><b>Discount Per liter (Fuel):</b></td>
+												<td align="left" colspan="1" nowrap>Discount Per liter (Fuel):</td>
 												<td align="left" nowrap><span id="report_less_per_liter" style="font-weight: normal;"></span></td>
 												<td align="left" colspan="1" nowrap>VATable Sales</td>
 												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vatable_sales" style="font-weight: normal;"></span></td>
@@ -105,7 +105,7 @@
 												<td align="left" colspan="1"><b></b></td>
 												<td align="left" ></td>
 												<td align="left" nowrap colspan="1">VAT Amount</td>
-												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vatable_amount" style="font-weight: normal;"></span></td>
+												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vat_amount" style="font-weight: normal;"></span></td>
 												
 											</tr>
 											
@@ -331,8 +331,32 @@
 						<div class="row mb-2">
 						  <label for="less_per_liter" class="col-sm-4 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Discount Per Liter</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
+							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="">
 							<span class="valid-feedback" id="less_per_literError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="net_value_percentage" class="col-sm-4 col-form-label" title="Net Value">Net Value</label>
+						  <div class="col-sm-8">
+							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12">
+							<span class="valid-feedback" id="net_value_percentage_taxError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="vat_value_percentage" class="col-sm-4 col-form-label" title="Net Value">VAT Value</label>
+						  <div class="col-sm-8">
+							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12">
+							<span class="valid-feedback" id="vat_value_percentageError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="withholding_tax_percentage" class="col-sm-4 col-form-label" title="Withholding Tax">Withholding Tax</label>
+						  <div class="col-sm-8">
+							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1">
+							<span class="valid-feedback" id="withholding_taxError"></span>
 						  </div>
 						</div>
 						

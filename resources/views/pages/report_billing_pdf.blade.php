@@ -46,7 +46,9 @@ if($company_header=='Teves'){
 		<tr style="font-size:12px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
+		</table>
 		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		
 			<tr>
 				<th class="data_th" style="border:1px solid #000;">#</th>
@@ -54,13 +56,12 @@ if($company_header=='Teves'){
 				<th class="data_th" nowrap style="border:1px solid #000;">Time</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Driver's Name</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">P.O No.</th>
-				<th class="data_th" nowrap style="border:1px solid #000;">Plate Number</th>
+				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Description</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Product</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Quantity</th>
-				<th class="data_th" nowrap style="border:1px solid #000;">Price</th>
-				<th class="data_th" nowrap style="border:1px solid #000;">Amount</th>
+				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Price</th>
+				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Amount</th>
 			</tr>
-			
 											
 		<tbody>
 			<?php 
@@ -98,22 +99,21 @@ if($company_header=='Teves'){
 			?>
 			
 			@endforeach
-			
-											
+	
 											<tr class="data_tr">
 												<td align="left" colspan="6"></td>
-												<td align="left"><b>Total Volume:</b></td>
+												<td align="left">Total Volume:</td>
 												<td align="left"><?=number_format($total_liters,2);?> L</td>
 												<td align="left"><b>Total Sales:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <?=number_format($total_payable,2);?></td>
+												<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <?=number_format($total_payable,2);?></td>
 											</tr>
-											
+											<!--'withholding_tax_percentage','net_value_percentage','vat_value_percentage'-->
 											<tr class="data_tr">
 												<td align="left" colspan="6"></td>
-												<td align="left" colspan="1"><b>Discount per liter:</b></td>
+												<td align="left" colspan="1">Discount per liter:</td>
 												<td align="left" ><?=($less_per_liter);?> L</td>
-												<td align="left" colspan="1"><b>VATable Sales</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format(($total_payable/1.12),2);?></td>
+												<td align="left" colspan="1">VATable Sales</td>
+												<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format(($total_payable/$net_value_percentage),2);?></td>
 												
 											</tr>
 											
@@ -121,8 +121,8 @@ if($company_header=='Teves'){
 												<td align="left" colspan="6"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
-												<td align="left" colspan="1"><b>VAT Amount</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format((($total_payable/1.12)*0.12),2);?></td>
+												<td align="left" colspan="1">VAT Amount</td>
+												<td align="right"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span style="text-slign:right;"><?=number_format((($total_payable/$net_value_percentage)*$vat_value_percentage),2);?></span></td>
 												
 											</tr>
 									
@@ -130,8 +130,8 @@ if($company_header=='Teves'){
 												<td align="left" colspan="6"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
-												<td align="left" colspan="1"><b>Less: Discount</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_liters*$less_per_liter,2);?></td>
+												<td align="left" colspan="1">Less: Discount</td>
+												<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_liters*$less_per_liter,2);?></td>
 												
 											</tr>
 											
@@ -139,8 +139,8 @@ if($company_header=='Teves'){
 												<td align="left" colspan="6"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
-												<td align="left" colspan="1"><b>Less: With Holding Tax</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format( ( ($total_payable/1.12)*0.01) ,2 );?></td>
+												<td align="left" colspan="1">Less: With Holding Tax</td>
+												<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format( ( ($total_payable/$net_value_percentage)*$withholding_tax_percentage) ,2 );?></td>
 												
 											</tr>
 									
@@ -148,15 +148,10 @@ if($company_header=='Teves'){
 												<td align="left" colspan="6"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
-												<td align="left" colspan="1"><b>Total Payable:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_payable-($less_per_liter*$total_liters)-(($total_payable/1.12)*0.01),2);?></span></td>
+												<td align="left" colspan="1"><b>TOTAL AMOUNT DUE:</b></td>
+												<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_payable-($less_per_liter*$total_liters)-(($total_payable/$net_value_percentage)*$withholding_tax_percentage),2);?></span></td>
 											</tr>
 			
-			
-			
-			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
-			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
-			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
@@ -170,7 +165,8 @@ if($company_header=='Teves'){
 				<td align="center" colspan="3">{{$user_data->user_job_title}}</td>
 				<td align="left" colspan="5"></td>
 			</tr>
-			
+			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
+			<tr style="font-size:12px;font-style: italic;"><td colspan="10">This billing statement is not valid for claims of taxes. Please refer to Sales Invoice issued.</td></tr>
 		</tbody>
 		</table>
 		
