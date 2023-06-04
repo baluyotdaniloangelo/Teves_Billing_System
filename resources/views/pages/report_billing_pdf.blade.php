@@ -32,7 +32,7 @@ if($company_header=='Teves'){
 		</tr>
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left">TIN:</td>
-			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_address'] }}</td>			
+			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_tin'] }}</td>			
 			<td colspan="1" align="left">PAYMENT TERMS:</td>
 			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ @$receivable_data['payment_term'] }}</td>
 		</tr>
