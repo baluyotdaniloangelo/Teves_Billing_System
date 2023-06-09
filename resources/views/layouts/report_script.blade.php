@@ -18,7 +18,7 @@
 			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
-			let less_per_liter 		= $("input[name=less_per_liter]").val() / 100;
+			let less_per_liter 		= $("input[name=less_per_liter]").val();
 			
 			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val() / 100;
 			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
@@ -186,7 +186,7 @@
 			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
-			let less_per_liter 		= $("input[name=less_per_liter]").val() / 100;
+			let less_per_liter 		= $("input[name=less_per_liter]").val();
 			
 			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val() / 100;
 			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
@@ -442,7 +442,7 @@
 			let receivable_status 		= $("#receivable_status").val();
 			
 			
-			let less_per_liter 		= $("input[name=less_per_liter]").val() / 100;
+			let less_per_liter 		= $("input[name=less_per_liter]").val();
 			
 			/*Added May 6, 2023*/
 			let company_header 					= $("#company_header").val();
