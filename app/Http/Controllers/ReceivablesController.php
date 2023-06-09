@@ -319,7 +319,7 @@ class ReceivablesController extends Controller
 			$Receivables->billing_period_start 			= $request->start_date;
 			$Receivables->billing_period_end 			= $request->end_date;
 			
-			$Receivables->less_per_liter 		= $request->less_per_liter * 100;
+			$Receivables->less_per_liter 		= $request->less_per_liter;
 			$Receivables->company_header 		= $request->company_header;
 			
 			$result = $Receivables->save();
