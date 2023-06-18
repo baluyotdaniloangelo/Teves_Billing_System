@@ -47,7 +47,7 @@ class BillingTransactionController extends Controller
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
               		->get([
 					'teves_billing_table.billing_id',
-					'teves_billing_table.recievable_idx',
+					'teves_billing_table.receivable_idx',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -68,7 +68,7 @@ class BillingTransactionController extends Controller
 				
                 ->addColumn('action', function($row){
                     
-					if($row->recievable_idx==0){
+					if($row->receivable_idx==0){
 					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_site">

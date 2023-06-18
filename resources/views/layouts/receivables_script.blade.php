@@ -570,7 +570,7 @@
 						_token: "{{ csrf_token() }}"
 					}
 
-					var url_billing = "{{URL::to('generate_report_pdf')}}?" + $.param(query_billing)
+					var url_billing = "{{URL::to('generate_receivable_covered_bill_pdf')}}?" + $.param(query_billing)
 					window.open(url_billing);
 
 				  }

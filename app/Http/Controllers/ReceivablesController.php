@@ -273,8 +273,8 @@ class ReceivablesController extends Controller
 		/*Delete Payment*/	
 		ReceivablesPaymentModel::where('receivable_idx', $receivableID)->delete();
 		
-		$billing_update = BillingTransactionModel::where('recievable_idx', '=', $receivableID)
-				->update(['recievable_idx' => 0]);
+		$billing_update = BillingTransactionModel::where('receivable_idx', '=', $receivableID)
+				->update(['receivable_idx' => 0]);
 		
 		return 'Deleted';
 		
@@ -304,7 +304,7 @@ class ReceivablesController extends Controller
 			$receivable_amount = BillingTransactionModel::where('client_idx', $client_idx)
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
-				->where('recievable_idx', '=', 0)
+				->where('receivable_idx', '=', 0)
 				->groupBy('teves_billing_table.client_idx')
 				->sum('order_total_amount');
 					
@@ -312,7 +312,7 @@ class ReceivablesController extends Controller
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
                 ->where('teves_product_table.product_unit_measurement', '=', 'L')
-				->where('recievable_idx', '=', 0)
+				->where('receivable_idx', '=', 0)
 				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 				->groupBy('teves_billing_table.client_idx')
 				->groupBy('teves_product_table.product_unit_measurement')
@@ -358,8 +358,8 @@ class ReceivablesController extends Controller
 			$billing_update = BillingTransactionModel::where('client_idx', $client_idx)
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
-				->where('recievable_idx', '=', 0)
-				->update(['recievable_idx' => $Receivables->receivable_id]);
+				->where('receivable_idx', '=', 0)
+				->update(['receivable_idx' => $Receivables->receivable_id]);
 			
 			if($result){
 				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);
@@ -390,14 +390,14 @@ class ReceivablesController extends Controller
 			$receivable_amount = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
-				->where('recievable_idx', '=', $request->ReceivableID)
+				->where('receivable_idx', '=', $request->ReceivableID)
 				->groupBy('teves_billing_table.client_idx')
 				->sum('order_total_amount');
 					
 			$receivable_total_liter = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
-				->where('recievable_idx', '=', $request->ReceivableID)
+				->where('receivable_idx', '=', $request->ReceivableID)
                 ->where('teves_product_table.product_unit_measurement', '=', 'L')
 				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 				->groupBy('teves_billing_table.client_idx')
@@ -460,8 +460,8 @@ class ReceivablesController extends Controller
 			$billing_update = BillingTransactionModel::where('client_idx', $client_idx->client_idx)
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
-				->where('recievable_idx', '=', $request->ReceivableID)
-				->update(['recievable_idx' => $Receivables->receivable_id]);
+				->where('receivable_idx', '=', $request->ReceivableID)
+				->update(['receivable_idx' => $Receivables->receivable_id]);
 			*/
 			
 			if($result){

@@ -80,7 +80,7 @@ class ReportController extends Controller
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.billing_id',
-					'teves_billing_table.recievable_idx',
+					'teves_billing_table.receivable_idx',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -119,12 +119,12 @@ class ReportController extends Controller
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
                     ->where('teves_billing_table.order_date', '<=', $end_date)
-					->where('teves_billing_table.recievable_idx', '=', 0)
+					->where('teves_billing_table.receivable_idx', '=', 0)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.billing_id',
-					'teves_billing_table.recievable_idx',
+					'teves_billing_table.receivable_idx',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -164,12 +164,12 @@ class ReportController extends Controller
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
                     ->where('teves_billing_table.order_date', '<=', $end_date)
-					->where('teves_billing_table.recievable_idx', '=', $receivable_id)
+					->where('teves_billing_table.receivable_idx', '=', $receivable_id)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.billing_id',
-					'teves_billing_table.recievable_idx',
+					'teves_billing_table.receivable_idx',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -460,7 +460,7 @@ class ReportController extends Controller
 			$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('order_date', '>=', $start_date)
                     ->where('order_date', '<=', $end_date)
-					->where('teves_billing_table.recievable_idx', '=', $receivable_id)
+					->where('teves_billing_table.receivable_idx', '=', $receivable_id)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->get([
 					'teves_billing_table.drivers_name',
@@ -621,7 +621,7 @@ class ReportController extends Controller
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
                     ->where('teves_billing_table.order_date', '<=', $end_date)
-					->where('teves_billing_table.recievable_idx', '=', $receivable_id)
+					->where('teves_billing_table.receivable_idx', '=', $receivable_id)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([

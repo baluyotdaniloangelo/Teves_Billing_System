@@ -77,8 +77,8 @@
 								total_liters += 0;
 							}
 							
-							var recievable_idx = response[i].recievable_idx;/*Added June 18, 2023*/
-							if(recievable_idx=='0'){
+							var receivable_idx = response[i].receivable_idx;/*Added June 18, 2023*/
+							if(receivable_idx=='0'){
 								//Editable
 								$action = "<td align='center' id='editBill' data-id="+billing_id+"><a href='#' class='btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit'></a></td>" +
 								"<td align='center' id='deleteBill' data-id="+billing_id+"><a class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete'></a></td>";			
@@ -259,8 +259,8 @@
 								total_liters += 0;
 							}
 							
-							var recievable_idx = response[i].recievable_idx;/*Added June 18, 2023*/
-							if(recievable_idx=='0'){
+							var receivable_idx = response[i].receivable_idx;/*Added June 18, 2023*/
+							if(receivable_idx=='0'){
 								//Editable
 								$action = "<td align='center' id='editBill' data-id="+billing_id+"><a href='#' class='btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit'></a></td>" +
 								"<td align='center' id='deleteBill' data-id="+billing_id+"><a class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete'></a></td>";			
@@ -328,7 +328,7 @@
 							//'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()"> Excel</button>'+
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf('+recievable_idx+')"> PDF</button>'+'</div>');
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf('+receivable_idx+')"> PDF</button>'+'</div>');
 							
 							$("#save_options").html('');
 
