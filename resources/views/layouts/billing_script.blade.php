@@ -472,4 +472,50 @@
 				}
 			   });		
 	  });
+  
+  	<!--Select Bill For Update-->
+	$('body').on('click','#viewBill',function(){
+			
+			event.preventDefault();
+			let billID = $(this).data('id');
+			
+			  $.ajax({
+				url: "/bill_info",
+				type:"POST",
+				data:{
+				  billID:billID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					$("#view_order_date").html(response[0].order_date);
+					$("#view_order_time").html(response[0].order_time);
+					$("#view_order_po_number").html(response[0].order_po_number);
+					$("#view_client_name").html(response[0].client_name);
+					
+					$("#view_plate_no").html(response[0].plate_no);
+					$("#view_product_name").html(response[0].product_name);
+					$("#view_product_price").html(response[0].product_price);
+					$("#view_drivers_name").html(response[0].drivers_name);
+					$("#view_order_quantity").html(response[0].order_quantity);
+					
+					var total_amount = response[0].order_total_amount;
+					$('#ViewTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#ViewBillingModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+
+  
+  
   </script>

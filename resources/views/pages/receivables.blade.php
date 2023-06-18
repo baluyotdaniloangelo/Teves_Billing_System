@@ -9,7 +9,7 @@
 			  
 				<div class="card-header ">
 				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
-					<div class="d-flex justify-content-end" id="product_option"></div>				  
+					<div class="d-flex justify-content-end" id="receivable_option"></div>					  
 				  </div>
 				</div>			  
 		 
@@ -103,7 +103,7 @@
               <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Create Receivable</h5>
+                      <h5 class="modal-title">Update Receivable</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -195,11 +195,8 @@
 						  <div class="col-sm-9">
 						  
 						  <div class="input-group">
-							  
-									<input type="date" class="form-control " name="start_date" id="start_date" required>
-
-								
-									<input type="date" class="form-control " name="end_date" id="end_date" required>
+									<input type="date" class="form-control" name="start_date" id="start_date" required readonly>
+									<input type="date" class="form-control" name="end_date" id="end_date" required readonly>
 							<span class="valid-feedback" id="end_dateError"></span>
 							<span class="valid-feedback" id="start_dateError"></span>		
 							</div>

@@ -24,7 +24,7 @@
 													<th>Time</th>
 													<th>Driver's Name</th>
 													<th>S.O No.</th>
-													<th>Plate Number</th>																	
+													<th>Description</th>																	
 													<th>Product</th>
 													<th>Price</th>
 													<th>Quantity</th>
@@ -44,7 +44,7 @@
 													<th>Time</th>
 													<th>Driver's Name</th>
 													<th>S.O. No.</th>
-													<th>Plate Number</th>																	
+													<th>Description</th>																	
 													<th>Product</th>
 													<th>Price</th>
 													<th>Quantity</th>
@@ -59,7 +59,7 @@
             </div>
           </div>
 
-	<!-- Site Delete Modal-->
+	<!-- Bill Delete Modal-->
     <div class="modal fade" id="BillDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -93,6 +93,44 @@
                     
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteBillConfirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>	
+
+	<!-- Bill Info Modal-->
+    <div class="modal fade" id="ViewBillingModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+		
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Bill Information<br>
+				</div>
+				<div align="left"style="margin: 10px;">
+				Date: <span id="view_order_date"></span><br>
+				Time: <span id="view_order_time"></span><br>
+				
+				PO #: <span id="view_order_po_number"></span><br>
+				Client: <span id="view_client_name"></span><br>
+				
+				Plate #: <span id="view_plate_no"></span><br>
+				Driver: <span id="view_drivers_name"></span><br>
+				
+				Product: <span id="view_product_name"></span><br>
+				Price: <span id="view_product_price"></span><br>
+				Quantity: <span id="view_order_quantity"></span><br>
+				
+				Total Amount: <span id="ViewTotalAmount"></span><br>
+				
+				</div>
+                <div class="modal-footer footer_modal_bg">
+                    
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Close</button>
                   
                 </div>
             </div>

@@ -35,11 +35,18 @@ else if (Request::is('supplier')){
 @include('layouts.supplier_script')
 <?php
 }
-else if (Request::is('report')){
+else if (Request::is('create_recievable')){
 ?>
 <body class="">
 @include('layouts.footer')
-@include('layouts.report_script')
+@include('layouts.create_recievable_script')
+<?php
+}
+else if (Request::is('billing_history')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.billing_history_script')
 <?php
 }
 else if (Request::is('user')){

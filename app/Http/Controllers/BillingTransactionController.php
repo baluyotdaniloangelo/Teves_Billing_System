@@ -47,6 +47,7 @@ class BillingTransactionController extends Controller
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
               		->get([
 					'teves_billing_table.billing_id',
+					'teves_billing_table.recievable_idx',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -66,12 +67,23 @@ class BillingTransactionController extends Controller
 				->addIndexColumn()
 				
                 ->addColumn('action', function($row){
-                    						
+                    
+					if($row->recievable_idx==0){
+					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_site">
 					<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 					<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 					</div>';
+					
+					}else{
+						
+					$actionBtn = '
+					<div align="center" class="action_table_menu_site">
+					<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+					</div>';
+					
+					}
                     return $actionBtn;
                 })
 				

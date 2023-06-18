@@ -104,9 +104,9 @@
       </li>
 	  -->
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Create Billing Statement">
+        <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Report">
           <i class="bi bi-graph-up navbar_icon"></i>
-          <span title="Create Billing Statement">Report</span>
+          <span title="Generate Billing History">Report</span>
         </a>
       </li>
 	  

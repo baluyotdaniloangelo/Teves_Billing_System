@@ -55,7 +55,7 @@ if($company_header=='Teves'){
 				<th class="data_th" nowrap style="border:1px solid #000;">Date</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Time</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Driver's Name</th>
-				<th class="data_th" nowrap style="border:1px solid #000;">P.O No.</th>
+				<th class="data_th" nowrap style="border:1px solid #000;">S.O. No.</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Description</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Product</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Quantity</th>

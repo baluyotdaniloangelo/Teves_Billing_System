@@ -73,14 +73,23 @@ Route::post('/update_client_post', [ClientController::class,'update_client_post'
 /*Confirm Delete Product*/
 Route::post('/delete_client_confirmed', [ClientController::class, 'delete_client_confirmed'])->name('delete_client_confirmed')->middleware('isLoggedIn');
 
-/*Load Report Interface*/
-Route::get('/report', [ReportController::class,'report'])->name('report')->middleware('isLoggedIn');
+
+/*Load Billing Report History Interface*/
+Route::get('/billing_history', [ReportController::class,'billing_history'])->name('report')->middleware('isLoggedIn');
+/*Generate via Web Page View - For receivable*/
+Route::post('/generate_report_recievable', [ReportController::class,'generate_report_recievable'])->name('generate_report_recievable')->middleware('isLoggedIn');
+/*Generate via Web Page View - For receivable*/
+Route::post('/generate_report_recievable_after_saved', [ReportController::class,'generate_report_recievable_after_saved'])->name('generate_report_recievable_after_saved')->middleware('isLoggedIn');
+
 /*Generate via Web Page View*/
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
 /*Download Directly via Excel*/
 Route::get('/generate_report_excel', [ReportController::class,'generate_report_excel'])->name('generate_report_excel')->middleware('isLoggedIn');
 /*Download via PDF*/
 Route::get('/generate_report_pdf', [ReportController::class,'generate_report_pdf'])->name('generate_report_pdf')->middleware('isLoggedIn');
+
+/*Download via PDF*/
+Route::get('/generate_receivable_covered_bill_pdf', [ReportController::class,'generate_receivable_covered_bill_pdf'])->name('generate_receivable_covered_bill_pdf')->middleware('isLoggedIn');
 
 /*Load User Account List for Admin Only*/
 Route::get('/user', [UserController::class,'user'])->name('user')->middleware('isLoggedIn');
@@ -101,6 +110,9 @@ Route::post('/user_account_post', [UserController::class,'user_account_post'])->
 
 /*Receivables*/
 /*December 17, 2022*/
+/*Load Create Receivable Interface June 18, 2023*/
+Route::get('/create_recievable', [ReceivablesController::class,'create_recievable'])->name('create_recievable')->middleware('isLoggedIn');
+/*Receivables List*/
 Route::get('/receivables', [ReceivablesController::class,'receivables'])->name('receivables')->middleware('isLoggedIn');
 Route::get('receivables/list', [ReceivablesController::class, 'getReceivablesList'])->name('getReceivablesList')->middleware('isLoggedIn');
 /*GET receivables Info*/

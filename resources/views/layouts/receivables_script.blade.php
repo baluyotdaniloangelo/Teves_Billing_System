@@ -15,12 +15,6 @@
 			             '</select> '
 		    },
 			/*processing: true,*/
-			/*
-			
-					'teves_receivable_table.receivable_vatable_sales',
-					'teves_receivable_table.receivable_vatable_amount',
-					'teves_receivable_table.receivable_withholding_tax',
-			*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getReceivablesList') }}",
@@ -30,14 +24,10 @@
 					{data: 'control_number'},
 					{data: 'client_name'},
 					{data: 'receivable_description'},
-
 					{data: 'receivable_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					{data: 'receivable_withholding_tax', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					
-					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					
-					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				
+					{data: 'receivable_withholding_tax', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
+					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
+					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },				
 					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_status'},
 					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
@@ -48,6 +38,9 @@
 					{ className: 'text-center', targets: [0, 1, 2] },
 			]
 		});
+				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
+				'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
+				'</div>').appendTo('#receivable_option');
 	});
 	
 	<!--Pay Receivables-->
@@ -314,20 +307,16 @@
 					document.getElementById("control_no_receivables").innerHTML = response[0].control_number;	
 					document.getElementById("billing_receivables").innerHTML = response[0].billing_date;					
 					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
-					document.getElementById("amount_receivables").innerHTML = response[0].receivable_amount;
-					
+					document.getElementById("amount_receivables").innerHTML = response[0].receivable_amount;					
 					document.getElementById("billing_date").value = response[0].billing_date;
 					document.getElementById("or_number").value = response[0].or_number;
 					document.getElementById("payment_term").value = response[0].payment_term;
-					document.getElementById("receivable_description").textContent = response[0].receivable_description;
-					
-					document.getElementById("receivable_status").value = response[0].receivable_status;
-					
+					document.getElementById("receivable_description").textContent = response[0].receivable_description;					
+					document.getElementById("receivable_status").value = response[0].receivable_status;					
 					document.getElementById("start_date").value = response[0].billing_period_start;
 					document.getElementById("end_date").value = response[0].billing_period_end;
 					document.getElementById("less_per_liter").value = response[0].less_per_liter;
-					document.getElementById("company_header").value = response[0].company_header;
-					
+					document.getElementById("company_header").value = response[0].company_header;					
 					document.getElementById("withholding_tax_percentage").value = response[0].receivable_withholding_tax_percentage;
 					document.getElementById("net_value_percentage").value = response[0].receivable_net_value_percentage;
 					document.getElementById("vat_value_percentage").value = response[0].receivable_vat_value_percentage;				

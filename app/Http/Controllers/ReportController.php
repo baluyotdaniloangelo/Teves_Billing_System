@@ -32,10 +32,11 @@ use PDF;
 
 class ReportController extends Controller
 {
-	/*Load Report Interface*/
-	public function report(){
+	
+	/*Load Billing History Report Interface*/
+	public function billing_history(){
 		
-		$title = 'Billing Statement';
+		$title = 'Billing History';
 		$data = array();
 		if(Session::has('loginID')){
 			
@@ -50,9 +51,9 @@ class ReportController extends Controller
 		
 		}
 
-		return view("pages.report", compact('data','title','client_data','drivers_name','plate_no','product_data'));
+		return view("pages.billing_history", compact('data','title','client_data','drivers_name','plate_no','product_data'));
 		
-	}   
+	}  	
 	
 	public function generate_report(Request $request){
 
@@ -79,6 +80,7 @@ class ReportController extends Controller
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
 					'teves_billing_table.billing_id',
+					'teves_billing_table.recievable_idx',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
@@ -95,6 +97,96 @@ class ReportController extends Controller
 		
 	}	
 	
+	/*Generated for receivable but not save*/
+	public function generate_report_recievable(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		
+		$data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('teves_billing_table.order_date', '>=', $start_date)
+                    ->where('teves_billing_table.order_date', '<=', $end_date)
+					->where('teves_billing_table.recievable_idx', '=', 0)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.recievable_idx',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
+		
+		return response()->json($data);
+		
+	}	
+	
+	/*Generated for receivable after saved*/
+	public function generate_report_recievable_after_saved(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+		
+		$receivable_id = $request->receivable_id;
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		
+		$data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('teves_billing_table.order_date', '>=', $start_date)
+                    ->where('teves_billing_table.order_date', '<=', $end_date)
+					->where('teves_billing_table.recievable_idx', '=', $receivable_id)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.recievable_idx',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
+		
+		return response()->json($data);
+		
+	}	
+
+
 	public function generate_report_excel(Request $request){
 
 		$request->validate([
@@ -113,23 +205,6 @@ class ReportController extends Controller
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
 		$less_per_liter = $request->less_per_liter;
-		
-		$data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('teves_billing_table.order_date', '>=', $start_date)
-                    ->where('teves_billing_table.order_date', '<=', $end_date)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-					->orderBy('teves_billing_table.order_date', 'asc')
-              		->get([
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);	
 
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
@@ -313,6 +388,276 @@ class ReportController extends Controller
        }
 	   
 	}	
+
+	public function generate_report_excel_covered_bill_pdf(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		$less_per_liter = $request->less_per_liter;
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address']);
+		
+		$client_name = $client_data['client_name'];
+		$client_address = $client_data['client_address'];
+		
+		
+		$_po_start_date=date_create("$start_date");
+		$po_start_date = date_format($_po_start_date,"m/d/y");
+			
+		$_po_end_date=date_create("$end_date");
+		$po_end_date = date_format($_po_end_date,"m/d/y");
+			
+	   ini_set('max_execution_time', 0);
+       ini_set('memory_limit', '4000M');
+       try {
+		   ob_start();
+           $spreadSheet = new Spreadsheet();
+           
+           $spreadSheet = IOFactory::load(public_path('/template/Billing Statement.xlsx'));
+
+		    $spreadSheet->getActiveSheet()->setCellValue('B7', $client_name);
+			$spreadSheet->getActiveSheet()->setCellValue('B8', $client_address);
+			
+			$spreadSheet->getActiveSheet()->setCellValue('J7', "$po_start_date - $po_end_date");
+			$spreadSheet->getActiveSheet()->setCellValue('J8', date('m/d/Y')); 
+				
+				
+				$styleBorder_prepared = array(
+					'borders' => array(
+						'bottom' => array(
+							'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+							'color' => array('rgb' => '000000'),
+						),
+					),
+				);
+				
+				$styleBorder = [
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
+                        ],
+                    ],
+                ];
+			
+			$no_excl = 11;
+			$n = 1;
+			
+			$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('order_date', '>=', $start_date)
+                    ->where('order_date', '<=', $end_date)
+					->where('teves_billing_table.recievable_idx', '=', $receivable_id)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->get([
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
+					
+			$total_liters = 0;						
+			$total_payable = 0;
+			
+			foreach ($billing_data as $billing_data_column){
+			
+				$spreadSheet->getActiveSheet()
+					->setCellValue('A'.$no_excl, $n)
+					->setCellValue('B'.$no_excl, $billing_data_column['order_date'])
+					->setCellValue('C'.$no_excl, $billing_data_column['order_time'])
+					->setCellValue('D'.$no_excl, $billing_data_column['drivers_name'])
+					->setCellValue('E'.$no_excl, $billing_data_column['order_po_number'])
+					->setCellValue('F'.$no_excl, $billing_data_column['plate_no'])
+					->setCellValue('G'.$no_excl, $billing_data_column['product_name'])
+					->setCellValue('H'.$no_excl, $billing_data_column['product_price'])
+					->setCellValue('I'.$no_excl, $billing_data_column['order_quantity'])
+					->setCellValue('J'.$no_excl, $billing_data_column['product_unit_measurement'])
+					->setCellValue('K'.$no_excl, $billing_data_column['order_total_amount']);
+					
+					$spreadSheet->getActiveSheet()->getStyle("A$no_excl:K$no_excl")->applyFromArray($styleBorder);
+					
+					$total_payable+= $billing_data_column['order_total_amount'];
+					
+					if($billing_data_column['product_unit_measurement']=='L'){
+						$total_liters += $billing_data_column['order_quantity'];
+					}else{
+						$total_liters += 0;
+					}
+			/*Increment*/
+			$no_excl++;
+			$n++;
+			} 
+			
+			$spreadSheet->getActiveSheet()->getStyle("H".$no_excl.":I".$no_excl)->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('H'.$no_excl, 'Total Volume:')
+					->setCellValue('I'.$no_excl, $total_liters);
+					
+			$spreadSheet->getActiveSheet()->getStyle('H'.($no_excl+1).":I".($no_excl+1))->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('H'.($no_excl+1), 'Less per liter:')
+					->setCellValue('I'.($no_excl+1), number_format(($less_per_liter*$total_liters),2));		
+			
+			$spreadSheet->getActiveSheet()->getStyle("J".$no_excl.":K".$no_excl)->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('J'.($no_excl), 'Total Due:')
+					->setCellValue('K'.($no_excl), number_format(($total_payable),2));
+			
+			$spreadSheet->getActiveSheet()->getStyle("J".($no_excl+1).":K".($no_excl+1))->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('J'.($no_excl+1), '')
+					->setCellValue('K'.($no_excl+1), number_format(($less_per_liter*$total_liters),2));			
+			
+			$spreadSheet->getActiveSheet()->getStyle("J".($no_excl+2).":K".($no_excl+2))->getFont()->setBold(true);
+			$spreadSheet->getActiveSheet()
+					->setCellValue('J'.($no_excl+2), 'Total Payable:')
+					->setCellValue('K'.($no_excl+2), number_format($total_payable-($less_per_liter*$total_liters),2));
+			
+			/*USER INFO*/
+			$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+			$spreadSheet->getActiveSheet()
+					->setCellValue('A'.($no_excl+6), 'Prepared by:')
+					->setCellValue('B'.($no_excl+6), $user_data['user_real_name']);
+			$spreadSheet->getActiveSheet()->getStyle('B'.($no_excl+6))->applyFromArray($styleBorder_prepared);
+			
+			$spreadSheet->getActiveSheet()
+					->setCellValue('B'.($no_excl+7), $user_data['user_job_title']);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("A11:A$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+			$spreadSheet->getActiveSheet()
+			->getStyle("B11:B$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("C11:C$no_excl")
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+			$spreadSheet->getActiveSheet()
+			->getStyle("H11:H".($no_excl+2))
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("I11:I".($no_excl+2))
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("J11:J".($no_excl+2))
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+			$spreadSheet->getActiveSheet()
+			->getStyle("K11:K".($no_excl+2))
+			->getAlignment()
+			->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			
+		  $Excel_writer = new Xlsx($spreadSheet);
+		  
+		   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+           header("Content-Disposition: attachment;filename=".$client_name." - Billing Statement.xlsx");
+           header('Cache-Control: max-age=0');
+           ob_end_clean();
+           $Excel_writer->save('php://output');
+           exit();
+       
+	   } catch (Exception $e) {
+           return;
+       }
+	   
+	}	
+
+	public function generate_receivable_covered_bill_pdf(Request $request){
+		
+		/**/
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+		
+		$receivable_id = $request->receivable_id;
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		$less_per_liter = $request->less_per_liter;
+		$company_header = $request->company_header;
+		
+		$withholding_tax_percentage = $request->withholding_tax_percentage;
+		$net_value_percentage = $request->net_value_percentage;
+		$vat_value_percentage = $request->vat_value_percentage;
+		
+		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+					->where('teves_billing_table.order_date', '>=', $start_date)
+                    ->where('teves_billing_table.order_date', '<=', $end_date)
+					->where('teves_billing_table.recievable_idx', '=', $receivable_id)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);	
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		/*Recievable Data*/
+				
+		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term']);
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
+          
+		$title = 'Billing Statement';
+		  
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
+		
+		/*Download Directly*/
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		$pdf->render();
+		return $pdf->stream($client_data['client_name'].".pdf");
+	}
+
 	
 	public function generate_report_pdf(Request $request){
 		

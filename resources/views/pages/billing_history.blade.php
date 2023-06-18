@@ -50,13 +50,7 @@
 							<div class="ms-2">
 								<div class="fw-bold">SALES ORDER PERIOD: <span id="po_info" style="font-weight: normal;"></span></div>			
 							</div>
-							<div class="ms-2">
-								<div class="fw-bold">PAYMENT TERMS: Not Available. Please save as receivables</div>
-							</div>
-							<div class="ms-2">
-								<div class="fw-bold">BILLING DATE: <span id="billing_date_info" style="font-weight: normal;"></span></div>
-							</div>
-	
+							
 						</div>
 						</div>
 						
@@ -68,8 +62,8 @@
 													<th>Date</th>
 													<th>Time</th>
 													<th>Driver's Name</th>
-													<th>P.O No.</th>
-													<th>Plate Number</th>
+													<th>S.O. No.</th>
+													<th>Description</th>
 													<th>Product</th>
 													<th>Quantity</th>
 													<th>Price</th>
