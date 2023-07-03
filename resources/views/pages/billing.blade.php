@@ -22,6 +22,7 @@
 													<th>#</th>
 													<th>Date</th>
 													<th>Time</th>
+													<th>Control Number</th>
 													<th>Driver's Name</th>
 													<th>S.O No.</th>
 													<th>Description</th>																	
@@ -42,6 +43,7 @@
 													<th>#</th>
 													<th>Date</th>
 													<th>Time</th>
+													<th>Control Number</th>
 													<th>Driver's Name</th>
 													<th>S.O. No.</th>
 													<th>Description</th>																	

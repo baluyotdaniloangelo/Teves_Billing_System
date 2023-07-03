@@ -22,7 +22,8 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date'},
-					{data: 'order_time'},  					
+					{data: 'order_time'},
+					{data: 'control_number'},  					
 					{data: 'drivers_name'},     
 					{data: 'order_po_number'},     
 					{data: 'plate_no'},     

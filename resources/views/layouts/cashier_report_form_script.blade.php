@@ -396,7 +396,79 @@
 	});
 
 
+	/*Part 2*/
+/*Call Function for Product Cahier's Report*/
+	$("#save-CRPH2").click(function(event){
+		
+			event.preventDefault();
+			
+			$('#product_idx_PH2Error').text('');
+			$('#order_quantity_PH2Error').text('');
+			$('#product_manual_price_PH2Error').text('');
+			
+			let CashiersReportId 		= {{ $CashiersReportId }};			
+		
+			var product_idx 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-id');
+			var order_quantity 			= $("input[name=order_quantity_PH2]").val();
+			var product_manual_price 	= $("input[name=product_manual_price_PH2Error]").val();
+			
+			document.getElementById('CRPH2_form').className = "g-3 needs-validation was-validated";
+			
+				/*Delete the Selected Item*/			
+				  $.ajax({
+					url: "/save_product_cashiers_report_PH2",
+					type:"POST",
+					data:{
+					  CHPH1_ID:0,
+					  CashiersReportId:CashiersReportId,
+					  product_idx:product_idx,
+					  order_quantity:order_quantity, 
+					  product_manual_price:product_manual_price, 
+					  _token: "{{ csrf_token() }}"
+					},
+					success:function(response){
+					  console.log(response);
+					  if(response) {
+						  
+						$('#switch_notice_on').show();
+						$('#sw_on').html(response.success);
+						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+						LoadCashiersReportPH1();
+						$('#product_idx_PH2Error').text('');					
+						$('#order_quantity_PH2Error').text('');		
+						$('#closing_readingError').text('');
+					  }
+					},
+					error: function(error) {
+					 console.log(error);
+						/*alert(error);*/
+							$('#product_idx_PH2Error').text(error.responseJSON.errors.product_idx);
+							document.getElementById('product_idxError').className = "invalid-feedback";
+							
+							$('#order_quantity_PH2Error').text(error.responseJSON.errors.order_quantity);
+							document.getElementById('order_quantity_PH2Error').className = "invalid-feedback";
+							
+							$('#product_manual_price_PH2Error').text(error.responseJSON.errors.closing_reading);
+							document.getElementById('product_manual_price_PH2Error').className = "invalid-feedback";
+					}
+				   });		
+		 });
+
+	function TotalAmount_PH2(){
+		
+		let product_price 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-price');
+		let product_manual_price 	= $("#product_manual_price").val();		
+		let order_quantity 			= $("input[name=order_quantity_PH2]").val();
+		
+		if(order_quantity!=0 || order_quantity!=''){
+			if(product_manual_price!='' && product_manual_price!=0){
+				var total_amount = product_manual_price * order_quantity;
+				$('#TotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}else{
+				var total_amount = product_price * order_quantity;
+				$('#TotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}
+		}		
+	}
 	
-
-
 </script>

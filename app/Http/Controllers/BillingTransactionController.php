@@ -45,9 +45,11 @@ class BillingTransactionController extends Controller
 
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
               		->get([
 					'teves_billing_table.billing_id',
 					'teves_billing_table.receivable_idx',
+					'teves_receivable_table.control_number',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
