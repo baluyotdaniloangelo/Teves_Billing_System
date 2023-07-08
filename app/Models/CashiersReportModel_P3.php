@@ -4,10 +4,10 @@ namespace App\Models;
 //use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CashiersReportModel_P2 extends Model
+class CashiersReportModel_P3 extends Model
 {
 	
-	protected $table = 'teves_cashiers_report_p2';
+	protected $table = 'teves_cashiers_report_p3';
 
 	protected $fillable = [
         'user_idx',
@@ -19,5 +19,5 @@ class CashiersReportModel_P2 extends Model
 		'created_at',
 		'updated_at'
     ];
-    protected $primaryKey = 'cashiers_report_p2_id';
+    protected $primaryKey = 'cashiers_report_p3_id';
 }

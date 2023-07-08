@@ -219,16 +219,29 @@ Route::post('/cashiers_report_info', [CashiersReportController::class, 'cashiers
 Route::post('/delete_cashiers_report_info', [CashiersReportController::class, 'delete_cashiers_report_info'])->name('delete_cashiers_report_info')->middleware('isLoggedIn');
 
 
-
+/*Cashiers Report Part 1*/
 Route::get('/cashiers_report_form/{id}', [CashiersReportController::class, 'cashiers_report_form'])->name('cashiers_report_form')->middleware('isLoggedIn');
 /*Save Cashier's Report Product*/
-Route::post('/save_product_cashiers_report', [CashiersReportController::class,'save_product_cashiers_report'])->name('save_product_cashiers_report')->middleware('isLoggedIn');
+Route::post('/save_product_cashiers_report_p1', [CashiersReportController::class,'save_product_cashiers_report_p1'])->name('SAVE_CHR_PH1')->middleware('isLoggedIn');
 /* Load Product P1 */
 Route::post('/get_cashiers_report_product_p1', [CashiersReportController::class,'get_cashiers_report_product_p1'])->name('GetCashiersProductP1')->middleware('isLoggedIn');
 /* Delete Product P1 */
 Route::post('/delete_cashiers_report_product_p1', [CashiersReportController::class,'delete_cashiers_report_product_p1'])->name('DeleteCashiersProductP1')->middleware('isLoggedIn');
 /*GET Cashiers report product P1*/
 Route::post('/cashiers_report_p1_info', [CashiersReportController::class, 'cashiers_report_p1_info'])->name('CRP1_info')->middleware('isLoggedIn');
+
+
+/*Cashiers Report Part 2*/
+/*Save Cashier's Report Product*/
+Route::post('/save_product_cashiers_report_PH2', [CashiersReportController::class,'save_product_cashiers_report_PH2'])->name('SAVE_CHR_PH2')->middleware('isLoggedIn');
+/* Load Product P2 */
+Route::post('/get_cashiers_report_product_p2', [CashiersReportController::class,'get_cashiers_report_product_p2'])->name('GetCashiersProductP2')->middleware('isLoggedIn');
+/* Delete Product P2 */
+Route::post('/delete_cashiers_report_product_p2', [CashiersReportController::class,'delete_cashiers_report_product_p2'])->name('DeleteCashiersProductP2')->middleware('isLoggedIn');
+/*GET Cashiers report product P2*/
+Route::post('/cashiers_report_p2_info', [CashiersReportController::class, 'cashiers_report_p2_info'])->name('CRP2_info')->middleware('isLoggedIn');
+
+
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

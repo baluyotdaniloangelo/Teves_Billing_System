@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CashiersReportModel;
 use App\Models\CashiersReportModel_P1;
+use App\Models\CashiersReportModel_P2;
 use App\Models\ProductModel;
 use Session;
 use Validator;
@@ -175,7 +176,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
-		return view("pages.cashiers_report_form", compact('data','title','CashiersReportData','product_data','CashiersReportId'));	
+		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId'));	
 		
 	}
 
@@ -201,7 +202,7 @@ class CashiersReportController extends Controller
 		
 	}
 	
-	public function save_product_cashiers_report(Request $request){	
+	public function save_product_cashiers_report_p1(Request $request){	
 
 		$request->validate([
 			'product_idx'  			=> 'required',
@@ -277,7 +278,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P1->product_price 				= $product_price;
 									$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
 									
-									$result = $CashiersReportModel_P1->save();
+									$result = $CashiersReportModel_P1->update();
 									
 									if($result){
 										return response()->json(['success'=>'Product Successfully Updated!']);
@@ -318,4 +319,129 @@ class CashiersReportController extends Controller
 		return 'Deleted';
 		
 	}
+	
+	
+	/*Part Two (Other Reports)*/
+	public function save_product_cashiers_report_PH2(Request $request){	
+
+		$request->validate([
+			'product_idx'  		=> 'required',
+			'order_quantity'  	=> 'required'		
+        ], 
+        [
+			'product_idx.required' 	=> 'Product is Required',
+			'order_quantity.required' 	=> 'Order Quantity is Required',
+        ]
+		);
+			
+			/*Get Cashier Report ID*/
+			$CashiersReportId = $request->CashiersReportId;
+			
+			$product_idx				= $request->product_idx;
+			$order_quantity 			= $request->order_quantity;
+			$product_manual_price 		= $request->product_manual_price;
+			
+			$CHPH2_ID 				= $request->CHPH2_ID;
+
+								/*Product Details*/
+								$product_info = ProductModel::find($product_idx, ['product_price']);					
+								
+								/*Check if Price is From Manual Price*/
+								if($product_manual_price!=0){
+									$product_price = $product_manual_price;
+								}else{
+									$product_price = $product_info->product_price;
+								}
+						
+								$peso_sales = ($order_quantity * $product_price);
+								
+								if($CHPH2_ID=='' || $CHPH2_ID ==0){	
+								
+									$CashiersReportModel_P2 = new CashiersReportModel_P2();
+									
+									$CashiersReportModel_P2->user_idx 					= Session::get('loginID');
+									$CashiersReportModel_P2->cashiers_report_id 		= $CashiersReportId;
+									$CashiersReportModel_P2->product_idx 				= $product_idx;
+									$CashiersReportModel_P2->order_quantity 			= $order_quantity;
+									$CashiersReportModel_P2->product_price 				= $product_price;
+									$CashiersReportModel_P2->order_total_amount 		= $peso_sales;
+									
+									$result = $CashiersReportModel_P2->save();
+									
+									if($result){
+										return response()->json(['success'=>'Product Successfully Created!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Product Information']);
+									}
+									
+								}else{
+																	
+									$CashiersReportModel_P2 = new CashiersReportModel_P2();
+									$CashiersReportModel_P2 = CashiersReportModel_P2::find($CHPH2_ID);
+									
+									//$CashiersReportModel_P2->user_idx 					= Session::get('loginID');
+									$CashiersReportModel_P2->product_idx 				= $product_idx;
+									$CashiersReportModel_P2->order_quantity 			= $order_quantity;
+									$CashiersReportModel_P2->product_price 				= $product_price;
+									$CashiersReportModel_P2->order_total_amount 		= $peso_sales;
+									
+									$result = $CashiersReportModel_P2->update();
+									
+									if($result){
+										return response()->json(['success'=>'Product Successfully Updated!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Product Information']);
+									}
+									
+								}
+								
+	}	
+	
+	public function get_cashiers_report_product_p2(Request $request){		
+	
+			$data =  CashiersReportModel_P2::where('cashiers_report_id', $request->CashiersReportId)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p2.product_idx')
+				->orderBy('cashiers_report_p2_id', 'asc')
+              	->get([
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_cashiers_report_p2.product_price',
+					'teves_cashiers_report_p2.cashiers_report_p2_id',
+					'teves_cashiers_report_p2.cashiers_report_id',
+					'teves_cashiers_report_p2.order_quantity',
+					'teves_cashiers_report_p2.order_total_amount'
+					]);
+		
+			return response()->json($data);
+	}
+
+	public function cashiers_report_p2_info(Request $request){
+
+		$CHPH2_ID = $request->CHPH2_ID;
+		
+		$data =  CashiersReportModel_P2::where('cashiers_report_p2_id', $CHPH2_ID)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p2.product_idx')
+				->get([
+					'teves_product_table.product_name',
+					'teves_product_table.product_id',
+					'teves_cashiers_report_p2.cashiers_report_p2_id',
+					'teves_cashiers_report_p2.order_quantity',
+					'teves_cashiers_report_p2.product_price',
+					'teves_cashiers_report_p2.order_total_amount'
+					]);			
+					
+		return response()->json($data);
+		
+	}
+	
+	public function delete_cashiers_report_product_p2(Request $request){		
+			
+		$CHPH2_ID = $request->CHPH2_ID;
+		CashiersReportModel_P2::find($CHPH2_ID)->delete();
+		return 'Deleted';
+		
+	}
+
 }

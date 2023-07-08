@@ -1,6 +1,7 @@
    <script type="text/javascript">
 	/*Load Cashiers Report Phase 1*/
 	LoadCashiersReportPH1();
+	LoadCashiersReportPH2();
 	
 	<!--Save New Client->
 	$("#update-cashiers-report").click(function(event){
@@ -140,7 +141,7 @@
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
-					url: "/save_product_cashiers_report",
+					url: "{{ route('SAVE_CHR_PH1') }}",
 					type:"POST",
 					data:{
 					  CHPH1_ID:0,
@@ -285,7 +286,7 @@
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
-					url: "/save_product_cashiers_report",
+					url: "{{ route('SAVE_CHR_PH1') }}",
 					type:"POST",
 					data:{ 
 					  CHPH1_ID:CHPH1_ID,
@@ -410,16 +411,16 @@
 		
 			var product_idx 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-id');
 			var order_quantity 			= $("input[name=order_quantity_PH2]").val();
-			var product_manual_price 	= $("input[name=product_manual_price_PH2Error]").val();
+			var product_manual_price 	= $("input[name=product_manual_price_PH2]").val();
 			
 			document.getElementById('CRPH2_form').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
-					url: "/save_product_cashiers_report_PH2",
+					url: "{{ route('SAVE_CHR_PH2') }}",
 					type:"POST",
 					data:{
-					  CHPH1_ID:0,
+					  CHPH2_ID:0,
 					  CashiersReportId:CashiersReportId,
 					  product_idx:product_idx,
 					  order_quantity:order_quantity, 
@@ -433,17 +434,17 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH1();
+						LoadCashiersReportPH2();
 						$('#product_idx_PH2Error').text('');					
 						$('#order_quantity_PH2Error').text('');		
-						$('#closing_readingError').text('');
+						$('#product_manual_price_PH2Error').text('');
 					  }
 					},
 					error: function(error) {
 					 console.log(error);
 						/*alert(error);*/
 							$('#product_idx_PH2Error').text(error.responseJSON.errors.product_idx);
-							document.getElementById('product_idxError').className = "invalid-feedback";
+							document.getElementById('product_idx_PH2Error').className = "invalid-feedback";
 							
 							$('#order_quantity_PH2Error').text(error.responseJSON.errors.order_quantity);
 							document.getElementById('order_quantity_PH2Error').className = "invalid-feedback";
@@ -454,10 +455,204 @@
 				   });		
 		 });
 
+	function LoadCashiersReportPH2() {		
+		$("#table_product_data_other_sales tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_other_sales');
+		let CashiersReportId 			= {{ $CashiersReportId }};	
+			  $.ajax({
+				url: "{{ route('GetCashiersProductP2') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var cashiers_report_p2_id = response[i].cashiers_report_p2_id;						
+							var product_idx = response[i].product_idx;						
+							var product_price = response[i].product_price;
+							var product_name = response[i].product_name;
+							var order_quantity = response[i].order_quantity;
+							var order_total_amount = response[i].order_total_amount;
+							
+							$('#table_product_data_other_sales tr:last').after("<tr>"+
+							"<td class='product_td' align='center'>"+product_name+"</td>"+
+							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
+							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
+							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH2_Edit' data-id='"+cashiers_report_p2_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP2'  data-id='"+cashiers_report_p2_id+"'></a></div></td>"+
+							"</tr>");				
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  }  	  
+
+	$('body').on('click','#CHPH2_Edit',function(){			
+			event.preventDefault();
+			let CHPH2_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP2_info') }}",
+				type:"POST",
+				data:{
+				  CHPH2_ID:CHPH2_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					document.getElementById("update-CRPH2").value = CHPH2_ID;				
+					/*Set Details*/					
+					document.getElementById("update_product_idx_PH2").value 			= response[0].product_name;
+					document.getElementById("update_order_quantity_PH2").value 			= response[0].order_quantity;
+					document.getElementById("update_product_manual_price_PH2").value 	= response[0].product_price;
+					
+					var total_amount = response[0].order_total_amount;
+					$('#UpdateTotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					$('#Update_CRPH2_Modal').modal('toggle');							  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+
+	$("#update-CRPH2").click(function(event){
+		
+			event.preventDefault();
+			
+			$('#update_product_idx_PH2Error').text('');
+			$('#update_order_quantity_PH2Error').text('');
+			$('#update_product_manual_price_PH2Error').text('');
+			
+			let CashiersReportId 		= {{ $CashiersReportId }};			
+			let CHPH2_ID 				= document.getElementById("update-CRPH2").value;
+			var product_idx 			= $("#update_product_name_PH2 option[value='" + $('#update_product_idx_PH2').val() + "']").attr('data-id');
+			var order_quantity 			= $("input[name=update_order_quantity_PH2]").val();
+			var product_manual_price 	= $("input[name=update_product_manual_price_PH2]").val();
+			
+			document.getElementById('CRPH2_form_edit').className = "g-3 needs-validation was-validated";
+			
+				/*Delete the Selected Item*/			
+				  $.ajax({
+					url: "{{ route('SAVE_CHR_PH2') }}",
+					type:"POST",
+					data:{
+					  CHPH2_ID:CHPH2_ID,
+					  CashiersReportId:CashiersReportId,
+					  product_idx:product_idx,
+					  order_quantity:order_quantity, 
+					  product_manual_price:product_manual_price, 
+					  _token: "{{ csrf_token() }}"
+					},
+					success:function(response){
+					  console.log(response);
+					  if(response) {
+						  
+						$('#switch_notice_on').show();
+						$('#sw_on').html(response.success);
+						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+						LoadCashiersReportPH2();
+						$('#update_product_idx_PH2Error').text('');					
+						$('#update_order_quantity_PH2Error').text('');		
+						$('#update_product_manual_price_PH2Error').text('');
+					  }
+					},
+					error: function(error) {
+					 console.log(error);
+						/*alert(error);*/
+							$('#update_product_idx_PH2Error').text(error.responseJSON.errors.product_idx);
+							document.getElementById('update_product_idx_PH2Error').className = "invalid-feedback";
+							
+							$('#update_order_quantity_PH2Error').text(error.responseJSON.errors.order_quantity);
+							document.getElementById('update_order_quantity_PH2Error').className = "invalid-feedback";
+							
+							$('#update_product_manual_price_PH2Error').text(error.responseJSON.errors.closing_reading);
+							document.getElementById('update_product_manual_price_PH2Error').className = "invalid-feedback";
+					}
+				   });		
+		 });
+
+
+	<!--CRPH1 Deletion Confirmation-->	
+	$('body').on('click','#deleteCashiersProductP2',function(){
+			event.preventDefault();
+			let CHPH2_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP2_info') }}",
+				type:"POST",
+				data:{
+				  CHPH2_ID:CHPH2_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					document.getElementById("deleteCRPH2Confirmed").value = CHPH2_ID;				
+					/*Set Details*/					
+					//$('#CRPH1_delete_product_idx').text(response[0].product_name);
+					$('#delete_product_idx_PH2').text(response[0].product_name);
+					$('#delete_order_quantity_PH2').text(response[0].order_quantity);
+					$('#delete_product_manual_price_PH2').text(response[0].product_price);
+					
+					var total_amount = response[0].order_total_amount;
+					$('#delete_TotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					$('#CRPH2DeleteModal').modal('toggle');							  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+
+	$('body').on('click','#deleteCRPH2Confirmed',function(){
+			
+		let CHPH2_ID = document.getElementById("deleteCRPH2Confirmed").value;
+		
+		if(CHPH2_ID!=0){
+			/*Delete the Selected Item*/	
+			  $.ajax({
+				url: "{{ route('DeleteCashiersProductP2') }}",
+				type:"POST",
+				data:{
+				  CHPH2_ID:CHPH2_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					LoadCashiersReportPH2();
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+				}
+			   });		
+		}	
+	});
+
+
 	function TotalAmount_PH2(){
 		
 		let product_price 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-price');
-		let product_manual_price 	= $("#product_manual_price").val();		
+		let product_manual_price 	= $("#product_manual_price_PH2").val();		
 		let order_quantity 			= $("input[name=order_quantity_PH2]").val();
 		
 		if(order_quantity!=0 || order_quantity!=''){
@@ -470,5 +665,22 @@
 			}
 		}		
 	}
-	
+
+	function UpdateTotalAmount_PH2(){
+		
+		let product_price 			= $("#update_product_name_PH2 option[value='" + $('#update_product_idx_PH2').val() + "']").attr('data-price');
+		let product_manual_price 	= $("#update_product_manual_price_PH2").val();		
+		let order_quantity 			= $("input[name=update_order_quantity_PH2]").val();
+		
+		if(order_quantity!=0 || order_quantity!=''){
+			if(product_manual_price!='' && product_manual_price!=0){
+				var total_amount = product_manual_price * order_quantity;
+				$('#UpdateTotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}else{
+				var total_amount = product_price * order_quantity;
+				$('#UpdateTotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}
+		}		
+	}	
+
 </script>
