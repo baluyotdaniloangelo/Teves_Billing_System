@@ -1,5 +1,4 @@
 	<!--Part 1-->
-	<div class="tab-pane fade active show" id="Product-justified" role="tabpanel" aria-labelledby="Product-tab">
 	
 	<div align="right">
 			<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH1_Modal"></button>
@@ -24,14 +23,14 @@
 					</tr>
 			</tbody>
 		</table>
-	<!--Modal to Create Bill-->
+
+	<!--Modal to Create-->
 	<div class="modal fade" id="CRPH1_Modal" tabindex="-1">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Add Product</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
@@ -51,7 +50,7 @@
 										@endforeach
 									</datalist>
 									<span class="valid-feedback" id="product_idxError"></span>
-									</div>	
+							</div>	
 						</div>	
 						
 						<div class="row mb-2">
@@ -85,7 +84,7 @@
 							  <span class="valid-feedback" id="product_manual_priceError"></span>						  
 						  </div>
 						</div>						
-						<!---->
+						
 						<div class="row mb-2">
 						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
 						  <div class="col-sm-9">
@@ -93,19 +92,19 @@
 						  </div>
 						</div>
 						
-						</div>
-						
 						<div class="modal-footer modal-footer_form">
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-CRPH1"> Submit</button>
 						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-CRPH1-save"> Reset</button>					  
 						</div>
-					</form><!-- End Multi Columns Form -->
+						
+						</form><!-- End Multi Columns Form -->
+						
                   </div>
                 </div>
              </div>
-		</div>
-	
-	<!--Modal to Upadate Site-->
+		</div>		
+		
+	<!--Modal to Upadate-->
 	<div class="modal fade" id="Update_CRPH1_Modal" tabindex="-1">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -131,7 +130,7 @@
 										@endforeach
 									</datalist>
 									<span class="valid-feedback" id="update_product_idxError"></span>
-									</div>	
+							</div>	
 						</div>	
 						
 						<div class="row mb-2">
@@ -173,8 +172,6 @@
 						  </div>
 						</div>
 						
-						</div>
-						
 						<div class="modal-footer modal-footer_form">
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-CRPH1"> Submit</button>
 						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-CRPH1-update"> Reset</button>  
@@ -184,8 +181,8 @@
                 </div>
              </div>
 	</div>
-					
-	<!-- CRP1 Delete Modal-->
+	
+		<!-- CRP1 Delete Modal-->
     <div class="modal fade" id="CRPH1DeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -216,4 +213,3 @@
         </div>
     </div>	
 					
-	</div>

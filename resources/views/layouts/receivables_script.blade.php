@@ -564,6 +564,7 @@
 						start_date:start_date,
 						end_date:end_date,
 						company_header:company_header,
+						less_per_liter:less_per_liter,
 						withholding_tax_percentage:withholding_tax_percentage,
 						net_value_percentage:net_value_percentage,
 						vat_value_percentage:vat_value_percentage,
