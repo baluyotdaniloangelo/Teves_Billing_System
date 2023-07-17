@@ -1,4 +1,4 @@
-	<!--Part 3-->	
+	<!--Part 4-->	
 	<div align="right">
 		<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH4_Modal"></button>
 	</div>
@@ -73,43 +73,21 @@
 					
 					  <form class="g-3 needs-validation" id="CRPH4_form_edit">
 					  
-					  <div class="row mb-2">
-						  <label for="update_product_idx_PH3" class="col-sm-3 col-form-label">PRODUCT</label>
+					   <div class="row mb-2">
+						  <label for="update_description_p4" class="col-sm-3 col-form-label">Description</label>
 						  <div class="col-sm-9">
-									<input class="form-control" list="update_description_p4" name="update_description_p4" id="update_product_idx_PH3" required autocomplete="off" onchange="UpdateTotalAmount_PH3()">
-									<datalist id="update_description_p4">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
-									<span class="valid-feedback" id="update_product_idx_PH3Error"></span>
+									<input class="form-control" list="update_description_p4" name="update_description_p4" id="update_description_p4" required autocomplete="off">
+									<span class="valid-feedback" id="update_description_p4Error"></span>
 									</div>	
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_order_quantity_PH3" class="col-sm-3 col-form-label">QUANTITY</label>
+						  <label for="update_amount_p4" class="col-sm-3 col-form-label" title="Amount">Amount</label>
 						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder=""  name="update_order_quantity_PH3" id="update_order_quantity_PH3" required step=".01" onchange="UpdateTotalAmount_PH3()" >
-							  <span class="valid-feedback" id="update_order_quantity_PH3Error"></span>						  
-						  </div>
-						</div>	
-						
-						<div class="row mb-2">
-						  <label for="update_amount_PH3" class="col-sm-3 col-form-label" title="Msnual Price">UNIT PRICE</label>
-						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" name="update_amount_PH3" id="update_amount_PH3" step=".01" onchange="UpdateTotalAmount_PH3()" >
-							  <span class="valid-feedback" id="update_amount_PH3Error"></span>						  
+							  <input type="number" class="form-control" placeholder="" name="update_amount_p4" id="update_amount_p4" step=".01" >
+							  <span class="valid-feedback" id="update_amount_p4Error"></span>						  
 						  </div>
 						</div>						
-						<!---->
-						<div class="row mb-2">
-						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
-						  <div class="col-sm-9">
-								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount_PH3">0.00</span>
-						  </div>
-						</div>
 						
 						<div class="modal-footer modal-footer_form">
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-CRPH4"> Submit</button>
@@ -136,8 +114,6 @@
 				<div align="left"style="margin: 10px;">
 				PRODUCT: <span id="delete_product_idx_PH3"></span><br>
 				QUANTITY: <span id="delete_order_quantity_PH3"></span><br>
-				PRICE: <span id="delete_amount_PH3"></span><br>
-				PESO SALES: <span id="delete_TotalAmount_PH3"></span><br>
 				</div>	
                 <div class="modal-footer footer_modal_bg">
                     

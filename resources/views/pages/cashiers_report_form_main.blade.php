@@ -74,6 +74,9 @@
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Miscellaneous</button>
 							</li>
+							<li class="nav-item" role="presentation">
+							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1"> OTHERS (Discounts, misload, return,sweldo,snack,change,lubes p.o)</button>
+							</li>
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
 							<div class="tab-pane fade show active" id="bordered-ph1" role="tabpanel" aria-labelledby="ph1-tab">
@@ -84,6 +87,9 @@
 							</div>
 							<div class="tab-pane fade" id="bordered-ph3" role="tabpanel" aria-labelledby="ph3-tab">
 							  @include('pages.cashiers_report_form_p3')
+							</div>
+							<div class="tab-pane fade" id="bordered-ph4" role="tabpanel" aria-labelledby="ph4-tab">
+							  @include('pages.cashiers_report_form_p4')
 							</div>
 						  </div><!-- End Bordered Tabs -->
 
