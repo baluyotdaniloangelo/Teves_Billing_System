@@ -95,14 +95,14 @@
         </a>
       </li>
 		<?php } ?>
-		<!--  -->
+		<!--
 		<li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Sales Order">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
           <span title="Create Sales Order">Cashier's Report</span>
         </a>
       </li>
-	
+	  -->
 	  <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Report">
           <i class="bi bi-graph-up navbar_icon"></i>
