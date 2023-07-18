@@ -7,6 +7,7 @@ use App\Models\CashiersReportModel;
 use App\Models\CashiersReportModel_P1;
 use App\Models\CashiersReportModel_P2;
 use App\Models\CashiersReportModel_P3;
+use App\Models\CashiersReportModel_P4;
 use App\Models\ProductModel;
 use Session;
 use Validator;
@@ -445,7 +446,6 @@ class CashiersReportController extends Controller
 		
 	}
 
-
 	/*Part Three (MSC Reports)*/
 	public function save_product_cashiers_report_PH3(Request $request){	
 
@@ -565,6 +565,102 @@ class CashiersReportController extends Controller
 			
 		$CHPH3_ID = $request->CHPH3_ID;
 		CashiersReportModel_P3::find($CHPH3_ID)->delete();
+		return 'Deleted';
+		
+	}
+
+
+	/*Part Four (MSC Reports)*/
+	public function save_cashiers_report_PH4(Request $request){	
+
+		$request->validate([
+			'description_p4'  	=> 'required',
+			'amount_p4'  		=> 'required'		
+        ], 
+        [
+			'description_p4.required' 	=> 'Description is Required',
+			'amount_p4.required' 		=> 'Amount is Required',
+        ]
+		);
+			
+			/*Get Cashier Report ID*/
+			$CashiersReportId = $request->CashiersReportId;
+			
+			$description_p4		= $request->description_p4;
+			$amount_p4 			= $request->amount_p4;
+			
+			$CHPH4_ID 			= $request->CHPH4_ID;
+
+								if($CHPH4_ID=='' || $CHPH4_ID ==0){	
+								
+									$CashiersReportModel_P4 = new CashiersReportModel_P4();
+									
+									$CashiersReportModel_P4->user_idx 				= Session::get('loginID');
+									$CashiersReportModel_P4->cashiers_report_id 	= $CashiersReportId;
+									$CashiersReportModel_P4->description_p4 		= $description_p4;
+									$CashiersReportModel_P4->amount_p4 				= $amount_p4;
+									
+									$result = $CashiersReportModel_P4->save();
+									
+									if($result){
+										return response()->json(['success'=>'Successfully Created!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Creation']);
+									}
+									
+								}else{
+																	
+									$CashiersReportModel_P4 = new CashiersReportModel_P4();
+									$CashiersReportModel_P4 = CashiersReportModel_P4::find($CHPH4_ID);
+									$CashiersReportModel_P4->description_p4 		= $description_p4;
+									$CashiersReportModel_P4->amount_p4 				= $amount_p4;
+									
+									$result = $CashiersReportModel_P4->update();
+									
+									if($result){
+										return response()->json(['success'=>'Successfully Updated!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Updated']);
+									}
+									
+								}
+								
+	}	
+	
+	public function get_cashiers_report_p4(Request $request){		
+	
+			$data =  CashiersReportModel_P4::where('cashiers_report_id', $request->CashiersReportId)
+				->orderBy('cashiers_report_p4_id', 'asc')
+              	->get([
+					'teves_cashiers_report_p4.cashiers_report_p4_id',
+					'teves_cashiers_report_p4.description_p4',
+					'teves_cashiers_report_p4.amount_p4'
+					]);
+		
+			return response()->json($data);
+	}
+
+	public function cashiers_report_p4_info(Request $request){
+
+		$CHPH4_ID = $request->CHPH4_ID;
+		
+		$data =  CashiersReportModel_P4::where('cashiers_report_p4_id', $CHPH4_ID)
+				->get([
+					'teves_cashiers_report_p4.cashiers_report_p4_id',
+					'teves_cashiers_report_p4.description_p4',
+					'teves_cashiers_report_p4.amount_p4'
+					]);			
+					
+		return response()->json($data);
+		
+	}
+	
+	public function delete_cashiers_report_p4(Request $request){		
+			
+		$CHPH4_ID = $request->CHPH4_ID;
+		CashiersReportModel_P4::find($CHPH4_ID)->delete();
 		return 'Deleted';
 		
 	}

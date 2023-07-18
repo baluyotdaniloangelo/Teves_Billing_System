@@ -3,7 +3,7 @@
 		<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH4_Modal"></button>
 	</div>
 	<br>						
-	<table class="table" id="">
+	<table class="table" id="table_PH4">
 		<thead>
 			<tr class='report'>
 				<th style="text-align:center !important;">Description</th>
@@ -11,7 +11,7 @@
 				<th style="text-align:center !important;" colspan='2'>Action</th>
 			</tr>
 		</thead>		
-		<tbody id="table_product_data_others2">
+		<tbody id="table_product_data_PH4">
 			<tr style="display: none;">
 				<td>HIDDEN</td></tr>
 			</tbody>	
@@ -75,10 +75,10 @@
 					  
 					   <div class="row mb-2">
 						  <label for="update_description_p4" class="col-sm-3 col-form-label">Description</label>
-						  <div class="col-sm-9">
+							<div class="col-sm-9">
 									<input class="form-control" list="update_description_p4" name="update_description_p4" id="update_description_p4" required autocomplete="off">
 									<span class="valid-feedback" id="update_description_p4Error"></span>
-									</div>	
+							</div>	
 						</div>	
 						
 						<div class="row mb-2">

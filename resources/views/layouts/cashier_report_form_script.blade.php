@@ -3,6 +3,7 @@
 	LoadCashiersReportPH1();
 	LoadCashiersReportPH2();
 	LoadCashiersReportPH3();
+	LoadCashiersReportPH4();
 	<!--Save New Client->
 	$("#update-cashiers-report").click(function(event){
 			
@@ -770,7 +771,7 @@
 							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
 							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP2'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -871,7 +872,7 @@
 		 });
 
 	<!--CRPH1 Deletion Confirmation-->	
-	$('body').on('click','#deleteCashiersProductP2',function(){
+	$('body').on('click','#deleteCashiersProductP3',function(){
 			event.preventDefault();
 			let CHPH3_ID = $(this).data('id');			
 			$.ajax({
@@ -971,26 +972,25 @@
 		
 			event.preventDefault();
 			
-			$('#product_idx_PH3Error').text('');
-			$('#order_quantity_PH3Error').text('');
+			$('#description_p4Error').text('');
+			$('#amount_p4Error').text('');
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
 			
-			var order_quantity 			= $("input[name=order_quantity_PH3]").val();
-			var product_manual_price 	= $("input[name=product_manual_price_PH3]").val();
+			var description_p4 		= $("input[name=description_p4]").val();
+			var amount_p4 			= $("input[name=amount_p4]").val();
 			
-			document.getElementById('CRPH3_form').className = "g-3 needs-validation was-validated";
+			document.getElementById('CRPH4_form').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
-					url: "{{ route('SAVE_CHR_PH3') }}",
+					url: "{{ route('SAVE_CHR_PH4') }}",
 					type:"POST",
 					data:{
 					  CHPH4_ID:0,
 					  CashiersReportId:CashiersReportId,
-					  product_idx:product_idx,
-					  order_quantity:order_quantity, 
-					  product_manual_price:product_manual_price, 
+					  description_p4:description_p4,
+					  amount_p4:amount_p4, 
 					  _token: "{{ csrf_token() }}"
 					},
 					success:function(response){
@@ -1000,33 +1000,30 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3();
-						$('#product_idx_PH3Error').text('');					
-						$('#order_quantity_PH3Error').text('');		
-						$('#product_manual_price_PH3Error').text('');
+						LoadCashiersReportPH4();
+						$('#description_p4Error').text('');					
+						$('#amount_p4Error').text('');		
 					  }
 					},
 					error: function(error) {
 					 console.log(error);
 						/*alert(error);*/
-							$('#product_idx_PH3Error').text(error.responseJSON.errors.product_idx);
-							document.getElementById('product_idx_PH3Error').className = "invalid-feedback";
+							$('#description_p4Error').text(error.responseJSON.errors.description_p4);
+							document.getElementById('description_p4Error').className = "invalid-feedback";
 							
-							$('#order_quantity_PH3Error').text(error.responseJSON.errors.order_quantity);
-							document.getElementById('order_quantity_PH3Error').className = "invalid-feedback";
+							$('#amount_p4Error').text(error.responseJSON.errors.amount_p4);
+							document.getElementById('amount_p4Error').className = "invalid-feedback";
 							
-							$('#product_manual_price_PH3Error').text(error.responseJSON.errors.closing_reading);
-							document.getElementById('product_manual_price_PH3Error').className = "invalid-feedback";
 					}
 				   });		
 		 });
 
-	function LoadCashiersReportPH3() {		
-		$("#table_product_data_msc tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc');
+	function LoadCashiersReportPH4() {		
+		$("#table_product_data_PH4 tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_PH4');
 		let CashiersReportId 			= {{ $CashiersReportId }};	
 			  $.ajax({
-				url: "{{ route('GetCashiersProductP3') }}",
+				url: "{{ route('GetCashiersP4') }}",
 				type:"POST",
 				data:{
 				  CashiersReportId:CashiersReportId,
@@ -1038,20 +1035,15 @@
 						var len = response.length;
 						for(var i=0; i<len; i++){
 						
-							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
-							var product_idx = response[i].product_idx;						
-							var product_price = response[i].product_price;
-							var product_name = response[i].product_name;
-							var order_quantity = response[i].order_quantity;
-							var order_total_amount = response[i].order_total_amount;
+							var cashiers_report_p4_id = response[i].cashiers_report_p4_id;					
+							var description_p4 = response[i].description_p4;
+							var amount_p4 = response[i].amount_p4;
 							
-							$('#table_product_data_msc tr:last').after("<tr>"+
-							"<td class='product_td' align='center'>"+product_name+"</td>"+
-							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
-							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
-							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP2'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							$('#table_product_data_PH4 tr:last').after("<tr>"+
+							"<td class='product_td' align='center'>"+description_p4+"</td>"+
+							"<td class='calibration_td' align='center'>"+amount_p4+"</td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH4_Edit' data-id='"+cashiers_report_p4_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersP4'  data-id='"+cashiers_report_p4_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -1064,28 +1056,24 @@
 			   });
 	  }  	  
 
-	$('body').on('click','#CHPH3_Edit',function(){			
+	$('body').on('click','#CHPH4_Edit',function(){			
 			event.preventDefault();
-			let CHPH3_ID = $(this).data('id');			
+			let CHPH4_ID = $(this).data('id');			
 			$.ajax({
-				url: "{{ route('CRP3_info') }}",
+				url: "{{ route('CRP4_info') }}",
 				type:"POST",
 				data:{
-				  CHPH3_ID:CHPH3_ID,
+				  CHPH4_ID:CHPH4_ID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {				
-					document.getElementById("update-CRPH3").value = CHPH3_ID;				
+					document.getElementById("update-CRPH4").value = CHPH4_ID;				
 					/*Set Details*/					
-					document.getElementById("update_product_idx_PH3").value 			= response[0].product_name;
-					document.getElementById("update_order_quantity_PH3").value 			= response[0].order_quantity;
-					document.getElementById("update_product_manual_price_PH3").value 	= response[0].product_price;
-					
-					var total_amount = response[0].order_total_amount;
-					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
-					$('#Update_CRPH3_Modal').modal('toggle');							  
+					document.getElementById("update_description_p4").value 	= response[0].description_p4;
+					document.getElementById("update_amount_p4").value 		= response[0].amount_p4;
+					$('#Update_CRPH4_Modal').modal('toggle');	
 				  }
 				},
 				error: function(error) {
@@ -1095,32 +1083,30 @@
 			   });	
 	  });
 
-	$("#update-CRPH3").click(function(event){
+	$("#update-CRPH4").click(function(event){
 		
 			event.preventDefault();
 			
-			$('#update_product_idx_PH3Error').text('');
-			$('#update_order_quantity_PH3Error').text('');
-			$('#update_product_manual_price_PH3Error').text('');
+			$('#update_description_p4Error').text('');
+			$('#update_amount_p4Error').text('');
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
-			let CHPH3_ID 				= document.getElementById("update-CRPH3").value;
-			var product_idx 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');
-			var order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
-			var product_manual_price 	= $("input[name=update_product_manual_price_PH3]").val();
+			let CHPH4_ID 				= document.getElementById("update-CRPH4").value;
+			
+			var description_p4 		= $("input[name=update_description_p4]").val();
+			var amount_p4 			= $("input[name=update_amount_p4]").val();
 			
 			document.getElementById('CRPH3_form_edit').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
-					url: "{{ route('SAVE_CHR_PH3') }}",
+					url: "{{ route('SAVE_CHR_PH4') }}",
 					type:"POST",
 					data:{
-					  CHPH3_ID:CHPH3_ID,
-					  CashiersReportId:CashiersReportId,
-					  product_idx:product_idx,
-					  order_quantity:order_quantity, 
-					  product_manual_price:product_manual_price, 
+						CHPH4_ID:CHPH4_ID,
+						CashiersReportId:CashiersReportId,
+						description_p4:description_p4,
+						amount_p4:amount_p4, 
 					  _token: "{{ csrf_token() }}"
 					},
 					success:function(response){
@@ -1130,51 +1116,43 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3();
-						$('#update_product_idx_PH3Error').text('');					
-						$('#update_order_quantity_PH3Error').text('');		
-						$('#update_product_manual_price_PH3Error').text('');
+						LoadCashiersReportPH4();
+						$('#update_description_p4Error').text('');					
+						$('#update_amount_p4Error').text('');		
 					  }
 					},
 					error: function(error) {
 					 console.log(error);
 						/*alert(error);*/
-							$('#update_product_idx_PH3Error').text(error.responseJSON.errors.product_idx);
-							document.getElementById('update_product_idx_PH3Error').className = "invalid-feedback";
+							$('#update_description_p4Error').text(error.responseJSON.errors.description_p4);
+							document.getElementById('update_description_p4Error').className = "invalid-feedback";
 							
-							$('#update_order_quantity_PH3Error').text(error.responseJSON.errors.order_quantity);
-							document.getElementById('update_order_quantity_PH3Error').className = "invalid-feedback";
-							
-							$('#update_product_manual_price_PH3Error').text(error.responseJSON.errors.closing_reading);
-							document.getElementById('update_product_manual_price_PH3Error').className = "invalid-feedback";
+							$('#update_amount_p4Error').text(error.responseJSON.errors.amount_p4);
+							document.getElementById('update_amount_p4Error').className = "invalid-feedback";
 					}
 				   });		
 		 });
 
 	<!--CRPH1 Deletion Confirmation-->	
-	$('body').on('click','#deleteCashiersProductP2',function(){
+	$('body').on('click','#deleteCashiersP4',function(){
 			event.preventDefault();
-			let CHPH3_ID = $(this).data('id');			
+			let CHPH4_ID = $(this).data('id');			
 			$.ajax({
-				url: "{{ route('CRP3_info') }}",
+				url: "{{ route('CRP4_info') }}",
 				type:"POST",
 				data:{
-				  CHPH3_ID:CHPH3_ID,
+				  CHPH4_ID:CHPH4_ID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {				
-					document.getElementById("deleteCRPH3Confirmed").value = CHPH3_ID;				
+					document.getElementById("deleteCRPH4Confirmed").value = CHPH4_ID;				
 					/*Set Details*/					
-					//$('#CRPH1_delete_product_idx').text(response[0].product_name);
-					$('#delete_product_idx_PH3').text(response[0].product_name);
-					$('#delete_order_quantity_PH3').text(response[0].order_quantity);
-					$('#delete_product_manual_price_PH3').text(response[0].product_price);
+					$('#delete_description_p4').text(response[0].description_p4);
+					$('#delete_amount_p4').text(response[0].amount_p4);
 					
-					var total_amount = response[0].order_total_amount;
-					$('#delete_TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
-					$('#CRPH3DeleteModal').modal('toggle');							  
+					$('#CRPH4DeleteModal').modal('toggle');							  
 				  }
 				},
 				error: function(error) {
@@ -1184,17 +1162,17 @@
 			   });	
 	  });
 
-	$('body').on('click','#deleteCRPH3Confirmed',function(){
+	$('body').on('click','#deleteCRPH4Confirmed',function(){
 			
-		let CHPH3_ID = document.getElementById("deleteCRPH3Confirmed").value;
+		let CHPH4_ID = document.getElementById("deleteCRPH4Confirmed").value;
 		
-		if(CHPH3_ID!=0){
+		if(CHPH4_ID!=0){
 			/*Delete the Selected Item*/	
 			  $.ajax({
-				url: "{{ route('DeleteCashiersProductP3') }}",
+				url: "{{ route('DeleteCashiersP4') }}",
 				type:"POST",
 				data:{
-				  CHPH3_ID:CHPH3_ID,
+				  CHPH4_ID:CHPH4_ID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -1203,7 +1181,7 @@
 					$('#switch_notice_off').show();
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
-					LoadCashiersReportPH3();
+					LoadCashiersReportPH4();
 				  }
 				},
 				error: function(error) {
@@ -1212,39 +1190,4 @@
 			   });		
 		}	
 	});
-
-	function TotalAmount_PH3(){
-		
-		let product_price 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-price');
-		let product_manual_price 	= $("#product_manual_price_PH3").val();		
-		let order_quantity 			= $("input[name=order_quantity_PH3]").val();
-		
-		if(order_quantity!=0 || order_quantity!=''){
-			if(product_manual_price!='' && product_manual_price!=0){
-				var total_amount = product_manual_price * order_quantity;
-				$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}
-		}		
-	}
-
-	function UpdateTotalAmount_PH3(){
-		
-		let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
-		let product_manual_price 	= $("#update_product_manual_price_PH3").val();		
-		let order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
-		
-		if(order_quantity!=0 || order_quantity!=''){
-			if(product_manual_price!='' && product_manual_price!=0){
-				var total_amount = product_manual_price * order_quantity;
-				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}
-		}		
-	}	
-
 </script>

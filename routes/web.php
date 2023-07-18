@@ -232,7 +232,6 @@ Route::post('/cashiers_report_p1_info', [CashiersReportController::class, 'cashi
 
 
 /*Cashiers Report Part 2*/
-/*Save Cashier's Report Product*/
 Route::post('/save_product_cashiers_report_PH2', [CashiersReportController::class,'save_product_cashiers_report_PH2'])->name('SAVE_CHR_PH2')->middleware('isLoggedIn');
 /* Load Product P2 */
 Route::post('/get_cashiers_report_product_p2', [CashiersReportController::class,'get_cashiers_report_product_p2'])->name('GetCashiersProductP2')->middleware('isLoggedIn');
@@ -242,14 +241,25 @@ Route::post('/delete_cashiers_report_product_p2', [CashiersReportController::cla
 Route::post('/cashiers_report_p2_info', [CashiersReportController::class, 'cashiers_report_p2_info'])->name('CRP2_info')->middleware('isLoggedIn');
 
 /*Cashiers Report Part 3*/
-/*Save Cashier's Report Product*/
 Route::post('/save_product_cashiers_report_PH3', [CashiersReportController::class,'save_product_cashiers_report_PH3'])->name('SAVE_CHR_PH3')->middleware('isLoggedIn');
-/* Load Product P2 */
+/* Load Product P3 */
 Route::post('/get_cashiers_report_product_p3', [CashiersReportController::class,'get_cashiers_report_product_p3'])->name('GetCashiersProductP3')->middleware('isLoggedIn');
-/* Delete Product P2 */
+/* Delete Product P3 */
 Route::post('/delete_cashiers_report_product_p3', [CashiersReportController::class,'delete_cashiers_report_product_p3'])->name('DeleteCashiersProductP3')->middleware('isLoggedIn');
-/*GET Cashiers report product P2*/
+/*GET Cashiers report product P3*/
 Route::post('/cashiers_report_p3_info', [CashiersReportController::class, 'cashiers_report_p3_info'])->name('CRP3_info')->middleware('isLoggedIn');
+
+/*Cashiers Report Part 4*/
+/*Save or Update*/
+Route::post('/save_cashiers_report_PH4', [CashiersReportController::class,'save_cashiers_report_PH4'])->name('SAVE_CHR_PH4')->middleware('isLoggedIn');
+/* Load P4 */
+Route::post('/get_cashiers_report_p4', [CashiersReportController::class,'get_cashiers_report_p4'])->name('GetCashiersP4')->middleware('isLoggedIn');
+/* Delete P4 */
+Route::post('/delete_cashiers_report_p4', [CashiersReportController::class,'delete_cashiers_report_p4'])->name('DeleteCashiersP4')->middleware('isLoggedIn');
+/*GET Cashiers report P4*/
+Route::post('/cashiers_report_p4_info', [CashiersReportController::class, 'cashiers_report_p4_info'])->name('CRP4_info')->middleware('isLoggedIn');
+
+
 
 
 /* Sales Summary */
