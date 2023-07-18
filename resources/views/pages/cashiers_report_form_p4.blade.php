@@ -112,8 +112,8 @@
 				Are you sure you want to Delete This Item?<br>
 				</div>
 				<div align="left"style="margin: 10px;">
-				PRODUCT: <span id="delete_product_idx_PH3"></span><br>
-				QUANTITY: <span id="delete_order_quantity_PH3"></span><br>
+				Description: <span id="delete_description_p4"></span><br>
+				Amount: <span id="delete_amount_p4"></span><br>
 				</div>	
                 <div class="modal-footer footer_modal_bg">
                     
