@@ -1190,4 +1190,21 @@
 			   });		
 		}	
 	});
+	
+	
+	
+	
+	function _1000_demo_total(){
+		
+		let _1000_demo = $("input[name=1000_demo]").val();
+		
+		if(_1000_demo!=0 || _1000_demo!=''){
+			
+				$('#1000_demo_total').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+	}
+
+	
 </script>

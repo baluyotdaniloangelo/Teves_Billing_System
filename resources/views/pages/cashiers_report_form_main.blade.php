@@ -66,30 +66,41 @@
 						  <!-- Bordered Tabs -->
 						  <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link active" id="ph1-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph1" type="button" role="tab" aria-controls="ph1" aria-selected="true">Product</button>
+							  <button class="nav-link active" id="ph1-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph1" type="button" role="tab" aria-controls="ph1" aria-selected="true">Part 1</button>
 							</li>
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph2-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph2" type="button" role="tab" aria-controls="ph2" aria-selected="false" tabindex="-1">Others</button>
+							  <button class="nav-link" id="ph2-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph2" type="button" role="tab" aria-controls="ph2" aria-selected="false" tabindex="-1">Part 2</button>
 							</li>
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Miscellaneous</button>
+							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Part 3</button>
 							</li>
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1"> OTHERS (Discounts, misload, return,sweldo,snack,change,lubes p.o)</button>
+							  <button class="nav-link" id="ph4-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1"> Part 4</button>
+							</li>
+							<li class="nav-item" role="presentation">
+							  <button class="nav-link" id="ph5-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph5" type="button" role="tab" aria-controls="ph5" aria-selected="false" tabindex="-1">Part 5</button>
 							</li>
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
 							<div class="tab-pane fade show active" id="bordered-ph1" role="tabpanel" aria-labelledby="ph1-tab">
-							  @include('pages.cashiers_report_form_p1')
+							Product
+							@include('pages.cashiers_report_form_p1')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph2" role="tabpanel" aria-labelledby="ph2-tab">
-							  @include('pages.cashiers_report_form_p2')
+							Others
+							 @include('pages.cashiers_report_form_p2')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph3" role="tabpanel" aria-labelledby="ph3-tab">
+							Miscellaneous
 							  @include('pages.cashiers_report_form_p3')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph4" role="tabpanel" aria-labelledby="ph4-tab">
+							Discounts, misload, return,sweldo,snack,change,lubes p.o
 							  @include('pages.cashiers_report_form_p4')
+							</div>
+							<div class="tab-pane fade" id="bordered-ph5" role="tabpanel" aria-labelledby="ph5-tab">
+							Cash On Hand Summary
+							@include('pages.cashiers_report_form_p5')
 							</div>
 						  </div><!-- End Bordered Tabs -->
 
