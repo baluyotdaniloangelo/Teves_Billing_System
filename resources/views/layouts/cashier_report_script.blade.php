@@ -21,7 +21,9 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'report_date'},
+					<?php if($data->user_type=="Admin"){ ?>
 					{data: 'user_real_name'},
+					<?php } ?>			
 					{data: 'teves_branch'},		
 					{data: 'forecourt_attendant'},
 					{data: 'shift'},

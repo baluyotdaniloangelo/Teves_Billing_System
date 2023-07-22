@@ -265,7 +265,8 @@ Route::post('/save_cashiers_report_PH5', [CashiersReportController::class,'save_
 /*GET Cashiers report P5*/
 Route::post('/cashiers_report_p5_info', [CashiersReportController::class, 'cashiers_report_p5_info'])->name('CRP5_info')->middleware('isLoggedIn');
 
-
+/*GET Cashiers report P6*/
+Route::post('/cashiers_report_p6_info', [CashiersReportController::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

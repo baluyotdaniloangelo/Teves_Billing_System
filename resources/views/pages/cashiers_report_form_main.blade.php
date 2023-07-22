@@ -21,6 +21,13 @@
 						<form class="g-2 needs-validation" id="CashierReportformNew">
 						
 						<div class="row mb-2">
+						  <label class="col-sm-4 col-form-label">Cashier Name</label>
+						  <div class="col-sm-8">
+							<span><b><?php echo $CashiersReportData[0]['user_real_name']; ?></b></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
 						  <label for="teves_branch" class="col-sm-4 col-form-label">Branch</label>
 						  <div class="col-sm-8">
 							<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
@@ -59,7 +66,6 @@
 						</div>
 						 <div class="text-center">				
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-cashiers-report"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-cashiers-report"> Reset</button>
 						  </div>
 						  </form><!-- End Multi Columns Form -->
 						   </div>
@@ -80,7 +86,7 @@
 							  <button class="nav-link" id="ph2-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph2" type="button" role="tab" aria-controls="ph2" aria-selected="false" tabindex="-1">Other Sales</button>
 							</li>
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Miscellaneus Items</button>
+							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Miscellaneous Items</button>
 							</li>
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph4-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1">Theoretical Sales</button>

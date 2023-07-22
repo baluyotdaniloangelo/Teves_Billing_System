@@ -37,8 +37,12 @@ class CashiersReportController extends Controller
 		$list = CashiersReportModel::get();
 		if ($request->ajax()) {
 			
-			    	$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-              		->get([				
+			
+					
+			if(Session::get('UserType')!="Admin"){
+				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')			
+              	 ->where('teves_cashiers_report.user_idx', '=', Session::get('loginID'))	
+				 ->get([				
 					'teves_cashiers_report.cashiers_report_id',
 					'user_tb.user_real_name',
 					'teves_cashiers_report.teves_branch',
@@ -47,6 +51,21 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.shift',
 					'teves_cashiers_report.created_at',
 					'teves_cashiers_report.updated_at']);
+			}else{
+				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')			
+               ->get([				
+					'teves_cashiers_report.cashiers_report_id',
+					'user_tb.user_real_name',
+					'teves_cashiers_report.teves_branch',
+					'teves_cashiers_report.forecourt_attendant',
+					'teves_cashiers_report.report_date',
+					'teves_cashiers_report.shift',
+					'teves_cashiers_report.created_at',
+					'teves_cashiers_report.updated_at']);
+			}
+			
+			
+					
 			
 			return DataTables::of($data)
 					->addIndexColumn()
@@ -739,6 +758,71 @@ class CashiersReportController extends Controller
 			else{
 				return response()->json(['success'=>"Error on Insert Cashier's Cash on Hand Report Information"]);
 			}
+			
+	}	
+	
+	public function cashiers_report_p6_info(Request $request){
+
+		$CashiersReportId = $request->CashiersReportId;
+		
+		/*$data =  CashiersReportModel_P4::where('cashiers_report_p4_id', $CHPH4_ID)
+				->get([
+					'teves_cashiers_report_p4.cashiers_report_p4_id',
+					'teves_cashiers_report_p4.description_p4',
+					'teves_cashiers_report_p4.amount_p4'
+					]);		*/	
+		
+		$PH1_SUM =  CashiersReportModel_P1::where('teves_cashiers_report_p1.cashiers_report_id', $CashiersReportId)
+        ->sum('order_total_amount');
+
+		$PH2_SUM =  CashiersReportModel_P2::where('teves_cashiers_report_p2.cashiers_report_id', $CashiersReportId)
+        ->sum('order_total_amount');
+		
+		$PH3_SUM =  CashiersReportModel_P3::where('teves_cashiers_report_p3.cashiers_report_id', $CashiersReportId)
+        ->sum('order_total_amount');
+		
+		$PH4_SUM =  CashiersReportModel_P4::where('teves_cashiers_report_p4.cashiers_report_id', $CashiersReportId)
+        ->sum('amount_p4');
+		
+		$_PH5_SUM = CashiersReportModel_P5::where('cashiers_report_id', $CashiersReportId)
+            ->get([	
+			'teves_cashiers_report_p5.cashiers_report_p5_id',			
+			'teves_cashiers_report_p5.one_thousand_deno',
+			'teves_cashiers_report_p5.five_hundred_deno',
+			'teves_cashiers_report_p5.two_hundred_deno',
+			'teves_cashiers_report_p5.one_hundred_deno',
+			'teves_cashiers_report_p5.fifty_deno',
+			'teves_cashiers_report_p5.twenty_deno',
+			'teves_cashiers_report_p5.ten_deno',
+			'teves_cashiers_report_p5.five_deno',
+			'teves_cashiers_report_p5.one_deno',
+			'teves_cashiers_report_p5.twenty_five_cent_deno',
+			'teves_cashiers_report_p5.cash_drop'
+			]);
+		
+		$one_thousand_deno 		= $_PH5_SUM[0]->one_thousand_deno * 1000;
+		
+		$five_hundred_deno 		= $_PH5_SUM[0]->five_hundred_deno * 500;
+		$two_hundred_deno 		= $_PH5_SUM[0]->two_hundred_deno * 200;
+		$one_hundred_deno 		= $_PH5_SUM[0]->one_hundred_deno * 100;
+		
+		$fifty_deno 			= $_PH5_SUM[0]->fifty_deno * 50;
+		$twenty_deno 			= $_PH5_SUM[0]->twenty_deno * 20;
+		$ten_deno 				= $_PH5_SUM[0]->ten_deno * 10;
+		
+		$five_deno 				= $_PH5_SUM[0]->five_deno * 5;
+		$one_deno 				= $_PH5_SUM[0]->one_deno * 1;
+		
+		$twenty_five_cent_deno 	= $_PH5_SUM[0]->twenty_five_cent_deno * 0.25;
+		
+		$PH5_SUM = $one_thousand_deno + $five_hundred_deno + $two_hundred_deno + $one_hundred_deno + $fifty_deno + $twenty_deno + $ten_deno + $five_deno + $one_deno + $twenty_five_cent_deno;
+        		
+		if($CashiersReportId!=0){
+				return response()->json(array('success' => "Success", 'fuel_sales_total' => $PH1_SUM, 'other_sales_total' => $PH2_SUM, 'miscellaneous_total' => $PH3_SUM, 'theoretical_sales' => $PH4_SUM, 'cash_on_hand' => $PH5_SUM), 200);
+		}
+		else{
+				return response()->json(['success'=>"Error on Load"]);
+		}
 			
 	}
 }

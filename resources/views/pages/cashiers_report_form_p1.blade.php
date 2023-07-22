@@ -39,7 +39,7 @@
 					  <form class="g-3 needs-validation" id="CRPH1_form">
 					  
 					  <div class="row mb-2">
-						  <label for="order_quantity" class="col-sm-3 col-form-label">PRODUCT</label>
+						  <label for="product_idx" class="col-sm-3 col-form-label">PRODUCT</label>
 						  <div class="col-sm-9">
 									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()">
 									<datalist id="product_name">
@@ -56,7 +56,7 @@
 						<div class="row mb-2">
 						  <label for="beginning_reading" class="col-sm-3 col-form-label">BEGINNING</label>
 						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="beginning_reading" id="beginning_reading" required step=".01" onchange="TotalAmount()" >
+							  <input type="number" class="form-control" placeholder="" aria-label="beginning_reading" aria-describedby="basic-addon1" name="beginning_reading" id="beginning_reading" required step=".01" onchange="TotalAmount()" >
 							  <span class="valid-feedback" id="beginning_readingError"></span>						  
 						  </div>
 						</div>	
@@ -64,7 +64,7 @@
 						<div class="row mb-2">
 						  <label for="closing_reading" class="col-sm-3 col-form-label">CLOSING</label>
 						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="closing_reading" id="closing_reading" required step=".01" onchange="TotalAmount()" >
+							  <input type="number" class="form-control" placeholder="" aria-label="closing_reading" aria-describedby="basic-addon1" name="closing_reading" id="closing_reading" required step=".01" onchange="TotalAmount()" >
 							  <span class="valid-feedback" id="closing_readingError"></span>						  
 						  </div>
 						</div>	
@@ -86,7 +86,7 @@
 						</div>						
 						
 						<div class="row mb-2">
-						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
+						  <label class="col-sm-3 col-form-label">Total Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount">0.00</span>
 						  </div>
@@ -119,7 +119,7 @@
 					  <form class="g-3 needs-validation" id="CRPH1_form_edit">
 					  
 					  <div class="row mb-2">
-						  <label for="order_quantity" class="col-sm-3 col-form-label">PRODUCT</label>
+						  <label for="update_product_idx" class="col-sm-3 col-form-label">PRODUCT</label>
 						  <div class="col-sm-9">
 									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
 									<datalist id="update_product_name">
@@ -134,7 +134,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="beginning_reading" class="col-sm-3 col-form-label">BEGINNING</label>
+						  <label for="update_beginning_reading" class="col-sm-3 col-form-label">BEGINNING</label>
 						  <div class="col-sm-9">
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_beginning_reading" id="update_beginning_reading" required step=".01" onchange="UpdateTotalAmount()" >
 							  <span class="valid-feedback" id="update_beginning_readingError"></span>						  
@@ -142,7 +142,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="closing_reading" class="col-sm-3 col-form-label">CLOSING</label>
+						  <label for="update_closing_reading" class="col-sm-3 col-form-label">CLOSING</label>
 						  <div class="col-sm-9">
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_closing_reading" id="update_closing_reading" required step=".01" onchange="UpdateTotalAmount()" >
 							  <span class="valid-feedback" id="update_closing_readingError"></span>						  
@@ -150,7 +150,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="calibration" class="col-sm-3 col-form-label">CALIBRATION</label>
+						  <label for="update_calibration" class="col-sm-3 col-form-label">CALIBRATION</label>
 						  <div class="col-sm-9">
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_calibration" id="update_calibration" step=".01" onchange="UpdateTotalAmount()" >
 							  <span class="valid-feedback" id="update_calibrationError"></span>						  
@@ -158,7 +158,7 @@
 						</div>
 
 						<div class="row mb-2">
-						  <label for="product_manual_price" class="col-sm-3 col-form-label" title="Msnual Price">PUMP PRICE</label>
+						  <label for="update_product_manual_price" class="col-sm-3 col-form-label" title="Msnual Price">PUMP PRICE</label>
 						  <div class="col-sm-9">
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_product_manual_price" id="update_product_manual_price" step=".01" onchange="UpdateTotalAmount()" >
 							  <span class="valid-feedback" id="update_product_manual_priceError"></span>						  
@@ -166,7 +166,7 @@
 						</div>						
 						<!---->
 						<div class="row mb-2">
-						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
+						  <label class="col-sm-3 col-form-label">Total Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount">0.00</span>
 						  </div>

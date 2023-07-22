@@ -66,7 +66,7 @@
 						</div>						
 						<!---->
 						<div class="row mb-2">
-						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
+						  <label class="col-sm-3 col-form-label">Total Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount_PH2">0.00</span>
 						  </div>
@@ -129,7 +129,7 @@
 						</div>						
 						<!---->
 						<div class="row mb-2">
-						  <label for="order_date" class="col-sm-3 col-form-label">Total Amount</label>
+						  <label class="col-sm-3 col-form-label">Total Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount_PH2">0.00</span>
 						  </div>

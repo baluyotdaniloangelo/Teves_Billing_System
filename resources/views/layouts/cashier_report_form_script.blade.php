@@ -5,6 +5,7 @@
 	LoadCashiersReportPH3();
 	LoadCashiersReportPH4();
 	LoadCashiersReportPH5();
+	LoadCashiersReportPH6();
 	<!--Save New Client->
 	$("#update-cashiers-report").click(function(event){
 			
@@ -203,13 +204,13 @@
 						
 							var cashiers_report_p1_id = response[i].cashiers_report_p1_id;						
 							var product_idx = response[i].product_idx;						
-							var product_price = response[i].product_price;
+							var product_price = response[i].product_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var beginning_reading = response[i].beginning_reading;
 							var order_quantity = response[i].order_quantity;
 							var closing_reading = response[i].closing_reading;
 							var calibration = response[i].calibration;
-							var order_total_amount = response[i].order_total_amount;
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
 							$('#table_product_body_data tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
@@ -475,10 +476,10 @@
 						
 							var cashiers_report_p2_id = response[i].cashiers_report_p2_id;						
 							var product_idx = response[i].product_idx;						
-							var product_price = response[i].product_price;
+							var product_price = response[i].product_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var order_quantity = response[i].order_quantity;
-							var order_total_amount = response[i].order_total_amount;
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
 							$('#table_product_data_other_sales tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
@@ -761,10 +762,10 @@
 						
 							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
 							var product_idx = response[i].product_idx;						
-							var product_price = response[i].product_price;
+							var product_price = response[i].product_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var order_quantity = response[i].order_quantity;
-							var order_total_amount = response[i].order_total_amount;
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
 							$('#table_product_data_msc tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
@@ -1038,7 +1039,7 @@
 						
 							var cashiers_report_p4_id = response[i].cashiers_report_p4_id;					
 							var description_p4 = response[i].description_p4;
-							var amount_p4 = response[i].amount_p4;
+							var amount_p4 = response[i].amount_p4.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
 							$('#table_product_data_PH4 tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+description_p4+"</td>"+
@@ -1840,4 +1841,57 @@
 					}
 				   });		
 	});
+
+
+	function LoadCashiersReportPH6() {		
+		
+		let CashiersReportId 			= {{ $CashiersReportId }};	
+			  
+			  $.ajax({
+				url: "{{ route('CRP6_info') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+				  
+					fuel_sales_total = response.fuel_sales_total;
+					other_sales_total = response.other_sales_total;
+					total_sales = fuel_sales_total + other_sales_total;
+					miscellaneous_total = response.miscellaneous_total;
+					theoretical_sales = response.theoretical_sales;
+					cash_on_hand = response.cash_on_hand;
+					
+					cash_short_or_over = cash_on_hand - (total_sales + miscellaneous_total + theoretical_sales);
+					
+					
+					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#other_sales_total').html(other_sales_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#total_sales').html(total_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#miscellaneous_total').html(miscellaneous_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#theoretical_sales').html(theoretical_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#cash_on_hand').html(cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#cash_short_or_over').html(cash_short_or_over.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  }  	  
+	
+
+
 </script>

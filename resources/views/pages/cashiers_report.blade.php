@@ -19,7 +19,7 @@
 												<tr>
 													<th>#</th>
 													<th>Date</th>
-													<th>Cashiers's Name</th>
+													<?php if($data->user_type=="Admin"){ ?><th>Cashiers's Name</th><?php } ?>
 													<th>Branch</th>
 													<th>Forecourt Attendant</th>
 													<th>Shift</th>
@@ -35,7 +35,7 @@
 												<tr>
 													<th>#</th>
 													<th>Date</th>
-													<th>Cashiers's Name</th>
+													<?php if($data->user_type=="Admin"){ ?><th>Cashiers's Name</th><?php } ?>
 													<th>Branch</th>
 													<th>Forecourt Attendant</th>
 													<th>Shift</th>
