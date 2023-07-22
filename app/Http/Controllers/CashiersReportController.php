@@ -8,6 +8,7 @@ use App\Models\CashiersReportModel_P1;
 use App\Models\CashiersReportModel_P2;
 use App\Models\CashiersReportModel_P3;
 use App\Models\CashiersReportModel_P4;
+use App\Models\CashiersReportModel_P5;
 use App\Models\ProductModel;
 use Session;
 use Validator;
@@ -84,6 +85,22 @@ class CashiersReportController extends Controller
 			/*Get Last ID*/
 			$last_transaction_id = $CashiersReportCreate->cashiers_report_id;
 			
+			/*Initialized Cash On Hand*/
+			$CashOnHand = new CashiersReportModel_P5();
+			$CashOnHand->cashiers_report_id 	= $last_transaction_id;
+			$CashOnHand->user_idx 				= Session::get('loginID');
+			$CashOnHand->one_thousand_deno 		= 0;
+			$CashOnHand->five_hundred_deno	 	= 0;
+			$CashOnHand->two_hundred_deno 		= 0;
+			$CashOnHand->one_hundred_deno 		= 0;
+			$CashOnHand->fifty_deno 			= 0;
+			$CashOnHand->twenty_deno 			= 0;
+			$CashOnHand->ten_deno 				= 0;
+			$CashOnHand->five_deno 				= 0;
+			$CashOnHand->one_deno 				= 0;
+			$CashOnHand->twenty_five_cent_deno 	= 0;
+			$CashOnHand->cash_drop 				= 0;
+			$result = $CashOnHand->save();
 			
 			if($result){
 				return response()->json(array('success' => "Cashier's Report Information Successfully Created!", 'cashiers_report_id' => $last_transaction_id), 200);
@@ -665,4 +682,63 @@ class CashiersReportController extends Controller
 		
 	}
 
+	/*Part 5 - Cash on Hand*/
+	public function cashiers_report_p5_info(Request $request){
+		
+		$CashiersReportID = $request->CashiersReportId;
+		
+		$data = CashiersReportModel_P5::where('cashiers_report_id', $CashiersReportID)
+            ->get([	
+			'teves_cashiers_report_p5.cashiers_report_p5_id',			
+			'teves_cashiers_report_p5.one_thousand_deno',
+			'teves_cashiers_report_p5.five_hundred_deno',
+			'teves_cashiers_report_p5.two_hundred_deno',
+			'teves_cashiers_report_p5.one_hundred_deno',
+			'teves_cashiers_report_p5.fifty_deno',
+			'teves_cashiers_report_p5.twenty_deno',
+			'teves_cashiers_report_p5.ten_deno',
+			'teves_cashiers_report_p5.five_deno',
+			'teves_cashiers_report_p5.one_deno',
+			'teves_cashiers_report_p5.twenty_five_cent_deno',
+			'teves_cashiers_report_p5.cash_drop'
+			]);
+		
+		return response()->json($data);
+					
+	}
+
+		public function save_cashiers_report_PH5(Request $request){
+		
+		$request->validate([
+			'cash_drop'   => 'required'
+        ], 
+        [
+			'cash_drop.required' => 'Cash Drop is required'
+        ]
+		);
+		
+			$CashOnHand = new CashiersReportModel_P5();
+			$CashOnHand = CashiersReportModel_P5::find($request->CHPH5_ID);
+			$CashOnHand->one_thousand_deno 		= $request->one_thousand_deno;
+			$CashOnHand->five_hundred_deno	 	= $request->five_hundred_deno;
+			$CashOnHand->two_hundred_deno 		= $request->two_hundred_deno;
+			$CashOnHand->one_hundred_deno 		= $request->one_hundred_deno;
+			$CashOnHand->fifty_deno 			= $request->fifty_deno;
+			$CashOnHand->twenty_deno 			= $request->twenty_deno;
+			$CashOnHand->ten_deno 				= $request->ten_deno;
+			$CashOnHand->five_deno 				= $request->five_deno;
+			$CashOnHand->one_deno 				= $request->one_deno;
+			$CashOnHand->twenty_five_cent_deno  = $request->twenty_five_cent_deno;;
+			$CashOnHand->cash_drop 				= $request->cash_drop;
+			
+			$result = $CashOnHand->update();
+			
+			if($result){
+				return response()->json(array('success' => "Cash On Hand Successfully Updated!"));
+			}
+			else{
+				return response()->json(['success'=>"Error on Insert Cashier's Cash on Hand Report Information"]);
+			}
+			
+	}
 }

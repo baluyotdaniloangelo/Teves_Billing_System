@@ -259,6 +259,11 @@ Route::post('/delete_cashiers_report_p4', [CashiersReportController::class,'dele
 /*GET Cashiers report P4*/
 Route::post('/cashiers_report_p4_info', [CashiersReportController::class, 'cashiers_report_p4_info'])->name('CRP4_info')->middleware('isLoggedIn');
 
+/*Cashiers Report Part 5*/
+/*Save or Update*/
+Route::post('/save_cashiers_report_PH5', [CashiersReportController::class,'save_cashiers_report_PH5'])->name('SAVE_CHR_PH5')->middleware('isLoggedIn');
+/*GET Cashiers report P5*/
+Route::post('/cashiers_report_p5_info', [CashiersReportController::class, 'cashiers_report_p5_info'])->name('CRP5_info')->middleware('isLoggedIn');
 
 
 

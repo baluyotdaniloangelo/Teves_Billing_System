@@ -4,6 +4,7 @@
 	LoadCashiersReportPH2();
 	LoadCashiersReportPH3();
 	LoadCashiersReportPH4();
+	LoadCashiersReportPH5();
 	<!--Save New Client->
 	$("#update-cashiers-report").click(function(event){
 			
@@ -1191,20 +1192,652 @@
 		}	
 	});
 	
-	
-	
-	
-	function _1000_demo_total(){
+	$('body').on('click','#cashonhand',function(){
 		
-		let _1000_demo = $("input[name=1000_demo]").val();
-		
-		if(_1000_demo!=0 || _1000_demo!=''){
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
 			
-				$('#1000_demo_total').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 
-		}		
+	});
+	
+	function one_thousand_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+		
+		if(one_thousand_deno!=0 || one_thousand_deno!=''){
+			
+				deno_amount = one_thousand_deno * 1000;
+				$('#one_thousand_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}			
+			
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 		
 	}
 
+	function five_hundred_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+		
+		if(five_hundred_deno!=0 || five_hundred_deno!=''){
+			
+				deno_amount = five_hundred_deno * 500;
+				$('#five_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
 	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		
+	}	
+	
+	function two_hundred_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+		
+		if(two_hundred_deno!=0 || two_hundred_deno!=''){
+			
+				deno_amount = two_hundred_deno * 200;
+				$('#two_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		
+	}	
+
+	function one_hundred_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+		
+		if(one_hundred_deno!=0 || one_hundred_deno!=''){
+			
+				deno_amount = one_hundred_deno * 100;
+				$('#one_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				
+	}
+
+	function fifty_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+			
+		if(fifty_deno!=0 || fifty_deno!=''){
+			
+				deno_amount = fifty_deno * 50;
+				$('#fifty_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		
+	}
+
+	function twenty_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+	
+		if(twenty_deno!=0 || twenty_deno!=''){
+			
+				deno_amount = twenty_deno * 20;
+				$('#twenty_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				
+	}
+	
+	function ten_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+		
+		if(ten_deno!=0 || ten_deno!=''){
+			
+				deno_amount = ten_deno * 10;
+				$('#ten_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		
+	}
+
+	function five_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+		
+		if(five_deno!=0 || five_deno!=''){
+			
+				deno_amount = five_deno * 5;
+				$('#five_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+	
+	}
+	
+	function one_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+			
+		if(one_deno!=0 || one_deno!=''){
+			
+				deno_amount = one_deno * 1;
+				$('#one_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		
+		
+	}
+	
+	function twenty_five_cent_deno_total(){
+		
+		var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+		var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+		var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+		var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+		var fifty_deno = $("input[name=fifty_deno]").val();
+		var twenty_deno = $("input[name=twenty_deno]").val();
+		var ten_deno = $("input[name=ten_deno]").val();
+		var five_deno = $("input[name=five_deno]").val();
+		var one_deno = $("input[name=one_deno]").val();
+		var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+			
+		if(twenty_five_cent_deno!=0 || twenty_five_cent_deno!=''){
+			
+				deno_amount = twenty_five_cent_deno * 0.25;
+				$('#twenty_five_cent_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		}		
+		one_thousand_deno_amt = one_thousand_deno * 1000;	
+		five_hundred_deno_amt = five_hundred_deno * 500;	
+		two_hundred_deno_amt = two_hundred_deno * 200;
+		one_hundred_deno_amt = one_hundred_deno * 100;
+		fifty_deno_amt = fifty_deno * 50;
+		twenty_deno_amt = twenty_deno * 20;
+		ten_deno_amt = ten_deno * 10;
+		five_deno_amt = five_deno * 5;
+		one_deno_amt = one_deno * 1;
+		twenty_five_deno_amt = twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		
+		
+	}	
+
+	function LoadCashiersReportPH5() {		
+		
+		let CashiersReportId 			= {{ $CashiersReportId }};	
+			  
+			  $.ajax({
+				url: "{{ route('CRP5_info') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+				  
+					document.getElementById("one_thousand_deno").value 	= response[0].one_thousand_deno;
+					
+					document.getElementById("five_hundred_deno").value 	= response[0].five_hundred_deno;
+					document.getElementById("two_hundred_deno").value 	= response[0].two_hundred_deno;
+					document.getElementById("one_hundred_deno").value 	= response[0].one_hundred_deno;
+
+					document.getElementById("fifty_deno").value 	= response[0].fifty_deno;
+					document.getElementById("twenty_deno").value 	= response[0].twenty_deno;
+					document.getElementById("ten_deno").value 		= response[0].ten_deno;
+					
+					document.getElementById("five_deno").value 	= response[0].five_deno;
+					document.getElementById("one_deno").value 	= response[0].one_deno;
+					
+					document.getElementById("twenty_five_cent_deno").value 	= response[0].twenty_five_cent_deno;
+					document.getElementById("cash_drop").value 	= response[0].cash_drop;
+					
+					document.getElementById("CASHONHAND").value = response[0].cashiers_report_p5_id;
+					
+					/*Load Amount*/
+		one_thousand_deno_amt 		= response[0].one_thousand_deno * 1000;	
+		five_hundred_deno_amt 		= response[0].five_hundred_deno * 500;	
+		two_hundred_deno_amt 		= response[0].two_hundred_deno * 200;
+		one_hundred_deno_amt 		= response[0].one_hundred_deno * 100;
+		fifty_deno_amt 				= response[0].fifty_deno * 50;
+		twenty_deno_amt 			= response[0].twenty_deno * 20;
+		ten_deno_amt 				= response[0].ten_deno * 10;
+		five_deno_amt 				= response[0].five_deno * 5;
+		one_deno_amt 				= response[0].one_deno * 1;
+		twenty_five_deno_amt 		= response[0].twenty_five_cent_deno * 0.25;
+	
+		total_cash_on_hand = one_thousand_deno_amt
+		+ five_hundred_deno_amt
+		+ two_hundred_deno_amt
+		+ one_hundred_deno_amt
+		+ fifty_deno_amt
+		+ twenty_deno_amt
+		+ ten_deno_amt
+		+ five_deno_amt
+		+ one_deno_amt
+		+ twenty_five_deno_amt;
+		
+		$('#one_thousand_deno_total_amt').html(one_thousand_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		
+		$('#five_hundred_deno_total_amt').html(five_hundred_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#two_hundred_deno_total_amt').html(two_hundred_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#one_hundred_deno_total_amt').html(one_hundred_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		
+		$('#fifty_deno_total_amt').html(fifty_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#twenty_deno_total_amt').html(twenty_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#ten_deno_total_amt').html(ten_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+		$('#five_deno_total_amt').html(five_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#one_deno_total_amt').html(one_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		
+		$('#twenty_five_cent_deno_total_amt').html(twenty_five_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+
+					
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  }  	  
+	
+	$("#CASHONHAND").click(function(event){
+		
+			event.preventDefault();
+		
+			let CashiersReportId 		= {{ $CashiersReportId }};			
+			let CHPH5_ID 				= document.getElementById("CASHONHAND").value;
+			
+			var one_thousand_deno = $("input[name=one_thousand_deno]").val();
+			var five_hundred_deno = $("input[name=five_hundred_deno]").val();
+			var two_hundred_deno = $("input[name=two_hundred_deno]").val();
+			var one_hundred_deno = $("input[name=one_hundred_deno]").val();
+			var fifty_deno = $("input[name=fifty_deno]").val();
+			var twenty_deno = $("input[name=twenty_deno]").val();
+			var ten_deno = $("input[name=ten_deno]").val();
+			var five_deno = $("input[name=five_deno]").val();
+			var one_deno = $("input[name=one_deno]").val();
+			var twenty_five_cent_deno = $("input[name=twenty_five_cent_deno]").val();
+			
+			var cash_drop = $("input[name=cash_drop]").val();
+			
+			document.getElementById('CASHONHAND_FORM').className = "g-3 needs-validation was-validated";
+					
+				  $.ajax({
+					url: "{{ route('SAVE_CHR_PH5') }}",
+					type:"POST",
+					data:{
+						CashiersReportId:CashiersReportId,
+						CHPH5_ID:CHPH5_ID,
+						one_thousand_deno:one_thousand_deno,
+						five_hundred_deno:five_hundred_deno,
+						two_hundred_deno:two_hundred_deno,
+						one_hundred_deno:one_hundred_deno,
+						fifty_deno:fifty_deno,
+						twenty_deno:twenty_deno,
+						ten_deno:ten_deno,
+						five_deno:five_deno,
+						one_deno:one_deno,
+						twenty_five_cent_deno:twenty_five_cent_deno,
+						cash_drop:cash_drop, 
+					  _token: "{{ csrf_token() }}"
+					},
+					success:function(response){
+					  console.log(response);
+					  if(response) {
+						  
+						$('#switch_notice_on').show();
+						$('#sw_on').html(response.success);
+						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+						LoadCashiersReportPH5();
+						$('#cash_dropError').text('');
+						
+					  }
+					},
+					error: function(error) {
+					 console.log(error);
+						
+						$('#cash_dropError').text(error.responseJSON.errors.cash_drop);
+						document.getElementById('cash_dropError').className = "invalid-feedback";			
+
+						$('#switch_notice_off').show();
+						$('#sw_off').html("Invalid Input");
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);
+							
+					}
+				   });		
+	});
 </script>
