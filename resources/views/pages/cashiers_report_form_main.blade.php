@@ -62,13 +62,17 @@
 							<span class="valid-feedback" id="shiftError"></span>
 						  </div>
 						</div>						
-									
-						</div>
-						 <div class="text-center">				
+								<div class="text-center">				
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-cashiers-report"> Submit</button>
-						  </div>
+						  </div>	
+						</div>
+						
+						 
 						  </form><!-- End Multi Columns Form -->
+						   
 						   </div>
+						   
+						   
 						  <div class="col-sm-3">
 								
 						</div>
@@ -95,7 +99,7 @@
 							  <button class="nav-link" id="ph5-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph5" type="button" role="tab" aria-controls="ph5" aria-selected="false" tabindex="-1">Cash On Hand</button>
 							</li>
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph6-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph6" type="button" role="tab" aria-controls="ph6" aria-selected="false" tabindex="-1">Summary</button>
+							  <button class="nav-link" id="ph6-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph6" type="button" role="tab" aria-controls="ph6" aria-selected="false" tabindex="-1" onclick="LoadCashiersReportPH6()">Summary</button>
 							</li>
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
