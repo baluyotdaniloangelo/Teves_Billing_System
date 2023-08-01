@@ -46,6 +46,7 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.cashiers_report_id',
 					'user_tb.user_real_name',
 					'teves_cashiers_report.teves_branch',
+					'teves_cashiers_report.cashiers_name',
 					'teves_cashiers_report.forecourt_attendant',
 					'teves_cashiers_report.report_date',
 					'teves_cashiers_report.shift',
@@ -57,6 +58,7 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.cashiers_report_id',
 					'user_tb.user_real_name',
 					'teves_cashiers_report.teves_branch',
+					'teves_cashiers_report.cashiers_name',
 					'teves_cashiers_report.forecourt_attendant',
 					'teves_cashiers_report.report_date',
 					'teves_cashiers_report.shift',
@@ -86,16 +88,23 @@ class CashiersReportController extends Controller
 	public function create_cashier_report_post(Request $request){
 		
 		$request->validate([
-			'report_date'   => 'required'
+			'report_date'   => 'required',
+			'forecourt_attendant'   => 'required',
+			'cashiers_name'   => 'required',
+			'shift'   => 'required'
         ], 
         [
-			'report_date.required' => 'Report Date is required'
+			'report_date.required' => 'Report Date is required',
+			'forecourt_attendant.required' => "Empoyee's on Duty is required",
+			'cashiers_name.required' => "Cashier's Name is required",
+			'shift.required' => "Shift is required"
         ]
 		);
 		
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate->user_idx 				= Session::get('loginID');
 			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
+			$CashiersReportCreate->cashiers_name 			= $request->cashiers_name;
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->shift 				= $request->shift;
@@ -133,10 +142,16 @@ class CashiersReportController extends Controller
 	public function update_cashier_report_post(Request $request){
 		
 		$request->validate([
-			'report_date'   => 'required'
+			'report_date'   => 'required',
+			'forecourt_attendant'   => 'required',
+			'cashiers_name'   => 'required',
+			'shift'   => 'required'
         ], 
         [
-			'report_date.required' => 'Report Date is required'
+			'report_date.required' => 'Report Date is required',
+			'forecourt_attendant.required' => "Empoyee's on Duty is required",
+			'cashiers_name.required' => "Cashier's Name is required",
+			'shift.required' => "Shift is required"
         ]
 		);
 		
@@ -208,6 +223,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.cashiers_report_id',
 			'user_tb.user_real_name',
 			'teves_cashiers_report.teves_branch',
+			'teves_cashiers_report.cashiers_name',
 			'teves_cashiers_report.forecourt_attendant',
 			'teves_cashiers_report.report_date',
 			'teves_cashiers_report.shift',
@@ -220,24 +236,44 @@ class CashiersReportController extends Controller
 
 	public function cashiers_report_p1_info(Request $request){
 
-		$CHPH1_ID = $request->CHPH1_ID;
+		$CashiersReportId = $request->CashiersReportId;
+		$product_id = $request->product_id;
 		
-		$data =  CashiersReportModel_P1::where('cashiers_report_p1_id', $CHPH1_ID)
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
-				->get([
-					'teves_product_table.product_name',
-					'teves_product_table.product_id',
-					'teves_cashiers_report_p1.cashiers_report_p1_id',
-					'teves_cashiers_report_p1.beginning_reading',
-					'teves_cashiers_report_p1.closing_reading',
-					'teves_cashiers_report_p1.calibration',
-					'teves_cashiers_report_p1.order_quantity',
-					'teves_cashiers_report_p1.product_price',
-					'teves_cashiers_report_p1.order_total_amount'
-					]);			
-					
-		return response()->json($data);
+		if($CashiersReportId!=0){
+			
+			//$CHPH1_ID = $request->CHPH1_ID;
+			
+			$data =  CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
+				->where('product_idx', $product_id)
+				->skip(0)
+				->take(1)
+					->get([
+						'teves_cashiers_report_p1.product_price'
+						]);			
+						
+			return response()->json($data);
+			
+		}else{
 		
+			$CHPH1_ID = $request->CHPH1_ID;
+			
+			$data =  CashiersReportModel_P1::where('cashiers_report_p1_id', $CHPH1_ID)
+				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+					->get([
+						'teves_product_table.product_name',
+						'teves_product_table.product_id',
+						'teves_cashiers_report_p1.cashiers_report_p1_id',
+						'teves_cashiers_report_p1.beginning_reading',
+						'teves_cashiers_report_p1.closing_reading',
+						'teves_cashiers_report_p1.calibration',
+						'teves_cashiers_report_p1.order_quantity',
+						'teves_cashiers_report_p1.product_price',
+						'teves_cashiers_report_p1.order_total_amount'
+						]);			
+						
+			return response()->json($data);
+			
+		}
 	}
 	
 	public function save_product_cashiers_report_p1(Request $request){	
@@ -502,18 +538,45 @@ class CashiersReportController extends Controller
 			$order_quantity 			= $request->order_quantity;
 			$product_manual_price 		= $request->product_manual_price;
 			
-			$CHPH3_ID 				= $request->CHPH3_ID;
-
-								/*Product Details*/
-								$product_info = ProductModel::find($product_idx, ['product_price']);					
+			$CHPH3_ID 			= $request->CHPH3_ID;
+			$pump_price_data =  CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
+				->where('product_idx', $product_idx)
+				->skip(0)
+				->take(1)
+					->get([
+						'teves_cashiers_report_p1.product_price'
+						]);	
+			
+			
+			$pump_price = @$pump_price_data[0]['product_price'];
+			
+			/*Product Details*/
+			$product_info = ProductModel::find($product_idx, ['product_price']);
+			
+			if($pump_price==''){
+				
+				/*Check if Price is From Manual Price*/
+				if($product_manual_price!=0){
+					$product_price = $product_manual_price;
+				}else{
+					$product_price = $product_info['product_price'];
+				}
+				
+			}else{
+			
+				/*Check if Price is From Manual Price*/
+				if($product_manual_price!=0){
+					$product_price = $pump_price - $product_manual_price;
+				}else{
+					$product_price = $pump_price;
+				}
+				
+			}
+				
+			
 								
-								/*Check if Price is From Manual Price*/
-								if($product_manual_price!=0){
-									$product_price = $product_manual_price;
-								}else{
-									$product_price = $product_info->product_price;
-								}
-						
+								
+						//echo "$product_price";
 								$peso_sales = ($order_quantity * $product_price);
 								
 								if($CHPH3_ID=='' || $CHPH3_ID ==0){	

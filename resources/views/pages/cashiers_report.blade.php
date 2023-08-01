@@ -19,9 +19,10 @@
 												<tr>
 													<th>#</th>
 													<th>Date</th>
-													<?php if($data->user_type=="Admin"){ ?><th>Cashiers's Name</th><?php } ?>
+													<?php if($data->user_type=="Admin"){ ?><th>Encoder's Name</th><?php } ?>
+													<th>Cashier's Name</th>
 													<th>Branch</th>
-													<th>Forecourt Attendant</th>
+													<th>Employee's On-Duty</th>
 													<th>Shift</th>
 													<th>Action</th>
 												</tr>
@@ -35,9 +36,10 @@
 												<tr>
 													<th>#</th>
 													<th>Date</th>
-													<?php if($data->user_type=="Admin"){ ?><th>Cashiers's Name</th><?php } ?>
+													<?php if($data->user_type=="Admin"){ ?><th>Encoder's Name</th><?php } ?>
+													<th>Cashier's Name</th>
 													<th>Branch</th>
-													<th>Forecourt Attendant</th>
+													<th>Employee's On-Duty</th>
 													<th>Shift</th>
 													<th>Action</th>
 												</tr>
@@ -93,26 +95,34 @@
 						<div class="row mb-2">
 						  <label for="teves_branch" class="col-sm-3 col-form-label">Branch</label>
 						  <div class="col-sm-9">
-							<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
+							<select class="form-select form-control" required name="teves_branch" id="teves_branch">
 								<option value="GT">GT</option>
 								<option value="Teves">Teves</option>
 							</select>
-							
+							<span class="valid-feedback" id="teves_branchError" title="Required"></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="forecourt_attendant" class="col-sm-3 col-form-label">Forecourt Attendant</label>
+						  <label for="cashiers_name" class="col-sm-3 col-form-label">Cashier's on Duty</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="">
-							<span class="valid-feedback" id="forecourt_attendantError" title="Required"></span>
+							<input type="text" class="form-control" name="cashiers_name" id="cashiers_name" value="" required>
+							<span class="valid-feedback" id="cashiers_nameError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="forecourt_attendant" class="col-sm-3 col-form-label">Employee's On-Duty</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="" required>
+							<span class="valid-feedback" id="forecourt_attendantError"></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
 						  <label for="report_date" class="col-sm-3 col-form-label">Report Date</label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="report_date" id="report_date" value="" required>
+							<input type="date" class="form-control " name="report_date" id="report_date" value="<?=date('Y-m-d');?>" required>
 							<span class="valid-feedback" id="report_dateError"></span>
 						  </div>
 						</div>
@@ -120,7 +130,7 @@
 						<div class="row mb-2">
 						  <label for="shift" class="col-sm-3 col-form-label">Shift</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="shift" id="shift" value="">
+							<input type="text" class="form-control " name="shift" id="shift" value="" required>
 							<span class="valid-feedback" id="shiftError"></span>
 						  </div>
 						</div>						

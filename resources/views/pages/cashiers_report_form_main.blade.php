@@ -14,14 +14,14 @@
             <div class="card-body">			
 				<div class="p-1">
 						<div class="row mb-2">
-						<div class="col-sm-3">
+						<div class="col-sm-2">
 								
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-8">
 						<form class="g-2 needs-validation" id="CashierReportformNew">
 						
 						<div class="row mb-2">
-						  <label class="col-sm-4 col-form-label">Cashier Name</label>
+						  <label class="col-sm-4 col-form-label">Encoder's Name</label>
 						  <div class="col-sm-8">
 							<span><b><?php echo $CashiersReportData[0]['user_real_name']; ?></b></span>
 						  </div>
@@ -29,27 +29,35 @@
 						
 						<div class="row mb-2">
 						  <label for="teves_branch" class="col-sm-4 col-form-label">Branch</label>
-						  <div class="col-sm-8">
+						  <div class="col-sm-6">
 							<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
 								<?php $teves_branch = $CashiersReportData[0]['teves_branch']; ?>
 								<option value="GT" <?php if($teves_branch=='GT'){ echo "selected";} else{} ?>>GT</option>
 								<option value="Teves" <?php if($teves_branch=='Teves'){ echo "selected";} else{} ?>>Teves</option>
 							</select>
-							
+							<span class="valid-feedback" id="teves_branchError"></span>
 						  </div>
 						</div>
+						  
+						<div class="row mb-2">
+							<label for="cashiers_name" class="col-sm-4 col-form-label">Cashier's on Duty</label>
+							<div class="col-sm-6">
+							<input type="text" class="form-control" name="cashiers_name" id="cashiers_name" value="<?php echo $CashiersReportData[0]['cashiers_name']; ?>" required>
+							<span class="valid-feedback" id="cashiers_nameError"></span>
+							</div>
+						</div>	
 						
 						<div class="row mb-2">
-						  <label for="forecourt_attendant" class="col-sm-4 col-form-label">Forecourt Attendant</label>
-						  <div class="col-sm-8">
-							<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="{{ $CashiersReportData[0]['forecourt_attendant'] }}">
-							<span class="valid-feedback" id="forecourt_attendantError" title="Required"></span>
+						  <label for="forecourt_attendant" class="col-sm-4 col-form-label">Employee's On-Duty</label>
+						  <div class="col-sm-6">
+							<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="{{ $CashiersReportData[0]['forecourt_attendant'] }}" required>
+							<span class="valid-feedback" id="forecourt_attendantError"></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
 						  <label for="report_date" class="col-sm-4 col-form-label">Report Date</label>
-						  <div class="col-sm-8">
+						  <div class="col-sm-6">
 							<input type="date" class="form-control " name="report_date" id="report_date" value="{{ $CashiersReportData[0]['report_date'] }}" required>
 							<span class="valid-feedback" id="report_dateError"></span>
 						  </div>
@@ -57,12 +65,13 @@
 						
 						<div class="row mb-2">
 						  <label for="shift" class="col-sm-4 col-form-label">Shift</label>
-						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="shift" id="shift" value="{{ $CashiersReportData[0]['shift'] }}">
+						  <div class="col-sm-6">
+							<input type="text" class="form-control " name="shift" id="shift" value="{{ $CashiersReportData[0]['shift'] }}" required>
 							<span class="valid-feedback" id="shiftError"></span>
 						  </div>
 						</div>						
-								<div class="text-center">				
+						
+						<div class="text-center">				
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-cashiers-report"> Submit</button>
 						  </div>	
 						</div>

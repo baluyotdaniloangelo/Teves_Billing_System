@@ -13,6 +13,7 @@
 			
 			/*Reset Warnings*/
 				$('#teves_branchError').text('');
+				$('#cashiers_nameError').text('');
 				$('#forecourt_attendantError').text('');
 				$('#report_dateError').text('');
 
@@ -22,6 +23,7 @@
 			
 			let teves_branch 				= $("#teves_branch").val();
 			let forecourt_attendant 		= $("input[name=forecourt_attendant]").val();
+			let cashiers_name 				= $("input[name=cashiers_name]").val();
 			let report_date 				= $("input[name=report_date]").val();
 			let shift 						= $("input[name=shift]").val();
 			
@@ -30,7 +32,8 @@
 				type:"POST",
 				data:{
 				  CashiersReportId:CashiersReportId,
-				  teves_branch:teves_branch,
+				  teves_branch:teves_branch, 
+				  cashiers_name:cashiers_name,
 				  forecourt_attendant:forecourt_attendant,
 				  report_date:report_date,
 				  shift:shift,
@@ -45,6 +48,7 @@
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#teves_branchError').text('');
+					$('#cashiers_nameError').text('');
 					$('#forecourt_attendantError').text('');
 					$('#report_dateError').text('');
 
@@ -67,6 +71,9 @@
 				  document.getElementById('teves_branchError').className = "invalid-feedback";
 				}
 				
+				  $('#cashiers_nameError').text(error.responseJSON.errors.cashiers_name);
+				  document.getElementById('cashiers_nameError').className = "invalid-feedback";
+				  
 				  $('#forecourt_attendantError').text(error.responseJSON.errors.forecourt_attendant);
 				  document.getElementById('forecourt_attendantError').className = "invalid-feedback";	
 				  
@@ -80,7 +87,6 @@
 				}
 			   });		
 	  });
-
 
 	function TotalAmount(){
 		
@@ -805,8 +811,12 @@
 					document.getElementById("update_order_quantity_PH3").value 			= response[0].order_quantity;
 					document.getElementById("update_product_manual_price_PH3").value 	= response[0].product_price;
 					
-					var total_amount = response[0].order_total_amount;
-					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					//var total_amount = response[0].order_total_amount;
+					//$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+
+					UpdateTotalAmount_PH3();
+
+					
 					$('#Update_CRPH3_Modal').modal('toggle');							  
 				  }
 				},
@@ -937,27 +947,175 @@
 
 	function TotalAmount_PH3(){
 		
-		let product_price 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-price');
+		let CashiersReportId 		= {{ $CashiersReportId }};			
+		let product_id 				= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');		
+		let product_price 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-price');	
 		let product_manual_price 	= $("#product_manual_price_PH3").val();		
 		let order_quantity 			= $("input[name=order_quantity_PH3]").val();
 		
-		if(order_quantity!=0 || order_quantity!=''){
-			if(product_manual_price!='' && product_manual_price!=0){
-				var total_amount = product_manual_price * order_quantity;
-				$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}
-		}		
+		/*GET PUMP PRICE*/
+		event.preventDefault();
+			
+			let CHPH1_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP1_info') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  CHPH1_ID:CHPH1_ID,
+				  product_id:product_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					
+					if(response==''){
+						$('#pump_price_txt').html('0');
+						$('#discounted_price_txt').html('0');
+						
+						if(order_quantity!=0 || order_quantity!=''){
+							
+							if(product_manual_price!='' && product_manual_price!=0){
+								
+								var total_amount = (product_manual_price) * order_quantity;
+								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}else{
+								
+								var total_amount = product_price * order_quantity;
+								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}
+							
+						}		
+						
+					}else{
+						
+						var pump_price	= response[0].product_price;
+						var discounted_price	= response[0].product_price - product_manual_price;
+						
+						$('#pump_price_txt').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+						
+						$('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+						
+						if(order_quantity!=0 || order_quantity!=''){
+							
+							if(product_manual_price!='' && product_manual_price!=0){
+								
+								var total_amount = (pump_price - product_manual_price) * order_quantity;
+								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}else{
+								
+								var total_amount = pump_price * order_quantity;
+								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}
+							
+						}		
+				  }
+						
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+		
+		
 	}
 
 	function UpdateTotalAmount_PH3(){
 		
+		let CashiersReportId 		= {{ $CashiersReportId }};
 		let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
+		let product_id 				= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');	
 		let product_manual_price 	= $("#update_product_manual_price_PH3").val();		
 		let order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
 		
+		
+		/*GET PUMP PRICE*/
+		event.preventDefault();
+			
+			let CHPH1_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP1_info') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  CHPH1_ID:CHPH1_ID,
+				  product_id:product_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  
+				  if(response) {				
+					
+					if(response==''){
+						
+					$('#pump_price_txt_update').html('0');
+					
+					$('#discounted_price_txt_update').html('0');
+					
+						$('#pump_price_txt').html('0');
+						$('#discounted_price_txt').html('0');
+						
+						if(order_quantity!=0 || order_quantity!=''){
+							
+							if(product_manual_price!='' && product_manual_price!=0){
+								
+								var total_amount = (product_manual_price) * order_quantity;
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}else{
+								
+								var total_amount = product_price * order_quantity;
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}
+							
+						}		
+						
+					}else{
+					
+					var pump_price	= response[0].product_price;
+					var discounted_price	= response[0].product_price - product_manual_price;
+					
+					$('#pump_price_txt_update').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					$('#discounted_price_txt_update').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					
+						if(order_quantity!=0 || order_quantity!=''){
+							
+							if(product_manual_price!='' && product_manual_price!=0){
+								
+								var total_amount = (pump_price - product_manual_price) * order_quantity;
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}else{
+								
+								var total_amount = pump_price * order_quantity;
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+							
+							}
+							
+						}	
+					
+					}					
+						
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });			
+		
+		/*
 		if(order_quantity!=0 || order_quantity!=''){
 			if(product_manual_price!='' && product_manual_price!=0){
 				var total_amount = product_manual_price * order_quantity;
@@ -967,6 +1125,7 @@
 				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 			}
 		}		
+		*/
 	}	
 
 	/*Part 4*/

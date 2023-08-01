@@ -78,7 +78,7 @@
 						</div>
 
 						<div class="row mb-2">
-						  <label for="product_manual_price" class="col-sm-3 col-form-label" title="Msnual Price">PUMP PRICE</label>
+						  <label for="product_manual_price" class="col-sm-3 col-form-label" title="Manual Price">PUMP PRICE</label>
 						  <div class="col-sm-9">
 							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="product_manual_price" id="product_manual_price" step=".01" onchange="TotalAmount()" >
 							  <span class="valid-feedback" id="product_manual_priceError"></span>						  

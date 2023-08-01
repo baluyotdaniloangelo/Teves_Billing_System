@@ -24,6 +24,7 @@
 					<?php if($data->user_type=="Admin"){ ?>
 					{data: 'user_real_name'},
 					<?php } ?>			
+					{data: 'cashiers_name'},		
 					{data: 'teves_branch'},		
 					{data: 'forecourt_attendant'},
 					{data: 'shift'},
@@ -45,12 +46,14 @@
 			
 					/*Reset Warnings*/
 					$('#teves_branchError').text('');
+					$('#cashiers_nameError').text('');
 					$('#forecourt_attendantError').text('');
 					$('#report_dateError').text('');
 
 			document.getElementById('CashierReportformNew').className = "g-3 needs-validation was-validated";
 
 			let teves_branch 				= $("#teves_branch").val();
+			let cashiers_name 				= $("input[name=cashiers_name]").val();
 			let forecourt_attendant 		= $("input[name=forecourt_attendant]").val();
 			let report_date 				= $("input[name=report_date]").val();
 			let shift 						= $("input[name=shift]").val();
@@ -59,7 +62,8 @@
 				url: "/create_cashier_report_post",
 				type:"POST",
 				data:{
-				  teves_branch:teves_branch,
+				  teves_branch:teves_branch, 
+				  cashiers_name:cashiers_name,
 				  forecourt_attendant:forecourt_attendant,
 				  report_date:report_date,
 				  shift:shift,
@@ -74,6 +78,7 @@
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#teves_branchError').text('');
+					$('#cashiers_nameError').text('');
 					$('#forecourt_attendantError').text('');
 					$('#report_dateError').text('');
 					
@@ -103,6 +108,9 @@
 				  document.getElementById('teves_branchError').className = "invalid-feedback";
 				}
 				
+				  $('#cashiers_nameError').text(error.responseJSON.errors.cashiers_name);
+				  document.getElementById('cashiers_nameError').className = "invalid-feedback";
+				  
 				  $('#forecourt_attendantError').text(error.responseJSON.errors.forecourt_attendant);
 				  document.getElementById('forecourt_attendantError').className = "invalid-feedback";	
 				  

@@ -48,7 +48,7 @@
 									<span class="valid-feedback" id="product_idx_PH3Error"></span>
 									</div>	
 						</div>	
-						
+									
 						<div class="row mb-2">
 						  <label for="order_quantity_PH3" class="col-sm-3 col-form-label">QUANTITY</label>
 						  <div class="col-sm-9">
@@ -63,10 +63,24 @@
 							  <input type="number" class="form-control" placeholder="" name="product_manual_price_PH3" id="product_manual_price_PH3" step=".01" onchange="TotalAmount_PH3()" >
 							  <span class="valid-feedback" id="product_manual_price_PH3Error"></span>						  
 						  </div>
-						</div>						
-						<!---->
+						</div>			
+						
 						<div class="row mb-2">
-						  <label class="col-sm-3 col-form-label">Total Amount</label>
+						  <label for="product_idx_PH3" class="col-sm-3 col-form-label">PUMP PRICE</label>
+						  <div class="col-sm-9">
+									<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="pump_price_txt"></span>
+						  </div>	
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="product_idx_PH3" class="col-sm-3 col-form-label">DISCOUNTED PRICE</label>
+						  <div class="col-sm-9">
+									<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="discounted_price_txt"></span>
+						  </div>	
+						</div>
+			
+						<div class="row mb-2">
+						  <label class="col-sm-3 col-form-label">TOTAL AMOUNT</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount_PH3">0.00</span>
 						  </div>
@@ -127,9 +141,23 @@
 							  <span class="valid-feedback" id="update_product_manual_price_PH3Error"></span>						  
 						  </div>
 						</div>						
-						<!---->
+						
 						<div class="row mb-2">
-						  <label class="col-sm-3 col-form-label">Total Amount</label>
+						  <label for="product_idx_PH3" class="col-sm-3 col-form-label">PUMP PRICE</label>
+						  <div class="col-sm-9">
+									<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="pump_price_txt_update"></span>
+						  </div>	
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="product_idx_PH3" class="col-sm-3 col-form-label">DISCOUNTED PRICE</label>
+						  <div class="col-sm-9">
+									<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="discounted_price_txt_update"></span>
+						  </div>	
+						</div>
+						
+						<div class="row mb-2">
+						  <label class="col-sm-3 col-form-label">TOTAL AMOUNT</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount_PH3">0.00</span>
 						  </div>
