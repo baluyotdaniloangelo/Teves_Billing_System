@@ -14,7 +14,9 @@ class CashiersReportModel_P3 extends Model
 		'cashiers_report_id',
         'product_idx',
 		'order_quantity',
-		'product_price',
+		'pump_price',
+		'unit_price',
+		'discounted_price',
 		'order_total_amount',
 		'created_at',
 		'updated_at'

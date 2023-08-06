@@ -6,8 +6,10 @@
           <div class="card">
 			  <div class="card">
 				<div class="card-header ">
-				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
-					<div class="d-flex justify-content-end" id="cashier_report_option"></div>				  
+				  <h5 class="card-title">&nbsp;{{ $title }}</h5><div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-success new_item bi-file-earmark-pdf" onclick="printCashierReportPDF()"></button>
+					</div>					
 				  </div>
 				</div>			  
 		 
@@ -102,6 +104,9 @@
 							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Miscellaneous Items</button>
 							</li>
 							<li class="nav-item" role="presentation">
+							  <button class="nav-link" id="ph3_1-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3_1" type="button" role="tab" aria-controls="ph3_1" aria-selected="false" tabindex="-1">Cash Out</button>
+							</li>
+							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph4-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1">Theoretical Sales</button>
 							</li>
 							<li class="nav-item" role="presentation">
@@ -123,6 +128,10 @@
 							<div class="tab-pane fade" id="bordered-ph3" role="tabpanel" aria-labelledby="ph3-tab">
 							<div align="center" style="font-weight:bold;">Miscellaneous Items</div>
 							  @include('pages.cashiers_report_form_p3')
+							</div>
+							<div class="tab-pane fade" id="bordered-ph3_1" role="tabpanel" aria-labelledby="ph3-tab_1">
+							<div align="center" style="font-weight:bold;">Cash Out</div>
+							  @include('pages.cashiers_report_form_p3_1')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph4" role="tabpanel" aria-labelledby="ph4-tab">
 							<div align="center" style="font-weight:bold;">Theoretical Sales(Discounts, misload, return,sweldo,snack,change,lubes p.o)</div>

@@ -8,7 +8,9 @@
 			<tr class='report'>
 				<th style="text-align:center !important;" width='40%'>Product</th>
 				<th style="text-align:center !important;">Quantity</th>
-				<th style="text-align:center !important;">Price</th>
+				<th style="text-align:center !important;">Pump Price</th>
+				<th style="text-align:center !important;">Unit Price</th>
+				<th style="text-align:center !important;">Discounted Price</th>
 				<th style="text-align:center !important;">Amount</th>
 				<th style="text-align:center !important;" colspan='2'>Action</th>
 			</tr>

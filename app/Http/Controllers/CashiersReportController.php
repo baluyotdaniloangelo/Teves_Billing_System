@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-
+//use Request;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CashiersReportModel;
@@ -13,6 +13,9 @@ use App\Models\ProductModel;
 use Session;
 use Validator;
 use DataTables;
+
+/*PDF*/
+use PDF;
 
 class CashiersReportController extends Controller
 {
@@ -536,7 +539,7 @@ class CashiersReportController extends Controller
 			
 			$product_idx				= $request->product_idx;
 			$order_quantity 			= $request->order_quantity;
-			$product_manual_price 		= $request->product_manual_price;
+			$product_manual_price 		= $request->product_manual_price + 0;
 			
 			$CHPH3_ID 			= $request->CHPH3_ID;
 			$pump_price_data =  CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
@@ -544,39 +547,31 @@ class CashiersReportController extends Controller
 				->skip(0)
 				->take(1)
 					->get([
+						'teves_cashiers_report_p1.cashiers_report_p1_id',
 						'teves_cashiers_report_p1.product_price'
 						]);	
-			
-			
-			$pump_price = @$pump_price_data[0]['product_price'];
-			
-			/*Product Details*/
-			$product_info = ProductModel::find($product_idx, ['product_price']);
-			
-			if($pump_price==''){
+					
+			$pump_price = @$pump_price_data[0]['product_price']+0;
+			$cashiers_report_p1_id = @$pump_price_data[0]['cashiers_report_p1_id']+0;
+
+			if($pump_price==0){
 				
-				/*Check if Price is From Manual Price*/
-				if($product_manual_price!=0){
-					$product_price = $product_manual_price;
-				}else{
-					$product_price = $product_info['product_price'];
-				}
+				$discounted_price 	= 0;
+				$product_price 		= $product_manual_price;
 				
 			}else{
 			
 				/*Check if Price is From Manual Price*/
 				if($product_manual_price!=0){
 					$product_price = $pump_price - $product_manual_price;
+					$discounted_price 	= $pump_price - $product_manual_price;
 				}else{
+					$discounted_price 	= 0;
 					$product_price = $pump_price;
 				}
-				
-			}
-				
 			
-								
-								
-						//echo "$product_price";
+			}
+		
 								$peso_sales = ($order_quantity * $product_price);
 								
 								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
@@ -586,10 +581,11 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
 									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
-									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
-									$CashiersReportModel_P3->product_price 				= $product_price;
+									$CashiersReportModel_P3->order_quantity 			= $order_quantity;$CashiersReportModel_P3->pump_price 				  = $pump_price;
+									$CashiersReportModel_P3->unit_price 				= $product_manual_price;
+									$CashiersReportModel_P3->discounted_price 			= $discounted_price;
 									$CashiersReportModel_P3->order_total_amount 		= $peso_sales;
-									
+									$CashiersReportModel_P3->miscellaneous_items_type 	= 'Product';
 									$result = $CashiersReportModel_P3->save();
 									
 									if($result){
@@ -604,11 +600,12 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3 = new CashiersReportModel_P3();
 									$CashiersReportModel_P3 = CashiersReportModel_P3::find($CHPH3_ID);
 									
-									//$CashiersReportModel_P2->user_idx 					= Session::get('loginID');
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
-									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
-									$CashiersReportModel_P3->product_price 				= $product_price;
+									$CashiersReportModel_P3->order_quantity 			= $order_quantity;$CashiersReportModel_P3->pump_price 				  = $pump_price;
+									$CashiersReportModel_P3->unit_price 				= $product_manual_price;
+									$CashiersReportModel_P3->discounted_price 			= $discounted_price;
 									$CashiersReportModel_P3->order_total_amount 		= $peso_sales;
+									$CashiersReportModel_P3->miscellaneous_items_type 	= 'Product';
 									
 									$result = $CashiersReportModel_P3->update();
 									
@@ -631,7 +628,9 @@ class CashiersReportController extends Controller
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
-					'teves_cashiers_report_p3.product_price',
+					'teves_cashiers_report_p3.pump_price',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.discounted_price',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.cashiers_report_id',
 					'teves_cashiers_report_p3.order_quantity',
@@ -652,7 +651,9 @@ class CashiersReportController extends Controller
 					'teves_product_table.product_id',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
-					'teves_cashiers_report_p3.product_price',
+					'teves_cashiers_report_p3.pump_price',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.discounted_price',
 					'teves_cashiers_report_p3.order_total_amount'
 					]);			
 					
@@ -668,6 +669,113 @@ class CashiersReportController extends Controller
 		
 	}
 
+	/*Part Three Cash Out (MSC Reports)*/
+	public function save_product_cashiers_report_PH3_1(Request $request){	
+
+		$request->validate([
+			'co_name_cash_out'  => 'required',
+			'cashout_amount'  	=> 'required'		
+        ], 
+        [
+			'co_name_cash_out.required' 	=> 'Name is Required',
+			'cashout_amount.required' 	=> 'Cashout Amount is Required',
+        ]
+		);
+			
+			/*Get Cashier Report ID*/
+			$CashiersReportId = $request->CashiersReportId;
+			
+			$CHPH3_ID 	= $request->CHPH3_ID;
+			
+			$co_name_cash_out 	= $request->co_name_cash_out;
+			$date_cashout 		= $request->date_cashout;
+			$time_cash_out 		= $request->time_cash_out;
+			$cashout_amount 	= $request->cashout_amount;
+								
+								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
+								
+									$CashiersReportModel_P3 = new CashiersReportModel_P3();
+									
+									$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
+									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
+									$CashiersReportModel_P3->co_name_cash_out 			= $co_name_cash_out;
+									$CashiersReportModel_P3->date_cashout 				= $date_cashout;
+									$CashiersReportModel_P3->time_cash_out 				= $time_cash_out;
+									$CashiersReportModel_P3->cashout_amount 			= $cashout_amount;
+									$CashiersReportModel_P3->miscellaneous_items_type 	= 'CashOut';
+									$result = $CashiersReportModel_P3->save();
+									
+									if($result){
+										return response()->json(['success'=>'Cash Out Successfully Created!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Cash Out Creation']);
+									}
+									
+								}else{
+																	
+									$CashiersReportModel_P3 = new CashiersReportModel_P3();
+									$CashiersReportModel_P3 = CashiersReportModel_P3::find($CHPH3_ID);
+									
+									$CashiersReportModel_P3->co_name_cash_out 			= $co_name_cash_out;
+									$CashiersReportModel_P3->date_cashout 				= $date_cashout;
+									$CashiersReportModel_P3->time_cash_out 				= $time_cash_out;
+									$CashiersReportModel_P3->cashout_amount 			= $cashout_amount;
+									$CashiersReportModel_P3->miscellaneous_items_type 	= 'CashOut';
+									
+									$result = $CashiersReportModel_P3->update();
+									
+									if($result){
+										return response()->json(['success'=>'Cash Out Updated!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Cash Out Update']);
+									}
+									
+								}
+						
+	}	
+	
+	public function get_cashiers_report_product_p3_1(Request $request){		
+	
+			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
+			->where('miscellaneous_items_type', 'CashOut')
+				->orderBy('cashiers_report_p3_id', 'asc')
+              	->get([
+					'teves_cashiers_report_p3.cashiers_report_p3_id',
+					'teves_cashiers_report_p3.co_name_cash_out',
+					'teves_cashiers_report_p3.date_cashout',
+					'teves_cashiers_report_p3.time_cash_out',
+					'teves_cashiers_report_p3.cashout_amount'
+					]);
+		
+			return response()->json($data);
+	}
+
+	public function cashiers_report_p3_info_1(Request $request){
+
+		$CHPH3_ID = $request->CHPH3_ID;
+		
+		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
+			->where('miscellaneous_items_type', 'CashOut')
+				->get([
+					'teves_cashiers_report_p3.co_name_cash_out',
+					'teves_cashiers_report_p3.date_cashout',
+					'teves_cashiers_report_p3.time_cash_out',
+					'teves_cashiers_report_p3.cashout_amount'
+					]);			
+					
+		return response()->json($data);
+		
+	}
+	
+	public function delete_cashiers_report_product_p3_1(Request $request){		
+			
+		$CHPH3_ID = $request->CHPH3_ID;
+		CashiersReportModel_P3::find($CHPH3_ID)->delete();
+		return 'Deleted';
+		
+	}
 
 	/*Part Four (MSC Reports)*/
 	public function save_cashiers_report_PH4(Request $request){	
@@ -888,4 +996,58 @@ class CashiersReportController extends Controller
 		}
 			
 	}
+	
+	
+	/*Print Via PDF*/
+	public function generate_cashier_report_pdf(Request $request){
+
+		$request->validate([
+		  'CashiersReportId'      			=> 'required'
+        ], 
+        [
+			'CashiersReportId.required' 	=> 'Please select a Client',
+        ]
+		);
+		$CashiersReportId = $request->CashiersReportId;
+		
+		$CashiersReportData = CashiersReportModel::where('cashiers_report_id', $CashiersReportId)
+			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+            ->get([				
+			'teves_cashiers_report.cashiers_report_id',
+			'user_tb.user_real_name',
+			'teves_cashiers_report.teves_branch',
+			'teves_cashiers_report.cashiers_name',
+			'teves_cashiers_report.forecourt_attendant',
+			'teves_cashiers_report.report_date',
+			'teves_cashiers_report.shift',
+			'teves_cashiers_report.created_at',
+			'teves_cashiers_report.updated_at']);
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+          
+		$title = 'Cashier Report';
+		  
+       $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData'));
+		//var_dump($CashiersReportData);
+		/*Download Directly*/
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'portrait');/*Set to Landscape*/
+		//$pdf->render();
+		return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
+		//return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData'));
+
+	}
+	
+		/*Save Reading of Meters*/
+	public function check_time(Request $request){
+		//$request->headers->set('Accept', 'application/json');
+		
+		//echo $segment1 =  Request::segment(5);
+		
+		 $server_time=date('Y-m-d H:i:s');
+		 echo "OK, $server_time";
+		
+	}
+	
 }

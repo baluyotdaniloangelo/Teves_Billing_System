@@ -249,6 +249,15 @@ Route::post('/delete_cashiers_report_product_p3', [CashiersReportController::cla
 /*GET Cashiers report product P3*/
 Route::post('/cashiers_report_p3_info', [CashiersReportController::class, 'cashiers_report_p3_info'])->name('CRP3_info')->middleware('isLoggedIn');
 
+/*Cashiers Report Part 3.1*/
+Route::post('/save_product_cashiers_report_PH3_1', [CashiersReportController::class,'save_product_cashiers_report_PH3_1'])->name('SAVE_CHR_PH3_1')->middleware('isLoggedIn');
+/* Load Product P3 */
+Route::post('/get_cashiers_report_product_p3_1', [CashiersReportController::class,'get_cashiers_report_product_p3_1'])->name('GetCashiersProductP3_1')->middleware('isLoggedIn');
+/* Delete Product P3 */
+Route::post('/delete_cashiers_report_product_p3_1', [CashiersReportController::class,'delete_cashiers_report_product_p3_1'])->name('DeleteCashiersProductP3_1')->middleware('isLoggedIn');
+/*GET Cashiers report product P3*/
+Route::post('/cashiers_report_p3_info_1', [CashiersReportController::class, 'cashiers_report_p3_info_1'])->name('CRP3_info_1')->middleware('isLoggedIn');
+
 /*Cashiers Report Part 4*/
 /*Save or Update*/
 Route::post('/save_cashiers_report_PH4', [CashiersReportController::class,'save_cashiers_report_PH4'])->name('SAVE_CHR_PH4')->middleware('isLoggedIn');
@@ -267,6 +276,10 @@ Route::post('/cashiers_report_p5_info', [CashiersReportController::class, 'cashi
 
 /*GET Cashiers report P6*/
 Route::post('/cashiers_report_p6_info', [CashiersReportController::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
+
+/*Load Cashiers Report */
+Route::get('/generate_cashier_report_pdf', [CashiersReportController::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
+//Route::post('/check_time.php', [CashiersReportController::class,'check_time'])->name('check_time.php');
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

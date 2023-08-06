@@ -20,7 +20,7 @@ use App\Models\PurchaseOrderPaymentModel;
 use App\Models\ClientModel;
 use Session;
 use Validator;
-use DataTables;
+//use DataTables;
 
 /*Excel*/
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -593,8 +593,7 @@ class ReportController extends Controller
 	}	
 
 	public function generate_receivable_covered_bill_pdf(Request $request){
-		
-		/**/
+
 		$request->validate([
           'client_idx'      		=> 'required',
 		  'start_date'      		=> 'required',
