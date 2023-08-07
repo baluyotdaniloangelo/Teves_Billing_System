@@ -44,19 +44,19 @@ if($company_header=='Teves'){
 		</tr>
 		
 		
-<tr style="font-size:11px; border:1px solid #000; " >
-  <td style="font-size:11px; border:1px solid #000;" colspan="2" rowspan="2">PRODUCT </td>
-  <td style="font-size:11px; border:1px solid #000;" colspan="4">TOTALIZER READING</td>
-  <td style="font-size:11px; border:1px solid #000;" rowspan="2">CALIBRATION</td>
-  <td style="font-size:11px; border:1px solid #000;" rowspan="2">SALES IN LITERS</td>
-  <td style="font-size:11px; border:1px solid #000;" rowspan="2">PUMP PRICE</td>
-  <td style="font-size:11px; border:1px solid #000;" rowspan="2">PESO  SALES</td>
-  </tr>
+		<tr style="font-size:11px; border:1px solid #000; " >
+		  <td style="font-size:11px; border:1px solid #000;" colspan="2" rowspan="2">PRODUCT </td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="4">TOTALIZER READING</td>
+		  <td style="font-size:11px; border:1px solid #000;" rowspan="2">CALIBRATION</td>
+		  <td style="font-size:11px; border:1px solid #000;" rowspan="2">SALES IN LITERS</td>
+		  <td style="font-size:11px; border:1px solid #000;" rowspan="2">PUMP PRICE</td>
+		  <td style="font-size:11px; border:1px solid #000;" rowspan="2">PESO  SALES</td>
+		</tr>
   
-  <tr style="font-size:11px;" > 
-  <td style="font-size:11px; border:1px solid #000;" colspan="2">BEGINNING</td>
-  <td style="font-size:11px; border:1px solid #000;" colspan="2">CLOSING</td>
-  </tr>
+		<tr style="font-size:11px;" > 
+		  <td style="font-size:11px; border:1px solid #000;" colspan="2">BEGINNING</td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="2">CLOSING</td>
+		</tr>
   
 		</table>
 		
