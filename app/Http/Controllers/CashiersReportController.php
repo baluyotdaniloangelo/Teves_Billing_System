@@ -1028,14 +1028,66 @@ class CashiersReportController extends Controller
           
 		$title = 'Cashier Report';
 		  
-       $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData'));
+		  
+		 $data_P1_premium_95 =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+			->where('product_idx', 13)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+				->orderBy('cashiers_report_p1_id', 'asc')
+              	->get([
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_cashiers_report_p1.product_price',
+					'teves_cashiers_report_p1.cashiers_report_p1_id',
+					'teves_cashiers_report_p1.cashiers_report_id',
+					'teves_cashiers_report_p1.beginning_reading',
+					'teves_cashiers_report_p1.closing_reading',
+					'teves_cashiers_report_p1.calibration',
+					'teves_cashiers_report_p1.order_quantity',
+					'teves_cashiers_report_p1.order_total_amount'
+					]); 
+					
+					
+		 $data_P1_super_regular =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+			->where('product_idx', 11)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+				->orderBy('cashiers_report_p1_id', 'asc')
+              	->get([
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_cashiers_report_p1.product_price',
+					'teves_cashiers_report_p1.cashiers_report_p1_id',
+					'teves_cashiers_report_p1.cashiers_report_id',
+					'teves_cashiers_report_p1.beginning_reading',
+					'teves_cashiers_report_p1.closing_reading',
+					'teves_cashiers_report_p1.calibration',
+					'teves_cashiers_report_p1.order_quantity',
+					'teves_cashiers_report_p1.order_total_amount'
+					]); 		
+
+		 $data_P1_diesel =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+			->where('product_idx', 12)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+				->orderBy('cashiers_report_p1_id', 'asc')
+              	->get([
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_cashiers_report_p1.product_price',
+					'teves_cashiers_report_p1.cashiers_report_p1_id',
+					'teves_cashiers_report_p1.cashiers_report_id',
+					'teves_cashiers_report_p1.beginning_reading',
+					'teves_cashiers_report_p1.closing_reading',
+					'teves_cashiers_report_p1.calibration',
+					'teves_cashiers_report_p1.order_quantity',
+					'teves_cashiers_report_p1.order_total_amount'
+					]); 							
+     //  $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData'));
 		//var_dump($CashiersReportData);
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'portrait');/*Set to Landscape*/
 		//$pdf->render();
-		return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
-		//return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData'));
+		//return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
+		return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel'));
 
 	}
 	
