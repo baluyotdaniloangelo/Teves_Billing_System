@@ -170,7 +170,29 @@ if($company_header=='Teves'){
 		</tr>
 		
 		</table>
-		
-		
+		<br>
+		<table cellspacing="0" cellpading="0" width="100%">
+
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		  <td style="font-size:11px; border:1px solid #000;" colspan="4">OTHER SALES (Lubricants/Car Care Products/Others)</td>
+		</tr>
+
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		  <td style="font-size:11px; border:1px solid #000;">Product Description</td>
+		  <td style="font-size:11px; border:1px solid #000;">Quantity</td>
+		  <td style="font-size:11px; border:1px solid #000;">Unit Price</td>
+          <td style="font-size:11px; border:1px solid #000;">Amount</td>
+		</tr>
+
+            @foreach ($data_P2 as $data_P2_cols)
+			<tr class="data_tr" style="text-align: center; font-size:11px;">
+				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->product_name}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->product_price}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->order_quantity}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->order_total_amount}}</td>
+			</tr>
+			@endforeach
+
+		</table>
 </body>
 </html>

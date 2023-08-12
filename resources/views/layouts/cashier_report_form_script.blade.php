@@ -2,8 +2,11 @@
 	/*Load Cashiers Report Phase 1*/
 	LoadCashiersReportPH1();
 	LoadCashiersReportPH2();
-	LoadCashiersReportPH3();
-	LoadCashiersReportPH3_1();
+
+    LoadCashiersReportPH3_SALES_CREDIT();
+	LoadCashiersReportPH3_DISCOUNT();
+    LoadCashiersReportPH3_OTHERS();
+
 	LoadCashiersReportPH4();
 	LoadCashiersReportPH5();
 	LoadCashiersReportPH6();
@@ -693,6 +696,41 @@
 	}	
 
 	/*Part 3*/
+    function input_settings_create_PH3(){
+
+    var miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
+
+        if(miscellaneous_items_type == 'DISCOUNTS'){
+
+            document.getElementById("reference_no_PH3").disabled = true;
+            document.getElementById("product_manual_price_PH3").disabled = true;
+
+            document.getElementById("quantity_label").innerHTML = "LITERS";
+            document.getElementById("manual_price_label").innerHTML = "UNIT PRICE";
+           
+
+        }else if(miscellaneous_items_type == 'SALES_CREDIT'){
+
+            document.getElementById("reference_no_PH3").disabled = true;
+            document.getElementById("product_manual_price_PH3").disabled = true;
+
+            document.getElementById("quantity_label").innerHTML = "LITERS";
+            document.getElementById("manual_price_label").innerHTML = "AMOUNT";
+
+        }else{
+
+            document.getElementById("reference_no_PH3").disabled = false;
+            document.getElementById("product_manual_price_PH3").disabled = false;
+
+            document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
+            document.getElementById("manual_price_label").innerHTML = "AMOUNT";
+
+        }
+        
+
+    }
+
+
 	$("#save-CRPH3").click(function(event){
 		
 			event.preventDefault();
@@ -702,10 +740,12 @@
 			$('#product_manual_price_PH3Error').text('');
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
-		
-			var product_idx 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');
-			var order_quantity 			= $("input[name=order_quantity_PH3]").val();
-			var product_manual_price 	= $("input[name=product_manual_price_PH3]").val();
+
+            var miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
+            var reference_no 			    = $("input[name=reference_no_PH3]").val();
+			var product_idx 			    = $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');
+			var order_quantity 			    = $("input[name=order_quantity_PH3]").val();
+			var product_manual_price 	    = $("input[name=product_manual_price_PH3]").val();
 			
 			document.getElementById('CRPH3_form').className = "g-3 needs-validation was-validated";
 			
@@ -716,7 +756,9 @@
 					data:{
 					  CHPH3_ID:0,
 					  CashiersReportId:CashiersReportId,
-					  product_idx:product_idx,
+					  miscellaneous_items_type:miscellaneous_items_type,
+                      reference_no:reference_no,
+                      product_idx:product_idx,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
 					  _token: "{{ csrf_token() }}"
@@ -728,7 +770,7 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3();
+						LoadCashiersReportPH3_DISCOUNT();
 						$('#product_idx_PH3Error').text('');					
 						$('#order_quantity_PH3Error').text('');		
 						$('#product_manual_price_PH3Error').text('');
@@ -749,12 +791,12 @@
 				   });		
 		 });
 
-	function LoadCashiersReportPH3() {		
-		$("#table_product_data_msc tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc');
+	function LoadCashiersReportPH3_DISCOUNT() {		
+		$("#table_product_data_msc_DISCOUNT tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc_DISCOUNT');
 		let CashiersReportId 			= {{ $CashiersReportId }};	
 			  $.ajax({
-				url: "{{ route('GetCashiersProductP3') }}",
+				url: "{{ route('GetCashiersProductP3_DISCOUNTS') }}",
 				type:"POST",
 				data:{
 				  CashiersReportId:CashiersReportId,
@@ -795,7 +837,92 @@
 				}
 			   });
 	  }  	  
+	function LoadCashiersReportPH3_SALES_CREDIT() {		
+		$("#table_product_data_msc_SALES_CREDIT tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc_SALES_CREDIT');
+		let CashiersReportId 			= {{ $CashiersReportId }};	
+			  $.ajax({
+				url: "{{ route('GetCashiersProductP3_SALES_CREDIT') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
+							var product_idx = response[i].product_idx;						
+							var unit_price = response[i].unit_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var product_name = response[i].product_name;
+							var order_quantity = response[i].order_quantity;
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							
+							$('#table_product_data_msc_SALES_CREDIT tr:last').after("<tr>"+
+							"<td class='product_td' align='center'>"+product_name+"</td>"+
+							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
+							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
+							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"</tr>");				
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+    }
 
+	function LoadCashiersReportPH3_OTHERS() {		
+		$("#table_product_data_msc_OTHERS tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc_OTHERS');
+		let CashiersReportId 			= {{ $CashiersReportId }};	
+			  $.ajax({
+				url: "{{ route('GetCashiersProductP3_OTHERS') }}",
+				type:"POST",
+				data:{
+				  CashiersReportId:CashiersReportId,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
+							var product_idx = response[i].product_idx;						
+							var unit_price = response[i].unit_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var product_name = response[i].product_name;
+							var order_quantity = response[i].order_quantity;
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							
+							$('#table_product_data_msc_OTHERS tr:last').after("<tr>"+
+							"<td class='product_td' align='center'>"+product_name+"</td>"+
+							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
+							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
+							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"</tr>");				
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+    }
+    
 	$('body').on('click','#CHPH3_Edit',function(){			
 			event.preventDefault();
 			let CHPH3_ID = $(this).data('id');			
@@ -866,7 +993,7 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3();
+						LoadCashiersReportPH3_DISCOUNT();
 						$('#update_product_idx_PH3Error').text('');					
 						$('#update_order_quantity_PH3Error').text('');		
 						$('#update_product_manual_price_PH3Error').text('');
@@ -939,7 +1066,7 @@
 					$('#switch_notice_off').show();
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
-					LoadCashiersReportPH3();
+					LoadCashiersReportPH3_DISCOUNT();
 				  }
 				},
 				error: function(error) {
@@ -951,83 +1078,87 @@
 
 	function TotalAmount_PH3(){
 		
-		let CashiersReportId 		= {{ $CashiersReportId }};			
-		let product_id 				= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');		
-		//let product_price 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-price');
-		let product_price 			= 0;		
-		let product_manual_price 	= $("#product_manual_price_PH3").val();		
-		let order_quantity 			= $("input[name=order_quantity_PH3]").val();
+		let CashiersReportId 		= {{ $CashiersReportId }};
+
+        let miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
+
+        
+		    let product_id 				= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');		
+		    let product_price 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-price');
+		    //let product_price 			= 0;		
+		    let product_manual_price 	= $("#product_manual_price_PH3").val();		
+		    let order_quantity 			= $("input[name=order_quantity_PH3]").val();
 		
-		/*GET PUMP PRICE*/
-		event.preventDefault();
+		    /*GET PUMP PRICE*/
+		    event.preventDefault();
 			
-			let CHPH1_ID = $(this).data('id');			
-			$.ajax({
-				url: "{{ route('CRP1_info') }}",
-				type:"POST",
-				data:{
-				  CashiersReportId:CashiersReportId,
-				  CHPH1_ID:CHPH1_ID,
-				  product_id:product_id,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {				
+			    let CHPH1_ID = $(this).data('id');			
+			    $.ajax({
+				    url: "{{ route('CRP1_info') }}",
+				    type:"POST",
+				    data:{
+				      CashiersReportId:CashiersReportId,
+				      CHPH1_ID:CHPH1_ID,
+				      product_id:product_id,
+				      _token: "{{ csrf_token() }}"
+				    },
+				    success:function(response){
+				      console.log(response);
+				      if(response) {				
 					
-					if(response==''){
-						$('#pump_price_txt').html('0');
-						$('#discounted_price_txt').html('0');
+					    if(response==''){
+						    $('#pump_price_txt').html('0');
+						    $('#discounted_price_txt').html('0');
 						
-						if(order_quantity!=0 || order_quantity!=''){
+						    if(order_quantity!=0 || order_quantity!=''){
 							
-							if(product_manual_price!='' && product_manual_price!=0){
+							    if(product_manual_price!='' && product_manual_price!=0){
 								
-								var total_amount = (product_manual_price) * order_quantity;
-								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    var total_amount = (product_manual_price) * order_quantity;
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
-							}else{
+							    }else{
 								
-								var total_amount = product_price * order_quantity;
-								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    var total_amount = product_price * order_quantity;
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
-							}
+							    }
 							
-						}		
+						    }		
 						
-					}else{
+					    }else{
 						
-						var pump_price	= response[0].product_price;
-						var discounted_price	= response[0].product_price - product_manual_price;
+						    var pump_price	= response[0].product_price;
+						    var discounted_price	= response[0].product_price - product_manual_price;
 						
-						$('#pump_price_txt').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+						    $('#pump_price_txt').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 						
-						$('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+						    $('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 						
-						if(order_quantity!=0 || order_quantity!=''){
+						    if(order_quantity!=0 || order_quantity!=''){
 							
-							if(product_manual_price!='' && product_manual_price!=0){
+							    if(product_manual_price!='' && product_manual_price!=0){
 								
-								var total_amount = (pump_price - product_manual_price) * order_quantity;
-								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    var total_amount = (pump_price - product_manual_price) * order_quantity;
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
-							}else{
+							    }else{
 								
-								var total_amount = pump_price * order_quantity;
-								$('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    var total_amount = pump_price * order_quantity;
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
-							}
+							    }
 							
-						}		
-				  }
+						    }		
+				      }
 						
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });	
+				      }
+				    },
+				    error: function(error) {
+				     console.log(error);
+					    alert(error);
+				    }
+			       });	
 		
 		
 	}
@@ -1035,8 +1166,8 @@
 	function UpdateTotalAmount_PH3(){
 		
 		let CashiersReportId 		= {{ $CashiersReportId }};
-		//let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
-		let product_price 			= 0;
+		let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
+		//let product_price 			= 0;
 		let product_id 				= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');	
 		let product_manual_price 	= $("#update_product_manual_price_PH3").val();		
 		let order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
@@ -1136,276 +1267,7 @@
 		*/
 	}	
 
-	/*Part 3.1*/
-	$("#save-CRPH3_1").click(function(event){
-		
-			event.preventDefault();
-			
-			$('#co_name_cash_outError').text('');
-			$('#date_cashoutError').text('');
-			$('#time_cash_out3Error').text('');
-			$('#cashout_amountError').text('');
-			
-			let CashiersReportId 		= {{ $CashiersReportId }};			
-		
-			var co_name_cash_out 		= $("input[name=co_name_cash_out]").val();
-			var date_cashout 			= $("input[name=date_cashout]").val();
-			var time_cash_out 			= $("input[name=time_cash_out]").val();
-			var cashout_amount 			= $("input[name=cashout_amount]").val();
-			
-			document.getElementById('CRPH3_1_form').className = "g-3 needs-validation was-validated";
-			
-				/*Delete the Selected Item*/			
-				  $.ajax({
-					url: "{{ route('SAVE_CHR_PH3_1') }}",
-					type:"POST",
-					data:{
-					  CHPH3_ID:0,
-					  CashiersReportId:CashiersReportId,
-					  co_name_cash_out:co_name_cash_out,
-					  date_cashout:date_cashout, 
-					  time_cash_out:time_cash_out,
-					  cashout_amount:cashout_amount, 					  
-					  _token: "{{ csrf_token() }}"
-					},
-					success:function(response){
-					  console.log(response);
-					  if(response) {
-						  
-						$('#switch_notice_on').show();
-						$('#sw_on').html(response.success);
-						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3_1();
-						
-						$('#co_name_cash_outError').text('');
-						$('#date_cashoutError').text('');
-						$('#time_cash_out3Error').text('');
-						$('#cashout_amountError').text('');
-						
-					  }
-					},
-					error: function(error) {
-					 console.log(error);
-						
-							$('#co_name_cash_outError').text(error.responseJSON.errors.co_name_cash_out);
-							document.getElementById('co_name_cash_outError').className = "invalid-feedback";
-							
-							$('#date_cashoutError').text(error.responseJSON.errors.date_cashout);
-							document.getElementById('date_cashoutError').className = "invalid-feedback";
-							
-							$('#time_cash_outError').text(error.responseJSON.errors.time_cash_out);
-							document.getElementById('time_cash_outError').className = "invalid-feedback";
-				
-							$('#cashout_amountError').text(error.responseJSON.errors.cashout_amount);
-							document.getElementById('cashout_amountError').className = "invalid-feedback";
-							
-					}
-				   });		
-		 });
-
-	function LoadCashiersReportPH3_1() {		
-		$("#table_product_data_msc_1 tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc_1');
-		let CashiersReportId 			= {{ $CashiersReportId }};	
-			  $.ajax({
-				url: "{{ route('GetCashiersProductP3_1') }}",
-				type:"POST",
-				data:{
-				  CashiersReportId:CashiersReportId,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){						
-				  console.log(response);
-				  if(response!='') {			  
-						var len = response.length;
-							
-						for(var i=0; i<len; i++){
-							
-							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
-							var co_name_cash_out 	= response[i].co_name_cash_out;						
-							var date_cashout	 	= response[i].date_cashout;
-							var time_cash_out 		= response[i].time_cash_out;
-							var cashout_amount 		= response[i].cashout_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
-
-							$('#table_product_data_msc_1 tr:last').after("<tr>"+
-							"<td class='product_td' align='center'>"+(i+1)+"</td>"+
-							"<td class='product_td' align='center'>"+co_name_cash_out+"</td>"+
-							"<td class='calibration_td' align='center'>"+date_cashout+"</td>"+
-							"<td class='manual_price_td' align='center'>"+time_cash_out+"</td>"+
-							"<td class='manual_price_td' align='center'>"+cashout_amount+"</td>"+
-							"<td><div align='center' class='' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_1' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"<td><div align='center' class='' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_1'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"</tr>");				
-					}			
-				  }else{
-							/*No Result Found or Error*/	
-				  }
-				},
-				error: function(error) {
-				 console.log(error);	 
-				}
-			   });
-	  }  	  
-
-	$('body').on('click','#CHPH3_Edit_1',function(){			
-			event.preventDefault();
-			let CHPH3_ID = $(this).data('id');	
-
-			$.ajax({
-				url: "{{ route('CRP3_info_1') }}",
-				type:"POST",
-				data:{
-				  CHPH3_ID:CHPH3_ID,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {				
-					document.getElementById("update-CRPH3_1").value = CHPH3_ID;				
-					/*Set Details*/					
-					document.getElementById("update_co_name_cash_out").value 	= response[0].co_name_cash_out;
-					document.getElementById("update_date_cashout").value 		= response[0].date_cashout;
-					document.getElementById("update_time_cash_out").value 		= response[0].time_cash_out;
-					document.getElementById("update_cashout_amount").value 		= response[0].cashout_amount;
-
-					//UpdateTotalAmount_PH3();			
-					$('#Update_CRPH3_1_Modal').modal('toggle');							  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });	
-	  });
-
-	$("#update-CRPH3_1").click(function(event){
-		
-			event.preventDefault();
-			
-			$('#update_co_name_cash_outError').text('');
-			$('#update_date_cashoutError').text('');
-			$('#update_time_cash_out3Error').text('');
-			$('#update_cashout_amountError').text('');
-			
-			let CashiersReportId 		= {{ $CashiersReportId }};			
-			let CHPH3_ID 				= document.getElementById("update-CRPH3_1").value;
-			var co_name_cash_out 		= $("input[name=update_co_name_cash_out]").val();
-			var date_cashout 			= $("input[name=update_date_cashout]").val();
-			var time_cash_out 			= $("input[name=update_time_cash_out]").val();
-			var cashout_amount 			= $("input[name=update_cashout_amount]").val();
-			
-			document.getElementById('CRPH3_1_form_edit').className = "g-3 needs-validation was-validated";
-			
-				/*Delete the Selected Item*/			
-				  $.ajax({
-					url: "{{ route('SAVE_CHR_PH3_1') }}",
-					type:"POST",
-					data:{
-					  CHPH3_ID:CHPH3_ID,
-					  CashiersReportId:CashiersReportId,
-					  co_name_cash_out:co_name_cash_out,
-					  date_cashout:date_cashout,
-					  time_cash_out:time_cash_out, 
-					  cashout_amount:cashout_amount, 
-					  _token: "{{ csrf_token() }}"
-					},
-					success:function(response){
-					  console.log(response);
-					  if(response) {
-						  
-						$('#switch_notice_on').show();
-						$('#sw_on').html(response.success);
-						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3_1();
-						
-						$('#update_co_name_cash_outError').text('');
-						$('#update_date_cashoutError').text('');
-						$('#update_time_cash_out3Error').text('');
-						$('#update_cashout_amountError').text('');
-					  
-					  }
-					},
-					error: function(error) {
-					 console.log(error);
-												
-							$('#update_co_name_cash_outError').text(error.responseJSON.errors.co_name_cash_out);
-							document.getElementById('update_co_name_cash_outError').className = "invalid-feedback";
-							
-							$('#update_date_cashoutError').text(error.responseJSON.errors.date_cashout);
-							document.getElementById('update_date_cashoutError').className = "invalid-feedback";
-							
-							$('#update_time_cash_outError').text(error.responseJSON.errors.time_cash_out);
-							document.getElementById('update_time_cash_outError').className = "invalid-feedback";
-				
-							$('#update_cashout_amountError').text(error.responseJSON.errors.cashout_amount);
-							document.getElementById('update_cashout_amountError').className = "invalid-feedback";
-						
-					}
-				   });		
-		 });
-
-	<!--CRPH1 Deletion Confirmation-->	
-	$('body').on('click','#deleteCashiersProductP3_1',function(){
-			event.preventDefault();
-			let CHPH3_ID = $(this).data('id');			
-			$.ajax({
-				url: "{{ route('CRP3_info_1') }}",
-				type:"POST",
-				data:{
-				  CHPH3_ID:CHPH3_ID,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {				
-					document.getElementById("deleteCRPH3Confirmed_1").value = CHPH3_ID;				
-					/*Set Details*/
-					
-					$('#delete_co_name_cash_out').text(response[0].co_name_cash_out);
-					$('#delete_date_cashout').text(response[0].date_cashout);
-					$('#delete_time_cash_out').text(response[0].time_cash_out);
-					$('#delete_cashout_amount').text(response[0].cashout_amount);
-					
-					$('#CRPH3DeleteModal_1').modal('toggle');							  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });	
-	  });
-
-	$('body').on('click','#deleteCRPH3Confirmed_1',function(){
-			
-		let CHPH3_ID = document.getElementById("deleteCRPH3Confirmed_1").value;
-		
-		if(CHPH3_ID!=0){
-			/*Delete the Selected Item*/	
-			  $.ajax({
-				url: "{{ route('DeleteCashiersProductP3') }}",
-				type:"POST",
-				data:{
-				  CHPH3_ID:CHPH3_ID,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					$('#switch_notice_off').show();
-					$('#sw_off').html("Deleted");
-					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
-					LoadCashiersReportPH3_1();
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-				}
-			   });		
-		}	
-	});
-
+	
 	/*Part 4*/
 	$("#save-CRPH4").click(function(event){
 		

@@ -103,9 +103,9 @@
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph3-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3" type="button" role="tab" aria-controls="ph3" aria-selected="false" tabindex="-1">Miscellaneous Items</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<!--<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph3_1-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3_1" type="button" role="tab" aria-controls="ph3_1" aria-selected="false" tabindex="-1">Cash Out</button>
-							</li>
+							</li>-->
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph4-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1">Theoretical Sales</button>
 							</li>
@@ -118,23 +118,23 @@
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
 							<div class="tab-pane fade show active" id="bordered-ph1" role="tabpanel" aria-labelledby="ph1-tab">
-							<div align="center" style="font-weight:bold;">Fuel Sales</div>
+							<!--<div align="center" style="font-weight:bold;">Fuel Sales</div>-->
 							@include('pages.cashiers_report_form_p1')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph2" role="tabpanel" aria-labelledby="ph2-tab">
-							<div align="center" style="font-weight:bold;">Others Sales</div>
+							<!--<div align="center" style="font-weight:bold;">Others Sales</div>-->
 							 @include('pages.cashiers_report_form_p2')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph3" role="tabpanel" aria-labelledby="ph3-tab">
-							<div align="center" style="font-weight:bold;">Miscellaneous Items</div>
+							<!--<div align="center" style="font-weight:bold;">Miscellaneous Items</div>-->
 							  @include('pages.cashiers_report_form_p3')
 							</div>
-							<div class="tab-pane fade" id="bordered-ph3_1" role="tabpanel" aria-labelledby="ph3-tab_1">
+							<!--<div class="tab-pane fade" id="bordered-ph3_1" role="tabpanel" aria-labelledby="ph3-tab_1">
 							<div align="center" style="font-weight:bold;">Cash Out</div>
-							  @include('pages.cashiers_report_form_p3_1')
-							</div>
+							  include('pages.cashiers_report_form_p3_1')
+							</div>-->
 							<div class="tab-pane fade" id="bordered-ph4" role="tabpanel" aria-labelledby="ph4-tab">
-							<div align="center" style="font-weight:bold;">Theoretical Sales(Discounts, misload, return,sweldo,snack,change,lubes p.o)</div>
+							<!--<div align="center" style="font-weight:bold;">Theoretical Sales(Discounts, misload, return,sweldo,snack,change,lubes p.o)</div>-->
 							  @include('pages.cashiers_report_form_p4')
 							</div>
 							<div class="tab-pane fade" id="bordered-ph5" role="tabpanel" aria-labelledby="ph5-tab">						
