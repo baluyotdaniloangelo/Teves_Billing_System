@@ -524,22 +524,38 @@ class CashiersReportController extends Controller
 	/*Part Three (MSC Reports)*/
 	public function save_product_cashiers_report_PH3(Request $request){	
 
-		$request->validate([
-            'miscellaneous_items_type'  		=> 'required',
-			'product_idx'  		=> 'required',
-			'order_quantity'  	=> 'required'		
-        ], 
-        [
-			'miscellaneous_items_type.required' 	=> 'Type is Required',
-            'product_idx.required' 	=> 'Product is Required',
-			'order_quantity.required' 	=> 'Order Quantity is Required',
-        ]
-		);
+		$miscellaneous_items_type	= $request->miscellaneous_items_type;
+		
+		if($miscellaneous_items_type=='OTHERS' || $miscellaneous_items_type=='CASHOUT'){
+			
+			$request->validate([
+				'product_manual_price' 	=> 'required',	
+			], 
+			[
+				'product_manual_price.required' 	=> 'Required',
+			]
+			);
+			
+		}else{
+			
+			$request->validate([
+				'miscellaneous_items_type' 	=> 'required',
+				'product_idx'  				=> 'required',
+				'order_quantity'  			=> 'required'		
+			], 
+			[
+				'miscellaneous_items_type.required' 	=> 'Type is Required',
+				'product_idx.required' 	=> 'Product is Required',
+				'order_quantity.required' 	=> 'Order Quantity is Required',
+			]
+			);	
+			
+		}
 			
 			/*Get Cashier Report ID*/
 			$CashiersReportId = $request->CashiersReportId;
 
-            $miscellaneous_items_type	= $request->miscellaneous_items_type;
+            
             $reference_no				= $request->reference_no;
 
 			$product_idx				= $request->product_idx;
@@ -621,6 +637,7 @@ class CashiersReportController extends Controller
 			        }
 		
              }
+			 
                 $peso_sales = ($order_quantity * $product_price);
 								
 								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
@@ -682,6 +699,7 @@ class CashiersReportController extends Controller
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					'teves_cashiers_report_p3.reference_no',
 					'teves_cashiers_report_p3.pump_price',
 					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.discounted_price',
@@ -693,6 +711,7 @@ class CashiersReportController extends Controller
 		
 			return response()->json($data);
 	}
+	
     public function get_cashiers_report_product_p3_SALES_CREDIT(Request $request){		
 	
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
@@ -714,20 +733,17 @@ class CashiersReportController extends Controller
 			return response()->json($data);
 	}
 
-        public function get_cashiers_report_product_p3_OTHERS(Request $request){		
+    public function get_cashiers_report_product_p3_OTHERS(Request $request){		
 	
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
-            ->where('miscellaneous_items_type','OTHERS')
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+            ->where('miscellaneous_items_type','=','OTHERS')
+			->orWhere('miscellaneous_items_type','=','CASHOUT')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
-					'teves_product_table.product_id as product_idx',
-					'teves_product_table.product_name',
-					'teves_cashiers_report_p3.pump_price',
-					'teves_cashiers_report_p3.unit_price',
-					'teves_cashiers_report_p3.discounted_price',
+					'teves_cashiers_report_p3.reference_no',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.cashiers_report_id',
+					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.order_total_amount'
 					]);
@@ -735,7 +751,30 @@ class CashiersReportController extends Controller
 			return response()->json($data);
 	}
 
-	public function cashiers_report_p3_info(Request $request){
+	public function cashiers_report_p3_info_SALES_CREDIT(Request $request){
+
+		$CHPH3_ID = $request->CHPH3_ID;
+		
+		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
+		->where('miscellaneous_items_type','=','SALES_CREDIT')
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+				->get([
+					'teves_product_table.product_name',
+					'teves_product_table.product_id',
+					'teves_cashiers_report_p3.miscellaneous_items_type',
+					'teves_cashiers_report_p3.cashiers_report_p3_id',
+					'teves_cashiers_report_p3.order_quantity',
+					'teves_cashiers_report_p3.pump_price',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.discounted_price',
+					'teves_cashiers_report_p3.order_total_amount'
+					]);			
+					
+		return response()->json($data);
+		
+	}
+	
+	public function cashiers_report_p3_info_DISCOUNT(Request $request){
 
 		$CHPH3_ID = $request->CHPH3_ID;
 		
@@ -744,6 +783,8 @@ class CashiersReportController extends Controller
 				->get([
 					'teves_product_table.product_name',
 					'teves_product_table.product_id',
+					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.pump_price',
@@ -756,115 +797,25 @@ class CashiersReportController extends Controller
 		
 	}
 	
-	public function delete_cashiers_report_product_p3(Request $request){		
-			
-		$CHPH3_ID = $request->CHPH3_ID;
-		CashiersReportModel_P3::find($CHPH3_ID)->delete();
-		return 'Deleted';
-		
-	}
-
-	/*Part Three Cash Out (MSC Reports)*/
-	public function save_product_cashiers_report_PH3_1(Request $request){	
-
-		$request->validate([
-			'co_name_cash_out'  => 'required',
-			'cashout_amount'  	=> 'required'		
-        ], 
-        [
-			'co_name_cash_out.required' 	=> 'Name is Required',
-			'cashout_amount.required' 	=> 'Cashout Amount is Required',
-        ]
-		);
-			
-			/*Get Cashier Report ID*/
-			$CashiersReportId = $request->CashiersReportId;
-			
-			$CHPH3_ID 	= $request->CHPH3_ID;
-			
-			$co_name_cash_out 	= $request->co_name_cash_out;
-			$date_cashout 		= $request->date_cashout;
-			$time_cash_out 		= $request->time_cash_out;
-			$cashout_amount 	= $request->cashout_amount;
-								
-								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
-								
-									$CashiersReportModel_P3 = new CashiersReportModel_P3();
-									
-									$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
-									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
-									$CashiersReportModel_P3->co_name_cash_out 			= $co_name_cash_out;
-									$CashiersReportModel_P3->date_cashout 				= $date_cashout;
-									$CashiersReportModel_P3->time_cash_out 				= $time_cash_out;
-									$CashiersReportModel_P3->cashout_amount 			= $cashout_amount;
-									$CashiersReportModel_P3->miscellaneous_items_type 	= 'others';
-									$result = $CashiersReportModel_P3->save();
-									
-									if($result){
-										return response()->json(['success'=>'Cash Out Successfully Created!']);
-									}
-									else{
-										return response()->json(['success'=>'Error on Cash Out Creation']);
-									}
-									
-								}else{
-																	
-									$CashiersReportModel_P3 = new CashiersReportModel_P3();
-									$CashiersReportModel_P3 = CashiersReportModel_P3::find($CHPH3_ID);
-									
-									$CashiersReportModel_P3->co_name_cash_out 			= $co_name_cash_out;
-									$CashiersReportModel_P3->date_cashout 				= $date_cashout;
-									$CashiersReportModel_P3->time_cash_out 				= $time_cash_out;
-									$CashiersReportModel_P3->cashout_amount 			= $cashout_amount;
-									$CashiersReportModel_P3->miscellaneous_items_type 	= 'others';
-									
-									$result = $CashiersReportModel_P3->update();
-									
-									if($result){
-										return response()->json(['success'=>'Cash Out Updated!']);
-									}
-									else{
-										return response()->json(['success'=>'Error on Cash Out Update']);
-									}
-									
-								}
-						
-	}	
-	
-	public function get_cashiers_report_product_p3_1(Request $request){		
-	
-			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
-			->where('miscellaneous_items_type', 'CashOut')
-				->orderBy('cashiers_report_p3_id', 'asc')
-              	->get([
-					'teves_cashiers_report_p3.cashiers_report_p3_id',
-					'teves_cashiers_report_p3.co_name_cash_out',
-					'teves_cashiers_report_p3.date_cashout',
-					'teves_cashiers_report_p3.time_cash_out',
-					'teves_cashiers_report_p3.cashout_amount'
-					]);
-		
-			return response()->json($data);
-	}
-
-	public function cashiers_report_p3_info_1(Request $request){
+	public function cashiers_report_p3_info_OTHERS(Request $request){
 
 		$CHPH3_ID = $request->CHPH3_ID;
 		
 		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
-			->where('miscellaneous_items_type', 'CashOut')
+			//->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 				->get([
-					'teves_cashiers_report_p3.co_name_cash_out',
-					'teves_cashiers_report_p3.date_cashout',
-					'teves_cashiers_report_p3.time_cash_out',
-					'teves_cashiers_report_p3.cashout_amount'
+					'teves_cashiers_report_p3.miscellaneous_items_type',
+					'teves_cashiers_report_p3.cashiers_report_p3_id',
+					'teves_cashiers_report_p3.order_quantity',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.reference_no'
 					]);			
 					
 		return response()->json($data);
 		
 	}
 	
-	public function delete_cashiers_report_product_p3_1(Request $request){		
+	public function delete_cashiers_report_product_p3(Request $request){		
 			
 		$CHPH3_ID = $request->CHPH3_ID;
 		CashiersReportModel_P3::find($CHPH3_ID)->delete();
@@ -992,7 +943,7 @@ class CashiersReportController extends Controller
 					
 	}
 
-		public function save_cashiers_report_PH5(Request $request){
+	public function save_cashiers_report_PH5(Request $request){
 		
 		$request->validate([
 			'cash_drop'   => 'required'
@@ -1141,7 +1092,6 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p1.order_total_amount'
 					]); 
 					
-					
 		 $data_P1_super_regular =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
 			->where('product_idx', 11)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
@@ -1189,28 +1139,61 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p2.order_total_amount'
 					]);
 
-
-        //$pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData'));
+		$data_SALES_CREDIT =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
+			->where('miscellaneous_items_type','=','SALES_CREDIT')
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+				->get([
+					'teves_product_table.product_name',
+					'teves_product_table.product_id',
+					'teves_cashiers_report_p3.miscellaneous_items_type',
+					'teves_cashiers_report_p3.cashiers_report_p3_id',
+					'teves_cashiers_report_p3.order_quantity',
+					'teves_cashiers_report_p3.pump_price',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.discounted_price',
+					'teves_cashiers_report_p3.order_total_amount'
+					]);		
+					
+		$data_DISCOUNTS =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
+            ->where('miscellaneous_items_type','DISCOUNTS')
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+				->orderBy('cashiers_report_p3_id', 'asc')
+              	->get([
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.pump_price',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.discounted_price',
+					'teves_cashiers_report_p3.cashiers_report_p3_id',
+					'teves_cashiers_report_p3.cashiers_report_id',
+					'teves_cashiers_report_p3.order_quantity',
+					'teves_cashiers_report_p3.order_total_amount'
+					]);
+		
+		$data_OTHERS =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
+            ->where('miscellaneous_items_type','=','OTHERS')
+			->orWhere('miscellaneous_items_type','=','CASHOUT')
+				->orderBy('cashiers_report_p3_id', 'asc')
+              	->get([
+					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.cashiers_report_p3_id',
+					'teves_cashiers_report_p3.cashiers_report_id',
+					'teves_cashiers_report_p3.unit_price',
+					'teves_cashiers_report_p3.order_quantity',
+					'teves_cashiers_report_p3.order_total_amount'
+					]);			
+        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS'));
 		//var_dump($CashiersReportData);
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
-		//$pdf->setPaper('A4', 'portrait');/*Set to Landscape*/
-		//$pdf->render();
-		//return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
+		$pdf->setPaper('A4', 'portrait');/*Set to Landscape*/
+		$pdf->render();
+		return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
 
-		return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2'));
+		//return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS'));
 
 	}
-	
-		/*Save Reading of Meters*/
-	public function check_time(Request $request){
-		//$request->headers->set('Accept', 'application/json');
-		
-		//echo $segment1 =  Request::segment(5);
-		
-		 $server_time=date('Y-m-d H:i:s');
-		 echo "OK, $server_time";
-		
-	}
+
 	
 }

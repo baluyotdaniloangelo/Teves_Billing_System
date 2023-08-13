@@ -230,8 +230,7 @@
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH1_Edit' data-id='"+cashiers_report_p1_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP1'  data-id='"+cashiers_report_p1_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH1_Edit' data-id='"+cashiers_report_p1_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP1'  data-id='"+cashiers_report_p1_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -496,8 +495,7 @@
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH2_Edit' data-id='"+cashiers_report_p2_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP2'  data-id='"+cashiers_report_p2_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH2_Edit' data-id='"+cashiers_report_p2_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP2'  data-id='"+cashiers_report_p2_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -660,7 +658,6 @@
 		}	
 	});
 
-
 	function TotalAmount_PH2(){
 		
 		let product_price 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-price');
@@ -702,9 +699,11 @@
 
         if(miscellaneous_items_type == 'DISCOUNTS'){
 
-            document.getElementById("reference_no_PH3").disabled = true;
-            document.getElementById("product_manual_price_PH3").disabled = true;
-
+            document.getElementById("reference_no_PH3").disabled = false;
+            document.getElementById("product_manual_price_PH3").disabled = false;
+			document.getElementById("product_idx_PH3").disabled = false;
+			document.getElementById("order_quantity_PH3").disabled = false;
+			
             document.getElementById("quantity_label").innerHTML = "LITERS";
             document.getElementById("manual_price_label").innerHTML = "UNIT PRICE";
            
@@ -713,15 +712,29 @@
 
             document.getElementById("reference_no_PH3").disabled = true;
             document.getElementById("product_manual_price_PH3").disabled = true;
-
+			document.getElementById("product_idx_PH3").disabled = false;
+			document.getElementById("order_quantity_PH3").disabled = false;
+			
             document.getElementById("quantity_label").innerHTML = "LITERS";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
 
-        }else{
+        }else if(miscellaneous_items_type == 'SALES_CREDIT'){
+			
+            document.getElementById("reference_no_PH3").disabled = false;
+            document.getElementById("product_manual_price_PH3").disabled = false;
+			document.getElementById("product_idx_PH3").disabled = true;
+			document.getElementById("order_quantity_PH3").disabled = true;
+			
+            document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
+            document.getElementById("manual_price_label").innerHTML = "AMOUNT";
+
+		}else{
 
             document.getElementById("reference_no_PH3").disabled = false;
             document.getElementById("product_manual_price_PH3").disabled = false;
-
+			document.getElementById("product_idx_PH3").disabled = true;
+			document.getElementById("order_quantity_PH3").disabled = false;
+			
             document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
 
@@ -730,6 +743,53 @@
 
     }
 
+    function update_input_settings_create_PH3(){
+
+    var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
+
+        if(miscellaneous_items_type == 'DISCOUNTS'){
+
+            document.getElementById("update_reference_no_PH3").disabled = false;
+            document.getElementById("update_product_manual_price_PH3").disabled = false;
+			document.getElementById("update_product_idx_PH3").disabled = false;
+			document.getElementById("update_order_quantity_PH3").disabled = false;
+			
+            document.getElementById("update_quantity_label").innerHTML = "LITERS";
+            document.getElementById("update_manual_price_label").innerHTML = "UNIT PRICE";
+           
+
+        }else if(miscellaneous_items_type == 'SALES_CREDIT'){
+
+            document.getElementById("update_reference_no_PH3").disabled = true;
+            document.getElementById("update_product_manual_price_PH3").disabled = true;
+			document.getElementById("update_product_idx_PH3").disabled = false;
+			document.getElementById("update_order_quantity_PH3").disabled = false;
+			
+            document.getElementById("update_quantity_label").innerHTML = "LITERS";
+            document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
+
+        }else if(miscellaneous_items_type == 'SALES_CREDIT'){
+			
+            document.getElementById("update_reference_no_PH3").disabled = false;
+            document.getElementById("update_product_manual_price_PH3").disabled = false;
+			document.getElementById("update_product_idx_PH3").disabled = true;
+			document.getElementById("update_order_quantity_PH3").disabled = true;
+			
+            document.getElementById("update_quantity_label").innerHTML = "LITERS/PCS";
+            document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
+
+		}else{
+
+            document.getElementById("update_reference_no_PH3").disabled = false;
+            document.getElementById("update_product_manual_price_PH3").disabled = false;
+			document.getElementById("update_product_idx_PH3").disabled = true;
+			document.getElementById("update_order_quantity_PH3").disabled = false;
+			
+            document.getElementById("update_quantity_label").innerHTML = "LITERS/PCS";
+            document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
+
+        }
+    }
 
 	$("#save-CRPH3").click(function(event){
 		
@@ -770,7 +830,9 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3_DISCOUNT();
+						    LoadCashiersReportPH3_SALES_CREDIT();
+							LoadCashiersReportPH3_DISCOUNT();
+							LoadCashiersReportPH3_OTHERS();
 						$('#product_idx_PH3Error').text('');					
 						$('#order_quantity_PH3Error').text('');		
 						$('#product_manual_price_PH3Error').text('');
@@ -807,7 +869,7 @@
 				  if(response!='') {			  
 						var len = response.length;
 						for(var i=0; i<len; i++){
-						
+							var reference_no = response[i].reference_no;			
 							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
 							var product_idx = response[i].product_idx;						
 							var pump_price = response[i].pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
@@ -817,15 +879,16 @@
 							var order_quantity = response[i].order_quantity;
 							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
-							$('#table_product_data_msc tr:last').after("<tr>"+
+							$('#table_product_data_msc_DISCOUNT tr:last').after("<tr>"+
+							"<td align='center'>" + (i+1) + "</td>" +
+							"<td class='calibration_td' align='center'>"+reference_no+"</td>"+
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+pump_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+discounted_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_DISCOUNT' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_DISCOUNT'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -862,12 +925,13 @@
 							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
 							$('#table_product_data_msc_SALES_CREDIT tr:last').after("<tr>"+
+							"<td align='center'>" + (i+1) + "</td>" +
+							
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_SALES_CREDIT' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -879,7 +943,7 @@
 				}
 			   });
     }
-
+	
 	function LoadCashiersReportPH3_OTHERS() {		
 		$("#table_product_data_msc_OTHERS tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc_OTHERS');
@@ -896,21 +960,21 @@
 				  if(response!='') {			  
 						var len = response.length;
 						for(var i=0; i<len; i++){
-						
+							
+							var reference_no = response[i].reference_no;		
 							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
 							var product_idx = response[i].product_idx;						
 							var unit_price = response[i].unit_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
-							var product_name = response[i].product_name;
+							//var product_name = response[i].product_name;
 							var order_quantity = response[i].order_quantity;
 							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							
 							$('#table_product_data_msc_OTHERS tr:last').after("<tr>"+
-							"<td class='product_td' align='center'>"+product_name+"</td>"+
+							"<td align='center'>" + (i+1) + "</td>" +
+							"<td class='calibration_td' align='center'>"+reference_no+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
-							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit' data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_OTHERS' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_OTHERS'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -923,11 +987,11 @@
 			   });
     }
     
-	$('body').on('click','#CHPH3_Edit',function(){			
+	$('body').on('click','#CHPH3_Edit_SALES_CREDIT',function(){			
 			event.preventDefault();
 			let CHPH3_ID = $(this).data('id');			
 			$.ajax({
-				url: "{{ route('CRP3_info') }}",
+				url: "{{ route('CRP3_info_SALES_CREDIT') }}",
 				type:"POST",
 				data:{
 				  CHPH3_ID:CHPH3_ID,
@@ -938,10 +1002,94 @@
 				  if(response) {				
 					document.getElementById("update-CRPH3").value = CHPH3_ID;				
 					/*Set Details*/					
+					
+					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
 					document.getElementById("update_product_idx_PH3").value 			= response[0].product_name;
 					document.getElementById("update_order_quantity_PH3").value 			= response[0].order_quantity;
 					document.getElementById("update_product_manual_price_PH3").value 	= response[0].unit_price;
 					
+					
+					update_input_settings_create_PH3();
+					var total_amount = response[0].order_total_amount;
+					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+
+					UpdateTotalAmount_PH3();
+
+					
+					$('#Update_CRPH3_Modal').modal('toggle');							  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+	  
+	$('body').on('click','#CHPH3_Edit_DISCOUNT',function(){			
+			event.preventDefault();
+			let CHPH3_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP3_info_DISCOUNT') }}",
+				type:"POST",
+				data:{
+				  CHPH3_ID:CHPH3_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					document.getElementById("update-CRPH3").value = CHPH3_ID;				
+					/*Set Details*/					
+					
+					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
+					document.getElementById("update_reference_no_PH3").value 				= response[0].reference_no;
+					document.getElementById("update_product_idx_PH3").value 				= response[0].product_name;
+					document.getElementById("update_order_quantity_PH3").value 				= response[0].order_quantity;
+					document.getElementById("update_product_manual_price_PH3").value 		= response[0].unit_price;
+					
+					
+					update_input_settings_create_PH3();
+					var total_amount = response[0].order_total_amount;
+					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+
+					UpdateTotalAmount_PH3();
+
+					
+					$('#Update_CRPH3_Modal').modal('toggle');							  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+	  	  
+	$('body').on('click','#CHPH3_Edit_OTHERS',function(){			
+			event.preventDefault();
+			let CHPH3_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP3_info_OTHERS') }}",
+				type:"POST",
+				data:{
+				  CHPH3_ID:CHPH3_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					document.getElementById("update-CRPH3").value = CHPH3_ID;				
+					/*Set Details*/					
+					
+					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
+					document.getElementById("update_reference_no_PH3").value 				= response[0].reference_no;
+					
+					document.getElementById("update_order_quantity_PH3").value 				= response[0].order_quantity;
+					document.getElementById("update_product_manual_price_PH3").value 		= response[0].unit_price;
+					
+					
+					update_input_settings_create_PH3();
 					//var total_amount = response[0].order_total_amount;
 					//$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
 
@@ -957,7 +1105,6 @@
 				}
 			   });	
 	  });
-
 	$("#update-CRPH3").click(function(event){
 		
 			event.preventDefault();
@@ -993,7 +1140,9 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						LoadCashiersReportPH3_DISCOUNT();
+						    LoadCashiersReportPH3_SALES_CREDIT();
+							LoadCashiersReportPH3_DISCOUNT();
+							LoadCashiersReportPH3_OTHERS();
 						$('#update_product_idx_PH3Error').text('');					
 						$('#update_order_quantity_PH3Error').text('');		
 						$('#update_product_manual_price_PH3Error').text('');
@@ -1015,11 +1164,11 @@
 		 });
 
 	<!--CRPH1 Deletion Confirmation-->	
-	$('body').on('click','#deleteCashiersProductP3',function(){
+	$('body').on('click','#deleteCashiersProductP3_SALES_CREDIT',function(){
 			event.preventDefault();
 			let CHPH3_ID = $(this).data('id');			
 			$.ajax({
-				url: "{{ route('CRP3_info') }}",
+				url: "{{ route('CRP3_info_SALES_CREDIT') }}",
 				type:"POST",
 				data:{
 				  CHPH3_ID:CHPH3_ID,
@@ -1030,7 +1179,6 @@
 				  if(response) {				
 					document.getElementById("deleteCRPH3Confirmed").value = CHPH3_ID;				
 					/*Set Details*/					
-					//$('#CRPH1_delete_product_idx').text(response[0].product_name);
 					$('#delete_product_idx_PH3').text(response[0].product_name);
 					$('#delete_order_quantity_PH3').text(response[0].order_quantity);
 					$('#delete_product_manual_price_PH3').text(response[0].product_price);
@@ -1038,6 +1186,72 @@
 					var total_amount = response[0].order_total_amount;
 					$('#delete_TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
 					$('#CRPH3DeleteModal').modal('toggle');							  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+	$('body').on('click','#deleteCashiersProductP3_DISCOUNT',function(){
+			event.preventDefault();
+			let CHPH3_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP3_info_DISCOUNT') }}",
+				type:"POST",
+				data:{
+				  CHPH3_ID:CHPH3_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					document.getElementById("deleteCRPH3Confirmed_DISCOUNT").value = CHPH3_ID;				
+					/*Set Details*/					
+					//$('#CRPH1_delete_product_idx').text(response[0].product_name);
+					$('#delete_reference_PH3_DISCOUNT').text(response[0].reference_no);
+					$('#delete_product_idx_PH3_DISCOUNT').text(response[0].product_name);
+					$('#delete_order_quantity_PH3_DISCOUNT').text(response[0].order_quantity);
+					$('#delete_product_manual_price_PH3_DISCOUNT').text(response[0].product_price);
+					
+					var total_amount = response[0].order_total_amount;
+					$('#delete_TotalAmount_PH3_DISCOUNT').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					$('#CRPH3DeleteModal_DISCOUNT').modal('toggle');							  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+	<!--CRPH1 Deletion Confirmation-->	
+	$('body').on('click','#deleteCashiersProductP3_OTHERS',function(){
+			event.preventDefault();
+			let CHPH3_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP3_info_OTHERS') }}",
+				type:"POST",
+				data:{
+				  CHPH3_ID:CHPH3_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+					document.getElementById("deleteCRPH3Confirmed_OTHERS").value = CHPH3_ID;				
+					/*Set Details*/
+					
+					$('#delete_reference_PH3_others').text(response[0].reference_no);
+					$('#delete_liters_pcs_PH3_others').text(response[0].order_quantity);
+					$('#delete_amount_PH3_others').text(response[0].unit_price);
+					
+					//var total_amount = response[0].order_total_amount;
+					//$('#delete_TotalAmount_PH3_OTHERS').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					
+					$('#CRPH3DeleteModal_OTHERS').modal('toggle');							  
+				  
 				  }
 				},
 				error: function(error) {
@@ -1066,7 +1280,9 @@
 					$('#switch_notice_off').show();
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
-					LoadCashiersReportPH3_DISCOUNT();
+					    LoadCashiersReportPH3_SALES_CREDIT();
+						LoadCashiersReportPH3_DISCOUNT();
+						LoadCashiersReportPH3_OTHERS();
 				  }
 				},
 				error: function(error) {
@@ -1075,7 +1291,64 @@
 			   });		
 		}	
 	});
-
+	$('body').on('click','#deleteCRPH3Confirmed_OTHERS',function(){
+			
+		let CHPH3_ID = document.getElementById("deleteCRPH3Confirmed_OTHERS").value;
+		
+		if(CHPH3_ID!=0){
+			/*Delete the Selected Item*/	
+			  $.ajax({
+				url: "{{ route('DeleteCashiersProductP3') }}",
+				type:"POST",
+				data:{
+				  CHPH3_ID:CHPH3_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+						LoadCashiersReportPH3_OTHERS();
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+				}
+			   });		
+		}	
+	});
+	
+	$('body').on('click','#deleteCRPH3Confirmed_DISCOUNT',function(){
+			
+		let CHPH3_ID = document.getElementById("deleteCRPH3Confirmed_DISCOUNT").value;
+		
+		if(CHPH3_ID!=0){
+			/*Delete the Selected Item*/	
+			  $.ajax({
+				url: "{{ route('DeleteCashiersProductP3') }}",
+				type:"POST",
+				data:{
+				  CHPH3_ID:CHPH3_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+						LoadCashiersReportPH3_DISCOUNT();
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+				}
+			   });		
+		}	
+	});
+	
 	function TotalAmount_PH3(){
 		
 		let CashiersReportId 		= {{ $CashiersReportId }};
@@ -1107,7 +1380,8 @@
 				      if(response) {				
 					
 					    if(response==''){
-						    $('#pump_price_txt').html('0');
+						   
+						   $('#pump_price_txt').html('0');
 						    $('#discounted_price_txt').html('0');
 						
 						    if(order_quantity!=0 || order_quantity!=''){
@@ -1129,8 +1403,13 @@
 					    }else{
 						
 						    var pump_price	= response[0].product_price;
-						    var discounted_price	= response[0].product_price - product_manual_price;
-						
+						    
+							if(miscellaneous_items_type=='DISCOUNTS'){
+								var discounted_price	= response[0].product_price - product_manual_price;
+							}else{
+								var discounted_price	= 0;
+							}
+							
 						    $('#pump_price_txt').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 						
 						    $('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
@@ -1159,11 +1438,11 @@
 					    alert(error);
 				    }
 			       });	
-		
-		
 	}
 
 	function UpdateTotalAmount_PH3(){
+		
+		let miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 		
 		let CashiersReportId 		= {{ $CashiersReportId }};
 		let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
@@ -1219,8 +1498,13 @@
 					}else{
 					
 					var pump_price	= response[0].product_price;
-					var discounted_price	= response[0].product_price - product_manual_price;
 					
+							if(miscellaneous_items_type=='DISCOUNTS'){
+								var discounted_price	= response[0].product_price - product_manual_price;
+							}else{
+								var discounted_price	= 0;
+							}
+							
 					$('#pump_price_txt_update').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					
 					$('#discounted_price_txt_update').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
@@ -1343,8 +1627,7 @@
 							$('#table_product_data_PH4 tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+description_p4+"</td>"+
 							"<td class='calibration_td' align='center'>"+amount_p4+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH4_Edit' data-id='"+cashiers_report_p4_id+"'></a></div></td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersP4'  data-id='"+cashiers_report_p4_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH4_Edit' data-id='"+cashiers_report_p4_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersP4'  data-id='"+cashiers_report_p4_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
