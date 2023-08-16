@@ -1,12 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\app",
     "\\resources",
     "\\resources\\views",
     "\\resources\\views\\layouts",
     "\\resources\\views\\pages",
     "\\routes"
   ],
-  "SelectedNode": "\\routes\\web.php",
+  "SelectedNode": "\\resources\\views\\pages\\report_sales_order_pdf.blade.php",
   "PreviewInSolutionExplorer": true
 }

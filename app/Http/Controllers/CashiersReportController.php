@@ -1182,8 +1182,17 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.order_total_amount'
-					]);			
-        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS'));
+					]);
+		
+		$data_theoretical_sales =  CashiersReportModel_P4::where('cashiers_report_id', $request->CashiersReportId)
+			->orderBy('cashiers_report_p4_id', 'asc')
+            ->get([
+				'teves_cashiers_report_p4.cashiers_report_p4_id',
+				'teves_cashiers_report_p4.description_p4',
+				'teves_cashiers_report_p4.amount_p4'
+				]);
+					
+        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales'));
 		//var_dump($CashiersReportData);
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
@@ -1195,5 +1204,4 @@ class CashiersReportController extends Controller
 
 	}
 
-	
 }

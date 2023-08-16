@@ -174,23 +174,32 @@ if($company_header=='Teves'){
 		<table cellspacing="0" width="100%">
 
         <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="4">OTHER SALES (Lubricants/Car Care Products/Others)</td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="5">OTHER SALES (Lubricants/Car Care Products/Others)</td>
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;">Product Description</td>
+          <td style="font-size:11px; border:1px solid #000;">#</td>
+          <td style="font-size:11px; border:1px solid #000;">Product Description</td>
 		  <td style="font-size:11px; border:1px solid #000;">Quantity</td>
 		  <td style="font-size:11px; border:1px solid #000;">Unit Price</td>
           <td style="font-size:11px; border:1px solid #000;">Amount</td>
 		</tr>
-
+            <?php
+            $other_sales_no = 1;
+            $other_sales_total = 0;
+            ?>
             @foreach ($data_P2 as $data_P2_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
-				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->product_name}}</td>
+				<td nowrap style="border:1px solid #000;"><?=$other_sales_no;?></td>
+                <td nowrap style="border:1px solid #000;">{{$data_P2_cols->product_name}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->product_price}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->order_quantity}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_P2_cols->order_total_amount}}</td>
 			</tr>
+            <?php
+            $other_sales_no++;
+            $other_sales_total += $data_P2_cols->order_total_amount;
+            ?>
 			@endforeach
 
 		</table>
@@ -214,6 +223,7 @@ if($company_header=='Teves'){
 		</tr>
 			<?php
 			$sc = 1;
+			$total_sales_credit =0;
 			?>
             @foreach ($data_SALES_CREDIT as $data_SALES_CREDIT_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
@@ -222,7 +232,11 @@ if($company_header=='Teves'){
 				<td nowrap style="border:1px solid #000;">{{$data_SALES_CREDIT_cols->order_quantity}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_SALES_CREDIT_cols->order_total_amount}}</td>
 			</tr>
-			<?php $sc++; ?>
+			<?php 
+			$sc++; 
+			$total_sales_credit += $data_SALES_CREDIT_cols->order_total_amount;
+			?>
+			
 			@endforeach
 
 		</table>
@@ -243,6 +257,7 @@ if($company_header=='Teves'){
 			
 			<?php
 			$dis = 1;
+			$total_discount = 0;
 			?>
 
             @foreach ($data_DISCOUNTS as $data_DISCOUNTS_cols)
@@ -253,11 +268,52 @@ if($company_header=='Teves'){
 				<td nowrap style="border:1px solid #000;">{{$data_DISCOUNTS_cols->unit_price}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_DISCOUNTS_cols->order_total_amount}}</td>
 			</tr>
-			<?php $dis++; ?>
+			<?php
+			$dis++; 
+			$total_discount += $data_DISCOUNTS_cols->order_total_amount;
+			?>
 			@endforeach
 
 		</table>
 		<br>
+		<table cellspacing="0" width="100%">
+		
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		  <td style="font-size:11px; border:1px solid #000;" colspan="4"> OTHERS Lubricants discounts / Money Cash Out / Misload</td>
+		</tr>
+
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		  <td style="font-size:11px; border:1px solid #000;">#</td>
+		  <td style="font-size:11px; border:1px solid #000;">Reference No.</td>
+		  <td style="font-size:11px; border:1px solid #000;">Liters / Pieces</td>
+		  <td style="font-size:11px; border:1px solid #000;">Amount</td>
+		</tr>
+			
+			<?php
+			$other_msc = 1;
+			$total_others_msc = 0;
+			?>
+
+            @foreach ($data_OTHERS as $data_OTHERS_cols)
+			<tr class="data_tr" style="text-align: center; font-size:11px;">
+				<td nowrap style="border:1px solid #000;"><?=$other_msc;?></td>
+				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->reference_no}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->order_quantity}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_DISCOUNTS_cols->unit_price}}</td>
+			</tr>
+			<?php
+			$other_msc++; 
+			$total_others_msc += $data_DISCOUNTS_cols->unit_price;
+			?>
+			@endforeach
+
+		</table>
+
+		</table>
+		<br>
+
+
+
 		<table cellspacing="0" width="100%">
 		
         <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
@@ -286,6 +342,113 @@ if($company_header=='Teves'){
 			@endforeach
 
 		</table>
+        
+		<br>
+		<table cellspacing="0" width="100%">
+
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		  <td style="font-size:11px; border:1px solid #000;" colspan="3">THEORETICAL SALES</td>
+		</tr>
+
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+          <td style="font-size:11px; border:1px solid #000;">#</td>
+          <td style="font-size:11px; border:1px solid #000;">Description</td>
+          <td style="font-size:11px; border:1px solid #000;">Amount</td>
+		</tr>
+            <?php
+            $theoretical_sales_no = 1;
+            $theoretical_sales_total = 0;
+            ?>
+            @foreach ($data_theoretical_sales as $data_theoretical_sales_cols)
+			<tr class="data_tr" style="text-align: center; font-size:11px;">
+				<td nowrap style="border:1px solid #000;"><?=$theoretical_sales_no;?></td>
+				<td nowrap style="border:1px solid #000;">{{$data_theoretical_sales_cols->description_p4}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_theoretical_sales_cols->amount_p4}}</td>
+			</tr>
+            <?php
+            $theoretical_sales_no++;
+            $theoretical_sales_total += $data_theoretical_sales_cols->amount_p4;
+            ?>
+			@endforeach
+
+		</table>
+		<br>
+        <style>
+            .final {
+              width: 100%;
+            }
+
+            .summary {
+              float: left;
+              width: 50%;
+            }
+
+            .cash_on_hand {
+              float: left;
+              width: 50%;
+            }
+        </style>
+        <?php
+            $total_fuel_sales = $order_total_amount_P1_premium_95 + $order_total_amount_P1_super_regular + $order_total_amount_P1_diesel;
+        ?>
+        <div class = "final">
+          <div class = "summary">
+                		<table cellspacing="0" width="100%">		
+                        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		                  <td style="font-size:11px; border:1px solid #000;" colspan="2">SUMMARY</td>
+		                </tr>
+
+		                <tr>
+		                   <td style="font-size:11px; border:1px solid #000;">FUEL SALES</td>
+                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_fuel_sales,2,".",",");?></td>
+		                </tr>
+
+     		            <tr>
+		                   <td style="font-size:11px; border:1px solid #000;">OTHER SALES</td>
+                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($other_sales_total,2,".",",");?></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">MISCELLANEOUS ITEMS</td>
+                           <td style="font-size:11px; border:1px solid #000;"></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:right;">SALES ORDER - CREDIT SALES</td>
+                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_sales_credit,2,".",",");?></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:right;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
+                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_discount,2,".",",");?></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:right;">OTHERS</td>
+                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_others_msc,2,".",",");?></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">THEORETICAL SALES</td>
+                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($theoretical_sales_total,2,".",",");?></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">CASH ON HAND</td>
+                           <td style="font-size:11px; border:1px solid #000;"></td>
+		                </tr>
+
+                        <tr>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">CASH - SHORT/OVER</td>
+                           <td style="font-size:11px; border:1px solid #000;"></td>
+		                </tr>
+
+		                </table>
+          </div>
+          <div class = "cash_on_hand">
+             Column 2 content
+          </div>
+        </div>
 
 </body>
 </html>
