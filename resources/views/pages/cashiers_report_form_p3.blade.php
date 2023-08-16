@@ -195,7 +195,6 @@
 									</div>	
 					  </div>					  
 					  
-					  
 					  <div class="row mb-2">
 						  <label for="update_product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT</label>
 						  <div class="col-sm-8">

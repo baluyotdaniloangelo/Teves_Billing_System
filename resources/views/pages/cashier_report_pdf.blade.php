@@ -178,7 +178,7 @@ if($company_header=='Teves'){
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-          <td style="font-size:11px; border:1px solid #000;">#</td>
+          <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
           <td style="font-size:11px; border:1px solid #000;">Product Description</td>
 		  <td style="font-size:11px; border:1px solid #000;">Quantity</td>
 		  <td style="font-size:11px; border:1px solid #000;">Unit Price</td>
@@ -216,7 +216,7 @@ if($company_header=='Teves'){
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;">#</td>
+		  <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
 		  <td style="font-size:11px; border:1px solid #000;">Product</td>
 		  <td style="font-size:11px; border:1px solid #000;">Liters</td>
           <td style="font-size:11px; border:1px solid #000;">Amount</td>
@@ -248,7 +248,7 @@ if($company_header=='Teves'){
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;">#</td>
+		  <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
 		  <td style="font-size:11px; border:1px solid #000;">Reference No.</td>
 		  <td style="font-size:11px; border:1px solid #000;">Liters</td>
           <td style="font-size:11px; border:1px solid #000;">Unit Price</td>
@@ -283,7 +283,7 @@ if($company_header=='Teves'){
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;">#</td>
+		  <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
 		  <td style="font-size:11px; border:1px solid #000;">Reference No.</td>
 		  <td style="font-size:11px; border:1px solid #000;">Liters / Pieces</td>
 		  <td style="font-size:11px; border:1px solid #000;">Amount</td>
@@ -296,50 +296,18 @@ if($company_header=='Teves'){
 
             @foreach ($data_OTHERS as $data_OTHERS_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
-				<td nowrap style="border:1px solid #000;"><?=$other_msc;?></td>
+				<td nowrap style="border:1px solid #000;" width="10%"><?=$other_msc;?></td>
 				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->reference_no}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->order_quantity}}</td>
-				<td nowrap style="border:1px solid #000;">{{$data_DISCOUNTS_cols->unit_price}}</td>
+				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->unit_price}}</td>
 			</tr>
 			<?php
 			$other_msc++; 
-			$total_others_msc += $data_DISCOUNTS_cols->unit_price;
+			$total_others_msc += $data_OTHERS_cols->unit_price;
 			?>
 			@endforeach
 
 		</table>
-
-		</table>
-		<br>
-
-
-
-		<table cellspacing="0" width="100%">
-		
-        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="4"> OTHERS Lubricants discounts / Money Cash Out / Misload</td>
-		</tr>
-
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-		  <td style="font-size:11px; border:1px solid #000;">#</td>
-		  <td style="font-size:11px; border:1px solid #000;">Reference No.</td>
-		  <td style="font-size:11px; border:1px solid #000;">Liters / Pieces</td>
-		  <td style="font-size:11px; border:1px solid #000;">Amount</td>
-		</tr>
-			
-			<?php
-			$dis = 1;
-			?>
-
-            @foreach ($data_OTHERS as $data_OTHERS_cols)
-			<tr class="data_tr" style="text-align: center; font-size:11px;">
-				<td nowrap style="border:1px solid #000;"><?=$dis;?></td>
-				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->reference_no}}</td>
-				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->order_quantity}}</td>
-				<td nowrap style="border:1px solid #000;">{{$data_DISCOUNTS_cols->unit_price}}</td>
-			</tr>
-			<?php $dis++; ?>
-			@endforeach
 
 		</table>
         
@@ -351,7 +319,7 @@ if($company_header=='Teves'){
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
-          <td style="font-size:11px; border:1px solid #000;">#</td>
+          <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
           <td style="font-size:11px; border:1px solid #000;">Description</td>
           <td style="font-size:11px; border:1px solid #000;">Amount</td>
 		</tr>
@@ -400,47 +368,86 @@ if($company_header=='Teves'){
 
 		                <tr>
 		                   <td style="font-size:11px; border:1px solid #000;">FUEL SALES</td>
-                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_fuel_sales,2,".",",");?></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_fuel_sales,2,".",",");?></td>
 		                </tr>
 
      		            <tr>
 		                   <td style="font-size:11px; border:1px solid #000;">OTHER SALES</td>
-                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($other_sales_total,2,".",",");?></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($other_sales_total,2,".",",");?></td>
 		                </tr>
 
                         <tr>
-		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">MISCELLANEOUS ITEMS</td>
-                           <td style="font-size:11px; border:1px solid #000;"></td>
+		                   <td style="font-size:11px; border:1px solid #000; text-align:left;" colspan="2">MISCELLANEOUS ITEMS</td>
+                           
 		                </tr>
 
                         <tr>
 		                   <td style="font-size:11px; border:1px solid #000; text-align:right;">SALES ORDER - CREDIT SALES</td>
-                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_sales_credit,2,".",",");?></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_sales_credit,2,".",",");?></td>
 		                </tr>
 
                         <tr>
 		                   <td style="font-size:11px; border:1px solid #000; text-align:right;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
-                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_discount,2,".",",");?></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_discount,2,".",",");?></td>
 		                </tr>
 
                         <tr>
 		                   <td style="font-size:11px; border:1px solid #000; text-align:right;">OTHERS</td>
-                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_others_msc,2,".",",");?></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_others_msc,2,".",",");?></td>
 		                </tr>
 
                         <tr>
 		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">THEORETICAL SALES</td>
-                           <td style="font-size:11px; border:1px solid #000;"><?=number_format($theoretical_sales_total,2,".",",");?></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($theoretical_sales_total,2,".",",");?></td>
 		                </tr>
-
+						<?php
+						
+						$one_thousand_deno 		= $data_Cash_on_hand[0]->one_thousand_deno;
+						$five_hundred_deno 		= $data_Cash_on_hand[0]->five_hundred_deno;
+						$two_hundred_deno 		= $data_Cash_on_hand[0]->two_hundred_deno;
+						$one_hundred_deno		= $data_Cash_on_hand[0]->one_hundred_deno;
+						$fifty_deno 			= $data_Cash_on_hand[0]->fifty_deno;
+						$twenty_deno 			= $data_Cash_on_hand[0]->twenty_deno;
+						$ten_deno 				= $data_Cash_on_hand[0]->ten_deno;
+						$five_deno 				= $data_Cash_on_hand[0]->five_deno;
+						$one_deno 				= $data_Cash_on_hand[0]->one_deno;
+						$twenty_five_cent_deno 	= $data_Cash_on_hand[0]->twenty_five_cent_deno;
+						$cash_drop 				= $data_Cash_on_hand[0]->cash_drop;
+						
+						$one_thousand_deno_total 	= $one_thousand_deno * 1000;
+						$five_hundred_deno_total 	= $five_hundred_deno * 500;
+						$two_hundred_deno_total 	= $two_hundred_deno * 200;
+						$one_hundred_deno_total 	= $one_hundred_deno * 100;
+						
+						$fifty_deno_total 			= $fifty_deno * 50;
+						$twenty_deno_total 			= $twenty_deno * 20;
+						$ten_deno_total 			= $ten_deno * 10;
+						$five_deno_total 			= $five_deno * 5;
+						$one_deno_total 			= $one_deno * 1;
+						$twenty_five_cent_deno_total = $twenty_five_cent_deno * 0.25;
+						
+						$total_cash_on_hand = 
+							$one_thousand_deno_total + 
+							$five_hundred_deno_total + 
+							$two_hundred_deno_total + 
+							$one_hundred_deno_total +
+							$fifty_deno_total + 
+							$twenty_deno_total +
+							$ten_deno_total + 
+							$five_deno_total +
+							$one_deno_total +
+							$twenty_five_cent_deno_total;
+							
+						$short_over = ($total_fuel_sales + $other_sales_total + $total_sales_credit + $total_discount + $total_others_msc + $theoretical_sales_total) - $total_cash_on_hand;
+						?>
                         <tr>
 		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">CASH ON HAND</td>
-                           <td style="font-size:11px; border:1px solid #000;"></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_cash_on_hand,2,".",",");?></td>
 		                </tr>
 
                         <tr>
 		                   <td style="font-size:11px; border:1px solid #000; text-align:left;">CASH - SHORT/OVER</td>
-                           <td style="font-size:11px; border:1px solid #000;"></td>
+                           <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($short_over,2,".",",");?></td>
 		                </tr>
 
 		                </table>

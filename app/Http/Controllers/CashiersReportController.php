@@ -593,7 +593,7 @@ class CashiersReportController extends Controller
 					        $discounted_price 	= 0;
 					        $product_price = $pump_price;
 				        }
-			
+						$peso_sales = ($order_quantity * $product_price);
 			        }
 
             }else if($miscellaneous_items_type=='DISCOUNTS'){
@@ -615,6 +615,7 @@ class CashiersReportController extends Controller
 				        }
 			
 			        }
+					$peso_sales = ($order_quantity * $product_price);
 
             }else{
 
@@ -635,10 +636,10 @@ class CashiersReportController extends Controller
 				        }
 			
 			        }
-		
+					 $peso_sales = ($product_price);
              }
 			 
-                $peso_sales = ($order_quantity * $product_price);
+               
 								
 								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
 								
@@ -1191,8 +1192,25 @@ class CashiersReportController extends Controller
 				'teves_cashiers_report_p4.description_p4',
 				'teves_cashiers_report_p4.amount_p4'
 				]);
-					
-        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales'));
+		
+		$data_Cash_on_hand = CashiersReportModel_P5::where('cashiers_report_id', $request->CashiersReportId)
+            ->get([	
+			'teves_cashiers_report_p5.cashiers_report_p5_id',			
+			'teves_cashiers_report_p5.one_thousand_deno',
+			'teves_cashiers_report_p5.five_hundred_deno',
+			'teves_cashiers_report_p5.two_hundred_deno',
+			'teves_cashiers_report_p5.one_hundred_deno',
+			'teves_cashiers_report_p5.fifty_deno',
+			'teves_cashiers_report_p5.twenty_deno',
+			'teves_cashiers_report_p5.ten_deno',
+			'teves_cashiers_report_p5.five_deno',
+			'teves_cashiers_report_p5.one_deno',
+			'teves_cashiers_report_p5.twenty_five_cent_deno',
+			'teves_cashiers_report_p5.cash_drop'
+			]);
+		
+		
+        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand'));
 		//var_dump($CashiersReportData);
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/

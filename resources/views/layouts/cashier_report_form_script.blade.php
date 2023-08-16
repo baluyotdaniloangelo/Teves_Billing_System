@@ -1091,7 +1091,7 @@
 					
 					update_input_settings_create_PH3();
 					//var total_amount = response[0].order_total_amount;
-					//$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+					$('#UpdateTotalAmount_PH3').html('0');		
 
 					UpdateTotalAmount_PH3();
 
@@ -1105,6 +1105,7 @@
 				}
 			   });	
 	  });
+
 	$("#update-CRPH3").click(function(event){
 		
 			event.preventDefault();
@@ -1113,11 +1114,13 @@
 			$('#update_order_quantity_PH3Error').text('');
 			$('#update_product_manual_price_PH3Error').text('');
 			
-			let CashiersReportId 		= {{ $CashiersReportId }};			
-			let CHPH3_ID 				= document.getElementById("update-CRPH3").value;
-			var product_idx 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');
-			var order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
-			var product_manual_price 	= $("input[name=update_product_manual_price_PH3]").val();
+			let CashiersReportId 			= {{ $CashiersReportId }};			
+			let CHPH3_ID 					= document.getElementById("update-CRPH3").value;
+			var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
+			var reference_no 				= $("input[name=update_reference_no_PH3]").val();
+			var product_idx 				= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');
+			var order_quantity 				= $("input[name=update_order_quantity_PH3]").val();
+			var product_manual_price 		= $("input[name=update_product_manual_price_PH3]").val();
 			
 			document.getElementById('CRPH3_form_edit').className = "g-3 needs-validation was-validated";
 			
@@ -1128,6 +1131,8 @@
 					data:{
 					  CHPH3_ID:CHPH3_ID,
 					  CashiersReportId:CashiersReportId,
+					  miscellaneous_items_type:miscellaneous_items_type, 
+					  reference_no:reference_no,
 					  product_idx:product_idx,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
@@ -1442,7 +1447,7 @@
 
 	function UpdateTotalAmount_PH3(){
 		
-		let miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
+		var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 		
 		let CashiersReportId 		= {{ $CashiersReportId }};
 		let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
@@ -1462,6 +1467,7 @@
 				data:{
 				  CashiersReportId:CashiersReportId,
 				  CHPH1_ID:CHPH1_ID,
+				  miscellaneous_items_type:miscellaneous_items_type,
 				  product_id:product_id,
 				  _token: "{{ csrf_token() }}"
 				},
@@ -1487,7 +1493,7 @@
 								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
 							}else{
-								
+								alert('s');
 								var total_amount = product_price * order_quantity;
 								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 							
