@@ -1218,7 +1218,7 @@ class CashiersReportController extends Controller
 		$pdf->render();
 		return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
 
-		//return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS'));
+		//return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand'));
 
 	}
 
