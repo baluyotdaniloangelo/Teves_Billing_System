@@ -74,15 +74,25 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_remaining_balance',
 					'teves_receivable_table.receivable_status']);
 		
-		return DataTables::of($data)
+
+		
+				return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('action', function($row){	
-					$actionBtn = '
-					<div align="center" class="action_table_menu_Product">
-					<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-subtract btn_icon_table btn_icon_table_view" id="payReceivables"></a>
-					<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editReceivables"></a>
-					<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables"></a>
-					</div>';
+						if($row->receivable_status == 'Paid'){
+			
+								$actionBtn = '';
+								
+						}else{
+							
+								$actionBtn = '
+									<div align="center" class="action_table_menu_Product">
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-subtract btn_icon_table btn_icon_table_view" id="payReceivables"></a>
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editReceivables"></a>
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables"></a>
+									</div>';
+								
+						}
                     return $actionBtn;
                 })
 				
@@ -219,15 +229,22 @@ class ReceivablesController extends Controller
 
 			$remaining_balance = $receivable_amount - $receivable_payment_amount;
 			
+			/*IF Fully Paid Automatically Update the Status to Paid*/
+			if($remaining_balance <= 0)
+			{
+				$receivable_status = 'Paid';
+			}else{
+				$receivable_status = 'Pending';
+			}
+			
 			/*Update Recievable Table*/
 			$Receivables_update = new ReceivablesModel();
 			$Receivables_update = ReceivablesModel::find($receivable_id);
 			
-			$Receivables_update->receivable_remaining_balance 		= $remaining_balance;
+			$Receivables_update->receivable_remaining_balance 	= $remaining_balance;
+			$Receivables_update->receivable_status 				= $receivable_status;
 			
 			$result_update = $Receivables_update->update();
-			
-			
 			
 			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
 			}

@@ -282,12 +282,15 @@ if($company_header=='Teves'){
 		</tr>
 			
 		<tr style="font-size:10px;">
-			<td colspan="10" align="left" style="border-top:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">&nbsp;Purchase order printed by:</td>	
+			<td colspan="10" align="left" style="border-top:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">&nbsp;Prepared by:</td>	
 				
 		</tr>
 		<tr style="font-size:10px;">
 			<td colspan="10" align="center" style="border-bottom:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000;">&nbsp;{{$user_data->user_real_name}}<br></td>	
 				
+		</tr>
+		<tr style="font-size:10px;font-style: italic;">
+			<td colspan="10" style="">This is a system-generated. No Signature is Required.</td>
 		</tr>
 		</table>
 		

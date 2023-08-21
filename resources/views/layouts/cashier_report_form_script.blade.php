@@ -718,7 +718,7 @@
             document.getElementById("quantity_label").innerHTML = "LITERS";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
 
-        }else if(miscellaneous_items_type == 'SALES_CREDIT'){
+        }/*else if(miscellaneous_items_type == 'SALES_CREDIT'){
 			
             document.getElementById("reference_no_PH3").disabled = false;
             document.getElementById("product_manual_price_PH3").disabled = false;
@@ -728,7 +728,7 @@
             document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
 
-		}else{
+		}*/else{
 
             document.getElementById("reference_no_PH3").disabled = false;
             document.getElementById("product_manual_price_PH3").disabled = false;

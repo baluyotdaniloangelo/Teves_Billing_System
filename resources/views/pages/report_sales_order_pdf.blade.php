@@ -220,7 +220,7 @@ if($company_header=='Teves'){
 		</tr>
 			
 		<tr style="font-size:10px;">
-			<td colspan="10" align="left" style="border-top:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000; border-bottom:0px solid #000; font-style: italic; height:30px !important;">&nbsp;Sales order printed by:</td>	
+			<td colspan="10" align="left" style="border-top:1px solid #000;border-right:1px solid #000;  border-left:1px solid #000; border-bottom:0px solid #000; font-style: italic; height:30px !important;">&nbsp;Prepared by:</td>	
 				
 		</tr>
 		<tr style="font-size:10px;">
@@ -228,7 +228,8 @@ if($company_header=='Teves'){
 				
 		</tr>
 		<tr style="font-size:10px;font-style: italic;">
-			<td colspan="10" style="">This Sales Order is not valid for claims of taxes. Please refer to sales invoice / official receipts issued.</td>
+			<td colspan="10" style="">This Sales Order is not valid for claims of taxes. Please refer to sales invoice / official receipts issued.<br>
+			This is a system-generated. No Signature is Required.</td>
 		</tr>
 		</table>
 		

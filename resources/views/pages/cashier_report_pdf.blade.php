@@ -44,7 +44,7 @@ if($company_header=='Teves'){
 		</tr>
 		</table>
 		<table cellspacing="0" width="100%">
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="3" rowspan="2">PRODUCT </td>
 		  <td style="font-size:11px; border:1px solid #000;" colspan="4">TOTALIZER READING</td>
 		  <td style="font-size:11px; border:1px solid #000;" rowspan="2">CALIBRATION</td>
@@ -53,7 +53,7 @@ if($company_header=='Teves'){
 		  <td style="font-size:11px; border:1px solid #000;" rowspan="2">PESO  SALES</td>
 		</tr>
   
-		<tr style="text-align: center; font-size:11px;" > 
+		<tr style="text-align: center; font-size:11px; background-color: #c6e0b4;" > 
 		  <td style="font-size:11px; border:1px solid #000;" colspan="2">BEGINNING</td>
 		  <td style="font-size:11px; border:1px solid #000;" colspan="2">CLOSING</td>
 		</tr>
@@ -86,7 +86,7 @@ if($company_header=='Teves'){
 			?>
 			@endforeach
 		
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="8">TOTAL </td>
 		  <td style="font-size:11px; border:1px solid #000;"><?=$order_quantity_P1_premium_95;?></td>
 		  <td style="font-size:11px; border:1px solid #000;"><?=$product_price_P1_premium_95;?></td>
@@ -124,7 +124,7 @@ if($company_header=='Teves'){
 			?>
 			@endforeach
 		
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="8">TOTAL </td>
 		  <td style="font-size:11px; border:1px solid #000;"><?=$order_quantity_P1_super_regular;?></td>
 		  <td style="font-size:11px; border:1px solid #000;"><?=$product_price_P1_super_regular;?></td>
@@ -162,7 +162,7 @@ if($company_header=='Teves'){
 			?>
 			@endforeach
 		
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="8">TOTAL </td>
 		  <td style="font-size:11px; border:1px solid #000;"><?=$order_quantity_P1_diesel;?></td>
 		  <td style="font-size:11px; border:1px solid #000;"><?=$product_price_P1_diesel;?></td>
@@ -173,11 +173,11 @@ if($company_header=='Teves'){
 		<br>
 		<table cellspacing="0" width="100%">
 
-        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="5">OTHER SALES (Lubricants/Car Care Products/Others)</td>
 		</tr>
 
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
           <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
           <td style="font-size:11px; border:1px solid #000;">Product Description</td>
 		  <td style="font-size:11px; border:1px solid #000;">Quantity</td>
@@ -207,15 +207,15 @@ if($company_header=='Teves'){
 		
 		<table cellspacing="0" width="100%">
 		
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="4">MISCELLANEOUS ITEMS</td>
 		</tr>
 		
-        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="4">SALES ORDER - CREDIT SALES</td>
 		</tr>
 
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
 		  <td style="font-size:11px; border:1px solid #000;">Product</td>
 		  <td style="font-size:11px; border:1px solid #000;">Liters</td>
@@ -226,7 +226,7 @@ if($company_header=='Teves'){
 			$total_sales_credit =0;
 			?>
             @foreach ($data_SALES_CREDIT as $data_SALES_CREDIT_cols)
-			<tr class="data_tr" style="text-align: center; font-size:11px;">
+			<tr class="data_tr" style="text-align: center; font-size:11px; ">
 				<td nowrap style="border:1px solid #000;"><?=$sc;?></td>
 				<td nowrap style="border:1px solid #000;">{{$data_SALES_CREDIT_cols->product_name}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_SALES_CREDIT_cols->order_quantity}}</td>
@@ -243,11 +243,11 @@ if($company_header=='Teves'){
 		<br>
 		<table cellspacing="0" width="100%">
 		
-        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="5">DISCOUNTS ( WHOLE SALE - FUEL)</td>
 		</tr>
 
-		<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
 		  <td style="font-size:11px; border:1px solid #000;">Reference No.</td>
 		  <td style="font-size:11px; border:1px solid #000;">Liters</td>
@@ -278,7 +278,7 @@ if($company_header=='Teves'){
 		<br>
 		<table cellspacing="0" width="100%">
 		
-        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="4"> OTHERS Lubricants discounts / Money Cash Out / Misload</td>
 		</tr>
 
@@ -314,7 +314,7 @@ if($company_header=='Teves'){
 		<br>
 		<table cellspacing="0" width="100%">
 
-        <tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+        <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="3">THEORETICAL SALES</td>
 		</tr>
 
@@ -346,44 +346,44 @@ if($company_header=='Teves'){
         ?>
 		<table cellspacing="0" width="100%">		
                         <tr>
-		                  <td>
+		                  <td width="45%">
 								<table cellspacing="0" width="100%">		
-								<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+								<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 								  <td style="font-size:11px; border:1px solid #000;" colspan="2">SUMMARY</td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000;">FUEL SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">FUEL SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_fuel_sales,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000;">OTHER SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">OTHER SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($other_sales_total,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left;" colspan="2">MISCELLANEOUS ITEMS</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan="2">MISCELLANEOUS ITEMS</td>
 								   
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;">SALES ORDER - CREDIT SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right; background-color: #c6e0b4;">SALES ORDER - CREDIT SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_sales_credit,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right; background-color: #c6e0b4;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_discount,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;">OTHERS</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right; background-color: #c6e0b4;">OTHERS</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_others_msc,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left;">THEORETICAL SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">THEORETICAL SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($theoretical_sales_total,2,".",",");?></td>
 								</tr>
 								<?php
@@ -427,12 +427,12 @@ if($company_header=='Teves'){
 								$short_over = $total_cash_on_hand - ($total_fuel_sales + $other_sales_total + $total_sales_credit + $total_discount + $total_others_msc + $theoretical_sales_total);
 								?>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left;">CASH ON HAND</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CASH ON HAND</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_cash_on_hand,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left;">CASH - SHORT/OVER</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CASH - SHORT/OVER</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($short_over,2,".",",");?></td>
 								</tr>
 								<tr>
@@ -449,73 +449,74 @@ if($company_header=='Teves'){
 								</tr>
 								</table>
 							</td>
-							<td>
-							
+							<td width="10%">
+							</td>
+							<td width="45%">
 							<table cellspacing="0" width="100%">		
-							<tr style="text-align:center; font-size:11px; border:1px solid #000; " >
+							<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 							  <td style="font-size:11px; border:1px solid #000;" colspan="3">CASH ON HAND SUMMARY</td>
 							</tr>
-							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
+							<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 							  <td style="font-size:11px; border:1px solid #000;">Deno</td>
 							  <td style="font-size:11px; border:1px solid #000;">Quantity</td>
 							  <td style="font-size:11px; border:1px solid #000;">Amount</td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">1000</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">1000</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$one_thousand_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$one_thousand_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">500</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">500</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$five_hundred_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$five_hundred_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">200</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">200</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$two_hundred_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$two_hundred_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">100</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">100</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$one_hundred_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$one_hundred_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">50</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">50</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$fifty_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$fifty_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">20</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">20</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$twenty_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$twenty_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">10</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">10</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$ten_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$ten_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">5</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">5</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$five_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$five_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">1</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">1</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$one_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$one_deno_total;?></td>
 							</tr>
 							<tr style="text-align:right; font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;">0.25</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">0.25</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$twenty_five_cent_deno;?></td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$twenty_five_cent_deno_total;?></td>
 							</tr>
 							<tr style="font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;" colspan='2'>Total cash on hand</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan='2'>Total cash on hand</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$total_cash_on_hand;?></td>
 							</tr>
 							<tr style="font-size:11px; border:1px solid #000; " >
-							  <td style="font-size:11px; border:1px solid #000;" colspan='2'>Cash drop</td>
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan='2'>Cash drop</td>
 							  <td style="font-size:11px; border:1px solid #000;"><?=$cash_drop;?></td>
 							</tr>
 							</table>
