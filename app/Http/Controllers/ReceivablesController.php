@@ -74,24 +74,18 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_remaining_balance',
 					'teves_receivable_table.receivable_status']);
 		
-
-		
 				return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('action', function($row){	
 						if($row->receivable_status == 'Paid'){
-			
 								$actionBtn = '';
-								
 						}else{
-							
 								$actionBtn = '
 									<div align="center" class="action_table_menu_Product">
 									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-subtract btn_icon_table btn_icon_table_view" id="payReceivables"></a>
 									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editReceivables"></a>
 									<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables"></a>
-									</div>';
-								
+									</div>';	
 						}
                     return $actionBtn;
                 })
