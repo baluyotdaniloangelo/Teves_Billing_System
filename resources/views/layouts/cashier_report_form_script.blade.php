@@ -7,7 +7,7 @@
 	LoadCashiersReportPH3_DISCOUNT();
     LoadCashiersReportPH3_OTHERS();
 
-	LoadCashiersReportPH4();
+	//LoadCashiersReportPH4();
 	LoadCashiersReportPH5();
 	LoadCashiersReportPH6();
 	<!--Save New Client->
@@ -931,7 +931,7 @@
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_SALES_CREDIT' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
+							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_SALES_CREDIT' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_SALES_CREDIT'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
 					}			
 				  }else{
@@ -2450,11 +2450,10 @@
 					other_sales_total = response.other_sales_total;
 					total_sales = fuel_sales_total + other_sales_total;
 					miscellaneous_total = response.miscellaneous_total;
-					theoretical_sales = response.theoretical_sales;
+					theoretical_sales = total_sales - miscellaneous_total;
 					cash_on_hand = response.cash_on_hand;
 					
-					cash_short_or_over = cash_on_hand - (total_sales + miscellaneous_total + theoretical_sales);
-					
+					cash_short_or_over = cash_on_hand - (total_sales + miscellaneous_total + theoretical_sales);				
 					
 					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					

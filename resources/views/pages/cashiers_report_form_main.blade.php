@@ -105,10 +105,10 @@
 							</li>
 							<!--<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph3_1-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph3_1" type="button" role="tab" aria-controls="ph3_1" aria-selected="false" tabindex="-1">Cash Out</button>
-							</li>-->
+							</li>
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph4-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph4" type="button" role="tab" aria-controls="ph4" aria-selected="false" tabindex="-1">Theoretical Sales</button>
-							</li>
+							</li>-->
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph5-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph5" type="button" role="tab" aria-controls="ph5" aria-selected="false" tabindex="-1">Cash On Hand</button>
 							</li>
@@ -133,10 +133,10 @@
 							<div align="center" style="font-weight:bold;">Cash Out</div>
 							  include('pages.cashiers_report_form_p3_1')
 							</div>-->
-							<div class="tab-pane fade" id="bordered-ph4" role="tabpanel" aria-labelledby="ph4-tab">
+							<!--<div class="tab-pane fade" id="bordered-ph4" role="tabpanel" aria-labelledby="ph4-tab">-->
 							<!--<div align="center" style="font-weight:bold;">Theoretical Sales(Discounts, misload, return,sweldo,snack,change,lubes p.o)</div>-->
-							  @include('pages.cashiers_report_form_p4')
-							</div>
+							<!--  inclsudje('pages.cashiers_report_form_p4') -->
+							<!--</div>-->
 							<div class="tab-pane fade" id="bordered-ph5" role="tabpanel" aria-labelledby="ph5-tab">						
 							@include('pages.cashiers_report_form_p5')
 							</div>

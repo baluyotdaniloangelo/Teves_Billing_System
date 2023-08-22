@@ -984,13 +984,6 @@ class CashiersReportController extends Controller
 
 		$CashiersReportId = $request->CashiersReportId;
 		
-		/*$data =  CashiersReportModel_P4::where('cashiers_report_p4_id', $CHPH4_ID)
-				->get([
-					'teves_cashiers_report_p4.cashiers_report_p4_id',
-					'teves_cashiers_report_p4.description_p4',
-					'teves_cashiers_report_p4.amount_p4'
-					]);		*/	
-		
 		$PH1_SUM =  CashiersReportModel_P1::where('teves_cashiers_report_p1.cashiers_report_id', $CashiersReportId)
         ->sum('order_total_amount');
 
@@ -1034,7 +1027,9 @@ class CashiersReportController extends Controller
 		
 		$twenty_five_cent_deno 	= $_PH5_SUM[0]->twenty_five_cent_deno * 0.25;
 		
-		$PH5_SUM = $one_thousand_deno + $five_hundred_deno + $two_hundred_deno + $one_hundred_deno + $fifty_deno + $twenty_deno + $ten_deno + $five_deno + $one_deno + $twenty_five_cent_deno;
+		$cash_drop 	= $_PH5_SUM[0]->cash_drop;
+		
+		$PH5_SUM = $cash_drop + $one_thousand_deno + $five_hundred_deno + $two_hundred_deno + $one_hundred_deno + $fifty_deno + $twenty_deno + $ten_deno + $five_deno + $one_deno + $twenty_five_cent_deno;
         		
 		if($CashiersReportId!=0){
 				return response()->json(array('success' => "Success", 'fuel_sales_total' => $PH1_SUM, 'other_sales_total' => $PH2_SUM, 'miscellaneous_total' => $PH3_SUM, 'theoretical_sales' => $PH4_SUM, 'cash_on_hand' => $PH5_SUM), 200);

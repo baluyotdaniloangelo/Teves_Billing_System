@@ -413,6 +413,7 @@ if($company_header=='Teves'){
 								$twenty_five_cent_deno_total = $twenty_five_cent_deno * 0.25;
 								
 								$total_cash_on_hand = 
+									$cash_drop + 
 									$one_thousand_deno_total + 
 									$five_hundred_deno_total + 
 									$two_hundred_deno_total + 

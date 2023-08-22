@@ -32,7 +32,7 @@
                     <td style="text-align: right !important;"><span id="theoretical_sales">0.00</span></td>
                   </tr>
 				  <tr>
-                    <th scope="row">CASH ON HAND</th>
+                    <th scope="row">TOTAL CASH</th>
                     <td style="text-align: right !important;"><span id="cash_on_hand">0.00</span></td>
                   </tr>
 				  <tr>
