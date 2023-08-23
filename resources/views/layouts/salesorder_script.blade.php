@@ -577,8 +577,8 @@
 	function LoadProductRowForUpdate(sales_order_id) {
 		
 		event.preventDefault();
-		$("#update_table_product_body_data tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_product_body_data');
+		
+		//$("#update_table_product_data tbody").html("");
 		
 			  $.ajax({
 				url: "/get_sales_order_product_list",
@@ -588,7 +588,9 @@
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
-							
+				
+				  $("#update_table_product_data tbody").html("");
+					
 				  console.log(response);
 				  if(response!='') {
 					  
@@ -601,7 +603,8 @@
 							var product_price = response[i].product_price;
 							var order_quantity = response[i].order_quantity;
 							
-							$('#update_table_product_body_data tr:last').after("<tr>"+
+							
+							var tr_str = "<tr>"+
 								"<td class='product_td' align='center'>"+
 								"<select class='form-control form-select update_product_idx' name='update_product_idx' id='update_product_idx' required>"+
 									"<option selected='' disabled='' value=''>Choose...</option>"+
@@ -619,11 +622,20 @@
 								"<input type='text' class='form-control update_product_manual_price' placeholder='0.00' aria-label='' name='update_product_manual_price' id='update_product_manual_price' value='"+product_price+"'>"+
 								"</td>"+
 								"<td><div onclick='deleteRow(this)' data-id="+id+" id='product_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'>"+
-								"<a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteReceivables'></a>"+"</div></div>"+"</td></tr>");
+								"<a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteReceivables'></a>"+"</div></div>"+"</td></tr>";
+								
+							$("#update_table_product_data tbody").append(tr_str);
 						}			
 				  }else{
 							/*No Result Found or Error*/	
 				  }
+				},
+				beforeSend:function()
+				{
+					//alert('s');
+					$("#update_table_product_data tbody").html("");
+					//$("#update_table_product_body_data tr").remove();
+					//$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_product_body_data');
 				},
 				error: function(error) {
 				 console.log(error);	 
@@ -635,8 +647,6 @@
 	function LoadPaymentRowForUpdate(sales_order_id) {
 		
 		event.preventDefault();
-		$("#update_table_payment_body_data tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 		
 			  $.ajax({
 				url: "/get_sales_order_payment_list",
@@ -649,6 +659,9 @@
 							
 				  console.log(response);
 				  if(response!='') {
+					  
+					  $("#update_table_payment_body_data tr").remove();
+					  $('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 					  
 						var len = response.length;
 						for(var i=0; i<len; i++){

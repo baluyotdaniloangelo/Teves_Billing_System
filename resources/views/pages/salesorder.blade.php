@@ -356,7 +356,7 @@
 									</thead>
 										
 									<tbody id="update_table_product_body_data">
-										 <tr style="display: none;"><td>HIDDEN</td></tr>
+										 
 									</tbody>
 									
 								</table>

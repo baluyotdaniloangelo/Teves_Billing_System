@@ -158,6 +158,13 @@
 							$("#download_options").html(''); 
 				
 					}
+				}
+				,beforeSend:function()
+				{
+					$('#loading_data').show();
+				},
+				complete: function(){
+					$('#loading_data').hide();
 				},
 				error: function(error) {
 				 console.log(error);	
