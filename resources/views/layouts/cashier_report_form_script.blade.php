@@ -2453,7 +2453,7 @@
 					theoretical_sales = total_sales - miscellaneous_total;
 					cash_on_hand = response.cash_on_hand;
 					
-					cash_short_or_over = cash_on_hand - (total_sales + miscellaneous_total + theoretical_sales);				
+					cash_short_or_over = cash_on_hand - (total_sales + miscellaneous_total);				
 					
 					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					
