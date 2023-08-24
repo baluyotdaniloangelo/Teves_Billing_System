@@ -401,7 +401,7 @@ if($company_header=='Teves'){
 									$one_deno_total +
 									$twenty_five_cent_deno_total;
 									
-								$short_over = $total_cash_on_hand - ($total_fuel_sales + $other_sales_total + $total_sales_credit + $total_discount + $total_others_msc);
+								$short_over = $total_cash_on_hand - ($theoretical_sales_total);
 								?>
 								<tr>
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CASH ON HAND</td>
