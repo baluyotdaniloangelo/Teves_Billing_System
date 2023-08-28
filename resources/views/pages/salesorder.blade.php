@@ -115,7 +115,7 @@
 								
 								<div class="row">
 								<div class="col-md-4">
-										<label for="client_idx" class="form-label">Sold To</label>
+										<label for="client_id" class="form-label">Sold To</label>
 	
 										 <input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
 											<datalist id="client_name">
@@ -248,7 +248,11 @@
 								
 					</div>
 					<div class="modal-footer modal-footer_form">
-						
+							<div id="loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-sales-order"> Submit</button>
 									<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>
 						  
@@ -431,10 +435,12 @@
 								
 					</div>
 					<div class="modal-footer modal-footer_form">
-						
-						<button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-sales-order"> Submit</button>
-						
-						  
+							<div id="upload_loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>						
+						<button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-sales-order"> Submit</button> 
 					</div>
 					</form>		
                   </div>

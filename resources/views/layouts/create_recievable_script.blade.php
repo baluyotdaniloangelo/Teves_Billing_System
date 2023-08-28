@@ -8,10 +8,7 @@
 					/*Reset Warnings*/
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
-					$('#end_dateError').text('');		
-					
-					/*Reset Table Upon Resubmit form*/					
-					$("#billingstatementreport tbody").html("");					
+					$('#end_dateError').text('');							
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
@@ -40,6 +37,9 @@
 				
 				/*Close Form*/
 				$('#CreateReportModal').modal('toggle');
+				
+				/*Reset Table Upon Resubmit form*/					
+				$("#billingstatementreport tbody").html("");
 				
 				/*Call Function to Get the Client Name and Address*/
 				get_client_details();
@@ -166,6 +166,13 @@
 
 				 }
 				},
+				beforeSend:function()
+				{
+					$('#loading_data').show();
+				},
+				complete: function(){
+					$('#loading_data').hide();
+				},
 				error: function(error) {
 				 console.log(error);	
 				 
@@ -194,9 +201,6 @@
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');		
 					
-					/*Reset Table Upon Resubmit form*/					
-					$("#billingstatementreport tbody").html("");					
-					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
 			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
@@ -224,7 +228,9 @@
 				
 				/*Call Function to Get the Client Name and Address*/
 				get_client_details();
-							
+				/*Reset Table Upon Resubmit form*/					
+				$("#billingstatementreport tbody").html("");
+				
 				  console.log(response);
 				  if(response!='') {
 					
@@ -677,6 +683,12 @@
 					$('#payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 					
+					/*Clear Form*/
+					$('#or_number').val("");
+					$('#payment_term').val("");
+					$('#receivable_description').val("");
+					/*Close Form*/
+					$('#CreateReceivablesModal').modal('toggle');
 					
 					/*Reload*/
 					reload_report_after_save(response.receivable_id);
@@ -700,11 +712,23 @@
 					'</div>');
 							
 					$("#save_options").html('');
-
-					
-					/*Close Form*/
 					
 				  }
+				},
+				beforeSend:function()
+				{
+					/*Disable Submit Button*/
+					document.getElementById("generate_report").disabled = true;
+					/*Show Status*/
+					$('#loading_data_save_receivables').show();
+				},
+				complete: function(){
+					
+					/*Enable Submit Button*/
+					document.getElementById("generate_report").disabled = true;
+					/*Hide Status*/
+					$('#loading_data_save_receivables').hide();
+					
 				},
 				error: function(error) {
 				 console.log(error);	

@@ -490,11 +490,11 @@ if($company_header=='Teves'){
 							</tr>
 							<tr style="font-size:11px; border:1px solid #000; " >
 							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan='2'>Total cash on hand</td>
-							  <td style="font-size:11px; border:1px solid #000;"><?=number_format($total_cash_on_hand,2,".",",");?></td>
+							  <td style="text-align:right; font-size:11px; border:1px solid #000;"><?=number_format($total_cash_on_hand,2,".",",");?></td>
 							</tr>
 							<tr style="font-size:11px; border:1px solid #000; " >
 							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan='2'>Cash drop</td>
-							  <td style="font-size:11px; border:1px solid #000;"><?=number_format($cash_drop,2,".",",");?></td>
+							  <td style="text-align:right; font-size:11px; border:1px solid #000;"><?=number_format($cash_drop,2,".",",");?></td>
 							</tr>
 							</table>
 							

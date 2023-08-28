@@ -29,14 +29,9 @@
 				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
 				{data: ({sales_order_net_amount,sales_order_less_percentage}) => (Number(sales_order_net_amount)*Number(sales_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
 				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
-					
-				
-				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					
-				
+				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'delivery_status', name: 'delivery_status', orderable: true, searchable: true},
-				{data: 'payment_status', name: 'payment_status', orderable: true, searchable: true},
-				
+				{data: 'payment_status', name: 'payment_status', orderable: true, searchable: true},		
 				{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],
@@ -51,7 +46,7 @@
 				
 	});
 	
-		function AddPaymentRow() {
+	function AddPaymentRow() {
 		
 		var x = document.getElementById("table_payment_body_data").rows.length;
 		/*Limit to 5 rows*/
@@ -122,9 +117,9 @@
 				  console.log(response);
 				  if(response) {
 					
-					//$('#switch_notice_off').show();
-					//$('#sw_off').html("Item Deleted");
-					//setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Payment Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					
 				  }
 				},
@@ -137,7 +132,6 @@
 		
 	}
 
-	
 	function AddProductRow() {
 		
 		var x = document.getElementById("table_product_body_data").rows.length;
@@ -208,9 +202,9 @@
 				  console.log(response);
 				  if(response) {
 					
-					//$('#switch_notice_off').show();
-					//$('#sw_off').html("Item Deleted");
-					//setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Order Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					
 				  }
 				},
@@ -220,7 +214,6 @@
 				}
 			   });		
 		}
-		
 	}
 	
 	<!--Save New Sales Order-->
@@ -370,14 +363,26 @@
 					$('#product_manual_priceError').text('');
 					$('#order_quantityError').text('');
 		
-					
+					/*Clear Form*/
+					$('#sales_order_date').val("");
+					$('#delivered_to').val("");
+					$('#delivered_to_address').val("");
+					$('#dr_number').val("");
+					$('#or_number').val("");
+					$('#payment_term').val("");
+					$('#delivery_method').val("");
+					$('#hauler').val("");
+					$('#required_date').val("");
+					$('#instructions').val("");
+					$('#note').val("");	
+		
 				    /*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					//var table = $("#getSalesOrderList").DataTable();
-					//table.ajax.reload(null, false);
+					var table = $("#getSalesOrderList").DataTable();
+					table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#CreateSalesOrderModal').modal('toggle');
@@ -390,10 +395,28 @@
 					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
 					window.open(url);
 					
-					/*Reload Page*/
-					location.reload();
+					/*Reload Page
+					location.reload();*/
 					
 				  }
+				},
+				beforeSend:function()
+				{
+					
+					/*Disable Submit Button*/
+					document.getElementById("save-sales-order").disabled = true;
+					/*Show Status*/
+					$('#loading_data').show();
+					
+					
+				},
+				complete: function(){
+						
+					/*Enable Submit Button*/
+					document.getElementById("save-sales-order").disabled = false;
+					/*Hide Status*/
+					$('#loading_data').hide();	
+					
 				},
 				error: function(error) {
 					
@@ -478,10 +501,10 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					//var table = $("#getSalesOrderList").DataTable();
-				    //table.ajax.reload(null, false);
+					var table = $("#getSalesOrderList").DataTable();
+				    table.ajax.reload(null, false);
 					/*Reload Page*/
-					location.reload();
+					//location.reload();
 					
 				  }
 				},
@@ -537,9 +560,9 @@
 					
 					document.getElementById("update_company_header").value = response[0].company_header;
 					
-				var update_product_idx = [];
-				var update_order_quantity = [];
-				var update_product_manual_price = [];
+					var update_product_idx = [];
+					var update_order_quantity = [];
+					var update_product_manual_price = [];
 				  
 					 $('.update_product_idx').each(function(){
 						if($(this).val() == ''){
@@ -575,11 +598,7 @@
 	  });	
 
 	function LoadProductRowForUpdate(sales_order_id) {
-		
 		event.preventDefault();
-		
-		//$("#update_table_product_data tbody").html("");
-		
 			  $.ajax({
 				url: "/get_sales_order_product_list",
 				type:"POST",
@@ -864,13 +883,12 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					//var table = $("#getSalesOrderList").DataTable();
-					//table.ajax.reload(null, false);
+					var table = $("#getSalesOrderList").DataTable();
+					table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#UpdateSalesOrderModal').modal('toggle');
 					/*Open PDF for Printing*/
-					//let salesOrderID = $(this).data('id');
 					var query = {
 								sales_order_id:sales_order_id,
 								_token: "{{ csrf_token() }}"
@@ -879,9 +897,22 @@
 					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
 					window.open(url);
 					
-					/*Reload Page*/
-					location.reload();
+					/*Reload Page
+					location.reload();*/
+					
 				  }
+				},
+				beforeSend:function()
+				{
+					$('#upload_loading_data').show();
+				},
+				complete: function(){
+					
+					$('#upload_loading_data').hide();
+					
+					/*Close Form*/
+					$('#UpdateSalesOrderModal').modal('toggle');
+					
 				},
 				error: function(error) {
 					
@@ -890,7 +921,6 @@
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
 				  document.getElementById('client_idxError').className = "invalid-feedback";
 				  
-				   
 				  //document.getElementById('product_idxError').className = "invalid-feedback";
 				  $('#product_idxError').html(error.responseJSON.errors.product_idx);
 								

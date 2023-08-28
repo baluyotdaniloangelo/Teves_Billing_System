@@ -158,13 +158,23 @@
 							$("#download_options").html(''); 
 				
 					}
-				}
-				,beforeSend:function()
+				},
+				beforeSend:function()
 				{
+					
+					/*Disable Submit Button*/
+					document.getElementById("generate_report").disabled = true;
+					/*Show Status*/
 					$('#loading_data').show();
+					
 				},
 				complete: function(){
+					
+					/*Enable Submit Button*/
+					document.getElementById("generate_report").disabled = false;
+					/*Hide Status*/
 					$('#loading_data').hide();
+					
 				},
 				error: function(error) {
 				 console.log(error);	
@@ -655,7 +665,7 @@
 	  });
 
 	  <!--Site Confirmed For Deletion-->
-	  $('body').on('click','#deleteBillConfirmed',function(){
+	$('body').on('click','#deleteBillConfirmed',function(){
 			
 			event.preventDefault();
 

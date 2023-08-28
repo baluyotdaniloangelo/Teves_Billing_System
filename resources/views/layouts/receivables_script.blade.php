@@ -237,8 +237,6 @@
 	function loadReceivablesPayment(ReceivableID) {
 		
 		event.preventDefault();
-		$("#receivable_payment_table_body_data tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#receivable_payment_table_body_data');
 		
 			  $.ajax({
 				url: "/get_receivable_payment_list",
@@ -251,6 +249,9 @@
 							
 				  console.log(response);
 				  if(response!='') {
+					  
+					    $("#receivable_payment_table_body_data tr").remove();
+						$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#receivable_payment_table_body_data');
 					  
 						var len = response.length;
 						for(var i=0; i<len; i++){
@@ -405,6 +406,13 @@
 				  
 				  }
 				},
+				beforeSend:function()
+				{
+					$('#update_loading_data').show();
+				},
+				complete: function(){
+					$('#update_loading_data').hide();
+				},
 				error: function(error) {
 				 console.log(error);	
 				 
@@ -467,8 +475,8 @@
 			   });		
 	  });
 
-	  <!--Receivable Confirmed For Deletion-->
-	  $('body').on('click','#deleteReceivableConfirmed',function(){
+	<!--Receivable Confirmed For Deletion-->
+	$('body').on('click','#deleteReceivableConfirmed',function(){
 			
 			event.preventDefault();
 
@@ -505,7 +513,7 @@
 			   });		
 	  });
 
-		function receivable_print(id){
+	function receivable_print(id){
 		  
 			event.preventDefault();
 			var to_print = document.getElementById("receivable_print_"+id).value;
@@ -523,10 +531,10 @@
 					/*No Action*/
 				}
 				
-		}	    
+	}	    
 	  
-	  /*Re-print*/
-	  function print_billing(id){
+	/*Re-print*/
+	function print_billing(id){
 	  
 			event.preventDefault();
 			
@@ -584,7 +592,7 @@
 	  
 	  }
 	  
-	  function print_receivable(id){
+	function print_receivable(id){
 	  
 			event.preventDefault();
 			
@@ -637,9 +645,9 @@
 				}
 			   });		
 	  
-	  }
+	}
 	  
-	  	  function print_soa(id){
+	function print_soa(id){
 	  
 			event.preventDefault();
 			
@@ -690,8 +698,7 @@
 				 console.log(error);
 					alert(error);
 				}
-			   });		
-	  
+			   });
 	  }
   </script>
 	

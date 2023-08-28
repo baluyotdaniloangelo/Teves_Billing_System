@@ -318,7 +318,12 @@
 								<hr>
 								
 					</div>
-					<div class="modal-footer modal-footer_form">		
+					<div class="modal-footer modal-footer_form">
+							<div id="loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>					
 						<button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-purchase-order"> Submit</button>
 						<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>
 					</div>
@@ -582,6 +587,11 @@
 								
 					</div>
 					<div class="modal-footer modal-footer_form">		
+							<div id="update_loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
 						<button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-purchase-order" value=""> Submit</button>
 						<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>
 					</div>

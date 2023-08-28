@@ -147,6 +147,16 @@
 					$('#product_manual_priceError').text('');
 					$('#order_quantityError').text('');
 					
+					/*Clear Form*/
+					$('#order_po_number').val("");
+					$('#client_idx').val("");
+					$('#plate_no').val("");
+					$('#drivers_name').val("");
+					$('#product_idx').val("");
+					$('#product_manual_price').val("");
+					$('#order_quantity').val("");
+					
+					$('#TotalAmount').html('0.00');
 				    /*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
@@ -156,6 +166,22 @@
 				    table.ajax.reload(null, false);
 					
 				  }
+				},
+				beforeSend:function()
+				{
+					/*Disable Submit Button*/
+					document.getElementById("save-billing-transaction").disabled = true;
+					/*Show Status*/
+					$('#loading_data').show();
+			
+				},
+				complete: function(){
+					
+					/*Disable Submit Button*/
+					document.getElementById("save-billing-transaction").disabled = false;
+					/*Hide Status*/
+					$('#loading_data').hide();
+				
 				},
 				error: function(error) {
 					
@@ -169,10 +195,6 @@
 
 				  $('#order_po_numberError').text(error.responseJSON.errors.order_po_number);
 				  document.getElementById('order_po_numberError').className = "invalid-feedback";		
-				
-				  //$('#client_idxError').text(error.responseJSON.errors.client_idx);
-				  //document.getElementById('client_idxError').className = "invalid-feedback";	
-				  //document.getElementById("client_id").value = "";
 				  
 					if(error.responseJSON.errors.client_idx=='Client is Required'){
 							
@@ -336,6 +358,23 @@
 				    table.ajax.reload(null, false);
 					
 				  }
+				},
+				beforeSend:function()
+				{
+					
+					/*Disable Submit Button*/
+					document.getElementById("update-billing-transaction").disabled = true;
+					/*Show Status*/
+					$('#update_loading_data').show();
+					
+				},
+				complete: function(){
+					
+					/*Enable Submit Button*/
+					document.getElementById("update-billing-transaction").disabled = false;
+					/*Hide Status*/
+					$('#update_loading_data').hide();
+					
 				},
 				error: function(error) {
 				 console.log(error);	

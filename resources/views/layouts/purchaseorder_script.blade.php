@@ -367,14 +367,35 @@
 					
 					$('#supplier_idxError').text('');					
 
+					/*Clear Form*/
+					$('#company_header').val("");
+					$('#supplier_name').val("");
+					$('#purchase_order_sales_order_number').val("");
+					$('#purchase_order_collection_receipt_no').val("");
+					$('#purchase_order_official_receipt_no').val("");
+					$('#purchase_order_delivery_receipt_no').val("");
+					$('#purchase_order_delivery_method').val("");
+					$('#purchase_loading_terminal').val("");
+					$('#hauler_operator').val("");
+					$('#lorry_driver').val("");
+					$('#plate_number').val("");
+					$('#contact_number').val("");
+					
+					$('#purchase_destination').val("");
+					$('#purchase_destination_address').val("");
+					$('#purchase_date_of_departure').val("");
+					$('#purchase_date_of_arrival').val("");
+					
+					$('#purchase_order_instructions').val("");
+					$('#purchase_order_note').val("");
 					
 				    /*
 					If you are using server side datatable, then you can use ajax.reload() 
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					//var table = $("#getPurchaseOrderList").DataTable();
-					//table.ajax.reload(null, false);
+					var table = $("#getPurchaseOrderList").DataTable();
+					table.ajax.reload(null, false);
 					
 					/*Close Modal*/
 					$('#CreatePurchaseOrderModal').modal('toggle');
@@ -387,10 +408,28 @@
 					var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
 					window.open(url);
 					
-					/*Reload Page*/
+					/*Reload Page
 					location.reload();
-					
+					*/
 				  }
+				},
+				beforeSend:function()
+				{
+					
+					/*Disable Submit Button*/
+					document.getElementById("save-purchase-order").disabled = true;
+					/*Show Status*/
+					$('#loading_data').show();
+					
+					
+				},
+				complete: function(){
+						
+					/*Enable Submit Button*/
+					document.getElementById("save-purchase-order").disabled = false;
+					/*Hide Status*/
+					$('#loading_data').hide();	
+					
 				},
 				error: function(error) {
 					
@@ -591,9 +630,7 @@
 	function LoadProductRowForUpdate(purchase_order_id) {
 		
 		event.preventDefault();
-		$("#update_table_product_body_data tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_product_body_data');
-		
+
 			  $.ajax({
 				url: "/get_purchase_order_product_list",
 				type:"POST",
@@ -606,6 +643,9 @@
 				  console.log(response);
 				  if(response!='') {
 					  
+						$("#update_table_product_body_data tr").remove();
+						$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_product_body_data');
+		
 						var len = response.length;
 						for(var i=0; i<len; i++){
 							
@@ -648,8 +688,6 @@
 	function LoadPaymentRowForUpdate(purchase_order_id) {
 		
 		event.preventDefault();
-		$("#update_table_payment_body_data tr").remove();
-		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 		
 			  $.ajax({
 				url: "/get_purchase_order_payment_list",
@@ -662,7 +700,10 @@
 							
 				  console.log(response);
 				  if(response!='') {
-					  
+					 
+					$("#update_table_payment_body_data tr").remove();
+					$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
+
 						var len = response.length;
 						for(var i=0; i<len; i++){
 							
@@ -902,6 +943,24 @@
 					location.reload();
 					
 				  }
+				},
+				beforeSend:function()
+				{
+					
+					/*Disable Submit Button*/
+					document.getElementById("update-purchase-order").disabled = true;
+					/*Show Status*/
+					$('#update_loading_data').show();
+					
+					
+				},
+				complete: function(){
+						
+					/*Enable Submit Button*/
+					document.getElementById("update-purchase-order").disabled = false;
+					/*Hide Status*/
+					$('#update_loading_data').hide();	
+					
 				},
 				error: function(error) {
 					
