@@ -272,7 +272,9 @@
 
 						}			
 				  }else{
-							/*No Result Found or Error*/	
+							/*No Result Found or Error*/
+							$("#receivable_payment_table_body_data tr").remove();
+							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#receivable_payment_table_body_data');
 				  }
 				},
 				error: function(error) {

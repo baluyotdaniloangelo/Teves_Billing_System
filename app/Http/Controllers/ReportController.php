@@ -920,21 +920,12 @@ class ReportController extends Controller
 					'teves_sales_order_component_table.order_total_amount'
 					]);
 		
-		$sales_payment_component = SalesOrderPaymentModel::where('teves_sales_order_payment_details.sales_order_idx', $sales_order_id)
-			->orderBy('sales_order_idx', 'asc')
-              	->get([
-					'teves_sales_order_payment_details.sales_order_mode_of_payment',
-					'teves_sales_order_payment_details.sales_order_date_of_payment',
-					'teves_sales_order_payment_details.sales_order_reference_no',
-					'teves_sales_order_payment_details.sales_order_payment_amount',
-					]);
-		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'SALES ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','sales_payment_component'));
+        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','sales_payment_component'));
 		
 		/*Download Directly*/

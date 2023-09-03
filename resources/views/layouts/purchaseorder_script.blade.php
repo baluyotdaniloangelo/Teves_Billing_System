@@ -730,7 +730,9 @@
 
 						}			
 				  }else{
-							/*No Result Found or Error*/	
+							/*No Result Found or Error*/
+							$("#update_table_payment_body_data tr").remove();
+							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 				  }
 				},
 				error: function(error) {

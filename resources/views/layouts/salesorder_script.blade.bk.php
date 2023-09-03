@@ -46,6 +46,92 @@
 				
 	});
 	
+	function AddPaymentRow() {
+		
+		var x = document.getElementById("table_payment_body_data").rows.length;
+		/*Limit to 5 rows*/
+		
+		if(x > 3){
+		   return;
+		}else{
+		
+			$('#table_payment_body_data tr:last').after("<tr>"+
+			"<td class='bank_td' align='center'>"+
+			"<input type='text' class='form-control mode_of_payment' id='mode_of_payment' name='mode_of_payment' list='mode_of_payment_list' autocomplete='off'>"+
+							"<datalist id='mode_of_payment_list'>"+
+								<?php foreach ($sales_order_mode_of_payment_suggestion as $mode_of_payment_cols) {?>
+									"<option value='<?=$mode_of_payment_cols->sales_order_mode_of_payment;?>'>"+
+								<?php } ?>
+							"</datalist>"+
+			"</td>"+
+			"<td class='date_of_payment_td' align='center'><input type='date' class='form-control date_of_payment' id='date_of_payment' name='date_of_payment' value='<?=date('Y-m-d');?>'></td>"+
+			"<td class='reference_no_td' align='center'><input type='text' class='form-control reference_no' id='reference_no' name='reference_no'></td>"+
+			"<td class='payment_amount_td' align='center'><input type='number' class='form-control payment_amount' id='payment_amount' name='payment_amount'></td>"+
+			"<td><div onclick='deletePaymentRow(this)' data-id='0' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+		
+		}	
+	}		
+	
+	function UpdatePaymentRow() {
+		
+		var x = document.getElementById("update_table_payment_body_data").rows.length;
+		/*Limit to 5 rows*/
+		if(x > 3){
+		   return;
+		}else{
+	
+						$('#update_table_payment_body_data tr:last').after("<tr>"+
+							"<td class='bank_td' align='center'>"+
+							"<input type='text' class='form-control update_mode_of_payment' id='update_mode_of_payment' name='update_mode_of_payment' list='mode_of_payment_list' autocomplete='off' value=''>"+
+											"<datalist id='mode_of_payment_list'>"+
+												<?php foreach ($sales_order_mode_of_payment_suggestion as $mode_of_payment_cols) {?>
+													"<option value='<?=$mode_of_payment_cols->sales_order_mode_of_payment;?>'>"+
+												<?php } ?>
+											"</datalist>"+
+							"</td>"+
+							"<td class='update_date_of_payment_td' align='center'><input type='date' class='form-control update_date_of_payment' id='update_date_of_payment' name='update_date_of_payment' value=''></td>"+
+							"<td class='update_reference_no_td' align='center'><input type='text' class='form-control update_reference_no' id='update_reference_no' name='update_reference_no' value=''></td>"+
+							"<td class='update_payment_amount_td' align='center'><input type='number' class='form-control update_payment_amount' id='update_payment_amount' name='update_payment_amount' value=''></td>"+
+							"<td><div onclick='deletePaymentRow(this)' data-id='' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+
+		}	
+	}
+	
+	function deletePaymentRow(btn) {
+			
+		var paymentitemID= $(btn).data("id");				
+		var row = btn.parentNode.parentNode;
+		row.parentNode.removeChild(row);
+		
+		if(paymentitemID!=0){
+			/*Delete the Selected Item*/
+			
+			  $.ajax({
+				url: "/delete_sales_order_payment_item",
+				type:"POST",
+				data:{
+				  paymentitemID:paymentitemID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Payment Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					//alert(error);
+				}
+			   });		
+		}
+		
+	}
+
 	function AddProductRow() {
 		
 		var x = document.getElementById("table_product_body_data").rows.length;
@@ -186,6 +272,49 @@
 				   		product_manual_price.push($(this).val());			  
 				  });		
 				
+				/*Payment Options*/
+				var mode_of_payment = [];
+				var date_of_payment = [];
+				var reference_no = [];
+				var payment_amount = [];
+				  
+				  $('.mode_of_payment').each(function(){
+					if($(this).val() == ''){
+						alert('Please Select a Bank');
+						exit();
+					}else{  				  
+				   		mode_of_payment.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.date_of_payment').each(function(){
+					if($(this).val() == ''){
+						alert('Date of Payment is Empty');
+						exit(); 
+					}else{  				  
+				   		date_of_payment.push($(this).val());
+					}				  
+				  });
+				  
+				  $('.reference_no').each(function(){
+					if($(this).val() == ''){
+						alert('Reference is Empty');
+						exit(); 
+					}else{  				  
+				   		reference_no.push($(this).val());
+					}				  
+				  });	
+				  
+				  $('.payment_amount').each(function(){
+					if($(this).val() == ''){
+						alert('Payment Amount is Empty');
+						exit(); 
+					}else{  				  
+				   		payment_amount.push($(this).val());
+					}				  
+				  });		
+
+				
 			  $.ajax({
 				url: "/create_sales_order_post",
 				type:"POST",
@@ -203,6 +332,10 @@
 				  required_date:required_date,
 				  instructions:instructions,
 				  note:note,
+				  mode_of_payment:mode_of_payment,
+				  date_of_payment:date_of_payment,
+				  reference_no:reference_no,
+				  payment_amount:payment_amount,
 				  product_idx:product_idx,
 				  order_quantity:order_quantity,
 				  product_manual_price:product_manual_price,
@@ -391,6 +524,9 @@
 			/*Call Product List for Sales Order*/
 			LoadProductRowForUpdate(sales_order_id);
 			
+			/*Call Product List for Sales Order*/
+			LoadPaymentRowForUpdate(sales_order_id);
+			
 			  $.ajax({
 				url: "/sales_order_info",
 				type:"POST",
@@ -525,7 +661,63 @@
 				}
 			   });
 	  }  	  
+	
 
+	function LoadPaymentRowForUpdate(sales_order_id) {
+		
+		event.preventDefault();
+		
+			  $.ajax({
+				url: "/get_sales_order_payment_list",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+							
+				  console.log(response);
+				  if(response!='') {
+					  
+					  $("#update_table_payment_body_data tr").remove();
+					  $('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
+					  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+							
+							var id = response[i].sales_order_payment_details_id;
+							
+							var mode_of_payment 				= response[i].sales_order_mode_of_payment;
+							var sales_order_date_of_payment 	= response[i].sales_order_date_of_payment;
+							var sales_order_reference_no		= response[i].sales_order_reference_no;
+							var sales_order_payment_amount 		= response[i].sales_order_payment_amount;
+							
+							$('#update_table_payment_body_data tr:last').after("<tr>"+
+							"<td class='bank_td' align='center'>"+
+							"<input type='text' class='form-control update_mode_of_payment' id='update_mode_of_payment' name='update_mode_of_payment' list='mode_of_payment_list' autocomplete='off' value='"+mode_of_payment+"'>"+
+											"<datalist id='mode_of_payment_list'>"+
+												<?php foreach ($sales_order_mode_of_payment_suggestion as $mode_of_payment_cols) {?>
+													"<option value='<?=$mode_of_payment_cols->sales_order_mode_of_payment;?>'>"+
+												<?php } ?>
+											"</datalist>"+
+							"</td>"+
+							"<td class='update_date_of_payment_td' align='center'><input type='date' class='form-control update_date_of_payment' id='update_date_of_payment' name='update_date_of_payment' value='"+sales_order_date_of_payment+"'></td>"+
+							"<td class='update_reference_no_td' align='center'><input type='text' class='form-control update_reference_no' id='update_reference_no' name='update_reference_no' value='"+sales_order_reference_no+"'></td>"+
+							"<td class='update_payment_amount_td' align='center'><input type='number' class='form-control update_payment_amount' id='update_payment_amount' name='update_payment_amount' value='"+sales_order_payment_amount+"'></td>"+
+							"<td><div onclick='deletePaymentRow(this)' data-id='"+id+"' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+
+						}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  }  	  
+
+	
 	<!--Save New Sales Order-->
 	$("#update-sales-order").click(function(event){
 
@@ -740,8 +932,8 @@
 			   });	
 	  });	  
  
-	/*Re-print*/
-	$('body').on('click','#PrintSalesOrder',function(){	  
+	  /*Re-print*/
+	  $('body').on('click','#PrintSalesOrder',function(){	  
 	  
 			let salesOrderID = $(this).data('id');
 			var query = {
@@ -752,9 +944,9 @@
 			var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
 			window.open(url);
 	  
-	});
+	  });
 	  
-	function sales_update_status(id){
+	  function sales_update_status(id){
 		  
 			event.preventDefault();
 			var sales_status = document.getElementById("sales_order_status_"+id).value;
@@ -783,7 +975,7 @@
 		  
 	  }	    
 
-	function LoadInformationForReceivable(id){
+	  function LoadInformationForReceivable(id){
 		  
 			event.preventDefault();
 		
@@ -831,7 +1023,7 @@
 		  
 	  }	
 	  
-	function sales_order_delivery_status(id){
+	  function sales_order_delivery_status(id){
 		  
 			event.preventDefault();
 			var sales_order_delivery_status = document.getElementById("sales_order_delivery_status_"+id).value;
