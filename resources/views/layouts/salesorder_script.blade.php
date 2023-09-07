@@ -798,28 +798,18 @@
 							
 				  console.log(response);
 				  if(response!='') {
-						
-					document.getElementById("update_sales_order_date").value = response[0].sales_order_date;
-					document.getElementById("update_dr_number").value = response[0].sales_order_dr_number;
-					document.getElementById("update_or_number").value = response[0].sales_order_or_number;
-					document.getElementById("update_payment_term").value = response[0].sales_order_payment_term;
 					
-					document.getElementById("update_client_idx").value = response[0].client_name;
-					//document.getElementById("update_delivered_to").value = response[0].sales_order_delivered_to_address;
-					//document.getElementById("update_delivered_to_address").value = response[0].sales_order_delivered_to_address;
+					document.getElementById("client_name_receivables").innerHTML = response[0].client_name;
+					document.getElementById("client_address_receivables").innerHTML = response[0].client_address;
+					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
 					
-					//document.getElementById("update_delivery_method").value = response[0].sales_order_delivery_method;
-					//document.getElementById("update_hauler").value = response[0].sales_order_hauler;
-					//document.getElementById("update_required_date").value = response[0].sales_order_required_date;
+				//	document.getElementById("receivable_company_header").value = response[0].company_header;
+					document.getElementById("receivable_billing_date").value = response[0].sales_order_date;
+					document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
+					document.getElementById("receivable_payment_term").value = response[0].sales_order_payment_term;
 					
-					//document.getElementById("update_instructions").value = response[0].sales_order_instructions;
-					//document.getElementById("update_note").value = response[0].sales_order_note;
-					//document.getElementById("update-sales-order").value = response[0].sales_order_id;
+					document.getElementById("add-to-receivables").value = id;
 					
-					document.getElementById("update_sales_order_net_percentage").value = response[0].sales_order_net_percentage;
-					document.getElementById("update_sales_order_less_percentage").value = response[0].sales_order_less_percentage;
-					
-					document.getElementById("update_company_header").value = response[0].company_header;						
 				  }else{
 							/*No Result Found or Error*/	
 				  }
@@ -829,8 +819,104 @@
 				}
 			   });
 		  
-	  }	
-	  
+	}	
+	
+	<!--Save New receivables->
+	$("#add-to-receivables").click(function(event){
+			
+			event.preventDefault();
+			
+					/*Reset Warnings*/
+					//$('#receivable_or_numberError').text('');
+					//$('#receivable_payment_termError').text('');
+					$('#receivable_descriptionError').text('');
+
+			document.getElementById('ReceivableformAddFromSalesOrder').className = "g-3 needs-validation was-validated";
+			
+			let SalesOrderID 			= document.getElementById("add-to-receivables").value;
+
+			//let company_header 			= $("#receivable_company_header").val();
+			let billing_date			= $("input[name=receivable_billing_date]").val();	
+			let or_number 				= $("input[name=receivable_or_number]").val();	
+			let payment_term 			= $("input[name=receivable_payment_term]").val();
+			let receivable_description 	= $("#receivable_description").val();
+
+			$.ajax({
+				url: "/create_receivables_from_sale_order_post",
+				type:"POST",
+				data:{
+				  sales_order_idx:SalesOrderID,
+				  or_number:or_number,
+				  payment_term:payment_term,
+				  receivable_description:receivable_description,
+				 // company_header:company_header,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					/*Reset Warnings*/
+					$('#receivable_or_numberError').text('');
+					$('#receivable_payment_termError').text('');
+					$('#receivable_descriptionError').text('');
+					
+					/*Clear Form*/
+					$('#receivable_or_number').val("");
+					$('#receivable_payment_term').val("");
+					$('#receivable_description').val("");
+					/*Close Form*/
+					$('#SalesOrderDeliveredModal').modal('toggle');
+					/*
+					var query = {
+						receivable_id:response.receivable_id,
+						_token: "{{ csrf_token() }}"
+					}
+					*/
+					/*Reload Details or link for PDF*/
+					/*
+					download_billing_report_pdf(response.receivable_id);
+					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
+					window.open(url);
+					*/
+				  }
+				},
+				beforeSend:function()
+				{
+					/*Disable Submit Button*/
+					document.getElementById("add-to-receivables").disabled = true;
+					/*Show Status*/
+					$('#loading_data_save_receivables').show();
+				},
+				complete: function(){
+					
+					/*Enable Submit Button*/
+					document.getElementById("add-to-receivables").disabled = false;
+					/*Hide Status*/
+					$('#loading_data_save_receivables').hide();
+					
+				},
+				error: function(error) {
+				 console.log(error);	
+										
+				//$('#receivable_or_numberError').text(error.responseJSON.errors.product_price);
+				//document.getElementById('receivable_or_numberError').className = "invalid-feedback";	
+				
+				//$('#receivable_payment_termError').text(error.responseJSON.errors.product_price);
+				//document.getElementById('receivable_payment_termError').className = "invalid-feedback";	
+				
+				$('#receivable_descriptionError').text(error.responseJSON.errors.receivable_description);
+				document.getElementById('receivable_descriptionError').className = "invalid-feedback";					
+				
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });		
+	  });
+	    
+	
 	function sales_order_delivery_status(id){
 		  
 			event.preventDefault();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ReceivablesModel;
+use App\Models\SalesOrderModel;
 use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesPaymentModel;
 use App\Models\ClientModel;
@@ -248,7 +249,58 @@ class ReceivablesController extends Controller
 			}
 							
 	}
-	
+
+	public function create_receivables_from_sale_order_post(Request $request){		
+
+		$request->validate([
+			'receivable_description'  	=> 'required'
+        ], 
+        [
+			'receivable_description.required' 	=> 'Description is Required'
+        ]
+		);
+
+			@$last_id = ReceivablesModel::latest()->first()->receivable_id;
+			
+			/*GET SALES ORDER*/
+			$sales_order_idx = $request->sales_order_idx;
+					$SalesOrderData = SalesOrderModel::where('sales_order_id', $sales_order_idx)
+					->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.company_header',
+					'teves_sales_order_table.sales_order_client_idx',
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_payment_term']);	
+			
+			/*Save to Receivables*/
+			$Receivables = new ReceivablesModel();
+			$Receivables->client_idx 					= $SalesOrderData[0]->sales_order_client_idx;
+			$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$Receivables->billing_date 					= $request->billing_date;
+			$Receivables->or_number 					= $request->or_number;
+			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
+			$Receivables->receivable_description 		= $request->receivable_description;
+			$Receivables->receivable_status 			= 'Pending';			
+			$Receivables->receivable_amount 			= $SalesOrderData[0]->sales_order_total_due;
+			$Receivables->receivable_remaining_balance 	= $SalesOrderData[0]->sales_order_total_due;
+			$Receivables->company_header 				= $SalesOrderData[0]->company_header;
+			
+			$result = $Receivables->save();
+			
+			/*Update Sales Order to Delivered*/
+			$salesOrderUpdate = new SalesOrderModel();
+			$salesOrderUpdate = SalesOrderModel::find($sales_order_idx);
+			$salesOrderUpdate->sales_order_status = 'Delivered';
+			$salesOrderUpdate->update();
+
+			if($result){
+				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);
+			}
+			else{
+				return response()->json(['success'=>'Error on Insert Receivables Information']);
+			}
+	}
+		
 	/*Fetch Product Information*/
 	public function receivable_info(Request $request){
 

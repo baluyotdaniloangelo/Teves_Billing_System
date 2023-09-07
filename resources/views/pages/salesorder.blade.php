@@ -470,7 +470,6 @@
 						 
 						</li>
 						  
-						</li>
 						<!--<li class="list-group-item d-flex justify-content-between align-items-start">
 						  <div class="ms-2 me-auto">
 							<div class="fw-bold">Billing Date</div>
@@ -500,23 +499,23 @@
 					</div>
 					<div class="col-lg-8">
 									
-					  <form class="g-2 needs-validation pt-4" id="ReceivableformEdit">
-						
+					  <form class="g-2 needs-validation pt-4" id="ReceivableformAddFromSalesOrder">
+						<!--
 						<div class="row mb-2">
-						  <label for="billing_date" class="col-sm-3 col-form-label">Header/Company : </label>
+						  <label for="receivable_company_header" class="col-sm-3 col-form-label">Header/Company : </label>
 						  <div class="col-sm-9">
-							<select class="form-select form-control" required="" name="company_header" id="company_header">
+							<select class="form-select form-control" required="" name="receivable_company_header" id="receivable_company_header">
 								<option value="GT">GT</option>
 								<option value="Teves">Teves</option>
 							</select>
 						  </div>
 						</div>
-						
+						-->
 						<div class="row mb-2">
-						  <label for="billing_date" class="col-sm-3 col-form-label">Billing Date : </label>
+						  <label for="receivable_billing_date" class="col-sm-3 col-form-label">Billing Date : </label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="billing_date" id="billing_date" value="" required>
-							<span class="valid-feedback" id="billing_dateError"></span>
+							<input type="date" class="form-control " name="receivable_billing_date" id="receivable_billing_date" value="" required>
+							<span class="valid-feedback" id="receivable_billing_dateError"></span>
 						  </div>
 						</div>
 						<!--
@@ -533,52 +532,52 @@
 
 						  </div>
 						</div>						
-						-->		
+							
 						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Discount Per Liter</label>
+						  <label for="receivable_receivable_less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Discount Per Liter</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" required>
-							<span class="valid-feedback" id="less_per_literError"></span>
+							<input type="text" class="form-control " name="receivable_less_per_liter" id="receivable_less_per_liter" value="" required>
+							<span class="valid-feedback" id="receivable_less_per_literError"></span>
 						  </div>
 						</div>
 
 						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Net Value</label>
+						  <label for="receivable_net_value_percentage" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Net Value</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12">
+							<input type="text" class="form-control " name="receivable_net_value_percentage" id="receivable_net_value_percentage" value="1.12">
 							<span class="valid-feedback" id=""></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">VAT Value</label>
+						  <label for="receivable_vat_value_percentage" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">VAT Value</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12">
+							<input type="text" class="form-control " name="receivable_vat_value_percentage" id="receivable_vat_value_percentage" value="12">
 							<span class="valid-feedback" id=""></span>
 						  </div>
 						</div>
 
 						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Withholding Tax</label>
+						  <label for="receivable_withholding_tax_percentage" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Withholding Tax</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1">
-							<span class="valid-feedback" id="less_per_literError"></span>
+							<input type="text" class="form-control " name="receivable_withholding_tax_percentage" id="receivable_withholding_tax_percentage" value="1">
+							<span class="valid-feedback" id="receivable_withholding_tax_percentageError"></span>
+						  </div>
+						</div>						
+-->	
+						<div class="row mb-2">
+						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="receivable_or_number" id="receivable_or_number" value="">
+							<span class="valid-feedback" id="receivable_or_numberError"></span>
 						  </div>
 						</div>						
 
 						<div class="row mb-2">
-						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
+						  <label for="receivable_payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="or_number" id="or_number" value="">
-							<span class="valid-feedback" id="or_numberError"></span>
-						  </div>
-						</div>						
-
-						<div class="row mb-2">
-						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="payment_term" id="payment_term" value="">
-							<span class="valid-feedback" id="payment_termError"></span>
+							<input type="text" class="form-control " name="receivable_payment_term" id="receivable_payment_term" value="">
+							<span class="valid-feedback" id="receivable_payment_termError"></span>
 						  </div>
 						</div>							
 						
@@ -590,18 +589,18 @@
 						  </div>
 						</div>
 
-						<div class="row mb-2">
+						<!--<div class="row mb-2">
 						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
 						  <div class="col-sm-9">
 							<select class="form-control form-select" aria-label="receivable_status" name="receivable_status" id="receivable_status">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Paid">Paid</option>
-								<option value="Pending">Pending</option>
+								<option value="Pending">Pending</option>-->
 								<!--<option value="Remaining Balance">Remaining Balance</option>-->
-							</select>
+							<!--</select>
 						  </div>
 						</div>						
-						
+						-->
 						</div>
 						
 					</div>
@@ -612,8 +611,8 @@
 								<span class="visually-hidden">Loading...</span>
 							</div>
 							</div>
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="add-receivables"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="add-to-receivables"> Submit</button>
+						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>-->
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->

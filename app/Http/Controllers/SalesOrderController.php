@@ -145,6 +145,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
 					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_client_table.client_tin',
 					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_dr_number',
 					'teves_sales_order_table.sales_order_or_number',		
