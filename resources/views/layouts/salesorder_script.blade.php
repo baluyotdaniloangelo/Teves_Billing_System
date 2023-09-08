@@ -803,7 +803,6 @@
 					document.getElementById("client_address_receivables").innerHTML = response[0].client_address;
 					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
 					
-				//	document.getElementById("receivable_company_header").value = response[0].company_header;
 					document.getElementById("receivable_billing_date").value = response[0].sales_order_date;
 					document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
 					document.getElementById("receivable_payment_term").value = response[0].sales_order_payment_term;
