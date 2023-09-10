@@ -644,7 +644,7 @@
 			let or_number 				= $("input[name=or_number]").val();			
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
-			let receivable_status 		= $("#receivable_status").val();
+			//let receivable_status 		= $("#receivable_status").val();
 					
 			let less_per_liter 			= $("input[name=less_per_liter]").val();
 			
@@ -665,7 +665,7 @@
 				  or_number:or_number,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
-				  receivable_status:receivable_status,
+				  //receivable_status:receivable_status,
 				  less_per_liter:less_per_liter,
 				  company_header:company_header,
 				  withholding_tax_percentage:withholding_tax_percentage,
@@ -725,7 +725,7 @@
 				complete: function(){
 					
 					/*Enable Submit Button*/
-					document.getElementById("generate_report").disabled = true;
+					document.getElementById("generate_report").disabled = false;
 					/*Hide Status*/
 					$('#loading_data_save_receivables').hide();
 					

@@ -74,9 +74,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.receivable_remaining_balance',
 					'teves_receivable_table.receivable_status']);
-					
-					
-									
+										
 				return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('action', function($row){	
@@ -404,14 +402,14 @@ class ReceivablesController extends Controller
 			$Receivables->receivable_vatable_sales 		= $vatable_sales;
 			$Receivables->receivable_vat_amount 		= $vatable_amount;
 			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
-			$Receivables->receivable_amount 			= $total_amount_due;
-			$Receivables->receivable_remaining_balance 	= $total_amount_due;
+			$Receivables->receivable_amount 			= number_format($total_amount_due,2, '.', '');
+			$Receivables->receivable_remaining_balance 	= number_format($total_amount_due,2, '.', '');
 			
 			$Receivables->receivable_net_value_percentage 			= $net_value_percentage;
 			$Receivables->receivable_withholding_tax_percentage 	= $withholding_tax_percentage * 100;
 			$Receivables->receivable_vat_value_percentage 			= $vat_value_percentage * 100;
 					
-			$Receivables->receivable_status 			= $request->receivable_status;		
+			$Receivables->receivable_status 			= 'Pending';		
 			$Receivables->billing_period_start 			= $start_date;
 			$Receivables->billing_period_end 			= $end_date;
 			
@@ -505,15 +503,15 @@ class ReceivablesController extends Controller
 			$Receivables->receivable_vatable_sales 		= $vatable_sales;
 			$Receivables->receivable_vat_amount 		= $vatable_amount;
 			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
-			$Receivables->receivable_amount 			= $total_amount_due;
+			$Receivables->receivable_amount 			= number_format($total_amount_due,2, '.', '');
 			
-			$Receivables->receivable_remaining_balance 	= $receivable_total_payment_amount;
+			$Receivables->receivable_remaining_balance 	= number_format($receivable_total_payment_amount,2, '.', '');
 			
 			$Receivables->receivable_net_value_percentage 			= $net_value_percentage;
 			$Receivables->receivable_withholding_tax_percentage 	= $withholding_tax_percentage * 100;
 			$Receivables->receivable_vat_value_percentage 			= $vat_value_percentage * 100;			
 			
-			$Receivables->receivable_status 			= $request->receivable_status;
+			//$Receivables->receivable_status 			= $request->receivable_status;
 			$Receivables->billing_period_start 			= $request->start_date;
 			$Receivables->billing_period_end 			= $request->end_date;
 			

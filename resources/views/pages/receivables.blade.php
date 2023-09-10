@@ -59,7 +59,6 @@
 										</table>
 									</div>		
 				</div>									
-                   
             </div>
           </div>
 
@@ -71,7 +70,6 @@
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
  					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
                 </div>
-				
 				
                 <div class="modal-body warning_modal_bg" id="modal-body">
 				Are you sure you want to Delete This Receivable?<br>
@@ -259,7 +257,7 @@
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>
-
+						<!--
 						<div class="row mb-2">
 						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
 						  <div class="col-sm-9">
@@ -267,11 +265,11 @@
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Paid">Paid</option>
 								<option value="Pending">Pending</option>
-								<!--<option value="Remaining Balance">Remaining Balance</option>-->
+								<option value="Remaining Balance">Remaining Balance</option>
 							</select>
 						  </div>
 						</div>						
-						
+						-->
 						</div>
 						
 					</div>

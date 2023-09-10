@@ -29,7 +29,7 @@
 													<th>Net Amount</th>
 													<th>Total Due</th>
 													<th>Delivery Status</th>
-													<th>Payment Status</th>
+													<!--<th>Payment Status</th>-->
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -50,7 +50,7 @@
 													<th>Net Amount</th>
 													<th>Total Due</th>
 													<th>Delivery Status</th>
-													<th>Payment Status</th>
+													<!--<th>Payment Status</th>-->
 													<th>Action</th>										
 												</tr>
 											</tfoot>	

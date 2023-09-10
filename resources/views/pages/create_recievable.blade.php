@@ -245,7 +245,7 @@
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>		
-
+						<!--
 						<div class="row mb-2">
 						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
 						  <div class="col-sm-9">
@@ -257,7 +257,7 @@
 							</select>
 						  </div>
 						</div>
-						
+						-->
 						
 						</div>
 						

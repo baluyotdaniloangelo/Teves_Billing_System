@@ -31,7 +31,7 @@
 				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'delivery_status', name: 'delivery_status', orderable: true, searchable: true},
-				{data: 'payment_status', name: 'payment_status', orderable: true, searchable: true},		
+				//{data: 'payment_status', name: 'payment_status', orderable: true, searchable: true},		
 				{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],

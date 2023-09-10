@@ -315,7 +315,7 @@
 					document.getElementById("or_number").value = response[0].or_number;
 					document.getElementById("payment_term").value = response[0].payment_term;
 					document.getElementById("receivable_description").textContent = response[0].receivable_description;					
-					document.getElementById("receivable_status").value = response[0].receivable_status;					
+					//document.getElementById("receivable_status").value = response[0].receivable_status;					
 					document.getElementById("start_date").value = response[0].billing_period_start;
 					document.getElementById("end_date").value = response[0].billing_period_end;
 					document.getElementById("less_per_liter").value = response[0].less_per_liter;
