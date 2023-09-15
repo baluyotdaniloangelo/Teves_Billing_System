@@ -63,6 +63,7 @@ class ReceivablesController extends Controller
     	$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               		->get([
 					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.billing_date',
 					'teves_client_table.client_name',
 					'teves_receivable_table.control_number',		
@@ -94,12 +95,19 @@ class ReceivablesController extends Controller
                 })
 				
 				->addColumn('action_print', function($row){
+					
+					if($row->sales_order_idx==0){
+						$print_sales_or_billing = '<option value="PrintBilling">Billing</option>';
+					}else{
+						$print_sales_or_billing = '<option value="PrintSalesOrder">Sales Order</option>';
+					}
+					
 					$action_print = '
 					<div align="center" class="action_table_menu_Product">
 					<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
 						<option disabled="" selected value="">Choose...</option>
 						<option value="PrintStatement" title="Statement of Account">SOA</option>
-						<option value="PrintBilling">Billing</option>
+						'.$print_sales_or_billing.'
 						<option value="PrintReceivables">Receivable</option>
 						</select>
 					</div>';
@@ -274,6 +282,7 @@ class ReceivablesController extends Controller
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 					= $SalesOrderData[0]->sales_order_client_idx;
 			$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
 			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
@@ -307,6 +316,7 @@ class ReceivablesController extends Controller
 					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               		->get([
 					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.billing_date',
 					'teves_client_table.client_address',
 					'teves_client_table.client_name',

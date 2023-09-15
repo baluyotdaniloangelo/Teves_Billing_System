@@ -30,8 +30,7 @@
 				{data: ({sales_order_net_amount,sales_order_less_percentage}) => (Number(sales_order_net_amount)*Number(sales_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
 				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
-				{data: 'delivery_status', name: 'delivery_status', orderable: true, searchable: true},
-				//{data: 'payment_status', name: 'payment_status', orderable: true, searchable: true},		
+				{data: 'delivery_status', name: 'delivery_status', orderable: true, searchable: true},	
 				{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],
@@ -219,8 +218,7 @@
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					$('#order_dateError').text('');					
-					$('#order_timeError').text('');
+					$('#sales_order_dateError').text('');		
 					$('#order_po_numberError').text('');
 					$('#client_idxError').text('');
 					
@@ -231,7 +229,6 @@
 					$('#order_quantityError').text('');
 		
 					/*Clear Form*/
-					$('#sales_order_date').val("");
 					$('#delivered_to').val("");
 					$('#delivered_to_address').val("");
 					$('#dr_number').val("");
@@ -288,6 +285,9 @@
 				error: function(error) {
 					
 				 console.log(error);	
+				 
+				  $('#sales_order_dateError').text(error.responseJSON.errors.sales_order_date);
+				  document.getElementById('sales_order_dateError').className = "invalid-feedback";
 				 
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
 				  document.getElementById('client_idxError').className = "invalid-feedback";
@@ -802,6 +802,7 @@
 					document.getElementById("client_name_receivables").innerHTML = response[0].client_name;
 					document.getElementById("client_address_receivables").innerHTML = response[0].client_address;
 					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
+					document.getElementById("amount_receivables").innerHTML = response[0].sales_order_total_due;
 					
 					document.getElementById("receivable_billing_date").value = response[0].sales_order_date;
 					document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
@@ -834,7 +835,7 @@
 			
 			let SalesOrderID 			= document.getElementById("add-to-receivables").value;
 
-			//let company_header 			= $("#receivable_company_header").val();
+			//let company_header 		= $("#receivable_company_header").val();
 			let billing_date			= $("input[name=receivable_billing_date]").val();	
 			let or_number 				= $("input[name=receivable_or_number]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term]").val();
@@ -866,6 +867,9 @@
 					$('#receivable_description').val("");
 					/*Close Form*/
 					$('#SalesOrderDeliveredModal').modal('toggle');
+					
+					var table = $("#getSalesOrderList").DataTable();
+					table.ajax.reload(null, false);
 					/*
 					var query = {
 						receivable_id:response.receivable_id,
@@ -916,28 +920,24 @@
 	  });
 	    
 	
-	function sales_order_delivery_status(id){
+	function sales_order_status(id){
 		  
 			event.preventDefault();
-			var sales_order_delivery_status = document.getElementById("sales_order_delivery_status_"+id).value;
+			var sales_order_status = document.getElementById("sales_order_status_"+id).value;
 			
-			if(sales_order_delivery_status == 'Delivered'){
+			if(sales_order_status == 'Delivered'){
 				/*Load Information*/
-				LoadInformationForReceivable(id);
-				
-				
+				LoadInformationForReceivable(id);	
 				/*Open Form*/
 				$('#SalesOrderDeliveredModal').modal('toggle');
-				
 			}else{
-			
-			
+				
 			  $.ajax({
-				url: "/update_sales_order_delivery_status",
+				url: "/update_sales_status",
 				type:"POST",
 				data:{
 				  sales_order_id:id,
-				  sales_order_delivery_status:sales_order_delivery_status,
+				  sales_order_status:sales_order_status,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -954,5 +954,7 @@
 				}
 			   });
 			}
+			
 	  }	    
+	  
  </script>

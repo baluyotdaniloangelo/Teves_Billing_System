@@ -92,7 +92,8 @@
 									
 										<div class="col-md-3">
 										  <label for="sales_order_date" class="form-label">Date</label>
-										  <input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="<?=date('Y-m-d');?>">
+										  <input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="<?=date('Y-m-d');?>" required>
+										  <span class="valid-feedback" id="sales_order_dateError"></span>
 										</div>
 										<div class="col-md-3">
 										  <label for="dr_number" class="form-label">D.R Number</label>
@@ -615,6 +616,7 @@
 						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>-->
 						  
 					</div>
+					Note: Once this Item moved to receivables, Status will no longer editable.
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>

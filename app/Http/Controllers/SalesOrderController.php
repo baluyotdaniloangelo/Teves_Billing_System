@@ -55,8 +55,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_status',
-					'teves_sales_order_table.sales_order_delivery_status']);
+					'teves_sales_order_table.sales_order_status']);
 					
 		}else{
 			
@@ -72,8 +71,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_status',
-					'teves_sales_order_table.sales_order_delivery_status']);	
+					'teves_sales_order_table.sales_order_status']);	
 			
 		}			
 	
@@ -83,38 +81,20 @@ class SalesOrderController extends Controller
 				->addColumn('delivery_status', function($row){
 					
 									
-				if($row->sales_order_delivery_status=='Pending'){
-					$sales_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Delivered">Delivered</option>';
-				}else if($row->sales_order_delivery_status=='Delivered'){
-					$sales_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Delivered">Delivered</option>';
-				}else{
-					$sales_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Delivered">Delivered</option>';
-				}
-					
-					$actionBtn = '
-					<div align="center" class="action_table_menu_Product">
-					<select class="sales_order_delivery_status_'.$row->sales_order_id.'" name="sales_order_delivery_status_'.$row->sales_order_id.'" id="sales_order_delivery_status_'.$row->sales_order_id.'" onchange="sales_order_delivery_status('.$row->sales_order_id.')">	
-						'.$sales_status_selected.'
-						</select>
-					</div>';
-                    return $actionBtn;
-                })
-				
-				->addColumn('payment_status', function($row){
-				
 				if($row->sales_order_status=='Pending'){
-					$sales_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
-				}else if($row->sales_order_status=='Paid'){
-					$sales_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
-				}else{
-					$sales_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
+					$sales_status_selected = '<div align="center" class="action_table_menu_Product">
+												<select class="sales_order_status_'.$row->sales_order_id.'" name="sales_order_status_'.$row->sales_order_id.'" id="sales_order_status_'.$row->sales_order_id.'" onchange="sales_order_status('.$row->sales_order_id.')">	
+													<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Delivered">Delivered</option>
+												</select>
+											  </div>';
+				}
+				else{
+					$sales_status_selected = 'Delivered';
 				}
 					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
-					<select class="sales_order_status_'.$row->sales_order_id.'" name="sales_order_status_'.$row->sales_order_id.'" id="sales_order_status_'.$row->sales_order_id.'" onchange="sales_update_status('.$row->sales_order_id.')">	
 						'.$sales_status_selected.'
-						</select>
 					</div>';
                     return $actionBtn;
                 })
@@ -128,7 +108,7 @@ class SalesOrderController extends Controller
 					</div>';
                     return $actionBtn;
                 })
-				->rawColumns(['action','delivery_status','payment_status'])
+				->rawColumns(['action','delivery_status'])
                 ->make(true);
 		}		
     }
@@ -186,12 +166,14 @@ class SalesOrderController extends Controller
 	public function create_sales_order_post(Request $request){
 
 		$request->validate([
-			'client_idx'  	=> 'required',
-			'product_idx'  	=> 'required'
+			'sales_order_date'  => 'required',
+			'client_idx'  		=> 'required',
+			'product_idx'  		=> 'required'
         ], 
         [
-			'client_idx.required' 	=> 'Client is Required',
-			'product_idx.required' 	=> 'Product is Required'
+			'sales_order_date.required' 	=> 'Sales Order Date is Required',
+			'client_idx.required' 			=> 'Client is Required',
+			'product_idx.required' 			=> 'Product is Required'
         ]
 		);
 
