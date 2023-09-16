@@ -847,6 +847,7 @@
 				data:{
 				  sales_order_idx:SalesOrderID,
 				  or_number:or_number,
+				  billing_date:billing_date,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				 // company_header:company_header,
