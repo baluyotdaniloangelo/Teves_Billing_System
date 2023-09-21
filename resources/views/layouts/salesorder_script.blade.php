@@ -825,32 +825,28 @@
 	$("#add-to-receivables").click(function(event){
 			
 			event.preventDefault();
-			
-					/*Reset Warnings*/
-					//$('#receivable_or_numberError').text('');
-					//$('#receivable_payment_termError').text('');
-					$('#receivable_descriptionError').text('');
+			$('#receivable_descriptionError').text('');
 
 			document.getElementById('ReceivableformAddFromSalesOrder').className = "g-3 needs-validation was-validated";
 			
 			let SalesOrderID 			= document.getElementById("add-to-receivables").value;
 
-			//let company_header 		= $("#receivable_company_header").val();
 			let billing_date			= $("input[name=receivable_billing_date]").val();	
 			let or_number 				= $("input[name=receivable_or_number]").val();	
+			let ar_reference 				= $("input[name=ar_reference]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
-
+			
 			$.ajax({
 				url: "/create_receivables_from_sale_order_post",
 				type:"POST",
 				data:{
 				  sales_order_idx:SalesOrderID,
 				  or_number:or_number,
+				  ar_reference:ar_reference,
 				  billing_date:billing_date,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
-				 // company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

@@ -315,7 +315,7 @@
 					document.getElementById("or_number").value = response[0].or_number;
 					document.getElementById("payment_term").value = response[0].payment_term;
 					document.getElementById("receivable_description").textContent = response[0].receivable_description;					
-					//document.getElementById("receivable_status").value = response[0].receivable_status;					
+					document.getElementById("ar_reference").value = response[0].ar_reference;					
 					document.getElementById("start_date").value = response[0].billing_period_start;
 					document.getElementById("end_date").value = response[0].billing_period_end;
 					document.getElementById("less_per_liter").value = response[0].less_per_liter;
@@ -335,6 +335,8 @@
 			   });	
 	  });
 
+
+
 	$("#update-receivables").click(function(event){			
 			event.preventDefault();
 			
@@ -346,7 +348,8 @@
 			
 			let ReceivableID 			= document.getElementById("update-receivables").value;
 			let billing_date 			= $("input[name=billing_date]").val();	
-			let or_number 				= $("input[name=or_number]").val();				
+			let or_number 				= $("input[name=or_number]").val();		
+			let ar_reference 				= $("input[name=ar_reference]").val();				
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
 			let receivable_status 		= $("#receivable_status").val();
@@ -368,6 +371,7 @@
 				  ReceivableID:ReceivableID,
 				  billing_date:billing_date,
 				  or_number:or_number,
+				  ar_reference:ar_reference,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				  receivable_status:receivable_status,
@@ -435,6 +439,154 @@
 			   });
 		
 	  });
+	
+	<!--Select Receivable For Update-->	
+	$('body').on('click','#editReceivablesFromSalesOrder',function(){
+			
+			event.preventDefault();
+			let ReceivableID = $(this).data('id');
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("SO-update-receivables").value = ReceivableID;
+					
+					/*Set Details*/
+							
+					document.getElementById("client_name_receivables_SO").innerHTML = response[0].client_name;
+					document.getElementById("client_address_receivables_SO").innerHTML = response[0].client_address;
+					document.getElementById("control_no_receivables_SO").innerHTML = response[0].control_number;	
+					//document.getElementById("billing_receivables_SO").innerHTML = response[0].billing_date;					
+					document.getElementById("client_tin_receivables_SO").innerHTML = response[0].client_tin;
+					document.getElementById("amount_receivables_SO").innerHTML = response[0].receivable_amount;	
+					
+					document.getElementById("receivable_billing_date_SO").value = response[0].billing_date;
+					document.getElementById("receivable_or_number_SO").value = response[0].or_number;
+					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
+					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;					
+					document.getElementById("receivable_ar_reference_SO").value = response[0].ar_reference;					
+					//document.getElementById("start_date").value = response[0].billing_period_start;
+					//document.getElementById("end_date").value = response[0].billing_period_end;
+					//document.getElementById("less_per_liter").value = response[0].less_per_liter;
+					//document.getElementById("company_header").value = response[0].company_header;					
+					//document.getElementById("withholding_tax_percentage").value = response[0].receivable_withholding_tax_percentage;
+					//document.getElementById("net_value_percentage").value = response[0].receivable_net_value_percentage;
+					//document.getElementById("vat_value_percentage").value = response[0].receivable_vat_value_percentage;				
+					
+					$('#UpdateReceivablesFromSalesOrderModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });  
+	  
+	<!--Save New receivables->
+	$("#SO-update-receivables").click(function(event){
+			
+			event.preventDefault();
+			$('#receivable_description_SO_Error').text('');
+
+			document.getElementById('ReceivableformEditFromSalesOrder').className = "g-3 needs-validation was-validated";
+			
+			let ReceivableID 			= document.getElementById("SO-update-receivables").value;
+
+			let billing_date			= $("input[name=receivable_billing_date_SO]").val();	
+			let or_number 				= $("input[name=receivable_or_number_SO]").val();	
+			let ar_reference 			= $("input[name=receivable_ar_reference_SO]").val();	
+			let payment_term 			= $("input[name=receivable_payment_term_SO]").val();
+			let receivable_description 	= $("#receivable_description_SO").val();
+			
+			$.ajax({
+				url: "/update_receivables_from_sale_order_post",
+				type:"POST",
+				data:{
+				  ReceivableID:ReceivableID,
+				  or_number:or_number,
+				  ar_reference:ar_reference,
+				  billing_date:billing_date,
+				  payment_term:payment_term,
+				  receivable_description:receivable_description,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					/*Reset Warnings*/
+					$('#receivable_or_numberError').text('');
+					$('#receivable_payment_termError').text('');
+					$('#receivable_descriptionError').text('');
+					
+					/*Clear Form*/
+					$('#receivable_or_number').val("");
+					$('#receivable_payment_term').val("");
+					$('#receivable_description').val("");
+					/*Close Form*/
+					$('#SalesOrderDeliveredModal').modal('toggle');
+					
+					var table = $("#getSalesOrderList").DataTable();
+					table.ajax.reload(null, false);
+					/*
+					var query = {
+						receivable_id:response.receivable_id,
+						_token: "{{ csrf_token() }}"
+					}
+					*/
+					/*Reload Details or link for PDF*/
+					/*
+					download_billing_report_pdf(response.receivable_id);
+					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
+					window.open(url);
+					*/
+				  }
+				},
+				beforeSend:function()
+				{
+					/*Disable Submit Button*/
+					document.getElementById("add-to-receivables").disabled = true;
+					/*Show Status*/
+					$('#loading_data_save_receivables').show();
+				},
+				complete: function(){
+					
+					/*Enable Submit Button*/
+					document.getElementById("add-to-receivables").disabled = false;
+					/*Hide Status*/
+					$('#loading_data_save_receivables').hide();
+					
+				},
+				error: function(error) {
+				 console.log(error);	
+										
+				//$('#receivable_or_numberError').text(error.responseJSON.errors.product_price);
+				//document.getElementById('receivable_or_numberError').className = "invalid-feedback";	
+				
+				//$('#receivable_payment_termError').text(error.responseJSON.errors.product_price);
+				//document.getElementById('receivable_payment_termError').className = "invalid-feedback";	
+				
+				$('#receivable_descriptionError').text(error.responseJSON.errors.receivable_description);
+				document.getElementById('receivable_descriptionError').className = "invalid-feedback";					
+				
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });		
+	  });	  
 	  
 	<!--Receivable Deletion Confirmation-->
 	$('body').on('click','#deleteReceivables',function(){

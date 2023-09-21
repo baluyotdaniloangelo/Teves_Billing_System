@@ -100,12 +100,25 @@ class SalesOrderController extends Controller
                 })
 				
                 ->addColumn('action', function($row){
-					$actionBtn = '
-					<div align="center" class="action_table_menu_Product">
-					<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-					<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
-					<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
-					</div>';
+					
+					if($row->sales_order_status=='Pending'){
+						
+						$actionBtn = '
+						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
+						</div>';
+					
+					}else{	
+					
+						$actionBtn = '
+						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						</div>';
+					
+					}
+					
                     return $actionBtn;
                 })
 				->rawColumns(['action','delivery_status'])

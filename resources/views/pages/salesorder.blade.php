@@ -470,22 +470,6 @@
 						  </div>
 						 
 						</li>
-						  
-						<!--<li class="list-group-item d-flex justify-content-between align-items-start">
-						  <div class="ms-2 me-auto">
-							<div class="fw-bold">Billing Date</div>
-							<div id="billing_receivables"></div>
-						  </div>
-						 
-						</li>
-						
-						<li class="list-group-item d-flex justify-content-between align-items-start">
-						  <div class="ms-2 me-auto">
-							<div class="fw-bold">Control No.</div>
-							<div id="control_no_receivables"></div>
-						  </div>
-						 
-						</li>-->
 						
 						<li class="list-group-item d-flex justify-content-between align-items-start">
 						  <div class="ms-2 me-auto">
@@ -501,17 +485,7 @@
 					<div class="col-lg-8">
 									
 					  <form class="g-2 needs-validation pt-4" id="ReceivableformAddFromSalesOrder">
-						<!--
-						<div class="row mb-2">
-						  <label for="receivable_company_header" class="col-sm-3 col-form-label">Header/Company : </label>
-						  <div class="col-sm-9">
-							<select class="form-select form-control" required="" name="receivable_company_header" id="receivable_company_header">
-								<option value="GT">GT</option>
-								<option value="Teves">Teves</option>
-							</select>
-						  </div>
-						</div>
-						-->
+						
 						<div class="row mb-2">
 						  <label for="receivable_billing_date" class="col-sm-3 col-form-label">Billing Date : </label>
 						  <div class="col-sm-9">
@@ -519,53 +493,7 @@
 							<span class="valid-feedback" id="receivable_billing_dateError"></span>
 						  </div>
 						</div>
-						<!--
-						<div class="row mb-2">
-						  <label for="start_date" class="col-sm-3 col-form-label">Period:</label>
-						  <div class="col-sm-9">
-						  
-						  <div class="input-group">
-									<input type="date" class="form-control" name="start_date" id="start_date" required readonly>
-									<input type="date" class="form-control" name="end_date" id="end_date" required readonly>
-							<span class="valid-feedback" id="end_dateError"></span>
-							<span class="valid-feedback" id="start_dateError"></span>		
-							</div>
-
-						  </div>
-						</div>						
-							
-						<div class="row mb-2">
-						  <label for="receivable_receivable_less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Discount Per Liter</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_less_per_liter" id="receivable_less_per_liter" value="" required>
-							<span class="valid-feedback" id="receivable_less_per_literError"></span>
-						  </div>
-						</div>
-
-						<div class="row mb-2">
-						  <label for="receivable_net_value_percentage" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Net Value</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_net_value_percentage" id="receivable_net_value_percentage" value="1.12">
-							<span class="valid-feedback" id=""></span>
-						  </div>
-						</div>
 						
-						<div class="row mb-2">
-						  <label for="receivable_vat_value_percentage" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">VAT Value</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_vat_value_percentage" id="receivable_vat_value_percentage" value="12">
-							<span class="valid-feedback" id=""></span>
-						  </div>
-						</div>
-
-						<div class="row mb-2">
-						  <label for="receivable_withholding_tax_percentage" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Withholding Tax</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_withholding_tax_percentage" id="receivable_withholding_tax_percentage" value="1">
-							<span class="valid-feedback" id="receivable_withholding_tax_percentageError"></span>
-						  </div>
-						</div>						
--->	
 						<div class="row mb-2">
 						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
@@ -573,6 +501,14 @@
 							<span class="valid-feedback" id="receivable_or_numberError"></span>
 						  </div>
 						</div>						
+
+						<div class="row mb-2">
+						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="ar_reference" id="ar_reference" value="">
+							<span class="valid-feedback" id="ar_referenceError"></span>
+						  </div>
+						</div>	
 
 						<div class="row mb-2">
 						  <label for="receivable_payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
@@ -589,24 +525,13 @@
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>
-
-						<!--<div class="row mb-2">
-						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
-						  <div class="col-sm-9">
-							<select class="form-control form-select" aria-label="receivable_status" name="receivable_status" id="receivable_status">
-								<option selected="" disabled="" value="">Choose...</option>
-								<option value="Paid">Paid</option>
-								<option value="Pending">Pending</option>-->
-								<!--<option value="Remaining Balance">Remaining Balance</option>-->
-							<!--</select>
-						  </div>
-						</div>						
-						-->
+						
 						</div>
 						
 					</div>
 					</div>
                     <div class="modal-footer modal-footer_form">
+					Note: Once this Item moved to receivables, Status will no longer editable.
 							<div id="update_loading_data" style="display:none;">
 							<div class="spinner-border text-success" role="status">
 								<span class="visually-hidden">Loading...</span>
@@ -616,7 +541,7 @@
 						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>-->
 						  
 					</div>
-					Note: Once this Item moved to receivables, Status will no longer editable.
+					
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>

@@ -80,9 +80,15 @@ class ReceivablesController extends Controller
 				->addIndexColumn()
                 ->addColumn('action', function($row){	
 				
+					if($row->sales_order_idx==0){
+						$menu_for_update = 'editReceivables';
+					}else{
+						$menu_for_update = 'editReceivablesFromSalesOrder';
+					}
+				
 						$actionBtn = '<div align="center" class="action_table_menu_Product">
 									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-subtract btn_icon_table btn_icon_table_view" id="payReceivables"></a>
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editReceivables"></a>
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'"></a>
 									<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables"></a>
 								</div>';
 				
@@ -285,6 +291,7 @@ class ReceivablesController extends Controller
 			$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
+			$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			$Receivables->receivable_status 			= 'Pending';			
@@ -307,6 +314,43 @@ class ReceivablesController extends Controller
 				return response()->json(['success'=>'Error on Insert Receivables Information']);
 			}
 	}
+	
+	public function update_receivables_from_sale_order_post(Request $request){		
+
+		$request->validate([
+			'receivable_description'  	=> 'required'
+        ], 
+        [
+			'receivable_description.required' 	=> 'Description is Required'
+        ]
+		);
+
+			$ReceivableID = $request->ReceivableID;
+			/*Update to Receivables*/
+			$Receivables = new ReceivablesModel();
+			$Receivables = ReceivablesModel::find($ReceivableID);
+			//$Receivables->client_idx 					= $SalesOrderData[0]->sales_order_client_idx;
+			//$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			//$Receivables->sales_order_idx 				= $request->sales_order_idx;
+			$Receivables->billing_date 					= $request->billing_date;
+			$Receivables->or_number 					= $request->or_number;
+			$Receivables->ar_reference 					= $request->ar_reference;
+			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
+			$Receivables->receivable_description 		= $request->receivable_description;
+			//$Receivables->receivable_status 			= 'Pending';			
+			//$Receivables->receivable_amount 			= $SalesOrderData[0]->sales_order_total_due;
+			//$Receivables->receivable_remaining_balance 	= $SalesOrderData[0]->sales_order_total_due;
+			//$Receivables->company_header 				= $SalesOrderData[0]->company_header;
+			
+			$result = $Receivables->update();
+
+			if($result){
+				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);
+			}
+			else{
+				return response()->json(['success'=>'Error on Update Receivables Information']);
+			}
+	}
 		
 	/*Fetch Product Information*/
 	public function receivable_info(Request $request){
@@ -323,7 +367,8 @@ class ReceivablesController extends Controller
 					'teves_client_table.client_id',
 					'teves_receivable_table.control_number',
 					'teves_client_table.client_tin',
-					'teves_receivable_table.or_number',				
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',					
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
@@ -405,6 +450,7 @@ class ReceivablesController extends Controller
 			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->billing_date 				= date('Y-m-d');
 			$Receivables->or_number 				= $request->or_number;
+			$Receivables->ar_reference 				= $request->ar_reference;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			
@@ -506,6 +552,7 @@ class ReceivablesController extends Controller
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
+			$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			

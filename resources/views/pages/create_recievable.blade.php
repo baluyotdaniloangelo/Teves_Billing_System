@@ -231,6 +231,14 @@
 						</div>	
 
 						<div class="row mb-2">
+						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="ar_reference" id="ar_reference" value="">
+							<span class="valid-feedback" id="ar_referenceError"></span>
+						  </div>
+						</div>	
+
+						<div class="row mb-2">
 						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="payment_term" id="payment_term" value="" required>

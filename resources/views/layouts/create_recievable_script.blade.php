@@ -641,7 +641,8 @@
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 				
-			let or_number 				= $("input[name=or_number]").val();			
+			let or_number 				= $("input[name=or_number]").val();
+			let ar_reference 			= $("input[name=ar_reference]").val();			
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
 			//let receivable_status 		= $("#receivable_status").val();
@@ -663,6 +664,7 @@
 				  start_date:start_date,
 				  end_date:end_date,
 				  or_number:or_number,
+				  ar_reference:ar_reference,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				  //receivable_status:receivable_status,

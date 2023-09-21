@@ -240,6 +240,14 @@
 							<input type="text" class="form-control " name="or_number" id="or_number" value="">
 							<span class="valid-feedback" id="or_numberError"></span>
 						  </div>
+						</div>	
+
+						<div class="row mb-2">
+						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="ar_reference" id="ar_reference" value="">
+							<span class="valid-feedback" id="ar_referenceError"></span>
+						  </div>
 						</div>						
 
 						<div class="row mb-2">
@@ -404,7 +412,132 @@
 				  </div>
                 </div>
              </div>
-			 
+			
+
+
+ 	<!--Move Sales Order to  Receivables-->
+	<div class="modal fade" id="UpdateReceivablesFromSalesOrderModal" tabindex="-1">
+	
+              <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Update Receivable</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+						<div class="row">
+					<div class="col-lg-4">
+					  
+					  <ol class="list-group list-group-numbered">
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Client</div>
+							<div id="client_name_receivables_SO"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Address</div>
+							<div id="client_address_receivables_SO"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">TIN</div>
+							<div id="client_tin_receivables_SO"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">CONTROL NO.</div>
+							<div id="control_no_receivables_SO"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Total Due</div>
+							<div id="amount_receivables_SO"></div>
+						  </div>
+						 
+						</li>
+						
+					  </ol>					
+					
+					</div>
+					<div class="col-lg-8">
+									
+					  <form class="g-2 needs-validation pt-4" id="ReceivableformEditFromSalesOrder">
+						
+						<div class="row mb-2">
+						  <label for="receivable_billing_date_SO" class="col-sm-3 col-form-label">Billing Date : </label>
+						  <div class="col-sm-9">
+							<input type="date" class="form-control " name="receivable_billing_date_SO" id="receivable_billing_date_SO" value="" required>
+							<span class="valid-feedback" id="receivable_billing_date_SO_Error"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="receivable_or_number_SO" id="receivable_or_number_SO" value="">
+							<span class="valid-feedback" id="receivable_or_number_SO_Error"></span>
+						  </div>
+						</div>						
+
+						<div class="row mb-2">
+						  <label for="ar_reference_SO" class="col-sm-3 col-form-label">AR Reference: </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="receivable_ar_reference_SO" id="receivable_ar_reference_SO" value="">
+							<span class="valid-feedback" id="ar_reference_SO_Error"></span>
+						  </div>
+						</div>	
+
+						<div class="row mb-2">
+						  <label for="receivable_payment_term_SO" class="col-sm-3 col-form-label">Payment Term : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="receivable_payment_term_SO" id="receivable_payment_term_SO" value="">
+							<span class="valid-feedback" id="receivable_payment_term_SO_Error"></span>
+						  </div>
+						</div>							
+						
+						<div class="row mb-2">
+						  <label for="receivable_description_SO" class="col-sm-3 col-form-label">Description : </label>
+						  <div class="col-sm-9">
+							<textarea class="form-control" id="receivable_description_SO" style="height: 50px;" required></textarea>
+							<span class="valid-feedback" id="receivable_description_SO_Error"></span>
+						  </div>
+						</div>
+						
+						</div>
+						
+					</div>
+					</div>
+                    <div class="modal-footer modal-footer_form">
+							<div id="update_loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="SO-update-receivables"> Submit</button>
+						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon"> Reset</button>-->
+						  
+					</div>
+					
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>			
     </section>
 </main>
 @endsection
