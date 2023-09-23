@@ -18,10 +18,28 @@ if($company_header=='Teves'){
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left">ACCOUNT NAME:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_name'] }}</td>			
-			<td colspan="1" align="left">DATE PRINTED:</td>
-			<td colspan="3" align="left" style="border-bottom:1px solid #000;"><?php echo strtoupper(date('M/d/Y')); ?></td>
+			<td colspan="1" align="left">BILLING DATE:</td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">
+			<?php
+				$_print_date=date_create(date('Y-m-d'));
+				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
+				
+				$_billing_date=date_create($receivable_data['billing_date']);
+				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
+				echo $billing_date;
+			?>
+			</td>
 			
 		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="1" align="left">TIN:</td>
+			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_tin'] }}</td>			
+			<td colspan="1" nowrap align="left">DATE PRINTED:</td>
+			<td colspan="3" nowrap align="left" style="border-bottom:1px solid #000;"><?=$print_date;?></td>			
+			
+		</tr>
+		
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left">TIN:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_tin'] }}</td>			
@@ -37,10 +55,24 @@ if($company_header=='Teves'){
 			<td colspan="3" nowrap align="left" style="border-bottom:1px solid #000;"><?=$po_start_date;?> - <?=$po_end_date;?></td>			
 			
 		</tr>
+		
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left">ADDRESS:</td>
 			<td colspan="5" align="left" style="border-bottom:1px solid #000;">{{ $client_data['client_address'] }}</td>
-			<td colspan="4" align="left"></td>
+			<td colspan="1" align="left">O.R. NO.</td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ @$receivable_data['or_number'] }}</td>
+		</tr>
+
+		<tr style="font-size:12px;">
+			<td colspan="6" align="left"></td>
+			<td colspan="1" align="left">AR REFERENCE :</td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ @$receivable_data['ar_reference'] }}</td>
+		</tr>
+
+		<tr style="font-size:12px;">
+			<td colspan="6" align="left"></td>
+			<td colspan="1" align="left">PAYMENT TERMS:</td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ @$receivable_data['payment_term'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -166,7 +198,7 @@ if($company_header=='Teves'){
 				<td align="left" colspan="5"></td>
 			</tr>
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
-			
+			<tr style="font-size:12px;font-style: italic;"><td colspan="10">This billing statement is not valid for claims of taxes. Please refer to Sales Invoice issued.</td></tr>
 		</tbody>
 		</table>
 		

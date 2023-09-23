@@ -32,25 +32,42 @@ if($company_header=='Teves'){
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 				?>
-			<?=$billing_date;?></td>
+				<?=$billing_date;?>
+			</td>
 		</tr>
 
 		
 		<tr style="font-size:12px;">
-			<td colspan="7" align="left" ><b>ADDRESS :</b> {{ $receivable_data[0]['client_address'] }}</td>	
-			<td colspan="3" nowrap align="left" ><b>DATE PRITED :</b><?=$print_date;?></td>	
+			<td colspan="7" align="left"><b style="padding-right:5px;">TIN: </b>{{ $receivable_data[0]['client_tin'] }}</td>
+			
+			<td colspan="3" nowrap align="left" ><b>DATE PRINTED : </b><?=$print_date;?></td>	
 		</tr>
+
+		<tr style="font-size:12px;">
+			<td colspan="7" align="left" ><b>ADDRESS :</b> {{ $receivable_data[0]['client_address'] }}</td>				
+			<!--<td colspan="3" nowrap align="left"><b>O.R. NO. : </b>{{ $receivable_data[0]['or_number'] }}</td>-->
+			<td colspan="3" nowrap align="left"><b>AR REFERENCE : </b>{{ $receivable_data[0]['ar_reference'] }}</td>
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="10" align="left"></td>			
+			
+		</tr>		
 		
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
-		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Billing Date</td>		
-			<!--<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">P.O Period</td>-->
-			<td colspan="4" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Description</td>
-			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
-		</tr>									
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+		</tr>		
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="3" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:25px !important;">Billing Date</td>	
+			<td colspan="4" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Description</td>
+			<td colspan="3" nowrap align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">Amount</td>
+		</tr>
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+		</tr>		
 		<?php
 			$_po_start_date=date_create($receivable_data[0]['billing_period_start']);
 			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
@@ -60,35 +77,48 @@ if($company_header=='Teves'){
 			?>
 		<tr style="font-size:12px;">
 			
-			<td colspan="3" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; height: 20px; padding:10px;"><?=$billing_date;?></td>
-			<td colspan="4" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
-			<!--<td colspan="4" align="left" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>-->
-			<td colspan="3" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
+			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; height: 20px; padding:10px;"><?=$billing_date;?></td>
+			<?php
+			if($receivable_data[0]['sales_order_idx']==0){
+				?>
+				<td colspan="4" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
+				<?php
+			}else{
+				?>
+				<td colspan="4" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
+				<?php
+			}
+			?>
+			<td colspan="3" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		
 		<tr style="font-size:12px;">
 			
-			<td colspan="3" align="right" style="border-left: 1px solid #000;"></td>
+			<td colspan="3" align="right" style="border-left: 0px solid #000;"></td>
 			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
-			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 1px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($receivable_data[0]['receivable_amount'],2);?>
 		
 		</tr>		
 		
 		<tr>
-			<td colspan="10" style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;">&nbsp;</td>
+			<td colspan="10" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
 		</tr>
 		<tr>
-			<td colspan="10" style="font-size:12px; border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important; text-align: center;">PAYMENT</td>
+			<td colspan="10" style="font-size:12px; border:0px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important; text-align: center;">PAYMENT</td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="1" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">#</td>		
-			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date of Payment</td>		
-			<td colspan="2" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Reference No.</td>		
-			<td colspan="3" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>
-			<td colspan="2" nowrap align="center" style="border:1px solid #000;    background-color: #c6e0b4; font-weight:bold;">Amount</td>
+			<td colspan="1" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">#</td>		
+			<td colspan="2" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date of Payment</td>		
+			<td colspan="2" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Reference No.</td>		
+			<td colspan="3" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>
+			<td colspan="2" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold;">Amount</td>
+		</tr>
+		
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>
 		<?php 
 			$no = 1;
@@ -101,11 +131,11 @@ if($company_header=='Teves'){
 			?>
 		<tr style="font-size:12px;">
 			
-			<td colspan="1" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$no;?></td>
-			<td colspan="2" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;"><?=$paymnent_date;?></td>
-			<td colspan="2" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
-			<td colspan="3" align="center" style="border-left:1px solid #000; border-bottom:solid 1px; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
-			<td colspan="2" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$no;?></td>
+			<td colspan="2" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$paymnent_date;?></td>
+			<td colspan="2" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
+			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
+			<td colspan="2" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
 		
 		</tr>
 			<?php
@@ -117,9 +147,9 @@ if($company_header=='Teves'){
 		
 		<tr style="font-size:12px;">
 			
-			<td colspan="3" align="right" style="border-left: 1px solid #000; border-bottom: 1px solid #000;"></td>
-			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important; border-bottom: 1px solid #000;">REMAINING BALANCE </td>
-			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 1px solid #000;border-bottom: 1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<td colspan="3" align="right" style="border-left: 0px solid #000; border-bottom: 0px solid #000;"></td>
+			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important; border-bottom: 0px solid #000;">REMAINING BALANCE </td>
+			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 0px solid #000;border-bottom: 1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($receivable_data[0]['receivable_amount']-$total_payment,2);?>
 		
 		</tr>		
@@ -129,7 +159,7 @@ if($company_header=='Teves'){
 		</tr>
 		
 		<tr style="font-size:12px;border:0px solid #000;font-style: italic;">
-			<td colspan="10" align="left"style="border:1px solid #000; height:25px !important;">
+			<td colspan="10" align="left"style="border:0px solid #000; height:25px !important;">
 			By Affixing your signature below, you hereby acknowledge to have a current pending payable as stated and do acknowledge that you received the original purchase order copy for re-checking purposes.</br>
 			</td>
 		</tr>

@@ -641,14 +641,14 @@ class ReportController extends Controller
 		
 		/*Recievable Data*/
 				
-		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term']);
+		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number']);
 		
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
 		$title = 'Billing Statement';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
+        $pdf = PDF::loadView('pages.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
@@ -711,7 +711,7 @@ class ReportController extends Controller
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
-		$title = 'Billing Statement';
+		$title = 'Billing History';
 		  
         $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
 		
@@ -800,6 +800,7 @@ class ReportController extends Controller
 				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               	->get([
 					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.billing_date',
 					'teves_client_table.client_name',
 					'teves_client_table.client_address',
