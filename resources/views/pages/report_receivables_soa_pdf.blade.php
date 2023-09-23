@@ -23,9 +23,8 @@ if($company_header=='Teves'){
 			<td colspan="10">&nbsp;</td>
 		</tr>
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left">ACCOUNT NAME :</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $receivable_data[0]['client_name'] }}</td>			
-			<td colspan="2" nowrap align="left">DATE :</td>	
+			<td colspan="7" align="left" ><b>ACCOUNT NAME :</b> {{ $receivable_data[0]['client_name'] }}</td>
+			<td colspan="3" nowrap align="left"><b>BILLING DATE :</b>	
 				<?php
 				$_print_date=date_create(date('Y-m-d'));
 				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
@@ -33,16 +32,15 @@ if($company_header=='Teves'){
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 				?>
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$print_date;?></td>
+			<?=$billing_date;?></td>
 		</tr>
 
 		
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left">ADDRESS :</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000; ">{{ $receivable_data[0]['client_address'] }}</td>	
-			<td colspan="4" align="left"></td>			
+			<td colspan="7" align="left" ><b>ADDRESS :</b> {{ $receivable_data[0]['client_address'] }}</td>	
+			<td colspan="3" nowrap align="left" ><b>DATE PRITED :</b><?=$print_date;?></td>	
 		</tr>
-	
+		
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
