@@ -421,7 +421,7 @@
               <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Update Receivable</h5>
+                      <h5 class="modal-title">Update Receivable(From Sales Order)</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -524,7 +524,7 @@
 					</div>
 					</div>
                     <div class="modal-footer modal-footer_form">
-							<div id="update_loading_data" style="display:none;">
+							<div id="update_loading_data_SO" style="display:none;">
 							<div class="spinner-border text-success" role="status">
 								<span class="visually-hidden">Loading...</span>
 							</div>

@@ -335,7 +335,7 @@ class ReceivablesController extends Controller
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
 			$Receivables->ar_reference 					= $request->ar_reference;
-			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
+			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			//$Receivables->receivable_status 			= 'Pending';			
 			//$Receivables->receivable_amount 			= $SalesOrderData[0]->sales_order_total_due;
@@ -345,7 +345,7 @@ class ReceivablesController extends Controller
 			$result = $Receivables->update();
 
 			if($result){
-				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);
+				return response()->json(array('success' => 'Receivable Information Successfully Updated!', 'receivable_id' => $request->ReceivableID), 200);
 			}
 			else{
 				return response()->json(['success'=>'Error on Update Receivables Information']);

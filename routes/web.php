@@ -131,6 +131,7 @@ Route::post('/delete_receivable_payment_item', [ReceivablesController::class,'de
 Route::post('/save_receivable_payment_post', [ReceivablesController::class,'save_receivable_payment_post'])->name('save_receivable_payment_post')->middleware('isLoggedIn');
 /*Save Receivables Payment from Sales Order*/
 Route::post('/create_receivables_from_sale_order_post', [ReceivablesController::class,'create_receivables_from_sale_order_post'])->name('create_receivables_from_sale_order_post')->middleware('isLoggedIn');
+Route::post('/update_receivables_from_sale_order_post', [ReceivablesController::class,'update_receivables_from_sale_order_post'])->name('update_receivables_from_sale_order_post')->middleware('isLoggedIn');
 
 /*Sales Order*/
 /*January 04, 2023*/

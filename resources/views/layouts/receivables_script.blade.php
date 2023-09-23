@@ -537,45 +537,44 @@
 					/*Close Form*/
 					$('#SalesOrderDeliveredModal').modal('toggle');
 					
-					var table = $("#getSalesOrderList").DataTable();
-					table.ajax.reload(null, false);
-					/*
+					var table = $("#getReceivablesList").DataTable();
+				    table.ajax.reload(null, false);
+					
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					
 					var query = {
 						receivable_id:response.receivable_id,
 						_token: "{{ csrf_token() }}"
 					}
-					*/
+					
 					/*Reload Details or link for PDF*/
-					/*
-					download_billing_report_pdf(response.receivable_id);
+					
+					//download_billing_report_pdf(response.receivable_id);
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
-					*/
+					
 				  }
 				},
 				beforeSend:function()
 				{
 					/*Disable Submit Button*/
-					document.getElementById("add-to-receivables").disabled = true;
+					document.getElementById("SO-update-receivables").disabled = true;
 					/*Show Status*/
-					$('#loading_data_save_receivables').show();
+					$('#update_loading_data_SO').show();
 				},
 				complete: function(){
 					
 					/*Enable Submit Button*/
-					document.getElementById("add-to-receivables").disabled = false;
+					document.getElementById("SO-update-receivables").disabled = false;
 					/*Hide Status*/
-					$('#loading_data_save_receivables').hide();
+					$('#update_loading_data_SO').hide();
 					
 				},
 				error: function(error) {
 				 console.log(error);	
-										
-				//$('#receivable_or_numberError').text(error.responseJSON.errors.product_price);
-				//document.getElementById('receivable_or_numberError').className = "invalid-feedback";	
-				
-				//$('#receivable_payment_termError').text(error.responseJSON.errors.product_price);
-				//document.getElementById('receivable_payment_termError').className = "invalid-feedback";	
 				
 				$('#receivable_descriptionError').text(error.responseJSON.errors.receivable_description);
 				document.getElementById('receivable_descriptionError').className = "invalid-feedback";					

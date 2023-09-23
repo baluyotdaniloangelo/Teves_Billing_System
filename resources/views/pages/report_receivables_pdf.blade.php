@@ -45,10 +45,16 @@ if($company_header=='Teves'){
 		<tr style="font-size:12px;">
 			<td colspan="2" align="left">ADDRESS :</td>
 			<td colspan="4" align="left" style="border-bottom:1px solid #000; ">{{ $receivable_data[0]['client_address'] }}</td>			
+			<td colspan="2" nowrap align="left">AR REFERENCE :</td>		
+			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $receivable_data[0]['ar_reference'] }}</td>
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="2" align="left"></td>
+			<td colspan="4" align="left" style=""></td>			
 			<td colspan="2" nowrap align="left">PAYMENT TERM :</td>		
 			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000; ">{{ $receivable_data[0]['payment_term'] }}</td>
 		</tr>
-	
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
@@ -60,8 +66,8 @@ if($company_header=='Teves'){
 		
 		<tr style="font-size:12px;">
 			
-			<td colspan="6" align="left" style="border-left:1px solid #000;height: 180px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
-			<td colspan="4" align="center" style="border-right:1px solid #000;height: 200px;border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
+			<td colspan="6" align="left" style="border-left:1px solid #000;height: 140px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
+			<td colspan="4" align="center" style="border-right:1px solid #000;height: 140px;border-bottom:solid 1px;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		
