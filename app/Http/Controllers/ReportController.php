@@ -641,7 +641,7 @@ class ReportController extends Controller
 		
 		/*Recievable Data*/
 				
-		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number']);
+		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number']);
 		
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);

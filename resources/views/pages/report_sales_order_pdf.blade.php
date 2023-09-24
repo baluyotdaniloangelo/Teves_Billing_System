@@ -38,7 +38,7 @@ if($company_header=='Teves'){
 			<td colspan="2" align="left">TIN No.:</td>
 			<td colspan="3" align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['client_tin'] }}</td>			
 			<td colspan="3" nowrap align="left">D.R. NO. :</td>		
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
+			<td colspan="2" align="left" style="border-bottom:1px solid #000;">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
 		</tr>
 		
 		<tr style="font-size:10px;">

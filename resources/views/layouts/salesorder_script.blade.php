@@ -833,7 +833,7 @@
 
 			let billing_date			= $("input[name=receivable_billing_date]").val();	
 			let or_number 				= $("input[name=receivable_or_number]").val();	
-			let ar_reference 				= $("input[name=ar_reference]").val();	
+			//let ar_reference 				= $("input[name=ar_reference]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
 			
@@ -843,7 +843,7 @@
 				data:{
 				  sales_order_idx:SalesOrderID,
 				  or_number:or_number,
-				  ar_reference:ar_reference,
+				  //ar_reference:ar_reference,
 				  billing_date:billing_date,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
@@ -867,18 +867,17 @@
 					
 					var table = $("#getSalesOrderList").DataTable();
 					table.ajax.reload(null, false);
-					/*
+					
 					var query = {
 						receivable_id:response.receivable_id,
 						_token: "{{ csrf_token() }}"
 					}
-					*/
+					
 					/*Reload Details or link for PDF*/
-					/*
-					download_billing_report_pdf(response.receivable_id);
+					
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
-					*/
+					
 				  }
 				},
 				beforeSend:function()

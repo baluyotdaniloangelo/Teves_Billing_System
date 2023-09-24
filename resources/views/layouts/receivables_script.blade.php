@@ -315,7 +315,7 @@
 					document.getElementById("or_number").value = response[0].or_number;
 					document.getElementById("payment_term").value = response[0].payment_term;
 					document.getElementById("receivable_description").textContent = response[0].receivable_description;					
-					document.getElementById("ar_reference").value = response[0].ar_reference;					
+					//document.getElementById("ar_reference").value = response[0].ar_reference;					
 					document.getElementById("start_date").value = response[0].billing_period_start;
 					document.getElementById("end_date").value = response[0].billing_period_end;
 					document.getElementById("less_per_liter").value = response[0].less_per_liter;
@@ -349,7 +349,7 @@
 			let ReceivableID 			= document.getElementById("update-receivables").value;
 			let billing_date 			= $("input[name=billing_date]").val();	
 			let or_number 				= $("input[name=or_number]").val();		
-			let ar_reference 				= $("input[name=ar_reference]").val();				
+			//let ar_reference 				= $("input[name=ar_reference]").val();				
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
 			let receivable_status 		= $("#receivable_status").val();
@@ -371,7 +371,7 @@
 				  ReceivableID:ReceivableID,
 				  billing_date:billing_date,
 				  or_number:or_number,
-				  ar_reference:ar_reference,
+				  //ar_reference:ar_reference,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				  receivable_status:receivable_status,
@@ -473,7 +473,7 @@
 					document.getElementById("receivable_or_number_SO").value = response[0].or_number;
 					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
 					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;					
-					document.getElementById("receivable_ar_reference_SO").value = response[0].ar_reference;					
+					//document.getElementById("receivable_ar_reference_SO").value = response[0].ar_reference;					
 					//document.getElementById("start_date").value = response[0].billing_period_start;
 					//document.getElementById("end_date").value = response[0].billing_period_end;
 					//document.getElementById("less_per_liter").value = response[0].less_per_liter;
@@ -505,7 +505,7 @@
 
 			let billing_date			= $("input[name=receivable_billing_date_SO]").val();	
 			let or_number 				= $("input[name=receivable_or_number_SO]").val();	
-			let ar_reference 			= $("input[name=receivable_ar_reference_SO]").val();	
+			//let ar_reference 			= $("input[name=receivable_ar_reference_SO]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term_SO]").val();
 			let receivable_description 	= $("#receivable_description_SO").val();
 			
@@ -515,7 +515,7 @@
 				data:{
 				  ReceivableID:ReceivableID,
 				  or_number:or_number,
-				  ar_reference:ar_reference,
+				  //ar_reference:ar_reference,
 				  billing_date:billing_date,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,

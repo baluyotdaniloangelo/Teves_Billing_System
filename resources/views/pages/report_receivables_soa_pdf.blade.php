@@ -46,7 +46,7 @@ if($company_header=='Teves'){
 		<tr style="font-size:12px;">
 			<td colspan="7" align="left" ><b>ADDRESS :</b> {{ $receivable_data[0]['client_address'] }}</td>				
 			<!--<td colspan="3" nowrap align="left"><b>O.R. NO. : </b>{{ $receivable_data[0]['or_number'] }}</td>-->
-			<td colspan="3" nowrap align="left"><b>AR REFERENCE : </b>{{ $receivable_data[0]['ar_reference'] }}</td>
+			<td colspan="3" nowrap align="left"><b>AR REFERENCE : </b>{{ $receivable_data[0]['control_number'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">

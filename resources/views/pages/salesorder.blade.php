@@ -501,7 +501,7 @@
 							<span class="valid-feedback" id="receivable_or_numberError"></span>
 						  </div>
 						</div>						
-
+						<!--
 						<div class="row mb-2">
 						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
 						  <div class="col-sm-9">
@@ -509,7 +509,7 @@
 							<span class="valid-feedback" id="ar_referenceError"></span>
 						  </div>
 						</div>	
-
+						-->
 						<div class="row mb-2">
 						  <label for="receivable_payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">

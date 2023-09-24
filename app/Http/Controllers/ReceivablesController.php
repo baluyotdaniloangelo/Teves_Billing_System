@@ -291,7 +291,7 @@ class ReceivablesController extends Controller
 			$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
-			$Receivables->ar_reference 					= $request->ar_reference;
+			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			$Receivables->receivable_status 			= 'Pending';			
@@ -334,7 +334,7 @@ class ReceivablesController extends Controller
 			//$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
-			$Receivables->ar_reference 					= $request->ar_reference;
+			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			//$Receivables->receivable_status 			= 'Pending';			
@@ -368,7 +368,6 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.control_number',
 					'teves_client_table.client_tin',
 					'teves_receivable_table.or_number',
-					'teves_receivable_table.ar_reference',					
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
@@ -450,7 +449,7 @@ class ReceivablesController extends Controller
 			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->billing_date 				= date('Y-m-d');
 			$Receivables->or_number 				= $request->or_number;
-			$Receivables->ar_reference 				= $request->ar_reference;
+			//$Receivables->ar_reference 				= $request->ar_reference;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			
@@ -552,7 +551,7 @@ class ReceivablesController extends Controller
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
-			$Receivables->ar_reference 					= $request->ar_reference;
+			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			

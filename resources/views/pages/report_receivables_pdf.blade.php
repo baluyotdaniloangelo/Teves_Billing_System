@@ -26,8 +26,8 @@ if($company_header=='Teves'){
 		</tr>
 		<tr style="font-size:12px;">
 		
-			<td colspan="7" align="left"><b style="padding-right:5px;">ACCOUNT NAME : </b>{{ $receivable_data[0]['client_name'] }}</td>			
-			<td colspan="3" nowrap align="left"><b>BILLING DATE : </b>
+			<td colspan="6" align="left"><b style="padding-right:5px;">ACCOUNT NAME : </b>{{ $receivable_data[0]['client_name'] }}</td>			
+			<td colspan="4" nowrap align="left"><b>BILLING DATE : </b>
 				<?php
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
@@ -36,18 +36,13 @@ if($company_header=='Teves'){
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="7" align="left"><b style="padding-right:5px;">TIN: </b>{{ $receivable_data[0]['client_tin'] }}</td>			
-			<td colspan="3" nowrap align="left"><b>O.R. NO. : </b>{{ $receivable_data[0]['or_number'] }}</td>
-		</tr>
-		
-		<tr style="font-size:12px;">
-			<td colspan="7" align="left"><b style="padding-right:5px;">ADDRESS : </b>{{ $receivable_data[0]['client_address'] }}</td>			
-			<td colspan="3" nowrap align="left"><b>AR REFERENCE : </b>{{ $receivable_data[0]['ar_reference'] }}</td>
+			<td colspan="6" align="left"><b style="padding-right:5px;">TIN: </b>{{ $receivable_data[0]['client_tin'] }}</td>			
+			<td colspan="4 nowrap align="left"><b>PAYMENT REFERENCE. : </b>{{ $receivable_data[0]['or_number'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">	
-			<td colspan="7" align="left" ></td>
-			<td colspan="3" nowrap align="left"><b>PAYMENT TERM : </b>{{ $receivable_data[0]['payment_term'] }}</td>
+			<td colspan="6 align="left"><b style="padding-right:5px;">ADDRESS : </b>{{ $receivable_data[0]['client_address'] }}</td>
+			<td colspan="4" align="left"><b>PAYMENT TERM : </b>{{ $receivable_data[0]['payment_term'] }}</td>
 		</tr>
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
