@@ -214,13 +214,13 @@
 						
 							var cashiers_report_p1_id = response[i].cashiers_report_p1_id;						
 							var product_idx = response[i].product_idx;						
-							var product_price = response[i].product_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var beginning_reading = response[i].beginning_reading;
-							var order_quantity = response[i].order_quantity;
+							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var closing_reading = response[i].closing_reading;
 							var calibration = response[i].calibration;
-							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_product_body_data tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
@@ -877,7 +877,7 @@
 							var discounted_price = response[i].discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var order_quantity = response[i].order_quantity;
-							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_product_data_msc_DISCOUNT tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
@@ -919,14 +919,14 @@
 						
 							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
 							var product_idx = response[i].product_idx;						
-							var unit_price = response[i].unit_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var unit_price = response[i].unit_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var product_name = response[i].product_name;
-							var order_quantity = response[i].order_quantity;
-							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_product_data_msc_SALES_CREDIT tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
-							
 							"<td class='product_td' align='center'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
@@ -964,10 +964,10 @@
 							var reference_no = response[i].reference_no;		
 							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
 							var product_idx = response[i].product_idx;						
-							var unit_price = response[i].unit_price.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var unit_price = response[i].unit_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							//var product_name = response[i].product_name;
 							var order_quantity = response[i].order_quantity;
-							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_product_data_msc_OTHERS tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
@@ -1011,7 +1011,7 @@
 					
 					update_input_settings_create_PH3();
 					var total_amount = response[0].order_total_amount;
-					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 
 					UpdateTotalAmount_PH3();
 
@@ -1051,7 +1051,7 @@
 					
 					update_input_settings_create_PH3();
 					var total_amount = response[0].order_total_amount;
-					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 
 					UpdateTotalAmount_PH3();
 
@@ -1189,7 +1189,7 @@
 					$('#delete_product_manual_price_PH3').text(response[0].product_price);
 					
 					var total_amount = response[0].order_total_amount;
-					$('#delete_TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					$('#delete_TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));				
 					$('#CRPH3DeleteModal').modal('toggle');							  
 				  }
 				},
@@ -1221,7 +1221,7 @@
 					$('#delete_product_manual_price_PH3_DISCOUNT').text(response[0].product_price);
 					
 					var total_amount = response[0].order_total_amount;
-					$('#delete_TotalAmount_PH3_DISCOUNT').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					$('#delete_TotalAmount_PH3_DISCOUNT').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));				
 					$('#CRPH3DeleteModal_DISCOUNT').modal('toggle');							  
 				  }
 				},
@@ -1253,7 +1253,7 @@
 					$('#delete_amount_PH3_others').text(response[0].unit_price);
 					
 					//var total_amount = response[0].order_total_amount;
-					//$('#delete_TotalAmount_PH3_OTHERS').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
+					//$('#delete_TotalAmount_PH3_OTHERS').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));				
 					
 					$('#CRPH3DeleteModal_OTHERS').modal('toggle');							  
 				  
@@ -1394,12 +1394,12 @@
 							    if(product_manual_price!='' && product_manual_price!=0){
 								
 								    var total_amount = (product_manual_price) * order_quantity;
-								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							    }else{
 								
 								    var total_amount = product_price * order_quantity;
-								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							    }
 							
@@ -1415,21 +1415,21 @@
 								var discounted_price	= 0;
 							}
 							
-						    $('#pump_price_txt').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+						    $('#pump_price_txt').html(pump_price.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 						
-						    $('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+						    $('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 						
 						    if(order_quantity!=0 || order_quantity!=''){
 							
 							    if(product_manual_price!='' && product_manual_price!=0){
 								
 								    var total_amount = (pump_price - product_manual_price) * order_quantity;
-								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							    }else{
 								
 								    var total_amount = pump_price * order_quantity;
-								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								    $('#TotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							    }
 							
@@ -1490,12 +1490,12 @@
 							if(product_manual_price!='' && product_manual_price!=0){
 								
 								var total_amount = (product_manual_price) * order_quantity;
-								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							}else{
 								alert('s');
 								var total_amount = product_price * order_quantity;
-								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							}
 							
@@ -1511,9 +1511,9 @@
 								var discounted_price	= 0;
 							}
 							
-					$('#pump_price_txt_update').html(pump_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#pump_price_txt_update').html(pump_price.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#discounted_price_txt_update').html(discounted_price.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#discounted_price_txt_update').html(discounted_price.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
 					
 						if(order_quantity!=0 || order_quantity!=''){
@@ -1521,12 +1521,12 @@
 							if(product_manual_price!='' && product_manual_price!=0){
 								
 								var total_amount = (pump_price - product_manual_price) * order_quantity;
-								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							}else{
 								
 								var total_amount = pump_price * order_quantity;
-								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							}
 							
@@ -1548,10 +1548,10 @@
 		if(order_quantity!=0 || order_quantity!=''){
 			if(product_manual_price!='' && product_manual_price!=0){
 				var total_amount = product_manual_price * order_quantity;
-				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 			}else{
 				var total_amount = product_price * order_quantity;
-				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 			}
 		}		
 		*/
@@ -1628,7 +1628,7 @@
 						
 							var cashiers_report_p4_id = response[i].cashiers_report_p4_id;					
 							var description_p4 = response[i].description_p4;
-							var amount_p4 = response[i].amount_p4.toLocaleString("en-PH", {minimumFractionDigits: 2});
+							var amount_p4 = response[i].amount_p4.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_product_data_PH4 tr:last').after("<tr>"+
 							"<td class='product_td' align='center'>"+description_p4+"</td>"+
@@ -1816,7 +1816,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 	});
 	
@@ -1836,7 +1836,7 @@
 		if(one_thousand_deno!=0 || one_thousand_deno!=''){
 			
 				deno_amount = one_thousand_deno * 1000;
-				$('#one_thousand_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#one_thousand_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}			
 			
@@ -1862,7 +1862,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
 	}
 
@@ -1882,7 +1882,7 @@
 		if(five_hundred_deno!=0 || five_hundred_deno!=''){
 			
 				deno_amount = five_hundred_deno * 500;
-				$('#five_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#five_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		
@@ -1908,7 +1908,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 		
 	}	
 	
@@ -1928,7 +1928,7 @@
 		if(two_hundred_deno!=0 || two_hundred_deno!=''){
 			
 				deno_amount = two_hundred_deno * 200;
-				$('#two_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#two_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		
@@ -1954,7 +1954,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 		
 	}	
 
@@ -1974,7 +1974,7 @@
 		if(one_hundred_deno!=0 || one_hundred_deno!=''){
 			
 				deno_amount = one_hundred_deno * 100;
-				$('#one_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#one_hundred_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		
@@ -2000,7 +2000,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 				
 	}
 
@@ -2020,7 +2020,7 @@
 		if(fifty_deno!=0 || fifty_deno!=''){
 			
 				deno_amount = fifty_deno * 50;
-				$('#fifty_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#fifty_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		
@@ -2046,7 +2046,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 		
 	}
 
@@ -2066,7 +2066,7 @@
 		if(twenty_deno!=0 || twenty_deno!=''){
 			
 				deno_amount = twenty_deno * 20;
-				$('#twenty_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#twenty_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		
@@ -2092,7 +2092,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 				
 	}
 	
@@ -2112,7 +2112,7 @@
 		if(ten_deno!=0 || ten_deno!=''){
 			
 				deno_amount = ten_deno * 10;
-				$('#ten_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#ten_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		
@@ -2138,7 +2138,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));		
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 		
 	}
 
@@ -2158,7 +2158,7 @@
 		if(five_deno!=0 || five_deno!=''){
 			
 				deno_amount = five_deno * 5;
-				$('#five_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#five_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		one_thousand_deno_amt = one_thousand_deno * 1000;	
@@ -2183,7 +2183,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 	
 	}
 	
@@ -2203,7 +2203,7 @@
 		if(one_deno!=0 || one_deno!=''){
 			
 				deno_amount = one_deno * 1;
-				$('#one_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#one_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		one_thousand_deno_amt = one_thousand_deno * 1000;	
@@ -2228,7 +2228,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
 		
 	}
@@ -2249,7 +2249,7 @@
 		if(twenty_five_cent_deno!=0 || twenty_five_cent_deno!=''){
 			
 				deno_amount = twenty_five_cent_deno * 0.25;
-				$('#twenty_five_cent_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#twenty_five_cent_deno_total_amt').html(deno_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 		}		
 		one_thousand_deno_amt = one_thousand_deno * 1000;	
@@ -2274,7 +2274,7 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
 		
 	}	
@@ -2335,22 +2335,22 @@
 		+ one_deno_amt
 		+ twenty_five_deno_amt;
 		
-		$('#one_thousand_deno_total_amt').html(one_thousand_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#one_thousand_deno_total_amt').html(one_thousand_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
-		$('#five_hundred_deno_total_amt').html(five_hundred_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-		$('#two_hundred_deno_total_amt').html(two_hundred_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-		$('#one_hundred_deno_total_amt').html(one_hundred_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#five_hundred_deno_total_amt').html(five_hundred_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+		$('#two_hundred_deno_total_amt').html(two_hundred_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+		$('#one_hundred_deno_total_amt').html(one_hundred_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
-		$('#fifty_deno_total_amt').html(fifty_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-		$('#twenty_deno_total_amt').html(twenty_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-		$('#ten_deno_total_amt').html(ten_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#fifty_deno_total_amt').html(fifty_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+		$('#twenty_deno_total_amt').html(twenty_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+		$('#ten_deno_total_amt').html(ten_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
-		$('#five_deno_total_amt').html(five_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-		$('#one_deno_total_amt').html(one_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#five_deno_total_amt').html(five_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+		$('#one_deno_total_amt').html(one_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
-		$('#twenty_five_cent_deno_total_amt').html(twenty_five_deno_amt.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#twenty_five_cent_deno_total_amt').html(twenty_five_deno_amt.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 		
-		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+		$('#total_cash_on_hand_amt').html(total_cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 
 					
 				  }else{
@@ -2455,19 +2455,19 @@
 					
 					cash_short_or_over = cash_on_hand - (theoretical_sales);				
 					
-					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#other_sales_total').html(other_sales_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#other_sales_total').html(other_sales_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#total_sales').html(total_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#total_sales').html(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#miscellaneous_total').html(miscellaneous_total.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#miscellaneous_total').html(miscellaneous_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#theoretical_sales').html(theoretical_sales.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#theoretical_sales').html(theoretical_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#cash_on_hand').html(cash_on_hand.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#cash_on_hand').html(cash_on_hand.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
-					$('#cash_short_or_over').html(cash_short_or_over.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#cash_short_or_over').html(cash_short_or_over.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
 				  }else{
 							/*No Result Found or Error*/	
