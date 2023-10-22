@@ -15,9 +15,14 @@ if($company_header=='Teves'){
 		<tr>
 			<td colspan="10"><div align="center"><h5>{{ $title }}</h5></div></td>
 		</tr>
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >
+		
 		<tr style="font-size:12px;">
-			<td colspan="6" align="left"><b>ACCOUNT NAME:</b> {{ $client_data['client_name'] }}</td>			
-			<td colspan="4" align="left"><b>BILLING DATE:</b>
+			<td colspan="1" align="left" width="10%"><b>ACCOUNT NAME</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="3" align="left" width="59%">{{ $client_data['client_name'] }}</td>
 			<?php
 				$_print_date=date_create(date('Y-m-d'));
 				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
@@ -25,43 +30,54 @@ if($company_header=='Teves'){
 				$_billing_date=date_create($receivable_data['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 				echo $billing_date;
-			?>
-			</td>
-			
+			?>			
+			<td colspan="2" align="left" width="10%"><b>BILLING DATE</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="2" align="left" width="19%"><?=$billing_date;?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="6" align="left"><b>TIN:</b> {{ $client_data['client_tin'] }}</td>			
-			<td colspan="4" nowrap align="left"><b>DATE PRINTED:</b> <?=$print_date;?></td>			
+		
+			<td colspan="1" align="left" width="10%"><b>TIN</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="3" align="left" width="59%">{{ $client_data['client_tin'] }}</td>	
 			
-		</tr>
+			<td colspan="2" align="left" width="10%"><b>DATE PRINTED</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="2" align="left" width="19%"><?=$print_date;?></td>
+			
+		</tr>		
 		
 		<tr style="font-size:12px;">
-			<td colspan="6" align="left"><b>ADDRESS:</b> {{ $client_data['client_address'] }}</td>			
-			<td colspan="4" nowrap align="left"><b>SALES ORDER PERIOD:</b> 
+		
+			<td colspan="1" align="left" width="10%"><b>ADDRESS</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="3" align="left" width="59%">{{ $client_data['client_address'] }}</td>	
 			<?php
-			
 			$_po_start_date=date_create("$start_date");
 			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
 			
 			$_po_end_date=date_create("$end_date");
-			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/Y"));
-			
-			echo "$po_start_date - $po_end_date";
-			
+			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/Y"));	
 			?>
-			</td>			
+			<td colspan="2" align="left" width="10%"><b>SALES ORDER PERIOD</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="2" align="left" width="19%"><?php echo "$po_start_date - $po_end_date"; ?></td>
 			
 		</tr>
-
+		
 		<tr style="font-size:12px;">
-			<td colspan="6" align="left"></td>
-			<td colspan="4" align="left"><b>AR REFERENCE :</b> {{ @$receivable_data['control_number'] }}</td>
+			<td colspan="5" align="left" width="70%"></td>
+			<td colspan="2" align="left" width="9%"><b>AR REFERENCE</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="2" align="left" width="20%">{{ @$receivable_data['control_number'] }}</td>
 		</tr>
-
+		
 		<tr style="font-size:12px;">
-			<td colspan="6" align="left"></td>
-			<td colspan="4" align="left"><b>PAYMENT TERMS:</b> {{ @$receivable_data['payment_term'] }}</td>
+			<td colspan="5" align="left" width="70%"></td>
+			<td colspan="2" align="left" width="10%"><b>PAYMENT TERMS</b></td>
+			<td colspan="1" align="left" width="1%"><b> : </b></td>
+			<td colspan="2" align="left" width="19%">{{ @$receivable_data['payment_term'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">

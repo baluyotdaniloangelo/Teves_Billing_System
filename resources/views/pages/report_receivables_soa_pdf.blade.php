@@ -22,41 +22,52 @@ if($company_header=='Teves'){
 		<tr style="font-size:12px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
-		<tr style="font-size:12px;">
-			<td colspan="7" align="left" ><b>ACCOUNT NAME :</b> {{ $receivable_data[0]['client_name'] }}</td>
-			<td colspan="3" nowrap align="left"><b>BILLING DATE :</b>	
-				<?php
-				$_print_date=date_create(date('Y-m-d'));
-				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
-				
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
+		<?php
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
-				?>
-				<?=$billing_date;?>
-			</td>
+		?>
+		<tr style="font-size:12px;">
+			<td colspan="2" align="left" width="8%"><b>ACCOUNT NAME</b></td>	
+			<td colspan="1" align="center" width="1%"><b>:</b></td>	
+			<td colspan="3" align="left" width="60%">{{ $receivable_data[0]['client_name'] }}</td>	
+			
+			<td colspan="1" nowrap align="left" width="10%"><b>BILLING DATE</b></td>
+			<td colspan="1" align="center" width="1%"><b>:</b></td>
+			<td colspan="2" align="left" width="20%"><?=$billing_date;?></td>		
+		</tr>
+		<?php
+				$_print_date=date_create(date('Y-m-d'));
+				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
+		?>
+		<tr style="font-size:12px;">
+			<td colspan="2" align="left" width="8%"><b>TIN</b></td>	
+			<td colspan="1" align="center" width="1%"><b>:</b></td>	
+			<td colspan="3" align="left" width="60%">{{ $receivable_data[0]['client_tin'] }}</td>	
+			<td colspan="1" nowrap align="left" width="10%"><b>DATE PRINTED</b></td>
+			<td colspan="1" align="center" width="1%"><b>:</b></td>
+			<td colspan="2" align="left" width="20%"><?=$print_date;?></td>		
+		</tr>
+		
+		<tr style="font-size:12px;">		
+			<td colspan="2" align="left" width="8%"><b>ADDRESS</b></td>	
+			<td colspan="1" align="center" width="1%"><b>:</b></td>	
+			<td colspan="3" align="left" width="60%">{{ $receivable_data[0]['client_address'] }}</td>	
+			<td colspan="1" nowrap align="left" width="10%"><b>AR REFERENCE</b></td>
+			<td colspan="1" align="center" width="1%"><b>:</b></td>
+			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['control_number'] }}</td>			
 		</tr>
 
-		
-		<tr style="font-size:12px;">
-			<td colspan="7" align="left"><b style="padding-right:5px;">TIN: </b>{{ $receivable_data[0]['client_tin'] }}</td>
-			
-			<td colspan="3" nowrap align="left" ><b>DATE PRINTED : </b><?=$print_date;?></td>	
-		</tr>
-
-		<tr style="font-size:12px;">
-			<td colspan="7" align="left" ><b>ADDRESS :</b> {{ $receivable_data[0]['client_address'] }}</td>				
-			<!--<td colspan="3" nowrap align="left"><b>O.R. NO. : </b>{{ $receivable_data[0]['or_number'] }}</td>-->
-			<td colspan="3" nowrap align="left"><b>AR REFERENCE : </b>{{ $receivable_data[0]['control_number'] }}</td>
-		</tr>
-		
-		<tr style="font-size:12px;">
-			<td colspan="10" align="left"></td>			
-			
-		</tr>		
-		
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
+		
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
+				
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>		

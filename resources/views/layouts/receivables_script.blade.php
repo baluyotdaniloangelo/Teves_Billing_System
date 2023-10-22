@@ -186,7 +186,7 @@
 		
 		var x = document.getElementById("receivable_payment_table_body_data").rows.length;
 		/*Limit to 10 rows*/
-		if(x > 10){
+		if(x > 50){
 		   return;
 		}else{
 						$('#receivable_payment_table_body_data tr:last').after("<tr>"+

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -782,6 +781,9 @@ class ReportController extends Controller
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
+		
+		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+		
 	}
 	
 	public function generate_receivable_soa_pdf(Request $request){

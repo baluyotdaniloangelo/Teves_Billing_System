@@ -157,17 +157,25 @@ class ReceivablesController extends Controller
 			/*Get Receivable Payment Details*/
 			$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivableID)
               	->sum('receivable_payment_amount');
-
-			$remaining_balance = $receivable_amount - $receivable_payment_amount+0;
+				
+			$remaining_balance = number_format($receivable_amount - $receivable_payment_amount+0,2, '.', '');;
+		
+			/*IF Fully Paid Automatically Update the Status to Paid*/
+			if($remaining_balance <= 0)
+			{
+				$receivable_status = 'Paid';
+			}else{
+				$receivable_status = 'Pending';
+			}
 			
 			/*Update Recievable Table*/
 			$Receivables_update = new ReceivablesModel();
 			$Receivables_update = ReceivablesModel::find($receivableID);
 			
-			$Receivables_update->receivable_remaining_balance 		= $remaining_balance;
+			$Receivables_update->receivable_remaining_balance 	= $remaining_balance;
+			$Receivables_update->receivable_status 				= $receivable_status;
 			
 			$result_update = $Receivables_update->update();
-
 
 		return 'Deleted';
 		
@@ -198,7 +206,7 @@ class ReceivablesController extends Controller
 						$mode_of_payment_item 	= $mode_of_payment[$count];
 						$date_of_payment_item 	= $date_of_payment[$count];
 						$reference_no_item 		= $reference_no[$count];
-						$payment_amount_item 	= $payment_amount[$count];
+						$payment_amount_item 	= number_format($payment_amount[$count],2, '.', '');
 						$payment_id_item 		= $payment_id[$count];
 				
 					if($payment_id_item==0){
@@ -237,8 +245,8 @@ class ReceivablesController extends Controller
 			/*Get Receivable Payment Details*/
 			$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivable_id)
               	->sum('receivable_payment_amount');
-
-			$remaining_balance = $receivable_amount - $receivable_payment_amount;
+			
+			$remaining_balance = number_format($receivable_amount - $receivable_payment_amount,2, '.', '');
 			
 			/*IF Fully Paid Automatically Update the Status to Paid*/
 			if($remaining_balance <= 0)
@@ -453,16 +461,16 @@ class ReceivablesController extends Controller
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			
-			$Receivables->receivable_gross_amount 		= $gross_amount;			
-			$Receivables->receivable_vatable_sales 		= $vatable_sales;
-			$Receivables->receivable_vat_amount 		= $vatable_amount;
-			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
+			$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');			
+			$Receivables->receivable_vatable_sales 		= number_format($vatable_sales,2, '.', '');
+			$Receivables->receivable_vat_amount 		= number_format($vatable_amount,2, '.', '');
+			$Receivables->receivable_withholding_tax 	= number_format($withholding_tax,2, '.', '');			
 			$Receivables->receivable_amount 			= number_format($total_amount_due,2, '.', '');
 			$Receivables->receivable_remaining_balance 	= number_format($total_amount_due,2, '.', '');
 			
-			$Receivables->receivable_net_value_percentage 			= $net_value_percentage;
-			$Receivables->receivable_withholding_tax_percentage 	= $withholding_tax_percentage * 100;
-			$Receivables->receivable_vat_value_percentage 			= $vat_value_percentage * 100;
+			$Receivables->receivable_net_value_percentage 			=  number_format($net_value_percentage,2, '.', '');
+			$Receivables->receivable_withholding_tax_percentage 	=  number_format($withholding_tax_percentage * 100,2, '.', '');
+			$Receivables->receivable_vat_value_percentage 			=  number_format($vat_value_percentage * 100,2, '.', '');
 					
 			$Receivables->receivable_status 			= 'Pending';		
 			$Receivables->billing_period_start 			= $start_date;
@@ -551,21 +559,21 @@ class ReceivablesController extends Controller
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->or_number 					= $request->or_number;
-			//$Receivables->ar_reference 					= $request->ar_reference;
+			//$Receivables->ar_reference 				= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			
-			$Receivables->receivable_gross_amount 		= $gross_amount;			
-			$Receivables->receivable_vatable_sales 		= $vatable_sales;
-			$Receivables->receivable_vat_amount 		= $vatable_amount;
-			$Receivables->receivable_withholding_tax 	= $withholding_tax;			
+			$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');			
+			$Receivables->receivable_vatable_sales 		= number_format($vatable_sales,2, '.', '');
+			$Receivables->receivable_vat_amount 		= number_format($vatable_amount,2, '.', '');
+			$Receivables->receivable_withholding_tax 	= number_format($withholding_tax,2, '.', '');			
 			$Receivables->receivable_amount 			= number_format($total_amount_due,2, '.', '');
 			
 			$Receivables->receivable_remaining_balance 	= number_format($receivable_total_payment_amount,2, '.', '');
 			
-			$Receivables->receivable_net_value_percentage 			= $net_value_percentage;
-			$Receivables->receivable_withholding_tax_percentage 	= $withholding_tax_percentage * 100;
-			$Receivables->receivable_vat_value_percentage 			= $vat_value_percentage * 100;			
+			$Receivables->receivable_net_value_percentage 			= number_format($net_value_percentage,2, '.', '');
+			$Receivables->receivable_withholding_tax_percentage 	= number_format($withholding_tax_percentage * 100,2, '.', '');
+			$Receivables->receivable_vat_value_percentage 			= number_format($vat_value_percentage * 100,2, '.', '');			
 			
 			//$Receivables->receivable_status 			= $request->receivable_status;
 			$Receivables->billing_period_start 			= $request->start_date;

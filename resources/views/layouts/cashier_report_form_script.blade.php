@@ -177,6 +177,14 @@
 						$('#product_idxError').text('');					
 						$('#beginning_readingError').text('');		
 						$('#closing_readingError').text('');
+						
+						/*Clear Form*/
+						document.getElementById("product_idx").value = '';
+						document.getElementById("beginning_reading").value = '';
+						document.getElementById("closing_reading").value = '';
+						document.getElementById("calibration").value = '';
+						document.getElementById("product_manual_price").value = '';
+						
 					  }
 					},
 					error: function(error) {
@@ -267,7 +275,8 @@
 					
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
-					$('#Update_CRPH1_Modal').modal('toggle');							  
+					$('#Update_CRPH1_Modal').modal('toggle');		
+						
 				  }
 				},
 				error: function(error) {
@@ -321,6 +330,10 @@
 						$('#update_product_idxError').text('');					
 						$('#update_beginning_readingError').text('');		
 						$('#update_closing_readingError').text('');
+						
+						/*Clear Form*/
+						$('#Update_CRPH1_Modal').modal('toggle');
+						
 					  }
 					},
 					error: function(error) {
@@ -449,6 +462,12 @@
 						$('#product_idx_PH2Error').text('');					
 						$('#order_quantity_PH2Error').text('');		
 						$('#product_manual_price_PH2Error').text('');
+						
+						/*Clear Form*/
+						document.getElementById("product_idx_PH2").value = '';
+						document.getElementById("order_quantity_PH2").value = '';
+						document.getElementById("product_manual_price_PH2").value = '';
+						
 					  }
 					},
 					error: function(error) {
@@ -578,6 +597,8 @@
 						$('#update_product_idx_PH2Error').text('');					
 						$('#update_order_quantity_PH2Error').text('');		
 						$('#update_product_manual_price_PH2Error').text('');
+						/*Close Form*/
+						$('#Update_CRPH2_Modal').modal('toggle');		
 					  }
 					},
 					error: function(error) {
@@ -836,6 +857,17 @@
 						$('#product_idx_PH3Error').text('');					
 						$('#order_quantity_PH3Error').text('');		
 						$('#product_manual_price_PH3Error').text('');
+						
+						/*Clear Form*/
+						document.getElementById("reference_no_PH3").value = '';
+						document.getElementById("product_idx_PH3").value = '';
+						document.getElementById("order_quantity_PH3").value = '';
+						document.getElementById("product_manual_price_PH3").value = '';
+						
+						$('#pump_price_txt').html('0');
+						$('#discounted_price_txt').html('0');
+						$('#TotalAmount_PH3').html('0');
+						
 					  }
 					},
 					error: function(error) {
@@ -899,7 +931,8 @@
 				 console.log(error);	 
 				}
 			   });
-	  }  	  
+	}  	  
+	
 	function LoadCashiersReportPH3_SALES_CREDIT() {		
 		$("#table_product_data_msc_SALES_CREDIT tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_product_data_msc_SALES_CREDIT');
@@ -1094,9 +1127,9 @@
 					$('#UpdateTotalAmount_PH3').html('0');		
 
 					UpdateTotalAmount_PH3();
-
 					
-					$('#Update_CRPH3_Modal').modal('toggle');							  
+					$('#Update_CRPH3_Modal').modal('toggle');		
+					
 				  }
 				},
 				error: function(error) {
@@ -1151,6 +1184,9 @@
 						$('#update_product_idx_PH3Error').text('');					
 						$('#update_order_quantity_PH3Error').text('');		
 						$('#update_product_manual_price_PH3Error').text('');
+						
+						$('#Update_CRPH3_Modal').modal('toggle');
+						
 					  }
 					},
 					error: function(error) {
@@ -1387,7 +1423,7 @@
 					    if(response==''){
 						   
 						   $('#pump_price_txt').html('0');
-						    $('#discounted_price_txt').html('0');
+						   $('#discounted_price_txt').html('0');
 						
 						    if(order_quantity!=0 || order_quantity!=''){
 							

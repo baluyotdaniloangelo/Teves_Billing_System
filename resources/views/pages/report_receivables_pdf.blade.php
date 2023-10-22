@@ -19,34 +19,54 @@ if($company_header=='Teves'){
 			<td colspan="4" style="border:1px solid #000; background-color: #c6e0b4; text-align:center; font-weight:bold; font-size:16px !important; padding:5px;"> {{ $title }} </td>
 			<td colspan="2"></td>
 			<td colspan="2" nowrap align="left" style="color:red">CONTROL NO :</td>
-			<td colspan="2"><div align="left" style="color:red">{{ $receivable_data[0]['control_number'] }}</td>
+			<td colspan="2"><div align="center" style="color:red">{{ $receivable_data[0]['control_number'] }}</td>
 		</tr>
 		<tr style="font-size:12px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
-		<tr style="font-size:12px;">
 		
-			<td colspan="6" align="left"><b style="padding-right:5px;">ACCOUNT NAME : </b>{{ $receivable_data[0]['client_name'] }}</td>			
-			<td colspan="4" nowrap align="left"><b>BILLING DATE : </b>
-				<?php
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
+		
+		<tr style="font-size:12px;">
+			<td colspan="2" align="left" width="10%"><b>ACCOUNT NAME</b></td>	
+			<td colspan="1" align="center" width="1%"><b>:</b></td>	
+			<td colspan="3" align="left" width="58%">{{ $receivable_data[0]['client_name'] }}</td>	
+			<?php
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
-				?>
-			<?=$billing_date;?></td>
+			?>
+			<td colspan="1" nowrap align="left" width="10%"><b>BILLING DATE</b></td>
+			<td colspan="1" align="center" width="1%"><b>:</b></td>
+			<td colspan="2" align="left" width="20%"><?=$billing_date;?></td>		
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="6" align="left"><b style="padding-right:5px;">TIN: </b>{{ $receivable_data[0]['client_tin'] }}</td>			
-			<td colspan="4 nowrap align="left"><b>PAYMENT REFERENCE. : </b>{{ $receivable_data[0]['or_number'] }}</td>
+			<td colspan="2" align="left" width="10%"><b>TIN</b></td>	
+			<td colspan="1" align="center" width="1%"><b>:</b></td>	
+			<td colspan="3" align="left" width="58%">{{ $receivable_data[0]['client_tin'] }}</td>	
+			<td colspan="1" nowrap align="left" width="10%"><b>PAYMENT REFERENCE</b></td>
+			<td colspan="1" align="center" width="1%"><b>:</b></td>
+			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['or_number'] }}</td>		
 		</tr>
 		
-		<tr style="font-size:12px;">	
-			<td colspan="6 align="left"><b style="padding-right:5px;">ADDRESS : </b>{{ $receivable_data[0]['client_address'] }}</td>
-			<td colspan="4" align="left"><b>PAYMENT TERM : </b>{{ $receivable_data[0]['payment_term'] }}</td>
+		<tr style="font-size:12px;">		
+			<td colspan="2" align="left" width="10%"><b>ADDRESS</b></td>	
+			<td colspan="1" align="center" width="1%"><b>:</b></td>	
+			<td colspan="3" align="left" width="58%">{{ $receivable_data[0]['client_address'] }}</td>	
+			<td colspan="1" nowrap align="left" width="10%"><b>PAYMENT TERM</b></td>
+			<td colspan="1" align="center" width="1%"><b>:</b></td>
+			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['payment_term'] }}</td>			
 		</tr>
+
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
+		
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="6" align="center" style="border:1px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">DESCRIPTION</td>		
