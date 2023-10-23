@@ -11,15 +11,16 @@ if($company_header=='Teves'){
 	<?php
 }
 ?>
+		</table>
 		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<tr style="font-size:12px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
 		<tr style="font-size:12px;">
 			<td colspan="4" style="border:1px solid #000; background-color: #c6e0b4; text-align:center; font-weight:bold; font-size:16px !important; padding:5px;"> {{ $title }} </td>
-			<td colspan="2"></td>
-			<td colspan="2" nowrap align="left" style="color:red">CONTROL NO :</td>
-			<td colspan="2"><div align="center" style="color:red">{{ $receivable_data[0]['control_number'] }}</td>
+			<td colspan="2" ></td>
+			<td colspan="4" ><div align="center" style="color:red">CONTROL NO : {{ $receivable_data[0]['control_number'] }}</td>
 		</tr>
 		<tr style="font-size:12px;">
 			<td colspan="10">&nbsp;</td>
@@ -46,18 +47,18 @@ if($company_header=='Teves'){
 			<td colspan="2" align="left" width="10%"><b>TIN</b></td>	
 			<td colspan="1" align="center" width="1%"><b>:</b></td>	
 			<td colspan="3" align="left" width="58%">{{ $receivable_data[0]['client_tin'] }}</td>	
-			<td colspan="1" nowrap align="left" width="10%"><b>PAYMENT REFERENCE</b></td>
+			<td colspan="1" nowrap align="left" width="10%"><b>PAYMENT TERM</b></td>
 			<td colspan="1" align="center" width="1%"><b>:</b></td>
-			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['or_number'] }}</td>		
+			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['payment_term'] }}</td>			
 		</tr>
 		
 		<tr style="font-size:12px;">		
 			<td colspan="2" align="left" width="10%"><b>ADDRESS</b></td>	
 			<td colspan="1" align="center" width="1%"><b>:</b></td>	
 			<td colspan="3" align="left" width="58%">{{ $receivable_data[0]['client_address'] }}</td>	
-			<td colspan="1" nowrap align="left" width="10%"><b>PAYMENT TERM</b></td>
-			<td colspan="1" align="center" width="1%"><b>:</b></td>
-			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['payment_term'] }}</td>			
+			<td colspan="1" nowrap align="left" width="10%"><b></b></td>
+			<td colspan="1" align="center" width="1%"><b></b></td>
+			<td colspan="2" align="left" width="20%"></td>			
 		</tr>
 
 		<tr style="font-size:12px;">

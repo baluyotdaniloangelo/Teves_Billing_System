@@ -25,10 +25,10 @@
 </head>
 <body>
     
-	<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
+	<table class="" width="100%" cellspacing="0" cellpadding="1">
 	
 		<tr>
-			<td rowspan="4" align="center" colspan="4">
+			<td rowspan="4" align="center" colspan="7">
 			<img src="{{public_path('client_logo/logo-2.jpg')}}" style="width:120px;">
 			</td>
 			<td nowrap style="font-size:20px; font-weight:bold;" align="center" colspan="3">G-T PETROLEUM PRODUCTS RETAILING</td>
