@@ -12,9 +12,13 @@ if($company_header=='Teves'){
 }
 
 ?>
+		
 		<tr style="font-size:10px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<tr style="font-size:14px;">
 			<td colspan="4" style="border:1px solid #000; background-color: #c6e0b4; text-align:center; font-weight:bold; padding:5px; height:30px !important;"> {{ $title }} </td>
 			<td colspan="2"></td>
