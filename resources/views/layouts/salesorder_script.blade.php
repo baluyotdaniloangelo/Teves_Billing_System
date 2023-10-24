@@ -17,14 +17,13 @@
 			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
+			responsive: true,
 			ajax: "{{ route('getSalesOrderList') }}",
 			columns: [
 				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 				{data: 'sales_order_date'},
-					
 				{data: 'sales_order_control_number'},
 				{data: 'client_name'},   
-					
 				{data: 'sales_order_payment_term'},   
 				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
 				{data: ({sales_order_net_amount,sales_order_less_percentage}) => (Number(sales_order_net_amount)*Number(sales_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
@@ -35,7 +34,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 4] },
+					{ className: 'text-center', targets: [0, 1, 2] },
 			]
 		});
 				/**/
@@ -43,6 +42,17 @@
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateSalesOrderModal"></button>'+
 				'</div>').appendTo('#sales_order_option');
 				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});				
+	
 	});
 	
 	function AddProductRow() {

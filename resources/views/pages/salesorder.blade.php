@@ -16,21 +16,21 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getSalesOrderList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable display" id="getSalesOrderList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>No.</th>
-													<th>Date</th>
-													<th>Control Number</th>
-													<th>Account Name</th>
-													<th>Payment Term</th>
-													<th>Gross Amount</th>
-													<th>Withholding Tax</th>
-													<th>Net Amount</th>
-													<th>Total Due</th>
-													<th>Delivery Status</th>
+													<th class="all">No.</th>
+													<th class="all">Date</th>
+													<th class="all">Control Number</th>
+													<th class="all">Account Name</th>
+													<th class="none">Payment Term : </th>
+													<th class="none">Gross Amount : </th>
+													<th class="none">Withholding Tax : </th>
+													<th class="none">Net Amount : </th>
+													<th class="none">Total Due : </th>
+													<th class="all">Delivery Status</th>
 													<!--<th>Payment Status</th>-->
-													<th>Action</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
@@ -40,18 +40,18 @@
 											
 											<tfoot>
 												<tr>
-													<th>No.</th>
-													<th>Date</th>
-													<th>Control Number</th>
-													<th>Account Name</th>
-													<th>Payment Term</th>
-													<th>Gross Amount</th>
-													<th>Withholding Tax</th>
-													<th>Net Amount</th>
-													<th>Total Due</th>
-													<th>Delivery Status</th>
+													<th class="all">No.</th>
+													<th class="all">Date</th>
+													<th class="all">Control Number</th>
+													<th class="all">Account Name</th>
+													<th class="none">Payment Term : </th>
+													<th class="none">Gross Amount : </th>
+													<th class="none">Withholding Tax : </th>
+													<th class="none">Net Amount : </th>
+													<th class="none">Total Due : </th>
+													<th class="all">Delivery Status</th>
 													<!--<th>Payment Status</th>-->
-													<th>Action</th>										
+													<th class="all">Action</th>								
 												</tr>
 											</tfoot>	
 										</table>
