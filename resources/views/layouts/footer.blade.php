@@ -93,3 +93,6 @@
   <!-- Page level plugins -->
   <script src="{{asset('datatables/jquery.dataTables.js')}}"></script>
   <script src="{{asset('datatables/dataTables.bootstrap4.js')}}"></script>
+  
+  <!--Responsive Datatable Plugin-->
+   <script src="{{asset('datatables/dataTables.responsive.min.js')}}"></script>

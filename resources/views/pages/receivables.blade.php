@@ -16,22 +16,22 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive" style="">
-										<table class="table table-bordered dataTable" id="getReceivablesList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable display" id="getReceivablesList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>No.</th>
-													<th>Date</th>
-													<th>Control Number</th>
-													<th>Account Name</th>
-													<th>Description</th>
-													<th>Total Sales</th>
-													<th>Withholding Tax</th>
-													<th>Total Amount Due</th>
-													<th>Total Amount Rendered</th>
-													<th>Remaining Balance</th>
-													<th>Status</th>
-													<th>Generate</th>
-													<th>Action</th>
+													<th class="all">No.</th>
+													<th class="all">Date</th>
+													<th class="all">Control Number</th>
+													<th class="all">Account Name</th>
+													<th class="none">Description : </th>
+													<th class="none">Total Sales : </th>
+													<th class="none">Withholding Tax : </th>
+													<th class="none">Total Amount Due : </th>
+													<th class="none">Total Amount Rendered : </th>
+													<th class="none">Remaining Balance : </th>
+													<th class="all">Status</th>
+													<th class="all">Generate</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
@@ -41,19 +41,19 @@
 											
 											<tfoot>
 												<tr>
-													<th>No.</th>
-													<th>Date</th>
-													<th>Control Number</th>
-													<th>Account Name</th>
-													<th>Description</th>
-													<th>Total Sales</th>
-													<th>Withholding Tax</th>
-													<th>Net Amount Payable</th>
-													<th>Total Amount Due</th>
-													<th>Remaining Balance</th>
-													<th>Status</th>
-													<th>Generate</th>
-													<th>Action</th>												
+													<th class="all">No.</th>
+													<th class="all">Date</th>
+													<th class="all">Control Number</th>
+													<th class="all">Account Name</th>
+													<th class="none">Description : </th>
+													<th class="none">Total Sales : </th>
+													<th class="none">Withholding Tax : </th>
+													<th class="none">Total Amount Due : </th>
+													<th class="none">Total Amount Rendered : </th>
+													<th class="none">Remaining Balance : </th>
+													<th class="all">Status</th>
+													<th class="all">Generate</th>
+													<th class="all">Action</th>												
 												</tr>
 											</tfoot>	
 										</table>

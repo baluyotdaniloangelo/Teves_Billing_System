@@ -17,6 +17,7 @@
 			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
+			responsive: true,
 			ajax: "{{ route('getReceivablesList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
@@ -41,6 +42,18 @@
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
 				'</div>').appendTo('#receivable_option');
+				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});			
+				
 	});
 	
 	<!--Pay Receivables-->
