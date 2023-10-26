@@ -17,7 +17,9 @@
 		    },
 			/*processing: true,*/
 			serverSide: true,
+			pageLength: 10,
 			stateSave: true,/*Remember Searches*/
+			responsive: true,
 			ajax: "{{ route('getBillingTransactionList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
@@ -30,19 +32,30 @@
 					{data: 'product_name'}, 
 					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }, 					
 					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
-					{ data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-
+					{data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 5, 6, 7, 8, 9, 10] },
+					{ className: 'text-center', targets: [0, 1, 5, 6, 7] },
 					{ type: 'numeric-comma', targets: [8,9] }
 			]
 		});
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
 				'</div>').appendTo('#billing_option');
+				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});				
+				
 	});
 
 	function TotalAmount(){

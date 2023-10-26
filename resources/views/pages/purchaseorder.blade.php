@@ -16,16 +16,16 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getPurchaseOrderList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable display" id="getPurchaseOrderList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
-													<th>Date</th>
-													<th>Control Number</th>
-													<th>Supplier</th>
-													<th>Total Payable</th>
-													<th>Status</th>
-													<th>Action</th>
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Control Number</th>
+													<th class="all">Supplier</th>
+													<th class="none">Total Payable</th>
+													<th class="all">Status</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
@@ -35,13 +35,13 @@
 											
 											<tfoot>
 												<tr>
-													<th>#</th>
-													<th>Date</th>
-													<th>Control Number</th>
-													<th>Supplier</th>
-													<th>Total Payable</th>
-													<th>Status</th>
-													<th>Action</th>	
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Control Number</th>
+													<th class="all">Supplier</th>
+													<th class="none">Total Payable</th>
+													<th class="all">Status</th>
+													<th class="all">Action</th>
 												</tr>
 											</tfoot>	
 										</table>

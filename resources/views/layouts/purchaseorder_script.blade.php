@@ -15,6 +15,7 @@
 		    },
 			/*processing: true,*/
 			serverSide: true,
+			responsive: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getPurchaseOrderList') }}",
 			columns: [
@@ -36,6 +37,17 @@
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreatePurchaseOrderModal"></button>'+
 				'</div>').appendTo('#purchase_order_option');
 				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});				
+								
 	});
 	
 	function AddPaymentRow() {

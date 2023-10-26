@@ -37,6 +37,7 @@
 					{ className: 'text-center', targets: [0, 1, 2] },
 			]
 		});
+		
 				/**/
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateSalesOrderModal"></button>'+

@@ -16,20 +16,20 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getBillingTransactionList" width="100%" cellspacing="0">
+										<table class="table table-bordered dataTable display" id="getBillingTransactionList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
-													<th>Date</th>
-													<th>Time</th>
-													<th>Control Number</th>
-													<th>Driver's Name</th>
-													<th>S.O No.</th>
-													<th>Description</th>																	
-													<th>Product</th>
-													<th>Price</th>
-													<th>Quantity</th>
-													<th>Amount</th>
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Time</th>
+													<th class="all">Control Number</th>
+													<th class="all">Driver's Name</th>
+													<th class="all">S.O No.</th>
+													<th class="all">Description</th>																	
+													<th class="all">Product</th>
+													<th class="none">Price : </th>
+													<th class="none">Quantity : </th>
+													<th class="none">Amount : </th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -40,17 +40,17 @@
 	
 											<tfoot>
 												<tr>
-													<th>#</th>
-													<th>Date</th>
-													<th>Time</th>
-													<th>Control Number</th>
-													<th>Driver's Name</th>
-													<th>S.O. No.</th>
-													<th>Description</th>																	
-													<th>Product</th>
-													<th>Price</th>
-													<th>Quantity</th>
-													<th>Amount</th>
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Time</th>
+													<th class="all">Control Number</th>
+													<th class="all">Driver's Name</th>
+													<th class="all">S.O No.</th>
+													<th class="all">Description</th>																	
+													<th class="all">Product</th>
+													<th class="none">Price : </th>
+													<th class="none">Quantity : </th>
+													<th class="none">Amount : </th>
 													<th>Action</th>
 												</tr>
 											</tfoot>

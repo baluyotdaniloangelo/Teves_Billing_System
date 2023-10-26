@@ -61,8 +61,7 @@ class BillingTransactionController extends Controller
 					'teves_client_table.client_name',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_date',
-					'teves_billing_table.order_time',
-					'teves_billing_table.updated_at']);
+					'teves_billing_table.order_time']);
 		
 		return DataTables::of($data)
 				
