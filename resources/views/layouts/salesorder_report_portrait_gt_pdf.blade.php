@@ -37,7 +37,7 @@
 			<td colspan="7" width="40%" style="horizontal-align:center;text-align:left;">
 				<b style="font-size:18px;">G-T PETROLEUM PRODUCTS RETAILING</b><br>
 			</td>
-			<td colspan="2" align="left" width="50%" style="font-size:14px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td>
+			<td colspan="2" align="left" width="50%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td>
 
 			
 		</tr>

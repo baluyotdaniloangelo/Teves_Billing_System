@@ -3,26 +3,15 @@ $company_header=$receivable_data[0]['company_header'];
 
 if($company_header=='Teves'){
 	?>
-	@include('layouts.report_portrait_teves_pdf');
+	@include('layouts.report_portrait_teves_pdf')
 	<?php
 }else{
 	?>
-	@include('layouts.report_portrait_gt_pdf');
+	@include('layouts.soa_report_portrait_gt_pdf')
 	<?php
 }
 ?>
-		
-		<tr style="font-size:12px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
-		<tr style="font-size:12px;">
-			<td colspan="10" style="border:0px solid #000; text-align:center; font-weight:bold; font-size:16px !important; padding:5px; color:red;"> {{ $title }} </td>
-			
-		</tr>
-		<tr style="font-size:12px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
-		</table>
+		<br>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<?php
