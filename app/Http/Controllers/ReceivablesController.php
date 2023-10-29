@@ -298,7 +298,7 @@ class ReceivablesController extends Controller
 			$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
-			$Receivables->or_number 					= $request->or_number;
+			//$Receivables->or_number 					= $request->or_number;
 			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
@@ -341,7 +341,7 @@ class ReceivablesController extends Controller
 			//$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			//$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
-			$Receivables->or_number 					= $request->or_number;
+			//$Receivables->or_number 					= $request->or_number;
 			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
@@ -456,8 +456,8 @@ class ReceivablesController extends Controller
 			$Receivables->client_idx 				= $request->client_idx;
 			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->billing_date 				= date('Y-m-d');
-			$Receivables->or_number 				= $request->or_number;
-			//$Receivables->ar_reference 				= $request->ar_reference;
+			//$Receivables->or_number 				= $request->or_number;
+			//$Receivables->ar_reference 			= $request->ar_reference;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			
@@ -558,7 +558,7 @@ class ReceivablesController extends Controller
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 					= $request->billing_date;
-			$Receivables->or_number 					= $request->or_number;
+			//$Receivables->or_number 					= $request->or_number;
 			//$Receivables->ar_reference 				= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;

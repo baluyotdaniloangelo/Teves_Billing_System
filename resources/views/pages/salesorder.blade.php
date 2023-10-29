@@ -436,7 +436,7 @@
               <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Add Receivable</h5>
+                      <h5 class="modal-title">Create Receivable</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -493,7 +493,7 @@
 							<span class="valid-feedback" id="receivable_billing_dateError"></span>
 						  </div>
 						</div>
-						
+						<!--
 						<div class="row mb-2">
 						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
@@ -501,7 +501,7 @@
 							<span class="valid-feedback" id="receivable_or_numberError"></span>
 						  </div>
 						</div>						
-						<!--
+						
 						<div class="row mb-2">
 						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
 						  <div class="col-sm-9">

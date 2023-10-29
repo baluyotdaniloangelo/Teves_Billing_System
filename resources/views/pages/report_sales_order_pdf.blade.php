@@ -11,22 +11,9 @@ if($company_header=='Teves'){
 	<?php
 }
 ?>
-		<!--
+
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		
-		<tr style="font-size:10px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
-		<tr style="font-size:14px;">
-			<td colspan="10" style=" background-color: #fff; text-align:center; font-weight:bold; !important; padding:5px; height:30px !important; color:red"> {{ $title }} </td>
-		</tr>
-		<tr style="font-size:10px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
-		</table>
-		-->
-		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		
+	
 		<tr style="font-size:12px;">
 			<td colspan="2" align="left" width="9%"><b>SOLD TO</b></td>
 			<td colspan="1" align="center" width="1%"><b> : </b></td>
@@ -64,11 +51,11 @@ if($company_header=='Teves'){
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr>
-		<tr style="font-size:10px;border:0 solid #000;">		
+		<tr style="font-size:12px;border:0 solid #000;">		
 
-			<td colspan="2" width="20%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:25px !important;">DESCRIPTION</td>		
+			<td colspan="2" width="20%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:15px !important;">DESCRIPTION</td>		
 			<td colspan="2" width="20%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">QUANTITY</td>
 			<td colspan="1" width="10%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT</td>		
 			<td colspan="3" width="30%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT PRICE</td>
@@ -76,7 +63,7 @@ if($company_header=='Teves'){
 					
 		</tr>									
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr>	
 			<?php 
 			$no = 1;
@@ -91,10 +78,10 @@ if($company_header=='Teves'){
 				$total_liters += 0;
 			}
 			
-			$component_height = 135 / count($sales_order_component);
+			$component_height = 200 / count($sales_order_component);
 			
 			?>
-			<tr class="data_tr" style="font-size:10px;">
+			<tr class="data_tr" style="font-size:12px;">
 				<td colspan="2" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_name}}</td>
 				<td colspan="2" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_unit_measurement}}</td>
@@ -107,27 +94,27 @@ if($company_header=='Teves'){
 			
 			@endforeach
 
-		<tr style="font-size:10px;">
+		<tr style="font-size:12px;">
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Gross Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_gross_amount'],2);?>
 		</tr>
 		
-		<tr style="font-size:10px;">
+		<tr style="font-size:12px;">
 			
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Net Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_net_amount'],2);?>
 		</tr>
 		
-		<tr style="font-size:10px;">
+		<tr style="font-size:12px;">
 			
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less 1% </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_net_amount']*$sales_order_data[0]['sales_order_less_percentage']/100,2);?>
 		</tr>		
 
-		<tr style="font-size:10px;">			
+		<tr style="font-size:12px;">			
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Due </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($sales_order_data[0]['sales_order_total_due'],2);?>
@@ -151,19 +138,19 @@ if($company_header=='Teves'){
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr>
 		
-		<tr style="font-size:10px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:25px !important;">DELIVERY METHOD</td>	
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="3" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:15px !important;">DELIVERY METHOD</td>	
 			<td colspan="4" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">HAULER | DRIVER</td>
 			<td colspan="3" nowrap align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">REQUIRED DATE</td>
 		</tr>
 			
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr> 
-		<tr style="font-size:10px;border:0 solid #000;">
+		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; height: 20px; padding:10px;">{{$sales_order_data[0]->sales_order_delivery_method}}</td>
 			<td colspan="4" align="center"  style="border-left:0px solid #000; border-bottom:solid 1px gray; height: 20px; padding:10px;">{{$sales_order_data[0]->sales_order_hauler}}</td>
 			<?php

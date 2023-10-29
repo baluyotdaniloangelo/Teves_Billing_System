@@ -221,7 +221,7 @@
 					<div class="col-lg-8">
 									
 					  <form class="g-2 needs-validation pt-4" id="ReceivableformNew">
-						
+						<!--
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
@@ -229,7 +229,7 @@
 							<span class="valid-feedback" id="or_numberError"></span>
 						  </div>
 						</div>	
-
+						
 						<div class="row mb-2">
 						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
 						  <div class="col-sm-9">
@@ -237,7 +237,7 @@
 							<span class="valid-feedback" id="ar_referenceError"></span>
 						  </div>
 						</div>	
-
+						-->
 						<div class="row mb-2">
 						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">

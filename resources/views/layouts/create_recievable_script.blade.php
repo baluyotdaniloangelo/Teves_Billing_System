@@ -631,7 +631,7 @@
 			
 					/*Reset Warnings*/
 					$('#tin_numberError').text('');
-					$('#or_numberError').text('');
+					//$('#or_numberError').text('');
 					$('#payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 
@@ -641,7 +641,7 @@
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 				
-			let or_number 				= $("input[name=or_number]").val();
+			//let or_number 				= $("input[name=or_number]").val();
 			//let ar_reference 			= $("input[name=ar_reference]").val();			
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
@@ -663,7 +663,7 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
-				  or_number:or_number,
+				  //or_number:or_number,
 				  //ar_reference:ar_reference,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
@@ -681,12 +681,12 @@
 					  
 					/*Reset Warnings*/
 					$('#tin_numberError').text('');
-					$('#or_numberError').text('');
+					//$('#or_numberError').text('');
 					$('#payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 					
 					/*Clear Form*/
-					$('#or_number').val("");
+					//$('#or_number').val("");
 					$('#payment_term').val("");
 					$('#receivable_description').val("");
 					/*Close Form*/

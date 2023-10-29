@@ -816,7 +816,7 @@
 					document.getElementById("amount_receivables").innerHTML = response[0].sales_order_total_due;
 					
 					document.getElementById("receivable_billing_date").value = response[0].sales_order_date;
-					document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
+					//document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
 					document.getElementById("receivable_payment_term").value = response[0].sales_order_payment_term;
 					
 					document.getElementById("add-to-receivables").value = id;
@@ -843,7 +843,7 @@
 			let SalesOrderID 			= document.getElementById("add-to-receivables").value;
 
 			let billing_date			= $("input[name=receivable_billing_date]").val();	
-			let or_number 				= $("input[name=receivable_or_number]").val();	
+			//let or_number 				= $("input[name=receivable_or_number]").val();	
 			//let ar_reference 				= $("input[name=ar_reference]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
@@ -853,7 +853,7 @@
 				type:"POST",
 				data:{
 				  sales_order_idx:SalesOrderID,
-				  or_number:or_number,
+				  //or_number:or_number,
 				  //ar_reference:ar_reference,
 				  billing_date:billing_date,
 				  payment_term:payment_term,
@@ -865,12 +865,12 @@
 				  if(response) {
 					  
 					/*Reset Warnings*/
-					$('#receivable_or_numberError').text('');
+					//$('#receivable_or_numberError').text('');
 					$('#receivable_payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 					
 					/*Clear Form*/
-					$('#receivable_or_number').val("");
+					//$('#receivable_or_number').val("");
 					$('#receivable_payment_term').val("");
 					$('#receivable_description').val("");
 					/*Close Form*/

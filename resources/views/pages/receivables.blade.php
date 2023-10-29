@@ -79,7 +79,7 @@
 				
 				Billing Date: <span id="confirm_delete_billing_date"></span><br>
 				Control Number: <span id="confirm_delete_control_number"></span><br>
-				OR Number: <span id="confirm_delete_or_no"></span><br>
+				<!--OR Number: <span id="confirm_delete_or_no"></span><br>-->
 				Client: <span id="confirm_delete_client_info"></span><br>
 				Description: <span id="confirm_delete_description"></span><br>
 				Amount: <span id="confirm_delete_amount"></span><br>
@@ -233,7 +233,7 @@
 							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>
 						</div>						
-
+						<!--
 						<div class="row mb-2">
 						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
@@ -241,7 +241,7 @@
 							<span class="valid-feedback" id="or_numberError"></span>
 						  </div>
 						</div>	
-						<!--
+						
 						<div class="row mb-2">
 						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference : </label>
 						  <div class="col-sm-9">
@@ -486,7 +486,7 @@
 							<span class="valid-feedback" id="receivable_billing_date_SO_Error"></span>
 						  </div>
 						</div>
-						
+						<!--
 						<div class="row mb-2">
 						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
 						  <div class="col-sm-9">
@@ -494,7 +494,7 @@
 							<span class="valid-feedback" id="receivable_or_number_SO_Error"></span>
 						  </div>
 						</div>						
-						<!--
+						
 						<div class="row mb-2">
 						  <label for="ar_reference_SO" class="col-sm-3 col-form-label">AR Reference: </label>
 						  <div class="col-sm-9">

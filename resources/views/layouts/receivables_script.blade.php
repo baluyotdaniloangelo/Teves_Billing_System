@@ -325,7 +325,7 @@
 					document.getElementById("client_tin_receivables").innerHTML = response[0].client_tin;
 					document.getElementById("amount_receivables").innerHTML = response[0].receivable_amount;					
 					document.getElementById("billing_date").value = response[0].billing_date;
-					document.getElementById("or_number").value = response[0].or_number;
+					//document.getElementById("or_number").value = response[0].or_number;
 					document.getElementById("payment_term").value = response[0].payment_term;
 					document.getElementById("receivable_description").textContent = response[0].receivable_description;					
 					//document.getElementById("ar_reference").value = response[0].ar_reference;					
@@ -361,7 +361,7 @@
 			
 			let ReceivableID 			= document.getElementById("update-receivables").value;
 			let billing_date 			= $("input[name=billing_date]").val();	
-			let or_number 				= $("input[name=or_number]").val();		
+			//let or_number 				= $("input[name=or_number]").val();		
 			//let ar_reference 				= $("input[name=ar_reference]").val();				
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
@@ -383,7 +383,7 @@
 				data:{
 				  ReceivableID:ReceivableID,
 				  billing_date:billing_date,
-				  or_number:or_number,
+				  //or_number:or_number,
 				  //ar_reference:ar_reference,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
@@ -435,8 +435,8 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				$('#or_numberError').text(error.responseJSON.errors.product_price);
-				document.getElementById('or_numberError').className = "invalid-feedback";	
+				//$('#or_numberError').text(error.responseJSON.errors.product_price);
+				//document.getElementById('or_numberError').className = "invalid-feedback";	
 				
 				$('#payment_termError').text(error.responseJSON.errors.product_price);
 				document.getElementById('payment_termError').className = "invalid-feedback";	
@@ -483,7 +483,7 @@
 					document.getElementById("amount_receivables_SO").innerHTML = response[0].receivable_amount;	
 					
 					document.getElementById("receivable_billing_date_SO").value = response[0].billing_date;
-					document.getElementById("receivable_or_number_SO").value = response[0].or_number;
+					//document.getElementById("receivable_or_number_SO").value = response[0].or_number;
 					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
 					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;					
 					//document.getElementById("receivable_ar_reference_SO").value = response[0].ar_reference;					
@@ -517,7 +517,7 @@
 			let ReceivableID 			= document.getElementById("SO-update-receivables").value;
 
 			let billing_date			= $("input[name=receivable_billing_date_SO]").val();	
-			let or_number 				= $("input[name=receivable_or_number_SO]").val();	
+			//let or_number 				= $("input[name=receivable_or_number_SO]").val();	
 			//let ar_reference 			= $("input[name=receivable_ar_reference_SO]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term_SO]").val();
 			let receivable_description 	= $("#receivable_description_SO").val();
@@ -527,7 +527,7 @@
 				type:"POST",
 				data:{
 				  ReceivableID:ReceivableID,
-				  or_number:or_number,
+				  //or_number:or_number,
 				  //ar_reference:ar_reference,
 				  billing_date:billing_date,
 				  payment_term:payment_term,
@@ -539,12 +539,12 @@
 				  if(response) {
 					  
 					/*Reset Warnings*/
-					$('#receivable_or_numberError').text('');
+					//$('#receivable_or_numberError').text('');
 					$('#receivable_payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 					
 					/*Clear Form*/
-					$('#receivable_or_number').val("");
+					//$('#receivable_or_number').val("");
 					$('#receivable_payment_term').val("");
 					$('#receivable_description').val("");
 					/*Close Form*/
@@ -622,7 +622,7 @@
 					/*Set Details*/
 					document.getElementById("confirm_delete_billing_date").value = response[0].billing_date;
 					document.getElementById("confirm_delete_control_number").innerHTML = response[0].control_number;
-					document.getElementById("confirm_delete_or_no").value = response[0].or_number;	
+					//document.getElementById("confirm_delete_or_no").value = response[0].or_number;	
 					document.getElementById("confirm_delete_client_info").innerHTML = response[0].client_name;
 					document.getElementById("confirm_delete_description").textContent = response[0].receivable_description;
 					document.getElementById("confirm_delete_amount").innerHTML = response[0].receivable_amount;
