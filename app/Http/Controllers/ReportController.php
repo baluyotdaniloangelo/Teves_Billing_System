@@ -645,7 +645,7 @@ class ReportController extends Controller
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
-		$title = 'Billing Statement';
+		$title = 'BILLING STATEMENT';
 		  
         $pdf = PDF::loadView('pages.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
 		

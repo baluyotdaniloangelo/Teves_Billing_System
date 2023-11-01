@@ -3,7 +3,7 @@ $company_header=$receivable_data[0]['company_header'];
 
 if($company_header=='Teves'){
 	?>
-	@include('layouts.report_portrait_teves_pdf')
+	@include('layouts.soa_report_portrait_teves_pdf')
 	<?php
 }else{
 	?>
@@ -11,42 +11,27 @@ if($company_header=='Teves'){
 	<?php
 }
 ?>
-		<br>
-		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<?php
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 		?>
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="8%"><b>ACCOUNT NAME</b></td>	
-			<td colspan="1" align="center" width="1%"><b>:</b></td>	
-			<td colspan="3" align="left" width="60%">{{ $receivable_data[0]['client_name'] }}</td>	
-			
-			<td colspan="1" nowrap align="left" width="10%"><b>BILLING DATE</b></td>
-			<td colspan="1" align="center" width="1%"><b>:</b></td>
-			<td colspan="2" align="left" width="20%"><?=$billing_date;?></td>		
+			<td colspan="1" align="left" width="10%"><b>ACCOUNT NAME</b></td>	
+			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_name'] }}</td>		
 		</tr>
 		<?php
 				$_print_date=date_create(date('Y-m-d'));
 				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
 		?>
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="8%"><b>TIN</b></td>	
-			<td colspan="1" align="center" width="1%"><b>:</b></td>	
-			<td colspan="3" align="left" width="60%">{{ $receivable_data[0]['client_tin'] }}</td>	
-			<td colspan="1" nowrap align="left" width="10%"><b>DATE PRINTED</b></td>
-			<td colspan="1" align="center" width="1%"><b>:</b></td>
-			<td colspan="2" align="left" width="20%"><?=$print_date;?></td>		
+			<td colspan="1" align="left" width="10%"><b>TIN</b></td>	
+			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_tin'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">		
-			<td colspan="2" align="left" width="8%"><b>ADDRESS</b></td>	
-			<td colspan="1" align="center" width="1%"><b>:</b></td>	
-			<td colspan="3" align="left" width="60%">{{ $receivable_data[0]['client_address'] }}</td>	
-			<td colspan="1" nowrap align="left" width="10%"><b>AR REFERENCE</b></td>
-			<td colspan="1" align="center" width="1%"><b>:</b></td>
-			<td colspan="2" align="left" width="20%">{{ $receivable_data[0]['control_number'] }}</td>			
+			<td colspan="1" align="left" width="20%"><b>ADDRESS</b></td>	
+			<td colspan="9" align="left" width="80%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_address'] }}</td>			
 		</tr>
 
 		<tr style="font-size:12px;">

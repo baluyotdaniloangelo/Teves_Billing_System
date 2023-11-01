@@ -2,82 +2,36 @@
 
 if($company_header=='Teves'){
 	?>
-	@include('layouts.report_billing_header_teves_pdf');
+	@include('layouts.receivable_covered_report_teves_pdf');
 	<?php
 }else{
 	?>
-	@include('layouts.report_billing_header_gt_pdf');
+	@include('layouts.receivable_covered_report_gt_pdf')
 	<?php
 }
 
 ?>
-
-		<tr>
-			<td colspan="10"><div align="center"><h5>{{ $title }}</h5></div></td>
-		</tr>
-		</table>
-		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left" width="10%"><b>ACCOUNT NAME</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="3" align="left" width="59%">{{ $client_data['client_name'] }}</td>
-			<?php
-				$_print_date=date_create(date('Y-m-d'));
-				$print_date = strtoupper(date_format($_print_date,"M/d/Y"));
-				
-				$_billing_date=date_create($receivable_data['billing_date']);
-				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
-				echo $billing_date;
-			?>			
-			<td colspan="2" align="left" width="10%"><b>BILLING DATE</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="2" align="left" width="19%"><?=$billing_date;?></td>
+			<td colspan="9" align="left" width="59%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>
+			
 		</tr>
 		
 		<tr style="font-size:12px;">
 		
 			<td colspan="1" align="left" width="10%"><b>TIN</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="3" align="left" width="59%">{{ $client_data['client_tin'] }}</td>	
-			
-			<td colspan="2" align="left" width="10%"><b>DATE PRINTED</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="2" align="left" width="19%"><?=$print_date;?></td>
+			<td colspan="9" align="left" width="59%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_tin'] }}</td>	
 			
 		</tr>		
 		
 		<tr style="font-size:12px;">
 		
 			<td colspan="1" align="left" width="10%"><b>ADDRESS</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="3" align="left" width="59%">{{ $client_data['client_address'] }}</td>	
-			<?php
-			$_po_start_date=date_create("$start_date");
-			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
+			<td colspan="9" align="left" width="59%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_address'] }}</td>	
 			
-			$_po_end_date=date_create("$end_date");
-			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/Y"));	
-			?>
-			<td colspan="2" align="left" width="10%"><b>SALES ORDER PERIOD</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="2" align="left" width="19%"><?php echo "$po_start_date - $po_end_date"; ?></td>
 			
-		</tr>
-		
-		<tr style="font-size:12px;">
-			<td colspan="5" align="left" width="70%"></td>
-			<td colspan="2" align="left" width="9%"><b>AR REFERENCE</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="2" align="left" width="20%">{{ @$receivable_data['control_number'] }}</td>
-		</tr>
-		
-		<tr style="font-size:12px;">
-			<td colspan="5" align="left" width="70%"></td>
-			<td colspan="2" align="left" width="10%"><b>PAYMENT TERMS</b></td>
-			<td colspan="1" align="left" width="1%"><b> : </b></td>
-			<td colspan="2" align="left" width="19%">{{ @$receivable_data['payment_term'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">

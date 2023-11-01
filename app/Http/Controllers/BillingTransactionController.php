@@ -60,29 +60,53 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.order_po_number',
 					'teves_client_table.client_name',
 					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);
+					'teves_billing_table.order_time',
+					'teves_billing_table.created_at',]);
 		
 		return DataTables::of($data)
 				
-				->addIndexColumn()
-				
+				->addIndexColumn()				
                 ->addColumn('action', function($row){
                     
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+						
 					if($row->receivable_idx==0){
-					
-					$actionBtn = '
-					<div align="center" class="action_table_menu_site">
-					<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
-					<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
-					</div>';
-					
+						
+						if(Session::get('UserType')=="Admin"){
+							$actionBtn = '
+							<div align="center" class="action_table_menu_site">
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+							</div>';
+						}
+						else{
+							
+							if($numberDays>=1){
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';
+							}else{
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+								</div>';
+							}
+
+						}
+
 					}else{
 						
-					$actionBtn = '
-					<div align="center" class="action_table_menu_site">
-					<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
-					</div>';
+						$actionBtn = '
+						<div align="center" class="action_table_menu_site">
+						<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+						</div>';
 					
 					}
                     return $actionBtn;

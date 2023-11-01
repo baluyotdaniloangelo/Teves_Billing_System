@@ -39,9 +39,7 @@ class CashiersReportController extends Controller
 		
 		$list = CashiersReportModel::get();
 		if ($request->ajax()) {
-			
-			
-					
+
 			if(Session::get('UserType')!="Admin"){
 				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')			
               	 ->where('teves_cashiers_report.user_idx', '=', Session::get('loginID'))	
@@ -68,20 +66,48 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.created_at',
 					'teves_cashiers_report.updated_at']);
 			}
-			
-			
-					
-			
+	
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row){
-						$actionBtn = '
-						<div align="center" class="action_table_menu_client">
-						<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
-						<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
-						<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
-						</div>';
+						
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+						
+						if(Session::get('UserType')=="Admin"){
+							$actionBtn = '
+							<div align="center" class="action_table_menu_client">
+							<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+							<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
+							<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
+							</div>';
+						}else{
+							
+							if($numberDays>=1){
+								$actionBtn = '
+								<div align="center" class="action_table_menu_client">
+								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+								</div>';
+							}
+							else{
+								$actionBtn = '
+								<div align="center" class="action_table_menu_client">
+								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+								<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
+								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
+								</div>';
+							}
+							
+						}
+						
+						
 						return $actionBtn;
+						
+						
 					})
 					->rawColumns(['action'])
 					->make(true);

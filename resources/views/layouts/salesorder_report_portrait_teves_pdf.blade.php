@@ -56,7 +56,7 @@
 			<div style="font-size:11px;">VAT REG. TIN : 740-213-285-001</div>
 			</td>
 			<td colspan="1" align="left" width="19%" style="font-size:12px; font-weight:bold;"><b>DATE GENERATED</b></td>
-			<td colspan="1" align="left" width="1%" style="font-size:12px; font-weight:bold; color:red;"><b> : </b></td>
+			<td colspan="1" align="left" width="1%" style="font-size:12px; font-weight:bold; color:black;"><b> : </b></td>
 			<td colspan="4" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;"><?=$sales_order_date;?></td>
 		</tr>
 		<tr>
