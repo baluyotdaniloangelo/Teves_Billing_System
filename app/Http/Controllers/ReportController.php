@@ -931,7 +931,7 @@ class ReportController extends Controller
 		$title = 'SALES ORDER';
 		  
         $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
-		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','sales_payment_component'));
+		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

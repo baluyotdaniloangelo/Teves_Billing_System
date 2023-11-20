@@ -5,9 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ $title }}</title>
+	
 	<style>
 		body {
-			font-family: "Open Sans", sans-serif;
+			font-family: Calibri, Candara, Sergoe, "Sergoe UI", Optima, Arial, sans-serif;
 		}
 		.data_thead {
 			background-color: #000000;

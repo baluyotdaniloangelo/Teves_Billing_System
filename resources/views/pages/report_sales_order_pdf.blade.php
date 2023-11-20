@@ -13,39 +13,41 @@ if($company_header=='Teves'){
 ?>
 
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-	
+		<tr style="font-size:10px;">
+			<td colspan="10" style="height:7px !important;"></td>
+		</tr>
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="9%"><b>SOLD TO</b></td>
+			<td colspan="2" align="left" width="7%"><b>SOLD TO</b></td>
 			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="90%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_name'] }}</td>
+			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_name'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="9%"><b>TIN NO.</b></td>
+			<td colspan="2" align="left" width="7%"><b>TIN NO.</b></td>
 			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="90%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_tin'] }}</td>
+			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_tin'] }}</td>
 		</tr>		
 		
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="9%"><b>ADDRESS</b></td>
+			<td colspan="2" align="left" width="7%"><b>ADDRESS</b></td>
 			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="90%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_address'] }}</td>
+			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_address'] }}</td>
 		</tr>
 	
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="9%"><b>DELIVERED TO</b></td>
+			<td colspan="2" align="left" width="7%"><b>DELIVERED TO</b></td>
 			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="90%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_delivered_to'] }}</td>
+			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_delivered_to'] }}</td>
 		</tr>	
 	
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="9%"><b>ADDRESS</b></td>
+			<td colspan="2" align="left" width="7%"><b>ADDRESS</b></td>
 			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="90%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</td>
+			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</td>
 		</tr>
 	
 		<tr style="font-size:10px;">
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:7px !important;">&nbsp;</td>
 		</tr>
 		</table>
 		

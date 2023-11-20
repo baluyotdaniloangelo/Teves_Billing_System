@@ -14,33 +14,33 @@ if($company_header=='Teves'){
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		
 		<tr style="font-size:12px;">
-			<td colspan="1" align="left" width="10%"><b>ACCOUNT NAME</b></td>
-			<td colspan="9" align="left" width="59%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>
+			<td colspan="1" align="left" width="15%"><b>ACCOUNT NAME</b></td>
+			<td colspan="9" align="left" width="85%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>
 			
 		</tr>
 		
 		<tr style="font-size:12px;">
 		
-			<td colspan="1" align="left" width="10%"><b>TIN</b></td>
-			<td colspan="9" align="left" width="59%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_tin'] }}</td>	
+			<td colspan="1" align="left" width="15%"><b>TIN</b></td>
+			<td colspan="9" align="left" width="85%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_tin'] }}</td>	
 			
 		</tr>		
 		
 		<tr style="font-size:12px;">
 		
-			<td colspan="1" align="left" width="10%"><b>ADDRESS</b></td>
-			<td colspan="9" align="left" width="59%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_address'] }}</td>	
+			<td colspan="1" align="left" width="15%"><b>ADDRESS</b></td>
+			<td colspan="9" align="left" width="85%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_address'] }}</td>	
 			
 			
 		</tr>
 		
-		<tr style="font-size:12px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
+		
 		</table>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		
+		<tr style="font-size:12px;">
+			<td colspan="10">&nbsp;</td>
+		</tr>
 			<tr>
 				<th class="data_th" style="border:1px solid #000;">#</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Date</th>

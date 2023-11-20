@@ -62,7 +62,7 @@ form.user .form-control-user {
 }
 
 .action_table_menu_site{
-	margin-top: 3px;
+	/*margin-top: 3px;*/
 	white-space: nowrap;
 }
 
@@ -241,10 +241,15 @@ div.dataTables_wrapper div.dataTables_length select {
 }
 */
 .sidebar_li_a{
-	color:#fff !important;
-	background-color: #041c68c7;
-    border-radius: 4px;
-	margin-bottom: 1px;
+	/*color: #0030ff !important; */
+    margin-bottom: 0px;
+    background-color: #c3d6f7;
+    border-radius: 0px !important;
+    padding: 10px 0 10px 10px !important;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 0px !important;
 }
 
 .loading_style{
@@ -274,7 +279,7 @@ div.dataTables_wrapper div.dataTables_length select {
 }
 
 .navbar_white_text{
-	color :#FFF !important;
+	/*color :#FFF !important;*/
 }
 
 #usermanualdiv{

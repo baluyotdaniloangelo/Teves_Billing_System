@@ -49,8 +49,8 @@
 			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;">San Juan, Madrid Surigao del Sur</div>
 			</td>
-			<td colspan="3" align="left" width="20%" style="font-size:12px; font-weight:bold;;"><b>BILLING DATE</b></td>
-			<td colspan="3" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon"><?=$billing_date;?></td>
+			<td colspan="3" align="left" width="20%" style="font-size:11px; font-weight:bold;;"><b>BILLING DATE</b></td>
+			<td colspan="3" align="left" width="30%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$billing_date;?></td>
 		</tr>		
 		<?php
 				$_print_date=date_create(date('Y-m-d'));
@@ -60,16 +60,16 @@
 			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;">VAT REG. TIN : 740-213-285-001</div>
 			</td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>DATE PRINTED</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon"><?=$print_date;?></td>
+			<td colspan="3" align="left" width="25%" style="font-size:11px; font-weight:bold;"><b>DATE PRINTED</b></td>
+			<td colspan="3" align="left" width="25%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$print_date;?></td>
 		</tr>
 		
 		<tr>
 			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;">GLEZA F. TEVES - Proprietress</div>
 			</td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>AR REFERENCE</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['control_number'] }}</td>
+			<td colspan="3" align="left" width="25%" style="font-size:11px; font-weight:bold;"><b>AR REFERENCE</b></td>
+			<td colspan="3" align="left" width="25%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['control_number'] }}</td>
 		</tr>
 		<tr>
 			<td colspan="10"  width="50%" style="horizontal-align:center;text-align:left;"></td>

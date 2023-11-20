@@ -77,7 +77,7 @@
 		
 		<tr>
 			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>OFFICIAL RECEIPT NO.</b></td>
+			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>SALES INVOICE NO.</b></td>
 			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_official_receipt_no'] }}</td>
 		</tr>
 

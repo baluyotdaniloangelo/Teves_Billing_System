@@ -49,15 +49,19 @@
 
 
 .sidebar_bg{
-	/* box-shadow: none !important; */
-    /* background-color: #a7e9af !important;!*/
+	/*box-shadow: none !important;*/
+    background-color: #f1f3ff !important;
 	top: 70px !important;
-	width: 220px !important;
+	width: 170px !important;
+	padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .navbar_bg{
-	color: #ffffff !important;
-    background: #041c68 !important;
+	color: #0030ff !important;
+    /*background: #041c68 !important;*/
+	border-radius: none !important;	
 }
 
 .navbar_icon{
@@ -68,13 +72,13 @@
 	font-size: 16px !important;
 }
 .navbar_header_bg{
-	/*transition: none !important;*/
+	/*transition: none !important;
     box-shadow: none !important;
-    background-color: #2b2a2a !important;
+    background-color: #2b2a2a !important;*/
 }
 
 .navbar_header_title{
-	color: #fff !important;
+	/*color: #fff !important;*/
 }
 
 .toggle_sidebar{
