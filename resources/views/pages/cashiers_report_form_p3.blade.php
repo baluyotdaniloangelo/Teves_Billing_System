@@ -67,7 +67,7 @@
                       <h5 class="modal-title">Create Miscellaneous Sales</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						
-						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
                     <div class="modal-body">
@@ -149,8 +149,8 @@
 						</div>
 						
 						<div class="modal-footer modal-footer_form">
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="save-CRPH3"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-CRPH3-save"> Reset</button>					  
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-CRPH3"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-CRPH3-save"> Reset</button>					  
 						</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
@@ -166,7 +166,7 @@
                       <h5 class="modal-title">Update Miscellaneous Sales</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						
-						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
                     <div class="modal-body">
@@ -248,8 +248,8 @@
 						</div>
 						
 						<div class="modal-footer modal-footer_form">
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-CRPH3"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-CRPH3-update"> Reset</button>					  
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-CRPH3"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-CRPH3-update"> Reset</button>					  
 						</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
@@ -277,8 +277,8 @@
 				</div>	
                 <div class="modal-footer footer_modal_bg">
                     
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH3Confirmed" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH3Confirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
                   
                 </div>
             </div>
@@ -305,8 +305,8 @@
 				</div>	
                 <div class="modal-footer footer_modal_bg">
                     
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH3Confirmed_DISCOUNT" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH3Confirmed_DISCOUNT" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
                   
                 </div>
             </div>
@@ -331,8 +331,8 @@
 				</div>	
                 <div class="modal-footer footer_modal_bg">
                     
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH3Confirmed_OTHERS" value=""><i class="bi bi-trash3 navbar_icon"></i> Delete</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle navbar_icon"></i> Cancel</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH3Confirmed_OTHERS" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
                   
                 </div>
             </div>

@@ -59,13 +59,17 @@
 }
 
 .navbar_bg{
-	color: #0030ff !important;
+	color: #000 !important;
     /*background: #041c68 !important;*/
 	border-radius: none !important;	
 }
 
 .navbar_icon{
-	color: #c0ff00 !important;
+	color: #006e47 !important;
+}
+
+.form_button_icon{
+    color: #fffc6c !important;
 }
 
 .sidebar-nav .nav-content a i{

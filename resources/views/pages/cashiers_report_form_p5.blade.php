@@ -104,7 +104,7 @@
               </table>
 			 </form> 
 				<div class="text-center">				
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="CASHONHAND"> Submit</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="CASHONHAND"> Submit</button>
 						  </div>
 		</div>
 		<div class="col-sm-3">

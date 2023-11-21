@@ -74,7 +74,7 @@
 						</div>						
 						
 						<div class="text-center">				
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="update-cashiers-report"> Submit</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-cashiers-report"> Submit</button>
 						  </div>	
 						</div>
 						

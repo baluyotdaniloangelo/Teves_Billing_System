@@ -241,9 +241,9 @@ div.dataTables_wrapper div.dataTables_length select {
 }
 */
 .sidebar_li_a{
-	/*color: #0030ff !important; */
+	color: #000 !important; 
     margin-bottom: 0px;
-    background-color: #c3d6f7;
+    background-color: #b2c0d74a;
     border-radius: 0px !important;
     padding: 10px 0 10px 10px !important;
 }

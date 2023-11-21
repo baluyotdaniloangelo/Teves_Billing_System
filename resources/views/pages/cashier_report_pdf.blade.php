@@ -3,24 +3,16 @@ $company_header=$CashiersReportData[0]['teves_branch'];
 
 if($company_header=='Teves'){
 	?>
-	@include('layouts.report_portrait_teves_pdf');
+	@include('layouts.cashiers_report_portrait_teves_pdf')
 	<?php
 }else{
 	?>
-	@include('layouts.report_portrait_gt_pdf');
+	@include('layouts.cashiers_report_portrait_teves_pdf')
 	<?php
 }
 ?>
-		<tr style="font-size:12px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
-		<tr style="font-size:12px;">
-			<td colspan="10" style="border:0px solid #000; text-align:center; font-weight:bold; font-size:16px !important; padding:5px; color:red;"> {{ $title }} </td>
-			
-		</tr>
-		<tr style="font-size:12px;">
-			<td colspan="10">&nbsp;</td>
-		</tr>
+	
+		<table cellspacing="0" width="100%">
 		<tr style="font-size:12px;">
 			<td colspan="2" align="left">Cashier On duty:</td>
 			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $CashiersReportData[0]['cashiers_name'] }}</td>			
