@@ -19,7 +19,7 @@
 		}
 		.data_tr {
 			padding: 5px;
-		} 	
+		} 
 		.td_colon:before{
 			content:":";
 			font-weight:bold;
@@ -33,58 +33,39 @@
 <body>
     
 	<table class="" width="100%" cellspacing="0" cellpadding="1">
-		
-			<?php
-				$_purchase_order_date=date_create($purchase_order_data[0]['purchase_order_date']);
-				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
-			?>
 			
 		<tr>
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%"><img src="{{public_path('client_logo/logo-2.jpg')}}" style="width:112px;"></td>
 			<td colspan="7" width="40%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;">G-T PETROLEUM PRODUCTS RETAILING</b></td>
-			<td colspan="2" nowrap align="left" width="50%" style="font-size:12px; background-color: yellowgreen; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td>
+			<td colspan="2" nowrap align="left" width="50%" style="font-size:12px; background-color: pink; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td>
 		</tr>
 		
 		<tr>
-			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
+			<td colspan="5"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;">San Juan, Madrid Surigao del Sur</div>
 			</td>
-			<td colspan="3" align="left" width="20%" style="font-size:12px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
-			<td colspan="3" align="left" width="30%" style="font-size:12px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_control_number'] }}</td>
+			<?php
+				$_report_date=date_create($CashiersReportData[0]['report_date']);
+				$report_date = strtoupper(date_format($_report_date,"M/d/Y"));
+			?>
+			<td colspan="1" align="left" width="12%" style="font-size:12px; font-weight:bold;"><b>DATE</b></td>
+			<td colspan="3" align="left" width="38%" style="font-size:12px; order-bottom:solid 1px gray;" class="td_colon"><?=$report_date;?></td>
 		</tr>		
 		
 		<tr>
-			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
+			<td colspan="5"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;">VAT REG. TIN : 740-213-285-000</div>
 			</td>
-			<td colspan="3" align="left" width="20%" style="font-size:12px; font-weight:bold;;"><b>DATE</b></td>
-			<td colspan="3" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon"><?=$purchase_order_date;?></td>
+			<td colspan="1" align="left" width="12%" style="font-size:12px; font-weight:bold;;"><b>SHIFT</b></td>
+			<td colspan="3" align="left" width="38%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $CashiersReportData[0]['shift'] }}</td>
 		</tr>
 		
 		<tr>
-			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
+			<td colspan="5"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;">GLEZA F. TEVES - Proprietress</div>
 			</td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>SALES ORDER NO.</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_sales_order_number'] }}</td>
-		</tr>
-		
-		<tr>
-			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>COLLECTION RECEIPT NO.</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_collection_receipt_no'] }}</td>
-		</tr>
-		
-		<tr>
-			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>SALES INVOICE NO.</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_official_receipt_no'] }}</td>
-		</tr>
-
-		<tr>
-			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>DELIVERY RECEIPT NO.</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_delivery_receipt_no'] }}</td>
+			<td colspan="2" align="left" width="10%" style="font-size:12px;"><b></b></td>
+			<td colspan="2" align="left" width="40%" style="font-size:12px;" class=""></td>
 		</tr>
 		
 		</table>

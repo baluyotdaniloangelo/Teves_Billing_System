@@ -7,34 +7,27 @@ if($company_header=='Teves'){
 	<?php
 }else{
 	?>
-	@include('layouts.cashiers_report_portrait_teves_pdf')
+	@include('layouts.cashiers_report_portrait_gt_pdf')
 	<?php
 }
 ?>
-	
-		<table cellspacing="0" width="100%">
+		<br>
+		<table class="" width="100%" cellspacing="0" cellpadding="1">
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left">Cashier On duty:</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000;">{{ $CashiersReportData[0]['cashiers_name'] }}</td>			
-			<td colspan="2" nowrap align="left">Date :</td>	
-				<?php
-				$_report_date=date_create($CashiersReportData[0]['report_date']);
-				$report_date = strtoupper(date_format($_report_date,"M/d/Y"));
-				?>
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;"><?=$report_date;?></td>
+			<td colspan="1" align="left" width="30%"><b>CASHIER ON DUTY</b></td>
+			<td colspan="9" align="left" style="border-bottom:1px solid #000;" width="70%" class="td_colon">{{ $CashiersReportData[0]['cashiers_name'] }}</td>			
 		</tr>
 	
 		<tr style="font-size:12px;">
-			<td colspan="2" align="left">Forecourt Attendant :</td>
-			<td colspan="4" align="left" style="border-bottom:1px solid #000; ">{{ $CashiersReportData[0]['forecourt_attendant'] }}</td>	
-			<td colspan="2" nowrap align="left">Shift :</td>	
-			<td colspan="2" nowrap align="left" style="border-bottom:1px solid #000;">{{ $CashiersReportData[0]['shift'] }}</td>			
-		</tr>
+			<td colspan="1" align="left" width="30%"><b>FORECOURT ATTENDANT</b></td>
+			<td colspan="9" align="left" style="border-bottom:1px solid #000;" width="70%" class="td_colon">{{ $CashiersReportData[0]['forecourt_attendant'] }}</td>	
+				</tr>
 	
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		</table>
+		
 		<table cellspacing="0" width="100%">
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" colspan="3" rowspan="2">PRODUCT </td>
