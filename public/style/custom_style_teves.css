@@ -15,7 +15,8 @@
 }
 
 #main{
-	 padding: 0px !important;
+	 padding: 0px !important;    
+	 margin-top: 70px !important;
 }
 
 .logo img{
@@ -64,8 +65,18 @@
 
 .navbar_bg{
 	color: #000 !important;
-    /*background: #041c68 !important;*/
-	border-radius: none !important;	
+    background: #fff !important;
+	border-radius: 0px !important;	
+}
+
+.sidebar-nav .nav-link:hover {
+    color: #4154f1;
+    background: #e1e8f5 !important;
+}
+
+.sidebar-nav .nav-content {
+	padding-top: 0px !important;
+    border-left: #ff4700 4px solid !important;
 }
 
 .navbar_icon{

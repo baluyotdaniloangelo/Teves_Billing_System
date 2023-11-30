@@ -16,10 +16,10 @@
             <div class="card-body">			
 				<div class="p-1">
 						<div class="row mb-2">
-						<div class="col-sm-2">
+						<div class="col-sm-3">
 								
 						</div>
-						<div class="col-sm-8">
+						<div class="col-sm-6">
 						<form class="g-2 needs-validation" id="CashierReportformNew">
 						
 						<div class="row mb-2">
@@ -72,19 +72,31 @@
 							<span class="valid-feedback" id="shiftError"></span>
 						  </div>
 						</div>						
+						<div class="row mb-2">
 						
-						<div class="text-center">				
+						<div class="col-sm-4">
+						</div>
+						
+						<div class="col-sm-4">
+						
+						<div align="right">				
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-cashiers-report"> Submit</button>
 						  </div>	
 						</div>
+						<div class="col-sm-4">
+						</div>
+						</div>
 						
+						
+						
+						</div>
+						</div>
 						 
 						  </form><!-- End Multi Columns Form -->
 						   
-						   </div>
-						   
-						   
-						  <div class="col-sm-3">
+						</div>
+						      
+						<div class="col-sm-3">
 								
 						</div>
 						<hr>

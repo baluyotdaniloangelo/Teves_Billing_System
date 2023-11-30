@@ -8,8 +8,8 @@ body{
 .form-control{
 	/*font-size:12px !important;*/
 	color:#000 !important;
-	border: 1px solid #2653d4;
-    border-radius: 0;
+	border: 1px solid #656d87;
+    border-radius: 1px;
 }
 
 .sidebar-brand {
@@ -225,7 +225,7 @@ div.dataTables_wrapper div.dataTables_length select {
 
 .table-bordered td, .table-bordered th{
 	border-top: none !important;
-	border-bottom: 1px solid #041cb11f    !important;
+	/*border-bottom: 1px solid #041cb11f    !important;*/
 	border-left: none !important;
 	border-right:none !important;
 }
@@ -243,7 +243,15 @@ div.dataTables_wrapper div.dataTables_length select {
 .sidebar_li_a{
 	color: #000 !important; 
     margin-bottom: 0px;
-    background-color: #b2c0d74a;
+    background-color: #fff;
+    border-radius: 0px !important;
+    padding: 10px 0 10px 10px !important;
+}
+
+.sidebar_li_a:hover{
+	color: blue !important; 
+    margin-bottom: 0px;
+    background-color: #f6f9ff !important;
     border-radius: 0px !important;
     padding: 10px 0 10px 10px !important;
 }
@@ -321,10 +329,13 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 }
 
 .card-header{
-	border-bottom: 2px solid #3f8f48  !important;
+	border-bottom: 1px solid #3f8f48  !important;
 }
 .card-title{
 	font-family: "Nunito", sans-serif !important;
+}
+.card {
+	border-radius:0px !important;
 }
 /*
 #main {
