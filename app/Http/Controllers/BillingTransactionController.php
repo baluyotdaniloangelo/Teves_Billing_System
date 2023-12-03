@@ -165,9 +165,7 @@ class BillingTransactionController extends Controller
 		$request->validate([
           'order_date'      		=> 'required',
 		  'order_time'      		=> 'required',
-		  'order_po_number'      	=> ['required',function ($input) {
-				return $input->order_po_number >= 3;
-			}],
+		  'order_po_number'      	=> 'required',
 		  'client_idx'      		=> 'required',
 		  'plate_no'      			=> 'required',
 		  'drivers_name'      		=> 'required',
@@ -185,43 +183,52 @@ class BillingTransactionController extends Controller
 			'order_quantity.required' => 'Quantity is Required'
         ]
 		);
-
-			//$data = $request->all();
 			
-			/*Product Details*/
-			$product_info = ProductModel::find($request->product_idx, ['product_price']);					
+			$so_count_check = BillingTransactionModel::where('order_po_number', '=', $request->order_po_number)->get();
+			$so_total_count = $so_count_check->count();
 			
-			/*Check if Price is From Manual Price*/
-			if($request->product_manual_price!=0){
-				$product_price = $request->product_manual_price;
+			if($so_total_count == 6){
+				
+					return response()->json(array('so_error'=>true), 200);
+					
 			}else{
-				$product_price = $product_info->product_price;
-			}
-			
-			$order_total_amount = $request->order_quantity * $product_price;
-			
-			/*insert*/
-			$Billing = new BillingTransactionModel();
-			
-			$Billing->order_date 			= $request->order_date;
-			$Billing->order_time 			= $request->order_time;
-			$Billing->order_po_number 		= $request->order_po_number;	
-			$Billing->client_idx 			= $request->client_idx;
-			$Billing->plate_no 				= $request->plate_no;
-			$Billing->drivers_name 			= $request->drivers_name;
-			$Billing->product_idx 			= $request->product_idx;
-			$Billing->product_price 		= $product_price;
-			$Billing->order_quantity 		= $request->order_quantity;
-			$Billing->order_total_amount 	= $order_total_amount;
-			
-			$result = $Billing->save();
-			
-			if($result){
-				return response()->json(['success'=>'Bill Information Successfully Created!']);
-			}
-			else{
-				return response()->json(['success'=>'Error on Insert Bill Information']);
-			}
+				
+					/*Product Details*/
+					$product_info = ProductModel::find($request->product_idx, ['product_price']);					
+					
+					/*Check if Price is From Manual Price*/
+					if($request->product_manual_price!=0){
+						$product_price = $request->product_manual_price;
+					}else{
+						$product_price = $product_info->product_price;
+					}
+					
+					$order_total_amount = $request->order_quantity * $product_price;	
+					
+					/*insert*/
+					$Billing = new BillingTransactionModel();
+					
+					$Billing->order_date 			= $request->order_date;
+					$Billing->order_time 			= $request->order_time;
+					$Billing->order_po_number 		= $request->order_po_number;	
+					$Billing->client_idx 			= $request->client_idx;
+					$Billing->plate_no 				= $request->plate_no;
+					$Billing->drivers_name 			= $request->drivers_name;
+					$Billing->product_idx 			= $request->product_idx;
+					$Billing->product_price 		= $product_price;
+					$Billing->order_quantity 		= $request->order_quantity;
+					$Billing->order_total_amount 	= $order_total_amount;
+					
+					$result = $Billing->save();
+					
+					if($result){
+						return response()->json(array('success' => "Bill Information Successfully Created!", 'so_error' => false), 200);
+					}
+					else{
+						return response()->json(['success'=>'Error on Insert Bill Information','so_error'=>false]);
+					}	
+
+			}				
 	}
 
 	public function update_bill_post(Request $request){
@@ -248,44 +255,63 @@ class BillingTransactionController extends Controller
         ]
 		);
 
-			$data = $request->all();
+			//$data = $request->all();
 			
-			/*Product Details*/
-			$product_info = ProductModel::find($request->product_idx, ['product_price']);		
-
-			/*Check if Price is From Manual Price*/
-			if($request->product_manual_price!=0){
-				$product_price = $request->product_manual_price;
+			$so_count_check = BillingTransactionModel::where('order_po_number', '=', $request->order_po_number)->get();
+			$so_total_count = $so_count_check->count();
+			
+			if($so_total_count == 6){
+				
+					return response()->json(array('so_error'=>true), 200);
+					
 			}else{
-				$product_price = $product_info->product_price;
-			}
-			
-			$order_total_amount = $request->order_quantity * $product_price;
-			
-			$Billing = new BillingTransactionModel();
-			$Billing = BillingTransactionModel::find($request->billID);
-			
-			$Billing->order_date 			= $request->order_date;
-			$Billing->order_time 			= $request->order_time;
-			$Billing->order_po_number 		= $request->order_po_number;	
-			$Billing->client_idx 			= $request->client_idx;
-			$Billing->plate_no 				= $request->plate_no;
-			$Billing->drivers_name 			= $request->drivers_name;
-			$Billing->product_idx 			= $request->product_idx;
-			$Billing->product_price 		= $product_price;
-			$Billing->order_quantity 		= $request->order_quantity;
-			$Billing->order_total_amount 	= $order_total_amount;
-			
-			
-			$result = $Billing->update();
-			
-			if($result){
-				return response()->json(['success'=>'Bill Information Successfully Updated!']);
-			}
-			else{
-				return response()->json(['success'=>'Error on Update Bill Information']);
+					
+					/*Product Details*/
+					$product_info = ProductModel::find($request->product_idx, ['product_price']);		
+
+					/*Check if Price is From Manual Price*/
+					if($request->product_manual_price!=0){
+						$product_price = $request->product_manual_price;
+					}else{
+						$product_price = $product_info->product_price;
+					}
+					
+					$order_total_amount = $request->order_quantity * $product_price;
+					
+					$Billing = new BillingTransactionModel();
+					$Billing = BillingTransactionModel::find($request->billID);
+					
+					$Billing->order_date 			= $request->order_date;
+					$Billing->order_time 			= $request->order_time;
+					$Billing->order_po_number 		= $request->order_po_number;	
+					$Billing->client_idx 			= $request->client_idx;
+					$Billing->plate_no 				= $request->plate_no;
+					$Billing->drivers_name 			= $request->drivers_name;
+					$Billing->product_idx 			= $request->product_idx;
+					$Billing->product_price 		= $product_price;
+					$Billing->order_quantity 		= $request->order_quantity;
+					$Billing->order_total_amount 	= $order_total_amount;
+										
+					$result = $Billing->update();
+
+					if($result){
+						return response()->json(array('success' => "Bill Information Successfully Updated!", 'so_error' => false), 200);
+					}
+					else{
+						return response()->json(['success'=>'Error on Update Bill Information','so_error'=>false]);
+					}	
 			}
 	}
 
+	public function count_so_number(Request $request){		
+			
+		/*If Reached to 6 Item Block and Clear Form input for SO*/	
+			
+		//$paymentitemID = $request->paymentitemID;
+		//PurchaseOrderPaymentModel::find($paymentitemID)->delete();
+		//return 'Deleted';
+		
+		
+	}
 	
 }

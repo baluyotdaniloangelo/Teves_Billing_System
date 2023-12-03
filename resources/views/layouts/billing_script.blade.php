@@ -15,7 +15,7 @@
 			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
-			/*processing: true,*/
+			processing: true,
 			serverSide: true,
 			pageLength: 10,
 			stateSave: true,/*Remember Searches*/
@@ -37,7 +37,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 5, 6, 7] },
+					{ className: 'text-center', targets: [0, 1] },
 					{ type: 'numeric-comma', targets: [8,9] }
 			]
 		});
@@ -145,39 +145,57 @@
 				  console.log(response);
 				  if(response) {
 					  
-					$('#switch_notice_on').show();
-					$('#sw_on').html(response.success);
-					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					let so_error = response.so_error;
 					
-					$('#order_dateError').text('');					
-					$('#order_timeError').text('');
-					$('#order_po_numberError').text('');
-					$('#client_idxError').text('');
+					if(so_error == true){
+							
+						$('#switch_notice_off').show();
+						$('#sw_off').html("The SO "+ order_po_number +" Number Exceeds Allowable Entry (6)");
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+						
+						$('#order_po_numberError').text("The SO "+ order_po_number +" Number Exceeds Allowable Entry (6)");
+						document.getElementById('order_po_numberError').className = "invalid-feedback";
+						
+						$('#order_po_number').val("");
+						
+					}else{
 					
-					$('#plate_noError').text('');
-					$('#drivers_nameError').text('');
-					$('#product_idxError').text('');
-					$('#product_manual_priceError').text('');
-					$('#order_quantityError').text('');
-					
-					/*Clear Form*/
-					$('#order_po_number').val("");
-					$('#client_idx').val("");
-					$('#plate_no').val("");
-					$('#drivers_name').val("");
-					$('#product_idx').val("");
-					$('#product_manual_price').val("");
-					$('#order_quantity').val("");
-					
-					$('#TotalAmount').html('0.00');
-				    /*
-					If you are using server side datatable, then you can use ajax.reload() 
-					function to reload the datatable and pass the true or false as a parameter for refresh paging.
-					*/
-					
-					var table = $("#getBillingTransactionList").DataTable();
-				    table.ajax.reload(null, false);
-					
+						$('#switch_notice_on').show();
+						$('#sw_on').html(response.success);
+						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+						
+						$('#order_dateError').text('');					
+						$('#order_timeError').text('');
+						$('#order_po_numberError').text('');
+						document.getElementById('order_po_numberError').className = "valid-feedback";
+						
+						$('#client_idxError').text('');
+						
+						$('#plate_noError').text('');
+						$('#drivers_nameError').text('');
+						$('#product_idxError').text('');
+						$('#product_manual_priceError').text('');
+						$('#order_quantityError').text('');
+						
+						/*Clear Form*/
+						//$('#order_po_number').val("");
+						$('#client_idx').val("");
+						$('#plate_no').val("");
+						$('#drivers_name').val("");
+						$('#product_idx').val("");
+						$('#product_manual_price').val("");
+						$('#order_quantity').val("");
+						
+						$('#TotalAmount').html('0.00');
+						}
+						/*
+						If you are using server side datatable, then you can use ajax.reload() 
+						function to reload the datatable and pass the true or false as a parameter for refresh paging.
+						*/
+						
+						var table = $("#getBillingTransactionList").DataTable();
+						table.ajax.reload(null, false);
+						
 				  }
 				},
 				beforeSend:function()
@@ -346,30 +364,45 @@
 				success:function(response){
 				  console.log(response);
 				  if(response) {
+					
+					let so_error = response.so_error;
+					
+					if(so_error == true){
+							
+						$('#switch_notice_off').show();
+						$('#sw_off').html("The SO "+ order_po_number +" Number Exceeds Allowable Entry (6)");
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+						
+						$('#update_order_po_numberError').text("The SO "+ order_po_number +" Number Exceeds Allowable Entry (6)");
+						document.getElementById('update_order_po_numberError').className = "invalid-feedback";
+						
+						$('#order_po_number').val("");
+						
+					}else{
+						
+						$('#switch_notice_on').show();
+						$('#sw_on').html(response.success);
+						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+						
+						$('#update_order_dateError').text('');					
+						$('#update_order_timeError').text('');
+						//$('#update_order_po_numberError').text('');
+						$('#update_client_idxError').text('');
+						
+						$('#update_plate_noError').text('');
+						$('#update_drivers_nameError').text('');
+						$('#update_product_idxError').text('');
+						$('#update_product_manual_priceError').text('');
+						$('#update_order_quantityError').text('');
 					  
-					$('#switch_notice_on').show();
-					$('#sw_on').html(response.success);
-					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-					
-					$('#update_order_dateError').text('');					
-					$('#update_order_timeError').text('');
-					$('#update_order_po_numberError').text('');
-					$('#update_client_idxError').text('');
-					
-					$('#update_plate_noError').text('');
-					$('#update_drivers_nameError').text('');
-					$('#update_product_idxError').text('');
-					$('#update_product_manual_priceError').text('');
-					$('#update_order_quantityError').text('');
-				  
-					/*
-					If you are using server side datatable, then you can use ajax.reload() 
-					function to reload the datatable and pass the true or false as a parameter for refresh paging.
-					*/
-					
-					var table = $("#getBillingTransactionList").DataTable();
-				    table.ajax.reload(null, false);
-					
+						/*
+						If you are using server side datatable, then you can use ajax.reload() 
+						function to reload the datatable and pass the true or false as a parameter for refresh paging.
+						*/
+						
+						var table = $("#getBillingTransactionList").DataTable();
+						table.ajax.reload(null, false);
+					}
 				  }
 				},
 				beforeSend:function()

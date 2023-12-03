@@ -266,6 +266,7 @@ class ReceivablesController extends Controller
 			$result_update = $Receivables_update->update();
 			
 			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
+			
 			}
 							
 	}

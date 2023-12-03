@@ -69,6 +69,10 @@
 	border-radius: 0px !important;	
 }
 
+.sidebar-nav{
+	border-left: #abb513 solid 1px;
+}
+
 .sidebar-nav .nav-link:hover {
     color: #4154f1;
     background: #e1e8f5 !important;

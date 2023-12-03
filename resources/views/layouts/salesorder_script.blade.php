@@ -893,10 +893,12 @@
 				},
 				beforeSend:function()
 				{
+					
 					/*Disable Submit Button*/
 					document.getElementById("add-to-receivables").disabled = true;
 					/*Show Status*/
 					$('#loading_data_save_receivables').show();
+				
 				},
 				complete: function(){
 					

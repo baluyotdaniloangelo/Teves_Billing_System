@@ -457,7 +457,7 @@ class PurchaseOrderController extends Controller
 				
 			 }
 			
-			$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
+				$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
 				$less_in_percentage 			= $request->purchase_order_less_percentage/100;
 
 					if($request->purchase_order_net_percentage==0){
