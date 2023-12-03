@@ -165,7 +165,9 @@ class BillingTransactionController extends Controller
 		$request->validate([
           'order_date'      		=> 'required',
 		  'order_time'      		=> 'required',
-		  'order_po_number'      	=> 'required',
+		  'order_po_number'      	=> ['required',function ($input) {
+				return $input->order_po_number >= 3;
+			}],
 		  'client_idx'      		=> 'required',
 		  'plate_no'      			=> 'required',
 		  'drivers_name'      		=> 'required',
