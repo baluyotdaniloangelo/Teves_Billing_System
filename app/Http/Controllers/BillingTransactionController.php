@@ -11,6 +11,8 @@ use Session;
 use Validator;
 use DataTables;
 
+//use Spatie\Activitylog\Models\Activity;
+
 class BillingTransactionController extends Controller
 {
 	
@@ -67,13 +69,6 @@ class BillingTransactionController extends Controller
 				
 				->addIndexColumn()				
                 ->addColumn('action', function($row){
-                    
-						$startTimeStamp = strtotime($row->created_at);
-						$endTimeStamp = strtotime(date('y-m-d'));
-						$timeDiff = abs($endTimeStamp - $startTimeStamp);
-						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
-						// and you might want to convert to integer
-						$numberDays = intval($numberDays);
 						
 					if($row->receivable_idx==0){
 						
@@ -119,11 +114,8 @@ class BillingTransactionController extends Controller
                 })
 				
 				->rawColumns(['action','quantity_measurement'])
-                ->make(true);
-		
+                ->make(true);		
 		}
-		
-		
     }
 
 	/*Fetch Site Information*/
@@ -220,7 +212,17 @@ class BillingTransactionController extends Controller
 					$Billing->order_total_amount 	= $order_total_amount;
 					
 					$result = $Billing->save();
-					
+												
+					/*
+					$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+					var_dump($user_data);
+					activity() 
+					->performedOn($Billing)
+					->causedBy($user_data->user_id)
+				   // ->withProperties(['business_name' => $request->order_quantity])
+					->log('Business <span class="text-green">Updated</span>  - '.$request->order_quantity);
+					*/
+			
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Created!", 'so_error' => false), 200);
 					}
@@ -293,6 +295,12 @@ class BillingTransactionController extends Controller
 					$Billing->order_total_amount 	= $order_total_amount;
 										
 					$result = $Billing->update();
+
+					$lastActivity = Activity::all()->last(); //returns the last logged activity
+					$lastActivity->causer;
+					$lastActivity->getExtraProperty('key'); //returns 'value'
+					$lastActivity->where('properties->key', 'value')->get(); // get all activity where the `key` custom property is 'value'
+				
 
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Updated!", 'so_error' => false), 200);

@@ -633,8 +633,8 @@ class ReportController extends Controller
 					'teves_billing_table.order_total_amount',
 					'teves_billing_table.order_po_number',
 					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
 					'teves_billing_table.order_time']);	
+					
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		

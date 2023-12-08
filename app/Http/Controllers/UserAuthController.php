@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Spatie\Activitylog\Models\Activity;
 use Hash;
 use Session;
 use Validator;
@@ -24,9 +25,12 @@ class UserAuthController extends Controller
         $user = User::where('user_name', '=', $request->user_name)->first();
 		if ($user){
 			if(Hash::check($request->InputPassword,$user->user_password)){
+				
 				$request->session()->put('loginID', $user->user_id);
 				$request->session()->put('UserType', $user->user_type);
+				
 				return redirect('billing');
+				
 			}else{
 				return back()->with('fail', 'Incorrect Password');
 			}
