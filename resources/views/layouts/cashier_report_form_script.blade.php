@@ -185,6 +185,8 @@
 						document.getElementById("calibration").value = '';
 						document.getElementById("product_manual_price").value = '';
 						
+						LoadCashiersReportPH6();
+						
 					  }
 					},
 					error: function(error) {
@@ -333,7 +335,7 @@
 						
 						/*Clear Form*/
 						$('#Update_CRPH1_Modal').modal('toggle');
-						
+						LoadCashiersReportPH6();
 					  }
 					},
 					error: function(error) {
@@ -382,7 +384,7 @@
 					$('#CRPH1_delete_order_total_amount').text(response[0].order_total_amount);
 					
 					$('#CRPH1DeleteModal').modal('toggle');					
-				  
+					LoadCashiersReportPH6();
 				  }
 				},
 				error: function(error) {
@@ -467,7 +469,7 @@
 						document.getElementById("product_idx_PH2").value = '';
 						document.getElementById("order_quantity_PH2").value = '';
 						document.getElementById("product_manual_price_PH2").value = '';
-						
+						LoadCashiersReportPH6();
 					  }
 					},
 					error: function(error) {
@@ -594,6 +596,7 @@
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						LoadCashiersReportPH2();
+						LoadCashiersReportPH6();
 						$('#update_product_idx_PH2Error').text('');					
 						$('#update_order_quantity_PH2Error').text('');		
 						$('#update_product_manual_price_PH2Error').text('');
@@ -640,7 +643,8 @@
 					
 					var total_amount = response[0].order_total_amount;
 					$('#delete_TotalAmount_PH2').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));				
-					$('#CRPH2DeleteModal').modal('toggle');							  
+					$('#CRPH2DeleteModal').modal('toggle');			
+										
 				  }
 				},
 				error: function(error) {
@@ -670,6 +674,7 @@
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					LoadCashiersReportPH2();
+					LoadCashiersReportPH6();
 				  }
 				},
 				error: function(error) {
@@ -863,7 +868,7 @@
 						document.getElementById("product_idx_PH3").value = '';
 						document.getElementById("order_quantity_PH3").value = '';
 						document.getElementById("product_manual_price_PH3").value = '';
-						
+						LoadCashiersReportPH6();
 						$('#pump_price_txt').html('0');
 						$('#discounted_price_txt').html('0');
 						$('#TotalAmount_PH3').html('0');
@@ -1047,7 +1052,7 @@
 					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 
 					UpdateTotalAmount_PH3();
-
+					LoadCashiersReportPH6();
 					
 					$('#Update_CRPH3_Modal').modal('toggle');							  
 				  }
@@ -1127,7 +1132,7 @@
 					$('#UpdateTotalAmount_PH3').html('0');		
 
 					UpdateTotalAmount_PH3();
-					
+					LoadCashiersReportPH6();
 					$('#Update_CRPH3_Modal').modal('toggle');		
 					
 				  }
@@ -1352,6 +1357,7 @@
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 						LoadCashiersReportPH3_OTHERS();
+						LoadCashiersReportPH6();
 				  }
 				},
 				error: function(error) {
@@ -1381,6 +1387,7 @@
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 						LoadCashiersReportPH3_DISCOUNT();
+						LoadCashiersReportPH6();
 				  }
 				},
 				error: function(error) {
@@ -1628,6 +1635,7 @@
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						LoadCashiersReportPH4();
+						LoadCashiersReportPH6();
 						$('#description_p4Error').text('');					
 						$('#amount_p4Error').text('');		
 					  }
@@ -1743,6 +1751,7 @@
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						LoadCashiersReportPH4();
+						LoadCashiersReportPH6();
 						$('#update_description_p4Error').text('');					
 						$('#update_amount_p4Error').text('');		
 					  }
@@ -1808,6 +1817,7 @@
 					$('#sw_off').html("Deleted");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					LoadCashiersReportPH4();
+					LoadCashiersReportPH6();
 				  }
 				},
 				error: function(error) {
@@ -2448,6 +2458,7 @@
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						LoadCashiersReportPH5();
+						LoadCashiersReportPH6();
 						$('#cash_dropError').text('');
 						
 					  }

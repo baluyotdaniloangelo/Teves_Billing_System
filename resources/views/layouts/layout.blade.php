@@ -14,6 +14,12 @@ if (Request::is('billing')){
 @include('layouts.footer')
 @include('layouts.billing_script')
 <?php
+}else if (Request::is('billing2')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.billing_script')
+<?php
 }else if (Request::is('product')){
 ?>
 <body class="">

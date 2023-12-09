@@ -13,92 +13,90 @@
 				  </div>
 				</div>			  
 		 
-            <div class="card-body">			
-				<div class="p-1">
-						<div class="row mb-2">
-						<div class="col-sm-3">
+            <div class="card-body">		
+			
+				<div class="p-2">
+				<br>
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<form class="g-2 needs-validation" id="CashierReportformNew">
+								
+								<div class="row mb-2">
+								  <label class="col-sm-4 col-form-label">Encoder's Name</label>
+								  <div class="col-sm-8">
+									<span><b><?php echo $CashiersReportData[0]['user_real_name']; ?></b></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
+								  <label for="teves_branch" class="col-sm-4 col-form-label">Branch</label>
+								  <div class="col-sm-8">
+									<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
+										<?php $teves_branch = $CashiersReportData[0]['teves_branch']; ?>
+										<option value="GT" <?php if($teves_branch=='GT'){ echo "selected";} else{} ?>>GT</option>
+										<option value="Teves" <?php if($teves_branch=='Teves'){ echo "selected";} else{} ?>>Teves</option>
+									</select>
+									<span class="valid-feedback" id="teves_branchError"></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
+									<label for="cashiers_name" class="col-sm-4 col-form-label">Cashier's on Duty</label>
+									<div class="col-sm-8">
+									<input type="text" class="form-control" name="cashiers_name" id="cashiers_name" value="<?php echo $CashiersReportData[0]['cashiers_name']; ?>" required>
+									<span class="valid-feedback" id="cashiers_nameError"></span>
+									</div>
+								</div>
+								
+								<div class="row mb-2">
+								  <label for="forecourt_attendant" class="col-sm-4 col-form-label">Employee's On-Duty</label>
+								  <div class="col-sm-8">
+									<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="{{ $CashiersReportData[0]['forecourt_attendant'] }}" required>
+									<span class="valid-feedback" id="forecourt_attendantError"></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
+								  <label for="report_date" class="col-sm-4 col-form-label">Report Date</label>
+								  <div class="col-sm-8">
+									<input type="date" class="form-control " name="report_date" id="report_date" value="{{ $CashiersReportData[0]['report_date'] }}" required>
+									<span class="valid-feedback" id="report_dateError"></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
+								  <label for="shift" class="col-sm-4 col-form-label">Shift</label>
+								  <div class="col-sm-8">
+									<input type="text" class="form-control " name="shift" id="shift" value="{{ $CashiersReportData[0]['shift'] }}" required>
+									<span class="valid-feedback" id="shiftError"></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
+								
+								<div class="col-sm-4">
+								</div>
+								
+								<div class="col-sm-8">
+								
+								<div align="right">				
+								  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-cashiers-report"> Submit</button>
+								  </div>	
+								</div>
+								
+								</div>
+								
+								</form><!-- End Multi Columns Form -->
 								
 						</div>
 						<div class="col-sm-6">
-						<form class="g-2 needs-validation" id="CashierReportformNew">
-						
-						<div class="row mb-2">
-						  <label class="col-sm-4 col-form-label">Encoder's Name</label>
-						  <div class="col-sm-8">
-							<span><b><?php echo $CashiersReportData[0]['user_real_name']; ?></b></span>
-						  </div>
+								@include('pages.cashiers_report_form_p6')
 						</div>
 						
-						<div class="row mb-2">
-						  <label for="teves_branch" class="col-sm-4 col-form-label">Branch</label>
-						  <div class="col-sm-6">
-							<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
-								<?php $teves_branch = $CashiersReportData[0]['teves_branch']; ?>
-								<option value="GT" <?php if($teves_branch=='GT'){ echo "selected";} else{} ?>>GT</option>
-								<option value="Teves" <?php if($teves_branch=='Teves'){ echo "selected";} else{} ?>>Teves</option>
-							</select>
-							<span class="valid-feedback" id="teves_branchError"></span>
-						  </div>
-						</div>
-						  
-						<div class="row mb-2">
-							<label for="cashiers_name" class="col-sm-4 col-form-label">Cashier's on Duty</label>
-							<div class="col-sm-6">
-							<input type="text" class="form-control" name="cashiers_name" id="cashiers_name" value="<?php echo $CashiersReportData[0]['cashiers_name']; ?>" required>
-							<span class="valid-feedback" id="cashiers_nameError"></span>
-							</div>
-						</div>	
-						
-						<div class="row mb-2">
-						  <label for="forecourt_attendant" class="col-sm-4 col-form-label">Employee's On-Duty</label>
-						  <div class="col-sm-6">
-							<input type="text" class="form-control" name="forecourt_attendant" id="forecourt_attendant" value="{{ $CashiersReportData[0]['forecourt_attendant'] }}" required>
-							<span class="valid-feedback" id="forecourt_attendantError"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="report_date" class="col-sm-4 col-form-label">Report Date</label>
-						  <div class="col-sm-6">
-							<input type="date" class="form-control " name="report_date" id="report_date" value="{{ $CashiersReportData[0]['report_date'] }}" required>
-							<span class="valid-feedback" id="report_dateError"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="shift" class="col-sm-4 col-form-label">Shift</label>
-						  <div class="col-sm-6">
-							<input type="text" class="form-control " name="shift" id="shift" value="{{ $CashiersReportData[0]['shift'] }}" required>
-							<span class="valid-feedback" id="shiftError"></span>
-						  </div>
-						</div>						
-						<div class="row mb-2">
-						
-						<div class="col-sm-4">
-						</div>
-						
-						<div class="col-sm-4">
-						
-						<div align="right">				
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-cashiers-report"> Submit</button>
-						  </div>	
-						</div>
-						<div class="col-sm-4">
-						</div>
-						</div>
-						
-						
-						
-						</div>
-						</div>
-						 
-						  </form><!-- End Multi Columns Form -->
-						   
-						</div>
-						      
-						<div class="col-sm-3">
-								
-						</div>
+					</div>
+					
+					</div>
+				
 						<hr>
 						
 						<div class="card-body">
@@ -124,9 +122,9 @@
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph5-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph5" type="button" role="tab" aria-controls="ph5" aria-selected="false" tabindex="-1">Cash On Hand</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<!--<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph6-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph6" type="button" role="tab" aria-controls="ph6" aria-selected="false" tabindex="-1" onclick="LoadCashiersReportPH6()">Summary</button>
-							</li>
+							</li>-->
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
 							<div class="tab-pane fade show active" id="bordered-ph1" role="tabpanel" aria-labelledby="ph1-tab">
@@ -152,9 +150,7 @@
 							<div class="tab-pane fade" id="bordered-ph5" role="tabpanel" aria-labelledby="ph5-tab">						
 							@include('pages.cashiers_report_form_p5')
 							</div>
-							<div class="tab-pane fade" id="bordered-ph6" role="tabpanel" aria-labelledby="ph6-tab">				
-							@include('pages.cashiers_report_form_p6')
-							</div>
+							
 						  </div><!-- End Bordered Tabs -->
 
 						</div>

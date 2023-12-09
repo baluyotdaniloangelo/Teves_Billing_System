@@ -126,6 +126,7 @@ class ReceivablesController extends Controller
 		}		
     }
 
+	/*Payment List*/
 	public function get_receivable_payment_list(Request $request){		
 	
 			$data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
@@ -142,14 +143,17 @@ class ReceivablesController extends Controller
 			
 	}
 	
+	/*Delete Payment Item*/
 	public function delete_receivable_payment_item(Request $request){		
+		
+		if(Session::get('UserType')=="Admin"){
 			
-		$paymentitemID = $request->paymentitemID;
-		$receivableID = $request->receivable_id;
+			$paymentitemID = $request->paymentitemID;
+			$receivableID = $request->receivable_id;
 		
-		ReceivablesPaymentModel::find($paymentitemID)->delete();
+			ReceivablesPaymentModel::find($paymentitemID)->delete();
 		
-		/*Remaining Balance*/
+			/*Remaining Balance*/
 			/*Get Receivable Details*/
 			$receivable_details = ReceivablesModel::find($receivableID, ['receivable_amount']);							
 			$receivable_amount = $receivable_details->receivable_amount;
@@ -177,10 +181,13 @@ class ReceivablesController extends Controller
 			
 			$result_update = $Receivables_update->update();
 
-		return 'Deleted';
+			return 'Deleted';
+			
+		}
 		
 	}
 	
+	/*Save Payment Item*/
 	public function save_receivable_payment_post(Request $request){		
 			
 			$request->validate([
@@ -223,17 +230,21 @@ class ReceivablesController extends Controller
 						
 					}else{
 						
-						$ReceivablePaymentComponent = new ReceivablesPaymentModel();
+						if(Session::get('UserType')=="Admin"){
+							
+							$ReceivablePaymentComponent = new ReceivablesPaymentModel();
+							
+							$ReceivablePaymentComponent = ReceivablesPaymentModel::find($payment_id_item);
+							
+							$ReceivablePaymentComponent->receivable_mode_of_payment 	= $mode_of_payment_item;
+							$ReceivablePaymentComponent->receivable_date_of_payment 	= $date_of_payment_item;
+							$ReceivablePaymentComponent->receivable_reference 			= $reference_no_item;
+							$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
+							
+							$ReceivablePaymentComponent->update();
+							
+						}
 						
-						$ReceivablePaymentComponent = ReceivablesPaymentModel::find($payment_id_item);
-						
-						$ReceivablePaymentComponent->receivable_mode_of_payment 	= $mode_of_payment_item;
-						$ReceivablePaymentComponent->receivable_date_of_payment 	= $date_of_payment_item;
-						$ReceivablePaymentComponent->receivable_reference 			= $reference_no_item;
-						$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
-						
-						$ReceivablePaymentComponent->update();
-	
 					}
 				}		
 				
@@ -299,8 +310,6 @@ class ReceivablesController extends Controller
 			$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
-			//$Receivables->or_number 					= $request->or_number;
-			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			$Receivables->receivable_status 			= 'Pending';			
@@ -338,18 +347,9 @@ class ReceivablesController extends Controller
 			/*Update to Receivables*/
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($ReceivableID);
-			//$Receivables->client_idx 					= $SalesOrderData[0]->sales_order_client_idx;
-			//$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
-			//$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
-			//$Receivables->or_number 					= $request->or_number;
-			//$Receivables->ar_reference 					= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
-			//$Receivables->receivable_status 			= 'Pending';			
-			//$Receivables->receivable_amount 			= $SalesOrderData[0]->sales_order_total_due;
-			//$Receivables->receivable_remaining_balance 	= $SalesOrderData[0]->sales_order_total_due;
-			//$Receivables->company_header 				= $SalesOrderData[0]->company_header;
 			
 			$result = $Receivables->update();
 
@@ -457,8 +457,6 @@ class ReceivablesController extends Controller
 			$Receivables->client_idx 				= $request->client_idx;
 			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
 			$Receivables->billing_date 				= date('Y-m-d');
-			//$Receivables->or_number 				= $request->or_number;
-			//$Receivables->ar_reference 			= $request->ar_reference;
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			
@@ -559,8 +557,6 @@ class ReceivablesController extends Controller
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 					= $request->billing_date;
-			//$Receivables->or_number 					= $request->or_number;
-			//$Receivables->ar_reference 				= $request->ar_reference;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			
@@ -576,7 +572,6 @@ class ReceivablesController extends Controller
 			$Receivables->receivable_withholding_tax_percentage 	= number_format($withholding_tax_percentage * 100,2, '.', '');
 			$Receivables->receivable_vat_value_percentage 			= number_format($vat_value_percentage * 100,2, '.', '');			
 			
-			//$Receivables->receivable_status 			= $request->receivable_status;
 			$Receivables->billing_period_start 			= $request->start_date;
 			$Receivables->billing_period_end 			= $request->end_date;
 			
@@ -584,15 +579,6 @@ class ReceivablesController extends Controller
 			$Receivables->company_header 				= $request->company_header;
 			
 			$result = $Receivables->update();
-		
-			/*Update Billing List Affected by the Receivable
-
-			$billing_update = BillingTransactionModel::where('client_idx', $client_idx->client_idx)
-				->where('order_date', '>=', $start_date)
-                ->where('order_date', '<=', $end_date)
-				->where('receivable_idx', '=', $request->ReceivableID)
-				->update(['receivable_idx' => $Receivables->receivable_id]);
-			*/
 			
 			if($result){
 				return response()->json(['success'=>'Receivables Information Successfully Updated!']);

@@ -276,12 +276,27 @@
 							var receivable_reference				= response[i].receivable_reference;
 							var receivable_payment_amount 			= response[i].receivable_payment_amount;
 							
+							<?php if($data->user_type=="Admin"){ ?>
 							$('#receivable_payment_table_body_data tr:last').after("<tr>"+
 							"<td class='date_of_payment_td' align='center'><input type='date' class='form-control date_of_payment' id='date_of_payment' name='date_of_payment' value='"+receivable_date_of_payment+"'></td>"+
 							"<td class='bank_td' align='center'><input type='text' class='form-control mode_of_payment' id='mode_of_payment' name=' mode_of_payment' list='mode_of_payment_list' autocomplete='off' value='"+receivable_mode_of_payment+"'></td>"+
 							"<td class='reference_no_td' align='center'><input type='text' class='form-control reference_no' id='reference_no' name='reference_no' value='"+receivable_reference+"'></td>"+
 							"<td class='payment_amount_td' align='center'><input type='number' class='form-control payment_amount' id='payment_amount' name='payment_amount' value='"+receivable_payment_amount+"'></td>"+
 							"<td><div onclick='deletePaymentRow(this)' data-id='"+id+"' id='payment_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePayment'></a></div></div></td></tr>");
+							<?php 
+							}
+							else{ 
+							?>
+							$('#receivable_payment_table_body_data tr:last').after("<tr>"+
+							"<td class='date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
+							"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
+							"<td class='reference_no_td' align='center'>"+receivable_reference+"</td>"+
+							"<td class='payment_amount_td' align='center'>"+receivable_payment_amount+"</td>"+
+							"<td></td></tr>");
+						
+							<?php } ?>
+							
+							
 
 						}			
 				  }else{
@@ -477,23 +492,13 @@
 							
 					document.getElementById("client_name_receivables_SO").innerHTML = response[0].client_name;
 					document.getElementById("client_address_receivables_SO").innerHTML = response[0].client_address;
-					document.getElementById("control_no_receivables_SO").innerHTML = response[0].control_number;	
-					//document.getElementById("billing_receivables_SO").innerHTML = response[0].billing_date;					
+					document.getElementById("control_no_receivables_SO").innerHTML = response[0].control_number;				
 					document.getElementById("client_tin_receivables_SO").innerHTML = response[0].client_tin;
 					document.getElementById("amount_receivables_SO").innerHTML = response[0].receivable_amount;	
 					
 					document.getElementById("receivable_billing_date_SO").value = response[0].billing_date;
-					//document.getElementById("receivable_or_number_SO").value = response[0].or_number;
 					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
-					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;					
-					//document.getElementById("receivable_ar_reference_SO").value = response[0].ar_reference;					
-					//document.getElementById("start_date").value = response[0].billing_period_start;
-					//document.getElementById("end_date").value = response[0].billing_period_end;
-					//document.getElementById("less_per_liter").value = response[0].less_per_liter;
-					//document.getElementById("company_header").value = response[0].company_header;					
-					//document.getElementById("withholding_tax_percentage").value = response[0].receivable_withholding_tax_percentage;
-					//document.getElementById("net_value_percentage").value = response[0].receivable_net_value_percentage;
-					//document.getElementById("vat_value_percentage").value = response[0].receivable_vat_value_percentage;				
+					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;				
 					
 					$('#UpdateReceivablesFromSalesOrderModal').modal('toggle');					
 				  
@@ -517,8 +522,6 @@
 			let ReceivableID 			= document.getElementById("SO-update-receivables").value;
 
 			let billing_date			= $("input[name=receivable_billing_date_SO]").val();	
-			//let or_number 				= $("input[name=receivable_or_number_SO]").val();	
-			//let ar_reference 			= $("input[name=receivable_ar_reference_SO]").val();	
 			let payment_term 			= $("input[name=receivable_payment_term_SO]").val();
 			let receivable_description 	= $("#receivable_description_SO").val();
 			
@@ -527,8 +530,6 @@
 				type:"POST",
 				data:{
 				  ReceivableID:ReceivableID,
-				  //or_number:or_number,
-				  //ar_reference:ar_reference,
 				  billing_date:billing_date,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
@@ -539,12 +540,10 @@
 				  if(response) {
 					  
 					/*Reset Warnings*/
-					//$('#receivable_or_numberError').text('');
 					$('#receivable_payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 					
 					/*Clear Form*/
-					//$('#receivable_or_number').val("");
 					$('#receivable_payment_term').val("");
 					$('#receivable_description').val("");
 					/*Close Form*/
@@ -564,8 +563,6 @@
 					}
 					
 					/*Reload Details or link for PDF*/
-					
-					//download_billing_report_pdf(response.receivable_id);
 					var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
 					window.open(url);
 					
@@ -622,7 +619,6 @@
 					/*Set Details*/
 					document.getElementById("confirm_delete_billing_date").value = response[0].billing_date;
 					document.getElementById("confirm_delete_control_number").innerHTML = response[0].control_number;
-					//document.getElementById("confirm_delete_or_no").value = response[0].or_number;	
 					document.getElementById("confirm_delete_client_info").innerHTML = response[0].client_name;
 					document.getElementById("confirm_delete_description").textContent = response[0].receivable_description;
 					document.getElementById("confirm_delete_amount").innerHTML = response[0].receivable_amount;
@@ -888,9 +884,6 @@
 				  console.log(response);
 				  if(response) {
 					
-					//document.getElementById("update-receivables").value = ReceivableID;
-			
-
 					/*Open Receivable Print Page*/
 					let sales_order_idx 		= response[0].sales_order_idx;
 					var query_receivable = {
@@ -910,4 +903,3 @@
 			   });
 	  }	  
   </script>
-	

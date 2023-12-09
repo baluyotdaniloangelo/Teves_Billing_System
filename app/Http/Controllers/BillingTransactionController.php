@@ -37,7 +37,27 @@ class BillingTransactionController extends Controller
 		return view("pages.billing", compact('data','title','product_data','client_data','drivers_name','plate_no'));
 		
 	}   
-	
+	/*Load Site Interface*/
+	public function billing2(){
+		
+		$title = 'Billing Transaction';
+		$data = array();
+		if(Session::has('loginID')){
+			
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			
+			$product_data = ProductModel::all();
+			
+			$client_data = ClientModel::all();
+			
+			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
+			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
+		
+		}
+
+		return view("pages.billing_2", compact('data','title','product_data','client_data','drivers_name','plate_no'));
+		
+	}   	
 	/*Fetch Site List using Datatable*/
 	public function getBillingTransactionList(Request $request)
     {
@@ -80,6 +100,13 @@ class BillingTransactionController extends Controller
 							</div>';
 						}
 						else{
+						
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
 							
 							if($numberDays>=1){
 								$actionBtn = '

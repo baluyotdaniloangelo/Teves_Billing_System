@@ -107,7 +107,7 @@
 					  </div>
                     </div>
                     <div class="modal-body">
-						<div class="row">
+					<div class="row">
 					<div class="col-lg-4">
 					  
 					  <ol class="list-group list-group-numbered">
@@ -233,23 +233,7 @@
 							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>
 						</div>						
-						<!--
-						<div class="row mb-2">
-						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="or_number" id="or_number" value="">
-							<span class="valid-feedback" id="or_numberError"></span>
-						  </div>
-						</div>	
 						
-						<div class="row mb-2">
-						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="ar_reference" id="ar_reference" value="">
-							<span class="valid-feedback" id="ar_referenceError"></span>
-						  </div>
-						</div>						
-						-->
 						<div class="row mb-2">
 						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
@@ -265,19 +249,7 @@
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>
-						<!--
-						<div class="row mb-2">
-						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
-						  <div class="col-sm-9">
-							<select class="form-control form-select" aria-label="receivable_status" name="receivable_status" id="receivable_status">
-								<option selected="" disabled="" value="">Choose...</option>
-								<option value="Paid">Paid</option>
-								<option value="Pending">Pending</option>
-								<option value="Remaining Balance">Remaining Balance</option>
-							</select>
-						  </div>
-						</div>						
-						-->
+						
 						</div>
 						
 					</div>
@@ -387,7 +359,6 @@
 										<th style="text-align:center !important;">Reference No.</th>
 										<th style="text-align:center !important;">Amount</th>
 										<th style="text-align:center !important;">Action</th>
-										
 										</tr>
 									</thead>
 										
@@ -486,23 +457,7 @@
 							<span class="valid-feedback" id="receivable_billing_date_SO_Error"></span>
 						  </div>
 						</div>
-						<!--
-						<div class="row mb-2">
-						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_or_number_SO" id="receivable_or_number_SO" value="">
-							<span class="valid-feedback" id="receivable_or_number_SO_Error"></span>
-						  </div>
-						</div>						
 						
-						<div class="row mb-2">
-						  <label for="ar_reference_SO" class="col-sm-3 col-form-label">AR Reference: </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_ar_reference_SO" id="receivable_ar_reference_SO" value="">
-							<span class="valid-feedback" id="ar_reference_SO_Error"></span>
-						  </div>
-						</div>	
-						-->
 						<div class="row mb-2">
 						  <label for="receivable_payment_term_SO" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">

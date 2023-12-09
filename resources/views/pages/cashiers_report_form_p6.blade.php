@@ -1,9 +1,9 @@
 	<!--Part 6-->
-	<div class="row mb-2">
-		<div class="col-sm-3">
+	<div class="row mb-1">
+		<!--<div class="col-sm-3">
 				
-		</div>
-		<div class="col-sm-6">
+		</div>-->
+		<div class="col-sm-12">
 		<table class="table" width="100%">
                 <thead>
                   <tr>
@@ -42,9 +42,9 @@
                 </tbody>
               </table>
 		</div>
-		<div class="col-sm-3">
+		<!--<div class="col-sm-3">
 				
-		</div>
+		</div>-->
 
 		</div>
 		
