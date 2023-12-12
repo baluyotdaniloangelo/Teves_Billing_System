@@ -11,7 +11,7 @@ if($company_header=='Teves'){
 	<?php
 }
 ?>
-		
+		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		
 		<tr style="font-size:12px;">

@@ -10,7 +10,7 @@ if($company_header=='Teves'){
 	@include('layouts.soa_report_portrait_gt_pdf')
 	<?php
 }
-?>
+?>		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<?php
 				$_billing_date=date_create($receivable_data[0]['billing_date']);

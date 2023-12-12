@@ -80,7 +80,7 @@ if($company_header=='Teves'){
 				$total_liters += 0;
 			}
 			
-			$component_height = 200 / count($sales_order_component);
+			$component_height = 170 / count($sales_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
@@ -131,7 +131,7 @@ if($company_header=='Teves'){
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:50px !important;font-style: italic;">In Words</td>
+			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:40px !important;font-style: italic;">In Words</td>
 			<td colspan="8" style="border-top:1px solid gray; border-bottom:1px solid gray; text-align:center;">&nbsp;<?php echo strtoupper($amount_in_words); ?></td>
 		</tr>
 

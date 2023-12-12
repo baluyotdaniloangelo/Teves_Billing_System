@@ -18,7 +18,7 @@ if (Request::is('billing')){
 ?>
 <body class="">
 @include('layouts.footer')
-@include('layouts.billing_script')
+@include('layouts.billing_script_v2')
 <?php
 }else if (Request::is('product')){
 ?>

@@ -10,29 +10,26 @@ if($company_header=='Teves'){
 	@include('layouts.purchaseorder_report_portrait_gt_pdf')
 	<?php
 }
-?>		
+?>		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		
 		<tr>
-			<td colspan="2" align="left" width="20%" style="font-size:12px; font-weight:bold;">SUPPLIER'S NAME</td>
-			<td colspan="8" align="left" width="90%" style="font-size:12px; border-bottom:1px solid #000;" class="td_colon">{{ $purchase_order_data[0]['supplier_name'] }}</td>			
+			<td colspan="4" align="left" width='20%' style="font-size:12px; font-weight:bold;">SUPPLIER</td>
+			<td colspan="6" align="left" width='80%' style="font-size:12px; border-bottom:1px solid #000;" class="td_colon">{{ $purchase_order_data[0]['supplier_name'] }}</td>			
 		</tr>
 		
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" style="font-size:12px; font-weight:bold;">TIN No.</td>
-			<td colspan="8" align="left" style="font-size:12px; border-bottom:1px solid #000;" class="td_colon">{{ $purchase_order_data[0]['supplier_tin'] }}</td>			
+		<tr>
+			<td colspan="4" align="left" style="font-size:12px; font-weight:bold;">TIN No.</td>
+			<td colspan="6" align="left" style="font-size:12px; border-bottom:1px solid #000;" class="td_colon">{{ $purchase_order_data[0]['supplier_tin'] }}</td>			
 		</tr>
 		
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" style="font-size:12px; font-weight:bold;">ADDRESS</td>
-			<td colspan="8" align="left" style="font-size:12px; border-bottom:1px solid #000; " class="td_colon">{{ $purchase_order_data[0]['supplier_address'] }}</td>			
+		<tr>
+			<td colspan="4" align="left" style="font-size:12px; font-weight:bold;">ADDRESS</td>
+			<td colspan="6" align="left" style="font-size:12px; border-bottom:1px solid #000; " class="td_colon">{{ $purchase_order_data[0]['supplier_address'] }}</td>			
 		</tr>
-	
-		<tr style="font-size:12px;">
-			<td colspan="10" style="height:10px !important;">&nbsp;</td>
-		</tr>
+
 		</table>
-		
+		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="10" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILS</td>			

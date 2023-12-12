@@ -26,7 +26,7 @@
 			text-align:center;
 			color:black;
 			position:relative;
-			left:-30px;
+			left:-5px;
 		}
 </style>
 </head>
