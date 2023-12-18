@@ -39,7 +39,9 @@
 
 			
 		<tr>
-			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%"><img src="{{public_path('client_logo/logo.jpg')}}" style="width:112px;"></td>
+			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
+			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
+			</td>
 			<td colspan="6" width="30%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;">TEVES GASOLINE STATION</b></td>
 			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: skyblue; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title }}</b></td>
 		</tr>

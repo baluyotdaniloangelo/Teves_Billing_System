@@ -9,6 +9,7 @@ use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesPaymentModel;
 use App\Models\ClientModel;
 use App\Models\ProductModel;
+use App\Models\TevesBranchModel;
 use Session;
 use Validator;
 use DataTables;
@@ -24,10 +25,10 @@ class ReceivablesController extends Controller
 		if(Session::has('loginID')){
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-		
+			$teves_branch = TevesBranchModel::all();
 		}
 
-		return view("pages.receivables", compact('data','title'));
+		return view("pages.receivables", compact('data','title','teves_branch'));
 		
 	}   
 
@@ -43,13 +44,14 @@ class ReceivablesController extends Controller
 			$client_data = ClientModel::all();
 			
 			$product_data = ProductModel::all();
+			$teves_branch = TevesBranchModel::all();
 			
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
 		}
 
-		return view("pages.create_recievable", compact('data','title','client_data','drivers_name','plate_no','product_data'));
+		return view("pages.create_recievable", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
 		
 	}   
 

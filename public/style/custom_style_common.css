@@ -334,9 +334,10 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 .card-title{
 	font-family: "Nunito", sans-serif !important;
 }
+/*
 .card {
 	border-radius:0px !important;
-}
+}*/
 /*
 #main {
     margin-left: 1px !important;

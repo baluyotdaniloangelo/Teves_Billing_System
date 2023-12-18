@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
+use App\Http\Controllers\SOBillingTransactionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SupplierController;
@@ -37,7 +38,8 @@ Route::get('logout', [UserAuthController::class,'logout']);
 
 /*Load Billing Transaction*/
 Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
-Route::get('/billing2', [BillingTransactionController::class,'billing2'])->name('billing2')->middleware('isLoggedIn');
+
+
 Route::get('billing/list', [BillingTransactionController::class, 'getBillingTransactionList'])->name('getBillingTransactionList')->middleware('isLoggedIn');
 /*Create Bill*/
 Route::post('/create_bill_post', [BillingTransactionController::class,'create_bill_post'])->name('create_bill_post')->middleware('isLoggedIn');
@@ -47,6 +49,27 @@ Route::post('/update_bill_post', [BillingTransactionController::class,'update_bi
 Route::post('/bill_info', [BillingTransactionController::class, 'bill_info'])->name('bill_info')->middleware('isLoggedIn');
 /*Confirm Delete Bill*/
 Route::post('/delete_bill_confirmed', [BillingTransactionController::class, 'delete_bill_confirmed'])->name('delete_bill_confirmed')->middleware('isLoggedIn');
+
+/*FOR SO Billing*/
+Route::get('/create_so_billing', [SOBillingTransactionController::class,'create_so_billing'])->name('create_so_billing')->middleware('isLoggedIn');
+/*Create SO*/
+
+Route::get('/so', [SOBillingTransactionController::class,'so'])->name('so')->middleware('isLoggedIn');
+Route::get('so/list', [SOBillingTransactionController::class, 'getSOBillingTransactionList'])->name('getSOBillingTransactionList')->middleware('isLoggedIn');
+Route::post('/so_info', [SOBillingTransactionController::class, 'so_info'])->name('so_info')->middleware('isLoggedIn');
+Route::post('/delete_so_confirmed', [SOBillingTransactionController::class, 'delete_so_confirmed'])->name('delete_so_confirmed')->middleware('isLoggedIn');
+
+Route::post('/create_so_post', [SOBillingTransactionController::class,'create_so_post'])->name('CreateSOPost')->middleware('isLoggedIn');
+Route::get('/so_add_product/{id}', [SOBillingTransactionController::class, 'so_add_product'])->name('so_add_product')->middleware('isLoggedIn');
+Route::post('/update_so_post', [SOBillingTransactionController::class,'update_so_post'])->name('UpdateSOPost')->middleware('isLoggedIn');
+Route::post('/so_add_product_post', [SOBillingTransactionController::class,'so_add_product_post'])->name('SOAddProductPost')->middleware('isLoggedIn');
+Route::post('/get_so_product', [SOBillingTransactionController::class,'get_so_product'])->name('GetSoProduct')->middleware('isLoggedIn');
+Route::post('/so_update_product_post', [SOBillingTransactionController::class,'so_update_product_post'])->name('SOUpdateProductPost')->middleware('isLoggedIn');
+
+
+
+
+
 
 /*Dev Date Nov 30 2022*/
 /*Load Product List*/

@@ -221,23 +221,7 @@
 					<div class="col-lg-8">
 									
 					  <form class="g-2 needs-validation pt-4" id="ReceivableformNew">
-						<!--
-						<div class="row mb-2">
-						  <label for="or_number" class="col-sm-3 col-form-label">O.R No. : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="or_number" id="or_number" value="">
-							<span class="valid-feedback" id="or_numberError"></span>
-						  </div>
-						</div>	
-						
-						<div class="row mb-2">
-						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="ar_reference" id="ar_reference" value="">
-							<span class="valid-feedback" id="ar_referenceError"></span>
-						  </div>
-						</div>	
-						-->
+				
 						<div class="row mb-2">
 						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
@@ -253,19 +237,6 @@
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>		
-						<!--
-						<div class="row mb-2">
-						  <label for="receivable_status" class="col-sm-3 col-form-label">Status : </label>
-						  <div class="col-sm-9">
-							<select class="form-control form-select" aria-label="receivable_status" name="receivable_status" id="receivable_status" required>
-								<option selected="" disabled="" value="">Choose...</option>
-								<option value="Paid">Paid</option>
-								<option value="Pending">Pending</option>
-								<option value="Remaining Balance">Remaining Balance</option>
-							</select>
-						  </div>
-						</div>
-						-->
 						
 						</div>
 						
@@ -288,7 +259,7 @@
 
 	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateReportModal" tabindex="-1">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Report</h5>
@@ -302,11 +273,12 @@
 
 					  
 						<div class="row mb-2">
-						  <label for="company_header" class="col-sm-4 col-form-label">Header/Company</label>
+						  <label for="company_header" class="col-sm-4 col-form-label">Branch</label>
 						  <div class="col-sm-8">
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
-								<option value="GT">GT</option>
-								<option value="Teves">Teves</option>
+							@foreach ($teves_branch as $teves_branch_cols)
+								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}</option>
+							@endforeach
 							</select>
 						  </div>
 						</div>
@@ -419,9 +391,9 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_order_po_number" class="col-sm-3 col-form-label">PO Number</label>
+						  <label for="update_order_po_number" class="col-sm-3 col-form-label">SO Number</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_order_po_number" id="update_order_po_number" value="" required>
+							<input type="text" class="form-control " name="update_order_po_number" id="update_order_po_number" value="" required disabled>
 							<span class="valid-feedback" id="update_order_po_numberError"></span>
 						  </div>
 						</div>

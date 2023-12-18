@@ -1,5 +1,23 @@
+@extends('layouts.layout')  
+@section('content')  
+
+<main id="main" class="main">	
+    <section class="section">	  
+          <div class="card">
+		  
+			  <div class="card">
+			  
+				<div class="card-header ">
+				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
+					<div class="d-flex justify-content-end" id="billing_option"></div>				  
+				  </div>
+				</div>			  
+		 
+            <div class="card-body">			
+				<div class="p-3">
+								
 	<!--Part 1-->
-	<div class="row">
+	<div class="row mb-2">
 		<div class="col-lg-4">
 						<form class="g-3 needs-validation" id="SOBillingformUpdate">
 							  
@@ -82,29 +100,14 @@
 							
 			</form>
 	</div>
-	
-	<div class="col-lg-8">		
-		<div align="right">
-			<button type="button" class="btn btn-success new_item bi bi-cart-plus-fill" onclick="AddProductRow();" title="Add a Product(1-5 items)"></button>
-		</div>
-		<br>
-		<table class="table" id="table_product_data">
-		
-			<thead>
-				<tr class="report">
-					<th style="text-align:center !important;" width="40%">Product</th>
-					<th style="text-align:center !important;">Quantity</th>
-					<th style="text-align:center !important;">Price</th>
-					<th style="text-align:center !important;">Action</th>
-				</tr>
-			</thead>
-										
-			<tbody id="table_product_body_data">
-					<tr style="display: none;"><td>HIDDEN</td></tr>
-			</tbody>
-									
-		</table>
-	
-	</div>
-	
-	</div>
+								
+				</div>									         
+            </div>
+          </div>
+
+    </section>
+</main>
+
+
+@endsection
+

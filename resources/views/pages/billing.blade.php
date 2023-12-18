@@ -305,7 +305,7 @@
 						<div class="row mb-2">
 						  <label for="update_order_po_number" class="col-sm-3 col-form-label">SO Number</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_order_po_number" id="update_order_po_number" value="" required>
+							<input type="text" class="form-control " name="update_order_po_number" id="update_order_po_number" value="" required disabled>
 							<span class="valid-feedback" id="update_order_po_numberError"></span>
 						  </div>
 						</div>

@@ -33,6 +33,7 @@
   
   <link href="{{asset('style/custom_style_common.css')}}" rel="stylesheet">
   <link href="{{asset('style/custom_style_teves.css')}}" rel="stylesheet">
+ 
   <!-- =======================================================
   * Template Name: NiceAdmin-pro - v2.3.1
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/

@@ -7,7 +7,7 @@ use App\Models\BillingTransactionModel;
 use App\Models\ReceivablesModel;
 use App\Models\ReceivablesPaymentModel;
 use App\Models\ProductModel;
-
+use App\Models\TevesBranchModel;
 use App\Models\SalesOrderModel;
 use App\Models\SalesOrderComponentModel;
 use App\Models\SalesOrderPaymentModel;
@@ -20,7 +20,7 @@ use App\Models\ClientModel;
 use Session;
 use Validator;
 //use DataTables;
-
+use Illuminate\Support\Facades\DB;
 /*Excel*/
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -44,13 +44,14 @@ class ReportController extends Controller
 			$client_data = ClientModel::all();
 			
 			$product_data = ProductModel::all();
+			$teves_branch = TevesBranchModel::all();
 			
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
 		}
 
-		return view("pages.billing_history", compact('data','title','client_data','drivers_name','plate_no','product_data'));
+		return view("pages.billing_history", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
 		
 	}  	
 	
@@ -640,14 +641,16 @@ class ReportController extends Controller
 		
 		/*Recievable Data*/
 				
-		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number']);
+		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number','company_header']);
 		
+		$receivable_header = TevesBranchModel::find($receivable_data['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
 		$title = 'BILLING STATEMENT';
 		  
-        $pdf = PDF::loadView('pages.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
+        $pdf = PDF::loadView('pages.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
@@ -659,7 +662,12 @@ class ReportController extends Controller
 	
 	public function generate_report_pdf(Request $request){
 		
-		/**/
+		/*Set Memory Limit to Infinite*/
+		ini_set("memory_limit",-1);
+		/*Set Maximum Execution Time*/
+		ini_set('max_execution_time', 300); //5 minutes
+		
+		/*Form Validation*/
 		$request->validate([
           'client_idx'      		=> 'required',
 		  'start_date'      		=> 'required',
@@ -682,24 +690,10 @@ class ReportController extends Controller
 		$net_value_percentage = $request->net_value_percentage;
 		$vat_value_percentage = $request->vat_value_percentage;
 		
-		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('teves_billing_table.order_date', '>=', $start_date)
-                    ->where('teves_billing_table.order_date', '<=', $end_date)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-					->orderBy('teves_billing_table.order_date', 'asc')
-              		->get([
-					'teves_billing_table.billing_id',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_product_table.product_unit_measurement',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);	
+		/*Using Raw Query*/
+		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? order by `teves_billing_table`.`order_date` asc";			
+		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date]);
+			
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
@@ -707,12 +701,14 @@ class ReportController extends Controller
 		$receivable_id = $request->receivable_id;		
 		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term']);
 		
+		$receivable_header = TevesBranchModel::find($request->company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
 		$title = 'Billing History';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
+        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
@@ -720,7 +716,7 @@ class ReportController extends Controller
 		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		$pdf->render();
 		return $pdf->stream($client_data['client_name'].".pdf");
-		//return view('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage'));
+		//return view('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
 	}
 	
 	public function generate_receivable_pdf(Request $request){
@@ -768,13 +764,14 @@ class ReportController extends Controller
 		
 		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;		
 	
-		
+		$receivable_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'RECEIVABLE';
 		  
-        $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+        $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_header'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -782,7 +779,7 @@ class ReportController extends Controller
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
 		
-		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words'));
+		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words','receivable_header'));
 		
 	}
 	
@@ -828,6 +825,7 @@ class ReportController extends Controller
 					'teves_receivable_payment.receivable_payment_amount',
 					]);
 		
+		$receivable_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
 		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
 		
@@ -849,7 +847,7 @@ class ReportController extends Controller
 		
 		$title = 'STATEMENT OF ACCOUNT';
 		  
-        $pdf = PDF::loadView('pages.report_receivables_soa_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data'));
+        $pdf = PDF::loadView('pages.report_receivables_soa_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','receivable_header'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

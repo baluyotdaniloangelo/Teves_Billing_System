@@ -174,8 +174,9 @@
 						  <label for="billing_date" class="col-sm-3 col-form-label">Header/Company : </label>
 						  <div class="col-sm-9">
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
-								<option value="GT">GT</option>
-								<option value="Teves">Teves</option>
+							@foreach ($teves_branch as $teves_branch_cols)
+								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}</option>
+							@endforeach		
 							</select>
 						  </div>
 						</div>

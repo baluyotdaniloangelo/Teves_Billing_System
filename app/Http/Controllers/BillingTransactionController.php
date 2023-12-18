@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
+use App\Models\SOBillingTransactionModel;
 use App\Models\ProductModel;
 use App\Models\ClientModel;
 use Session;
@@ -37,27 +39,7 @@ class BillingTransactionController extends Controller
 		return view("pages.billing", compact('data','title','product_data','client_data','drivers_name','plate_no'));
 		
 	}   
-	/*Load Site Interface*/
-	public function billing2(){
-		
-		$title = 'Billing Transaction';
-		$data = array();
-		if(Session::has('loginID')){
-			
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
-			$product_data = ProductModel::all();
-			
-			$client_data = ClientModel::all();
-			
-			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
-			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
-		
-		}
-
-		return view("pages.billing_2", compact('data','title','product_data','client_data','drivers_name','plate_no'));
-		
-	}   	
+ 	
 	/*Fetch Site List using Datatable*/
 	public function getBillingTransactionList(Request $request)
     {
@@ -98,6 +80,10 @@ class BillingTransactionController extends Controller
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 							</div>';
+							/*$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';*/
 						}
 						else{
 						
@@ -119,6 +105,10 @@ class BillingTransactionController extends Controller
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 								</div>';
+								/*$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';*/
 							}
 
 						}
@@ -338,15 +328,5 @@ class BillingTransactionController extends Controller
 			}
 	}
 
-	public function count_so_number(Request $request){		
-			
-		/*If Reached to 6 Item Block and Clear Form input for SO*/	
-			
-		//$paymentitemID = $request->paymentitemID;
-		//PurchaseOrderPaymentModel::find($paymentitemID)->delete();
-		//return 'Deleted';
-		
-		
-	}
-	
+
 }

@@ -61,6 +61,8 @@
         </div>
     </div>
 
+
+
 	<!--Notice-->
 	<div id="switch_notice_off" style="display: none;">
 		<div class="switch_notice_background" align="center">
@@ -95,4 +97,4 @@
   <script src="{{asset('datatables/dataTables.bootstrap4.js')}}"></script>
   
   <!--Responsive Datatable Plugin-->
-   <script src="{{asset('datatables/dataTables.responsive.min.js')}}"></script>
+  <script src="{{asset('datatables/dataTables.responsive.min.js')}}"></script>

@@ -5,7 +5,8 @@ Use to automatically hide the Side Nav Bar
 <body class="toggle-sidebar">-->
 
 @yield('content')
- 
+
+
 <?php
 
 if (Request::is('billing')){
@@ -14,13 +15,28 @@ if (Request::is('billing')){
 @include('layouts.footer')
 @include('layouts.billing_script')
 <?php
-}else if (Request::is('billing2')){
+}else if (Request::is('so')){
 ?>
 <body class="">
 @include('layouts.footer')
-@include('layouts.billing_script_v2')
+@include('layouts.so_billing_script')
 <?php
-}else if (Request::is('product')){
+}
+else if (Request::is('create_so_billing')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.so_billing_script')
+<?php
+}
+else if (Request::is('so_add_product/*')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.update_so_billing_script')
+<?php
+}
+else if (Request::is('product')){
 ?>
 <body class="">
 @include('layouts.footer')
@@ -261,7 +277,9 @@ else if (Request::is('monthly_sales')){
 			   });
 	  });
 
+		
 </script>
+
 </body>
 
 </html>
