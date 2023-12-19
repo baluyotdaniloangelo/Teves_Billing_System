@@ -13,7 +13,7 @@ class SalesSummaryChart extends Authenticatable
     //use HasApiTokens, Notifiable;
 	#use HasApiTokens, HasFactory, Notifiable;
 	
-	protected $table = 'teves_sales_summary';
+	protected $table = 'teves_sales_monthly_summary';
 	
     /**
      * The attributes that are mass assignable.

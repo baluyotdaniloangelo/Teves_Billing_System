@@ -32,9 +32,19 @@
 								  <label for="teves_branch" class="col-sm-4 col-form-label">Branch</label>
 								  <div class="col-sm-8">
 									<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
-										<?php $teves_branch = $CashiersReportData[0]['teves_branch']; ?>
-										<option value="GT" <?php if($teves_branch=='GT'){ echo "selected";} else{} ?>>GT</option>
-										<option value="Teves" <?php if($teves_branch=='Teves'){ echo "selected";} else{} ?>>Teves</option>
+										<?php $branch_idx = $CashiersReportData[0]['teves_branch']; ?>
+										
+										@foreach ($teves_branch as $teves_branch_cols)
+										<?php 
+										$branch_id = $teves_branch_cols->branch_id;
+										
+										?>
+										<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
+											{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}
+										</option>
+										
+										@endforeach
+										
 									</select>
 									<span class="valid-feedback" id="teves_branchError"></span>
 								  </div>

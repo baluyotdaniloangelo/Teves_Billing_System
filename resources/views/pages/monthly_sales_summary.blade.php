@@ -40,9 +40,7 @@
 				 <div  style="max-height: 300px;">
 					{!! $MonthlyChart->container() !!}
 				</div>
-
-				{!! $MonthlyChart->script() !!}
-				
+					{!! $MonthlyChart->script() !!}
             </div>
           </div>
         </div>

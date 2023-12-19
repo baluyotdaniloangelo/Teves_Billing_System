@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\SalesOrderModel;
 use App\Models\ProductModel;
 use App\Models\ClientModel;
+use App\Models\TevesBranchModel;
 use App\Models\SalesOrderComponentModel;
 use Session;
 use Validator;
@@ -24,13 +25,13 @@ class SalesOrderController extends Controller
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
+			$teves_branch = TevesBranchModel::all();
 			$sales_order_delivered_to = SalesOrderModel::select('sales_order_delivered_to')->distinct()->get();
 			$sales_order_delivered_to_address = SalesOrderModel::select('sales_order_delivered_to_address')->distinct()->get();
 		
 		}
 
-		return view("pages.salesorder", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address'));
+		return view("pages.salesorder", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch'));
 		
 	}   
 	

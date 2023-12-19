@@ -10,6 +10,8 @@ use App\Charts\SalesLineChart;
 use App\Models\BillingTransactionModel;
 use App\Models\SalesOrderComponentModel;
 
+use App\Models\ReceivablesPaymentModel;
+
 use Session;
 use Validator;
 use DataTables;
@@ -93,11 +95,21 @@ class SalesSummaryController extends Controller
 							//->groupBy(\DB::raw("Month(sales_order_date)"))
 							->pluck('total');
 							
+							
+							/*Query on Receivables Payment (teves_receivable_payment)*/	
+							$data_receivables_payment = ReceivablesPaymentModel::select(\DB::raw("COALESCE(sum(receivable_payment_amount),0) as total"))
+							->whereYear('receivable_date_of_payment', $year_r)
+							->whereMonth('receivable_date_of_payment',$month_r)
+							//->groupBy(\DB::raw("Month(sales_order_date)"))
+							->pluck('total');
+							
+							
 							/*Update teves_sales_summary*/
 							$update_monthy_sales = new SalesSummaryChart();
 							$update_monthy_sales = SalesSummaryChart::where('sales_month_year','=', $year_month_day)
 							->update(array('billing_total_sales' => $data_billing[0],
 							'sales_order_total_sales' => $data_sales_order[0],
+							'receivable_payment_total' => $data_receivables_payment[0],
 							'monthly_sales_total' => $data_billing[0] + $data_sales_order[0]));
 							
 						}else{
@@ -121,11 +133,20 @@ class SalesSummaryController extends Controller
 							//->groupBy(\DB::raw("Month(sales_order_date)"))
 							->pluck('total');
 							
+							/*Query on Receivables Payment (teves_receivable_payment)*/	
+							$data_receivables_payment = ReceivablesPaymentModel::select(\DB::raw("COALESCE(sum(receivable_payment_amount),0) as total"))
+							->whereYear('receivable_date_of_payment', $year_r)
+							->whereMonth('receivable_date_of_payment',$month_r)
+							//->groupBy(\DB::raw("Month(sales_order_date)"))
+							->pluck('total');
+							
+							
 							/*Update teves_sales_summary*/
 							$update_monthy_sales = new SalesSummaryChart();
 							$update_monthy_sales = SalesSummaryChart::where('sales_month_year','=', $year_month_day)
 							->update(array('billing_total_sales' => $data_billing[0],
 							'sales_order_total_sales' => $data_sales_order[0],
+							'receivable_payment_total' => $data_receivables_payment[0],
 							'monthly_sales_total' => $data_billing[0] + $data_sales_order[0]));
 						
 						}

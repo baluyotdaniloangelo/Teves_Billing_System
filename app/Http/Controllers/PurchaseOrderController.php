@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\PurchaseOrderModel;
 use App\Models\ProductModel;
+use App\Models\TevesBranchModel;
 use App\Models\SupplierModel;
 use App\Models\PurchaseOrderComponentModel;
 use App\Models\PurchaseOrderPaymentModel;
@@ -25,13 +26,13 @@ class PurchaseOrderController extends Controller
 			$product_data = ProductModel::all();
 			$supplier_data = SupplierModel::all();	
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
+			$teves_branch = TevesBranchModel::all();
 			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 		
 		}
 
-		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion','supplier_data'));
+		return view("pages.purchaseorder", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion','supplier_data','teves_branch'));
 		
 	}   
 	

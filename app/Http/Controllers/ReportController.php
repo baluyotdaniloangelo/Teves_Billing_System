@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BillingTransactionModel;
+use App\Models\SOBillingTransactionModel;
 use App\Models\ReceivablesModel;
 use App\Models\ReceivablesPaymentModel;
 use App\Models\ProductModel;
@@ -15,6 +16,7 @@ use App\Models\SalesOrderPaymentModel;
 use App\Models\PurchaseOrderModel;
 use App\Models\PurchaseOrderComponentModel;
 use App\Models\PurchaseOrderPaymentModel;
+
 
 use App\Models\ClientModel;
 use Session;
@@ -92,8 +94,12 @@ class ReportController extends Controller
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time']);
-		
-		return response()->json($data);
+					
+		/*Using Raw Query*/
+		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? order by `teves_billing_table`.`order_date` asc";			
+		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date]);
+
+		return response()->json($billing_data);
 		
 	}	
 	
@@ -161,7 +167,7 @@ class ReportController extends Controller
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
 		
-		$data = BillingTransactionModel::where('client_idx', $client_idx)
+		/*$data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
                     ->where('teves_billing_table.order_date', '<=', $end_date)
 					->where('teves_billing_table.receivable_idx', '=', $receivable_id)
@@ -180,9 +186,13 @@ class ReportController extends Controller
 					'teves_billing_table.order_po_number',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);
+					'teves_billing_table.order_time']);*/
+					
+		/*Using Raw Query*/
+		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
 		
-		return response()->json($data);
+		return response()->json($billing_data);
 		
 	}	
 
@@ -617,6 +627,7 @@ class ReportController extends Controller
 		$net_value_percentage = $request->net_value_percentage;
 		$vat_value_percentage = $request->vat_value_percentage;
 		
+		/*
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.order_date', '>=', $start_date)
                     ->where('teves_billing_table.order_date', '<=', $end_date)
@@ -635,7 +646,12 @@ class ReportController extends Controller
 					'teves_billing_table.order_po_number',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time']);	
-					
+		*/
+		
+		/*Using Raw Query*/
+		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
+		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
@@ -665,8 +681,9 @@ class ReportController extends Controller
 		/*Set Memory Limit to Infinite*/
 		ini_set("memory_limit",-1);
 		/*Set Maximum Execution Time*/
-		ini_set('max_execution_time', 300); //5 minutes
-		
+		ini_set('max_execution_time', 0); //5 minutes
+		//ini_set('max_execution_time', 0);
+		//ini_set('memory_limit', '4000M');
 		/*Form Validation*/
 		$request->validate([
           'client_idx'      		=> 'required',
@@ -895,7 +912,9 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_less_percentage',
 					'teves_sales_order_table.company_header'
 				]);
-				
+			
+		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		
 		$sales_order_amt =  number_format($sales_order_data[0]['sales_order_total_due'],2,".","");
 		
 		@$amount_split_whole_to_decimal = explode('.',$sales_order_amt);
@@ -928,7 +947,7 @@ class ReportController extends Controller
 		
 		$title = 'SALES ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
+        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
 		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		
 		/*Download Directly*/
@@ -1016,13 +1035,15 @@ class ReportController extends Controller
 					'teves_purchase_order_payment_details.purchase_order_reference_no',
 					'teves_purchase_order_payment_details.purchase_order_payment_amount',
 					]);
-					
+
+		$branch_header = TevesBranchModel::find($purchase_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'PURCHASE ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component'));
+        $pdf = PDF::loadView('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -1031,7 +1052,47 @@ class ReportController extends Controller
 		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER.pdf");
 		//return view('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component'));
 	}
+	
+	public function generate_test_pdf(Request $request){
+	/*Manually set paper*/
+		//$so_id = $request->receivable_id;
+		$SOId = 1;
+					
 		
+		
+		$so_data = SOBillingTransactionModel::where('so_id', $SOId)
+			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+            ->get([				
+			'teves_client_table.client_name',
+			'teves_client_table.client_id',
+			'teves_billing_so_table.so_number',
+			'teves_billing_so_table.order_date',
+			'teves_billing_so_table.order_time',
+			'teves_billing_so_table.drivers_name',
+			'teves_billing_so_table.plate_no']);
+			
+			$so_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+		
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'SALES ORDER';
+		  
+        $pdf = PDF::loadView('pages.print_so_pdf', compact('title', 'so_header','so_data'));
+		
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		$pdf->set_paper(array(0, 0, 288, 432), 'portrait');
+		//$customPaper = array(0,0,288,432);
+		//$pdf->setPaper($customPaper);
+		return $pdf->stream($so_data[0]['client_name']."_SO.pdf");
+	}
+
+	
 	public function numberToWord($num = '')
     {
         $num    = ( string ) ( ( int ) $num );

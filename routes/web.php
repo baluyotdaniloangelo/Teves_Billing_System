@@ -218,6 +218,7 @@ Route::get('/generate_purchase_order_pdf', [ReportController::class,'generate_pu
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
 Route::get('/generate_receivable_soa_pdf', [ReportController::class,'generate_receivable_soa_pdf'])->name('generate_receivable_soa_pdf')->middleware('isLoggedIn');
+Route::get('/generate_test_pdf', [ReportController::class,'generate_test_pdf'])->name('generate_test_pdf')->middleware('isLoggedIn');
 
 /*Dev Date Mar 27 2023*/
 /*Load Supplier List*/

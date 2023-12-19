@@ -10,6 +10,7 @@ use App\Models\CashiersReportModel_P3;
 use App\Models\CashiersReportModel_P4;
 use App\Models\CashiersReportModel_P5;
 use App\Models\ProductModel;
+use App\Models\TevesBranchModel;
 use Session;
 use Validator;
 use DataTables;
@@ -27,9 +28,10 @@ class CashiersReportController extends Controller
 		$data = array();
 		if(Session::has('loginID')){
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			$teves_branch = TevesBranchModel::all();
 			
 		}
-		return view("pages.cashiers_report", compact('data','title'));
+		return view("pages.cashiers_report", compact('data','title','teves_branch'));
 		
 	}   
 	
@@ -242,6 +244,7 @@ class CashiersReportController extends Controller
 		$data = array();
 		if(Session::has('loginID')){
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			$teves_branch = TevesBranchModel::all();
 			
 		}
 		
@@ -260,7 +263,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
-		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId'));	
+		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch'));	
 		
 	}
 
@@ -1231,8 +1234,9 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report_p5.cash_drop'
 			]);
 		
+		$branch_header = TevesBranchModel::find($CashiersReportData[0]['teves_branch'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
-        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand'));
+        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header'));
 		//var_dump($CashiersReportData);
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
