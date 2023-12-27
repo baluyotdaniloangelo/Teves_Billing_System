@@ -40,7 +40,7 @@
 										
 										?>
 										<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
-											{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}
+											{{$teves_branch_cols->branch_code}}
 										</option>
 										
 										@endforeach

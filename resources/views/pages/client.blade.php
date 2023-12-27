@@ -23,6 +23,11 @@
 													<th>Client Name</th>
 													<th>Address</th>
 													<th>TIN</th>
+													<th title='Default Value' class="none">Discount(Less)</th>
+													<th class="none">Net</th>
+													<th class="none">Vat</th>
+													<th class="none">Withhoding Tax</th>
+													<th class="none">Payment Terms</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -37,6 +42,11 @@
 													<th>Client Name</th>
 													<th>Address</th>
 													<th>TIN</th>
+													<th title='Default Value' class="none">Discount(Less)</th>
+													<th class="none">Net</th>
+													<th class="none">Vat</th>
+													<th class="none">Withhoding Tax</th>
+													<th class="none">Payment Terms</th>
 													<th>Action</th>
 												</tr>
 											</tfoot>
@@ -111,15 +121,53 @@
 							<input type="text" class="form-control " name="client_tin" id="client_tin" value="" required>
 							<span class="valid-feedback" id="client_tinError"></span>
 						  </div>
-						</div>						
-									
+						</div>
+
+						<div class="row mb-2">
+						  <label for="default_less_percentage" class="col-sm-3 col-form-label">Less/Discount</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="default_less_percentage" id="default_less_percentage" value="">
+							<span class="valid-feedback" id="default_less_percentageError"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="default_net_percentage" class="col-sm-3 col-form-label">Net Value</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="default_net_percentage" id="default_net_percentage" value="">
+							<span class="valid-feedback" id="default_net_percentageError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="default_vat_percentage" class="col-sm-3 col-form-label">VAT Value</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="default_vat_percentage" id="default_vat_percentage" value="">
+							<span class="valid-feedback" id="default_vat_percentageError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="default_withholding_tax_percentage" class="col-sm-3 col-form-label">Withhoding Tax</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="default_withholding_tax_percentage" id="default_withholding_tax_percentage" value="">
+							<span class="valid-feedback" id="default_withholding_tax_percentageError"></span>
+						  </div>
+						</div>
+								
+						<div class="row mb-2">
+						  <label for="default_payment_terms" class="col-sm-3 col-form-label">Payment Terms</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="default_payment_terms" id="default_payment_terms" value="">
+							<span class="valid-feedback" id="default_payment_termsError"></span>
+						  </div>
+						</div>
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
-						
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-client"> Submit</button>
 						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-client"> Reset</button>
-						  
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
@@ -164,7 +212,47 @@
 							<span class="valid-feedback" id="update_client_tinError"></span>
 						  </div>
 						</div>						
-									
+								
+						<div class="row mb-2">
+						  <label for="update_default_less_percentage" class="col-sm-3 col-form-label">Less/Discount</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_default_less_percentage" id="update_default_less_percentage" value="">
+							<span class="valid-feedback" id="update_default_less_percentageError"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="update_default_net_percentage" class="col-sm-3 col-form-label">Net Value</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_default_net_percentage" id="update_default_net_percentage" value="">
+							<span class="valid-feedback" id="update_default_net_percentageError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="update_default_vat_percentage" class="col-sm-3 col-form-label">VAT Value</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_default_vat_percentage" id="update_default_vat_percentage" value="">
+							<span class="valid-feedback" id="update_default_vat_percentageError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="update_default_withholding_tax_percentage" class="col-sm-3 col-form-label">Withhoding Tax</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_default_withholding_tax_percentage" id="update_default_withholding_tax_percentage" value="">
+							<span class="valid-feedback" id="update_default_withholding_tax_percentageError"></span>
+						  </div>
+						</div>
+								
+						<div class="row mb-2">
+						  <label for="update_default_payment_terms" class="col-sm-3 col-form-label">Payment Terms</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_default_payment_terms" id="update_default_payment_terms" value="">
+							<span class="valid-feedback" id="update_default_payment_termsError"></span>
+						  </div>
+						</div>
+								
 						</div>
 						
                     <div class="modal-footer modal-footer_form">

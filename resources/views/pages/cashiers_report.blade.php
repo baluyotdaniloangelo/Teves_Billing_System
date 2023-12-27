@@ -97,7 +97,7 @@
 						  <div class="col-sm-9">
 							<select class="form-select form-control" required name="teves_branch" id="teves_branch">
 								@foreach ($teves_branch as $teves_branch_cols)
-										<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}</option>
+										<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 								@endforeach
 							</select>
 							<span class="valid-feedback" id="teves_branchError" title="Required"></span>

@@ -171,11 +171,11 @@
 					  <form class="g-2 needs-validation pt-4" id="ReceivableformEdit">
 						
 						<div class="row mb-2">
-						  <label for="billing_date" class="col-sm-3 col-form-label">Header/Company : </label>
+						  <label for="billing_date" class="col-sm-3 col-form-label">Branch : </label>
 						  <div class="col-sm-9">
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
 							@foreach ($teves_branch as $teves_branch_cols)
-								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}</option>
+								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 							@endforeach		
 							</select>
 						  </div>

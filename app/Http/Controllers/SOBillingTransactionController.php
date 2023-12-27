@@ -386,7 +386,7 @@ class SOBillingTransactionController extends Controller
 					$result = $Billing->save();
 			
 					if($result){
-						return response()->json(array('success' => "Bill Information Successfully Created!"), 200);
+						return response()->json(array('success' => "Bill Information Successfully Updated!"), 200);
 					}
 					else{
 						return response()->json(['success'=>'Error on Insert Bill Information']);

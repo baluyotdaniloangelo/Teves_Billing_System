@@ -1,6 +1,5 @@
-   <script type="text/javascript">
-
-	<!--Load Table-->
+<script type="text/javascript">
+<!--Load Table-->
 	$(function () {
 
 		var ClientListTable = $('#getclientList').DataTable({
@@ -18,11 +17,17 @@
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getClientList') }}",
+			responsive: true,
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'client_name'},   
 					{data: 'client_address'},
 					{data: 'client_tin'},
+					{data: 'default_less_percentage'},
+					{data: 'default_net_percentage'},
+					{data: 'default_vat_percentage'},
+					{data: 'default_withholding_tax_percentage'},
+					{data: 'default_payment_terms'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
@@ -32,6 +37,18 @@
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateClientModal"></button>'+
 				'</div>').appendTo('#client_option');
+				
+					
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});					
 	});
 	
 	<!--Save New Client->
@@ -50,6 +67,12 @@
 			let client_address 		= $("input[name=client_address]").val();
 			let client_tin 			= $("input[name=client_tin]").val();
 			
+			let default_less_percentage 			= $("input[name=default_less_percentage]").val();
+			let default_net_percentage 				= $("input[name=default_net_percentage]").val();
+			let default_vat_percentage 				= $("input[name=default_vat_percentage]").val();
+			let default_withholding_tax_percentage 	= $("input[name=default_withholding_tax_percentage]").val();
+			let default_payment_terms 				= $("input[name=default_payment_terms]").val();
+			
 			  $.ajax({
 				url: "/create_client_post",
 				type:"POST",
@@ -57,6 +80,11 @@
 				  client_name:client_name,
 				  client_address:client_address,
 				  client_tin:client_tin,
+				  default_less_percentage:default_less_percentage,
+				  default_net_percentage:default_net_percentage,
+				  default_vat_percentage:default_vat_percentage,
+				  default_withholding_tax_percentage:default_withholding_tax_percentage,
+				  default_payment_terms:default_payment_terms,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -133,6 +161,12 @@
 					document.getElementById("update_client_name").value = response.client_name;
 					document.getElementById("update_client_address").value = response.client_address;
 					document.getElementById("update_client_tin").value = response.client_tin;
+					
+					document.getElementById("update_default_less_percentage").value = response.default_less_percentage;
+					document.getElementById("update_default_net_percentage").value = response.default_net_percentage;
+					document.getElementById("update_default_vat_percentage").value = response.default_vat_percentage;
+					document.getElementById("update_default_withholding_tax_percentage").value = response.default_withholding_tax_percentage;
+					document.getElementById("update_default_payment_terms").value = response.default_payment_terms;
 										
 					$('#UpdateClientModal').modal('toggle');					
 				  
@@ -144,7 +178,6 @@
 				}
 			   });	
 	  });
-
 
 	$("#update-client").click(function(event){			
 			event.preventDefault();
@@ -161,6 +194,12 @@
 			let client_address 		= $("input[name=update_client_address]").val();
 			let client_tin 			= $("input[name=update_client_tin]").val();
 			
+			let default_less_percentage 			= $("input[name=update_default_less_percentage]").val();
+			let default_net_percentage 				= $("input[name=update_default_net_percentage]").val();
+			let default_vat_percentage 				= $("input[name=update_default_vat_percentage]").val();
+			let default_withholding_tax_percentage 	= $("input[name=update_default_withholding_tax_percentage]").val();
+			let default_payment_terms 				= $("input[name=update_default_payment_terms]").val();
+			
 			  $.ajax({
 				url: "/update_client_post",
 				type:"POST",
@@ -169,6 +208,11 @@
 				  client_name:client_name,
 				  client_address:client_address,
 				  client_tin:client_tin,
+				  default_less_percentage:default_less_percentage,
+				  default_net_percentage:default_net_percentage,
+				  default_vat_percentage:default_vat_percentage,
+				  default_withholding_tax_percentage:default_withholding_tax_percentage,
+				  default_payment_terms:default_payment_terms,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -295,4 +339,4 @@
 				}
 			   });		
 	  });
-  </script>
+</script>

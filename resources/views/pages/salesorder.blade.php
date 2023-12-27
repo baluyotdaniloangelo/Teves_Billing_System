@@ -82,7 +82,7 @@
 											
 											<select class="form-select form-control" required="" name="company_header" id="company_header">
 											@foreach ($teves_branch as $teves_branch_cols)
-												<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}</option>
+												<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 											@endforeach
 											</select>
 											
@@ -261,7 +261,7 @@
 											
 											<select class="form-select form-control" required="" name="update_company_header" id="update_company_header">
 											@foreach ($teves_branch as $teves_branch_cols)
-												<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_name}} | {{$teves_branch_cols->branch_tin}}</option>
+												<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 											@endforeach
 											</select>
 											

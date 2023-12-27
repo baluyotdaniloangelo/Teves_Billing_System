@@ -41,9 +41,6 @@
 					{ type: 'numeric-comma', targets: [8,9] }
 			]
 		});
-				/*$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
-				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBillingModal"></button>'+
-				'</div>').appendTo('#billing_option');*/
 				
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();
@@ -601,7 +598,4 @@
 				}
 			   });	
 	  });
-
-  
-  
-  </script>
+	</script>
