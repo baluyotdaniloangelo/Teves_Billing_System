@@ -103,11 +103,14 @@ class SalesOrderController extends Controller
                 ->addColumn('action', function($row){
 					
 					if($row->sales_order_status=='Pending'){
+						/*
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						
+						*/
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="sales_order_form/'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
@@ -220,11 +223,9 @@ class SalesOrderController extends Controller
 
 		$request->validate([
 			'client_idx'  	=> 'required',
-			'product_idx'  	=> 'required'
         ], 
         [
 			'client_idx.required' 	=> 'Client is Required',
-			'product_idx.required' 	=> 'Product is Required'
         ]
 		);
 			
@@ -243,10 +244,6 @@ class SalesOrderController extends Controller
 			$Salesorder->sales_order_required_date 				= $request->required_date;
 			$Salesorder->sales_order_instructions 				= $request->instructions;
 			$Salesorder->sales_order_note 						= $request->note;
-			$Salesorder->sales_order_mode_of_payment 			= $request->mode_of_payment;
-			$Salesorder->sales_order_date_of_payment 			= $request->date_of_payment;
-			$Salesorder->sales_order_reference_no 				= $request->reference_no;
-			$Salesorder->sales_order_payment_amount 			= $request->payment_amount;
 			
 			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
 			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
@@ -256,68 +253,10 @@ class SalesOrderController extends Controller
 			/*Get Last ID*/
 			$last_transaction_id = $request->sales_order_id;
 			
-			$product_idx 					= $request->product_idx;
-			$order_quantity 				= $request->order_quantity;
-			$product_manual_price 			= $request->product_manual_price;
-			$sales_order_product_item_ids 	= $request->sales_order_product_item_ids;
-			
-			$gross_amount = 0;
-			
-			for($count = 0; $count < count($product_idx); $count++)
-			{
-				
-					$sales_order_item_product_id 			= $product_idx[$count];
-					$sales_order_item_order_quantity 		= $order_quantity[$count];
-					$sales_order_item_product_manual_price 	= $product_manual_price[$count];
-					/*Check if Already Exist, if exist update using the id, if not insert new item*/
-					$sales_order_product_item_id 			= $sales_order_product_item_ids[$count];
+			$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('order_total_amount');
 					
-				/*Product Details*/
-				$product_info = ProductModel::find($sales_order_item_product_id, ['product_price']);					
-				
-				/*Check if Price is From Manual Price*/
-				if($sales_order_item_product_manual_price!=0){
-					$product_price = $sales_order_item_product_manual_price;
-				}else{
-					$product_price = $product_info->product_price;
-				}
-				
-				$order_total_amount = $sales_order_item_order_quantity * $product_price;
-				
-				$gross_amount += $order_total_amount;
-				
-				if($sales_order_product_item_id==0){
-				
-				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
-				$SalesOrderComponentModel = new SalesOrderComponentModel();
-				
-				$SalesOrderComponentModel->sales_order_idx 			= $last_transaction_id;
-				$SalesOrderComponentModel->sales_order_date 		= $request->sales_order_date;
-				$SalesOrderComponentModel->product_idx 				= $sales_order_item_product_id;
-				$SalesOrderComponentModel->client_idx 				= $request->client_idx;
-				$SalesOrderComponentModel->order_quantity 			= $sales_order_item_order_quantity;
-				$SalesOrderComponentModel->product_price 			= $product_price;
-				$SalesOrderComponentModel->order_total_amount 		= $order_total_amount;
-				
-				$SalesOrderComponentModel->save();
-				
-				}else{
-				
-				/*Update*/
-				$SalesOrderComponentModel_update = new SalesOrderComponentModel();
-				$SalesOrderComponentModel_update = SalesOrderComponentModel::find($sales_order_product_item_id);
-				
-				$SalesOrderComponentModel_update->product_idx 				= $sales_order_item_product_id;
-				$SalesOrderComponentModel_update->sales_order_date 			= $request->sales_order_date;
-				$SalesOrderComponentModel_update->client_idx 				= $request->client_idx;
-				$SalesOrderComponentModel_update->order_quantity 			= $sales_order_item_order_quantity;
-				$SalesOrderComponentModel_update->product_price 			= $product_price;
-				$SalesOrderComponentModel_update->order_total_amount 		= $order_total_amount;
-				
-				$SalesOrderComponentModel_update->update();
-			
-				}
-			}
+			$gross_amount = $order_total_amount;
 			
 			$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
 			$less_in_percentage 			= $request->sales_order_less_percentage/100;
@@ -329,6 +268,7 @@ class SalesOrderController extends Controller
 						$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
 						$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
 			}
+			
 			$SalesOrderUpdate = new SalesOrderModel();
 			$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
 			$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
@@ -495,6 +435,30 @@ class SalesOrderController extends Controller
 						
 						$result = $SalesOrderComponent->save();
 				
+				$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('order_total_amount');
+					
+				$gross_amount = $order_total_amount;
+				
+				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $request->sales_order_less_percentage/100;
+							
+				if($request->sales_order_net_percentage==0){
+							$sales_order_net_amount 		= 0;
+							$sales_order_total_due 			=  number_format($gross_amount,2,".","");
+				}else{
+							$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
+							$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+				}
+				
+				$SalesOrderUpdate = new SalesOrderModel();
+				$SalesOrderUpdate = SalesOrderModel::find($request->sales_order_id);
+				$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
+				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
+				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
+				$SalesOrderUpdate->update();				
+				
+				
 						if($result){
 							return response()->json(array('success' => "Product Information Successfully Created!"), 200);
 						}
@@ -503,6 +467,7 @@ class SalesOrderController extends Controller
 						}				
 						
 					}else{
+						
 						/*UPDATE*/
 						$SalesOrderComponent = new SalesOrderComponentModel();
 						$SalesOrderComponent = SalesOrderComponentModel::find($request->sales_order_component_id);
@@ -513,6 +478,29 @@ class SalesOrderController extends Controller
 						
 						$result = $SalesOrderComponent->update();
 				
+				$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('order_total_amount');
+					
+				$gross_amount = $order_total_amount;
+				
+				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $request->sales_order_less_percentage/100;
+							
+				if($request->sales_order_net_percentage==0){
+							$sales_order_net_amount 		= 0;
+							$sales_order_total_due 			=  number_format($gross_amount,2,".","");
+				}else{
+							$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
+							$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+				}
+				
+				$SalesOrderUpdate = new SalesOrderModel();
+				$SalesOrderUpdate = SalesOrderModel::find($request->sales_order_id);
+				$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
+				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
+				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
+				$SalesOrderUpdate->update();				
+				
 						if($result){
 							return response()->json(array('success' => "Product Information Successfully Updated!"), 200);
 						}
@@ -521,5 +509,48 @@ class SalesOrderController extends Controller
 						}				
 					}
 					
+
+					
 	}		
+	
+	/*Delete Product Information*/
+	public function delete_sales_order_component_confirmed(Request $request){
+
+		/*Delete on Sales Order Table*/
+		$sales_order_component_id = $request->sales_order_component_id;
+		
+		/*Delete on Sales Order Product Component*/	
+		SalesOrderComponentModel::where('sales_order_component_id', $sales_order_component_id)->delete();
+		
+		
+				$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+				->sum('order_total_amount');
+					
+				$gross_amount = $order_total_amount;
+				
+				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $request->sales_order_less_percentage/100;
+							
+				if($request->sales_order_net_percentage==0){
+							$sales_order_net_amount 		= 0;
+							$sales_order_total_due 			=  number_format($gross_amount,2,".","");
+				}else{
+							$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
+							$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+				}
+				
+				$SalesOrderUpdate = new SalesOrderModel();
+				$SalesOrderUpdate = SalesOrderModel::find($request->sales_order_id);
+				$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
+				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
+				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
+				$SalesOrderUpdate->update();
+		
+		
+		
+		return 'Deleted';
+		
+	} 
+	
+	
 }

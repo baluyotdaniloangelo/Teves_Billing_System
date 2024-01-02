@@ -141,7 +141,7 @@ form.user .form-control-user {
 
 .btn_icon_modal{
 	font-size: 2rem !important;
-	color: #c0ff00;
+	color: red;
 }
 /*
 div.dataTables_wrapper div.dataTables_length select {
@@ -185,18 +185,12 @@ div.dataTables_wrapper div.dataTables_length select {
 }
 
 .header_modal_bg{
-	background-color: #041c68 !important;
+	background-color: #f3f2f2 !important;
 	border: none;
-	border-top-left-radius: 0px; 
-    border-top-right-radius: 0px;
-	color: #FFF;
 }
 
 .footer_modal_bg{
-	background-color: #041c68 !important;
-	border: none;
-	border-bottom-left-radius: 0px; 
-    border-bottom-right-radius: 0px;
+	background-color: #f3f2f2 !important;
 }
 
 .modal-content{

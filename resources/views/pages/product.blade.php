@@ -21,7 +21,7 @@
 												<tr>
 													<th>#</th>
 													<th>Product Name</th>
-													<th>Price</th>
+													<th>Default Price</th>
 													<th>Unit of Measurement</th>
 													<th>Action</th>
 												</tr>
@@ -35,7 +35,7 @@
 												<tr>
 													<th>#</th>
 													<th>Product Name</th>
-													<th>Price</th>
+													<th>Default Price</th>
 													<th>Unit of Measurement</th>
 													<th>Action</th>
 												</tr>
@@ -98,7 +98,7 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="product_price" class="col-sm-3 col-form-label">Product Price</label>
+						  <label for="product_price" class="col-sm-3 col-form-label">Default Price</label>
 						  <div class="col-sm-9">
 							<input type="number" class="form-control " name="product_price" id="product_price" value="" required>
 							<span class="valid-feedback" id="product_priceError"></span>
@@ -160,7 +160,7 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="update_product_price" class="col-sm-3 col-form-label">Product Price</label>
+						  <label for="update_product_price" class="col-sm-3 col-form-label">Default Price</label>
 						  <div class="col-sm-9">
 							<input type="number" class="form-control " name="update_product_price" id="update_product_price" value="" required>
 							<span class="valid-feedback" id="update_product_priceError"></span>
@@ -196,6 +196,82 @@
                   </div>
                 </div>
              </div>
+			 
+<div class="modal fade" id="ProductBranchPriceModal" tabindex="-1">
+	
+              <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Product Pricing per Branch</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+						<div class="row">
+					<div class="col-lg-4">
+					  
+					  <ol class="list-group list-group-numbered">
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Product</div>
+							<div id="branch_product_name"></div>
+						  </div>
+						 
+						</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Default Price</div>
+							<div id="branch_product_price"></div>
+						  </div>
+						 
+						</li>
+						  
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+						  <div class="ms-2 me-auto">
+							<div class="fw-bold">Unit of Measurement</div>
+							<div id="branch_product_unit"></div>
+						  </div>
+						 
+						</li>
+						
+					  </ol>					
+					
+					</div>
+					<div class="col-lg-8">
+								
+								<table class="table" id="branch_pricing_table">
+									<thead>
+										<tr class='report'>
+										<th style="text-align:center !important;">#</th>
+										<th style="text-align:left !important;">Branch</th>
+										<th style="text-align:center !important;">Price</th>
+										</tr>
+									</thead>
+										
+									<tbody id="branch_pricing_table_body_data">
+										 <tr style="display: none;"><td>HIDDEN</td></tr>
+									</tbody>
+									
+								</table>
+								<div style="color:red;" id="table_paymentxError"></div>
+					  
+					</div>
+						
+					</div>
+					</div>
+					
+                    <div class="modal-footer modal-footer_form">
+						<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-product-price-per-branch" value=""> Submit</button>
+					</div>
+					<!-- End Multi Columns Form -->
+                  
+				  </div>
+                </div>
+             </div>
+						 
     </section>
 </main>
 @endsection

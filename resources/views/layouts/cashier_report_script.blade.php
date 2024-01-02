@@ -25,7 +25,7 @@
 					{data: 'user_real_name'},
 					<?php } ?>			
 					{data: 'cashiers_name'},		
-					{data: 'teves_branch'},		
+					{data: 'branch_code'},		
 					{data: 'forecourt_attendant'},
 					{data: 'shift'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},

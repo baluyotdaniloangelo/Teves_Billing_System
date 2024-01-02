@@ -89,9 +89,9 @@ class ReceivablesController extends Controller
 					}
 				
 						$actionBtn = '<div align="center" class="action_table_menu_Product">
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-subtract btn_icon_table btn_icon_table_view" id="payReceivables"></a>
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'"></a>
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables"></a>
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" id="payReceivables" title="Add Payment"></a>
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'" title="Update"></a>
+									<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 								</div>';
 				
 						if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){

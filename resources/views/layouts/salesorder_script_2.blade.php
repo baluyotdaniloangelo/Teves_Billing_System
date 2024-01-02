@@ -142,9 +142,10 @@
 
 
 	function ClientInfo() {
+			test = encodeURI($('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id'));			
+			alert(test);
+			let clientID 				= ($('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id'));
 			
-			let clientID 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
-			alert();
 			$.ajax({
 				url: "/client_info",
 				type:"POST",
@@ -182,12 +183,17 @@
 					$('#client_idxError').text('');
 
 			document.getElementById('SalesOrderformNew').className = "g-3 needs-validation was-validated";
+			
+			
 
-			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));			
+			let client_idx 				= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
+			
+			
+			
 			let company_header 			= $("#company_header").val();			
 			let sales_order_date 		= $("input[name=sales_order_date]").val();
 
-			let payment_term 			= $("input[name=payment_term]").val();
+			let payment_term 				= $("input[name=payment_term]").val();
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
 			
@@ -347,365 +353,6 @@
 			   });		
 	  });
 	  
-	  
-	<!--Select Product For Update-->
-	$('body').on('click','#EditSalesOrder',function(){
-			
-			event.preventDefault();
-			let sales_order_id = $(this).data('id');
-			
-			/*Call Product List for Sales Order*/
-			LoadProductRowForUpdate(sales_order_id);
-			
-			  $.ajax({
-				url: "/sales_order_info",
-				type:"POST",
-				data:{
-				  sales_order_id:sales_order_id,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					
-					document.getElementById("update_sales_order_date").value = response[0].sales_order_date;
-					document.getElementById("update_dr_number").value = response[0].sales_order_dr_number;
-					document.getElementById("update_or_number").value = response[0].sales_order_or_number;
-					document.getElementById("update_payment_term").value = response[0].sales_order_payment_term;
-					
-					document.getElementById("update_client_idx").value = response[0].client_name;
-					document.getElementById("update_delivered_to").value = response[0].sales_order_delivered_to_address;
-					document.getElementById("update_delivered_to_address").value = response[0].sales_order_delivered_to_address;
-					
-					document.getElementById("update_delivery_method").value = response[0].sales_order_delivery_method;
-					document.getElementById("update_hauler").value = response[0].sales_order_hauler;
-					document.getElementById("update_required_date").value = response[0].sales_order_required_date;
-					
-					document.getElementById("update_instructions").value = response[0].sales_order_instructions;
-					document.getElementById("update_note").value = response[0].sales_order_note;
-					document.getElementById("update-sales-order").value = response[0].sales_order_id;
-					
-					document.getElementById("update_sales_order_net_percentage").value = response[0].sales_order_net_percentage;
-					document.getElementById("update_sales_order_less_percentage").value = response[0].sales_order_less_percentage;
-					
-					document.getElementById("update_company_header").value = response[0].company_header;
-					
-					var update_product_idx = [];
-					var update_order_quantity = [];
-					var update_product_manual_price = [];
-				  
-					 $('.update_product_idx').each(function(){
-						if($(this).val() == ''){
-							alert('Please Select a Product');
-							exit();
-						}else{  				  
-							update_product_idx.push($(this).val());
-						}				  
-					});
-					  
-					$('.update_order_quantity').each(function(){
-						if($(this).val() == ''){
-							alert('Quantity is Empty');
-							exit(); 
-						}else{  				  
-							update_order_quantity.push($(this).val());
-						}				  
-					});
-					  
-					$('.update_product_manual_price').each(function(){ 				  
-							update_product_manual_price.push($(this).val());			  
-					});		
-
-					$('#UpdateSalesOrderModal').modal('toggle');					
-				  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });	
-	  });	
-
-	function LoadProductRowForUpdate(sales_order_id) {
-		event.preventDefault();
-			  $.ajax({
-				url: "/get_sales_order_product_list",
-				type:"POST",
-				data:{
-				  sales_order_id:sales_order_id,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				
-				  $("#update_table_product_data tbody").html("");
-					
-				  console.log(response);
-				  if(response!='') {
-					  
-						var len = response.length;
-						for(var i=0; i<len; i++){
-							
-							var id = response[i].sales_order_component_id;
-							
-							var product_idx = response[i].product_idx;
-							var product_price = response[i].product_price;
-							var order_quantity = response[i].order_quantity;
-							
-							
-							var tr_str = "<tr>"+
-								"<td class='product_td' align='center'>"+
-								"<select class='form-control form-select update_product_idx' name='update_product_idx' id='update_product_idx' required>"+
-									"<option selected='' disabled='' value=''>Choose...</option>"+
-										<?php foreach ($product_data as $product_data_cols){ ?>
-											"<option value='<?=$product_data_cols->product_id;?>'"+
-											((product_idx == <?=$product_data_cols->product_id;?>) ? 'selected' : '') +
-											">"+
-											"<?=$product_data_cols->product_name;?> | <span style='font-family: DejaVu Sans; sans-serif;'>&#8369;</span>&nbsp;<?=$product_data_cols->product_price;?></option>"+
-										<?php } ?>
-								"</select></td>"+
-								"<td class='quantity_td' align='center'>"+
-								"<input type='number' class='form-control update_order_quantity' id='update_order_quantity' name='update_order_quantity' value='"+order_quantity+"'>"+
-								"</td>"+
-								"<td class='manual_price_td' align='center'>"+
-								"<input type='text' class='form-control update_product_manual_price' placeholder='0.00' aria-label='' name='update_product_manual_price' id='update_product_manual_price' value='"+product_price+"'>"+
-								"</td>"+
-								"<td><div onclick='deleteRow(this)' data-id="+id+" id='product_item'><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'>"+
-								"<a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteReceivables'></a>"+"</div></div>"+"</td></tr>";
-								
-							$("#update_table_product_data tbody").append(tr_str);
-						}			
-				  }else{
-							/*No Result Found or Error*/	
-				  }
-				},
-				beforeSend:function()
-				{
-					//alert('s');
-					$("#update_table_product_data tbody").html("");
-					//$("#update_table_product_body_data tr").remove();
-					//$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_product_body_data');
-				},
-				error: function(error) {
-				 console.log(error);	 
-				}
-			   });
-	  }  	  
-
-	<!--Save New Sales Order-->
-	$("#update-sales-order").click(function(event){
-
-			event.preventDefault();
-			
-			/*Reset Warnings*/
-			$('#client_idxError').text('');
-
-			document.getElementById('UpdateSalesOrderformUpdate').className = "g-3 needs-validation was-validated";
-
-			let sales_order_id			= document.getElementById("update-sales-order").value;
-			/*Added May 6, 2023*/
-			let company_header 			= $("#update_company_header").val();
-			let client_idx 				= ($("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id'));	
-			let sales_order_date 		= $("input[name=update_sales_order_date]").val();
-			let delivered_to 			= $("input[name=update_delivered_to]").val();
-			let delivered_to_address 	= $("input[name=update_delivered_to_address]").val();
-			let dr_number 				= $("input[name=update_dr_number]").val();
-			let or_number 				= $("input[name=update_or_number]").val();
-			let payment_term 			= $("input[name=update_payment_term]").val();
-			let delivery_method 		= $("input[name=update_delivery_method]").val();
-			let hauler 					= $("input[name=update_hauler]").val();
-			let required_date 			= $("input[name=update_required_date]").val();
-			let instructions 			= $("#update_instructions").val();
-			let note 					= $("#update_note").val();
-			let sales_order_net_percentage 	= $("input[name=update_sales_order_net_percentage]").val();
-			let sales_order_less_percentage = $("input[name=update_sales_order_less_percentage]").val();
-			
-				var product_idx = [];
-				var order_quantity = [];
-				var product_manual_price = [];
-				var sales_order_product_item_id = [];  
-				
-				  $('.update_product_idx').each(function(){
-					if($(this).val() == ''){
-						alert('Please Select a Product');
-						exit();
-					}else{  				  
-				   		product_idx.push($(this).val());
-					}				  
-				  });
-				  
-				  $('.update_order_quantity').each(function(){
-					if($(this).val() == ''){
-						alert('Quantity is Empty');
-						exit(); 
-					}else{  				  
-				   		order_quantity.push($(this).val());
-					}				  
-				  });
-				  
-				  $('.update_product_manual_price').each(function(){ 				  
-				   		product_manual_price.push($(this).val());			  
-				  });	
-
-				  $.each($("[id='product_item']"), function(){
-					sales_order_product_item_id.push($(this).attr("data-id"));
-				  });
-				  
-				  /*Payment Options*/
-				var mode_of_payment = [];
-				var date_of_payment = [];
-				var reference_no = [];
-				var payment_amount = [];
-				var payment_item_id = [];
-				
-				  $('.update_mode_of_payment').each(function(){
-					if($(this).val() == ''){
-						alert('Please Select a Bank');
-						exit();
-					}else{  				  
-				   		mode_of_payment.push($(this).val());
-					}				  
-				  });
-				  
-				  $('.update_date_of_payment').each(function(){
-					if($(this).val() == ''){
-						alert('Date of Payment is Empty');
-						exit(); 
-					}else{  				  
-				   		date_of_payment.push($(this).val());
-					}				  
-				  });
-				  
-				  $('.update_reference_no').each(function(){
-					if($(this).val() == ''){
-						alert('Reference is Empty');
-						exit(); 
-					}else{  				  
-				   		reference_no.push($(this).val());
-					}				  
-				  });	
-				  
-				  $('.update_payment_amount').each(function(){
-					if($(this).val() == ''){
-						alert('Payment Amount is Empty');
-						exit(); 
-					}else{  				  
-				   		payment_amount.push($(this).val());
-					}				  
-				  });		
-				  
-				  $.each($("[id='payment_item']"), function(){
-					payment_item_id.push($(this).attr("data-id"));
-				  });	
-				  
-			  $.ajax({
-				url: "/update_sales_order_post",
-				type:"POST",
-				data:{
-				  sales_order_id:sales_order_id,
-				  company_header:company_header,
-				  client_idx:client_idx,
-				  sales_order_date:sales_order_date,
-				  delivered_to:delivered_to,
-				  delivered_to_address:delivered_to_address,
-				  dr_number:dr_number,
-				  or_number:or_number,
-				  payment_term:payment_term,
-				  delivery_method:delivery_method,
-				  hauler:hauler,
-				  required_date:required_date,
-				  instructions:instructions,
-				  note:note,
-				  
-				  mode_of_payment:mode_of_payment,
-				  date_of_payment:date_of_payment,
-				  reference_no:reference_no,
-				  payment_amount:payment_amount,
-				  payment_item_id:payment_item_id,
-				  
-				  product_idx:product_idx,
-				  order_quantity:order_quantity,
-				  product_manual_price:product_manual_price, 
-				  sales_order_product_item_ids:sales_order_product_item_id,
-				  sales_order_net_percentage:sales_order_net_percentage,
-				  sales_order_less_percentage:sales_order_less_percentage,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					  
-					LoadProductRowForUpdate(sales_order_id);
-					
-					$('#switch_notice_on').show();
-					$('#sw_on').html(response.success);
-					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-					
-					$('#update_order_dateError').text('');					
-					$('#update_order_timeError').text('');
-					$('#update_order_po_numberError').text('');
-					$('#update_client_idxError').text('');
-					
-					$('#update_plate_noError').text('');
-					$('#update_drivers_nameError').text('');
-					$('#update_product_idxError').text('');
-					$('#update_product_manual_priceError').text('');
-					$('#update_order_quantityError').text('');
-					
-				    /*
-					If you are using server side datatable, then you can use ajax.reload() 
-					function to reload the datatable and pass the true or false as a parameter for refresh paging.
-					*/
-					
-					var table = $("#getSalesOrderList").DataTable();
-					table.ajax.reload(null, false);
-					
-					/*Close Modal*/
-					$('#UpdateSalesOrderModal').modal('toggle');
-					/*Open PDF for Printing*/
-					var query = {
-								sales_order_id:sales_order_id,
-								_token: "{{ csrf_token() }}"
-							}
-
-					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
-					window.open(url);
-					
-					/*Reload Page
-					location.reload();*/
-					
-				  }
-				},
-				beforeSend:function()
-				{
-					$('#upload_loading_data').show();
-				},
-				complete: function(){
-					
-					$('#upload_loading_data').hide();
-					
-					/*Close Form*/
-					$('#UpdateSalesOrderModal').modal('toggle');
-					
-				},
-				error: function(error) {
-					
-				 console.log(error);	
-				 
-				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
-				  document.getElementById('client_idxError').className = "invalid-feedback";
-				  
-				  //document.getElementById('product_idxError').className = "invalid-feedback";
-				  $('#product_idxError').html(error.responseJSON.errors.product_idx);
-								
-				$('#switch_notice_off').show();
-				$('#sw_off').html("Invalid Input");
-				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
-				  
-				}
-			   });	
-	  });	  
- 
 	/*Re-print*/
 	$('body').on('click','#PrintSalesOrder',function(){	  
 	  
@@ -865,13 +512,7 @@
 				},
 				error: function(error) {
 				 console.log(error);	
-										
-				//$('#receivable_or_numberError').text(error.responseJSON.errors.product_price);
-				//document.getElementById('receivable_or_numberError').className = "invalid-feedback";	
-				
-				//$('#receivable_payment_termError').text(error.responseJSON.errors.product_price);
-				//document.getElementById('receivable_payment_termError').className = "invalid-feedback";	
-				
+				 
 				$('#receivable_descriptionError').text(error.responseJSON.errors.receivable_description);
 				document.getElementById('receivable_descriptionError').className = "invalid-feedback";					
 				

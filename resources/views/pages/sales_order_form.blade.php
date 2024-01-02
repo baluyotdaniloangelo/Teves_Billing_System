@@ -192,7 +192,8 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal"></button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal">&nbsp;Add</button>
+						<button type="button" class="btn btn-success new_item bi-printer-fill" id="PrintSalesOrder">&nbsp;Print</button>
 						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 						
 					</div>					
@@ -384,7 +385,7 @@
              </div>		
 
 	<!-- Bill Delete Modal-->
-    <div class="modal fade" id="BillDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="SalesOrderComponentDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header header_modal_bg">
@@ -394,35 +395,25 @@
 				
 				
                 <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Bill?<br>
+				Are you sure you want to Delete This Product?<br>
 				</div>
 				<div align="left"style="margin: 10px;">
-				Date: <span id="bill_delete_order_date"></span><br>
-				Time: <span id="bill_delete_order_time"></span><br>
-				
-				PO #: <span id="bill_delete_order_po_number"></span><br>
-				Client: <span id="bill_delete_client_name"></span><br>
-				
-				Plate #: <span id="bill_delete_plate_no"></span><br>
-				Driver: <span id="bill_delete_drivers_name"></span><br>
 				
 				Product: <span id="bill_delete_product_name"></span><br>
 				Quantity: <span id="bill_delete_order_quantity"></span><br>
 				
 				Total Amount: <span id="bill_delete_order_total_amount"></span><br>
 				
-				
 				</div>
                 <div class="modal-footer footer_modal_bg">
-                    
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteBillConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteSalesOrderComponentConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
                   
                 </div>
             </div>
         </div>
-    </div>	
-			 
+    </div>
+	
     </section>
 </main>
 

@@ -12,7 +12,7 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
+			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
@@ -1002,5 +1002,23 @@
 				}
 			   });		
 	  });
- 
+
+	function UpdateTotalAmount(){
+		
+		let product_price 			= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-price');
+		let product_manual_price 	= $("#update_product_manual_price").val();
+		let order_quantity 			= $("input[name=update_order_quantity]").val();
+		
+		if(order_quantity!=0 || order_quantity!=''){
+			if(product_manual_price!='' && product_manual_price!=0){
+				var total_amount = product_manual_price * order_quantity;
+				$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}else{
+				var total_amount = product_price * order_quantity;
+				$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}
+		}
+		
+	}	
+	
 </script>

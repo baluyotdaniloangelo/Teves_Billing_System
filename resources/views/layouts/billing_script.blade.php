@@ -112,7 +112,8 @@
 			let order_date 				= $("input[name=order_date]").val();
 			let order_time 				= $("input[name=order_time]").val();
 			let order_po_number 		= $("input[name=order_po_number]").val();
-			let client_idx 				= $("#client_name option[value='" + $('#client_idx').val() + "']").attr('data-id');
+			
+			let client_idx 				= $('#client_name option[value="' + $('#client_idx').val() + '"]').attr('data-id')
 			let plate_no 				= $("input[name=plate_no]").val();
 			let drivers_name 			= $("input[name=drivers_name]").val();
 			let product_idx 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-id');
@@ -330,8 +331,9 @@
 			let billID 							= document.getElementById("update-billing-transaction").value;
 			let order_date 						= $("input[name=update_order_date]").val();
 			let order_time 						= $("input[name=update_order_time]").val();
-			let order_po_number 				= $("input[name=update_order_po_number]").val();			
-			let client_idx 						= $("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id');
+			let order_po_number 				= $("input[name=update_order_po_number]").val();	
+
+			let client_idx 						= $('#update_client_name option[value="' + $('#update_client_idx').val() + '"]').attr('data-id');
 			let plate_no 						= $("input[name=update_plate_no]").val();
 			let drivers_name 					= $("input[name=update_drivers_name]").val();
 			let product_idx 					= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-id');

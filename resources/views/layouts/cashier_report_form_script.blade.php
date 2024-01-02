@@ -94,7 +94,7 @@
 
 	function TotalAmount(){
 		
-		let product_price 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-price');
+		let product_price 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#product_manual_price").val();	
 		var beginning_reading 		= $("input[name=beginning_reading]").val();
 		var closing_reading 		= $("input[name=closing_reading]").val();
@@ -114,7 +114,7 @@
 	
 	function UpdateTotalAmount(){
 		
-		let product_price 			= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-price');
+		let product_price 			= $('#update_product_name option[value="' + $('#update_product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#update_product_manual_price").val();		
 		var beginning_reading 		= $("input[name=update_beginning_reading]").val();
 		var closing_reading 		= $("input[name=update_closing_reading]").val();
@@ -144,7 +144,7 @@
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
 		
-			var product_idx 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-id');
+			var product_idx 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 			var beginning_reading 		= $("input[name=beginning_reading]").val();
 			var closing_reading 		= $("input[name=closing_reading]").val();
 			var calibration 			= $("input[name=calibration]").val();
@@ -298,8 +298,8 @@
 			$('#update_closing_readingError').text('');
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
-			let CHPH1_ID 					= document.getElementById("update-CRPH1").value;
-			var product_idx 			= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-id');
+			let CHPH1_ID 				= document.getElementById("update-CRPH1").value;
+			var product_idx 			= $('#update_product_name option[value="' + $('#update_product_idx').val() + '"]').attr('data-id');
 			var beginning_reading 		= $("input[name=update_beginning_reading]").val();
 			var closing_reading 		= $("input[name=update_closing_reading]").val();
 			var calibration 			= $("input[name=update_calibration]").val();
@@ -435,7 +435,7 @@
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
 		
-			var product_idx 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-id');
+			var product_idx 			= $('#product_name_PH2 option[value="' + $('#product_idx_PH2').val() + '"]').attr('data-id');
 			var order_quantity 			= $("input[name=order_quantity_PH2]").val();
 			var product_manual_price 	= $("input[name=product_manual_price_PH2]").val();
 			
@@ -570,7 +570,7 @@
 			
 			let CashiersReportId 		= {{ $CashiersReportId }};			
 			let CHPH2_ID 				= document.getElementById("update-CRPH2").value;
-			var product_idx 			= $("#update_product_name_PH2 option[value='" + $('#update_product_idx_PH2').val() + "']").attr('data-id');
+			var product_idx 			= $('#update_product_name_PH2 option[value="' + $('#update_product_idx_PH2').val() + '"]').attr('data-id');
 			var order_quantity 			= $("input[name=update_order_quantity_PH2]").val();
 			var product_manual_price 	= $("input[name=update_product_manual_price_PH2]").val();
 			
@@ -686,7 +686,7 @@
 
 	function TotalAmount_PH2(){
 		
-		let product_price 			= $("#product_name_PH2 option[value='" + $('#product_idx_PH2').val() + "']").attr('data-price');
+		let product_price 			= $('#product_name_PH2 option[value="' + $('#product_idx_PH2').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#product_manual_price_PH2").val();		
 		let order_quantity 			= $("input[name=order_quantity_PH2]").val();
 		
@@ -703,7 +703,7 @@
 
 	function UpdateTotalAmount_PH2(){
 		
-		let product_price 			= $("#update_product_name_PH2 option[value='" + $('#update_product_idx_PH2').val() + "']").attr('data-price');
+		let product_price 			= $('#update_product_name_PH2 option[value="' + $('#update_product_idx_PH2').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#update_product_manual_price_PH2").val();		
 		let order_quantity 			= $("input[name=update_order_quantity_PH2]").val();
 		
@@ -829,7 +829,7 @@
 
             var miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
             var reference_no 			    = $("input[name=reference_no_PH3]").val();
-			var product_idx 			    = $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');
+			var product_idx 			    = $('#product_name_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');
 			var order_quantity 			    = $("input[name=order_quantity_PH3]").val();
 			var product_manual_price 	    = $("input[name=product_manual_price_PH3]").val();
 			
@@ -1156,7 +1156,7 @@
 			let CHPH3_ID 					= document.getElementById("update-CRPH3").value;
 			var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 			var reference_no 				= $("input[name=update_reference_no_PH3]").val();
-			var product_idx 				= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');
+			var product_idx 				= $('#update_product_name_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
 			var order_quantity 				= $("input[name=update_order_quantity_PH3]").val();
 			var product_manual_price 		= $("input[name=update_product_manual_price_PH3]").val();
 			
@@ -1404,9 +1404,9 @@
         let miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
 
         
-		    let product_id 				= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-id');		
-		    let product_price 			= $("#product_name_PH3 option[value='" + $('#product_idx_PH3').val() + "']").attr('data-price');
-		    //let product_price 			= 0;		
+		    let product_id 				= $('#product_name_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');		
+		    let product_price 			= $('#product_name_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-price');
+	
 		    let product_manual_price 	= $("#product_manual_price_PH3").val();		
 		    let order_quantity 			= $("input[name=order_quantity_PH3]").val();
 		
@@ -1493,9 +1493,8 @@
 		var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 		
 		let CashiersReportId 		= {{ $CashiersReportId }};
-		let product_price 			= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-price');
-		//let product_price 			= 0;
-		let product_id 				= $("#update_product_name_PH3 option[value='" + $('#update_product_idx_PH3').val() + "']").attr('data-id');	
+		let product_price 			= $('#update_product_name_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-price');
+		let product_id 				= $('#update_product_name_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');	
 		let product_manual_price 	= $("#update_product_manual_price_PH3").val();		
 		let order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
 		

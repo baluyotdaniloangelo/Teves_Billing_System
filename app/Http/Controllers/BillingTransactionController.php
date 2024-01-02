@@ -13,7 +13,7 @@ use Session;
 use Validator;
 use DataTables;
 
-//use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Models\Activity;
 
 class BillingTransactionController extends Controller
 {

@@ -15,7 +15,7 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
+			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
@@ -209,7 +209,7 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
+			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
@@ -367,7 +367,7 @@
 	    
 	function get_client_details(){
 		  
-			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			
 			  $.ajax({
 				url: "/client_info",
@@ -401,7 +401,7 @@
 	
 	function download_billing_report_excel(){
 		  
-			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+			let client_idx 		= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 		 		  
@@ -419,7 +419,7 @@
 	
 	function download_billing_report_pdf(receivable_id){
 			
-			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+			let client_idx 		= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 			let less_per_liter 	= $("input[name=less_per_liter]").val();
@@ -511,10 +511,10 @@
 			let order_date 						= $("input[name=update_order_date]").val();
 			let order_time 						= $("input[name=update_order_time]").val();
 			let order_po_number 				= $("input[name=update_order_po_number]").val();			
-			let client_idx 						= $("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id');
+			let client_idx 						= $('#update_client_name option[value="' + $('#update_client_idx').val() + '"]').attr('data-id');
 			let plate_no 						= $("input[name=update_plate_no]").val();
 			let drivers_name 					= $("input[name=update_drivers_name]").val();
-			let product_idx 					= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-id');
+			let product_idx 					= $('#update_product_name option[value="' + $('#update_product_idx').val() + '"]').attr('data-id');
 			let update_product_manual_price 	= $("#update_product_manual_price").val();
 			let order_quantity 					= $("input[name=update_order_quantity]").val();
 			

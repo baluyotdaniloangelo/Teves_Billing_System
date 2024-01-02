@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\SOBillingTransactionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
@@ -66,11 +67,6 @@ Route::post('/so_add_product_post', [SOBillingTransactionController::class,'so_a
 Route::post('/get_so_product', [SOBillingTransactionController::class,'get_so_product'])->name('GetSoProduct')->middleware('isLoggedIn');
 Route::post('/so_update_product_post', [SOBillingTransactionController::class,'so_update_product_post'])->name('SOUpdateProductPost')->middleware('isLoggedIn');
 
-
-
-
-
-
 /*Dev Date Nov 30 2022*/
 /*Load Product List*/
 Route::get('/product', [ProductController::class,'product'])->name('product')->middleware('isLoggedIn');
@@ -83,6 +79,11 @@ Route::post('/product_info', [ProductController::class, 'product_info'])->name('
 Route::post('/update_product_post', [ProductController::class,'update_product_post'])->name('update_product_post')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_product_confirmed', [ProductController::class, 'delete_product_confirmed'])->name('delete_product_confirmed')->middleware('isLoggedIn');
+/*Load Product Pricing Per Branch 01-02-2023*/
+Route::post('/get_product_pricing_per_branch', [ProductController::class,'get_product_pricing_per_branch'])->name('ProductPricingPerBranch')->middleware('isLoggedIn');
+/*Save Product Pricing Per Branch 01-02-2023*/
+Route::post('/save_branches_product_pricing_post', [ProductController::class,'save_branches_product_pricing_post'])->name('save_branches_product_pricing_post')->middleware('isLoggedIn');
+
 
 /*Dev Date Nov 30 2022*/
 /*Load Client List*/
@@ -184,6 +185,8 @@ Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales
 Route::get('/sales_order_form/{id}', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
 Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_order_component_info'])->name('sales_order_component_info')->middleware('isLoggedIn');
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
+Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');
+
 
 /*Get Sales Order Payment Item*/
 Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
@@ -319,6 +322,21 @@ Route::post('/cashiers_report_p6_info', [CashiersReportController::class, 'cashi
 /*Load Cashiers Report */
 Route::get('/generate_cashier_report_pdf', [CashiersReportController::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
 //Route::post('/check_time.php', [CashiersReportController::class,'check_time'])->name('check_time.php');
+
+
+/*Dev Date Nov 30 2022*/
+/*Load Branch List*/
+Route::get('/branch', [BranchController::class,'branch'])->name('branch')->middleware('isLoggedIn');
+Route::get('branch/list', [BranchController::class, 'getBranchList'])->name('getBranchList')->middleware('isLoggedIn');
+/*Create Product*/
+Route::post('/create_branch_post', [BranchController::class,'create_branch_post'])->name('CreateBranch')->middleware('isLoggedIn');
+/*GET Product Info*/
+Route::post('/branch_info', [BranchController::class, 'branch_info'])->name('BranchInfo')->middleware('isLoggedIn');
+/*Update Product*/
+Route::post('/update_branch_post', [BranchController::class,'update_branch_post'])->name('UpdateBranch')->middleware('isLoggedIn');
+/*Confirm Delete Product*/
+Route::post('/delete_branch_confirmed', [BranchController::class, 'delete_branch_confirmed'])->name('DeleteBranch')->middleware('isLoggedIn');
+
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

@@ -23,14 +23,6 @@
 			ajax: "{{ route('getSOBillingTransactionList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					/*<th class="all">#</th>
-					<th class="all">Date</th>
-					<th class="all">Time</th>
-					<th class="all">S.O No.</th>
-					<th class="all">Account Name</th>
-					<th class="none">Driver's Name</th>
-					<th class="none">Plate Number</th>*/
-					  
 					{data: 'order_date'},
 					{data: 'order_time'},
 					{data: 'so_number'},					
@@ -81,7 +73,7 @@
 			let order_date 				= $("input[name=so_order_date]").val();
 			let order_time 				= $("input[name=so_order_time]").val();
 			let so_number 				= $("input[name=so_number]").val();/*SO NUMBER*/
-			let client_idx 				= $("#so_client_name option[value='" + $('#so_client_idx').val() + "']").attr('data-id');
+			let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
 			let plate_no 				= $("input[name=so_plate_no]").val();
 			let drivers_name 			= $("input[name=so_drivers_name]").val();
 			
@@ -202,7 +194,7 @@
 
 
 	function LoadSOProductList(SOId) {		
-		//event.preventDefault();
+		
 		$("#so_product_list_data_delete tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#so_product_list_data_delete');
 
@@ -283,7 +275,4 @@
 				}
 			   });		
 	  });	 
-
-
-	  
 	</script>

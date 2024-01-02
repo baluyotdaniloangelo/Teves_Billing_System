@@ -550,7 +550,7 @@
 			let sales_order_id			= document.getElementById("update-sales-order").value;
 			/*Added May 6, 2023*/
 			let company_header 			= $("#update_company_header").val();
-			let client_idx 				= ($("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id'));	
+			let client_idx 				= $('#update_client_name option[value="' + $('#update_client_idx').val() + '"]').attr('data-id');	
 			let sales_order_date 		= $("input[name=update_sales_order_date]").val();
 			let delivered_to 			= $("input[name=update_delivered_to]").val();
 			let delivered_to_address 	= $("input[name=update_delivered_to_address]").val();

@@ -764,7 +764,7 @@
 			
 			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
 			
-			let supplier_idx 							= ($("#update_supplier_name option[value='" + $('#update_supplier_idx').val() + "']").attr('data-id'));
+			let supplier_idx 							= $('#update_supplier_name option[value="' + $('#update_supplier_idx').val() + '"]').attr('data-id');
 			/*Supplier's Name and Product Name*/
 			let supplier_name 							= $("input[name=update_supplier_name]").val();
 			/*Added May 6, 2023*/

@@ -43,12 +43,13 @@ class CashiersReportController extends Controller
 		if ($request->ajax()) {
 
 			if(Session::get('UserType')!="Admin"){
-				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')			
+				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+				 ->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
               	 ->where('teves_cashiers_report.user_idx', '=', Session::get('loginID'))	
 				 ->get([				
 					'teves_cashiers_report.cashiers_report_id',
 					'user_tb.user_real_name',
-					'teves_cashiers_report.teves_branch',
+					'teves_branch_table.branch_code',
 					'teves_cashiers_report.cashiers_name',
 					'teves_cashiers_report.forecourt_attendant',
 					'teves_cashiers_report.report_date',
@@ -56,11 +57,12 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.created_at',
 					'teves_cashiers_report.updated_at']);
 			}else{
-				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')			
-               ->get([				
+				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')	
+				->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
+				->get([				
 					'teves_cashiers_report.cashiers_report_id',
 					'user_tb.user_real_name',
-					'teves_cashiers_report.teves_branch',
+					'teves_branch_table.branch_code',
 					'teves_cashiers_report.cashiers_name',
 					'teves_cashiers_report.forecourt_attendant',
 					'teves_cashiers_report.report_date',

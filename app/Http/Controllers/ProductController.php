@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\User;
 use App\Models\ProductModel;
 use Session;
@@ -48,6 +50,7 @@ class ProductController extends Controller
 					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
+					<a href="#" data-id="'.$row->product_id.'" class="btn-warning btn-circle btn-sm bi bi-tags-fill btn_icon_table btn_icon_table_edit" id="LoadProductPricePerBranch"></a>
 					<a href="#" data-id="'.$row->product_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editProduct"></a>
 					<a href="#" data-id="'.$row->product_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteProduct"></a>
 					</div>';
@@ -57,10 +60,7 @@ class ProductController extends Controller
 				
 				->rawColumns(['action'])
                 ->make(true);
-		
-		}
-		
-		
+		}	
     }
 
 	/*Fetch Product Information*/
@@ -101,7 +101,18 @@ class ProductController extends Controller
 			
 			$result = $Product->save();
 			
+			/*Get Last ID*/
+			$last_transaction_id = $Product->product_id;
+			
+			/*Create Entry at Product Price Per Branch*/
+			
+			DB::insert("INSERT INTO teves_product_branch_price_table (product_idx,branch_idx,branch_price)
+			SELECT b.product_id,a.branch_id,b.product_price FROM teves_branch_table AS a,teves_product_table AS b
+			WHERE b.product_id=?",[$last_transaction_id]);
+			
 			if($result){
+				return response()->json(array('success' => "Product Information Successfully Created!, System will proceed to Update the Pricing per Branch", 'productID' => $last_transaction_id), 200);
+		
 				return response()->json(['success'=>'Product Information Successfully Created!']);
 			}
 			else{
@@ -137,4 +148,54 @@ class ProductController extends Controller
 				return response()->json(['success'=>'Error on Update Product Information']);
 			}
 	}
+	
+	/*Payment List*/
+	public function get_product_pricing_per_branch(Request $request){		
+
+			$data =  ProductModel::Join('teves_product_branch_price_table', 'teves_product_table.product_id', '=', 'teves_product_branch_price_table.product_idx')
+              		->Join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_branch_price_table.branch_idx')
+					->where('teves_product_table.product_id', $request->productID)
+					->orderBy('teves_product_branch_price_table.branch_price_id', 'asc')
+					->get([
+						'teves_product_branch_price_table.branch_price_id',
+						'teves_branch_table.branch_code',
+						'teves_product_branch_price_table.branch_price',
+					]);
+		
+			return response()->json($data);			
+	}
+
+	public function save_branches_product_pricing_post(Request $request){		
+			
+			$request->validate([
+			'branch_price'  	=> 'required'
+			], 
+			[
+				'branch_price.required' 	=> 'Branch Price is Required'
+			]
+			);
+			
+			$branch_price_id 	= $request->branch_price_id;
+			$branch_price 		= $request->branch_price;
+			
+			if($branch_price!=''){
+				for($count = 0; $count < count($branch_price_id); $count++)
+				{
+					
+						$branch_price_id_item 		= $branch_price_id[$count];
+						$branch_price_item 			= number_format($branch_price[$count],2, '.', '');
+						
+						if(Session::get('UserType')=="Admin"){
+								
+							DB::table('teves_product_branch_price_table')
+							->where('branch_price_id', $branch_price_id_item)
+							->update(['branch_price' => $branch_price_item]);
+							
+						}					
+				}		
+			
+			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
+			
+			}							
+	}	
 }

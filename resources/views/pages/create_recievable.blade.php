@@ -284,7 +284,7 @@
 						</div>
 					  
 						<div class="row mb-2">
-						  <label for="client_idx" class="col-sm-4 col-form-label">Client</label>
+						  <label for="client_id" class="col-sm-4 col-form-label">Client</label>
 						  <div class="col-sm-8">
 							<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
 								<datalist id="client_name">
@@ -469,7 +469,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="" class="col-sm-3 col-form-label">Amount</label>
+						  <label class="col-sm-3 col-form-label">Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount">0.00</span>
 						  </div>

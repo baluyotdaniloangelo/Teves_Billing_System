@@ -21,7 +21,7 @@
 			let order_date 				= $("input[name=so_order_date]").val();
 			let order_time 				= $("input[name=so_order_time]").val();
 			let so_number 				= $("input[name=so_number]").val();/*SO NUMBER*/
-			let client_idx 				= $("#so_client_name option[value='" + $('#so_client_idx').val() + "']").attr('data-id');
+			let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
 			let plate_no 				= $("input[name=so_plate_no]").val();
 			let drivers_name 			= $("input[name=so_drivers_name]").val();
 			
@@ -97,7 +97,7 @@
 	  
 	function TotalAmount(){
 		
-		let product_price 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-price');
+		let product_price 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#product_manual_price").val();
 		let order_quantity 			= $("input[name=order_quantity]").val();
 		
@@ -115,7 +115,7 @@
 
 	function UpdateTotalAmount(){
 		
-		let product_price 			= $("#edit_product_name option[value='" + $('#edit_product_idx').val() + "']").attr('data-price');
+		let product_price 			= $('#edit_product_name option[value="' + $('#edit_product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#edit_product_manual_price").val();
 		let order_quantity 			= $("input[name=edit_order_quantity]").val();
 		
@@ -144,7 +144,7 @@
 
 			document.getElementById('AddSOProduct').className = "g-3 needs-validation was-validated";
 		
-			let product_idx 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-id');
+			let product_idx 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 
@@ -330,7 +330,7 @@
 			
 			let SOId 						= {{ $SOId }};
 			let billID 						= document.getElementById("so-update-product").value;
-			let product_idx 				= $("#edit_product_name option[value='" + $('#edit_product_idx').val() + "']").attr('data-id');
+			let product_idx 				= $('#edit_product_name option[value="' + $('#edit_product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 		= $("#edit_product_manual_price").val();
 			let order_quantity 				= $("input[name=edit_order_quantity]").val();
 
@@ -457,7 +457,7 @@
 			   });		
 	  });
 
-	  <!--Site Confirmed For Deletion-->
+	  <!-- Confirmed For Deletion-->
 	  $('body').on('click','#deleteBillConfirmed',function(){
 			
 			event.preventDefault();

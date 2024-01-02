@@ -139,18 +139,25 @@
             <a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
               <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span>Product</span>
             </a>
+			
 			<?php if($data->user_type=="Admin"){ ?>
+			
+			<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
+              <i class="bi bi-building navbar_icon" title="Manage Client list"></i><span>Branch</span>
+            </a>
+			
 			<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
               <i class="bi bi-file-person navbar_icon" title="Manage Client list"></i><span>Client</span>
             </a>
-			<?php } ?>
-			<?php if($data->user_type=="Admin"){ ?>
+			
 			<a href="{{ route('supplier') }}" class="sidebar_li_a" title="Manage Supplier list">
               <i class="bi bi-file-person navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
             </a>
+			
 			<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
-              <i class="bi bi-people navbar_icon" title="Manage System User"></i><span>User</span>
+              <i class="bi bi-people navbar_icon" title="Manage System User"></i><span>User's Account</span>
             </a>
+			
 			<?php } ?>
 
           </li>

@@ -74,6 +74,14 @@
 					/*Refresh Table*/
 					var table = $("#getProductList").DataTable();
 				    table.ajax.reload(null, false);
+					
+					/*Load Receivable Payment Table*/
+					loadPricingPerBranch(response.productID);
+					loadProductInfo(response.productID);
+										
+					$('#CreateProductModal').modal('toggle');	
+					
+					$('#ProductBranchPriceModal').modal('toggle');	
 				  
 				  }
 				},
@@ -127,7 +135,8 @@
 					document.getElementById("update_product_price").value = response.product_price;
 					document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement;
 										
-					$('#UpdateProductModal').modal('toggle');					
+					$('#UpdateProductModal').modal('toggle');		
+					
 				  
 				  }
 				},
@@ -281,5 +290,192 @@
 				}
 			   });		
 	  });
+	  
+	<!--Pay Receivables-->
+	$('body').on('click','#LoadProductPricePerBranch',function(){
+			
+			event.preventDefault();
+			let productID = $(this).data('id');
+			
+			  $.ajax({
+				url: "/product_info",
+				type:"POST",
+				data:{
+				  productID:productID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("save-product-price-per-branch").value = productID;
+					
+					/*Set Details*/		
+					document.getElementById("branch_product_name").innerHTML = response.product_name;
+					document.getElementById("branch_product_price").innerHTML = response.product_price;
+					document.getElementById("branch_product_unit").innerHTML = response.product_unit_measurement;	
+					
+					/*Load Receivable Payment Table*/
+					loadPricingPerBranch(productID);
+					
+					$('#ProductBranchPriceModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });	  
+
+
+	 
+	function loadPricingPerBranch(productID) {
+		
+		event.preventDefault();
+		
+			  $.ajax({
+				url: "{{ route('ProductPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  productID:productID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+						
+								
+				  console.log(response);
+				  if(response!='') {
+					  
+					  document.getElementById("save-product-price-per-branch").value = productID;
+					  
+					    $("#branch_pricing_table_body_data tr").remove();
+						$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#branch_pricing_table_body_data');
+					  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+							
+							var id = response[i].branch_price_id;
+							
+							//var branch_id 			= response[i].branch_id;
+							var branch_code 			= response[i].branch_code;
+							var branch_price 			= response[i].branch_price;
+							
+							$('#branch_pricing_table_body_data tr:last').after("<tr>"+
+							"<td class='item_no' align='center'>"+(i+1)+"</td>"+
+							"<td class='branch_code_no_td' align='left' data-id='' id='branch_id'>"+branch_code+"</td>"+
+							"<td class='payment_amount_td' data-id='"+id+"' id='branch_price_id' align='center'><input type='number' class='form-control branch_price' id='branch_price' name='branch_price' value='"+branch_price+"'></td>"+
+							"</tr>");
+							
+						}			
+				  }else{
+							/*No Result Found or Error*/
+							$("#branch_pricing_table_body_data tr").remove();
+							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#branch_pricing_table_body_data');
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  }  	  
+
+	$("#save-product-price-per-branch").click(function(event){
+
+			event.preventDefault();
+				
+				let productID 			= document.getElementById("save-product-price-per-branch").value;
+				
+				//var branch_id = [];
+				var branch_price_id = [];
+				var branch_price = [];
+				  
+				  $.each($("[id='branch_price_id']"), function(){
+					branch_price_id.push($(this).attr("data-id"));
+				  });
+				  
+				  $('.branch_price').each(function(){
+					if($(this).val() == ''){
+						alert('Price is Empty');
+						exit(); 
+					}else{  				  
+				   		branch_price.push($(this).val());
+					}				  
+				  });		
+			
+			//alert(branch_price_id);
+			
+				$.ajax({
+				url: "/save_branches_product_pricing_post",
+				type:"POST",
+				data:{
+				  branch_price_id:branch_price_id,
+				  branch_price:branch_price,
+				  _token: "{{ csrf_token() }}"
+				},
+			
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					//loadReceivablesPayment(receivable_id);
+					
+					//var table = $("#getReceivablesList").DataTable();
+				    //table.ajax.reload(null, false);
+		
+					/*Close Modal*/
+					//$('#CreateSalesOrderModal').modal('toggle');
+					
+				  }
+				},
+				error: function(error) {
+					
+				 console.log(error);
+								
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });	
+	  });
+
+	function loadProductInfo(productID) {
+		
+		event.preventDefault();
+		
+			  $.ajax({
+				url: "/product_info",
+				type:"POST",
+				data:{
+				  productID:productID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("save-product-price-per-branch").value = productID;
+					
+					/*Set Details*/		
+					document.getElementById("branch_product_name").innerHTML = response.product_name;
+					document.getElementById("branch_product_price").innerHTML = response.product_price;
+					document.getElementById("branch_product_unit").innerHTML = response.product_unit_measurement;	
+				  }
+					
+					
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  } 	  
   </script>
 	

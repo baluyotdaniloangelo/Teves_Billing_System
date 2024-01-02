@@ -50,6 +50,13 @@ else if (Request::is('client')){
 @include('layouts.client_script')
 <?php
 }
+else if (Request::is('branch')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.branch_script')
+<?php
+}
 else if (Request::is('supplier')){
 ?>
 <body class="">

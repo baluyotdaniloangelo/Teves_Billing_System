@@ -106,7 +106,7 @@
 											 <input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off" onChange="ClientInfo()">
 												<datalist id="client_name">
 												  @foreach ($client_data as $client_data_cols)
-												  <option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+												  <option label="{{$client_data_cols->client_name}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}}">
 												  @endforeach
 												</datalist>
 																					
