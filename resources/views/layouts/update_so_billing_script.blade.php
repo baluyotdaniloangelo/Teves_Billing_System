@@ -17,7 +17,8 @@
 			document.getElementById('SOBillingformUpdate').className = "g-3 needs-validation was-validated";
 			
 			let SOId 			= {{ $SOId }};
-
+			
+			let branch_id 				= $("#branch_id").val();
 			let order_date 				= $("input[name=so_order_date]").val();
 			let order_time 				= $("input[name=so_order_time]").val();
 			let so_number 				= $("input[name=so_number]").val();/*SO NUMBER*/
@@ -33,6 +34,7 @@
 				type:"POST",
 				data:{
 				  so_id:SOId,
+				  branch_id:branch_id,
 				  order_date:order_date,
 				  order_time:order_time,
 				  so_number:so_number,
@@ -55,12 +57,17 @@
 					$('#so_client_idxError').text('');
 					$('#so_plate_noError').text('');
 					$('#so_drivers_nameError').text('');
-					
-					document.getElementById("SOBillingformNew").reset();				
-					document.getElementById('SOBillingformNew').className = "g-3 needs-validation";
+								
+					document.getElementById('SOBillingformUpdate').className = "g-3 needs-validation";
 					
 					so_id = response.so_id;
-				  
+					LoadProductList(branch_id);
+					
+					/*Enable the Add Product Button Until Changes not Save*/
+					document.getElementById("AddProductBTN").disabled = false;
+					document.getElementById("SOBilling_Edit").disabled = false;
+					document.getElementById("deleteSOProduct").disabled = false;
+					
 				  }
 				},
 				error: function(error) {
@@ -95,6 +102,56 @@
 			   });		
 	  });	
 	  
+	function UpdateBranch(){ 
+	
+		/*Disable the Add Product Button Until Changes not Save*/
+		document.getElementById("AddProductBTN").disabled = true;
+		document.getElementById("SOBilling_Edit").disabled = true;
+		document.getElementById("deleteSOProduct").disabled = true;
+		
+		$('#switch_notice_off').show();
+		$('#sw_off').html("You selected a new branch, to confirm changes click the update button");
+		setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },2000);
+		
+	}
+
+	function LoadProductList(branch_id) {		
+	
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+			  $.ajax({
+				url: "{{ route('ProductListPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  branch_idx:branch_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
+	
 	function TotalAmount(){
 		
 		let product_price 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-price');
@@ -149,7 +206,7 @@
 			let order_quantity 			= $("input[name=order_quantity]").val();
 
 			/*Client and Product Name*/
-			let product_name 					= $("input[name=product_name]").val();
+			let product_name 			= $("input[name=product_name]").val();
 			
 			let SOId 			= {{ $SOId }};
 			
@@ -232,8 +289,8 @@
 			   });	
 	  });	
 
-	function LoadSOProductList() {		
-		//event.preventDefault();
+	function LoadSOProductList() {	
+	
 		let SOId 			= {{ $SOId }};
 		$("#table_so_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_so_product_body_data');
@@ -303,6 +360,8 @@
 					
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
+					LoadProductList(response[0].branch_id)
 					
 					$('#EditProductModal').modal('toggle');					
 				  

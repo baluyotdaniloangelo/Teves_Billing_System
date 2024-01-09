@@ -52,7 +52,7 @@
 				  <form class="row g-3 needs-validation" action="{{route('login-user')}}" method="POST">
                     @csrf								
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
+                      <label for="user_name" class="form-label">Username</label>
 					  
                        <input type="Text" class="form-control form-control-user" id="user_name" name="user_name" placeholder="Enter Username" style="text-align:center;" value="{{old('user_name')}}">
 					   <span class="text-danger">@error('user_name') {{$message}} @enderror</span>
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
+                      <label for="InputPassword" class="form-label">Password</label>
                       <input type="password" class="form-control form-control-user" id="InputPassword" name="InputPassword" placeholder="Enter Password" style="text-align:center;" value="{{old('InputPassword')}}">
 					  <span class="text-danger">@error('InputPassword') {{$message}} @enderror</span>
                     </div>

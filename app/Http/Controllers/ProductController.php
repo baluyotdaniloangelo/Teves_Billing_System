@@ -149,7 +149,7 @@ class ProductController extends Controller
 			}
 	}
 	
-	/*Payment List*/
+	/*Pricing List*/
 	public function get_product_pricing_per_branch(Request $request){		
 
 			$data =  ProductModel::Join('teves_product_branch_price_table', 'teves_product_table.product_id', '=', 'teves_product_branch_price_table.product_idx')
@@ -197,5 +197,17 @@ class ProductController extends Controller
 			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
 			
 			}							
-	}	
+	}		
+	
+	/*Pricing List*/
+	public function get_product_list_pricing_per_branch(Request $request){		
+
+			$raw_query_product = "SELECT a.product_id,a.product_name,ifnull(b.branch_price,a.product_price) AS product_price ,c.branch_code FROM teves_product_table AS a
+			LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
+			WHERE c.branch_id = ?";			
+			$product_data = DB::select("$raw_query_product", [$request->branch_idx]);
+
+			return response()->json($product_data);			
+	}
+	
 }

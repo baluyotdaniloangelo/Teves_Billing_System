@@ -83,6 +83,8 @@ Route::post('/delete_product_confirmed', [ProductController::class, 'delete_prod
 Route::post('/get_product_pricing_per_branch', [ProductController::class,'get_product_pricing_per_branch'])->name('ProductPricingPerBranch')->middleware('isLoggedIn');
 /*Save Product Pricing Per Branch 01-02-2023*/
 Route::post('/save_branches_product_pricing_post', [ProductController::class,'save_branches_product_pricing_post'])->name('save_branches_product_pricing_post')->middleware('isLoggedIn');
+/*Load Product Pricing Per Branch per Billing 01-09-2023*/
+Route::post('/get_product_list_pricing_per_branch', [ProductController::class,'get_product_list_pricing_per_branch'])->name('ProductListPricingPerBranch')->middleware('isLoggedIn');
 
 
 /*Dev Date Nov 30 2022*/

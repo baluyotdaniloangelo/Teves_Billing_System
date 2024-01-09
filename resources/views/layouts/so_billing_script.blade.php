@@ -69,7 +69,8 @@
 					$('#sdrivers_nameError').text('');
 
 			document.getElementById('SOBillingformNew').className = "g-3 needs-validation was-validated";
-
+			
+			let branch_id 				= $("#branch_id").val();
 			let order_date 				= $("input[name=so_order_date]").val();
 			let order_time 				= $("input[name=so_order_time]").val();
 			let so_number 				= $("input[name=so_number]").val();/*SO NUMBER*/
@@ -78,12 +79,13 @@
 			let drivers_name 			= $("input[name=so_drivers_name]").val();
 			
 			/*Client and Product Name*/
-			let client_name 					= $("input[name=so_client_name]").val();
+			let client_name 			= $("input[name=so_client_name]").val();
 			
 			  $.ajax({
 				url: "{{ route('CreateSOPost') }}",
 				type:"POST",
 				data:{
+				  branch_id:branch_id,
 				  order_date:order_date,
 				  order_time:order_time,
 				  so_number:so_number,

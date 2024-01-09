@@ -27,7 +27,7 @@ class BillingTransactionController extends Controller
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-			$product_data = ProductModel::all();
+			//$product_data = ProductModel::all();
 			
 			$client_data = ClientModel::all();
 			
@@ -36,7 +36,7 @@ class BillingTransactionController extends Controller
 		
 		}
 
-		return view("pages.billing", compact('data','title','product_data','client_data','drivers_name','plate_no'));
+		return view("pages.billing", compact('data','title','client_data','drivers_name','plate_no'));
 		
 	}   
  	
@@ -124,8 +124,7 @@ class BillingTransactionController extends Controller
                     return $actionBtn;
                 })
 				
-				 ->addColumn('quantity_measurement', function($row){
-                 											
+				 ->addColumn('quantity_measurement', function($row){									
 					return  $row->order_quantity." ".$row->product_unit_measurement;
                     //return $actionBtn;
                 })
@@ -141,8 +140,10 @@ class BillingTransactionController extends Controller
 		$billID = $request->billID;
 		$data = BillingTransactionModel::where('billing_id', $request->billID)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->join('teves_billing_so_table', 'teves_billing_so_table.so_id', '=', 'teves_billing_table.so_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
               		->get([
+					'teves_billing_so_table.branch_idx as branch_id',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_id as product_idx',

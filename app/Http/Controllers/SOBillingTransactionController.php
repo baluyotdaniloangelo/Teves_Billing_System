@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,10 +8,11 @@ use App\Models\SOBillingTransactionModel;
 use App\Models\BillingTransactionModel;
 use App\Models\ProductModel;
 use App\Models\ClientModel;
+use App\Models\TevesBranchModel;
 use Session;
 use Validator;
 use DataTables;
-
+use Illuminate\Support\Facades\DB;
 //use Spatie\Activitylog\Models\Activity;
 
 class SOBillingTransactionController extends Controller
@@ -37,7 +37,6 @@ class SOBillingTransactionController extends Controller
 		return view("pages.so_billing", compact('data','title','client_data','drivers_name','plate_no'));
 		
 	}   
-	
 
 	/*Fetch SO List using Datatable*/
 	public function getSOBillingTransactionList(Request $request)
@@ -145,64 +144,70 @@ class SOBillingTransactionController extends Controller
 			
 			$client_data = ClientModel::all();
 			
+			$teves_branch = TevesBranchModel::all();
+			
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
+			return view("pages.billing_so_form", compact('data','title','product_data','client_data','drivers_name','plate_no','teves_branch'));
 		}
 
-		return view("pages.billing_so_form", compact('data','title','product_data','client_data','drivers_name','plate_no'));
-		
 	}  
 	
 	public function create_so_post(Request $request){
-	
-		$request->validate([
-          'order_date'      		=> 'required',
-		  'order_time'      		=> 'required',
-		  'so_number'      			=> 'required|unique:teves_billing_so_table,so_number',
-		  'client_idx'      		=> 'required',
-		  'plate_no'      			=> 'required',
-		  'drivers_name'      		=> 'required',
-        ], 
-        [
-			'order_date.required' => 'Order Date is required',
-			'order_time.required' => 'Order Time is Required',
-			'so_number.required' => 'SO is Required',
-			'client_idx.required' => 'Client is Required',
-			'plate_no.required' => 'Plate Number is Required',
-			'drivers_name.required' => "Driver's Name is Required",
-        ]
-		);
-				
-					/*insert*/
-					$SOBilling = new SOBillingTransactionModel();
-					$SOBilling->order_date 			= $request->order_date;
-					$SOBilling->order_time 			= $request->order_time;
-					$SOBilling->so_number 			= $request->so_number;	
-					$SOBilling->client_idx 			= $request->client_idx;
-					$SOBilling->plate_no 			= $request->plate_no;
-					$SOBilling->drivers_name 		= $request->drivers_name;
-					$SOBilling->created_by_user_id 	= Session::get('loginID');
-					$result = $SOBilling->save();
-					
-					$last_transaction_id = $SOBilling->so_id;
+		
+		if(Session::has('loginID')){
 			
-					if($result){
-						return response()->json(array('success' => "SO Information Successfully Created!", 'so_id' => $last_transaction_id), 200);
-					}
-					else{
-						return response()->json(['success'=>'Error on Insert SO Information']);
-					}	
+			$request->validate([
+			  'order_date'      		=> 'required',
+			  'order_time'      		=> 'required',
+			  'so_number'      			=> 'required|unique:teves_billing_so_table,so_number',
+			  'client_idx'      		=> 'required',
+			  'plate_no'      			=> 'required',
+			  'drivers_name'      		=> 'required',
+			], 
+			[
+				'order_date.required' => 'Order Date is required',
+				'order_time.required' => 'Order Time is Required',
+				'so_number.required' => 'SO is Required',
+				'client_idx.required' => 'Client is Required',
+				'plate_no.required' => 'Plate Number is Required',
+				'drivers_name.required' => "Driver's Name is Required",
+			]
+			);
+					
+						/*insert*/
+						$SOBilling = new SOBillingTransactionModel();
+						$SOBilling->branch_idx 			= $request->branch_id;
+						$SOBilling->order_date 			= $request->order_date;
+						$SOBilling->order_time 			= $request->order_time;
+						$SOBilling->so_number 			= $request->so_number;	
+						$SOBilling->client_idx 			= $request->client_idx;
+						$SOBilling->plate_no 			= $request->plate_no;
+						$SOBilling->drivers_name 		= $request->drivers_name;
+						$SOBilling->created_by_user_id 	= Session::get('loginID');
+						$result = $SOBilling->save();
+						
+						$last_transaction_id = $SOBilling->so_id;
+				
+						if($result){
+							return response()->json(array('success' => "SO Information Successfully Created!", 'so_id' => $last_transaction_id), 200);
+						}
+						else{
+							return response()->json(['success'=>'Error on Insert SO Information']);
+						}	
+		}
 		
 	}
 	
 	/*Load Site Interface*/
 	public function so_add_product($SOId){
-		
-		$title = 'Update SO / Add Product';
-		$data = array();
+
 		if(Session::has('loginID')){
 			
+			$title = 'Update SO / Add Product';
+			$data = array();
+		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$so_data = SOBillingTransactionModel::where('so_id', $SOId)
@@ -211,20 +216,27 @@ class SOBillingTransactionController extends Controller
 			'teves_client_table.client_name',
 			'teves_client_table.client_id',
 			'teves_billing_so_table.so_number',
+			'teves_billing_so_table.branch_idx',
 			'teves_billing_so_table.order_date',
 			'teves_billing_so_table.order_time',
 			'teves_billing_so_table.drivers_name',
 			'teves_billing_so_table.plate_no']);	
 			
-			$product_data = ProductModel::all();
-			
+			$raw_query_product = "SELECT a.product_id,a.product_name,ifnull(b.branch_price,a.product_price) AS product_price ,c.branch_code FROM teves_product_table AS a
+			LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
+			WHERE c.branch_id = ?";			
+			$product_data = DB::select("$raw_query_product", [$so_data[0]['branch_idx']]);
+		
 			$client_data = ClientModel::all();
+			$teves_branch = TevesBranchModel::all();
 			
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
-		
+			
+			return view("pages.billing_so_form_add_product", compact('data','title','product_data','client_data','drivers_name','plate_no', 'SOId','so_data','teves_branch'));
+
 		}
-		return view("pages.billing_so_form_add_product", compact('data','title','product_data','client_data','drivers_name','plate_no', 'SOId','so_data'));
+		
 	}  	
 	
 	public function update_so_post(Request $request){
@@ -254,6 +266,7 @@ class SOBillingTransactionController extends Controller
 					/*insert*/
 					$SOBilling = new SOBillingTransactionModel();
 					$SOBilling = SOBillingTransactionModel::find($request->so_id);
+					$SOBilling->branch_idx 			= $request->branch_id;
 					$SOBilling->order_date 			= $request->order_date;
 					$SOBilling->order_time 			= $request->order_time;
 					$SOBilling->so_number 			= $request->so_number;	
@@ -262,8 +275,7 @@ class SOBillingTransactionController extends Controller
 					$SOBilling->drivers_name 		= $request->drivers_name;
 					$SOBilling->updated_by_user_id 	= Session::get('loginID');
 					
-					$result = $SOBilling->update();
-					
+					$result = $SOBilling->update();		
 			
 					if($result){
 						return response()->json(array('success' => "SO Information Successfully Updated!", 'so_id' => $request->so_id), 200);

@@ -286,6 +286,10 @@
 					
 					document.getElementById("update-billing-transaction").value = billID;
 					
+					/*Load Selection Product*/
+					let branch_idx = response[0].branch_id;
+					LoadProductList(branch_idx);
+					
 					/*Set Details*/
 					document.getElementById("update_order_date").value = response[0].order_date;
 					document.getElementById("update_order_time").value = response[0].order_time;
@@ -311,6 +315,44 @@
 				}
 			   });	
 	  });
+
+	function LoadProductList(branch_idx) {		
+	
+		$("#update_product_name span").remove();
+		$('<span style="display: none;"></span>').appendTo('#update_product_name');
+
+
+			  $.ajax({
+				url: "{{ route('ProductListPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  branch_idx:branch_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#update_product_name span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
 
 	$("#update-billing-transaction").click(function(event){			
 			event.preventDefault();

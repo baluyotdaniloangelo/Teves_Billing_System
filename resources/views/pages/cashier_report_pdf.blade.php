@@ -349,12 +349,12 @@
 				<td nowrap style="border:1px solid #000;" width="10%"><?=$other_msc;?></td>
 				<td nowrap style="border:1px solid #000;">{{$data_OTHERS_cols->reference_no}}</td>
 				<td nowrap style="border:1px solid #000;"><?=number_format($data_OTHERS_cols['order_quantity'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_OTHERS_cols['unit_price'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000;"><?=number_format($data_OTHERS_cols['order_total_amount'],2,".",",");?></td>
 				
 			</tr>
 			<?php
 			$other_msc++; 
-			$total_others_msc += $data_OTHERS_cols->unit_price;
+			$total_others_msc += $data_OTHERS_cols->order_total_amount;
 			?>
 			@endforeach
 

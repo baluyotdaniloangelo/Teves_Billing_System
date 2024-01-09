@@ -191,7 +191,7 @@ class CashiersReportController extends Controller
 		
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate = CashiersReportModel::find($request->CashiersReportId);
-			$CashiersReportCreate->user_idx 				= Session::get('loginID');
+			/*$CashiersReportCreate->user_idx 				= Session::get('loginID');*/
 			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
 			$CashiersReportCreate->report_date 				= $request->report_date;
@@ -377,7 +377,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P1 = new CashiersReportModel_P1();
 									$CashiersReportModel_P1 = CashiersReportModel_P1::find($CHPH1_ID);
 									
-									$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
+									//$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
 									$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
 									$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
@@ -647,6 +647,15 @@ class CashiersReportController extends Controller
 				        }
 			
 			        }
+					$peso_sales = ($order_quantity * $product_price);
+
+            }else if($miscellaneous_items_type=='OTHERS'){
+
+                   
+				        $discounted_price 	= 0;
+				        $product_price 		= $product_manual_price;
+				
+			       
 					$peso_sales = ($order_quantity * $product_price);
 
             }else{

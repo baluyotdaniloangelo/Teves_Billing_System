@@ -1011,7 +1011,7 @@
 							"<td align='center'>" + (i+1) + "</td>" +
 							"<td class='calibration_td' align='center'>"+reference_no+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
-							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
+							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
 							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_OTHERS' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_OTHERS'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
 					}			

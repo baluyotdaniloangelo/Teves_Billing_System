@@ -15,6 +15,28 @@
 				<form class="g-3 needs-validation" id="SOBillingformUpdate">
 					
 												<div class="row mb-2">
+												  <label for="branch_id" class="col-sm-3 col-form-label">Branch</label>
+												  <div class="col-sm-9">
+												 	<select class="form-select form-control" required="" name="branch_id" id="branch_id" onchange="UpdateBranch()">
+													<?php $branch_idx = $so_data[0]['branch_idx']; ?>
+										
+													@foreach ($teves_branch as $teves_branch_cols)
+													<?php 
+													$branch_id = $teves_branch_cols->branch_id;
+													
+													?>
+													<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
+														{{$teves_branch_cols->branch_code}}
+													</option>
+													
+													@endforeach
+													
+									
+													</select>
+												  </div>
+												</div>		
+					
+												<div class="row mb-2">
 												  <label for="so_order_date" class="col-sm-3 col-form-label">Date</label>
 												  <div class="col-sm-9">
 													<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="{{ $so_data[0]['order_date'] }}" required>
@@ -106,7 +128,7 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal"></button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal" id='AddProductBTN'></button>
 						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 						
 					</div>					
@@ -158,17 +180,11 @@
 						<div class="col-sm-12">
 						
 						<div class="form-floating mb-3">
-						  <input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()"placeholder="Date">
+						  <input class="form-control" list="product_list" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()"placeholder="Date">
 						  <label for="product_idx">Product</label>
 						 </div>
 						<span class="valid-feedback" id="product_idxError"></span>
-						<datalist id="product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									
 						</div>
 						
 						</div>
@@ -223,8 +239,7 @@
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Update Product</h5>
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">				
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
@@ -237,17 +252,11 @@
 						<div class="col-sm-12">
 						
 						<div class="form-floating mb-3">
-						  <input class="form-control" list="edit_product_name" name="edit_product_name" id="edit_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()"placeholder="Date">
+						  <input class="form-control" list="product_list" name="edit_product_name" id="edit_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()"placeholder="Date">
 						  <label for="edit_product_idx">Product</label>
 						 </div>
 						<span class="valid-feedback" id="edit_product_idxError"></span>
-									<datalist id="edit_product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									
 						</div>
 						
 						</div>
@@ -335,7 +344,16 @@
             </div>
         </div>
     </div>	
-			 
+			
+<!--Data List for Product-->
+	<datalist id="product_list">
+		@foreach ($product_data as $product_data_cols)
+			<span style="font-family: DejaVu Sans; sans-serif;">
+				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+			</span>
+		@endforeach
+	</datalist>
+	
     </section>
 </main>
 

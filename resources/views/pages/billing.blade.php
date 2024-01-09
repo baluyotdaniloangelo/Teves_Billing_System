@@ -225,11 +225,7 @@
 							  
 									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()">
 									<datalist id="product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
+										
 									</datalist>
 									
 									<span class="input-group-text">Manual Price</span>
@@ -249,7 +245,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="order_date" class="col-sm-3 col-form-label">Amount</label>
+						  <label class="col-sm-3 col-form-label">Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount">0.00</span>
 						  </div>
@@ -357,11 +353,7 @@
 							  
 									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
 									<datalist id="update_product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}" data-price="{{$product_data_cols->product_price}}" >
-											</span>
-										@endforeach
+										
 									</datalist>
 									
 									<span class="input-group-text">Manual Price</span>
@@ -381,7 +373,7 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="" class="col-sm-3 col-form-label">Amount</label>
+						  <label class="col-sm-3 col-form-label">Amount</label>
 						  <div class="col-sm-9">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount">0.00</span>
 						  </div>
