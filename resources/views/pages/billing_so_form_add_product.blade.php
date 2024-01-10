@@ -97,9 +97,7 @@
 													  </datalist>
 													<span class="valid-feedback" id="drivers_nameError"></span>
 												  </div>
-												</div>
-												
-													
+												</div>												
 				</form>
              
             </div>
@@ -154,10 +152,8 @@
             </div>
           </div>
              
-            
 			</div>
-			
-		
+	
 		</div> 
 		
 	<!--Modal to Create SO Product-->
@@ -333,7 +329,6 @@
 				
 				Total Amount: <span id="bill_delete_order_total_amount"></span><br>
 				
-				
 				</div>
                 <div class="modal-footer footer_modal_bg">
                     
@@ -352,11 +347,10 @@
 				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
 			</span>
 		@endforeach
-	</datalist>
+	</datalist>	
 	
     </section>
 </main>
 
 
 @endsection
-

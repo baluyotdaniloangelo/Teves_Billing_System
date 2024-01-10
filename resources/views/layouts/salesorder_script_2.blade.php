@@ -142,8 +142,8 @@
 
 
 	function ClientInfo() {
-			test = encodeURI($('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id'));			
-			alert(test);
+			//test = encodeURI($('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id'));			
+			//alert(test);
 			let clientID 				= ($('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id'));
 			
 			$.ajax({

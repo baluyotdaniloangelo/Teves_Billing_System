@@ -104,15 +104,15 @@
 	  
 	function UpdateBranch(){ 
 	
-		/*Disable the Add Product Button Until Changes not Save*/
-		document.getElementById("AddProductBTN").disabled = true;
-		document.getElementById("SOBilling_Edit").disabled = true;
-		document.getElementById("deleteSOProduct").disabled = true;
-		
 		$('#switch_notice_off').show();
 		$('#sw_off').html("You selected a new branch, to confirm changes click the update button");
 		setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },2000);
 		
+		/*Disable the Add Product Button Until Changes not Save*/
+		document.getElementById("AddProductBTN").disabled = true;
+		document.getElementById("SOBilling_Edit").disabled = true;
+		document.getElementById("deleteSOProduct").disabled = true;
+	
 	}
 
 	function LoadProductList(branch_id) {		
@@ -201,7 +201,7 @@
 
 			document.getElementById('AddSOProduct').className = "g-3 needs-validation was-validated";
 		
-			let product_idx 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-id');
+			let product_idx 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 
@@ -389,7 +389,7 @@
 			
 			let SOId 						= {{ $SOId }};
 			let billID 						= document.getElementById("so-update-product").value;
-			let product_idx 				= $('#edit_product_name option[value="' + $('#edit_product_idx').val() + '"]').attr('data-id');
+			let product_idx 				= $('#product_list option[value="' + $('#edit_product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 		= $("#edit_product_manual_price").val();
 			let order_quantity 				= $("input[name=edit_order_quantity]").val();
 
@@ -429,8 +429,7 @@
 						
 						/*Reload Table*/
 						LoadSOProductList();
-						
-				  
+									  
 				},
 				beforeSend:function()
 				{
