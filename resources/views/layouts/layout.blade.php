@@ -97,7 +97,7 @@ else if (Request::is('salesorder')){
 ?>
 <body class="">
 @include('layouts.footer')
-@include('layouts.salesorder_script_2')
+@include('layouts.salesorder_script')
 <?php
 }
 else if (Request::is('sales_order_form/*')){

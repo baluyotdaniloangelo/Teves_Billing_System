@@ -117,6 +117,7 @@
 									<option value="oz">Ounce | oz</option>
 									<option value="Pail">Pail</option>
 									<option value="Drum">Drum</option>
+									<option value="Case">Case</option>
 							</select>
 							<span class="valid-feedback" id="product_unit_measurementError"></span>
 						  </div>
@@ -179,6 +180,7 @@
 									<option value="oz">Ounce | oz</option>
 									<option value="Pail">Pail</option>
 									<option value="Drum">Drum</option>
+									<option value="Case">Case</option>
 							</select>
 							<span class="valid-feedback" id="update_product_unit_measurementError"></span>
 						  </div>

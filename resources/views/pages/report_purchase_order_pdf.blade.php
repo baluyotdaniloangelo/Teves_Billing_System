@@ -144,7 +144,7 @@
 			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;"><?=$purchase_order_date_of_payment;?></td>
 			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">{{$purchase_payment_component_cols->purchase_order_reference_no}}</td>
 			<td colspan="2" align="right" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">	
-			<?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],2);?>
+			<?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],4);?>
 			</td>			
 			</tr>
 			<?php 
@@ -215,7 +215,7 @@
 				<td colspan="2" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_unit_measurement}}</td>
 				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->product_price,2,".",",");?></td>
-				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,2,".",",");?></td>
+				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,4,".",",");?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -226,28 +226,28 @@
 		<tr style="font-size:12px;">
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:25px !important;">Gross Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_gross_amount'],2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_gross_amount'],4);?>
 		</tr>
 		
 		<tr style="font-size:12px;">
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:25px !important;">Net Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_net_amount'],2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_net_amount'],4);?>
 		</tr>
 		
 		<tr style="font-size:12px;">
 			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:25px !important;">Less 1% </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100,2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100,4);?>
 		</tr>		
 
 		<tr style="font-size:12px;">			
 			<td colspan="3" align="left" style="border-left: 0px solid #000; border-top: 0px solid #000;">Total Volume</td>
-			<td colspan="2" align="right" style="border-left: 0px solid #000; border-top: 0px solid #000; font-weight:bold;"><?=number_format($total_liters,2,".",",");?></td>
+			<td colspan="2" align="right" style="border-left: 0px solid #000; border-top: 0px solid #000; font-weight:bold;"><?=number_format($total_liters,4,".",",");?></td>
 			<td colspan="1" align="center" style="border-left: 0px solid #000; border-top: 0px solid #000;">Liters</td>
 			<td colspan="2" align="right" style="background-color: #a9d08e; border-top: 0px solid #000; font-weight:bold;">Total Due </td>
 			<td colspan="2" align="right" style="background-color: #a9d08e; border-top: 0px solid #000; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($purchase_order_data[0]['purchase_order_total_payable'],2);?>
+			<?=number_format($purchase_order_data[0]['purchase_order_total_payable'],4);?>
 		</tr>	
 		
 		<tr>

@@ -23,7 +23,7 @@
 					{data: 'purchase_order_date'},
 					{data: 'purchase_order_control_number'},
 					{data: 'supplier_name'},
-					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },
 					{data: 'status', name: 'status', orderable: true, searchable: true},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
