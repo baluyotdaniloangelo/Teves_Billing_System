@@ -443,14 +443,8 @@
 						  
 							  <div class="input-group">
 							  
-									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
-									<datalist id="update_product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" value="{{$product_data_cols->product_name}}" data-price="{{$product_data_cols->product_price}}" >
-											</span>
-										@endforeach
-									</datalist>
+									<input class="form-control" list="product_list" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
+									
 									
 									<span class="input-group-text">Manual Price</span>
 									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="" step=".01" onchange="UpdateTotalAmount()">
@@ -526,6 +520,16 @@
             </div>
         </div>
     </div>	
+	
+	<!--Data List for Product-->
+	<datalist id="product_list">
+		@foreach ($product_data as $product_data_cols)
+			<span style="font-family: DejaVu Sans; sans-serif;">
+				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+			</span>
+		@endforeach
+	</datalist>		
+	
     </section>
 </main>
 

@@ -55,6 +55,8 @@
 				  if(response) {
 					  
 					LoadProductRowForUpdate(sales_order_id);
+					LoadProductList(company_header);
+					document.getElementById("AddSalesOrderProductBTN").disabled = false;
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
@@ -69,14 +71,14 @@
 					$('#update_drivers_nameError').text('');
 					
 					
-					/*Open PDF for Printing*/
+					/*Open PDF for Printing
 					var query = {
 								sales_order_id:sales_order_id,
 								_token: "{{ csrf_token() }}"
 							}
 
 					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
-					window.open(url);
+					window.open(url);*/
 					
 				  }
 				},
@@ -109,6 +111,54 @@
 			   });	
 	  });	  
 
+	function UpdateBranch(){ 
+	
+		$('#switch_notice_off').show();
+		$('#sw_off').html("You selected a new branch, to confirm changes click the update button");
+		setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },2000);
+		
+		/*Disable the Add Product Button Until Changes not Save*/
+		document.getElementById("AddSalesOrderProductBTN").disabled = true;
+		
+	}
+
+	function LoadProductList(branch_id) {		
+	
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+			  $.ajax({
+				url: "{{ route('ProductListPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  branch_idx:branch_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
+	
 	$("#save-product").click(function(event){
 		
 			event.preventDefault();
@@ -120,8 +170,10 @@
 					$('#order_quantityError').text('');
 
 			document.getElementById('AddProduct').className = "g-3 needs-validation was-validated";
+			
+			let company_header 			= $("#company_header").val();
 		
-			let product_idx 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-id');
+			let product_idx 			= $("#product_list option[value='" + $('#product_idx').val() + "']").attr('data-id');
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 
@@ -138,6 +190,7 @@
 				type:"POST",
 				data:{
 				  sales_order_component_id:0,
+				  branch_idx:company_header,
 				  sales_order_id:sales_order_id,
 				  product_idx:product_idx,
 				  product_manual_price:product_manual_price,
@@ -313,8 +366,12 @@
 
 			document.getElementById('EditSalesOrderComponentProduct').className = "g-3 needs-validation was-validated";
 			
+			let company_header 			= $("#company_header").val();
+			
+			let sales_order_id 			= {{ $SalesOrderID }};
+			
 			let sales_order_component_id 	= document.getElementById("update-product").value;
-			let product_idx 				= $("#edit_product_name option[value='" + $('#edit_product_idx').val() + "']").attr('data-id');
+			let product_idx 				= $("#product_list option[value='" + $('#edit_product_idx').val() + "']").attr('data-id');
 			let product_manual_price 		= $("#edit_product_manual_price").val();
 			let order_quantity 				= $("input[name=edit_order_quantity]").val();
 
@@ -323,11 +380,13 @@
 			
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
-			
+
 			  $.ajax({
 				url: "{{ route('SalesOrderComponentCompose') }}",
 				type:"POST",
 				data:{
+				  branch_idx:company_header,	
+				  sales_order_id:sales_order_id,
 				  sales_order_component_id:sales_order_component_id,
 				  product_idx:product_idx,
 				  product_manual_price:product_manual_price,
@@ -525,7 +584,7 @@
 	
 	function TotalAmount(){
 		
-		let product_price 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-price');
+		let product_price 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#product_manual_price").val();
 		let order_quantity 			= $("input[name=order_quantity]").val();
 		
@@ -543,7 +602,7 @@
 
 	function UpdateTotalAmount(){
 		
-		let product_price 			= $('#edit_product_name option[value="' + $('#edit_product_idx').val() + '"]').attr('data-price');
+		let product_price 			= $('#product_list option[value="' + $('#edit_product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#edit_product_manual_price").val();
 		let order_quantity 			= $("input[name=edit_order_quantity]").val();
 		

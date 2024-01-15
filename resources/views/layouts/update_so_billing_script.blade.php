@@ -154,7 +154,7 @@
 	
 	function TotalAmount(){
 		
-		let product_price 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-price');
+		let product_price 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#product_manual_price").val();
 		let order_quantity 			= $("input[name=order_quantity]").val();
 		
@@ -172,7 +172,7 @@
 
 	function UpdateTotalAmount(){
 		
-		let product_price 			= $('#edit_product_name option[value="' + $('#edit_product_idx').val() + '"]').attr('data-price');
+		let product_price 			= $('#product_list option[value="' + $('#edit_product_idx').val() + '"]').attr('data-price');
 		let product_manual_price 	= $("#edit_product_manual_price").val();
 		let order_quantity 			= $("input[name=edit_order_quantity]").val();
 		
@@ -200,7 +200,8 @@
 					$('#order_quantityError').text('');
 
 			document.getElementById('AddSOProduct').className = "g-3 needs-validation was-validated";
-		
+			
+			let branch_id 				= $("#branch_id").val();
 			let product_idx 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
@@ -214,6 +215,7 @@
 				url: "{{ route('SOAddProductPost') }}",
 				type:"POST",
 				data:{
+				  branch_idx:branch_id,
 				  so_id:SOId,
 				  product_idx:product_idx,
 				  product_manual_price:product_manual_price,
@@ -361,7 +363,7 @@
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					
-					LoadProductList(response[0].branch_id)
+					LoadProductList(response[0].branch_id);
 					
 					$('#EditProductModal').modal('toggle');					
 				  
@@ -388,6 +390,7 @@
 			document.getElementById('EditSOProduct').className = "g-3 needs-validation was-validated";
 			
 			let SOId 						= {{ $SOId }};
+			let branch_id 					= $("#branch_id").val();
 			let billID 						= document.getElementById("so-update-product").value;
 			let product_idx 				= $('#product_list option[value="' + $('#edit_product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 		= $("#edit_product_manual_price").val();
@@ -400,6 +403,7 @@
 				url: "{{ route('SOUpdateProductPost') }}",
 				type:"POST",
 				data:{
+				  branch_idx:branch_id,
 				  so_id:SOId,
 				  billing_id:billID,
 				  product_idx:product_idx,

@@ -8,6 +8,7 @@
 			
 			<div class="col-sm-4">
 			
+			
 			<div class="card">
             <div class="card-header"><h5 class="card-title">Update SO Information</h5></div>
             <div class="card-body">
@@ -19,19 +20,14 @@
 												  <div class="col-sm-9">
 												 	<select class="form-select form-control" required="" name="branch_id" id="branch_id" onchange="UpdateBranch()">
 													<?php $branch_idx = $so_data[0]['branch_idx']; ?>
-										
 													@foreach ($teves_branch as $teves_branch_cols)
 													<?php 
 													$branch_id = $teves_branch_cols->branch_id;
-													
 													?>
 													<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
 														{{$teves_branch_cols->branch_code}}
 													</option>
-													
 													@endforeach
-													
-									
 													</select>
 												  </div>
 												</div>		
@@ -309,8 +305,7 @@
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
  					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
                 </div>
-				
-				
+	
                 <div class="modal-body warning_modal_bg" id="modal-body">
 				Are you sure you want to Delete This Bill?<br>
 				</div>
@@ -340,7 +335,7 @@
         </div>
     </div>	
 			
-<!--Data List for Product-->
+	<!--Data List for Product-->
 	<datalist id="product_list">
 		@foreach ($product_data as $product_data_cols)
 			<span style="font-family: DejaVu Sans; sans-serif;">
@@ -348,7 +343,7 @@
 			</span>
 		@endforeach
 	</datalist>	
-	
+
     </section>
 </main>
 

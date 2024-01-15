@@ -25,7 +25,7 @@
 												<div class="row mb-2">
 												  <div class="col-sm-12">
 												   <label for="company_header" class="form-label">Branch</label>
-												 	<select class="form-select form-control" required="" name="company_header" id="company_header">
+												 	<select class="form-select form-control" required="" name="company_header" id="company_header" onchange="UpdateBranch()">
 													<?php $branch_idx = $sales_order_data[0]['company_header']; ?>
 										
 													@foreach ($teves_branch as $teves_branch_cols)
@@ -192,7 +192,7 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal">&nbsp;Add</button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN">&nbsp;Add</button>
 						<button type="button" class="btn btn-success new_item bi-printer-fill" id="PrintSalesOrder">&nbsp;Print</button>
 						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 						
@@ -246,17 +246,11 @@
 						<div class="col-sm-12">
 						
 						<div class="form-floating mb-3">
-						  <input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()"placeholder="Date">
+						  <input class="form-control" list="product_list" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()"placeholder="Date">
 						  <label for="product_idx">Product</label>
 						 </div>
 						<span class="valid-feedback" id="product_idxError"></span>
-						<datalist id="product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+						
 						</div>
 						
 						</div>
@@ -325,17 +319,11 @@
 						<div class="col-sm-12">
 						
 						<div class="form-floating mb-3">
-						  <input class="form-control" list="edit_product_name" name="edit_product_name" id="edit_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()"placeholder="Date">
+						  <input class="form-control" list="product_list" name="edit_product_name" id="edit_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()"placeholder="Date">
 						  <label for="edit_product_idx">Product</label>
 						 </div>
 						<span class="valid-feedback" id="edit_product_idxError"></span>
-									<datalist id="edit_product_name">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									
 						</div>
 						
 						</div>
@@ -413,7 +401,15 @@
             </div>
         </div>
     </div>
-	
+
+	<!--Data List for Product-->
+	<datalist id="product_list">
+		@foreach ($product_data as $product_data_cols)
+			<span style="font-family: DejaVu Sans; sans-serif;">
+				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+			</span>
+		@endforeach
+	</datalist>		
     </section>
 </main>
 

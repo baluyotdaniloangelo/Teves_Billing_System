@@ -640,12 +640,9 @@
 			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
-				
-			//let or_number 				= $("input[name=or_number]").val();
-			//let ar_reference 			= $("input[name=ar_reference]").val();			
+						
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
-			//let receivable_status 		= $("#receivable_status").val();
 					
 			let less_per_liter 			= $("input[name=less_per_liter]").val();
 			
@@ -663,11 +660,8 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
-				  //or_number:or_number,
-				  //ar_reference:ar_reference,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
-				  //receivable_status:receivable_status,
 				  less_per_liter:less_per_liter,
 				  company_header:company_header,
 				  withholding_tax_percentage:withholding_tax_percentage,
@@ -681,12 +675,10 @@
 					  
 					/*Reset Warnings*/
 					$('#tin_numberError').text('');
-					//$('#or_numberError').text('');
 					$('#payment_termError').text('');
 					$('#receivable_descriptionError').text('');
 					
 					/*Clear Form*/
-					//$('#or_number').val("");
 					$('#payment_term').val("");
 					$('#receivable_description').val("");
 					/*Close Form*/
@@ -785,6 +777,8 @@
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					
+					LoadProductList(response[0].branch_id);
+					
 					$('#UpdateBillingModal').modal('toggle');					
 				  
 				  }
@@ -796,6 +790,42 @@
 			   });	
 	  });
 
+	function LoadProductList(branch_id) {		
+	
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+			  $.ajax({
+				url: "{{ route('ProductListPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  branch_idx:branch_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
 
 	$("#update-billing-transaction").click(function(event){			
 			event.preventDefault();
@@ -820,7 +850,7 @@
 			let client_idx 						= $("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id');
 			let plate_no 						= $("input[name=update_plate_no]").val();
 			let drivers_name 					= $("input[name=update_drivers_name]").val();
-			let product_idx 					= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-id');
+			let product_idx 					= $("#product_list option[value='" + $('#update_product_idx').val() + "']").attr('data-id');
 			let update_product_manual_price 	= $("#update_product_manual_price").val();
 			let order_quantity 					= $("input[name=update_order_quantity]").val();
 			
@@ -1005,7 +1035,7 @@
 
 	function UpdateTotalAmount(){
 		
-		let product_price 			= $("#update_product_name option[value='" + $('#update_product_idx').val() + "']").attr('data-price');
+		let product_price 			= $("#product_list option[value='" + $('#update_product_idx').val() + "']").attr('data-price');
 		let product_manual_price 	= $("#update_product_manual_price").val();
 		let order_quantity 			= $("input[name=update_order_quantity]").val();
 		

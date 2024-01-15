@@ -11,6 +11,7 @@ use App\Models\SalesOrderComponentModel;
 use Session;
 use Validator;
 use DataTables;
+use Illuminate\Support\Facades\DB;
 
 class SalesOrderController extends Controller
 {
@@ -416,9 +417,15 @@ class SalesOrderController extends Controller
 					}else{
 						
 						/*Product Details*/
-						$product_info = ProductModel::find($request->product_idx, ['product_price']);
-						$product_price = $product_info->product_price;
+						//$product_info = ProductModel::find($request->product_idx, ['product_price']);
+						//$product_price = $product_info->product_price;
+						/*Product Details*/
+						$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
+						LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
+						WHERE b.branch_idx = ? and b.product_idx = ?";			
+						$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);		
 						
+						$product_price = $product_info[0]->product_price;
 					}
 					
 					$order_total_amount = $request->order_quantity * $product_price;	

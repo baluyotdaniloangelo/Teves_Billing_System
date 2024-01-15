@@ -12,7 +12,7 @@ use App\Models\ClientModel;
 use Session;
 use Validator;
 use DataTables;
-
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
 class BillingTransactionController extends Controller
@@ -230,16 +230,6 @@ class BillingTransactionController extends Controller
 					$Billing->order_total_amount 	= $order_total_amount;
 					
 					$result = $Billing->save();
-												
-					/*
-					$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
-					var_dump($user_data);
-					activity() 
-					->performedOn($Billing)
-					->causedBy($user_data->user_id)
-				   // ->withProperties(['business_name' => $request->order_quantity])
-					->log('Business <span class="text-green">Updated</span>  - '.$request->order_quantity);
-					*/
 			
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Created!", 'so_error' => false), 200);
@@ -285,15 +275,27 @@ class BillingTransactionController extends Controller
 					return response()->json(array('so_error'=>true), 200);
 					
 			}else{
+
+					$billID = $request->billID;
 					
+					$billing_data = BillingTransactionModel::where('billing_id', $request->billID)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->join('teves_billing_so_table', 'teves_billing_so_table.so_id', '=', 'teves_billing_table.so_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
+              		->get([
+					'teves_billing_so_table.branch_idx']);
+
 					/*Product Details*/
-					$product_info = ProductModel::find($request->product_idx, ['product_price']);		
+					$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
+					LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
+					WHERE b.branch_idx = ? and b.product_idx = ?";			
+					$product_info = DB::select("$raw_query_product", [$billing_data[0]->branch_idx,$request->product_idx]);		
 
 					/*Check if Price is From Manual Price*/
 					if($request->product_manual_price!=0){
 						$product_price = $request->product_manual_price;
 					}else{
-						$product_price = $product_info->product_price;
+						$product_price = $product_info[0]->product_price;
 					}
 					
 					$order_total_amount = $request->order_quantity * $product_price;
@@ -319,7 +321,6 @@ class BillingTransactionController extends Controller
 					$lastActivity->getExtraProperty('key'); //returns 'value'
 					$lastActivity->where('properties->key', 'value')->get(); // get all activity where the `key` custom property is 'value'
 				
-
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Updated!", 'so_error' => false), 200);
 					}
