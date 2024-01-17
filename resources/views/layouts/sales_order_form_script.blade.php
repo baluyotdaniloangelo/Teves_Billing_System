@@ -174,10 +174,11 @@
 			let company_header 			= $("#company_header").val();
 		
 			let product_idx 			= $("#product_list option[value='" + $('#product_idx').val() + "']").attr('data-id');
+			//let item_description  		= $("#product_idx").val();
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 
-			/*Client and Product Name*/
+			/*Product Name*/
 			let product_name 					= $("input[name=product_name]").val();
 			
 			let sales_order_id 			= {{ $SalesOrderID }};
@@ -192,7 +193,8 @@
 				  sales_order_component_id:0,
 				  branch_idx:company_header,
 				  sales_order_id:sales_order_id,
-				  product_idx:product_idx,
+				  product_idx:product_idx, 
+				  item_description:product_name,
 				  product_manual_price:product_manual_price,
 				  order_quantity:order_quantity,
 				  sales_order_net_percentage:sales_order_net_percentage,
@@ -244,7 +246,7 @@
 					
 				 console.log(error);	
 				      
-					if(error.responseJSON.errors.product_idx=='Product is Required'){
+					if(error.responseJSON.errors.product_idx=='Item Description or Product is Required'){
 							
 							if(product_name==''){
 								$('#product_idxError').html(error.responseJSON.errors.product_idx);
@@ -375,8 +377,8 @@
 			let product_manual_price 		= $("#edit_product_manual_price").val();
 			let order_quantity 				= $("input[name=edit_order_quantity]").val();
 
-			/*Client and Product Name*/
-			let product_name 				= $("input[name=product_name]").val();
+			/*Product Name*/
+			let product_name 				= $("input[name=edit_product_name]").val();
 			
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
@@ -389,6 +391,7 @@
 				  sales_order_id:sales_order_id,
 				  sales_order_component_id:sales_order_component_id,
 				  product_idx:product_idx,
+				  item_description:product_name,
 				  product_manual_price:product_manual_price,
 				  order_quantity:order_quantity,
 				  sales_order_net_percentage:sales_order_net_percentage,

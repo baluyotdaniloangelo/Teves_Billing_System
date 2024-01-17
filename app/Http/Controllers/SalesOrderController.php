@@ -135,8 +135,7 @@ class SalesOrderController extends Controller
 	public function sales_order_info(Request $request){
 		
 					$data = SalesOrderModel::where('sales_order_id', $request->sales_order_id)
-					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
-						
+					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')	
 					->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.company_header',
@@ -287,16 +286,15 @@ class SalesOrderController extends Controller
 	
 	public function get_sales_order_product_list(Request $request){		
 	
-			$data = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_sales_order_component_table.product_idx')
-					->orderBy('sales_order_component_id', 'asc')
-              		->get([
-					'teves_sales_order_component_table.sales_order_component_id',
-					'teves_product_table.product_name',
-					'teves_sales_order_component_table.product_idx',
-					'teves_sales_order_component_table.product_price',
-					'teves_sales_order_component_table.order_quantity',
-					'teves_sales_order_component_table.order_total_amount']);
+			$raw_query_sales_order_component = "SELECT `teves_sales_order_component_table`.`sales_order_component_id`,
+						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
+						`teves_sales_order_component_table`.`product_idx`, `teves_sales_order_component_table`.`product_price`, `teves_sales_order_component_table`.`order_quantity`,
+						`teves_sales_order_component_table`.`order_total_amount`
+						from `teves_sales_order_component_table`  left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx` where `sales_order_idx` = ?		  
+						order by `sales_order_component_id` asc";	
+						
+			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_id]);		
 		
 			return response()->json($data);
 	}
@@ -385,14 +383,16 @@ class SalesOrderController extends Controller
 
 	public function sales_order_component_info(Request $request){
 
-		$data = SalesOrderComponentModel::where('sales_order_component_id', $request->sales_order_component_id)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_sales_order_component_table.product_idx')
-              		->get([
-					'teves_product_table.product_name',
-					'teves_sales_order_component_table.product_price',
-					'teves_sales_order_component_table.order_quantity',					
-					'teves_sales_order_component_table.order_total_amount',
-					]);
+			$raw_query_sales_order_component = "select IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
+			 `teves_sales_order_component_table`.`product_price`,
+			  `teves_sales_order_component_table`.`order_quantity`,
+			   `teves_sales_order_component_table`.`order_total_amount`
+				 from `teves_sales_order_component_table` left join `teves_product_table`
+				  on `teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx`
+				   where `sales_order_component_id` = ?";	
+						
+			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_component_id]);		
+
 		return response()->json($data);
 		
 	}
@@ -400,11 +400,11 @@ class SalesOrderController extends Controller
 	public function sales_order_component_compose(Request $request){
 
 		$request->validate([
-		  'product_idx'      		=> 'required',
+		  'item_description'      	=> 'required',
 		  'order_quantity'      	=> 'required',
         ], 
         [
-			'product_idx.required' => 'Product is Required',
+			'item_description.required' => 'Item Description or Product is Required',
 			'order_quantity.required' => 'Quantity is Required'
         ]
 		);
@@ -427,14 +427,33 @@ class SalesOrderController extends Controller
 					
 					$order_total_amount = $request->order_quantity * $product_price;	
 					
+					$sales_order_data = SalesOrderModel::where('sales_order_id', $request->sales_order_id)
+					->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.company_header',
+					'teves_sales_order_table.sales_order_date',
+					'teves_sales_order_table.sales_order_client_idx']);
+					
+					$sales_order_date = $sales_order_data[0]->sales_order_date;
+					$client_idx = $sales_order_data[0]->sales_order_client_idx;
+					
+					if(($request->product_idx+0)==0){
+						$item_description = $request->item_description;
+					}else{
+						$item_description = '';
+					}
+					
 					if($request->sales_order_component_id==0){
 						
 						/*SAVE*/
 						$SalesOrderComponent = new SalesOrderComponentModel();
 						$SalesOrderComponent->sales_order_idx 		= $request->sales_order_id;
-						$SalesOrderComponent->product_idx 			= $request->product_idx;
+						$SalesOrderComponent->product_idx 			= $request->product_idx+0;
+						$SalesOrderComponent->item_description 		= $item_description;
 						$SalesOrderComponent->product_price 		= $product_price;
 						$SalesOrderComponent->order_quantity 		= $request->order_quantity;
+						$SalesOrderComponent->sales_order_date 		= $sales_order_date;
+						$SalesOrderComponent->client_idx 			= $client_idx;
 						$SalesOrderComponent->order_total_amount 	= $order_total_amount;
 						
 						$result = $SalesOrderComponent->save();
@@ -462,7 +481,6 @@ class SalesOrderController extends Controller
 				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
 				$SalesOrderUpdate->update();				
 				
-				
 						if($result){
 							return response()->json(array('success' => "Product Information Successfully Created!"), 200);
 						}
@@ -475,9 +493,12 @@ class SalesOrderController extends Controller
 						/*UPDATE*/
 						$SalesOrderComponent = new SalesOrderComponentModel();
 						$SalesOrderComponent = SalesOrderComponentModel::find($request->sales_order_component_id);
-						$SalesOrderComponent->product_idx 			= $request->product_idx;
+						$SalesOrderComponent->product_idx 			= $request->product_idx+0;
+						$SalesOrderComponent->item_description 		= $item_description;
 						$SalesOrderComponent->product_price 		= $product_price;
 						$SalesOrderComponent->order_quantity 		= $request->order_quantity;
+						$SalesOrderComponent->sales_order_date 		= $sales_order_date;
+						$SalesOrderComponent->client_idx 			= $client_idx;
 						$SalesOrderComponent->order_total_amount 	= $order_total_amount;
 						
 						$result = $SalesOrderComponent->update();

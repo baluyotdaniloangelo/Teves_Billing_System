@@ -204,7 +204,7 @@
 					<tr class='report'>
 						<th style="text-align:center !important;">Action</th>
 						<th style="text-align:center !important;">Item #</th>
-						<th style="text-align:center !important;">Product</th>
+						<th style="text-align:center !important;">Description</th>
 						<th style="text-align:center !important;">Price</th>
 						<th style="text-align:center !important;">Quantity</th>
 						<th style="text-align:center !important;">Amount</th>
