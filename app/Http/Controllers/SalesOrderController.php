@@ -415,10 +415,7 @@ class SalesOrderController extends Controller
 						$product_price = $request->product_manual_price;
 						
 					}else{
-						
-						/*Product Details*/
-						//$product_info = ProductModel::find($request->product_idx, ['product_price']);
-						//$product_price = $product_info->product_price;
+	
 						/*Product Details*/
 						$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
 						LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
