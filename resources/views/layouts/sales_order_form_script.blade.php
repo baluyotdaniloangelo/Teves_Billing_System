@@ -292,6 +292,7 @@
 						
 							var id = response[i].sales_order_component_id;
 							var product_name = response[i].product_name;
+							var product_unit_measurement = response[i].product_unit_measurement;
 							var product_price = response[i].product_price;
 							var order_quantity = response[i].order_quantity;
 							
@@ -303,6 +304,7 @@
 							"<td class='product_td' align='left'>"+product_name+"</td>"+
 							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
+							"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
 							"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
 							"</tr>");
 							

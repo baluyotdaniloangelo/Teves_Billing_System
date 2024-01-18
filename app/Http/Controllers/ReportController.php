@@ -931,7 +931,7 @@ class ReportController extends Controller
 		
 		$raw_query_sales_order_component = "SELECT `teves_sales_order_component_table`.`sales_order_component_id`,
 						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
-						IFNULL(`teves_product_table`.`product_unit_measurement`,'') as product_unit_measurement,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
 						`teves_sales_order_component_table`.`product_idx`, `teves_sales_order_component_table`.`product_price`, `teves_sales_order_component_table`.`order_quantity`,
 						`teves_sales_order_component_table`.`order_total_amount`
 						from `teves_sales_order_component_table`  left join `teves_product_table` on	 

@@ -207,6 +207,7 @@
 						<th style="text-align:center !important;">Description</th>
 						<th style="text-align:center !important;">Price</th>
 						<th style="text-align:center !important;">Quantity</th>
+						<th style="text-align:center !important;">Unit</th>
 						<th style="text-align:center !important;">Amount</th>
 						
 					</tr>

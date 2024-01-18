@@ -11,6 +11,7 @@ this can check the product total sales based from deduction from receivable disc
 
 */
 SELECT 
+b.billing_id,
 a.product_name,
 a.product_unit_measurement,
 b.order_quantity,
