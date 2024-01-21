@@ -21,6 +21,14 @@
 		.data_tr {
 			padding: 5px;
 		}
+		.td_colon:before{
+			content:":";
+			font-weight:bold;
+			text-align:center;
+			color:black;
+			position:relative;
+			left:-17px;
+		}
 	</style>
 	
 </head>
@@ -39,94 +47,78 @@
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
 			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
 			</td>
-			<td colspan="7" width="40%" style="horizontal-align:center;text-align:left;">
-				<b style="font-size:18px;"><?=$branch_header['branch_name'];?></b><br>
+			<td colspan="6" width="50%" style="horizontal-align:center;text-align:left;">
+				<b style="font-size:16px;"><?=$branch_header['branch_name'];?></b><br>
 			</td>
-			<td colspan="2" align="left" width="50%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td>
-
-			
+			<td colspan="3" align="left" width="40%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td> 
 		</tr>
 		
 		<tr>
-			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:11px;"><?=$branch_header['branch_address'];?></div>
+			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
+			<div style="font-size:11px;">Business Address : <?=$branch_header['branch_address'];?></div>
 			</td>
-			<td colspan="1" align="left" width="19%" style="font-size:12px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
-			<td colspan="1" align="left" width="1%" style="font-size:12px; font-weight:bold; color:red;"><b> : </b></td>
-			<td colspan="4" align="left" width="30%" style="font-size:12px; color:red; border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
+			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
+			<td colspan="2" align="left" width="23%" style="font-size:11px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
 
 		</tr>		
 		<tr>
-			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
+			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:11px;">VAT REG. TIN : <?=$branch_header['branch_tin'];?></div>
 			</td>
-			<td colspan="1" align="left" width="19%" style="font-size:12px; font-weight:bold;"><b>DATE GENERATED</b></td>
-			<td colspan="1" align="left" width="1%" style="font-size:12px; font-weight:bold; color:black;"><b> : </b></td>
-			<td colspan="4" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;"><?=$sales_order_date;?></td>
+			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>DATE GENERATED</b></td>
+			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$sales_order_date;?></td>
 		</tr>
 		<tr>
-			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
+			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:11px;"><?=$branch_header['branch_owner'];?> - <?=$branch_header['branch_owner_title'];?></div>
 			</td>
-			<td colspan="1" align="left" width="19%" style="font-size:12px; font-weight:bold;"><b>D.R. NO.</b></td>
-			<td colspan="1" align="left" width="01%" style="font-size:12px; font-weight:bold;"><b> : </b></td>
-			<td colspan="4" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
+			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>D.R. NO.</b></td>
+			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
 		</tr>
 		
 		<tr>
-			<td colspan="4"  width="40%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="1" align="left" width="19%" style="font-size:12px; font-weight:bold;"><b>P.O. NO.</b></td>
-			<td colspan="1" align="left" width="01%" style="font-size:12px; font-weight:bold;"><b> : </b></td>
-			<td colspan="4" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_or_number'] }}</td>
+			<td colspan="7"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>P.O. NO.</b></td>
+			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_or_number'] }}</td>
 		</tr>
 		
 		<tr>
-			<td colspan="4"  width="40%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="1" align="left" width="19%" style="font-size:12px; font-weight:bold;"><b>PAYMENT TERM</b></td>
-			<td colspan="1" align="left" width="01%" style="font-size:12px; font-weight:bold;"><b> : </b></td>
-			<td colspan="4" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_payment_term'] }}</td>
+			<td colspan="7"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>PAYMENT TERM</b></td>
+			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_payment_term'] }}</td>
 		</tr>
 
-		
 		</table>
 		<br>
 
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:10px;">
-			<td colspan="10" style="height:7px !important;"></td>
+			<td colspan="10" style="height:7px !important;" width="100%"></td>
 		</tr>
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="7%"><b>SOLD TO</b></td>
-			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_name'] }}</td>
+		<tr style="font-size:11px;">
+			<td colspan="2" align="left" width="5%"><b>SOLD TO</b></td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_name'] }}</td>
 		</tr>
-		
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="7%"><b>TIN NO.</b></td>
-			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_tin'] }}</td>
-		</tr>		
-		
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="7%"><b>ADDRESS</b></td>
-			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['client_address'] }}</td>
-		</tr>
-	
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="7%"><b>DELIVERED TO</b></td>
-			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_delivered_to'] }}</td>
+		<tr style="font-size:11px;">
+			<td colspan="2" align="left" width="5%"><b>TIN NO.</b></td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_tin'] }}</td>
 		</tr>	
-	
-		<tr style="font-size:12px;">
-			<td colspan="2" align="left" width="7%"><b>ADDRESS</b></td>
-			<td colspan="1" align="center" width="1%"><b> : </b></td>
-			<td colspan="7" align="left" width="92%" style="border-bottom:solid 1px gray;">{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</td>
+		<tr style="font-size:11px;">
+			<td colspan="2" align="left" width="5%"><b>ADDRESS</b></td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_address'] }}</td>
 		</tr>
-	
+		
+		<tr style="font-size:11px;">
+			<td colspan="2" align="left" width="5%"><b>DELIVERED TO</b></td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_delivered_to'] }}</td>
+		</tr>
+		
+		<tr style="font-size:11px;">
+			<td colspan="2" align="left" width="5%"><b>ADDRESS</b></td>
+			<td colspan="8" align="left" width="90%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</td>
+		</tr>
 		<tr style="font-size:10px;">
-			<td colspan="10" style="height:7px !important;">&nbsp;</td>
+			<td colspan="10" style="height:7px !important;" width="100%"></td>
 		</tr>
 		</table>
 		

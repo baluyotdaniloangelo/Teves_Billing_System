@@ -778,8 +778,7 @@ class CashiersReportController extends Controller
     public function get_cashiers_report_product_p3_OTHERS(Request $request){		
 	
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
-            ->where('miscellaneous_items_type','=','OTHERS')
-			->orWhere('miscellaneous_items_type','=','CASHOUT')
+				->whereIn('miscellaneous_items_type', array('CASHOUT', 'OTHERS'))
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_cashiers_report_p3.reference_no',
@@ -1209,8 +1208,7 @@ class CashiersReportController extends Controller
 					]);
 		
 		$data_OTHERS =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
-            ->where('miscellaneous_items_type','=','OTHERS')
-			->orWhere('miscellaneous_items_type','=','CASHOUT')
+				->whereIn('miscellaneous_items_type', array('CASHOUT', 'OTHERS'))
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_cashiers_report_p3.reference_no',

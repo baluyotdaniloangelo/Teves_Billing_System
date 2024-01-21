@@ -318,7 +318,7 @@ class ReceivablesController extends Controller
 			$Receivables->receivable_amount 			= $SalesOrderData[0]->sales_order_total_due;
 			$Receivables->receivable_remaining_balance 	= $SalesOrderData[0]->sales_order_total_due;
 			$Receivables->company_header 				= $SalesOrderData[0]->company_header;
-			
+			$Receivables->created_by_user_id 			= Session::get('loginID');
 			$result = $Receivables->save();
 			
 			/*Update Sales Order to Delivered*/
@@ -352,7 +352,7 @@ class ReceivablesController extends Controller
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
-			
+			$Receivables->updated_by_user_id 			= Session::get('loginID');
 			$result = $Receivables->update();
 
 			if($result){
@@ -479,7 +479,7 @@ class ReceivablesController extends Controller
 			
 			$Receivables->less_per_liter 		= $request->less_per_liter;
 			$Receivables->company_header 		= $request->company_header;
-			
+			$Receivables->created_by_user_id 			= Session::get('loginID');
 			$result = $Receivables->save();
 			
 			/*Update Billing List Affected by the Receivable*/

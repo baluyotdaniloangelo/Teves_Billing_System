@@ -243,13 +243,13 @@
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2">Prepared by:</td>
-				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
+				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{@$user_data->user_real_name}}</td>
 				<td align="left" colspan="5"></td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3">{{$user_data->user_job_title}}</td>
+				<td align="center" colspan="3">{{@$user_data->user_job_title}}</td>
 				<td align="left" colspan="5"></td>
 			</tr>
 			

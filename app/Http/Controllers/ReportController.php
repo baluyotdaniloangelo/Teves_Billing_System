@@ -627,40 +627,22 @@ class ReportController extends Controller
 		$net_value_percentage = $request->net_value_percentage;
 		$vat_value_percentage = $request->vat_value_percentage;
 		
-		/*
-		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('teves_billing_table.order_date', '>=', $start_date)
-                    ->where('teves_billing_table.order_date', '<=', $end_date)
-					->where('teves_billing_table.receivable_idx', '=', $receivable_id)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-					->orderBy('teves_billing_table.order_date', 'asc')
-              		->get([
-					'teves_billing_table.billing_id',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_product_table.product_unit_measurement',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);	
-		*/
 		
 		/*Using Raw Query*/
 		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
 		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
 		
-		/*USER INFO*/
-		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
 		
 		/*Recievable Data*/
 				
-		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number','company_header']);
+		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number','company_header','created_by_user_id']);
 		
 		$receivable_header = TevesBranchModel::find($receivable_data['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', $receivable_data['created_by_user_id'])->first();
+		
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
