@@ -8,7 +8,11 @@
 				<div class="card-header ">
 				  <h5 class="card-title">&nbsp;{{ $title }}</h5><div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success new_item bi-file-earmark-pdf" onclick="printCashierReportPDF()"></button>
+						<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('cashierReport') }}" title="Back">  
+						  <span title="Back to Cashier's Report List">Back</span>
+						</a>
+						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" onclick="printCashierReportPDF()">&nbsp;Print</button>
+						
 					</div>					
 				  </div>
 				</div>			  

@@ -174,7 +174,7 @@
 			let company_header 			= $("#company_header").val();
 		
 			let product_idx 			= $("#product_list option[value='" + $('#product_idx').val() + "']").attr('data-id');
-			//let item_description  		= $("#product_idx").val();
+
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
 

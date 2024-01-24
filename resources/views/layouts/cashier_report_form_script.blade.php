@@ -758,7 +758,7 @@
 
             document.getElementById("reference_no_PH3").disabled = false;
             document.getElementById("product_manual_price_PH3").disabled = false;
-			document.getElementById("product_idx_PH3").disabled = true;
+			document.getElementById("product_idx_PH3").disabled = false;
 			document.getElementById("order_quantity_PH3").disabled = false;
 			
             document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
@@ -785,16 +785,6 @@
            
 
         }else if(miscellaneous_items_type == 'SALES_CREDIT'){
-
-            document.getElementById("update_reference_no_PH3").disabled = true;
-            document.getElementById("update_product_manual_price_PH3").disabled = true;
-			document.getElementById("update_product_idx_PH3").disabled = false;
-			document.getElementById("update_order_quantity_PH3").disabled = false;
-			
-            document.getElementById("update_quantity_label").innerHTML = "LITERS";
-            document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
-
-        }else if(miscellaneous_items_type == 'SALES_CREDIT'){
 			
             document.getElementById("update_reference_no_PH3").disabled = false;
             document.getElementById("update_product_manual_price_PH3").disabled = false;
@@ -808,7 +798,7 @@
 
             document.getElementById("update_reference_no_PH3").disabled = false;
             document.getElementById("update_product_manual_price_PH3").disabled = false;
-			document.getElementById("update_product_idx_PH3").disabled = true;
+			document.getElementById("update_product_idx_PH3").disabled = false;
 			document.getElementById("update_order_quantity_PH3").disabled = false;
 			
             document.getElementById("update_quantity_label").innerHTML = "LITERS/PCS";
@@ -829,7 +819,12 @@
 
             var miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
             var reference_no 			    = $("input[name=reference_no_PH3]").val();
-			var product_idx 			    = $('#product_name_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');
+			
+			/*Product ID*/
+			var product_idx 			    = $('#product_list_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');
+			/*Product Name*/
+			let product_name 				= $("input[name=product_name_PH3]").val();
+			
 			var order_quantity 			    = $("input[name=order_quantity_PH3]").val();
 			var product_manual_price 	    = $("input[name=product_manual_price_PH3]").val();
 			
@@ -845,6 +840,7 @@
 					  miscellaneous_items_type:miscellaneous_items_type,
                       reference_no:reference_no,
                       product_idx:product_idx,
+					  item_description:product_name,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
 					  _token: "{{ csrf_token() }}"
@@ -877,10 +873,18 @@
 					},
 					error: function(error) {
 					 console.log(error);
-						/*alert(error);*/
-							$('#product_idx_PH3Error').text(error.responseJSON.errors.product_idx);
-							document.getElementById('product_idx_PH3Error').className = "invalid-feedback";
-							
+						
+							if(error.responseJSON.errors.product_idx=='Item Description or Product is Required'){
+								if(product_name==''){
+									$('#product_idx_PH3Error').html(error.responseJSON.errors.product_idx);
+								}else{
+									$('#product_idx_PH3Error').html("Incorrect Product Name <b>" + product_name + "</b>");
+								}
+								
+								document.getElementById("product_idx_PH3").value = "";
+								document.getElementById('product_idx_PH3Error').className = "invalid-feedback";
+							}
+						
 							$('#order_quantity_PH3Error').text(error.responseJSON.errors.order_quantity);
 							document.getElementById('order_quantity_PH3Error').className = "invalid-feedback";
 							
@@ -1010,6 +1014,7 @@
 							$('#table_product_data_msc_OTHERS tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
 							"<td class='calibration_td' align='center'>"+reference_no+"</td>"+
+							"<td class='calibration_td' align='center'>"+reference_no+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
 							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_OTHERS' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_OTHERS'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
@@ -1028,6 +1033,10 @@
 	$('body').on('click','#CHPH3_Edit_SALES_CREDIT',function(){			
 			event.preventDefault();
 			let CHPH3_ID = $(this).data('id');			
+			
+			/*Reset Form*/
+			document.getElementById("CRPH3_form_edit").reset();	
+			
 			$.ajax({
 				url: "{{ route('CRP3_info_SALES_CREDIT') }}",
 				type:"POST",
@@ -1066,7 +1075,11 @@
 	  
 	$('body').on('click','#CHPH3_Edit_DISCOUNT',function(){			
 			event.preventDefault();
-			let CHPH3_ID = $(this).data('id');			
+			let CHPH3_ID = $(this).data('id');
+			
+			/*Reset Form*/
+			document.getElementById("CRPH3_form_edit").reset();		
+			
 			$.ajax({
 				url: "{{ route('CRP3_info_DISCOUNT') }}",
 				type:"POST",
@@ -1106,7 +1119,11 @@
 	  	  
 	$('body').on('click','#CHPH3_Edit_OTHERS',function(){			
 			event.preventDefault();
-			let CHPH3_ID = $(this).data('id');			
+			let CHPH3_ID = $(this).data('id');
+
+			/*Reset Form*/
+			document.getElementById("CRPH3_form_edit").reset();
+			
 			$.ajax({
 				url: "{{ route('CRP3_info_OTHERS') }}",
 				type:"POST",
@@ -1122,6 +1139,8 @@
 					
 					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
 					document.getElementById("update_reference_no_PH3").value 				= response[0].reference_no;
+					//alert(response[0].item_description);
+					document.getElementById("update_product_idx_PH3").value = response[0].item_description;
 					
 					document.getElementById("update_order_quantity_PH3").value 				= response[0].order_quantity;
 					document.getElementById("update_product_manual_price_PH3").value 		= response[0].unit_price;
@@ -1156,7 +1175,11 @@
 			let CHPH3_ID 					= document.getElementById("update-CRPH3").value;
 			var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 			var reference_no 				= $("input[name=update_reference_no_PH3]").val();
-			var product_idx 				= $('#update_product_name_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
+	
+			var product_idx 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
+			/*Product Name*/
+			let product_name 				= $("input[name=update_product_name_PH3]").val();
+			
 			var order_quantity 				= $("input[name=update_order_quantity_PH3]").val();
 			var product_manual_price 		= $("input[name=update_product_manual_price_PH3]").val();
 			
@@ -1172,6 +1195,7 @@
 					  miscellaneous_items_type:miscellaneous_items_type, 
 					  reference_no:reference_no,
 					  product_idx:product_idx,
+					  item_description:product_name,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
 					  _token: "{{ csrf_token() }}"

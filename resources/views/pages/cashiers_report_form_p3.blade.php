@@ -2,63 +2,85 @@
 	<div align="right">
 		<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH3_Modal"></button>
 	</div>
-	<br>
 
-    <div align="left" style="font-weight:bold;">SALES ORDER - CREDIT SALES</div>	
-   <table class="table" id="">
-		<thead>
-			<tr class='report'>
-				<th style="text-align:center !important;">#</th>
-				<th style="text-align:center !important;">Product</th>
-				<th style="text-align:center !important;">Liters</th>
-				<th style="text-align:center !important;">Pump Price</th>
-				<th style="text-align:center !important;">Amount</th>
-				<th style="text-align:center !important;">Action</th>
-			</tr>
-		</thead>		
-		<tbody id="table_product_data_msc_SALES_CREDIT">
-			<tr style="display: none;">
-				<td>HIDDEN</td></tr>
-			</tbody>	
-	</table>
+              <!-- Pills Tabs -->
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pills-sales_order-tab" data-bs-toggle="pill" data-bs-target="#pills-sales_order" type="button" role="tab" aria-controls="pills-sales_order" aria-selected="true">SALES ORDER - CREDIT SALES</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-discount-tab" data-bs-toggle="pill" data-bs-target="#pills-discount" type="button" role="tab" aria-controls="pills-discount" aria-selected="false" tabindex="-1">DISCOUNTS ( WHOLE SALE - FUEL)</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-others-tab" data-bs-toggle="pill" data-bs-target="#pills-others" type="button" role="tab" aria-controls="pills-others" aria-selected="false" tabindex="-1">OTHERS (Lubricants discounts / Money Cash Out / Misload)</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-2" id="myTabContent">
+                <div class="tab-pane fade active show" id="pills-sales_order" role="tabpanel" aria-labelledby="sales_order-tab">
+				
+					<table class="table" id="">
+						<thead>
+							<tr class='report'>
+								<th style="text-align:center !important;">#</th>
+								<th style="text-align:center !important;">Product</th>
+								<th style="text-align:center !important;">Liters</th>
+								<th style="text-align:center !important;">Pump Price</th>
+								<th style="text-align:center !important;">Amount</th>
+								<th style="text-align:center !important;">Action</th>
+							</tr>
+						</thead>		
+						<tbody id="table_product_data_msc_SALES_CREDIT">
+							<tr style="display: none;">
+								<td>HIDDEN</td></tr>
+							</tbody>	
+					</table>
+					
+                </div>
+				
+                <div class="tab-pane fade" id="pills-discount" role="tabpanel" aria-labelledby="discount-tab">
+					
+					<table class="table" id="">
+						<thead>
+							<tr class='report'>
+								<th style="text-align:center !important;">#</th>
+								<th style="text-align:center !important;">Reference No.</th>
+								<th style="text-align:center !important;">Product</th>
+								<th style="text-align:center !important;">Liters</th>
+								<th style="text-align:center !important;">Pump Price</th>
+								<th style="text-align:center !important;">Unit Price</th>
+								<th style="text-align:center !important;">Discounted Price</th>
+								<th style="text-align:center !important;">Amount</th>
+								<th style="text-align:center !important;">Action</th>
+							</tr>
+						</thead>		
+						<tbody id="table_product_data_msc_DISCOUNT">
+							<tr style="display: none;">
+								<td>HIDDEN</td></tr>
+							</tbody>	
+					</table>                 
 
-    <div align="left" style="font-weight:bold;">DISCOUNTS ( WHOLE SALE - FUEL)</div>
-    <table class="table" id="">
-		<thead>
-			<tr class='report'>
-				<th style="text-align:center !important;">#</th>
-				<th style="text-align:center !important;">Reference No.</th>
-				<th style="text-align:center !important;">Product</th>
-				<th style="text-align:center !important;">Liters</th>
-				<th style="text-align:center !important;">Pump Price</th>
-				<th style="text-align:center !important;">Unit Price</th>
-				<th style="text-align:center !important;">Discounted Price</th>
-				<th style="text-align:center !important;">Amount</th>
-				<th style="text-align:center !important;">Action</th>
-			</tr>
-		</thead>		
-		<tbody id="table_product_data_msc_DISCOUNT">
-			<tr style="display: none;">
-				<td>HIDDEN</td></tr>
-			</tbody>	
-	</table>
+				</div>
+				
+                <div class="tab-pane fade" id="pills-others" role="tabpanel" aria-labelledby="others-tab">
+                      <table class="table" id="">
+							<thead>
+								<tr class='report'>
+									<th style="text-align:center !important;">#</th>
+									<th style="text-align:center !important;">Reference No.</th>
+									<th style="text-align:center !important;">Description</th>
+									<th style="text-align:center !important;">Liters / Pieces</th>
+									<th style="text-align:center !important;">Amount</th>
+									<th style="text-align:center !important;">Action</th>
+								</tr>
+							</thead>		
+							<tbody id="table_product_data_msc_OTHERS">
+								<tr style="display: none;">
+									<td>HIDDEN</td></tr>
+								</tbody>	
+						</table>
+				</div>
+              </div><!-- End Pills Tabs -->
 
-    <div align="left" style="font-weight:bold;">OTHERS (Lubricants discounts / Money Cash Out / Misload)</div>
-    <table class="table" id="">
-		<thead>
-			<tr class='report'>
-				<th style="text-align:center !important;">#</th>
-				<th style="text-align:center !important;">Reference No.</th>
-				<th style="text-align:center !important;">Liters / Pieces</th>
-				<th style="text-align:center !important;">Amount</th>
-				<th style="text-align:center !important;">Action</th>
-			</tr>
-		</thead>		
-		<tbody id="table_product_data_msc_OTHERS">
-			<tr style="display: none;">
-				<td>HIDDEN</td></tr>
-			</tbody>	
-	</table>
 	<!--Modal to Create Other Sales-->
 	<div class="modal fade" id="CRPH3_Modal" tabindex="-1">
               <div class="modal-dialog modal-lg">
@@ -97,16 +119,9 @@
 					  </div>
 
 					  <div class="row mb-2">
-						  <label for="product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT</label>
+						  <label for="product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT / DESCRIPTION</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="product_name_PH3" name="product_name_PH3" id="product_idx_PH3" required autocomplete="off" onchange="TotalAmount_PH3()">
-									<datalist id="product_name_PH3">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									<input class="form-control" list="product_list_PH3" name="product_name_PH3" id="product_idx_PH3" required autocomplete="off" onchange="TotalAmount_PH3()">
 									<span class="valid-feedback" id="product_idx_PH3Error"></span>
 									</div>	
 						</div>	
@@ -196,16 +211,9 @@
 					  </div>					  
 					  
 					  <div class="row mb-2">
-						  <label for="update_product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT</label>
+						  <label for="update_product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT / DESCRIPTION</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="update_product_name_PH3" name="update_product_name_PH3" id="update_product_idx_PH3" required autocomplete="off" onchange="UpdateTotalAmount_PH3()">
-									<datalist id="update_product_name_PH3">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									<input class="form-control" list="product_list_PH3" name="update_product_name_PH3" id="update_product_idx_PH3" required autocomplete="off" onchange="UpdateTotalAmount_PH3()">
 									<span class="valid-feedback" id="update_product_idx_PH3Error"></span>
 									</div>	
 						</div>	
@@ -256,6 +264,15 @@
                 </div>
              </div>		
 	</div>
+	
+	<!--Product List-->
+	<datalist id="product_list_PH3">
+		@foreach ($product_data as $product_data_cols)
+			<span style="font-family: DejaVu Sans; sans-serif;">
+			<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
+			</span>
+		@endforeach
+	</datalist>
 	
 	<!-- CRP2 Delete Modal-->
     <div class="modal fade" id="CRPH3DeleteModal" tabindex="-1" role="dialog" aria-hidden="true">

@@ -99,15 +99,17 @@
             </div>
             <div class="card-footer">
 												<div class="row mb-3">
-												<div class="col-sm-9" align='right'>
+												<div class="col-sm-6" align='right'>
 												<div id="loading_data_update_so" style="display:none;">
 													<div class="spinner-border text-success" role="status">
 														<span class="visually-hidden">Loading...</span>
 													</div>
 												</div>
 												</div>
-												<div class="col-sm-3" align='right'>
-												
+												<div class="col-sm-6" align='right'>
+												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('so') }}" title="Back">  
+												  <span title="Back to Sales Order List">Back</span>
+												</a>
 												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-so-billing-transaction" title='Update SO information'> Update</button>
 												</div>
 												</div>	
@@ -122,8 +124,11 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddProductModal" id='AddProductBTN'></button>
-						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
+						<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('so') }}" title="Back">  
+						  <span title="Back to Sales Order List">Back</span>
+						</a>
+						
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id='AddProductBTN'></button>
 						
 					</div>					
 				  </div>

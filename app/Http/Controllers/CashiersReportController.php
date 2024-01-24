@@ -561,9 +561,11 @@ class CashiersReportController extends Controller
 		if($miscellaneous_items_type=='OTHERS' || $miscellaneous_items_type=='CASHOUT'){
 			
 			$request->validate([
+				'item_description'      	=> 'required',
 				'product_manual_price' 	=> 'required',	
 			], 
 			[
+				'item_description'      	=> 'required',
 				'product_manual_price.required' 	=> 'Required',
 			]
 			);
@@ -572,12 +574,12 @@ class CashiersReportController extends Controller
 			
 			$request->validate([
 				'miscellaneous_items_type' 	=> 'required',
-				'product_idx'  				=> 'required',
+				'item_description'      	=> 'required',
 				'order_quantity'  			=> 'required'		
 			], 
 			[
 				'miscellaneous_items_type.required' 	=> 'Type is Required',
-				'product_idx.required' 	=> 'Product is Required',
+				'item_description'      	=> 'required',
 				'order_quantity.required' 	=> 'Order Quantity is Required',
 			]
 			);	
@@ -587,7 +589,6 @@ class CashiersReportController extends Controller
 			/*Get Cashier Report ID*/
 			$CashiersReportId = $request->CashiersReportId;
 
-            
             $reference_no				= $request->reference_no;
 
 			$product_idx				= $request->product_idx;
@@ -691,6 +692,7 @@ class CashiersReportController extends Controller
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
+									$CashiersReportModel_P3->item_description 			= $request->item_description;
 									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
                                     $CashiersReportModel_P3->pump_price 				= $pump_price;
 									$CashiersReportModel_P3->unit_price 				= $product_manual_price;
@@ -712,6 +714,7 @@ class CashiersReportController extends Controller
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
+									$CashiersReportModel_P3->item_description 			= $request->item_description;
 									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
                                     $CashiersReportModel_P3->pump_price 			    = $pump_price;
 									$CashiersReportModel_P3->unit_price 				= $product_manual_price;
@@ -846,6 +849,7 @@ class CashiersReportController extends Controller
 			//->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 				->get([
 					'teves_cashiers_report_p3.miscellaneous_items_type',
+					'teves_cashiers_report_p3.item_description',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.unit_price',
