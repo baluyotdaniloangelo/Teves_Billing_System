@@ -64,7 +64,6 @@ class SOBillingTransactionController extends Controller
 						if(Session::get('UserType')=="Admin"){
 							$actionBtn = '
 							<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewSO"></a>
 								<a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
 								<a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
 							</div>';
@@ -86,7 +85,6 @@ class SOBillingTransactionController extends Controller
 							}else{
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewSO"></a>
 								<a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
 								<a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
 								</div>';
