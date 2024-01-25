@@ -114,6 +114,13 @@ else if (Request::is('purchaseorder')){
 @include('layouts.purchaseorder_script')
 <?php
 }
+else if (Request::is('purchaseorder_v2')){
+	?>
+	<body class="">
+	@include('layouts.footer')
+	@include('layouts.purchaseorder_script_v2')
+	<?php
+}
 else if (Request::is('cashier_report')){
 ?>
 <body class="">

@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\PurchaseOrderController_v2;
 use App\Http\Controllers\CashiersReportController;
 
 use App\Http\Controllers\SalesSummaryController;
@@ -189,7 +190,6 @@ Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_o
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');
 
-
 /*Get Sales Order Payment Item*/
 Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
 
@@ -220,6 +220,33 @@ Route::post('/get_purchase_order_payment_list', [PurchaseOrderController::class,
 Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
 /*Update Purchase Status*/
 Route::post('/update_purchase_status', [PurchaseOrderController::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
+
+
+/*Purchase Order Version 2*/
+/*January 25, 2023*/
+Route::get('/purchaseorder_v2', [PurchaseOrderController_v2::class,'purchaseorder'])->name('purchaseorder_v2')->middleware('isLoggedIn');
+Route::get('purchaseorder/list', [PurchaseOrderController_v2::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');
+/*GET Purchase Order Info*/
+Route::post('/purchase_order_info', [PurchaseOrderController_v2::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');
+/*Confirm Delete Purchase Order*/
+Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController_v2::class, 'delete_purchase_order_confirmed'])->name('delete_purchase_order_confirmed')->middleware('isLoggedIn');
+/*Create Purchase Order*/
+Route::post('/create_purchase_order_post_v2', [PurchaseOrderController_v2::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
+/*Update Purchase Order*/
+Route::post('/update_purchase_order_post', [PurchaseOrderController_v2::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');
+/*Get Purchase Order Product Item*/
+Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
+/*Get Purchase Order Product Item*/
+Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
+/*Delete Purchase Order Product Item*/
+Route::post('/delete_purchase_order_item', [PurchaseOrderController_v2::class,'delete_purchase_order_item'])->name('delete_purchase_order_item')->middleware('isLoggedIn');
+/*Get Purchase Order Payment Item*/
+Route::post('/get_purchase_order_payment_list', [PurchaseOrderController_v2::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');
+/*Delete Purchase Order Payment Item*/
+Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController_v2::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
+/*Update Purchase Status*/
+Route::post('/update_purchase_status', [PurchaseOrderController_v2::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
+
 
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');

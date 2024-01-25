@@ -23,27 +23,28 @@ class BillingTransactionController extends Controller
 		
 		$title = 'Billing Transaction';
 		$data = array();
+
 		if(Session::has('loginID')){
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
-			//$product_data = ProductModel::all();
 			
 			$client_data = ClientModel::all();
 			
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
+
+			return view("pages.billing", compact('data','title','client_data','drivers_name','plate_no'));
 		
 		}
 
-		return view("pages.billing", compact('data','title','client_data','drivers_name','plate_no'));
+		
 		
 	}   
  	
 	/*Fetch Site List using Datatable*/
 	public function getBillingTransactionList(Request $request)
     {
-
+	
 		$list = BillingTransactionModel::get();
 		if ($request->ajax()) {
 

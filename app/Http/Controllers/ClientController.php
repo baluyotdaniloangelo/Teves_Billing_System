@@ -15,11 +15,15 @@ class ClientController extends Controller
 	public function client(){
 		$title = 'Client';
 		$data = array();
+
 		if(Session::has('loginID')){
+
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$client_data = ClientModel::all();		
+			return view("pages.client", compact('data','title'));
+	
 		}
-		return view("pages.client", compact('data','title'));
+		
 	}   
 	
 	/*Fetch client List using Datatable*/
