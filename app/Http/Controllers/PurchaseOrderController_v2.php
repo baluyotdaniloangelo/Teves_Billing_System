@@ -129,13 +129,9 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_order_note',
 						'teves_purchase_order_table.company_header'
 				]);	
-						
-						
-						
-						
-						
+															
 					return response()->json($data);	
-		
+					
 	}
 
 	/*Delete Product Information*/
