@@ -1,250 +1,16 @@
    <script type="text/javascript">
-	<!--Load Table-->
-	$(function () {
-
-		var ReceivableListTable = $('#getPurchaseOrderList').DataTable({
-			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
-			             '<option value="10">10</option>'+
-			             '<option value="20">20</option>'+
-			             '<option value="30">30</option>'+
-			             '<option value="40">40</option>'+
-			             '<option value="50">50</option>'+
-			             '<option value="-1">All</option>'+
-			             '</select> '
-		    },
-			/*processing: true,*/
-			serverSide: true,
-			responsive: true,
-			stateSave: true,/*Remember Searches*/
-			ajax: "{{ route('getPurchaseOrderList_v2') }}",
-			columns: [
-					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'purchase_order_date'},
-					{data: 'purchase_order_control_number'},
-					{data: 'supplier_name'},
-					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },
-					{data: 'status', name: 'status', orderable: true, searchable: true},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
-			],
-			order: [[ 1, "desc" ]],
-			columnDefs: [
-					{ className: 'text-center', targets: [0, 1] },
-			]
-		});
-				/**/
-				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
-				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreatePurchaseOrderModal"></button>'+
-				'</div>').appendTo('#purchase_order_option');
-				
-		$('a.toggle-vis').on('click', function (e) {
-        e.preventDefault();
- 
-        // Get the column API object
-        var column = table.column($(this).attr('data-column'));
- 
-        // Toggle the visibility
-        column.visible(!column.visible());
-		
-		});				
-								
-	});
-	
-	
-	<!--Save New Sales Order-->
-	$("#save-purchase-order").click(function(event){
-
-			event.preventDefault();
-			
-			document.getElementById('PurchaseOrderformNew').className = "g-3 needs-validation was-validated";
-
-			let purchase_order_date 					= $("input[name=purchase_order_date]").val();
-			
-			let supplier_idx 							= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
-			/*Supplier's Name and Product Name*/
-			let supplier_name 					= $("input[name=supplier_name]").val();
-			
-			/*Added May 6, 2023*/
-			let company_header 							= $("#company_header").val();
-			 	 
-			  $.ajax({
-				url: "{{ route('SavePurchaseOrder') }}",
-				type:"POST",
-				data:{
-			
-					purchase_order_date:purchase_order_date,
-					supplier_idx:supplier_idx,
-					company_header:company_header,
-					_token: "{{ csrf_token() }}"
-				},		
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					  
-					$('#switch_notice_on').show();
-					$('#sw_on').html(response.success);
-					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-					
-					$('#supplier_idxError').text('');					
-
-					/*Clear Form*/
-					$('#company_header').val("");
-					$('#supplier_name').val("");
-				
-					/*Close Modal*/
-					$('#CreatePurchaseOrderModal').modal('toggle');
-					/*Open PDF for Printing*/
-					var query = {
-						purchase_order_id:response.purchase_order_id,
-						_token: "{{ csrf_token() }}"
-					}
-
-					/*Open Cashier's Report*/
-					var url = "{{URL::to('purchase_order_form')}}";
-					window.location.href = url+'/'+purchase_order_id;
-					//var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
-					//window.open(url);
-					
-					/*Reload Page
-					location.reload();
-					*/
-				  }
-				},
-				beforeSend:function()
-				{
-					
-					/*Disable Submit Button*/
-					document.getElementById("save-purchase-order").disabled = true;
-					/*Show Status*/
-					$('#loading_data').show();
-					
-					
-				},
-				complete: function(){
-						
-					/*Enable Submit Button*/
-					document.getElementById("save-purchase-order").disabled = false;
-					/*Hide Status*/
-					$('#loading_data').hide();	
-					
-				},
-				error: function(error) {
-					
-				console.log(error);	
-				
-					if(error.responseJSON.errors.supplier_idx=="Supplier's Name is Required"){
-						
-							if(supplier_idx==''){
-								$('#supplier_idxError').html(error.responseJSON.errors.supplier_idx);
-							}else{
-								$('#supplier_idxError').html("Incorrect Supplier's Name <b>" + supplier_name + "</b>");
-							}
-						
-							document.getElementById("supplier_idx").value = "";
-							document.getElementById('supplier_idxError').className = "invalid-feedback";
-							
-					}
-				
-				$('#product_idxError').html(error.responseJSON.errors.product_idx);
-				
-				$('#switch_notice_off').show();
-				$('#sw_off').html("Invalid Input");
-				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
-				  
-				}
-			   });	
-	  });
-	
-	<!--Product Deletion Confirmation-->
-	$('body').on('click','#deletePurchaseOrder',function(){
-			
-			event.preventDefault();
-			let purchase_order_id = $(this).data('id');
-			
-			  $.ajax({
-				url: "/purchase_order_info",
-				type:"POST",
-				data:{
-				  purchase_order_id:purchase_order_id,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					
-					document.getElementById("deletePurchaseOrderConfirmed").value = purchase_order_id;
-							
-					/*Set Details*/
-					$('#confirm_delete_purchase_order_date').text(response.purchase_order_date);
-					$('#confirm_delete_purchase_control_number').text(response.purchase_order_control_number);
-					$('#confirm_delete_suppliers_name').text(response.purchase_supplier_name);
-					$('#confirm_delete_amount').text(response.purchase_order_total_payable);
-					
-					$('#SalesOrderDeleteModal').modal('toggle');					
-				  
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-					alert(error);
-				}
-			   });		
-	  });	
-	  
-	  
-	  <!--Product Confirmed For Deletion-->
-	$('body').on('click','#deletePurchaseOrderConfirmed',function(){
-			
-			event.preventDefault();
-
-			let purchase_order_id = document.getElementById("deletePurchaseOrderConfirmed").value;
-			
-			  $.ajax({
-				url: "/delete_purchase_order_confirmed",
-				type:"POST",
-				data:{
-				  purchase_order_id:purchase_order_id,
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){
-				  console.log(response);
-				  if(response) {
-					
-					$('#switch_notice_off').show();
-					$('#sw_off').html("Purchase Order Deleted");
-					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
-					
-					/*
-					If you are using server side datatable, then you can use ajax.reload() 
-					function to reload the datatable and pass the true or false as a parameter for refresh paging.
-					*/
-					
-					//var table = $("#getPurchaseOrderList").DataTable();
-				    //table.ajax.reload(null, false);
-					
-					/*Reload Page*/
-					location.reload();
-					
-				  }
-				},
-				error: function(error) {
-				 console.log(error);
-				}
-			   });		
-	  });
-	  
 	  
 	<!--Select Product For Update-->
-	$('body').on('click','#EditPurchaseOrder',function(){
+	function LoadPurchaseOrderInfo() {
 			
 			event.preventDefault();
-			let purchase_order_id = $(this).data('id');
+			let purchase_order_id = $SalesOrderID;
 			
-			/*Call Product List for Sales Order*/
-			LoadProductRowForUpdate(purchase_order_id);
+			/*Call Product List for Purchase Order*/
+			//LoadProductRowForUpdate(purchase_order_id);
 			
-			/*Call Product List for Sales Order*/
-			LoadPaymentRowForUpdate(purchase_order_id);
+			/*Call Payment List for Purchase Order*/
+			//LoadPaymentRowForUpdate(purchase_order_id);
 			
 			  $.ajax({
 				url: "/purchase_order_info",
@@ -287,34 +53,6 @@
 			document.getElementById("update-purchase-order").value = purchase_order_id;		
 			document.getElementById("update_company_header").value = response[0].company_header;	
 			
-				var update_product_idx = [];
-				var update_order_quantity = [];
-				var update_product_manual_price = [];
-				  
-					 $('.update_product_idx').each(function(){
-						if($(this).val() == ''){
-							alert('Please Select a Product');
-							exit();
-						}else{  				  
-							update_product_idx.push($(this).val());
-						}				  
-					});
-					  
-					$('.update_order_quantity').each(function(){
-						if($(this).val() == ''){
-							alert('Quantity is Empty');
-							exit(); 
-						}else{  				  
-							update_order_quantity.push($(this).val());
-						}				  
-					});
-					  
-					$('.update_product_manual_price').each(function(){ 				  
-							update_product_manual_price.push($(this).val());			  
-					});		
-
-					$('#UpdatePurchaseOrderModal').modal('toggle');					
-				  
 				  }
 				},
 				error: function(error) {
@@ -322,7 +60,7 @@
 					alert(error);
 				}
 			   });	
-	  });	
+	}	
 
 	function LoadProductRowForUpdate(purchase_order_id) {
 		

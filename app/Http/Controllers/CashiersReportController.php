@@ -615,8 +615,8 @@ class CashiersReportController extends Controller
 				
 				        $discounted_price 	= 0;
 				        $product_price 		= $product_manual_price;
-				
-			        }else{
+					
+					}else{
 			
 				        /*Check if Price is From Manual Price*/
 				        if($product_manual_price!=0){
@@ -626,9 +626,11 @@ class CashiersReportController extends Controller
 					        $discounted_price 	= 0;
 					        $product_price = $pump_price;
 				        }
-						$peso_sales = ($order_quantity * $product_price);
+						
 			        }
-
+					
+					$peso_sales = ($order_quantity * $product_price);
+					
             }else if($miscellaneous_items_type=='DISCOUNTS'){
 
                     if($pump_price==0){
@@ -785,6 +787,7 @@ class CashiersReportController extends Controller
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.item_description',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.cashiers_report_id',
 					'teves_cashiers_report_p3.unit_price',

@@ -225,7 +225,7 @@ Route::post('/update_purchase_status', [PurchaseOrderController::class,'update_p
 /*Purchase Order Version 2*/
 /*January 25, 2023*/
 Route::get('/purchaseorder_v2', [PurchaseOrderController_v2::class,'purchaseorder'])->name('purchaseorder_v2')->middleware('isLoggedIn');
-Route::get('purchaseorder/list', [PurchaseOrderController_v2::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');
+Route::get('purchaseorder_v2/list', [PurchaseOrderController_v2::class, 'getPurchaseOrderList_v2'])->name('getPurchaseOrderList_v2')->middleware('isLoggedIn');
 /*GET Purchase Order Info*/
 Route::post('/purchase_order_info', [PurchaseOrderController_v2::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');
 /*Confirm Delete Purchase Order*/
@@ -247,6 +247,7 @@ Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController_v2::
 /*Update Purchase Status*/
 Route::post('/update_purchase_status', [PurchaseOrderController_v2::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
 
+Route::get('/purchase_order_form/{id}', [PurchaseOrderController_v2::class, 'purchase_order_form'])->name('purchase_order_forms')->middleware('isLoggedIn');
 
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');

@@ -37,7 +37,7 @@ class PurchaseOrderController_v2 extends Controller
 	}   
 	
 	/*Fetch Product List using Datatable*/
-	public function getPurchaseOrderList(Request $request)
+	public function getPurchaseOrderList_v2(Request $request)
     {
 		$list = PurchaseOrderModel::get();
 		if ($request->ajax()) {
@@ -78,7 +78,7 @@ class PurchaseOrderController_v2 extends Controller
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
-					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditPurchaseOrder"></a>
+					<a href="purchase_order_form/'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deletePurchaseOrder"></a>
 					</div>';
                     return $actionBtn;
@@ -88,6 +88,65 @@ class PurchaseOrderController_v2 extends Controller
 		}		
     }
 
+	/*Load Purchase Order Interface*/
+	public function purchase_order_form($PurchaseOrderID){
+		
+		$title = 'Purchase Order';
+		$data = array();
+		if(Session::has('loginID')){
+			
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
+			$supplier_data = SupplierModel::all();
+			$product_data = ProductModel::all();
+			
+			$teves_branch = TevesBranchModel::all();
+			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
+			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
+			
+			$purchase_order_data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $PurchaseOrderID)
+				->leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+              	->get([
+						'teves_supplier_table.supplier_name',
+						'teves_supplier_table.supplier_tin',
+						'teves_supplier_table.supplier_address',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_collection_receipt_no',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
+						'teves_purchase_order_table.purchase_order_delivery_receipt_no',
+						'teves_purchase_order_table.purchase_order_bank',
+						'teves_purchase_order_table.purchase_order_date_of_payment',
+						'teves_purchase_order_table.purchase_order_reference_no',
+						'teves_purchase_order_table.purchase_order_payment_amount',
+						'teves_purchase_order_table.purchase_order_delivery_method',
+						'teves_purchase_order_table.purchase_loading_terminal',
+						'teves_purchase_order_table.purchase_order_date_of_pickup',
+						'teves_purchase_order_table.purchase_order_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_gross_amount',
+						'teves_purchase_order_table.purchase_order_total_liters',
+						'teves_purchase_order_table.purchase_order_net_percentage', 
+						'teves_purchase_order_table.purchase_order_net_amount',
+						'teves_purchase_order_table.purchase_order_less_percentage',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.hauler_operator',
+						'teves_purchase_order_table.lorry_driver',
+						'teves_purchase_order_table.plate_number',
+						'teves_purchase_order_table.contact_number',
+						'teves_purchase_order_table.purchase_destination',
+						'teves_purchase_order_table.purchase_destination_address',
+						'teves_purchase_order_table.purchase_date_of_departure',
+						'teves_purchase_order_table.purchase_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_instructions',
+						'teves_purchase_order_table.purchase_order_note',
+						'teves_purchase_order_table.company_header'
+				]);	
+					
+		return view("pages.purchase_order_form", compact('data','title','product_data','supplier_data','teves_branch', 'purchase_data_suggestion','purchase_payment_suggestion', 'PurchaseOrderID','purchase_order_data'));
+		}
+		
+	}  	
+	
 	/*Fetch Product Information*/
 	public function purchase_order_info(Request $request){
 		
