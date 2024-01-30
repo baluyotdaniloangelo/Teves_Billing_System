@@ -1,10 +1,11 @@
    <script type="text/javascript">
-	  
+	LoadPurchaseOrderInfo();  
+	LoadProductRowForUpdate();
 	<!--Select Product For Update-->
 	function LoadPurchaseOrderInfo() {
 			
-			event.preventDefault();
-			let purchase_order_id = $SalesOrderID;
+			//event.preventDefault();
+			let purchase_order_id = {{ $PurchaseOrderID }};
 			
 			/*Call Product List for Purchase Order*/
 			//LoadProductRowForUpdate(purchase_order_id);
@@ -62,7 +63,56 @@
 			   });	
 	}	
 
-	function LoadProductRowForUpdate(purchase_order_id) {
+	function LoadProductRowForUpdate() {	
+		
+		$("#table_purchase_order_product_body_data tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_purchase_order_product_body_data');
+
+
+			  $.ajax({
+				url: "/get_purchase_order_product_list",
+				type:"POST",
+				data:{
+					purchase_order_id:{{ $PurchaseOrderID }},
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var id = response[i].sales_order_component_id;
+							var product_name = response[i].product_name;
+							var product_unit_measurement = response[i].product_unit_measurement;
+							var product_price = response[i].product_price;
+							var order_quantity = response[i].order_quantity;
+							
+							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							
+							$('#table_purchase_order_product_body_data tr:last').after("<tr>"+
+							"<td align='center'>" + (i+1) + "</td>" +
+							"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
+							
+							"<td class='product_td' align='left'>"+product_name+"</td>"+
+							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
+							"<td class='calibration_td' align='center'>"+order_quantity+" "+product_unit_measurement+"</td>"+
+							"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+							"</tr>");
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  } 
+	  
+
+	function LoadProductRowForUpdate_OLD(purchase_order_id) {
 		
 		event.preventDefault();
 

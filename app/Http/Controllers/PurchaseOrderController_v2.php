@@ -12,6 +12,7 @@ use App\Models\PurchaseOrderPaymentModel;
 use Session;
 use Validator;
 use DataTables;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderController_v2 extends Controller
 {
@@ -103,46 +104,9 @@ class PurchaseOrderController_v2 extends Controller
 			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 			
-			$purchase_order_data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $PurchaseOrderID)
-				->leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
-              	->get([
-						'teves_supplier_table.supplier_name',
-						'teves_supplier_table.supplier_tin',
-						'teves_supplier_table.supplier_address',
-						'teves_purchase_order_table.purchase_order_control_number',
-						'teves_purchase_order_table.purchase_order_date',
-						'teves_purchase_order_table.purchase_order_sales_order_number',
-						'teves_purchase_order_table.purchase_order_collection_receipt_no',
-						'teves_purchase_order_table.purchase_order_official_receipt_no',
-						'teves_purchase_order_table.purchase_order_delivery_receipt_no',
-						'teves_purchase_order_table.purchase_order_bank',
-						'teves_purchase_order_table.purchase_order_date_of_payment',
-						'teves_purchase_order_table.purchase_order_reference_no',
-						'teves_purchase_order_table.purchase_order_payment_amount',
-						'teves_purchase_order_table.purchase_order_delivery_method',
-						'teves_purchase_order_table.purchase_loading_terminal',
-						'teves_purchase_order_table.purchase_order_date_of_pickup',
-						'teves_purchase_order_table.purchase_order_date_of_arrival',
-						'teves_purchase_order_table.purchase_order_gross_amount',
-						'teves_purchase_order_table.purchase_order_total_liters',
-						'teves_purchase_order_table.purchase_order_net_percentage', 
-						'teves_purchase_order_table.purchase_order_net_amount',
-						'teves_purchase_order_table.purchase_order_less_percentage',
-						'teves_purchase_order_table.purchase_order_total_payable',
-						'teves_purchase_order_table.hauler_operator',
-						'teves_purchase_order_table.lorry_driver',
-						'teves_purchase_order_table.plate_number',
-						'teves_purchase_order_table.contact_number',
-						'teves_purchase_order_table.purchase_destination',
-						'teves_purchase_order_table.purchase_destination_address',
-						'teves_purchase_order_table.purchase_date_of_departure',
-						'teves_purchase_order_table.purchase_date_of_arrival',
-						'teves_purchase_order_table.purchase_order_instructions',
-						'teves_purchase_order_table.purchase_order_note',
-						'teves_purchase_order_table.company_header'
-				]);	
+			
 					
-		return view("pages.purchase_order_form", compact('data','title','product_data','supplier_data','teves_branch', 'purchase_data_suggestion','purchase_payment_suggestion', 'PurchaseOrderID','purchase_order_data'));
+		return view("pages.purchase_order_form", compact('data','title','product_data','supplier_data','teves_branch', 'purchase_data_suggestion','purchase_payment_suggestion', 'PurchaseOrderID'));
 		}
 		
 	}  	
@@ -426,13 +390,17 @@ class PurchaseOrderController_v2 extends Controller
 	
 	public function get_purchase_order_product_list(Request $request){		
 	
-			$data = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
-					->orderBy('purchase_order_component_id', 'asc')
-              		->get([
-					'purchase_order_component_id',
-					'product_idx',
-					'product_price',
-					'order_quantity']);
+					$raw_query_purchase_order_component = "SELECT `teves_purchase_order_component_table`.`purchase_order_component_id`,
+					IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
+					IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+					`teves_purchase_order_component_table`.`product_idx`, `teves_purchase_order_component_table`.`product_price`, `teves_purchase_order_component_table`.`order_quantity`,
+					`teves_purchase_order_component_table`.`order_total_amount`
+					from `teves_purchase_order_component_table`  left join `teves_product_table` on	 
+					`teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx` where `purchase_order_idx` = ?		  
+					order by `purchase_order_component_id` asc";	
+					
+		$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_id]);	
+
 		
 			return response()->json($data);
 	}

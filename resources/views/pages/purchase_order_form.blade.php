@@ -17,7 +17,7 @@
 									<div class="row mb-2">
 
 										<div class="col-md-6">
-										  <label for="purchase_order_date" class="form-label">Date</label>
+										  <label for="update_purchase_order_date" class="form-label">Date</label>
 										  <input type="date" class="form-control" id="update_purchase_order_date" name="update_purchase_order_date" value="<?=date('Y-m-d');?>">
 										</div>
 
@@ -59,12 +59,12 @@
 									<div class="row mb-2">
 										
 										<div class="col-md-6">
-											  <label for="purchase_order_net_percentage" class="form-label">Net Value</label>
+											  <label for="update_purchase_order_net_percentage" class="form-label">Net Value</label>
 											  <input type="number" class="form-control" id="update_purchase_order_net_percentage" name="update_purchase_order_net_percentage" step=".01">
 										</div>
 									
 										<div class="col-md-6">
-										  <label for="purchase_order_less_percentage" class="form-label">Less Value</label>
+										  <label for="update_purchase_order_less_percentage" class="form-label">Less Value</label>
 										  <input type="number" class="form-control" id="update_purchase_order_less_percentage" name="update_purchase_order_less_percentage" step=".01">
 										</div>
 										
@@ -75,7 +75,7 @@
 									<div class="row mb-2">
 								
 								
-										<label for="purchase_order_sales_order_number" class="col-sm-3 col-form-label">Sales Order #</label>
+										<label for="update_purchase_order_sales_order_number" class="col-sm-3 col-form-label">Sales Order #</label>
 										<div class="col-md-9"> 
 										<input type="text" class="form-control" id="update_purchase_order_sales_order_number" name="update_purchase_order_sales_order_number">
 										<span class="valid-feedback" id="update_purchase_order_sales_order_numberError"></span>
@@ -83,7 +83,7 @@
 									</div>
 								<div class="row mb-2">
 								
-									  <label for="purchase_order_collection_receipt_no" class="col-sm-3 col-form-label">Collection Receipt #</label>
+									  <label for="update_purchase_order_collection_receipt_no" class="col-sm-3 col-form-label">Collection Receipt #</label>
 									  <div class="col-md-9"> 
 									  <input type="text" class="form-control" id="update_purchase_order_collection_receipt_no" name="update_purchase_order_collection_receipt_no">
 									  <span class="valid-feedback" id="update_purchase_order_collection_receipt_noError"></span>
@@ -91,7 +91,7 @@
 								</div>
 								<div class="row mb-2">	
 								
-									  <label for="purchase_order_official_receipt_no" class="col-sm-3 col-form-label">Official Receipt #</label>
+									  <label for="update_purchase_order_official_receipt_no" class="col-sm-3 col-form-label">Official Receipt #</label>
 									  <div class="col-md-9"> 
 									  <input type="text" class="form-control" id="update_purchase_order_official_receipt_no" name="update_purchase_order_official_receipt_no">
 									  <span class="valid-feedback" id="update_purchase_order_official_receipt_nooError"></span>
@@ -99,7 +99,7 @@
 								</div>
 								<div class="row mb-2">		
 									
-									  <label for="purchase_order_delivery_receipt_no" class="col-sm-3 col-form-label">Delivery Receipt #</label>
+									  <label for="update_purchase_order_delivery_receipt_no" class="col-sm-3 col-form-label">Delivery Receipt #</label>
 										<div class="col-md-9"> 
 									  <input type="text" class="form-control" id="update_purchase_order_delivery_receipt_no" name="update_purchase_order_delivery_receipt_no">
 									  <span class="valid-feedback" id="update_purchase_order_delivery_receipt_noError"></span>
@@ -132,19 +132,17 @@
 									
 								</div>
 								
-								<hr>
+								<hr>					
 								
-								<h6 class="modal-title">Hauler Details</h6>							
+								<div class="row mb-2">
 								
-								<div class="row">
-								
-									<div class="col-md-3">
-									  <label for="hauler_operator" class="form-label">Driver</label>
+									<div class="col-md-6">
+									  <label for="update_hauler_operator" class="form-label">Driver</label>
 									  <input type="text" class="form-control" id="update_hauler_operator" name="update_hauler_operator">
 									</div>
 								
-									<div class="col-md-3">
-									  <label for="lorry_driver" class="form-label">Lory Plate #</label>
+									<div class="col-md-6">
+									  <label for="update_lorry_driver" class="form-label">Lory Plate #</label>
 									  <input type="text" class="form-control" id="update_lorry_driver" name="update_lorry_driver" list="lorry_driver_list">
 											<datalist id="lorry_driver_list">
 												@foreach ($purchase_data_suggestion as $lorry_driver_cols)
@@ -153,8 +151,11 @@
 											  </datalist>
 									</div>
 									
-									<div class="col-md-3">
-									  <label for="plate_number" class="form-label">Plate Number</label>
+								</div>
+
+								<div class="row mb-2">
+									<div class="col-md-6">
+									  <label for="update_plate_number" class="form-label">Plate Number</label>
 									  <input type="text" class="form-control" id="update_plate_number" name="update_plate_number" list="plate_number_list">
 											<datalist id="plate_number_list">
 												@foreach ($purchase_data_suggestion as $plate_number_cols)
@@ -163,8 +164,8 @@
 											  </datalist>
 									</div>
 									
-									<div class="col-md-3">
-									  <label for="contact_number" class="form-label">Contact Number</label>
+									<div class="col-md-6">
+									  <label for="update_contact_number" class="form-label">Contact Number</label>
 									  <input type="text" class="form-control" id="update_contact_number" name="update_contact_number" list="contact_number_list">
 											<datalist id="contact_number_list">
 												@foreach ($purchase_data_suggestion as $contact_number_cols)
@@ -175,10 +176,10 @@
 								
 								</div>
 								
-								<div class="row">
+								<div class="row mb-2">
 								
-									<div class="col-md-3">
-									  <label for="purchase_destination" class="form-label">Destination</label>
+									<div class="col-md-6">
+									  <label for="update_purchase_destination" class="form-label">Destination</label>
 									  <input type="text" class="form-control" id="update_purchase_destination" name="update_purchase_destination" list="purchase_destination_list">
 											<datalist id="purchase_destination_list">
 												@foreach ($purchase_data_suggestion as $purchase_destination_cols)
@@ -187,8 +188,8 @@
 											  </datalist>
 									</div>
 									
-									<div class="col-md-3">
-									  <label for="purchase_destination_address" class="form-label">Address</label>
+									<div class="col-md-6">
+									  <label for="update_purchase_destination_address" class="form-label">Address</label>
 									  <input type="text" class="form-control" id="update_purchase_destination_address" name="update_purchase_destination_address" value=""list="purchase_destination_address_list">
 											<datalist id="purchase_destination_address_list">
 												@foreach ($purchase_data_suggestion as $purchase_destination_address_cols)
@@ -196,28 +197,29 @@
 												@endforeach
 											  </datalist>
 									</div>
-									
-									<div class="col-md-3">
-									  <label for="purchase_date_of_departure" class="form-label">Date of Departure</label>
+								</div>	
+								<div class="row mb-2">
+									<div class="col-md-6">
+									  <label for="update_purchase_date_of_departure" class="form-label">Date of Departure</label>
 									  <input type="date" class="form-control" id="update_purchase_date_of_departure" name="update_purchase_date_of_departure">
 									</div>
 									
-									<div class="col-md-3">
-									  <label for="purchase_date_of_arrival" class="form-label">Date of Arrival</label>
+									<div class="col-md-6">
+									  <label for="update_purchase_date_of_arrival" class="form-label">Date of Arrival</label>
 									  <input type="date" class="form-control" id="update_purchase_date_of_arrival" name="update_purchase_date_of_arrival">
 									</div>
 								
 								</div>
-								
+								<hr>
 								<div class="row">
 								
 									<div class="col-md-6">
-									  <label for="purchase_order_instructions" class="form-label">Instructions</label>
+									  <label for="update_purchase_order_instructions" class="form-label">Instructions</label>
 									  <textarea class="form-control" id="update_purchase_order_instructions" name="update_purchase_order_instructions" style="height: 38px;"></textarea>
 									</div>
 									
 									<div class="col-md-6">
-									  <label for="purchase_order_note" class="form-label">Notes</label>
+									  <label for="update_purchase_order_note" class="form-label">Notes</label>
 									  <textarea class="form-control" id="update_purchase_order_note" name="update_purchase_order_note" style="height: 38px;"></textarea>
 									</div>
 					
@@ -239,52 +241,89 @@
 												</div>
 												</div>
 												<div class="col-sm-6" align='right'>
-												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('salesorder') }}" title="Back">  
+												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
 												  <span title="Back to Sales Order List">Back</span>
 												</a>
-												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-sales-order" title='Update Sales Order information'> Update</button>
+												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-purchase-order" title='Update Sales Order information'> Update</button>
 												</div>
 												</div>	
             </div>
           </div>
 			</div>
 			<div class="col-sm-7">
-			
 			<div class="card">
             <div class="card-body">
-              <h5 class="card-title">Product</h5>
-				<div class="d-flex justify-content-end" id="">
+              <h5 class="card-title">Product and Payment Details</h5>
+			  <div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('salesorder') }}" title="Back">  
+						<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
 						  <span title="Back to Sales Order List">Back</span>
 						</a>
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN">&nbsp;Add</button>
 						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrder">&nbsp;Print</button>
 						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 						
 					</div>					
-				  </div>
+				</div>
+              <!-- Default Accordion -->
+              <div class="accordion accordion-flush" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                      Product
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                    <div class="accordion-body">
+                    <br>
+					<br>
+					<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN">&nbsp;Add</button>
+					</div>					
+					</div>
 
-			<table class="table table-striped" id="">
-			<thead>
-					<tr class='report'>
-						<th style="text-align:center !important;">Action</th>
-						<th style="text-align:center !important;">Description</th>
-						<th style="text-align:center !important;">Price</th>
-						<th style="text-align:center !important;">Quantity</th>
-						<th style="text-align:center !important;">Amount</th>
-						
-					</tr>
-			</thead>
-			<tbody id="table_sales_order_product_body_data">
-					<tr style="display: none;">
-						<td>HIDDEN</td>
-					</tr>
-			</tbody>
-		</table>
+						<table class="table table-striped" id="">
+						<thead>
+						<tr class='report'>
+							<th style="text-align:center !important;">#</th>
+							<th style="text-align:center !important;">Action</th>
+							<th style="text-align:center !important;">Description</th>
+							<th style="text-align:center !important;">Price</th>
+							<th style="text-align:center !important;">Quantity</th>
+							<th style="text-align:center !important;">Amount</th>	
+						</tr>
+						</thead>
+							<tbody id="table_purchase_order_product_body_data">
+									<tr style="display: none;">
+										<td>HIDDEN</td>
+									</tr>
+							</tbody>
+						</table>
+
+					</div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Payment
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample" style="">
+                    <div class="accordion-body">
+                      <br>
+					  <br>
+					  Payment List Here
+
+
+                    </div>
+                  </div>
+                </div>
+                
+              </div><!-- End Default Accordion Example -->
+
             </div>
           </div>
-             
             
 			</div>
 			

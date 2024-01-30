@@ -121,11 +121,11 @@ else if (Request::is('purchaseorder_v2')){
 	@include('layouts.purchaseorder_script_v2')
 	<?php
 }
-else if (Request::is('purchase_order_form')){
+else if (Request::is('purchase_order_form/*')){
 	?>
 	<body class="">
 	@include('layouts.footer')
-	@include('layouts.purchase_order_form_script')
+	@include('layouts.purchase_order_form_script_v2')
 	<?php
 }
 else if (Request::is('cashier_report')){
