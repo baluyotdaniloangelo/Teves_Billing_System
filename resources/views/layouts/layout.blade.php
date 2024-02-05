@@ -123,6 +123,7 @@ else if (Request::is('purchaseorder_v2')){
 }
 else if (Request::is('purchase_order_form/*')){
 	?>
+	<meta name="csrf-token" content="{{csrf_token()}}">
 	<body class="">
 	@include('layouts.footer')
 	@include('layouts.purchase_order_form_script_v2')

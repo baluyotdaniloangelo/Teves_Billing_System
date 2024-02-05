@@ -549,7 +549,6 @@ class SalesOrderController extends Controller
 		/*Delete on Sales Order Product Component*/	
 		SalesOrderComponentModel::where('sales_order_component_id', $sales_order_component_id)->delete();
 		
-		
 				$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
 				->sum('order_total_amount');
 					
@@ -572,9 +571,7 @@ class SalesOrderController extends Controller
 				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
 				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
 				$SalesOrderUpdate->update();
-		
-		
-		
+	
 		return 'Deleted';
 		
 	} 

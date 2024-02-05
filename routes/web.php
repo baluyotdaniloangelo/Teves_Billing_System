@@ -216,6 +216,9 @@ Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,
 Route::post('/delete_purchase_order_item', [PurchaseOrderController::class,'delete_purchase_order_item'])->name('delete_purchase_order_item')->middleware('isLoggedIn');
 /*Get Purchase Order Payment Item*/
 Route::post('/get_purchase_order_payment_list', [PurchaseOrderController::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');
+
+
+
 /*Delete Purchase Order Payment Item*/
 Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
 /*Update Purchase Status*/
@@ -234,12 +237,17 @@ Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController_v2::cla
 Route::post('/create_purchase_order_post_v2', [PurchaseOrderController_v2::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
 /*Update Purchase Order*/
 Route::post('/update_purchase_order_post', [PurchaseOrderController_v2::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');
-/*Get Purchase Order Product Item*/
-Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
+/*Create Purchase Order Product Item*/
+Route::post('/create_purchase_order_product_item', [PurchaseOrderController_v2::class,'create_purchase_order_product_item'])->name('PurchaseOrderProduct')->middleware('isLoggedIn');
+/*Create Product for Purchase Order*/
+Route::post('/create_purchase_order_post_v2', [PurchaseOrderController_v2::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
+
+Route::post('/purchase_order_product_info', [PurchaseOrderController_v2::class,'purchase_order_product_info'])->name('purchase_order_product_info')->middleware('isLoggedIn');
+
 /*Get Purchase Order Product Item*/
 Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
 /*Delete Purchase Order Product Item*/
-Route::post('/delete_purchase_order_item', [PurchaseOrderController_v2::class,'delete_purchase_order_item'])->name('delete_purchase_order_item')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_product', [PurchaseOrderController_v2::class,'delete_purchase_order_product'])->name('PurchaseOrderDeleteProduct')->middleware('isLoggedIn');
 /*Get Purchase Order Payment Item*/
 Route::post('/get_purchase_order_payment_list', [PurchaseOrderController_v2::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');
 /*Delete Purchase Order Payment Item*/
@@ -248,6 +256,13 @@ Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController_v2::
 Route::post('/update_purchase_status', [PurchaseOrderController_v2::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
 
 Route::get('/purchase_order_form/{id}', [PurchaseOrderController_v2::class, 'purchase_order_form'])->name('purchase_order_forms')->middleware('isLoggedIn');
+
+/*Create Payment for Purchase Order*/
+Route::post('/create_purchase_order_payment_item', [PurchaseOrderController_v2::class,'create_purchase_order_payment_item'])->name('PurchaseOrderPayment')->middleware('isLoggedIn');
+
+Route::post('/save_image',[PurchaseOrderController_v2::class,'save_image'])->name('save_image');
+
+Route::post('upload', [PurchaseOrderController_v2::class, 'store']);
 
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');

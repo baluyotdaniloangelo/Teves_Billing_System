@@ -58,20 +58,19 @@
 			
 			document.getElementById('PurchaseOrderformNew').className = "g-3 needs-validation was-validated";
 
-			let purchase_order_date 					= $("input[name=purchase_order_date]").val();
+			let purchase_order_date 			= $("input[name=purchase_order_date]").val();
 			
-			let supplier_idx 							= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
+			let supplier_idx 					= ($("#supplier_name option[value='" + $('#supplier_idx').val() + "']").attr('data-id'));
 			/*Supplier's Name and Product Name*/
 			let supplier_name 					= $("input[name=supplier_name]").val();
 			
 			/*Added May 6, 2023*/
-			let company_header 							= $("#company_header").val();
+			let company_header 					= $("#company_header").val();
 			 	 
 			  $.ajax({
 				url: "{{ route('SavePurchaseOrder') }}",
 				type:"POST",
 				data:{
-			
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
 					company_header:company_header,
@@ -101,7 +100,7 @@
 
 					/*Open Cashier's Report*/
 					var url = "{{URL::to('purchase_order_form')}}";
-					window.location.href = url+'/'+purchase_order_id;
+					window.location.href = url+'/'+response.purchase_order_id;
 					//var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
 					//window.open(url);
 					
@@ -180,7 +179,7 @@
 					$('#confirm_delete_suppliers_name').text(response.purchase_supplier_name);
 					$('#confirm_delete_amount').text(response.purchase_order_total_payable);
 					
-					$('#SalesOrderDeleteModal').modal('toggle');					
+					$('#PurchaseOrderDeleteModal').modal('toggle');					
 				  
 				  }
 				},
@@ -219,11 +218,8 @@
 					function to reload the datatable and pass the true or false as a parameter for refresh paging.
 					*/
 					
-					//var table = $("#getPurchaseOrderList").DataTable();
-				    //table.ajax.reload(null, false);
-					
-					/*Reload Page*/
-					location.reload();
+					var table = $("#getPurchaseOrderList").DataTable();
+				    table.ajax.reload(null, false);
 					
 				  }
 				},

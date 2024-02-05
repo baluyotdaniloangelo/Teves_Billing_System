@@ -132,15 +132,9 @@
 							var purchase_order_date_of_payment 	= response[i].purchase_order_date_of_payment;
 							var purchase_order_reference_no		= response[i].purchase_order_reference_no;
 							var purchase_order_payment_amount 	= response[i].purchase_order_payment_amount;
-							//var image_reference 	= response[i].image_reference;
-							
-							/*Display Image*/
-							//var image = new Image();
-							//image_src = "data:image/jpg;image/png;base64,"+image_reference;
-				
+													
 							$('#update_table_payment_body_data tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
-							//"<td align='center'><img src='"+image_src+"' width='30px'/></td>"+
 							"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
 							"<td class='bank_td' align='center'>"+purchase_order_bank+"</td>"+
 							"<td class='update_date_of_payment_td' align='center'>"+purchase_order_date_of_payment+"</td>"+
@@ -671,7 +665,7 @@
 
 			let purchase_order_id 				= {{ $PurchaseOrderID }};
 			
-			let purchase_order_payment_id 		= document.getElementById("save-payment").value;
+			let purchase_order_payment_id 	= document.getElementById("save-payment").value;
 			let purchase_order_bank 			= $("#purchase_order_bank").val();
 			let purchase_order_date_of_payment 	= $("#purchase_order_date_of_payment").val();
 			let purchase_order_reference_no 	= $("#purchase_order_reference_no").val();
@@ -760,24 +754,21 @@
   
 	  
  </script>
-
+<div>SRCH_ME</div>
  <script>
         $(function(){
 
             $('#AddPayment').on('submit', function(e){
                 e.preventDefault();
-	 		
-				//console.log(form);
-				$('#purchase_order_bankError').text('');
-				$('#purchase_order_date_of_paymentError').text('');
-				$('#purchase_order_reference_noError').text('');
-				$('#purchase_order_payment_amountError').text('');
-			
-				document.getElementById('AddPayment').className = "g-3 needs-validation was-validated";
-                
-				var form = this;
+	 
+				var myform = this;
+				let form = new FormData(myform);
+				form.append('eee', 'MARIAH CAREY');
 				
-				$.ajax({
+				 console.log(form);
+				
+				
+                $.ajax({
                     url:$(form).attr('action'),
                     method:$(form).attr('method'),
                     data:new FormData(form),
@@ -788,52 +779,16 @@
                         $(form).find('span.error-text').text('');
                     },
                     success:function(data){
-						
-						console.log(data);
-				  if(data) {
-					
-						$('#switch_notice_on').show();
-						$('#sw_on').html(data.success);
-						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-
-						$('#purchase_order_bankError').text('');
-						$('#purchase_order_date_of_paymentError').text('');
-						$('#purchase_order_reference_noError').text('');
-						$('#purchase_order_payment_amountError').text('');
-						
-						/*Clear Form*/
-						$('#purchase_order_bank').val("");
-						$('#purchase_order_reference_no').val("");
-						$('#purchase_order_payment_amount').val("");
-						$('#AddPaymentModal').modal('toggle');	
-						
-						}
-						
-						/*Reload Table*/
-						LoadPaymentRowForUpdate();
-						$(form)[0].reset();
-					
-                    },error: function(error) {
-					
-				 console.log(error);	
-								
-					$('#purchase_order_bankError').text(error.responseJSON.errors.purchase_order_bank);
-					document.getElementById('purchase_order_bankError').className = "invalid-feedback";
-					
-					$('#purchase_order_date_of_paymentError').text(error.responseJSON.errors.purchase_order_date_of_payment);
-					document.getElementById('purchase_order_date_of_paymentError').className = "invalid-feedback";					
-					
-					$('#purchase_order_reference_noError').text(error.responseJSON.errors.purchase_order_reference_no);
-					document.getElementById('purchase_order_reference_noError').className = "invalid-feedback";					
-					
-					$('#purchase_order_payment_amountError').text(error.responseJSON.errors.purchase_order_payment_amount);
-					document.getElementById('purchase_order_payment_amountError').className = "invalid-feedback";					
-					
-					$('#switch_notice_off').show();
-					$('#sw_off').html("Invalid Input" + "");
-					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
-				  
-				}
+                        if(data.code == 0){
+                            $.each(data.error, function(prefix,val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }else{
+                            $(form)[0].reset();
+                            // alert(data.msg);
+                            //fetchAllProducts();
+                        }
+                    }
                 });
             });
 

@@ -4,7 +4,7 @@
 	</div>
 
               <!-- Pills Tabs -->
-              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="pills-sales_order-tab" data-bs-toggle="pill" data-bs-target="#pills-sales_order" type="button" role="tab" aria-controls="pills-sales_order" aria-selected="true">SALES ORDER - CREDIT SALES</button>
                 </li>

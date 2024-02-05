@@ -85,7 +85,7 @@
 												</div>
 												
 												<div class="row mb-2">
-													<label for="or_number" class="col-sm-3 col-form-label">O.R Number</label>
+													<label for="or_number" class="col-sm-3 col-form-label">P.O Number</label>
 													<div class="col-sm-9">
 														<input type="text" class="form-control" id="or_number" name="or_number" value="{{ $sales_order_data[0]['sales_order_or_number'] }}" >
 													</div>
