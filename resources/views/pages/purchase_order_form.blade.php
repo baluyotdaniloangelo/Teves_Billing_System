@@ -9,16 +9,25 @@
             <div class="card-body">
 			
 				<h5 class="card-title" align="center">Update Purchase Order Information</h5>
-				<div class="d-flex justify-content-end" id="">
-					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
-						  <span title="Back to Sales Order List">Back</span>
-						</a>
-						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrder">&nbsp;Print</button>
-						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
+				<div class="row mb-2">
+					<div class="col-sm-6">
+					<h6>Control Number : <span class="badge" id='control_no' style="background-color: yellowgreen !important; color:#000 !important; font-weight:bold;">Info</span></h6>
+					</div>
+					<div class="col-sm-6">
+						<div class="d-flex justify-content-end" id="">
+							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -35px; position: absolute;">
+								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
+								  <span title="Back to Sales Order List">Back</span>
+								</a>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrder">&nbsp;Print</button>
+								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
+								
+							</div>					
+						</div>
 						
-					</div>					
+					</div>
 				</div>
+				
 				<hr>
 				<div class="row mb-2">
 					<div class="col-sm-6">
@@ -480,12 +489,18 @@
 							<label for="payment_image_reference" class="form-label">Upload</label>
 							<input class="form-control" type="file" id="payment_image_reference" name="payment_image_reference">
 							</div>
-						<div class="img-holder"></div>
+						
 						<!--<img id="preview-image-before-upload" src="" alt="preview image" style="max-height: 250px;">-->
 						 <input type="hidden" id="purchase_order_id_payment" name="purchase_order_id_payment" value="{{ $PurchaseOrderID }}">
 						 <input type="hidden" id="purchase_order_payment_details_id" name="purchase_order_payment_details_id" value="">		
 						</div>
-
+						
+						<div class="row mb-3">
+							<div class="col-sm-12">
+								<div class="img-holder" align="center"></div>
+							</div>
+						</div>
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
@@ -502,7 +517,43 @@
                 </div>
              </div>			
 	
-	
+	<!-- Bill Delete Modal-->
+    <div class="modal fade" id="PurchaseOrderPaymentDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+				
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Are you sure you want to Delete This Payment?<br>
+				</div>
+				<div class="row mb-2">
+				<div class="col-sm-4">
+				<div align="left"style="margin: 10px;">
+				
+				Bank: <span id="delete_purchase_order_bank"></span><br>
+				Date Of Pament: <span id="delete_purchase_order_date_of_payment"></span><br>	
+				Reference No.: <span id="delete_purchase_order_reference_no"></span><br>
+				Amount: <span id="delete_purchase_order_payment_amount"></span><br>
+				
+				</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="delete_img-holder" align="center"></div>
+				</div>
+				</div>
+				
+                <div class="modal-footer footer_modal_bg">
+				
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deletePurchaseOrderPaymentConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>	
     </section>
 </main>
 

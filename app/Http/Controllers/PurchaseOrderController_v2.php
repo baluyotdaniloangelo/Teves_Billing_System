@@ -335,7 +335,7 @@ class PurchaseOrderController_v2 extends Controller
 				
 	}
 	
-	public function delete_purchase_order_payment_item(Request $request){		
+	public function purchase_order_delete_payment(Request $request){		
 			
 		$paymentitemID = $request->paymentitemID;
 		PurchaseOrderPaymentModel::find($paymentitemID)->delete();
@@ -579,11 +579,35 @@ class PurchaseOrderController_v2 extends Controller
 
 	public function purchase_order_payment_info(Request $request){
 
-		$PurchaseOrderPaymentInfo = PurchaseOrderPaymentModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+		$PurchaseOrderPaymentInfo = PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_payment_details_id', $request->purchase_order_payment_details_id)
               	->get([
-						'purchase_order_net_percentage', 
-						'purchase_order_less_percentage'
+						'purchase_order_payment_details_id',
+						'purchase_order_idx', 
+						'purchase_order_bank',
+						'purchase_order_date_of_payment',
+						'purchase_order_reference_no',
+						'purchase_order_payment_amount',
+						'image_reference'
 				]);	
+/*
+			$raw_query_sales_order_component = "select IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
+			IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+			 `teves_purchase_order_component_table`.`product_price`,
+			  `teves_purchase_order_component_table`.`order_quantity`,
+			   `teves_purchase_order_component_table`.`order_total_amount`
+				 from `teves_purchase_order_component_table` left join `teves_product_table`
+				  on `teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx`
+				   where `teves_purchase_order_component_table`.`purchase_order_component_id` = ?";	
+						
+			$data = DB::select("$raw_query_sales_order_component", [ $request->purchase_order_component_id]);		
+*/
+		return response()->json($PurchaseOrderPaymentInfo);
+		
+	}
+	
+	public function purchase_order_product_info(Request $request){
+
+
 
 			$raw_query_sales_order_component = "select IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
 			IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
@@ -598,7 +622,7 @@ class PurchaseOrderController_v2 extends Controller
 
 		return response()->json($data);
 		
-	}
+	}	
 	
 	public function store(Request $request){
 		

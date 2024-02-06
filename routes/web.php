@@ -259,6 +259,8 @@ Route::get('/purchase_order_form/{id}', [PurchaseOrderController_v2::class, 'pur
 
 /*Create Payment for Purchase Order*/
 Route::post('/create_purchase_order_payment_item', [PurchaseOrderController_v2::class,'create_purchase_order_payment_item'])->name('PurchaseOrderPayment')->middleware('isLoggedIn');
+Route::post('/purchase_order_payment_info', [PurchaseOrderController_v2::class,'purchase_order_payment_info'])->name('PaymentInfo')->middleware('isLoggedIn');
+Route::post('/purchase_order_delete_payment', [PurchaseOrderController_v2::class,'purchase_order_delete_payment'])->name('DeletePayment')->middleware('isLoggedIn');
 
 Route::post('/save_image',[PurchaseOrderController_v2::class,'save_image'])->name('save_image');
 
