@@ -57,21 +57,16 @@ class PurchaseOrderController_v2 extends Controller
 				->addIndexColumn()
                 ->addColumn('status', function($row){
 					
-									
+					/*				
 				if($row->purchase_status=='Pending'){
 					$purchase_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
 				}else if($row->purchase_status=='Paid'){
 					$purchase_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
 				}else{
 					$purchase_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
-				}
+				}*/
 					
-					$actionBtn = '
-					<div align="center" class="action_table_menu_Product">
-					<select class="purchase_order_status_'.$row->purchase_order_id.'" name="purchase_order_status_'.$row->purchase_order_id.'" id="purchase_order_status_'.$row->purchase_order_id.'" onchange="purchase_update_status('.$row->purchase_order_id.')">	
-						'.$purchase_status_selected.'
-						</select>
-					</div>';
+					$actionBtn = $row->purchase_status;
                     return $actionBtn;
                 })
 				
@@ -275,10 +270,13 @@ class PurchaseOrderController_v2 extends Controller
 					`teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx` where `purchase_order_idx` = ?		  
 					order by `purchase_order_component_id` asc";	
 					
-		$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_id]);	
-
+			$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_id]);	
+			
+			$paymentlist = PurchaseOrderPaymentModel::where('purchase_order_idx', '=', $request->purchase_order_id)->get();
+			$paymentcount = $paymentlist->count();
 		
-			return response()->json($data);
+			return response()->json(array('productlist'=>$data,'paymentcount'=>$paymentcount));
+
 	}
 	
 	public function get_purchase_order_payment_list(Request $request){		
@@ -338,8 +336,53 @@ class PurchaseOrderController_v2 extends Controller
 	public function purchase_order_delete_payment(Request $request){		
 			
 		$paymentitemID = $request->paymentitemID;
+		$purchase_order_idx = $request->purchase_order_idx;
+		
 		PurchaseOrderPaymentModel::find($paymentitemID)->delete();
+		
+		
+							/*Update Status*/
+							/*Remaining Balance*/
+							/*Get Purchase Order Total Payable*/
+							$purchase_order_details = PurchaseOrderModel::find($purchase_order_idx, ['purchase_order_total_payable']);							
+							$purchase_order_total_payable = $purchase_order_details->purchase_order_total_payable;
+							
+							/*Get Payment Details*/
+							$purchase_order_total_payment_amount =  PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $purchase_order_idx)
+								->sum('purchase_order_payment_amount');
+								
+							$remaining_balance = number_format($purchase_order_total_payable - $purchase_order_total_payment_amount+0,2, '.', '');
+							$_paid_percentage = ($purchase_order_total_payment_amount / $purchase_order_total_payable) * 100;
+						
+							$paid_percentage = number_format($_paid_percentage,2,".","");
+						
+							/*IF Fully Paid Automatically Update the Status to Paid*/
+							if($paid_percentage >= 0.1 && $paid_percentage <= 99)
+							{		
+								
+								$PurchaseOrderstatus = "$paid_percentage% Paid";
+								
+							}else if($paid_percentage >= 100)
+							{	
+								
+								$PurchaseOrderstatus = "Paid";
+								
+							}else{
+								
+								$PurchaseOrderstatus = "Pending";
+								
+							}
+							
+							/*Update Recievable Table*/
+							$PurchaseOrderUpdate = new PurchaseOrderModel();
+							$PurchaseOrderUpdate = PurchaseOrderModel::find($purchase_order_idx);
+							
+							$PurchaseOrderUpdate->purchase_order_remaining_balance 	= $remaining_balance;
+							$PurchaseOrderUpdate->purchase_status 			= $PurchaseOrderstatus;
+							
+							$result_update = $PurchaseOrderUpdate->update();
 		return 'Deleted';
+		
 		
 	}
 	
@@ -497,69 +540,6 @@ class PurchaseOrderController_v2 extends Controller
 				
 	}
 
-	public function create_purchase_order_payment_item(Request $request){
-
-		$request->validate([
-		  'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:10048',
-		  'purchase_order_bank'      			=> 'required',
-		  'purchase_order_date_of_payment'      => 'required',
-		  'purchase_order_reference_no'      	=> 'required',
-		  'purchase_order_payment_amount'       => 'required',
-        ], 
-        [
-			'purchase_order_bank.required' => 'Bank Details is Required',
-			'purchase_order_date_of_payment.required' => 'Date of Payment is Required',
-			'purchase_order_reference_no.required' => 'Reference Number Required',
-			'purchase_order_payment_amount.required' => 'Payment Amount is Required'
-        ]
-		);
-		
-		$name = $request->file('image')->getClientOriginalName();
-
-        $path = $request->file('image')->store('public/images');
-
-		$path = $request->file('image')->getRealPath();    
-		$logo = file_get_contents($path);
-		$base64 = base64_encode($logo);
-		
-					$purchase_order_idx = $request->purchase_order_id;
-					$purchase_order_payment_id = $request->purchase_order_payment_id;
-					
-					if($purchase_order_payment_id==0){
-						
-					$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
-					
-					$PurchaseOrderPaymentComponent->purchase_order_idx 				= $purchase_order_idx;
-					$PurchaseOrderPaymentComponent->purchase_order_bank 			= $request->purchase_order_bank;
-					$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $request->purchase_order_date_of_payment;
-					$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $request->purchase_order_reference_no;
-					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-					$result = $PurchaseOrderPaymentComponent->save();
-				
-					}
-					else{
-					
-					$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
-					
-					$PurchaseOrderPaymentComponent = PurchaseOrderPaymentModel::find($purchase_order_payment_id);
-					$PurchaseOrderPaymentComponent->purchase_order_bank 			= $request->purchase_order_bank;
-					$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $request->purchase_order_date_of_payment;
-					$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $request->purchase_order_reference_no;
-					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-					$result = $PurchaseOrderPaymentComponent->update();
-
-					}
-				
-						if($result){
-							return response()->json(array('success' => "Payment Information Successfully Updated!"), 200);
-						}
-						else{
-							return response()->json(['success'=>'Error on Payment Information']);
-						}				
-				
-	}
-
 	public function purchase_order_component_info(Request $request){
 
 			$raw_query_sales_order_component = "select IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
@@ -589,25 +569,12 @@ class PurchaseOrderController_v2 extends Controller
 						'purchase_order_payment_amount',
 						'image_reference'
 				]);	
-/*
-			$raw_query_sales_order_component = "select IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
-			IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
-			 `teves_purchase_order_component_table`.`product_price`,
-			  `teves_purchase_order_component_table`.`order_quantity`,
-			   `teves_purchase_order_component_table`.`order_total_amount`
-				 from `teves_purchase_order_component_table` left join `teves_product_table`
-				  on `teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx`
-				   where `teves_purchase_order_component_table`.`purchase_order_component_id` = ?";	
-						
-			$data = DB::select("$raw_query_sales_order_component", [ $request->purchase_order_component_id]);		
-*/
+
 		return response()->json($PurchaseOrderPaymentInfo);
 		
 	}
 	
 	public function purchase_order_product_info(Request $request){
-
-
 
 			$raw_query_sales_order_component = "select IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
 			IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
@@ -624,82 +591,8 @@ class PurchaseOrderController_v2 extends Controller
 		
 	}	
 	
-	public function store(Request $request){
-		
-		Request::all();
-        
-        $validatedData = $request->validate([
-			'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:10048',
-			'purchase_order_bank'      			=> 'required',
-			'purchase_order_date_of_payment'      => 'required',
-			'purchase_order_reference_no'      	=> 'required',
-			'purchase_order_payment_amount'       => 'required',
-        ], 
-        [
-			'purchase_order_bank.required' => 'Bank Details is Required',
-			'purchase_order_date_of_payment.required' => 'Date of Payment is Required',
-			'purchase_order_reference_no.required' => 'Reference Number Required',
-			'purchase_order_payment_amount.required' => 'Payment Amount is Required'
-        ]
-
-        );
-
-        $name = $request->file('image')->getClientOriginalName();
-
-        $path = $request->file('image')->store('public/images');
-
-		$path = $request->file('image')->getRealPath();    
-		$logo = file_get_contents($path);
-		$base64 = base64_encode($logo);
-
-					$purchase_order_idx = $request->purchase_order_id;
-					$purchase_order_payment_id = $request->purchase_order_payment_id;
-					
-					if($purchase_order_payment_id==0){
-						
-					$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
-					
-					$PurchaseOrderPaymentComponent->purchase_order_idx 				= $purchase_order_idx;
-					$PurchaseOrderPaymentComponent->purchase_order_bank 			= $request->purchase_order_bank;
-					$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $request->purchase_order_date_of_payment;
-					$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $request->purchase_order_reference_no;
-					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-					$PurchaseOrderPaymentComponent->image_reference 	= $base64;
-					$result = $PurchaseOrderPaymentComponent->save();
-				
-					}
-					else{
-					
-					$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
-					
-					$PurchaseOrderPaymentComponent = PurchaseOrderPaymentModel::find($purchase_order_payment_id);
-					$PurchaseOrderPaymentComponent->purchase_order_bank 			= $request->purchase_order_bank;
-					$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $request->purchase_order_date_of_payment;
-					$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $request->purchase_order_reference_no;
-					$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-					$result = $PurchaseOrderPaymentComponent->update();
-
-					}
-				
-						if($result){
-							return response()->json(array('success' => "Payment Information Successfully Updated!"), 200);
-						}
-						else{
-							return response()->json(['success'=>'Error on Payment Information']);
-						}				
-
-			// $save = new Photo;
-			// $save->name = $name;
-			//  $save->path = $path;
-			//	$save->image_blob = $base64;
-		
-			//   $save->save();
-
-        return response()->json($path);
-
-    }	
 	
-	public function save_image(Request $request){
+	public function save_purchase_order_payment(Request $request){
         	 
 		 $validator = \Validator::make($request->all(),[
 				'payment_image_reference'=>'image|mimes:jpg,png,jpeg,svg|max:10048',
@@ -800,8 +693,49 @@ class PurchaseOrderController_v2 extends Controller
 
 							}
 							
-
 			   }
+
+							/*Update Status*/
+							/*Remaining Balance*/
+							/*Get Purchase Order Total Payable*/
+							$purchase_order_details = PurchaseOrderModel::find($purchase_order_idx, ['purchase_order_total_payable']);							
+							$purchase_order_total_payable = $purchase_order_details->purchase_order_total_payable;
+							
+							/*Get Payment Details*/
+							$purchase_order_total_payment_amount =  PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $purchase_order_idx)
+								->sum('purchase_order_payment_amount');
+								
+							$remaining_balance = number_format($purchase_order_total_payable - $purchase_order_total_payment_amount+0,2, '.', '');
+							$_paid_percentage = ($purchase_order_total_payment_amount / $purchase_order_total_payable) * 100;
+						
+							$paid_percentage = number_format($_paid_percentage,2,".","");
+						
+							/*IF Fully Paid Automatically Update the Status to Paid*/
+							if($paid_percentage >= 0.1 && $paid_percentage <= 99.9)
+							{	
+								
+								$PurchaseOrderstatus = "$paid_percentage% Paid";
+								
+							}else if($paid_percentage >= 100)
+							{	
+								
+								$PurchaseOrderstatus = "Paid";
+								
+							}else{
+								
+								$PurchaseOrderstatus = "Pending";
+								
+							}
+							
+							/*Update Recievable Table*/
+							$PurchaseOrderUpdate = new PurchaseOrderModel();
+							$PurchaseOrderUpdate = PurchaseOrderModel::find($purchase_order_idx);
+							
+							$PurchaseOrderUpdate->purchase_order_remaining_balance 	= $remaining_balance;
+							$PurchaseOrderUpdate->purchase_status 			= $PurchaseOrderstatus;
+							
+							$result_update = $PurchaseOrderUpdate->update();
+			
 
 						if($result){
 							return response()->json(array('success' => "Payment Information Successfully $result_type!"), 200);
@@ -810,7 +744,6 @@ class PurchaseOrderController_v2 extends Controller
 							return response()->json(['success'=>'Error on Payment Information']);
 						}	
 
-                   //return response()->json(['code'=>1,'msg'=>'New product has been saved successfully'.$singer]);
                }
            }
      

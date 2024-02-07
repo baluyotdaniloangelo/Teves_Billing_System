@@ -29,7 +29,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1] },
+					{ className: 'text-center', targets: [0, 1, 5] },
 			]
 		});
 				/**/

@@ -329,6 +329,7 @@
 					document.getElementById("receivable_billing_date").value = response[0].sales_order_date;
 					//document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
 					document.getElementById("receivable_payment_term").value = response[0].sales_order_payment_term;
+					document.getElementById("receivable_description").textContent = response[0].sales_order_control_number;	
 					
 					document.getElementById("add-to-receivables").value = id;
 					

@@ -221,7 +221,6 @@ class PurchaseOrderController extends Controller
 					$purchase_order_reference_no_item 		= $purchase_order_reference_no[$count];
 					$purchase_order_payment_amount_item 	= $purchase_order_payment_amount[$count];
 				
-				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
 				$PurchaseOrderPaymentComponent = new PurchaseOrderPaymentModel();
 				
 				$PurchaseOrderPaymentComponent->purchase_order_idx 		= $last_transaction_id;
@@ -263,7 +262,6 @@ class PurchaseOrderController extends Controller
 				
 				$gross_amount += $order_total_amount;
 				
-				/*Save to teves_sales_order_component_table(SalesOrderComponentModel)*/
 				$PurchaseOrderComponent = new PurchaseOrderComponentModel();
 				
 				$PurchaseOrderComponent->purchase_order_idx 		= $last_transaction_id;
@@ -473,7 +471,7 @@ class PurchaseOrderController extends Controller
 				$PurchaseOrderUpdate = PurchaseOrderModel::find($last_transaction_id);
 				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
 				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
-				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_payable;
+				$PurchaseOrderUpdate->purchase_order_total_payable  = $purchase_order_total_payable;
 				$PurchaseOrderUpdate->update();
 			
 			if($result){
@@ -493,8 +491,11 @@ class PurchaseOrderController extends Controller
 					'product_idx',
 					'product_price',
 					'order_quantity']);
+			
+			$paymentlist = PurchaseOrderPaymentModel::where('purchase_order_idx', '=', $request->purchase_order_id)->get();
+			$paymentcount = $paymentlist->count();
 		
-			return response()->json($data);
+			return response()->json(array('productlist'=>$data,'paymentcount'=>$paymentcount));
 	}
 	
 	public function get_purchase_order_payment_list(Request $request){		

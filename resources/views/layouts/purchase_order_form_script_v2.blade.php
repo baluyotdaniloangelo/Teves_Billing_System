@@ -1,7 +1,7 @@
    <script type="text/javascript">
 	LoadPurchaseOrderInfo();  
-	LoadProductRowForUpdate();
-	LoadPaymentRowForUpdate();
+	LoadProduct();
+	LoadPayment();
 	<!--Select Product For Update-->
 	function LoadPurchaseOrderInfo() {
 			
@@ -59,11 +59,10 @@
 			   });	
 	}	
 
-	function LoadProductRowForUpdate() {	
+	function LoadProduct() {	
 		
 		$("#table_purchase_order_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_purchase_order_product_body_data');
-
 
 			  $.ajax({
 				url: "/get_purchase_order_product_list",
@@ -73,30 +72,63 @@
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){						
-				  console.log(response);
-				  if(response!='') {			  
-						var len = response.length;
-						for(var i=0; i<len; i++){
+				  console.log(response['productlist']);
+				  if(response['productlist']!='') {			  
+						var len = response['productlist'].length;
+
+						if(response['paymentcount']!=0){
 						
-							var id = response[i].purchase_order_component_id;
-							var product_name = response[i].product_name;
-							var product_unit_measurement = response[i].product_unit_measurement;
-							var product_price = response[i].product_price;
-							var order_quantity = response[i].order_quantity;
+							for(var i=0; i<len; i++){
+								
+								$(".action_column_class").hide();
+								
+								var id = response['productlist'][i].purchase_order_component_id;
+								var product_name = response['productlist'][i].product_name;
+								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
+								var product_price = response['productlist'][i].product_price;
+								var order_quantity = response['productlist'][i].order_quantity;
+								
+								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+									
+								$('#table_purchase_order_product_body_data tr:last').after("<tr>"+
+								"<td align='center'>" + (i+1) + "</td>" +
+								"<td class='product_td' align='left'>"+product_name+"</td>"+
+								"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
+								"<td class='calibration_td' align='center'>"+order_quantity+" "+product_unit_measurement+"</td>"+
+								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+								"</tr>");	
+								
+							}
+						
+						}else{
+						
+							for(var i=0; i<len; i++){
+								
+								$(".action_column_class").show();
+								
+								var id = response['productlist'][i].purchase_order_component_id;
+								var product_name = response['productlist'][i].product_name;
+								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
+								var product_price = response['productlist'][i].product_price;
+								var order_quantity = response['productlist'][i].order_quantity;
+								
+								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+									
+								$('#table_purchase_order_product_body_data tr:last').after("<tr>"+
+								"<td align='center'>" + (i+1) + "</td>" +
+								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
+								"<td class='product_td' align='left'>"+product_name+"</td>"+
+								"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
+								"<td class='calibration_td' align='center'>"+order_quantity+" "+product_unit_measurement+"</td>"+
+								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+								"</tr>");	
+								
+								
+							}		
 							
-							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
-							$('#table_purchase_order_product_body_data tr:last').after("<tr>"+
-							"<td align='center'>" + (i+1) + "</td>" +
-							"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
-							
-							"<td class='product_td' align='left'>"+product_name+"</td>"+
-							"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
-							"<td class='calibration_td' align='center'>"+order_quantity+" "+product_unit_measurement+"</td>"+
-							"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-							"</tr>");
-							
-					}			
+						}
+						
 				  }else{
 							/*No Result Found or Error*/	
 				  }
@@ -108,7 +140,7 @@
 	  } 
 	  
   
-	function LoadPaymentRowForUpdate(purchase_order_id) {
+	function LoadPayment(purchase_order_id) {
 	
 			  $.ajax({
 				url: "/get_purchase_order_payment_list",
@@ -124,7 +156,8 @@
 					 
 					$("#update_table_payment_body_data tr").remove();
 					$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
-
+					//LoadProduct();
+					
 						var len = response.length;
 						for(var i=0; i<len; i++){
 							
@@ -134,24 +167,38 @@
 							var purchase_order_date_of_payment 	= response[i].purchase_order_date_of_payment;
 							var purchase_order_reference_no		= response[i].purchase_order_reference_no;
 							var purchase_order_payment_amount 	= response[i].purchase_order_payment_amount;
-							//var image_reference 	= response[i].image_reference;
+							var image_reference 				= response[i].image_reference;
 							
-							/*Display Image*/
-							//var image = new Image();
-							//image_src = "data:image/jpg;image/png;base64,"+image_reference;
+							if(image_reference==null){
+								
+								$('#update_table_payment_body_data tr:last').after("<tr>"+
+								"<td align='center'>" + (i+1) + "</td>" +
+								"<td><div align='left' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td class='bank_td' align='center'>"+purchase_order_bank+"</td>"+
+								"<td class='update_date_of_payment_td' align='center'>"+purchase_order_date_of_payment+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='center'>"+purchase_order_reference_no+"</td>"+
+								"<td class='update_purchase_order_payment_amount_td' align='center'>"+purchase_order_payment_amount+"</td>");
+								
+							}else{
+								
+								$('#update_table_payment_body_data tr:last').after("<tr>"+
+								"<td align='center'>" + (i+1) + "</td>" +
+								"<td><div align='left' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewPurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td class='bank_td' align='center'>"+purchase_order_bank+"</td>"+
+								"<td class='update_date_of_payment_td' align='center'>"+purchase_order_date_of_payment+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='center'>"+purchase_order_reference_no+"</td>"+
+								"<td class='update_purchase_order_payment_amount_td' align='center'>"+purchase_order_payment_amount+"</td>");
+							
+							}
 				
-							$('#update_table_payment_body_data tr:last').after("<tr>"+
-							"<td align='center'>" + (i+1) + "</td>" +
-							//"<td align='center'><img src='"+image_src+"' width='30px'/></td>"+
-							"<td><div align='left' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
-							"<td class='bank_td' align='center'>"+purchase_order_bank+"</td>"+
-							"<td class='update_date_of_payment_td' align='center'>"+purchase_order_date_of_payment+"</td>"+
-							"<td class='update_purchase_order_reference_no_td' align='center'>"+purchase_order_reference_no+"</td>"+
-							"<td class='update_purchase_order_payment_amount_td' align='center'>"+purchase_order_payment_amount+"</td>");
+							
 
 						}			
 				  }else{
 							/*No Result Found or Error*/
+							//LoadProduct();
+							$("#update_table_payment_body_data tr").remove();
+							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 				  }
 				},
 				error: function(error) {
@@ -160,10 +207,151 @@
 			   });
 	  }  	  
 	
+	<!--Save New Sales Order-->
+	$("#update-purchase-order").click(function(event){
+
+			event.preventDefault();
+
+			document.getElementById('PurchaseOrderformUpdate').className = "g-3 needs-validation was-validated";
+			
+			let purchase_order_id						= document.getElementById("update-purchase-order").value;
+			
+			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
+			
+			let supplier_idx 							= $('#update_supplier_name_list option[value="' + $('#update_supplier_idx').val() + '"]').attr('data-id');
+			//alert(supplier_idx);
+			/*Supplier's Name and Product Name*/
+			let supplier_name 							= $("input[name=update_supplier_name]").val();
+			/*Added May 6, 2023*/
+			let company_header 							= $("#update_company_header").val();
+			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
+			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
+			let purchase_order_official_receipt_no 		= $("input[name=update_purchase_order_official_receipt_no]").val();
+			let purchase_order_delivery_receipt_no 		= $("input[name=update_purchase_order_delivery_receipt_no]").val();
+		
+			let purchase_order_delivery_method 			= $("#update_purchase_order_delivery_method").val();
+			let purchase_loading_terminal 				= $("#update_purchase_loading_terminal").val();
+			
+			let purchase_order_net_percentage 			= $("input[name=update_purchase_order_net_percentage]").val();
+			let purchase_order_less_percentage 			= $("input[name=update_purchase_order_less_percentage]").val();
+			
+			let hauler_operator 					= $("input[name=update_hauler_operator]").val();
+			let lorry_driver 						= $("input[name=update_lorry_driver]").val();
+			let plate_number 						= $("input[name=update_plate_number]").val();
+			let contact_number 						= $("input[name=update_contact_number]").val();
+						
+			let purchase_destination 				= $("input[name=update_purchase_destination]").val();
+			let purchase_destination_address 		= $("input[name=update_purchase_destination_address]").val();
+			let purchase_date_of_departure 			= $("input[name=update_purchase_date_of_departure]").val();
+			let purchase_date_of_arrival 			= $("input[name=update_purchase_date_of_arrival]").val();
+			
+			
+			let purchase_order_instructions 			= $("#update_purchase_order_instructions").val();
+			let purchase_order_note 					= $("#update_purchase_order_note").val();
+				 
+			  $.ajax({
+				url: "/update_purchase_order_post",
+				type:"POST",
+				data:{
+			
+					purchase_order_id:purchase_order_id,
+					
+					purchase_order_date:purchase_order_date,
+					supplier_idx:supplier_idx,
+					company_header:company_header,
+					purchase_order_sales_order_number:purchase_order_sales_order_number,
+					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
+					purchase_order_official_receipt_no:purchase_order_official_receipt_no,
+					purchase_order_delivery_receipt_no:purchase_order_delivery_receipt_no,
+				
+					purchase_order_delivery_method:purchase_order_delivery_method,
+					purchase_loading_terminal:purchase_loading_terminal,
+					
+					purchase_order_net_percentage:purchase_order_net_percentage,
+					purchase_order_less_percentage:purchase_order_less_percentage,
+					
+					
+			
+					hauler_operator:hauler_operator,
+					lorry_driver:lorry_driver,
+					
+					
+					plate_number:plate_number,
+					contact_number:contact_number,
+					
+					purchase_destination:purchase_destination,
+					purchase_destination_address:purchase_destination_address,
+					purchase_date_of_departure:purchase_date_of_departure,
+					purchase_date_of_arrival:purchase_date_of_arrival,
+									
+					purchase_order_instructions:purchase_order_instructions,
+					purchase_order_note:purchase_order_note,
+				  
+					
+				  
+				
+					_token: "{{ csrf_token() }}"
+				},		
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					$('#update_purchase_supplier_nameError').text('');					
+					
+				  }
+				},
+				beforeSend:function()
+				{
+					
+					/*Disable Submit Button*/
+					document.getElementById("update-purchase-order").disabled = true;
+					/*Show Status*/
+					$('#update_loading_data').show();
+					
+				},
+				complete: function(){
+						
+					/*Enable Submit Button*/
+					document.getElementById("update-purchase-order").disabled = false;
+					/*Hide Status*/
+					$('#update_loading_data').hide();	
+					
+				},
+				error: function(error) {
+					
+				 console.log(error);	
+				
+					if(error.responseJSON.errors.supplier_idx=="Supplier's Name is Required"){
+						
+							if(supplier_idx==''){
+								$('#update_supplier_idxError').html(error.responseJSON.errors.supplier_idx);
+							}else{
+								$('#update_supplier_idxError').html("Incorrect Supplier's Name <b>" + supplier_name + "</b>");
+							}
+						
+							document.getElementById("update_supplier_idx").value = "";
+							document.getElementById('update_supplier_idxError').className = "invalid-feedback";
+							
+					}
+				
+				$('#product_idxError').html(error.responseJSON.errors.product_idx);
+				
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });	
+	  });	
+	
 	  /*Re-print*/
 	  $('body').on('click','#PrintPurchaseOrder',function(){	  
 	  
-			let purchaseOrderID = $(this).data('id');
+			let purchaseOrderID = {{ $PurchaseOrderID }};
 			var query = {
 						purchase_order_id:purchaseOrderID,
 						_token: "{{ csrf_token() }}"
@@ -238,7 +426,7 @@
 						}
 						
 						/*Reload Table*/
-						LoadProductRowForUpdate();
+						LoadProduct();
 									  
 				},
 				beforeSend:function()
@@ -381,7 +569,7 @@
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 
 					/*Reload Table*/
-					LoadProductRowForUpdate();
+					LoadProduct();
 					
 				  }
 				},
@@ -396,7 +584,6 @@
 			
 			event.preventDefault();
 			let purchase_order_payment_details_id = $(this).data('id');
-			//alert(purchase_order_payment_details_id);
 			  $.ajax({
 				url: "{{ route('PaymentInfo') }}",
 				type:"POST",
@@ -418,21 +605,17 @@
 					document.getElementById("purchase_order_payment_amount").value = response[0].purchase_order_payment_amount;
 					
 					/*Display Image*/
-					//var image = new Image();
 					if(response[0].image_reference != null){
+						
 						var img_holder = $('.img-holder');
 						img_holder.empty();
 						image_src = "data:image/jpg;image/png;base64,"+response[0].image_reference;
 						
 						$('<img/>',{'src':image_src,'class':'img-fluid','style':'max-width:400px;margin-bottom:5px;'}).appendTo(img_holder);
 					
-						//"<img src='"+image_src+"' width='30px'/>"+
-						
-						//var total_amount = response[0].order_total_amount;
-						//$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					}else{
 					}
-					//LoadPaymentRowForUpdate();
+					
 					$('#AddPaymentModal').modal('toggle');					
 				  
 				  }
@@ -443,13 +626,65 @@
 				}
 			   });	
 	  });	  	  
-		
+	
+<!--Select Bill For Update-->
+	$('body').on('click','#ViewPurchaseOrderPayment',function(){
+			
+			event.preventDefault();
+			let purchase_order_payment_details_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "{{ route('PaymentInfo') }}",
+				type:"POST",
+				data:{
+				  purchase_order_payment_details_id:purchase_order_payment_details_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+				
+					
+					/*Set Details*/
+					$('#view_purchase_order_bank').text(response[0].purchase_order_bank);
+					$('#view_purchase_order_date_of_payment').text(response[0].purchase_order_date_of_payment);
+					$('#view_purchase_order_reference_no').text(response[0].purchase_order_reference_no);
+					$('#view_purchase_order_payment_amount').text(response[0].purchase_order_payment_amount);
+				
+					
+					if(response[0].image_reference != null){
+					
+						/*Display Image*/
+						
+						var img_holder = $('.view_img-holder');
+						img_holder.empty();
+						image_src = "data:image/jpg;image/png;base64,"+response[0].image_reference;
+						
+						$('<img/>',{'src':image_src,'class':'img-fluid','style':'max-width:600px;margin-top:5px;margin-bottom:5px;'}).appendTo(img_holder);
+						
+						
+					
+					}else{
+					
+					}
+					
+					$('#PurchaseOrderViewPaymentReferenceModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });	
+	  
 	<!--Select Bill For Update-->
 	$('body').on('click','#deletePurchaseOrderPayment',function(){
 			
 			event.preventDefault();
 			let purchase_order_payment_details_id = $(this).data('id');
-			//alert(purchase_order_payment_details_id);
+			
 			  $.ajax({
 				url: "{{ route('PaymentInfo') }}",
 				type:"POST",
@@ -464,7 +699,6 @@
 					document.getElementById("deletePurchaseOrderPaymentConfirmed").value = response[0].purchase_order_payment_details_id;
 					
 					/*Set Details*/
-					//$('#control_no').text(
 					$('#delete_purchase_order_bank').text(response[0].purchase_order_bank);
 					$('#delete_purchase_order_date_of_payment').text(response[0].purchase_order_date_of_payment);
 					$('#delete_purchase_order_reference_no').text(response[0].purchase_order_reference_no);
@@ -507,7 +741,7 @@
 				url: "{{ route('DeletePayment') }}",
 				type:"POST",
 				data:{
-					purchase_order_id:purchase_order_id,
+					purchase_order_idx:purchase_order_id,
 					paymentitemID:paymentitemID,
 					_token: "{{ csrf_token() }}"
 				},
@@ -520,7 +754,8 @@
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 
 					/*Reload Table*/
-					LoadPaymentRowForUpdate();
+					LoadPayment();
+					//LoadProduct();
 					
 				  }
 				},
@@ -549,7 +784,6 @@
 		
 	}	  
 
-   $(function(){
 	   
 			/*Add Payment and Edit With Upload Function*/
             $('#AddPayment').on('submit', function(e){
@@ -597,7 +831,9 @@
 						}
 						
 						/*Reload Table*/
-						LoadPaymentRowForUpdate();
+						LoadPayment();
+						LoadProduct();
+						
 						$(form)[0].reset();
 					
                     },error: function(error) {
@@ -649,7 +885,4 @@
                 }
             });
 
-
-    
-        })
     </script>

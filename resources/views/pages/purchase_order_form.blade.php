@@ -16,10 +16,10 @@
 					<div class="col-sm-6">
 						<div class="d-flex justify-content-end" id="">
 							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -35px; position: absolute;">
-								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
+								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder_v2') }}" title="Back">  
 								  <span title="Back to Sales Order List">Back</span>
 								</a>
-								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrder">&nbsp;Print</button>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintPurchaseOrder">&nbsp;Print</button>
 								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 								
 							</div>					
@@ -237,7 +237,7 @@
 												</div>
 												</div>
 												<div class="col-sm-6" align='right'>
-												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
+												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder_v2') }}" title="Back">  
 												  <span title="Back to Sales Order List">Back</span>
 												</a>
 												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-purchase-order" title='Update Sales Order information'> Update</button>
@@ -251,7 +251,7 @@
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Product</button>
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" onclick="LoadProduct()">Product</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Payment</button>
@@ -270,7 +270,7 @@
 						<thead>
 						<tr class='report'>
 							<th style="text-align:center !important;">#</th>
-							<th style="text-align:center !important;">Action</th>
+							<th style="text-align:center !important;" class="action_column_class">Action</th>
 							<th style="text-align:center !important;">Description</th>
 							<th style="text-align:center !important;">Price</th>
 							<th style="text-align:center !important;">Quantity</th>
@@ -439,7 +439,7 @@
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('save_image')}}"  method="post" >
+					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('save_purchase_order_payment')}}"  method="post" >
 						@csrf
 						<div class="col-sm-12">
 						
@@ -554,6 +554,41 @@
             </div>
         </div>
     </div>	
+	
+	<!-- Bill Delete Modal-->
+    <div class="modal fade" id="PurchaseOrderViewPaymentReferenceModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+
+				<div class="row mb-2">
+				<div class="col-sm-4">
+				<div align="left"style="margin: 10px;">
+				
+				Bank: <span id="view_purchase_order_bank"></span><br>
+				Date Of Pament: <span id="view_purchase_order_date_of_payment"></span><br>	
+				Reference No.: <span id="view_purchase_order_reference_no"></span><br>
+				Amount: <span id="view_purchase_order_payment_amount"></span><br>
+				
+				</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="view_img-holder" align="center"></div>
+				</div>
+				</div>
+				
+                <div class="modal-footer footer_modal_bg">
+				
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Close</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>	
+	
     </section>
 </main>
 

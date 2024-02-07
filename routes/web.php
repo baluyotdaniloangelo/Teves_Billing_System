@@ -198,32 +198,30 @@ Route::post('/delete_sales_order_payment_item', [SalesOrderController::class,'de
 
 /*Purchase Order*/
 /*January 24, 2023*/
+/*
 Route::get('/purchaseorder', [PurchaseOrderController::class,'purchaseorder'])->name('purchaseorder')->middleware('isLoggedIn');
-Route::get('purchaseorder/list', [PurchaseOrderController::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');
-/*GET Purchase Order Info*/
-Route::post('/purchase_order_info', [PurchaseOrderController::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');
-/*Confirm Delete Purchase Order*/
-Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController::class, 'delete_purchase_order_confirmed'])->name('delete_purchase_order_confirmed')->middleware('isLoggedIn');
-/*Create Purchase Order*/
-Route::post('/create_purchase_order_post', [PurchaseOrderController::class,'create_purchase_order_post'])->name('create_purchase_order_post')->middleware('isLoggedIn');
-/*Update Purchase Order*/
-Route::post('/update_purchase_order_post', [PurchaseOrderController::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');
-/*Get Purchase Order Product Item*/
-Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
-/*Get Purchase Order Product Item*/
-Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
-/*Delete Purchase Order Product Item*/
-Route::post('/delete_purchase_order_item', [PurchaseOrderController::class,'delete_purchase_order_item'])->name('delete_purchase_order_item')->middleware('isLoggedIn');
-/*Get Purchase Order Payment Item*/
-Route::post('/get_purchase_order_payment_list', [PurchaseOrderController::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');
-
-
+Route::get('purchaseorder/list', [PurchaseOrderController::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');*/
+/*GET Purchase Order Info
+Route::post('/purchase_order_info', [PurchaseOrderController::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');*/
+/*Confirm Delete Purchase Order
+Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController::class, 'delete_purchase_order_confirmed'])->name('delete_purchase_order_confirmed')->middleware('isLoggedIn');*/
+/*Create Purchase Order
+Route::post('/create_purchase_order_post', [PurchaseOrderController::class,'create_purchase_order_post'])->name('create_purchase_order_post')->middleware('isLoggedIn');*/
+/*Update Purchase Order
+//Route::post('/update_purchase_order_post', [PurchaseOrderController::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');*/
+/*Get Purchase Order Product Item
+Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');*/
+/*Get Purchase Order Product Item
+Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');*/
+/*Delete Purchase Order Product Item
+Route::post('/delete_purchase_order_item', [PurchaseOrderController::class,'delete_purchase_order_item'])->name('delete_purchase_order_item')->middleware('isLoggedIn');*/
+/*Get Purchase Order Payment Item
+Route::post('/get_purchase_order_payment_list', [PurchaseOrderController::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');*/
 
 /*Delete Purchase Order Payment Item*/
 Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
 /*Update Purchase Status*/
 Route::post('/update_purchase_status', [PurchaseOrderController::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
-
 
 /*Purchase Order Version 2*/
 /*January 25, 2023*/
@@ -262,7 +260,7 @@ Route::post('/create_purchase_order_payment_item', [PurchaseOrderController_v2::
 Route::post('/purchase_order_payment_info', [PurchaseOrderController_v2::class,'purchase_order_payment_info'])->name('PaymentInfo')->middleware('isLoggedIn');
 Route::post('/purchase_order_delete_payment', [PurchaseOrderController_v2::class,'purchase_order_delete_payment'])->name('DeletePayment')->middleware('isLoggedIn');
 
-Route::post('/save_image',[PurchaseOrderController_v2::class,'save_image'])->name('save_image');
+Route::post('/save_purchase_order_payment',[PurchaseOrderController_v2::class,'save_purchase_order_payment'])->name('save_purchase_order_payment')->middleware('isLoggedIn');
 
 Route::post('upload', [PurchaseOrderController_v2::class, 'store']);
 
