@@ -97,10 +97,11 @@
 
 			document.getElementById('SalesOrderformNew').className = "g-3 needs-validation was-validated";
 	
-			let client_idx 				= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
+			let client_idx 					= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			
-			let company_header 			= $("#company_header").val();			
-			let sales_order_date 		= $("input[name=sales_order_date]").val();
+			let company_header 				= $("#company_header").val();
+			let sales_order_payment_type 	= $("#sales_order_payment_type").val();
+			let sales_order_date 			= $("input[name=sales_order_date]").val();
 
 			let payment_term 				= $("input[name=payment_term]").val();
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
@@ -112,6 +113,7 @@
 				data:{
 				  client_idx:client_idx,
 				  company_header:company_header,
+				  sales_order_payment_type:sales_order_payment_type,
 				  sales_order_date:sales_order_date,
 				  payment_term:payment_term,
 				  sales_order_net_percentage:sales_order_net_percentage,

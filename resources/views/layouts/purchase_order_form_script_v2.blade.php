@@ -78,9 +78,10 @@
 
 						if(response['paymentcount']!=0){
 						
+							$(".action_column_class").hide();
+							document.getElementById("AddPurchaseOrderProductBTN").disabled = true;
+							
 							for(var i=0; i<len; i++){
-								
-								$(".action_column_class").hide();
 								
 								var id = response['productlist'][i].purchase_order_component_id;
 								var product_name = response['productlist'][i].product_name;
@@ -101,10 +102,11 @@
 							}
 						
 						}else{
+							
+							$(".action_column_class").show();
+							document.getElementById("AddPurchaseOrderProductBTN").disabled = false;
 						
 							for(var i=0; i<len; i++){
-								
-								$(".action_column_class").show();
 								
 								var id = response['productlist'][i].purchase_order_component_id;
 								var product_name = response['productlist'][i].product_name;
@@ -121,12 +123,9 @@
 								"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
 								"<td class='calibration_td' align='center'>"+order_quantity+" "+product_unit_measurement+"</td>"+
 								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-								"</tr>");	
+								"</tr>");			
 								
-								
-							}		
-							
-							
+							}							
 						}
 						
 				  }else{
@@ -138,7 +137,6 @@
 				}
 			   });
 	  } 
-	  
   
 	function LoadPayment(purchase_order_id) {
 	
@@ -156,7 +154,6 @@
 					 
 					$("#update_table_payment_body_data tr").remove();
 					$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
-					//LoadProduct();
 					
 						var len = response.length;
 						for(var i=0; i<len; i++){
@@ -189,9 +186,7 @@
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+purchase_order_reference_no+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='center'>"+purchase_order_payment_amount+"</td>");
 							
-							}
-				
-							
+							}	
 
 						}			
 				  }else{
@@ -215,11 +210,8 @@
 			document.getElementById('PurchaseOrderformUpdate').className = "g-3 needs-validation was-validated";
 			
 			let purchase_order_id						= document.getElementById("update-purchase-order").value;
-			
 			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
-			
 			let supplier_idx 							= $('#update_supplier_name_list option[value="' + $('#update_supplier_idx').val() + '"]').attr('data-id');
-			//alert(supplier_idx);
 			/*Supplier's Name and Product Name*/
 			let supplier_name 							= $("input[name=update_supplier_name]").val();
 			/*Added May 6, 2023*/
@@ -228,24 +220,18 @@
 			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
 			let purchase_order_official_receipt_no 		= $("input[name=update_purchase_order_official_receipt_no]").val();
 			let purchase_order_delivery_receipt_no 		= $("input[name=update_purchase_order_delivery_receipt_no]").val();
-		
 			let purchase_order_delivery_method 			= $("#update_purchase_order_delivery_method").val();
 			let purchase_loading_terminal 				= $("#update_purchase_loading_terminal").val();
-			
 			let purchase_order_net_percentage 			= $("input[name=update_purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 			= $("input[name=update_purchase_order_less_percentage]").val();
-			
 			let hauler_operator 					= $("input[name=update_hauler_operator]").val();
 			let lorry_driver 						= $("input[name=update_lorry_driver]").val();
 			let plate_number 						= $("input[name=update_plate_number]").val();
 			let contact_number 						= $("input[name=update_contact_number]").val();
-						
 			let purchase_destination 				= $("input[name=update_purchase_destination]").val();
 			let purchase_destination_address 		= $("input[name=update_purchase_destination_address]").val();
 			let purchase_date_of_departure 			= $("input[name=update_purchase_date_of_departure]").val();
 			let purchase_date_of_arrival 			= $("input[name=update_purchase_date_of_arrival]").val();
-			
-			
 			let purchase_order_instructions 			= $("#update_purchase_order_instructions").val();
 			let purchase_order_note 					= $("#update_purchase_order_note").val();
 				 
@@ -253,9 +239,7 @@
 				url: "/update_purchase_order_post",
 				type:"POST",
 				data:{
-			
 					purchase_order_id:purchase_order_id,
-					
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
 					company_header:company_header,
@@ -263,33 +247,20 @@
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
 					purchase_order_official_receipt_no:purchase_order_official_receipt_no,
 					purchase_order_delivery_receipt_no:purchase_order_delivery_receipt_no,
-				
 					purchase_order_delivery_method:purchase_order_delivery_method,
 					purchase_loading_terminal:purchase_loading_terminal,
-					
 					purchase_order_net_percentage:purchase_order_net_percentage,
 					purchase_order_less_percentage:purchase_order_less_percentage,
-					
-					
-			
 					hauler_operator:hauler_operator,
 					lorry_driver:lorry_driver,
-					
-					
 					plate_number:plate_number,
 					contact_number:contact_number,
-					
 					purchase_destination:purchase_destination,
 					purchase_destination_address:purchase_destination_address,
 					purchase_date_of_departure:purchase_date_of_departure,
-					purchase_date_of_arrival:purchase_date_of_arrival,
-									
+					purchase_date_of_arrival:purchase_date_of_arrival,	
 					purchase_order_instructions:purchase_order_instructions,
 					purchase_order_note:purchase_order_note,
-				  
-					
-				  
-				
 					_token: "{{ csrf_token() }}"
 				},		
 				success:function(response){
@@ -362,6 +333,55 @@
 	  
 	  });
 	  
+	  
+	function UpdateBranch(){ 
+	
+		$('#switch_notice_off').show();
+		$('#sw_off').html("You selected a new branch, to confirm changes click the update button");
+		setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },2000);
+		
+		/*Disable the Add Product Button Until Changes not Save*/
+		document.getElementById("AddPurchaseOrderProductBTN").disabled = true;
+		
+	}
+
+	function LoadProductList(branch_id) {		
+	
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+			  $.ajax({
+				url: "{{ route('ProductListPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  branch_idx:branch_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
+	  
 	<!--Product-->
 	$("#save-product").click(function(event){
 		
@@ -376,17 +396,13 @@
 			document.getElementById('AddProduct').className = "g-3 needs-validation was-validated";
 			
 			let company_header 					= $("#update_company_header").val();
-			
 			let purchase_order_id 				= {{ $PurchaseOrderID }};
-			
 			let purchase_order_component_id 	= document.getElementById("save-product").value;
 			let product_idx 					= $("#product_list option[value='" + $('#product_idx').val() + "']").attr('data-id');
 			let product_manual_price 			= $("#product_manual_price").val();
 			let order_quantity 					= $("input[name=order_quantity]").val();
-
 			/*Product Name*/
 			let product_name 					= $("input[name=product_name]").val();
-			
 			let purchase_order_net_percentage 	= $("input[name=purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 	= $("input[name=purchase_order_less_percentage]").val();
 			
@@ -643,14 +659,12 @@
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-				
 					
 					/*Set Details*/
 					$('#view_purchase_order_bank').text(response[0].purchase_order_bank);
 					$('#view_purchase_order_date_of_payment').text(response[0].purchase_order_date_of_payment);
 					$('#view_purchase_order_reference_no').text(response[0].purchase_order_reference_no);
 					$('#view_purchase_order_payment_amount').text(response[0].purchase_order_payment_amount);
-				
 					
 					if(response[0].image_reference != null){
 					
@@ -662,8 +676,6 @@
 						
 						$('<img/>',{'src':image_src,'class':'img-fluid','style':'max-width:600px;margin-top:5px;margin-bottom:5px;'}).appendTo(img_holder);
 						
-						
-					
 					}else{
 					
 					}
@@ -704,7 +716,6 @@
 					$('#delete_purchase_order_reference_no').text(response[0].purchase_order_reference_no);
 					$('#delete_purchase_order_payment_amount').text(response[0].purchase_order_payment_amount);
 				
-					
 					if(response[0].image_reference != null){
 					
 						/*Display Image*/
@@ -755,7 +766,6 @@
 
 					/*Reload Table*/
 					LoadPayment();
-					//LoadProduct();
 					
 				  }
 				},
@@ -784,7 +794,6 @@
 		
 	}	  
 
-	   
 			/*Add Payment and Edit With Upload Function*/
             $('#AddPayment').on('submit', function(e){
                 e.preventDefault();
@@ -885,4 +894,4 @@
                 }
             });
 
-    </script>
+</script>

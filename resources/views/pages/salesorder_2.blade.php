@@ -29,7 +29,6 @@
 													<th class="none">Net Amount : </th>
 													<th class="none">Total Due : </th>
 													<th class="all">Delivery Status</th>
-													<!--<th>Payment Status</th>-->
 													<th class="all">Action</th>
 												</tr>
 											</thead>				
@@ -50,7 +49,6 @@
 													<th class="none">Net Amount : </th>
 													<th class="none">Total Due : </th>
 													<th class="all">Delivery Status</th>
-													<!--<th>Payment Status</th>-->
 													<th class="all">Action</th>								
 												</tr>
 											</tfoot>	
@@ -111,6 +109,21 @@
 												</datalist>
 																					
 											<span class="valid-feedback" id="client_idxError"></span>
+										</div>
+								</div>
+								<hr>
+								<div class="row">
+										
+										<div class="col-md-12">
+										
+											<label for="sales_order_payment_type" class="form-label">Payment Type</label>
+											<select class="form-select form-control" required="" name="sales_order_payment_type" id="sales_order_payment_type">
+											
+												<option value="Receivable">Receivable</option>
+												<option value="PBD">Paid Before Delivery</option>
+											
+											</select>
+											
 										</div>
 								</div>
 								<hr>
@@ -246,23 +259,7 @@
 							<span class="valid-feedback" id="receivable_billing_dateError"></span>
 						  </div>
 						</div>
-						<!--
-						<div class="row mb-2">
-						  <label for="receivable_or_number" class="col-sm-3 col-form-label">O.R No. : </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_or_number" id="receivable_or_number" value="">
-							<span class="valid-feedback" id="receivable_or_numberError"></span>
-						  </div>
-						</div>						
 						
-						<div class="row mb-2">
-						  <label for="ar_reference" class="col-sm-3 col-form-label">AR Reference: </label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="ar_reference" id="ar_reference" value="">
-							<span class="valid-feedback" id="ar_referenceError"></span>
-						  </div>
-						</div>	
-						-->
 						<div class="row mb-2">
 						  <label for="receivable_payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">

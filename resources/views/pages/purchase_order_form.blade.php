@@ -41,7 +41,7 @@
 
 								<div class="col-md-6">
 									<label for="update_company_header" class="form-label">Branch</label>
-										<select class="form-select form-control" required="" name="update_company_header" id="update_company_header">
+										<select class="form-select form-control" required="" name="update_company_header" id="update_company_header" onchange="UpdateBranch()">
 											@foreach ($teves_branch as $teves_branch_cols)
 												<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 											@endforeach
@@ -262,7 +262,7 @@
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN"></button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddPurchaseOrderProductBTN"></button>
 					</div>					
 					</div>
 

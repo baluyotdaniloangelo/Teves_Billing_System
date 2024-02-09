@@ -2,19 +2,38 @@
 @section('content')  
 
 <main id="main" class="main">	
-    <section class="section">
 
-        <div class="row mb-2">
-			
-			<div class="col-sm-4">
-			
-			<div class="card">
+    <section class="section">
+		<div class="card">
+		
             <div class="card-body">
-				<h5 class="card-title" align="center">Update Sales Order Information</h5>
+			
+				<h5 class="card-title" align="center">Update Purchase Order Information</h5>
+				<div class="row mb-2">
+					<div class="col-sm-6">
+					<h6>Control Number : <span class="badge" id='control_no' style="background-color: yellowgreen !important; color:#000 !important; font-weight:bold;">Info</span></h6>
+					</div>
+					<div class="col-sm-6">
+						<div class="d-flex justify-content-end" id="">
+							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -35px; position: absolute;">
+								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('salesorder') }}" title="Back">  
+								  <span title="Back to Sales Order List">Back</span>
+								</a>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrder">&nbsp;Print</button>
+								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
+								
+							</div>					
+						</div>
+						
+					</div>
+				</div>
+				
 				<hr>
-				<form class="g-3 needs-validation" id="UpdateSalesOrderformUpdate">
-					
-												<div class="row mb-2">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						
+						<form class="g-3 needs-validation" id="UpdateSalesOrderformUpdate">
+							<div class="row mb-2">
 												  <div class="col-sm-12">
 												  <label for="sales_order_date" class="form-label">Date</label>
 													<input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="{{ $sales_order_data[0]['sales_order_date'] }}" required>
@@ -59,6 +78,24 @@
 
 												<hr>
 												
+												<div class="row">
+														
+														<label for="sales_order_payment_type" class="col-sm-3 col-form-label">Payment Type</label>
+														<div class="col-md-9">
+														
+														<?php $sales_order_payment_type = $sales_order_data[0]->sales_order_payment_type; ?>
+														
+															<select class="form-select form-control" required="" name="sales_order_payment_type" id="sales_order_payment_type"> 
+															
+																<option value="Receivable" <?php if($sales_order_payment_type=='Receivable'){ echo "selected";} else{} ?>>Receivable</option>
+																<option value="PBD" <?php if($sales_order_payment_type=='PBD'){ echo "selected";} else{} ?>>Paid Before Delivery</option>
+															
+															</select>
+															
+														</div>
+												</div>
+
+												<hr>
 												<div class="row mb-2">
 									  
 														<label for="sales_order_net_percentage" class="col-sm-3 col-form-label">Net Value</label>
@@ -163,11 +200,10 @@
 													<label for="note" class="form-label">Notes</label>
 													<textarea class="form-control" id="note" name="note" style="height: 38px;">{{ $sales_order_data[0]['sales_order_note'] }}</textarea>
 												  </div>
-												</div>													
-				</form>
-             
-            </div>
-            <div class="card-footer">
+												</div>
+												
+												
+												<div class="card-footer">
 												<div class="row mb-3">
 												<div class="col-sm-6" align=''>
 												<div id="loading_data_update_so" style="display:none;">
@@ -183,54 +219,80 @@
 												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-sales-order" title='Update Sales Order information'> Update</button>
 												</div>
 												</div>	
-            </div>
-          </div>
-			</div>
-			<div class="col-sm-8">
-			
-			<div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Product</h5>
+						</div>
+						
+						</form>
+					</div>
+					<div class="col-sm-6">
+					 <!-- Default Tabs -->
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" onclick="LoadProduct()">Product</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Payment</button>
+                </li>
+               
+              </ul>
+              <div class="tab-content pt-2" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('salesorder') }}" title="Back">  
-						  <span title="Back to Sales Order List">Back</span>
-						</a>
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN">&nbsp;Add</button>
-						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrder">&nbsp;Print</button>
-						<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
-						
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN"></button>
 					</div>					
-				  </div>
+					</div>
 
-			<table class="table table-striped" id="">
-			<thead>
-					<tr class='report'>
-						<th style="text-align:center !important;">Action</th>
-						<th style="text-align:center !important;">Item #</th>
-						<th style="text-align:center !important;">Description</th>
-						<th style="text-align:center !important;">Price</th>
-						<th style="text-align:center !important;">Quantity</th>
-						<th style="text-align:center !important;">Unit</th>
-						<th style="text-align:center !important;">Amount</th>
-						
-					</tr>
-			</thead>
-			<tbody id="table_sales_order_product_body_data">
-					<tr style="display: none;">
-						<td>HIDDEN</td>
-					</tr>
-			</tbody>
-		</table>
-            </div>
-          </div>
-             
-            
+						<table class="table table-striped" id="">
+						<thead>
+						<tr class='report'>
+							<th style="text-align:center !important;">#</th>
+							<th style="text-align:center !important;" class="action_column_class">Action</th>
+							<th style="text-align:center !important;">Description</th>
+							<th style="text-align:center !important;">Price</th>
+							<th style="text-align:center !important;">Quantity</th>
+							<th style="text-align:center !important;">Amount</th>	
+						</tr>
+						</thead>
+							<tbody id="table_purchase_order_product_body_data">
+									<tr style="display: none;">
+										<td>HIDDEN</td>
+									</tr>
+							</tbody>
+						</table>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+				<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN"></button>
+					</div>					
+					</div>
+
+						<table class="table table-striped" id="">
+						<thead>
+						<tr class='report'>
+							<th style="text-align:center !important;">#</th>
+							<th style="text-align:center !important;">Action</th>
+							<th style="text-align:center !important;">Bank</th>
+							<th style="text-align:center !important;">Date of Payment</th>
+							<th style="text-align:center !important;">Reference No.</th>
+							<th style="text-align:center !important;">Amount</th>	
+						</tr>
+						</thead>
+							<tbody id="update_table_payment_body_data">
+									<tr style="display: none;">
+										<td>HIDDEN</td>
+									</tr>
+							</tbody>
+						</table>
+                </div>
+                
+              </div><!-- End Default Tabs -->
+					</div>
+				</div>
 			</div>
-			
-		
-		</div> 
-		
+		</div>
+        
 	<!--Modal to Create SO Product-->
 	<div class="modal fade" id="AddProductModal" tabindex="-1">
               <div class="modal-dialog modal-lg">
@@ -415,6 +477,8 @@
 			</span>
 		@endforeach
 	</datalist>		
+    </section>
+</main>	
     </section>
 </main>
 

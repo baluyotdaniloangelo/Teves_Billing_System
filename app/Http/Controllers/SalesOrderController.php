@@ -80,8 +80,7 @@ class SalesOrderController extends Controller
 		return DataTables::of($data)
 				->addIndexColumn()
 				
-				->addColumn('delivery_status', function($row){
-					
+				->addColumn('delivery_status', function($row){			
 									
 				if($row->sales_order_status=='Pending'){
 					$sales_status_selected = '<div align="center" class="action_table_menu_Product">
@@ -104,10 +103,7 @@ class SalesOrderController extends Controller
                 ->addColumn('action', function($row){
 					
 					if($row->sales_order_status=='Pending'){
-						/*
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
-						
-						*/
+				
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
@@ -156,12 +152,9 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_required_date',
 					'teves_sales_order_table.sales_order_instructions',
 					'teves_sales_order_table.sales_order_note',
-					'teves_sales_order_table.sales_order_mode_of_payment',
-					'teves_sales_order_table.sales_order_date_of_payment',
-					'teves_sales_order_table.sales_order_reference_no',
-					'teves_sales_order_table.sales_order_payment_amount',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage']);
+					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_payment_type']);
 					return response()->json($data);
 		
 	}
@@ -196,15 +189,20 @@ class SalesOrderController extends Controller
 
 			$client_idx = $request->client_idx;
 			
-			$Salesorder = new SalesOrderModel();
-			$Salesorder->company_header 						= $request->company_header;
-			$Salesorder->sales_order_date 						= $request->sales_order_date;
-			$Salesorder->sales_order_client_idx 				= $request->client_idx;
-			$Salesorder->sales_order_control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
+			$control_number = $BranchInfo->branch_initial."-SO-".$last_id+1;
 			
-			$Salesorder->sales_order_payment_term 				= $request->payment_term;
-			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
-			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
+			$Salesorder = new SalesOrderModel();
+			$Salesorder->company_header 					= $request->company_header;
+			$Salesorder->sales_order_date 					= $request->sales_order_date;
+			$Salesorder->sales_order_client_idx 			= $request->client_idx;
+			$Salesorder->sales_order_control_number 		= $control_number;
+			
+			$Salesorder->sales_order_payment_term 			= $request->payment_term;
+			$Salesorder->sales_order_net_percentage 		= $request->sales_order_net_percentage;
+			$Salesorder->sales_order_less_percentage 		= $request->sales_order_less_percentage;
+			
+			$Salesorder->sales_order_payment_type 			= $request->sales_order_payment_type;
 			
 			$result = $Salesorder->save();
 			
@@ -228,10 +226,14 @@ class SalesOrderController extends Controller
 			'client_idx.required' 	=> 'Client is Required',
         ]
 		);
+		
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
+			$control_number = $BranchInfo->branch_initial."-SO-".$request->sales_order_id+1;
 			
 			$Salesorder = new SalesOrderModel();
 			$Salesorder = SalesOrderModel::find($request->sales_order_id);
 			$Salesorder->sales_order_client_idx 				= $request->client_idx;
+			$Salesorder->sales_order_control_number 			= $control_number;
 			$Salesorder->company_header 						= $request->company_header;
 			$Salesorder->sales_order_date 						= $request->sales_order_date;
 			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
@@ -247,6 +249,8 @@ class SalesOrderController extends Controller
 			
 			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
 			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
+			
+			$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
 			
 			$result = $Salesorder->update();
 			
@@ -374,7 +378,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_reference_no',
 					'teves_sales_order_table.sales_order_payment_amount',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage']);
+					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_payment_type']);
 					
 		return view("pages.sales_order_form", compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','sales_order_data'));
 		}

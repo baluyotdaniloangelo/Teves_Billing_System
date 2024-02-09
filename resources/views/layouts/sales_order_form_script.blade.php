@@ -11,20 +11,21 @@
 
 			document.getElementById('UpdateSalesOrderformUpdate').className = "g-3 needs-validation was-validated";
 
-			let sales_order_id 			= {{ $SalesOrderID }};
-			let company_header 			= $("#company_header").val();
-			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));	
-			let sales_order_date 		= $("input[name=sales_order_date]").val();
-			let delivered_to 			= $("input[name=delivered_to]").val();
-			let delivered_to_address 	= $("input[name=delivered_to_address]").val();
-			let dr_number 				= $("input[name=dr_number]").val();
-			let or_number 				= $("input[name=or_number]").val();
-			let payment_term 			= $("input[name=payment_term]").val();
-			let delivery_method 		= $("input[name=delivery_method]").val();
-			let hauler 					= $("input[name=hauler]").val();
-			let required_date 			= $("input[name=required_date]").val();
-			let instructions 			= $("#instructions").val();
-			let note 					= $("#note").val();
+			let sales_order_id 				= {{ $SalesOrderID }};
+			let company_header 				= $("#company_header").val();
+			let sales_order_payment_type 	= $("#sales_order_payment_type").val();
+			let client_idx 					= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));	
+			let sales_order_date 			= $("input[name=sales_order_date]").val();
+			let delivered_to 				= $("input[name=delivered_to]").val();
+			let delivered_to_address 		= $("input[name=delivered_to_address]").val();
+			let dr_number 					= $("input[name=dr_number]").val();
+			let or_number 					= $("input[name=or_number]").val();
+			let payment_term 				= $("input[name=payment_term]").val();
+			let delivery_method 			= $("input[name=delivery_method]").val();
+			let hauler 						= $("input[name=hauler]").val();
+			let required_date 				= $("input[name=required_date]").val();
+			let instructions 				= $("#instructions").val();
+			let note 						= $("#note").val();
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
 			
@@ -34,6 +35,7 @@
 				data:{
 				  sales_order_id:sales_order_id,
 				  company_header:company_header,
+				  sales_order_payment_type:sales_order_payment_type,
 				  client_idx:client_idx,
 				  sales_order_date:sales_order_date,
 				  delivered_to:delivered_to,

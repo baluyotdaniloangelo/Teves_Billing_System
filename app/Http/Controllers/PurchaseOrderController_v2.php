@@ -213,10 +213,15 @@ class PurchaseOrderController_v2 extends Controller
 			'supplier_idx.required' 	=> "Supplier's Name is Required"
         ]
 		);
-
+		
+					
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
+			
+			$control_number = $BranchInfo->branch_initial."-PO-".$Purchaseorder->purchase_order_id+1;
+		
 			$Purchaseorder = new PurchaseOrderModel();
 			$Purchaseorder = PurchaseOrderModel::find($request->purchase_order_id);
-			
+			$Purchaseorder->purchase_order_control_number 			= $control_number;
 			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
 			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
 					
