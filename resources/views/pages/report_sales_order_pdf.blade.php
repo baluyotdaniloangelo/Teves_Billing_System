@@ -55,7 +55,7 @@
 		
 		<tr>
 			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:11px;">Business Address : <?=$branch_header['branch_address'];?></div>
+			<div style="font-size:11px;"><?=$branch_header['branch_address'];?></div>
 			</td>
 			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
 			<td colspan="2" align="left" width="23%" style="font-size:11px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>

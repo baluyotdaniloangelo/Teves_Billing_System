@@ -3,7 +3,7 @@
 	<!--Load Table-->
 	$(function () {
 
-		var ReceivableListTable = $('#getReceivablesList').DataTable({
+		var ReceivableListTable_billing = $('#getReceivablesListBilling').DataTable({
 			"language": {
 						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
 			             '<option value="10">10</option>'+
@@ -18,7 +18,7 @@
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			responsive: true,
-			ajax: "{{ route('getReceivablesList') }}",
+			ajax: "{{ route('getReceivablesList_billing') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'billing_date'},
@@ -39,9 +39,62 @@
 					{ className: 'text-center', targets: [0, 1, 2] },
 			]
 		});
+		
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
 				'</div>').appendTo('#receivable_option');
+				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});			
+
+
+		var ReceivableListTable_sales = $('#getReceivablesListSales').DataTable({
+			"language": {
+						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+		    },
+			/*processing: true,*/
+			serverSide: true,
+			stateSave: true,/*Remember Searches*/
+			responsive: true,
+			ajax: "{{ route('getReceivablesList_sales_order') }}",
+			columns: [
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'billing_date'},
+					{data: 'control_number'},
+					{data: 'client_name'},
+					{data: 'receivable_description'},
+					{data: 'receivable_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'receivable_withholding_tax', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
+					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
+					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },				
+					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'receivable_status'},
+					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
+					{data: 'action', name: 'action', orderable: false, searchable: false},
+			],
+			order: [[ 1, "desc" ]],
+			columnDefs: [
+					{ className: 'text-center', targets: [0, 1, 2] },
+			]
+		});
+			//	$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
+			//	'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
+			//	'</div>').appendTo('#receivable_option');
 				
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();

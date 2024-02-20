@@ -534,7 +534,7 @@
 				<div align="left"style="margin: 10px;">
 				
 				Bank: <span id="delete_purchase_order_bank"></span><br>
-				Date Of Pament: <span id="delete_purchase_order_date_of_payment"></span><br>	
+				Date Of Payment: <span id="delete_purchase_order_date_of_payment"></span><br>	
 				Reference No.: <span id="delete_purchase_order_reference_no"></span><br>
 				Amount: <span id="delete_purchase_order_payment_amount"></span><br>
 				
@@ -569,7 +569,7 @@
 				<div align="left"style="margin: 10px;">
 				
 				Bank: <span id="view_purchase_order_bank"></span><br>
-				Date Of Pament: <span id="view_purchase_order_date_of_payment"></span><br>	
+				Date Of Payment: <span id="view_purchase_order_date_of_payment"></span><br>	
 				Reference No.: <span id="view_purchase_order_reference_no"></span><br>
 				Amount: <span id="view_purchase_order_payment_amount"></span><br>
 				

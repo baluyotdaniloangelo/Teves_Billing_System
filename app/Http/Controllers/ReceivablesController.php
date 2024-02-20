@@ -20,24 +20,28 @@ class ReceivablesController extends Controller
 	/*Load Product Interface*/
 	public function receivables(){
 		
-		$title = 'Receivable';
-		$data = array();
 		if(Session::has('loginID')){
+			
+			$title = 'Receivable';
+			$data = array();
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$teves_branch = TevesBranchModel::all();
+			
+			return view("pages.receivables", compact('data','title','teves_branch'));
+			
 		}
-
-		return view("pages.receivables", compact('data','title','teves_branch'));
 		
 	}   
 
 	/*Load Report Interface*/
 	public function create_recievable(){
 		
-		$title = 'Create Receivable';
-		$data = array();
+		
 		if(Session::has('loginID')){
+			
+			$title = 'Create Receivable';
+			$data = array();
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
@@ -49,144 +53,228 @@ class ReceivablesController extends Controller
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
-		}
-
-		return view("pages.create_recievable", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
+			return view("pages.create_recievable", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
 		
-	}   
-
+		}
 	
-	/*Fetch Product List using Datatable*/
-	public function getReceivablesList(Request $request)
+	}   
+	
+	/*Fetch Receivables List using Datatable*/
+	/*Recievable from Billing*/
+	public function getReceivablesList_billing(Request $request)
     {
-		$list = ReceivablesModel::get();
-		if ($request->ajax()) {
+		
+		if(Session::has('loginID')){
+			
+			$list = ReceivablesModel::get();
+			if ($request->ajax()) {
 
-    	$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-              		->get([
-					'teves_receivable_table.receivable_id',
-					'teves_receivable_table.sales_order_idx',
-					'teves_receivable_table.billing_date',
-					'teves_client_table.client_name',
-					'teves_receivable_table.control_number',		
-					'teves_receivable_table.receivable_description',
-					'teves_receivable_table.receivable_gross_amount',
-					'teves_receivable_table.receivable_vatable_sales',
-					'teves_receivable_table.receivable_vat_amount',
-					'teves_receivable_table.receivable_withholding_tax',
-					'teves_receivable_table.receivable_amount',
-					'teves_receivable_table.receivable_remaining_balance',
-					'teves_receivable_table.receivable_status']);
-										
-				return DataTables::of($data)
-				->addIndexColumn()
-                ->addColumn('action', function($row){	
-				
-					if($row->sales_order_idx==0){
-						$menu_for_update = 'editReceivables';
-					}else{
-						$menu_for_update = 'editReceivablesFromSalesOrder';
-					}
-				
-						$actionBtn = '<div align="center" class="action_table_menu_Product">
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" id="payReceivables" title="Add Payment"></a>
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'" title="Update"></a>
-									<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
-								</div>';
-				
-						if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
-									return '';
+			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+						->WHERE('teves_receivable_table.sales_order_idx', '=', '0')
+						->get([
+						'teves_receivable_table.receivable_id',
+						'teves_receivable_table.sales_order_idx',
+						'teves_receivable_table.billing_date',
+						'teves_client_table.client_name',
+						'teves_receivable_table.control_number',		
+						'teves_receivable_table.receivable_description',
+						'teves_receivable_table.receivable_gross_amount',
+						'teves_receivable_table.receivable_vatable_sales',
+						'teves_receivable_table.receivable_vat_amount',
+						'teves_receivable_table.receivable_withholding_tax',
+						'teves_receivable_table.receivable_amount',
+						'teves_receivable_table.receivable_remaining_balance',
+						'teves_receivable_table.receivable_status']);
+											
+					return DataTables::of($data)
+					->addIndexColumn()
+					->addColumn('action', function($row){	
+					
+						if($row->sales_order_idx==0){
+							$menu_for_update = 'editReceivables';
 						}else{
-									return $actionBtn;
+							$menu_for_update = 'editReceivablesFromSalesOrder';
 						}
-                    
-                })
-				
-				->addColumn('action_print', function($row){
 					
-					if($row->sales_order_idx==0){
-						$print_sales_or_billing = '<option value="PrintBilling">Billing</option>';
-					}else{
-						$print_sales_or_billing = '<option value="PrintSalesOrder">Sales Order</option>';
-					}
+							$actionBtn = '<div align="center" class="action_table_menu_Product">
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" id="payReceivables" title="Add Payment"></a>
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'" title="Update"></a>
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
+									</div>';
 					
-					$action_print = '
-					<div align="center" class="action_table_menu_Product">
-					<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
-						<option disabled="" selected value="">Choose...</option>
-						<option value="PrintStatement" title="Statement of Account">SOA</option>
-						'.$print_sales_or_billing.'
-						<option value="PrintReceivables">Receivable</option>
-						</select>
-					</div>';
-                    return $action_print;
-                })
+							if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
+										return '';
+							}else{
+										return $actionBtn;
+							}
+						
+					})
+					
+					->addColumn('action_print', function($row){
+						
+						if($row->sales_order_idx==0){
+							$print_sales_or_billing = '<option value="PrintBilling">Billing</option>';
+						}else{
+							$print_sales_or_billing = '<option value="PrintSalesOrder">Sales Order</option>';
+						}
+						
+						$action_print = '
+						<div align="center" class="action_table_menu_Product">
+						<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
+							<option disabled="" selected value="">Choose...</option>
+							<option value="PrintStatement" title="Statement of Account">SOA</option>
+							'.$print_sales_or_billing.'
+							<option value="PrintReceivables">Receivable</option>
+							</select>
+						</div>';
+						return $action_print;
+					})
+					
+					
+					->rawColumns(['action','action_print'])
+					->make(true);
+			}	
+		}			
+    }
+	/*Recievable from Billing*/
+	public function getReceivablesList_sales_order(Request $request)
+    {
+		
+		if(Session::has('loginID')){
+			
+			$list = ReceivablesModel::get();
+			if ($request->ajax()) {
+
+			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+						->WHERE('teves_receivable_table.sales_order_idx', '<>', '0')
+						->get([
+						'teves_receivable_table.receivable_id',
+						'teves_receivable_table.sales_order_idx',
+						'teves_receivable_table.billing_date',
+						'teves_client_table.client_name',
+						'teves_receivable_table.control_number',		
+						'teves_receivable_table.receivable_description',
+						'teves_receivable_table.receivable_gross_amount',
+						'teves_receivable_table.receivable_vatable_sales',
+						'teves_receivable_table.receivable_vat_amount',
+						'teves_receivable_table.receivable_withholding_tax',
+						'teves_receivable_table.receivable_amount',
+						'teves_receivable_table.receivable_remaining_balance',
+						'teves_receivable_table.receivable_status']);
+											
+					return DataTables::of($data)
+					->addIndexColumn()
+					->addColumn('action', function($row){	
 				
-				
-				->rawColumns(['action','action_print'])
-                ->make(true);
-		}		
+							$menu_for_update = 'editReceivablesFromSalesOrder';
+
+							$actionBtn = '<div align="center" class="action_table_menu_Product">
+										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
+									</div>';
+					
+							if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
+										return '';
+							}else{
+										return $actionBtn;
+							}
+						
+					})
+					
+					->addColumn('action_print', function($row){
+						
+						if($row->sales_order_idx==0){
+							$print_sales_or_billing = '<option value="PrintBilling">Billing</option>';
+						}else{
+							$print_sales_or_billing = '<option value="PrintSalesOrder">Sales Order</option>';
+						}
+						
+						$action_print = '
+						<div align="center" class="action_table_menu_Product">
+						<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
+							<option disabled="" selected value="">Choose...</option>
+							<option value="PrintStatement" title="Statement of Account">SOA</option>
+							'.$print_sales_or_billing.'
+							<option value="PrintReceivables">Receivable</option>
+							</select>
+						</div>';
+						return $action_print;
+					})
+					
+					
+					->rawColumns(['action','action_print'])
+					->make(true);
+			}	
+		}			
     }
 
 	/*Payment List*/
 	public function get_receivable_payment_list(Request $request){		
 	
-			$data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
-				->orderBy('receivable_payment_id', 'asc')
-              	->get([
-					'teves_receivable_payment.receivable_payment_id',
-					'teves_receivable_payment.receivable_date_of_payment',
-					'teves_receivable_payment.receivable_mode_of_payment',
-					'teves_receivable_payment.receivable_reference',
-					'teves_receivable_payment.receivable_payment_amount',
-					]);
-		
-			return response()->json($data);
+		if(Session::has('loginID')){
+			
+				$data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
+					->orderBy('receivable_payment_id', 'asc')
+					->get([
+						'teves_receivable_payment.receivable_payment_id',
+						'teves_receivable_payment.receivable_date_of_payment',
+						'teves_receivable_payment.receivable_mode_of_payment',
+						'teves_receivable_payment.receivable_reference',
+						'teves_receivable_payment.receivable_payment_amount',
+						]);
+			
+				return response()->json($data);
+				
+		}
 			
 	}
 	
 	/*Delete Payment Item*/
 	public function delete_receivable_payment_item(Request $request){		
 		
-		if(Session::get('UserType')=="Admin"){
+		if(Session::has('loginID')){
 			
-			$paymentitemID = $request->paymentitemID;
-			$receivableID = $request->receivable_id;
-		
-			ReceivablesPaymentModel::find($paymentitemID)->delete();
-		
-			/*Remaining Balance*/
-			/*Get Receivable Details*/
-			$receivable_details = ReceivablesModel::find($receivableID, ['receivable_amount']);							
-			$receivable_amount = $receivable_details->receivable_amount;
-			
-			/*Get Receivable Payment Details*/
-			$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivableID)
-              	->sum('receivable_payment_amount');
+			if(Session::get('UserType')=="Admin"){
 				
-			$remaining_balance = number_format($receivable_amount - $receivable_payment_amount+0,2, '.', '');;
-		
-			/*IF Fully Paid Automatically Update the Status to Paid*/
-			if($remaining_balance <= 0)
-			{
-				$receivable_status = 'Paid';
-			}else{
-				$receivable_status = 'Pending';
+				$paymentitemID = $request->paymentitemID;
+				$receivableID = $request->receivable_id;
+			
+				ReceivablesPaymentModel::find($paymentitemID)->delete();
+			
+				/*Remaining Balance*/
+				/*Get Receivable Details*/
+				$receivable_details = ReceivablesModel::find($receivableID, ['receivable_amount']);							
+				$receivable_amount = $receivable_details->receivable_amount;
+				
+				/*Get Receivable Payment Details*/
+				$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivableID)
+					->sum('receivable_payment_amount');
+					
+				$remaining_balance = number_format($receivable_amount - $receivable_payment_amount+0,2, '.', '');;
+			
+				/*IF Fully Paid Automatically Update the Status to Paid*/
+				if($remaining_balance <= 0)
+				{
+					$receivable_status = 'Paid';
+				}else{
+					$receivable_status = 'Pending';
+				}
+				
+				/*Update Recievable Table*/
+				$Receivables_update = new ReceivablesModel();
+				$Receivables_update = ReceivablesModel::find($receivableID);
+				
+				$Receivables_update->receivable_remaining_balance 	= $remaining_balance;
+				$Receivables_update->receivable_status 				= $receivable_status;
+				
+				$result_update = $Receivables_update->update();
+
+				return 'Deleted';
+				
 			}
 			
-			/*Update Recievable Table*/
-			$Receivables_update = new ReceivablesModel();
-			$Receivables_update = ReceivablesModel::find($receivableID);
-			
-			$Receivables_update->receivable_remaining_balance 	= $remaining_balance;
-			$Receivables_update->receivable_status 				= $receivable_status;
-			
-			$result_update = $Receivables_update->update();
-
-			return 'Deleted';
-			
 		}
-		
 	}
 	
 	/*Save Payment Item*/
@@ -293,11 +381,17 @@ class ReceivablesController extends Controller
 			'receivable_description.required' 	=> 'Description is Required'
         ]
 		);
-
-			@$last_id = ReceivablesModel::latest()->first()->receivable_id;
+			
+			/*
+			if need to use where
+			$last_id = ReceivablesModel::where('control_number', '<>', '')->latest()->first()->receivable_id;
+			*/
+			
+			$last_id = ReceivablesModel::latest()->first()->receivable_id;
 			
 			/*GET SALES ORDER*/
 			$sales_order_idx = $request->sales_order_idx;
+			
 					$SalesOrderData = SalesOrderModel::where('sales_order_id', $sales_order_idx)
 					->get([
 					'teves_sales_order_table.sales_order_id',
@@ -306,10 +400,13 @@ class ReceivablesController extends Controller
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_term']);	
 			
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $SalesOrderData[0]->company_header)->first();				
+			$control_number = $BranchInfo->branch_initial."-RC-".$last_id+1;			
+			
 			/*Save to Receivables*/
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 					= $SalesOrderData[0]->sales_order_client_idx;
-			$Receivables->control_number 				= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$Receivables->control_number 				= $control_number;
 			$Receivables->sales_order_idx 				= $request->sales_order_idx;
 			$Receivables->billing_date 					= $request->billing_date;
 			$Receivables->payment_term 					= $SalesOrderData[0]->sales_order_payment_term;
@@ -363,7 +460,7 @@ class ReceivablesController extends Controller
 			}
 	}
 		
-	/*Fetch Product Information*/
+	/*Fetch Receivable Information*/
 	public function receivable_info(Request $request){
 
 					$receivable_id = $request->receivable_id;
@@ -394,7 +491,7 @@ class ReceivablesController extends Controller
 		
 	}
 
-	/*Delete Product Information*/
+	/*Delete Receivable Information*/
 	public function delete_receivable_confirmed(Request $request){
 
 		$receivableID = $request->receivable_id;
@@ -455,9 +552,12 @@ class ReceivablesController extends Controller
 			
 			$total_amount_due = $receivable_amount - (($receivable_total_liter*$less_per_liter) + ($withholding_tax));
 					
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $SalesOrderData[0]->company_header)->first();				
+			$control_number = $BranchInfo->branch_initial."-RC-".$last_id+1;					
+					
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 				= $request->client_idx;
-			$Receivables->control_number 			= str_pad(($last_id + 1), 8, "0", STR_PAD_LEFT);
+			$Receivables->control_number 			= $control_number;
 			$Receivables->billing_date 				= date('Y-m-d');
 			$Receivables->payment_term 				= $request->payment_term;
 			$Receivables->receivable_description 	= $request->receivable_description;

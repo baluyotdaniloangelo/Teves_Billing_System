@@ -28,13 +28,14 @@ class SOBillingTransactionController extends Controller
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$client_data = ClientModel::all();
+			$teves_branch = TevesBranchModel::all();
 			
 			$drivers_name = SOBillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = SOBillingTransactionModel::select('plate_no')->distinct()->get();
 		
 		}
 
-		return view("pages.so_billing", compact('data','title','client_data','drivers_name','plate_no'));
+		return view("pages.so_billing", compact('data','title','client_data','drivers_name','plate_no','teves_branch'));
 		
 	}   
 

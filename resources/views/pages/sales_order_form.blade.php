@@ -8,10 +8,10 @@
 		
             <div class="card-body">
 			
-				<h5 class="card-title" align="center">Update Purchase Order Information</h5>
+				<h5 class="card-title" align="center">Sales Order Information</h5>
 				<div class="row mb-2">
 					<div class="col-sm-6">
-					<h6>Control Number : <span class="badge" id='control_no' style="background-color: yellowgreen !important; color:#000 !important; font-weight:bold;">Info</span></h6>
+					<h6>Control Number : <span class="badge" id='control_no' style="background-color: orange !important; color:#000 !important; font-weight:bold;">{{ $sales_order_data[0]['sales_order_control_number'] }}</span></h6>
 					</div>
 					<div class="col-sm-6">
 						<div class="d-flex justify-content-end" id="">
@@ -30,7 +30,7 @@
 				
 				<hr>
 				<div class="row mb-2">
-					<div class="col-sm-6">
+					<div class="col-sm-5">
 						
 						<form class="g-3 needs-validation" id="UpdateSalesOrderformUpdate">
 							<div class="row mb-2">
@@ -223,57 +223,65 @@
 						
 						</form>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-7">
 					 <!-- Default Tabs -->
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                
+                <!-- nav-link active -->
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" onclick="LoadProduct()">Product</button>
+                  <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onclick="LoadProduct()" title='Product List, Create, Update and Delete Product'>Product</button>
                 </li>
+				
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Payment</button>
+                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false" tabindex="-1" onclick="LoadPayment()" title='Payment List, Create, Update and Delete Payment'>Payment</button>
                 </li>
-               
+				
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link <?php if($tab=='receivable') { echo 'active'; } ?>" id="receivable-tab" data-bs-toggle="tab" data-bs-target="#receivable" type="button" role="tab" aria-controls="receivable" aria-selected="false" tabindex="-1" title='Update Receivable Information'>Recievable Details</button>
+                </li>
+				
               </ul>
               <div class="tab-content pt-2" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade  <?php if($tab=='product') { echo ' show active'; } ?>"" id="product" role="tabpanel" aria-labelledby="product-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN"></button>
-					</div>					
-					</div>
 
+					</div>											
+					</div>
+					
 						<table class="table table-striped" id="">
 						<thead>
 						<tr class='report'>
-							<th style="text-align:center !important;">#</th>
 							<th style="text-align:center !important;" class="action_column_class">Action</th>
+							<th style="text-align:center !important;">Item #</th>
 							<th style="text-align:center !important;">Description</th>
 							<th style="text-align:center !important;">Price</th>
 							<th style="text-align:center !important;">Quantity</th>
+							<th style="text-align:center !important;">Unit</th>
 							<th style="text-align:center !important;">Amount</th>	
 						</tr>
 						</thead>
-							<tbody id="table_purchase_order_product_body_data">
+							<tbody id="table_sales_order_product_body_data">
 									<tr style="display: none;">
 										<td>HIDDEN</td>
 									</tr>
 							</tbody>
 						</table>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+				
+                <div class="tab-pane fade <?php if($tab=='payment') { echo 'show active'; } ?>" id="payment" role="tabpanel" aria-labelledby="payment-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN"></button>
 					</div>					
 					</div>
-
+					
 						<table class="table table-striped" id="">
 						<thead>
 						<tr class='report'>
 							<th style="text-align:center !important;">#</th>
 							<th style="text-align:center !important;">Action</th>
-							<th style="text-align:center !important;">Bank</th>
+							<th style="text-align:center !important;">Mode of Payment</th>
 							<th style="text-align:center !important;">Date of Payment</th>
 							<th style="text-align:center !important;">Reference No.</th>
 							<th style="text-align:center !important;">Amount</th>	
@@ -287,7 +295,85 @@
 						</table>
                 </div>
                 
-              </div><!-- End Default Tabs -->
+				<div class="tab-pane fade <?php if($tab=='receivable') { echo 'show active'; } ?>" id="receivable" role="tabpanel" aria-labelledby="receivable-tab">
+		
+		<div class="d-flex justify-content-end" id="">
+		
+							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+							
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSOA">&nbsp;SOA</button>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintReceivable">&nbsp;Receivable</button>
+								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
+								
+							</div>					
+						</div>
+					<div class="row mb-2">
+					<div class="col-sm-2">
+					</div>
+					<div class="col-sm-8">
+					<h6>
+						<div class="row mb-2">
+							<label class="col-sm-3 col-form-label">Control Number :</label>
+							<label class="col-sm-9 col-form-label">{{ $receivables_details['control_number'] }}</label>
+						</div>
+					</h6>
+					
+					<form class="g-2 needs-validation pt-1" id="ReceivableformEditFromSalesOrder">
+						
+						<div class="row mb-2">
+						  <label for="receivable_billing_date_SO" class="col-sm-3 col-form-label">Billing Date : </label>
+						  <div class="col-sm-9">
+							<input type="date" class="form-control " name="receivable_billing_date_SO" id="receivable_billing_date_SO" value="{{ $receivables_details['billing_date'] }}" required>
+							<span class="valid-feedback" id="receivable_billing_date_SO_Error"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="receivable_payment_term_SO" class="col-sm-3 col-form-label">Payment Term : </label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="receivable_payment_term_SO" id="receivable_payment_term_SO" value="{{ $receivables_details['payment_term'] }}">
+							<span class="valid-feedback" id="receivable_payment_term_SO_Error"></span>
+						  </div>
+						</div>							
+						
+						<div class="row mb-2">
+						  <label for="receivable_description_SO" class="col-sm-3 col-form-label">Description : </label>
+						  <div class="col-sm-9">
+							<textarea class="form-control" id="receivable_description_SO" style="height: 50px;" required>{{ $receivables_details['receivable_description'] }}</textarea>
+							<span class="valid-feedback" id="receivable_description_SO_Error"></span>
+						  </div>
+						</div>
+						
+					<div class="card-footer">
+												<div class="row mb-3">
+												<div class="col-sm-6" align="">
+												<div id="update_loading_data_receivable" style="display:none;">
+													<div class="spinner-border text-success" role="status">
+														<span class="visually-hidden">Loading...</span>
+													</div>
+												</div>
+												</div>
+												<div class="col-sm-6" align="right">
+												
+												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="SO-update-receivables" title="Update Receivable Information"> Update</button>
+												</div>
+												</div>	
+					</div>	
+
+					
+					</form><!-- End Multi Columns Form -->
+					</div>	
+						<div class="col-sm-2">
+					</div>
+					</div>
+                </div>
+                
+			  
+			  
+			  
+			  </div>
+			  
+	                
 					</div>
 				</div>
 			</div>
@@ -478,7 +564,170 @@
 		@endforeach
 	</datalist>		
     </section>
-</main>	
+	
+	
+	<!--Modal to Product-->
+	<div class="modal fade" id="AddPaymentModal" tabindex="-1">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Payment</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('save_sales_order_payment')}}"  method="post" >
+						@csrf
+						<div class="col-sm-12">
+						
+						<div class="form-floating mb-3">
+						
+						<input type='text' class='form-control' id='receivable_mode_of_payment' name='receivable_mode_of_payment' list='receivable_mode_of_payment' autocomplete='off' placeholder="Bank">
+							<datalist id='sales_order_bank_list'>
+								<?php foreach ($receivables_payment_suggestion as $receivables_payment_suggestion_cols) {?>
+									<option value='<?=$receivables_payment_suggestion_cols->receivable_mode_of_payment;?>'>
+								<?php } ?>
+							</datalist>
+						<label for="receivable_mode_of_payment">Mode of Payment</label>
+					
+						 </div>
+						<span class="valid-feedback" id="receivable_mode_of_paymentError"></span>
+						
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type='date' class='form-control' id='receivable_date_of_payment' name='receivable_date_of_payment' value='<?=date('Y-m-d');?>'>
+								<label for="receivable_date_of_payment">Date of Payment</label>
+								<span class="valid-feedback" id="receivable_date_of_paymentError"></span>
+							</div>
+						 
+						</div>
+						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="receivable_reference" id="receivable_reference" required placeholder="Reference No.">
+								<label for="receivable_reference">Reference No.</label>
+							</div>
+							 <span class="valid-feedback" id="receivable_referenceError"></span>
+						</div>
+						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-describedby="basic-addon1" name="receivable_payment_amount" id="receivable_payment_amount" required step=".01" placeholder="Amount">
+								<label for="receivable_payment_amount">Amount</label>
+							</div>
+							 <span class="valid-feedback" id="receivable_payment_amountError"></span>
+						</div>
+						
+						<div class="row mb-3">
+							<div class="col-sm-12">
+							<label for="payment_image_reference" class="form-label">Upload</label>
+							<input class="form-control" type="file" id="payment_image_reference" name="payment_image_reference">
+							</div>
+						
+						<!--<img id="preview-image-before-upload" src="" alt="preview image" style="max-height: 250px;">-->
+						 <input type="hidden" id="receivable_idx_payment" name="receivable_idx_payment" value="{{ @$receivables_details['receivable_id'] }}">
+						 <input type="hidden" id="receivable_payment_id" name="receivable_payment_id" value="">		
+						</div>
+						
+						<div class="row mb-3">
+							<div class="col-sm-12">
+								<div class="img-holder" align="center"></div>
+							</div>
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+							<div id="loading_data_update_product" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-payment" value="0"> Save</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-payment"> Reset</button>					  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>			
+	
+	<!-- Bill Delete Modal-->
+    <div class="modal fade" id="SalesOrderPaymentDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+				
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Are you sure you want to Delete This Payment?<br>
+				</div>
+				<div class="row mb-2">
+				<div class="col-sm-4">
+				<div align="left"style="margin: 10px;">
+				
+				Mode of Payment: <span id="delete_receivable_mode_of_payment"></span><br>
+				Date Of Payment: <span id="delete_receivable_date_of_payment"></span><br>	
+				Reference No.: <span id="delete_receivable_reference"></span><br>
+				Amount: <span id="delete_receivable_payment_amount"></span><br>
+				
+				</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="delete_img-holder" align="center"></div>
+				</div>
+				</div>
+				
+                <div class="modal-footer footer_modal_bg">
+				
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteSalesOrderPaymentConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>	
+	
+	<!-- Bill Delete Modal-->
+    <div class="modal fade" id="ViewOrderViewPaymentReferenceModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+
+				<div class="row mb-2">
+				<div class="col-sm-4">
+				<div align="left"style="margin: 10px;">
+				
+				Mode of Payment: <span id="view_receivable_mode_of_payment"></span><br>
+				Date Of Payment: <span id="view_receivable_date_of_payment"></span><br>	
+				Reference No.: <span id="view_receivable_reference"></span><br>
+				Amount: <span id="view_receivable_payment_amount"></span><br>
+				
+				</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="view_img-holder" align="center"></div>
+				</div>
+				</div>
+				
+                <div class="modal-footer footer_modal_bg">
+				
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Close</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>	
     </section>
 </main>
 

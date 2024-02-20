@@ -211,7 +211,7 @@
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
-				<td colspan="3" align="center" nowrap style=" height:<?=$component_height;?>px !important; border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_name}}</td>
+				<td colspan="3" align="center" style=" height:<?=$component_height;?>px !important; border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_name}}</td>
 				<td colspan="2" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_unit_measurement}}</td>
 				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->product_price,2,".",",");?></td>

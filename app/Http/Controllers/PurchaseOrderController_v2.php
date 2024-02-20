@@ -217,7 +217,7 @@ class PurchaseOrderController_v2 extends Controller
 					
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
 			
-			$control_number = $BranchInfo->branch_initial."-PO-".$Purchaseorder->purchase_order_id+1;
+			$control_number = $BranchInfo->branch_initial."-PO-".$request->purchase_order_id+1;
 		
 			$Purchaseorder = new PurchaseOrderModel();
 			$Purchaseorder = PurchaseOrderModel::find($request->purchase_order_id);
@@ -356,7 +356,7 @@ class PurchaseOrderController_v2 extends Controller
 							$purchase_order_total_payment_amount =  PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $purchase_order_idx)
 								->sum('purchase_order_payment_amount');
 								
-							$remaining_balance = number_format($purchase_order_total_payable - $purchase_order_total_payment_amount+0,2, '.', '');
+							$remaining_balance = number_format($purchase_order_total_payable - $purchase_order_total_payment_amount+0,4, '.', '');
 							$_paid_percentage = ($purchase_order_total_payment_amount / $purchase_order_total_payable) * 100;
 						
 							$paid_percentage = number_format($_paid_percentage,2,".","");
@@ -643,7 +643,6 @@ class PurchaseOrderController_v2 extends Controller
 							$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $request->purchase_order_date_of_payment;
 							$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $request->purchase_order_reference_no;
 							$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
-							$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
 							$PurchaseOrderPaymentComponent->image_reference 				= $image_blob;
 							$result = $PurchaseOrderPaymentComponent->save();
 							$result_type = 'Saved';
@@ -676,7 +675,6 @@ class PurchaseOrderController_v2 extends Controller
 							$PurchaseOrderPaymentComponent->purchase_order_bank 			= $request->purchase_order_bank;
 							$PurchaseOrderPaymentComponent->purchase_order_date_of_payment 	= $request->purchase_order_date_of_payment;
 							$PurchaseOrderPaymentComponent->purchase_order_reference_no 	= $request->purchase_order_reference_no;
-							$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
 							$PurchaseOrderPaymentComponent->purchase_order_payment_amount 	= $request->purchase_order_payment_amount;
 							
 							$result = $PurchaseOrderPaymentComponent->save();

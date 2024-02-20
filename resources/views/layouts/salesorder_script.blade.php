@@ -143,7 +143,7 @@
 
 					/*Open Cashier's Report*/
 					var url = "{{URL::to('sales_order_form')}}";
-					window.location.href = url+'/'+sales_order_id;
+					window.location.href = url+'?sales_order_id='+sales_order_id+'&tab=product';
 					
 				  }
 				},

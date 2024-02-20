@@ -142,7 +142,8 @@ Route::post('/user_account_post', [UserController::class,'user_account_post'])->
 Route::get('/create_recievable', [ReceivablesController::class,'create_recievable'])->name('create_recievable')->middleware('isLoggedIn');
 /*Receivables List*/
 Route::get('/receivables', [ReceivablesController::class,'receivables'])->name('receivables')->middleware('isLoggedIn');
-Route::get('receivables/list', [ReceivablesController::class, 'getReceivablesList'])->name('getReceivablesList')->middleware('isLoggedIn');
+Route::get('receivables/list_billing', [ReceivablesController::class, 'getReceivablesList_billing'])->name('getReceivablesList_billing')->middleware('isLoggedIn');
+Route::get('receivables/list_salesorder', [ReceivablesController::class, 'getReceivablesList_sales_order'])->name('getReceivablesList_sales_order')->middleware('isLoggedIn');
 /*GET receivables Info*/
 Route::post('/receivable_info', [ReceivablesController::class, 'receivable_info'])->name('receivable_info')->middleware('isLoggedIn');
 /*Confirm Delete receivables*/
@@ -185,7 +186,7 @@ Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 
 /*New Version for Sales Order*/
-Route::get('/sales_order_form/{id}', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
+Route::get('/sales_order_form', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
 Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_order_component_info'])->name('sales_order_component_info')->middleware('isLoggedIn');
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');
@@ -193,8 +194,16 @@ Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::cl
 /*Get Sales Order Payment Item*/
 Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
 
+Route::post('/save_sales_order_payment',[SalesOrderController::class,'save_sales_order_payment'])->name('save_sales_order_payment')->middleware('isLoggedIn');
+
+/*Get Sales Order Payment Item*/
+Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
+Route::post('/sales_order_payment_info', [SalesOrderController::class,'sales_order_payment_info'])->name('SalesPaymentInfo')->middleware('isLoggedIn');
+Route::post('/sales_order_delete_payment', [SalesOrderController::class,'sales_order_delete_payment'])->name('SalesOrderDeletePayment')->middleware('isLoggedIn');
+
+
 /*Delete Purchase Order Payment Item*/
-Route::post('/delete_sales_order_payment_item', [SalesOrderController::class,'delete_sales_order_payment_item'])->name('delete_sales_order_payment_item')->middleware('isLoggedIn');
+//Route::post('/delete_sales_order_payment_item', [SalesOrderController::class,'delete_sales_order_payment_item'])->name('delete_sales_order_payment_item')->middleware('isLoggedIn');
 
 /*Purchase Order*/
 /*January 24, 2023*/

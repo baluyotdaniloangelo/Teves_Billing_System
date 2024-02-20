@@ -100,7 +100,8 @@ else if (Request::is('salesorder')){
 @include('layouts.salesorder_script')
 <?php
 }
-else if (Request::is('sales_order_form/*')){
+/* Request::path(); for Get Method*/
+else if (Request::path()==('sales_order_form')){
 ?>
 <body class="">
 @include('layouts.footer')

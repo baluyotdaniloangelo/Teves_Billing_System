@@ -152,6 +152,17 @@
 						<form class="g-3 needs-validation" id="SOBillingformNew">
 							
 														<div class="row mb-2">
+														  <label for="branch_id" class="col-sm-3 col-form-label">Branch</label>
+														  <div class="col-sm-9">
+															<select class="form-select form-control" required="" name="branch_id" id="branch_id">
+															@foreach ($teves_branch as $teves_branch_cols)
+																<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
+															@endforeach
+															</select>
+														  </div>
+														</div>	
+												
+														<div class="row mb-2">
 														  <label for="order_date" class="col-sm-3 col-form-label">Date</label>
 														  <div class="col-sm-9">
 															<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="<?=date('Y-m-d');?>" required>

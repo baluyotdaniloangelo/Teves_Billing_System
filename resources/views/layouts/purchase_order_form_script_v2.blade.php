@@ -1,7 +1,9 @@
    <script type="text/javascript">
+   
 	LoadPurchaseOrderInfo();  
 	LoadProduct();
 	LoadPayment();
+	
 	<!--Select Product For Update-->
 	function LoadPurchaseOrderInfo() {
 			
@@ -74,10 +76,11 @@
 				success:function(response){						
 				  console.log(response['productlist']);
 				  if(response['productlist']!='') {			  
+				  
 						var len = response['productlist'].length;
 
 						if(response['paymentcount']!=0){
-						
+							
 							$(".action_column_class").hide();
 							document.getElementById("AddPurchaseOrderProductBTN").disabled = true;
 							
@@ -437,6 +440,9 @@
 						$('#product_idx').val("");
 						$('#product_manual_price').val("");
 						$('#order_quantity').val("");
+						
+						document.getElementById("save-product").value = 0;
+						
 						$('#AddProductModal').modal('toggle');	
 						
 						}
@@ -844,6 +850,9 @@
 						LoadProduct();
 						
 						$(form)[0].reset();
+						
+						document.getElementById("purchase_order_payment_details_id").value = 0;
+						
 					
                     },error: function(error) {
 					

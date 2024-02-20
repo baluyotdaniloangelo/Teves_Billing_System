@@ -15,49 +15,113 @@
 		 
             <div class="card-body">			
 				<div class="p-d3">
-									<div class="table-responsive" style="">
-										<table class="table table-bordered dataTable display" id="getReceivablesList" width="100%" cellspacing="0">
-											<thead>
-												<tr>
-													<th class="all">No.</th>
-													<th class="all">Date</th>
-													<th class="all">Control Number</th>
-													<th class="all">Account Name</th>
-													<th class="none">Description : </th>
-													<th class="none">Total Sales : </th>
-													<th class="none">Withholding Tax : </th>
-													<th class="none">Total Amount Due : </th>
-													<th class="none">Total Amount Rendered : </th>
-													<th class="none">Remaining Balance : </th>
-													<th class="all">Status</th>
-													<th class="all">Generate</th>
-													<th class="all">Action</th>
-												</tr>
-											</thead>				
-											
-											<tbody>
+									
+				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Billing</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="salesorder-tab" data-bs-toggle="tab" data-bs-target="#bordered-salesorder" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Oder">Sales Order</button>
+                </li>
+              
+				</ul>					
+				
+				<div class="tab-content pt-2" id="borderedTabContent">
+				
+                <div class="tab-pane fade show active" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
+											<div class="table-responsive" style="">
+												<table class="table table-bordered dataTable display" id="getReceivablesListBilling" width="100%" cellspacing="0">
+												<thead>
+													<tr>
+														<th class="all">No.</th>
+														<th class="all">Date</th>
+														<th class="all">Control Number</th>
+														<th class="all">Account Name</th>
+														<th class="none">Description : </th>
+														<th class="none">Total Sales : </th>
+														<th class="none">Withholding Tax : </th>
+														<th class="none">Total Amount Due : </th>
+														<th class="none">Total Amount Rendered : </th>
+														<th class="none">Remaining Balance : </th>
+														<th class="all">Status</th>
+														<th class="all">Generate</th>
+														<th class="all">Action</th>
+													</tr>
+												</thead>				
 												
-											</tbody>
-											
-											<tfoot>
-												<tr>
-													<th class="all">No.</th>
-													<th class="all">Date</th>
-													<th class="all">Control Number</th>
-													<th class="all">Account Name</th>
-													<th class="none">Description : </th>
-													<th class="none">Total Sales : </th>
-													<th class="none">Withholding Tax : </th>
-													<th class="none">Total Amount Due : </th>
-													<th class="none">Total Amount Rendered : </th>
-													<th class="none">Remaining Balance : </th>
-													<th class="all">Status</th>
-													<th class="all">Generate</th>
-													<th class="all">Action</th>												
-												</tr>
-											</tfoot>	
-										</table>
-									</div>		
+												<tbody>
+													
+												</tbody>
+												
+												<tfoot>
+													<tr>
+														<th class="all">No.</th>
+														<th class="all">Date</th>
+														<th class="all">Control Number</th>
+														<th class="all">Account Name</th>
+														<th class="none">Description : </th>
+														<th class="none">Total Sales : </th>
+														<th class="none">Withholding Tax : </th>
+														<th class="none">Total Amount Due : </th>
+														<th class="none">Total Amount Rendered : </th>
+														<th class="none">Remaining Balance : </th>
+														<th class="all">Status</th>
+														<th class="all">Generate</th>
+														<th class="all">Action</th>												
+													</tr>
+												</tfoot>	
+												</table>  
+											</div>
+				</div>
+				
+                <div class="tab-pane fade" id="bordered-salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
+											<div class="table-responsive" style="">
+												<table class="table table-bordered dataTable display" id="getReceivablesListSales" width="100%" cellspacing="0">
+												<thead>
+													<tr>
+														<th class="all">No.</th>
+														<th class="all">Date</th>
+														<th class="all">Control Number</th>
+														<th class="all">Account Name</th>
+														<th class="none">Description : </th>
+														<th class="none">Total Sales : </th>
+														<th class="none">Withholding Tax : </th>
+														<th class="none">Total Amount Due : </th>
+														<th class="none">Total Amount Rendered : </th>
+														<th class="none">Remaining Balance : </th>
+														<th class="all">Status</th>
+														<th class="all">Generate</th>
+														<th class="all">Action</th>
+													</tr>
+												</thead>				
+												
+												<tbody>
+													
+												</tbody>
+												
+												<tfoot>
+													<tr>
+														<th class="all">No.</th>
+														<th class="all">Date</th>
+														<th class="all">Control Number</th>
+														<th class="all">Account Name</th>
+														<th class="none">Description : </th>
+														<th class="none">Total Sales : </th>
+														<th class="none">Withholding Tax : </th>
+														<th class="none">Total Amount Due : </th>
+														<th class="none">Total Amount Rendered : </th>
+														<th class="none">Remaining Balance : </th>
+														<th class="all">Status</th>
+														<th class="all">Generate</th>
+														<th class="all">Action</th>												
+													</tr>
+												</tfoot>	
+											</table>
+										</div>
+				</div>
+				
+				</div>
+						
 				</div>									
             </div>
           </div>
@@ -479,6 +543,7 @@
 						
 					</div>
 					</div>
+					
                     <div class="modal-footer modal-footer_form">
 							<div id="update_loading_data_SO" style="display:none;">
 							<div class="spinner-border text-success" role="status">
