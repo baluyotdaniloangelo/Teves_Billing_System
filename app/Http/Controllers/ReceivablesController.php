@@ -401,7 +401,7 @@ class ReceivablesController extends Controller
 					'teves_sales_order_table.sales_order_payment_term']);	
 			
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $SalesOrderData[0]->company_header)->first();				
-			$control_number = $BranchInfo->branch_initial."-RC-".$last_id+1;			
+			$control_number = $BranchInfo->branch_initial."-AR-".$last_id+1;			
 			
 			/*Save to Receivables*/
 			$Receivables = new ReceivablesModel();
@@ -552,8 +552,8 @@ class ReceivablesController extends Controller
 			
 			$total_amount_due = $receivable_amount - (($receivable_total_liter*$less_per_liter) + ($withholding_tax));
 					
-			$BranchInfo = TevesBranchModel::where('branch_id', '=', $SalesOrderData[0]->company_header)->first();				
-			$control_number = $BranchInfo->branch_initial."-RC-".$last_id+1;					
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();				
+			$control_number = $BranchInfo->branch_initial."-AR-".$last_id+1;					
 					
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 				= $request->client_idx;

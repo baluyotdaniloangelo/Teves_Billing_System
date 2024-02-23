@@ -221,7 +221,7 @@ class SalesOrderController extends Controller
 			
 			$receivable_last_id = ReceivablesModel::latest()->first()->receivable_id;
 						
-			$receivable_control_number = $BranchInfo->branch_initial."-RC-".$receivable_last_id+1;	
+			$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_last_id+1;	
 				
 				/*Create Receivable*/
 				$Receivables = new ReceivablesModel();
@@ -317,7 +317,7 @@ class SalesOrderController extends Controller
 			$receivable_id = $receivable_data[0]->receivable_id;
 						
 			/*Recievable Control Number*/			
-			$receivable_control_number = $BranchInfo->branch_initial."-RC-".$receivable_id;	
+			$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_id;	
 			
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($receivable_id);
@@ -448,7 +448,7 @@ class SalesOrderController extends Controller
 					
 					$receivable_last_id = ReceivablesModel::latest()->first()->receivable_id;
 								
-					$receivable_control_number = $BranchInfo->branch_initial."-RC-".$receivable_last_id+1;	
+					$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_last_id+1;	
 					
 					/*Automatic Create the Receivable Entry*/
 						
