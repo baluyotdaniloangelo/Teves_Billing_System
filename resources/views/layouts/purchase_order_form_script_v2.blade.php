@@ -4,6 +4,15 @@
 	LoadProduct();
 	LoadPayment();
 	
+	function ResetPaymentForm(){
+		/*Reset Form*/
+		document.getElementById("AddPayment").reset();
+		/*Hide Image Reference Div*/
+		$("#image_payment_div").hide();
+		/*Reset Payment Id*/
+		document.getElementById("purchase_order_payment_details_id").value = 0;
+	}
+	
 	<!--Select Product For Update-->
 	function LoadPurchaseOrderInfo() {
 			
@@ -39,12 +48,8 @@
 			document.getElementById("update_hauler_operator").value = response[0].hauler_operator;
 			document.getElementById("update_lorry_driver").value = response[0].lorry_driver;
 			document.getElementById("update_plate_number").value = response[0].plate_number;
-			document.getElementById("update_contact_number").value = response[0].contact_number;		
 			
 			document.getElementById("update_purchase_destination").value = response[0].purchase_destination;
-			document.getElementById("update_purchase_destination_address").value = response[0].purchase_destination_address;
-			document.getElementById("update_purchase_date_of_departure").value = response[0].purchase_date_of_departure;
-			document.getElementById("update_purchase_date_of_arrival").value = response[0].purchase_date_of_arrival;
 			
 			document.getElementById("update_purchase_order_instructions").value = response[0].purchase_order_instructions;
 			document.getElementById("update_purchase_order_note").value = response[0].purchase_order_note;		
@@ -139,7 +144,7 @@
 				 console.log(error);	 
 				}
 			   });
-	  } 
+	} 
   
 	function LoadPayment(purchase_order_id) {
 	
@@ -194,7 +199,6 @@
 						}			
 				  }else{
 							/*No Result Found or Error*/
-							//LoadProduct();
 							$("#update_table_payment_body_data tr").remove();
 							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 				  }
@@ -203,7 +207,7 @@
 				 console.log(error);	 
 				}
 			   });
-	  }  	  
+	}  	  
 	
 	<!--Save New Sales Order-->
 	$("#update-purchase-order").click(function(event){
@@ -227,14 +231,10 @@
 			let purchase_loading_terminal 				= $("#update_purchase_loading_terminal").val();
 			let purchase_order_net_percentage 			= $("input[name=update_purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 			= $("input[name=update_purchase_order_less_percentage]").val();
-			let hauler_operator 					= $("input[name=update_hauler_operator]").val();
-			let lorry_driver 						= $("input[name=update_lorry_driver]").val();
-			let plate_number 						= $("input[name=update_plate_number]").val();
-			let contact_number 						= $("input[name=update_contact_number]").val();
-			let purchase_destination 				= $("input[name=update_purchase_destination]").val();
-			let purchase_destination_address 		= $("input[name=update_purchase_destination_address]").val();
-			let purchase_date_of_departure 			= $("input[name=update_purchase_date_of_departure]").val();
-			let purchase_date_of_arrival 			= $("input[name=update_purchase_date_of_arrival]").val();
+			let hauler_operator 						= $("input[name=update_hauler_operator]").val();
+			let lorry_driver 							= $("input[name=update_lorry_driver]").val();
+			let plate_number 							= $("input[name=update_plate_number]").val();
+			let purchase_destination 					= $("input[name=update_purchase_destination]").val();
 			let purchase_order_instructions 			= $("#update_purchase_order_instructions").val();
 			let purchase_order_note 					= $("#update_purchase_order_note").val();
 				 
@@ -257,11 +257,7 @@
 					hauler_operator:hauler_operator,
 					lorry_driver:lorry_driver,
 					plate_number:plate_number,
-					contact_number:contact_number,
 					purchase_destination:purchase_destination,
-					purchase_destination_address:purchase_destination_address,
-					purchase_date_of_departure:purchase_date_of_departure,
-					purchase_date_of_arrival:purchase_date_of_arrival,	
 					purchase_order_instructions:purchase_order_instructions,
 					purchase_order_note:purchase_order_note,
 					_token: "{{ csrf_token() }}"
@@ -320,10 +316,10 @@
 				  
 				}
 			   });	
-	  });	
+	});	
 	
-	  /*Re-print*/
-	  $('body').on('click','#PrintPurchaseOrder',function(){	  
+	/*Re-print*/
+	$('body').on('click','#PrintPurchaseOrder',function(){	  
 	  
 			let purchaseOrderID = {{ $PurchaseOrderID }};
 			var query = {
@@ -334,8 +330,7 @@
 			var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
 			window.open(url);
 	  
-	  });
-	  
+	});
 	  
 	function UpdateBranch(){ 
 	
@@ -347,6 +342,24 @@
 		document.getElementById("AddPurchaseOrderProductBTN").disabled = true;
 		
 	}
+
+	function TotalAmount(){
+		
+		let product_price 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-price');
+		let product_manual_price 	= $("#product_manual_price").val();
+		let order_quantity 			= $("input[name=order_quantity]").val();
+		
+		if(order_quantity!=0 || order_quantity!=''){
+			if(product_manual_price!='' && product_manual_price!=0){
+				var total_amount = product_manual_price * order_quantity;
+				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}else{
+				var total_amount = product_price * order_quantity;
+				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			}
+		}
+	
+	}	
 
 	function LoadProductList(branch_id) {		
 	
@@ -493,7 +506,7 @@
 				  
 				}
 			   });	
-	  });		
+	});		
 	  
 	<!--Select Bill For Update-->
 	$('body').on('click','#PurchaseOrderProduct_Edit',function(){
@@ -531,7 +544,7 @@
 					alert(error);
 				}
 			   });	
-	  });	  	  
+	});	  	  
 	
 	<!--Bill Deletion Confirmation-->
 	$('body').on('click','#deletePurchaseOrderComponentProduct',function(){
@@ -565,7 +578,7 @@
 					alert(error);
 				}
 			   });		
-	  });
+	});
 
 	  <!-- Confirmed For Deletion-->
 	  $('body').on('click','#deletePurchaseOrderComponentConfirmed',function(){
@@ -599,7 +612,7 @@
 				 console.log(error);
 				}
 			   });		
-	  });	  
+	});	  
 	
 	<!--Select For Update-->
 	$('body').on('click','#PurchaseOrderPayment_Edit',function(){
@@ -634,7 +647,7 @@
 						image_src = "data:image/jpg;image/png;base64,"+response[0].image_reference;
 						
 						$('<img/>',{'src':image_src,'class':'img-fluid','style':'max-width:400px;margin-bottom:5px;'}).appendTo(img_holder);
-					
+						$("#image_payment_div").show();
 					}else{
 					}
 					
@@ -647,9 +660,9 @@
 					alert(error);
 				}
 			   });	
-	  });	  	  
+	});	  	  
 	
-<!--Select Bill For Update-->
+	<!--Select Bill For Update-->
 	$('body').on('click','#ViewPurchaseOrderPayment',function(){
 			
 			event.preventDefault();
@@ -695,7 +708,7 @@
 					alert(error);
 				}
 			   });	
-	  });	
+	});	
 	  
 	<!--Select Bill For Update-->
 	$('body').on('click','#deletePurchaseOrderPayment',function(){
@@ -747,8 +760,8 @@
 			   });	
 	  });	  	  
 		
-	  <!-- Confirmed For Deletion-->
-	  $('body').on('click','#deletePurchaseOrderPaymentConfirmed',function(){
+	<!-- Confirmed For Deletion-->
+	$('body').on('click','#deletePurchaseOrderPaymentConfirmed',function(){
 			
 			event.preventDefault();
 			let purchase_order_id 				= {{ $PurchaseOrderID }};
@@ -779,29 +792,11 @@
 				 console.log(error);
 				}
 			   });		
-	  });	  
+	});	    
 
-
-	  function TotalAmount(){
+	/*Add Payment and Edit With Upload Function*/
+    $('#AddPayment').on('submit', function(e){
 		
-		let product_price 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-price');
-		let product_manual_price 	= $("#product_manual_price").val();
-		let order_quantity 			= $("input[name=order_quantity]").val();
-		
-		if(order_quantity!=0 || order_quantity!=''){
-			if(product_manual_price!='' && product_manual_price!=0){
-				var total_amount = product_manual_price * order_quantity;
-				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}
-		}
-		
-	}	  
-
-			/*Add Payment and Edit With Upload Function*/
-            $('#AddPayment').on('submit', function(e){
                 e.preventDefault();
 	 		
 				$('#purchase_order_bankError').text('');
@@ -810,7 +805,7 @@
 				$('#purchase_order_payment_amountError').text('');
 			
 				document.getElementById('AddPayment').className = "g-3 needs-validation was-validated";
-                
+				
 				var form = this;
 				
 				$.ajax({
@@ -824,56 +819,67 @@
                         $(form).find('span.error-text').text('');
                     },
                     success:function(data){
+					
 						console.log(data);
-					
-					if(data) {
-					
+						
 						$('#switch_notice_on').show();
 						$('#sw_on').html(data.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 
 						$('#purchase_order_bankError').text('');
 						$('#purchase_order_date_of_paymentError').text('');
+						document.getElementById('purchase_order_reference_noError').className = "valid-feedback";
 						$('#purchase_order_reference_noError').text('');
 						$('#purchase_order_payment_amountError').text('');
+
+						let purchase_order_payment_details_id = document.getElementById("purchase_order_payment_details_id").value;
 						
-						/*Clear Form*/
-						$('#purchase_order_bank').val("");
-						$('#purchase_order_reference_no').val("");
-						$('#purchase_order_payment_amount').val("");
-						$('#AddPaymentModal').modal('toggle');	
-						
+						/*Close Payment Modal if the item is from Receivable*/
+						if(purchase_order_payment_details_id!=0){
+							$('#AddPaymentModal').modal('toggle');	
 						}
 						
+						/*Reset Form*/
+						ResetPaymentForm();
 						/*Reload Table*/
 						LoadPayment();
 						LoadProduct();
-						
-						$(form)[0].reset();
-						
-						document.getElementById("purchase_order_payment_details_id").value = 0;
-						
 					
                     },error: function(error) {
 					
 						console.log(error);	
-								
-					$('#purchase_order_bankError').text(error.responseJSON.errors.purchase_order_bank);
-					document.getElementById('purchase_order_bankError').className = "invalid-feedback";
+						let purchase_order_reference_no 	= $("#purchase_order_reference_no").val();
+						if(error.responseJSON.errors.purchase_order_reference_no=="The purchase order reference no has already been taken."){
+							  
+						purchase_order_reference_no_error = "<b>"+ purchase_order_reference_no +"</b> has already been taken.";
+						$('#purchase_order_reference_noError').html(purchase_order_reference_no_error);
+						document.getElementById('purchase_order_reference_noError').className = "invalid-feedback";
 					
-					$('#purchase_order_date_of_paymentError').text(error.responseJSON.errors.purchase_order_date_of_payment);
-					document.getElementById('purchase_order_date_of_paymentError').className = "invalid-feedback";					
+						$('#purchase_order_reference_no').val("");
 					
-					$('#purchase_order_reference_noError').text(error.responseJSON.errors.purchase_order_reference_no);
-					document.getElementById('purchase_order_reference_noError').className = "invalid-feedback";					
+						$('#switch_notice_off').show();
+						$('#sw_off').html("Invalid Input" + ' ' + purchase_order_reference_no_error);
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		
+					  
+					}else {
 					
-					$('#purchase_order_payment_amountError').text(error.responseJSON.errors.purchase_order_payment_amount);
-					document.getElementById('purchase_order_payment_amountError').className = "invalid-feedback";					
+						$('#purchase_order_bankError').text(error.responseJSON.errors.purchase_order_bank);
+						document.getElementById('purchase_order_bankError').className = "invalid-feedback";
+						
+						$('#purchase_order_date_of_paymentError').text(error.responseJSON.errors.purchase_order_date_of_payment);
+						document.getElementById('purchase_order_date_of_paymentError').className = "invalid-feedback";					
+						
+						$('#purchase_order_reference_noError').text(error.responseJSON.errors.purchase_order_reference_no);
+						document.getElementById('purchase_order_reference_noError').className = "invalid-feedback";					
+						
+						$('#purchase_order_payment_amountError').text(error.responseJSON.errors.purchase_order_payment_amount);
+						document.getElementById('purchase_order_payment_amountError').className = "invalid-feedback";		
+
+						$('#switch_notice_off').show();
+						$('#sw_off').html("Invalid Input" + '');
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);							
 					
-					$('#switch_notice_off').show();
-					$('#sw_off').html("Invalid Input" + "");
-					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
-				  
+					}
 				}
                 });
             });

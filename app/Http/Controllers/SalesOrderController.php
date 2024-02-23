@@ -14,6 +14,7 @@ use Session;
 use Validator;
 use DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class SalesOrderController extends Controller
 {
@@ -124,6 +125,7 @@ class SalesOrderController extends Controller
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						</div>';
 					
 					}
@@ -323,9 +325,9 @@ class SalesOrderController extends Controller
 			$Receivables->company_header 				= $request->company_header;
 			$Receivables->update();
 			
-			
+			//return response()->json(array('productlist'=>$data,'paymentcount'=>$paymentcount));	
 			if($result){
-				return response()->json(array('success' => "Sales Order Successfully Updated!"), 200);
+				return response()->json(array('success' => "Sales Order Successfully Updated!",'sales_order_control_number'=>$control_number), 200);
 			}
 			else{
 				return response()->json(['success'=>'Error on Update Sales Order Information']);
@@ -669,11 +671,17 @@ class SalesOrderController extends Controller
 
 	public function save_sales_order_payment(Request $request){
         	 
-		 $validator = \Validator::make($request->all(),[
+		  $request->validate([
+			//$validator = \Validator::make($request->all(),[
 				'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
 				'receivable_mode_of_payment'      	=> 'required',
 				'receivable_date_of_payment'      	=> 'required',
-				'receivable_reference'      		=> 'required',
+				'receivable_reference'      		=> ['required',Rule::unique('teves_receivable_payment')->where( 
+													fn ($query) =>$query
+														->where('receivable_idx', $request->receivable_idx_payment)
+														->where('receivable_reference', $request->receivable_reference)
+														->where('receivable_payment_id', '<>',  $request->receivable_payment_id )
+													)],
 				'receivable_payment_amount'       	=> 'required',
            ],[
 				'receivable_mode_of_payment.required' 	=> 'Bank Details is Required',
@@ -682,11 +690,11 @@ class SalesOrderController extends Controller
 				'receivable_payment_amount.required' 	=> 'Payment Amount is Required'
            ]);
 
-           if(!$validator->passes()){
+          // if(!$validator->passes()){
               
-			  return response()->json(['error'=>0,'error'=>$validator->errors()->toArray()]);
+			  //return response()->json(['error'=>0,'error'=>$validator->errors()->toArray()]);
          
-		   }else{
+		  // }else{
 			   
 			   if ($request->hasFile('payment_image_reference')) {
 				   
@@ -794,7 +802,7 @@ class SalesOrderController extends Controller
 							$paid_percentage = number_format($_paid_percentage,2,".","");
 						
 							/*IF Fully Paid Automatically Update the Status to Paid*/
-							if($paid_percentage >= 0.1 && $paid_percentage <= 99)
+							if($paid_percentage >= 0.01 && $paid_percentage <= 99)
 							{		
 								
 								$Receivablestatus = "$paid_percentage% Paid";
@@ -823,7 +831,7 @@ class SalesOrderController extends Controller
 						else{
 							return response()->json(['success'=>'Error on Payment Information']);
 						}	
-               }
+               //}
            }	
 		
 	public function get_sales_order_payment_list(Request $request){		
@@ -887,7 +895,7 @@ class SalesOrderController extends Controller
 							$paid_percentage = number_format($_paid_percentage,2,".","");
 						
 							/*IF Fully Paid Automatically Update the Status to Paid*/
-							if($paid_percentage >= 0.1 && $paid_percentage <= 99)
+							if($paid_percentage >= 0.01 && $paid_percentage <= 99)
 							{		
 								
 								$Receivablestatus = "$paid_percentage% Paid";

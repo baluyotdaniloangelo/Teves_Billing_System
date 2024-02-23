@@ -272,37 +272,61 @@
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="10" align="center" style="border-top:1px solid gray; border-left:1px solid gray; border-right:1px solid gray; font-weight:bold; background-color: #c6e0b4; height:25px !important;">HAULER DETAILS</td>			
 		</tr>		
-
+		</table>
+		<table class="" width="100%" cellspacing="0" cellpadding="1" > 	  	
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="1" align="left" width="20%" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Hauler's Name</td>
+			<td colspan="9" align="left" width="90%" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">:{{$purchase_order_data[0]['hauler_operator']}}</td>
+		</tr>	
+		
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="1" align="left" width="20%" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Driver's Name</td>
+			<td colspan="9" align="left" width="90%" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">:{{$purchase_order_data[0]['lorry_driver']}}</td>
+		</tr>
+		
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="1" align="left" width="20%" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Plate No.</td>
+			<td colspan="9" align="left" width="90%" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">:{{$purchase_order_data[0]['plate_number']}}</td>
+		</tr>
+		
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td colspan="1" align="left" width="20%" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Destination</td>
+			<td colspan="9" align="left" width="90%" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">:{{$purchase_order_data[0]['purchase_destination']}}</td>
+		</tr>
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" > 	  	
+		<!--
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="left" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Hauler / Operator:</td>
 			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">{{$purchase_order_data[0]['hauler_operator']}}</td>
 			<td colspan="1" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">Destination</td>
 			<td colspan="4" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">{{$purchase_order_data[0]['purchase_destination']}}</td>
 		</tr>	
-
+		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="left" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Lorry Driver:</td>
 			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">{{$purchase_order_data[0]['lorry_driver']}}</td>
 			<td colspan="1" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">Address</td>
 			<td colspan="4" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">{{$purchase_order_data[0]['contact_number']}}</td>
 		</tr>
-
+		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="left" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Plate No.:</td>
 			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;">{{$purchase_order_data[0]['plate_number']}}</td>
 			<td colspan="2" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">Date of Departure:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
 				<?php
-				if($purchase_order_data[0]['purchase_date_of_departure']==''){
-					$purchase_date_of_departure = '';
-				}else{
-					$_purchase_date_of_departure=date_create($purchase_order_data[0]['purchase_date_of_departure']);
-					$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/Y"));
-				}
+				//if($purchase_order_data[0]['purchase_date_of_departure']==''){
+				//	$purchase_date_of_departure = '';
+				//}else{
+				//	$_purchase_date_of_departure=date_create($purchase_order_data[0]['purchase_date_of_departure']);
+				//	$purchase_date_of_departure = strtoupper(date_format($_purchase_date_of_departure,"M/d/Y"));
+				//}
 				?>
-			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;"><?=$purchase_date_of_departure;?></td>
+			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;"><//?=$purchase_date_of_departure;?></td>
 		</tr>
-
+		
 		<tr style="font-size:12px;border:0 solid #000;">
 		
 			<td colspan="2" align="left" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray;">Contact No.:</td>
@@ -310,7 +334,7 @@
 			
 			<td colspan="2" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">Date of Arrival:<br>
 			<div style="font-size:7px;font-style: italic;">from loading terminal</div></td>
-				<?php
+				</?php
 				
 				if($purchase_order_data[0]['purchase_date_of_arrival']==''){
 					$purchase_date_of_arrival = '';
@@ -319,12 +343,12 @@
 					$purchase_date_of_arrival = strtoupper(date_format($_purchase_date_of_arrival,"M/d/Y"));
 				}
 				?>
-			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;"><?=$purchase_date_of_arrival;?></td>	
+			<td colspan="3" align="left" style="border-top:1px solid gray; border-left:0px solid #000; border-right:1px solid gray; border-bottom:1px solid gray;"></?=$purchase_date_of_arrival;?></td>	
 		</tr>		
-		
+		-->
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="6" align="left" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
-			<td colspan="4" align="center" style="border:1px solid gray; font-weight:bold;">NOTE</td>	
+			<td colspan="6" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
+			<td colspan="4" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:0px solid #000; font-weight:bold;">NOTE</td>	
 		</tr>
 	    
 		<tr style="font-size:12px;border:0 solid #000;" rowspan="3">

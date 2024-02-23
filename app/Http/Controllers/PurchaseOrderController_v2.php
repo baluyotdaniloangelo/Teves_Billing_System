@@ -14,6 +14,8 @@ use Validator;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Models\Photo;
+use Illuminate\Validation\Rule;
+
 class PurchaseOrderController_v2 extends Controller
 {
 	
@@ -28,7 +30,7 @@ class PurchaseOrderController_v2 extends Controller
 			$supplier_data = SupplierModel::all();	
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$teves_branch = TevesBranchModel::all();
-			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
+			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','purchase_destination')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 		
 		}
@@ -74,6 +76,7 @@ class PurchaseOrderController_v2 extends Controller
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
+					<a href="#" class="btn-warning btn-circle btn-sm bi bi-file-image btn_icon_table btn_icon_table_edit" onclick="ViewGalery('.$row->purchase_order_id.')" id="viewPaymentGalery"></a>
 					<a href="purchase_order_form/'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deletePurchaseOrder"></a>
 					</div>';
@@ -138,11 +141,7 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.hauler_operator',
 						'teves_purchase_order_table.lorry_driver',
 						'teves_purchase_order_table.plate_number',
-						'teves_purchase_order_table.contact_number',
 						'teves_purchase_order_table.purchase_destination',
-						'teves_purchase_order_table.purchase_destination_address',
-						'teves_purchase_order_table.purchase_date_of_departure',
-						'teves_purchase_order_table.purchase_date_of_arrival',
 						'teves_purchase_order_table.purchase_order_instructions',
 						'teves_purchase_order_table.purchase_order_note',
 						'teves_purchase_order_table.company_header'
@@ -240,12 +239,8 @@ class PurchaseOrderController_v2 extends Controller
 			$Purchaseorder->lorry_driver							= $request->lorry_driver;			
 			
 			$Purchaseorder->plate_number							= $request->plate_number;
-			$Purchaseorder->contact_number							= $request->contact_number;
 					
 			$Purchaseorder->purchase_destination					= $request->purchase_destination;
-			$Purchaseorder->purchase_destination_address			= $request->purchase_destination_address;
-			$Purchaseorder->purchase_date_of_departure				= $request->purchase_date_of_departure;
-			$Purchaseorder->purchase_date_of_arrival				= $request->purchase_date_of_arrival;
 									
 			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
 			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
@@ -362,7 +357,7 @@ class PurchaseOrderController_v2 extends Controller
 							$paid_percentage = number_format($_paid_percentage,2,".","");
 						
 							/*IF Fully Paid Automatically Update the Status to Paid*/
-							if($paid_percentage >= 0.1 && $paid_percentage <= 99)
+							if($paid_percentage >= 0.01 && $paid_percentage <= 99)
 							{		
 								
 								$PurchaseOrderstatus = "$paid_percentage% Paid";
@@ -598,23 +593,31 @@ class PurchaseOrderController_v2 extends Controller
 	
 	
 	public function save_purchase_order_payment(Request $request){
-        	 
-		 $validator = \Validator::make($request->all(),[
-				'payment_image_reference'=>'image|mimes:jpg,png,jpeg,svg|max:10048',
-				'purchase_order_bank'      			=> 'required',
-				'purchase_order_date_of_payment'      => 'required',
-				'purchase_order_reference_no'      	=> 'required',
-				'purchase_order_payment_amount'       => 'required',
-           ],[
-				'purchase_order_bank.required' => 'Bank Details is Required',
-				'purchase_order_date_of_payment.required' => 'Date of Payment is Required',
-				'purchase_order_reference_no.required' => 'Reference Number Required',
-				'purchase_order_payment_amount.required' => 'Payment Amount is Required'
-           ]);
 
-           if(!$validator->passes()){
-               return response()->json(['error'=>0,'error'=>$validator->errors()->toArray()]);
-           }else{
+			 $request->validate([
+			//$validator = \Validator::make($request->all(),[
+				'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
+				'purchase_order_bank'      			=> 'required',
+				'purchase_order_date_of_payment'    => 'required',
+				'purchase_order_reference_no'      	=> ['required',Rule::unique('teves_purchase_order_payment_details')->where( 
+													fn ($query) =>$query
+														->where('purchase_order_idx', $request->purchase_order_id_payment)
+														->where('purchase_order_reference_no', $request->purchase_order_reference_no)
+														->where('purchase_order_payment_details_id', '<>',  $request->purchase_order_payment_details_id )														
+													)],
+				'purchase_order_payment_amount'     => 'required',
+           ],[
+				'purchase_order_bank.required' 				=> 'Bank Details is Required',
+				'purchase_order_date_of_payment.required' 	=> 'Date of Payment is Required',
+				'purchase_order_reference_no.required' 		=> 'Reference Number Required',
+				'purchase_order_payment_amount.required' 	=> 'Payment Amount is Required'
+           ]);
+		   
+		  
+
+           //if(!$validator->passes()){
+          //     return response()->json(['error'=>1,'error'=>$validator->errors()->toArray()]);
+         //  }else{
 			   if ($request->hasFile('payment_image_reference')) {
 				   
 					   $path = 'files/';
@@ -714,7 +717,7 @@ class PurchaseOrderController_v2 extends Controller
 							$paid_percentage = number_format($_paid_percentage,2,".","");
 						
 							/*IF Fully Paid Automatically Update the Status to Paid*/
-							if($paid_percentage >= 0.1 && $paid_percentage <= 99.9)
+							if($paid_percentage >= 0.01 && $paid_percentage <= 99.9)
 							{	
 								
 								$PurchaseOrderstatus = "$paid_percentage% Paid";
@@ -747,7 +750,7 @@ class PurchaseOrderController_v2 extends Controller
 							return response()->json(['success'=>'Error on Payment Information']);
 						}	
 
-               }
+              // }
            }
      
 	 

@@ -3,6 +3,16 @@
 	//ClientInfo();
 	LoadProduct();
 	LoadPayment();
+	LoadReceivables();
+	
+	function ResetPaymentForm(){
+		/*Reset Form*/
+		document.getElementById("AddPayment").reset();
+		/*Hide Image Reference Div*/
+		$("#image_payment_div").hide();
+		/*Reset Payment Id*/
+		document.getElementById("receivable_payment_id").value = 0;
+	}
 	
 	$("#update-sales-order").click(function(event){
 
@@ -74,16 +84,6 @@
 					$('#update_plate_noError').text('');
 					$('#update_drivers_nameError').text('');
 					
-					
-					/*Open PDF for Printing
-					var query = {
-								sales_order_id:sales_order_id,
-								_token: "{{ csrf_token() }}"
-							}
-
-					var url = "{{URL::to('generate_sales_order_pdf')}}?" + $.param(query)
-					window.open(url);*/
-					
 				  }
 				},
 				beforeSend:function()
@@ -124,6 +124,41 @@
 		/*Disable the Add Product Button Until Changes not Save*/
 		document.getElementById("AddSalesOrderProductBTN").disabled = true;
 		
+	}
+
+	<!--Select Receivable For Update-->	
+	function LoadReceivables(){ 
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id: {{ @$receivables_details['receivable_id'] }},
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					document.getElementById("receivable_control_number_info").innerHTML = response[0].control_number;	
+					document.getElementById("receivable_amount_info").innerHTML = response[0].receivable_amount;
+					
+					document.getElementById("receivable_billing_date_SO").value = response[0].billing_date;
+					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
+					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;					
+							
+					
+					$('#UpdateReceivablesModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
 	}
 
 	function LoadProductList(branch_id) {		
@@ -278,7 +313,6 @@
 			   });	
 	  });	
 
-
 	function LoadProduct() {
 		
 		$("#table_sales_order_product_body_data tr").remove();
@@ -355,8 +389,6 @@
 								
 							}
 					  }
-							
-							
 				  else{
 							/*No Result Found or Error*/	
 				  }
@@ -474,6 +506,7 @@
 						
 						/*Reload Table*/
 						LoadProduct();
+						LoadReceivables();
 									  
 				},
 				beforeSend:function()
@@ -627,8 +660,8 @@
 			   });		
 	  });
 
-	  <!-- Confirmed For Deletion-->
-	  $('body').on('click','#deleteSalesOrderComponentConfirmed',function(){
+	<!-- Confirmed For Deletion-->
+	$('body').on('click','#deleteSalesOrderComponentConfirmed',function(){
 			
 			event.preventDefault();
 			let sales_order_id 				= {{ $SalesOrderID }};
@@ -666,7 +699,7 @@
 				 console.log(error);
 				}
 			   });		
-	  });	  
+	});	  
 	
 	function TotalAmount(){
 		let product_price 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-price');
@@ -700,8 +733,8 @@
 		}
 	}	
 
-			/*Add Payment and Edit With Upload Function*/
-            $('#AddPayment').on('submit', function(e){
+	/*Add Payment and Edit With Upload Function*/
+    $('#AddPayment').on('submit', function(e){
 
                 e.preventDefault();
 	 		
@@ -727,57 +760,72 @@
                     success:function(data){
 						console.log(data);
 					
-					if(data) {
-					
 						$('#switch_notice_on').show();
 						$('#sw_on').html(data.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 
 						$('#receivable_mode_of_paymentError').text('');
-						$('#receivable_date_of_payment').text('');
+						$('#receivable_date_of_paymentError').text('');
 						$('#receivable_referenceError').text('');
 						$('#receivable_payment_amountError').text('');
 						
-						/*Clear Form*/
-						$('#receivable_mode_of_payment').val("");
-						$('#receivable_reference').val("");
-						$('#receivable_payment_amount').val("");
-						$('#AddPaymentModal').modal('toggle');	
+						let receivable_payment_id = document.getElementById("receivable_payment_id").value;
+						
+						/*Close Payment Modal if the item is from Receivable*/
+						if(receivable_payment_id!=0){
+							
+							$('#AddPaymentModal').modal('toggle');	
 						
 						}
 						
+						/*Reset Form*/
+						ResetPaymentForm();
 						/*Reload Table*/
 						LoadPayment();
 						LoadProduct();
-						
-						$(form)[0].reset();
 					
                     },error: function(error) {
 					
 						console.log(error);	
-								
-					$('#receivable_mode_of_paymentError').text(error.responseJSON.errors.receivable_mode_of_payment);
-					document.getElementById('receivable_mode_of_paymentError').className = "invalid-feedback";
+						
+						let receivable_reference 	= $("#receivable_reference").val();
+						if(error.responseJSON.errors.receivable_reference=="The receivable reference has already been taken."){
+							  
+						receivable_reference_error = "<b>"+ receivable_reference +"</b> has already been taken.";
+						$('#receivable_referenceError').html(receivable_reference_error);
+						document.getElementById('receivable_referenceError').className = "invalid-feedback";
 					
-					$('#receivable_date_of_payment').text(error.responseJSON.errors.purchase_order_date_of_payment);
-					document.getElementById('receivable_date_of_payment').className = "invalid-feedback";					
+						$('#receivable_reference').val("");
 					
-					$('#receivable_referenceError').text(error.responseJSON.errors.receivable_reference);
-					document.getElementById('receivable_referenceError').className = "invalid-feedback";					
+						$('#switch_notice_off').show();
+						$('#sw_off').html("Invalid Input" + ' ' + receivable_reference_error);
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		
+					  
+					}else {		
 					
-					$('#receivable_payment_amountError').text(error.responseJSON.errors.receivable_payment_amount);
-					document.getElementById('receivable_payment_amountError').className = "invalid-feedback";					
+						$('#receivable_mode_of_paymentError').text(error.responseJSON.errors.receivable_mode_of_payment);
+						document.getElementById('receivable_mode_of_paymentError').className = "invalid-feedback";
+						
+						$('#receivable_date_of_payment').text(error.responseJSON.errors.purchase_order_date_of_payment);
+						document.getElementById('receivable_date_of_payment').className = "invalid-feedback";					
+						
+						$('#receivable_referenceError').text(error.responseJSON.errors.receivable_reference);
+						document.getElementById('receivable_referenceError').className = "invalid-feedback";					
+						
+						$('#receivable_payment_amountError').text(error.responseJSON.errors.receivable_payment_amount);
+						document.getElementById('receivable_payment_amountError').className = "invalid-feedback";					
+						
+						$('#switch_notice_off').show();
+						$('#sw_off').html("Invalid Input" + "");
+						setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			
 					
-					$('#switch_notice_off').show();
-					$('#sw_off').html("Invalid Input" + "");
-					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
-				  
+					}
 				}
                 });
-            });
+    });
 
-            //Reset input file
-            $('input[type="file"][name="payment_image_reference"]').val('');
+    //Reset input file
+    $('input[type="file"][name="payment_image_reference"]').val('');
             //Image preview
             $('input[type="file"][name="payment_image_reference"]').on('change', function(){
                 var img_path = $(this)[0].value;
@@ -856,7 +904,6 @@
 						}			
 				  }else{
 							/*No Result Found or Error*/
-							//LoadProduct();
 							$("#update_table_payment_body_data tr").remove();
 							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
 				  }
@@ -901,6 +948,7 @@
 						image_src = "data:image/jpg;image/png;base64,"+response[0].image_reference;
 						
 						$('<img/>',{'src':image_src,'class':'img-fluid','style':'max-width:400px;margin-bottom:5px;'}).appendTo(img_holder);
+						$("#image_payment_div").show();
 					
 					}else{
 					}
@@ -1084,25 +1132,13 @@
 					/*Clear Form*/
 					$('#receivable_payment_term').val("");
 					$('#receivable_description').val("");
-					/*Close Form*/
-					//$('#SalesOrderDeliveredModal').modal('toggle');
 					
-					//var table = $("#getReceivablesList").DataTable();
-				    //table.ajax.reload(null, false);
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					
-					//var query = {
-					//	receivable_id:response.receivable_id,
-					//	_token: "{{ csrf_token() }}"
-					//}
-					
-					/*Reload Details or link for PDF*/
-					//var url = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query)
-					//window.open(url);
 					
 				  }
 				},
@@ -1134,5 +1170,4 @@
 				}
 			   });		
 	  });	  
-	  
  </script>

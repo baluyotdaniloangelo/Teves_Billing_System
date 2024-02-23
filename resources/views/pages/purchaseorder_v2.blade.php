@@ -150,6 +150,45 @@
         </div>
     </div>	
 
+	<!-- Bill Delete Modal-->
+    <div class="modal fade" id="ViewPaymentGalery" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
+ 					<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+                </div>
+				
+				<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" align="center">
+				
+                <div class="carousel-indicators">
+				
+                </div>
+				
+                <div class="carousel-inner">
+                 
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: #000;"></span>
+                  <span class="visually-hidden" >Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: #000;"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+
+              </div>
+				
+                <div class="modal-footer footer_modal_bg">
+				
+					<!--<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Close</button>-->
+                  
+                </div>
+            </div>
+        </div>
+    </div>	
+
   </section>
 </main>
 @endsection

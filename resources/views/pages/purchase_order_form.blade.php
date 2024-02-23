@@ -30,7 +30,7 @@
 				
 				<hr>
 				<div class="row mb-2">
-					<div class="col-sm-6">
+					<div class="col-sm-5">
 						<form class="g-2 needs-validation" id="PurchaseOrderformUpdate">
 								
 							<div class="row mb-2">
@@ -137,13 +137,19 @@
 							
 							<div class="row mb-2">
 								
-									<div class="col-md-6">
-									  <label for="update_hauler_operator" class="form-label">Driver</label>
+									<div class="col-md-12">
+									  <label for="update_hauler_operator" class="form-label">Hauler's Name</label>
 									  <input type="text" class="form-control" id="update_hauler_operator" name="update_hauler_operator">
 									</div>
 								
-									<div class="col-md-6">
-									  <label for="update_lorry_driver" class="form-label">Lory Plate #</label>
+									
+							</div>
+							
+							<div class="row mb-2">
+								
+								
+									<div class="col-md-12">
+									  <label for="update_lorry_driver" class="form-label">Driver's Name</label>
 									  <input type="text" class="form-control" id="update_lorry_driver" name="update_lorry_driver" list="lorry_driver_list">
 											<datalist id="lorry_driver_list">
 												@foreach ($purchase_data_suggestion as $lorry_driver_cols)
@@ -154,9 +160,10 @@
 									
 							</div>
 							
+							
 							<div class="row mb-2">
 							
-									<div class="col-md-6">
+									<div class="col-md-12">
 									  <label for="update_plate_number" class="form-label">Plate Number</label>
 									  <input type="text" class="form-control" id="update_plate_number" name="update_plate_number" list="plate_number_list">
 											<datalist id="plate_number_list">
@@ -165,7 +172,7 @@
 												@endforeach
 											  </datalist>
 									</div>
-									
+									<!--
 									<div class="col-md-6">
 									  <label for="update_contact_number" class="form-label">Contact Number</label>
 									  <input type="text" class="form-control" id="update_contact_number" name="update_contact_number" list="contact_number_list">
@@ -174,13 +181,13 @@
 													<option value="{{$contact_number_cols->contact_number}}">
 												@endforeach
 											  </datalist>
-									</div>
+									</div>-->
 								
 							</div>
 							
 							<div class="row mb-2">
 								
-									<div class="col-md-6">
+									<div class="col-md-12">
 									  <label for="update_purchase_destination" class="form-label">Destination</label>
 									  <input type="text" class="form-control" id="update_purchase_destination" name="update_purchase_destination" list="purchase_destination_list">
 											<datalist id="purchase_destination_list">
@@ -189,7 +196,7 @@
 												@endforeach
 											  </datalist>
 									</div>
-									
+									<!--
 									<div class="col-md-6">
 									  <label for="update_purchase_destination_address" class="form-label">Address</label>
 									  <input type="text" class="form-control" id="update_purchase_destination_address" name="update_purchase_destination_address" value=""list="purchase_destination_address_list">
@@ -198,8 +205,9 @@
 													<option value="{{$purchase_destination_address_cols->purchase_destination_address}}">
 												@endforeach
 											  </datalist>
-									</div>
+									</div>-->
 								</div>	
+								<!--
 								<div class="row mb-2">
 									<div class="col-md-6">
 									  <label for="update_purchase_date_of_departure" class="form-label">Date of Departure</label>
@@ -212,7 +220,7 @@
 									</div>
 								
 								</div>
-								
+								-->
 								<div class="row mb-2">
 								
 									<div class="col-md-6">
@@ -246,7 +254,7 @@
 								</div>
 						</form>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-7">
 					 <!-- Default Tabs -->
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 
@@ -287,7 +295,7 @@
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN"></button>
+						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
 					</div>					
 					</div>
 
@@ -472,8 +480,9 @@
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_reference_no" id="purchase_order_reference_no" required placeholder="Reference No.">
 								<label for="order_quantity">Reference No.</label>
+								<span class="valid-feedback" id="purchase_order_reference_noError"></span>
 							</div>
-							 <span class="valid-feedback" id="order_quantityError"></span>
+							 
 						</div>
 						
 						<div class="col-sm-12">
@@ -497,7 +506,7 @@
 						
 						<div class="row mb-3">
 							<div class="col-sm-12">
-								<div class="img-holder" align="center"></div>
+								<div class="img-holder" align="center" id="image_payment_div"></div>
 							</div>
 						</div>
 						

@@ -36,7 +36,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2] },
+					{ className: 'text-center', targets: [0, 1, 2, 10] },
 			]
 		});
 		
@@ -89,7 +89,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2] },
+					{ className: 'text-center', targets: [0, 1, 2, 10] },
 			]
 		});
 			//	$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
@@ -415,8 +415,6 @@
 				}
 			   });	
 	  });
-
-
 
 	$("#update-receivables").click(function(event){			
 			event.preventDefault();

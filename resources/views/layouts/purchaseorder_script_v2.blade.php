@@ -228,7 +228,106 @@
 				}
 			   });		
 	  });
-	  
+	
+
+	function ViewGalery(purchase_order_id){
+				//alert();
+			  //let receivable_id = {{ @$receivables_details['receivable_id'] }};
+//alert(purchase_order_id);
+			  $.ajax({
+				url: "/get_purchase_order_payment_list",
+				type:"POST",
+				data:{
+				  purchase_order_id:purchase_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+							
+				  console.log(response);
+				  if(response!='') {
+					 
+					//$("#update_table_payment_body_data tr").remove();
+					$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
+
+						var len = response.length;
+						for(var i=0; i<len; i++){
+							
+							var id = response[i].purchase_order_payment_details_id;
+							
+							var purchase_order_bank 			= response[i].purchase_order_bank;
+							var purchase_order_date_of_payment 	= response[i].purchase_order_date_of_payment;
+							var purchase_order_reference_no		= response[i].purchase_order_reference_no;
+							var purchase_order_payment_amount 	= response[i].purchase_order_payment_amount;
+							var image_reference				 	= response[i].image_reference
+
+								if(i==1){
+									
+									slide_btn_status = 'active';
+									slide_current_status = 'true';
+									
+									carousel_item_status = 'active carousel-item-start';
+									
+								}else{
+									
+									slide_btn_status = '';
+									slide_current_status = '';
+									
+									carousel_item_status = ' ';
+								}
+							
+							$('.carousel-indicators').append('<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="'+i+'" class="'+slide_btn_status +'" aria-current="'+slide_current_status+'" aria-label="Slide '+i+'"></button>');
+							
+							if(image_reference==null){
+								
+								image_src = "data:image/jpg;image/png;base64,"+response[i].image_reference;
+							
+							}else{
+								
+								image_src = "data:image/jpg;image/png;base64,"+response[i].image_reference;
+							
+							}
+							
+							
+							$('.carousel-inner').append('<div class="carousel-item '+carousel_item_status+'">'+
+							'<img src="'+image_src+'" class="d-block w-100" alt="..." style="max-width:700px;width:100%">'+
+							'<div class="carousel-caption d-none d-md-block" style="background-color:#000000a6; border:solid pink 1px; border-radius:2px;">'+
+						    '<table width="100%"><thead>'+
+							'<tr>'+
+							'<th style="text-align:center !important;">Bank</th>'+
+							'<th style="text-align:center !important;">Date of Payment</th>'+
+							'<th style="text-align:center !important;">Reference No.</th>'+
+							'<th style="text-align:center !important;">Amount</th>'+
+							'</tr>'+
+							'</thead>'+
+							'<tbody>'+
+							'<tr>'+
+							'<td>'+purchase_order_bank+'</td>'+
+							'<td>'+purchase_order_date_of_payment+'</td>'+
+							'<td>'+purchase_order_reference_no+'</td>'+
+							'<td>'+purchase_order_payment_amount+'</td>'+
+							'</tr>'+
+							'</tbody>'+
+							'</table>'+
+							'</div>'+
+							'</div>');
+					
+						}	
+						
+				  }else{
+							/*No Result Found or Error*/
+							$("#update_table_payment_body_data tr").remove();
+							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
+				  }
+				  
+				  $('#ViewPaymentGalery').modal('toggle');					  
+
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+			   
+	} 	  		
 	  
 	<!--Select Product For Update-->
 	$('body').on('click','#EditPurchaseOrder',function(){

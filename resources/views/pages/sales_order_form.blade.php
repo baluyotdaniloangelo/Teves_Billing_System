@@ -272,7 +272,7 @@
                 <div class="tab-pane fade <?php if($tab=='payment') { echo 'show active'; } ?>" id="payment" role="tabpanel" aria-labelledby="payment-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN"></button>
+						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
 					</div>					
 					</div>
 					
@@ -314,7 +314,7 @@
 					<h6>
 						<div class="row mb-2">
 							<label class="col-sm-3 col-form-label">Control Number :</label>
-							<label class="col-sm-9 col-form-label">{{ $receivables_details['control_number'] }}</label>
+							<label class="col-sm-9 col-form-label" id='receivable_control_number_info'>{{ $receivables_details['control_number'] }}</label>
 						</div>
 					</h6>
 					
@@ -323,7 +323,7 @@
 						<div class="row mb-2">
 						  <label for="receivable_billing_date_SO" class="col-sm-3 col-form-label">Billing Date : </label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="receivable_billing_date_SO" id="receivable_billing_date_SO" value="{{ $receivables_details['billing_date'] }}" required>
+							<input type="date" class="form-control " name="receivable_billing_date_SO" id="receivable_billing_date_SO" value="" required>
 							<span class="valid-feedback" id="receivable_billing_date_SO_Error"></span>
 						  </div>
 						</div>
@@ -331,7 +331,7 @@
 						<div class="row mb-2">
 						  <label for="receivable_payment_term_SO" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="receivable_payment_term_SO" id="receivable_payment_term_SO" value="{{ $receivables_details['payment_term'] }}">
+							<input type="text" class="form-control " name="receivable_payment_term_SO" id="receivable_payment_term_SO" value="">
 							<span class="valid-feedback" id="receivable_payment_term_SO_Error"></span>
 						  </div>
 						</div>							
@@ -339,11 +339,15 @@
 						<div class="row mb-2">
 						  <label for="receivable_description_SO" class="col-sm-3 col-form-label">Description : </label>
 						  <div class="col-sm-9">
-							<textarea class="form-control" id="receivable_description_SO" style="height: 50px;" required>{{ $receivables_details['receivable_description'] }}</textarea>
+							<textarea class="form-control" id="receivable_description_SO" style="height: 50px;" required></textarea>
 							<span class="valid-feedback" id="receivable_description_SO_Error"></span>
 						  </div>
 						</div>
 						
+						<div class="row mb-2">
+						  <label for="" class="col-sm-3 col-form-label">Amount : </label>
+						  <label class="col-sm-9 col-form-label" id="receivable_amount_info"></label>
+						</div>
 					<div class="card-footer">
 												<div class="row mb-3">
 												<div class="col-sm-6" align="">
@@ -637,7 +641,7 @@
 						
 						<div class="row mb-3">
 							<div class="col-sm-12">
-								<div class="img-holder" align="center"></div>
+								<div class="img-holder" align="center" id="image_payment_div"></div>
 							</div>
 						</div>
 						
