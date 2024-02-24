@@ -15,7 +15,21 @@
 		 
             <div class="card-body">			
 				<div class="p-d3">
-									<div class="table-responsive">
+				
+				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Unbilled</button>
+                </li>
+                <li class="nav-item" role="presentation"  data-bs-toggle="modal" data-bs-target="#BilledModal">
+                  <button class="nav-link" id="billed-tab" data-bs-toggle="tab" data-bs-target="#bordered-billed" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Oder">Billed</button>
+                </li>
+              
+				</ul>					
+				
+				<div class="tab-content pt-2" id="borderedTabContent">
+				
+                <div class="tab-pane fade show active" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
+											<div class="table-responsive">
 										<table class="table table-bordered dataTable display" id="getBillingTransactionList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
@@ -55,11 +69,123 @@
 												</tr>
 											</tfoot>
 										</table>
-									</div>		
+									</div>
+				</div>
+				
+                <div class="tab-pane fade" id="bordered-billed" role="tabpanel" aria-labelledby="billed-tab">
+					<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
+						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#BilledModal"></button>
+					</div>					
+					</div>
+									    <div class="table-responsive">
+										<table class="table table-bordered dataTable display" id="BillingListTable_billed" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Time</th>
+													<th class="all">Control Number</th>
+													<th class="all">Driver's Name</th>
+													<th class="all">S.O No.</th>
+													<th class="all">Description</th>																	
+													<th class="all">Product</th>
+													<th class="none">Price : </th>
+													<th class="none">Quantity : </th>
+													<th class="none">Amount : </th>
+													<th>Action</th>
+												</tr>
+											</thead>				
+											
+											<tbody>
+												
+											</tbody>
+	
+											<tfoot>
+												<tr>
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Time</th>
+													<th class="all">Control Number</th>
+													<th class="all">Driver's Name</th>
+													<th class="all">S.O No.</th>
+													<th class="all">Description</th>																	
+													<th class="all">Product</th>
+													<th class="none">Price : </th>
+													<th class="none">Quantity : </th>
+													<th class="none">Amount : </th>
+													<th>Action</th>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+				</div>
+				
+				</div>
+										
 				</div>									
                    
             </div>
           </div>
+
+	<!--Modal to Create Client-->
+	<div class="modal fade" id="BilledModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Billed History</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-2 needs-validation" id="generate_billed_form">
+					  
+						<div class="row mb-2">
+						  <label for="client_idx_billed" class="col-sm-4 col-form-label" title="***Client is Optional, You Can Generate the Billed item using the Date Range.">Client(Optional)</label>
+						  <div class="col-sm-8">
+							<input class="form-control" list="client_name_billed" name="client_name_billed" id="client_id_billed" required autocomplete="off">
+								<datalist id="client_name_billed">
+									@foreach ($client_data as $client_data_cols)
+										<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+									@endforeach
+								</datalist>
+							<span class="valid-feedback" id="client_idxError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="start_date_billed" class="col-sm-4 col-form-label">Start Date</label>
+						  <div class="col-sm-8">
+							<input type="date" class="form-control " name="start_date_billed" id="start_date_billed" value="<?=date('Y-m-d');?>" required>
+							<span class="valid-feedback" id="start_date_billedError"></span>
+						  </div>
+						</div>						
+								
+						<div class="row mb-2">
+						  <label for="end_date_billed" class="col-sm-4 col-form-label">End Date</label>
+						  <div class="col-sm-8">
+							<input type="date" class="form-control " name="end_date_billed" id="end_date_billed" value="<?=date('Y-m-d');?>" required>
+							<span class="valid-feedback" id="end_date_billedError"></span>
+						  </div>
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+					
+							<div id="loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_billed"> Submit</button>
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>
 
 	<!-- Bill Delete Modal-->
     <div class="modal fade" id="BillDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">

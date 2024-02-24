@@ -153,6 +153,9 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_dr_number',
 					'teves_sales_order_table.sales_order_or_number',		
+					'teves_sales_order_table.sales_order_po_number',
+					'teves_sales_order_table.sales_order_charge_invoice',
+					'teves_sales_order_table.sales_order_collection_receipt',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_delivered_to',
 					'teves_sales_order_table.sales_order_delivered_to_address',
@@ -267,7 +270,21 @@ class SalesOrderController extends Controller
 			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
 			$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
 			$Salesorder->sales_order_dr_number 					= $request->dr_number;
-			$Salesorder->sales_order_or_number 					= $request->or_number;
+			
+			/*
+				sales_order_or_number:sales_order_or_number,
+				sales_order_po_number:sales_order_po_number,
+				sales_order_charge_invoice:sales_order_charge_invoice,
+				sales_order_collection_receipt:sales_order_collection_receipt,
+			*/
+			
+			$Salesorder->sales_order_or_number 					= $request->sales_order_or_number;
+			$Salesorder->sales_order_po_number 					= $request->sales_order_po_number;
+			$Salesorder->sales_order_charge_invoice 			= $request->sales_order_charge_invoice;
+			$Salesorder->sales_order_collection_receipt 		= $request->sales_order_collection_receipt;
+			
+			//echo $request->sales_order_collection_receipt;
+			
 			$Salesorder->sales_order_payment_term 				= $request->payment_term;
 			$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
 			$Salesorder->sales_order_hauler 					= $request->hauler;
@@ -351,9 +368,7 @@ class SalesOrderController extends Controller
 			$paymentcount = $paymentlist->count();
 		
 			return response()->json(array('productlist'=>$data,'paymentcount'=>$paymentcount));			
-		
-			//return response()->json($data);
-			
+
 	}
 
 	public function delete_sales_order_item(Request $request){		
@@ -422,7 +437,10 @@ class SalesOrderController extends Controller
 					'teves_client_table.client_tin',
 					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_dr_number',
-					'teves_sales_order_table.sales_order_or_number',		
+					'teves_sales_order_table.sales_order_or_number',			
+					'teves_sales_order_table.sales_order_po_number',
+					'teves_sales_order_table.sales_order_charge_invoice',
+					'teves_sales_order_table.sales_order_collection_receipt',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_delivered_to',
 					'teves_sales_order_table.sales_order_delivered_to_address',
@@ -784,8 +802,6 @@ class SalesOrderController extends Controller
 				$salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
 				$salesOrderUpdate_status->sales_order_status = 'Delivered';
 				$salesOrderUpdate_status->update();
-				
-				
 				
 				/*Get Recivable Details [receivable_amount]*/
 				$receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							

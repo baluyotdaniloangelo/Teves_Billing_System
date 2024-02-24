@@ -97,6 +97,7 @@ class ReceivablesController extends Controller
 						}
 					
 							$actionBtn = '<div align="center" class="action_table_menu_Product">
+										<!--<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery()" id="viewPaymentGalery"></a>-->
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" id="payReceivables" title="Add Payment"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'" title="Update"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
@@ -169,6 +170,7 @@ class ReceivablesController extends Controller
 							$menu_for_update = 'editReceivablesFromSalesOrder';
 
 							$actionBtn = '<div align="center" class="action_table_menu_Product">
+										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
 										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
@@ -222,6 +224,7 @@ class ReceivablesController extends Controller
 						'teves_receivable_payment.receivable_mode_of_payment',
 						'teves_receivable_payment.receivable_reference',
 						'teves_receivable_payment.receivable_payment_amount',
+						'teves_receivable_payment.image_reference',
 						]);
 			
 				return response()->json($data);

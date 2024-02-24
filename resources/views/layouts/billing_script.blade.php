@@ -55,6 +55,68 @@
 				
 	});
 
+	$('body').on('click','#generate_billed',function(){
+		
+			event.preventDefault();
+			//let gatewayID = $(this).data('id');
+			let client_idx_billed 			= $('#client_name_billed option[value="' + $('#client_id_billed').val() + '"]').attr('data-id');
+			let start_date_billed 			= $("input[name=start_date_billed]").val();
+			let end_date_billed 			= $("input[name=end_date_billed]").val();
+			
+			  $.ajax({
+				url: "{{ route('getBillingTransactionList_Billed') }}",
+				type:"GET",
+				data:{
+				  client_idx_billed:client_idx_billed,
+				  start_date_billed:start_date_billed,
+				  end_date_billed:end_date_billed,
+				  _token: "{{ csrf_token() }}"
+				}
+			 }).done(function (result) {
+				 
+					BillingListTable_billed.clear().draw();
+					BillingListTable_billed.rows.add(result.data).draw();
+					
+					$('#BilledModal').modal('toggle');		
+            })	
+	  });
+
+		/*Load Billed List*/	
+			let BillingListTable_billed = $('#BillingListTable_billed').DataTable( {
+				"language": {
+						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+			    }, 
+				//processing: true,
+				//serverSide: true,
+				//stateSave: true,/*Remember Searches*/
+				responsive: true,
+				paging: true,
+				searching: true,
+				info: true,
+				data: [],
+				"columns": [
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'order_date'},
+					{data: 'order_time'},
+					{data: 'control_number'},  					
+					{data: 'drivers_name'},     
+					{data: 'order_po_number'},     
+					{data: 'plate_no'},     
+					{data: 'product_name'}, 
+					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }, 					
+					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
+					{data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+					{data: 'action', name: 'action', orderable: false, searchable: false},
+				]
+			} );
+
 	function TotalAmount(){
 		
 		let product_price 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-price');
@@ -288,6 +350,7 @@
 					
 					/*Load Selection Product*/
 					let branch_idx = response[0].branch_id;
+					//alert(branch_idx);
 					LoadProductList(branch_idx);
 					
 					/*Set Details*/
@@ -616,7 +679,7 @@
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					
+					  
 					/*Set Details*/
 					$("#view_order_date").html(response[0].order_date);
 					$("#view_order_time").html(response[0].order_time);

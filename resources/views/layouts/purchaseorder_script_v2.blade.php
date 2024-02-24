@@ -229,11 +229,8 @@
 			   });		
 	  });
 	
-
 	function ViewGalery(purchase_order_id){
-				//alert();
-				//let receivable_id = {{ @$receivables_details['receivable_id'] }};
-				//alert(purchase_order_id);
+		
 			  $.ajax({
 				url: "/get_purchase_order_payment_list",
 				type:"POST",
@@ -275,7 +272,7 @@
 									carousel_item_status = ' ';
 								}
 							
-							$('.carousel-indicators').last().append('<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="'+i+'" class="'+slide_btn_status +'" aria-current="'+slide_current_status+'" aria-label="Slide '+i+'"></button>');
+							$('.carousel-indicators').last().append('<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="'+i+'" class="'+slide_btn_status +'" aria-current="'+slide_current_status+'" aria-label="Slide '+i+'" style="background-color: magenta !important;"></button>');
 					
 							if(image_reference==null){
 								/*If no Uploaded Image Found*/
@@ -288,8 +285,8 @@
 							}
 							
 							$('.carousel-inner').last().append('<div class="carousel-item '+carousel_item_status+'">'+
-							'<img src="'+image_src+'" class="d-block w-100" alt="..." style="max-width:500px;width:100%">'+
-							'<br><br><br><br><br><div class="carousel-caption d-none d-md-block" style="background-color:#000000de; border:solid orange 2px; border-radius:10px;">'+
+							'<img src="'+image_src+'" class="d-block w-100" alt="..." style="min-width:400px; max-width:500px;width:100%">'+
+							'<div class="carousel-caption d-none d-md-block" style="background-color:#000000de; border-top:solid orange 2px; border-bottom:solid orange 2px; position: fixed !important; bottom: 30px !important; transition: all 0.3s;">'+
 						    '<table width="100%"><thead>'+
 							'<tr>'+
 							'<th style="text-align:center !important;">Bank</th>'+
@@ -312,13 +309,15 @@
 					
 						}	
 						
+						$('#ViewPaymentGalery').modal('toggle');
+						
 				  }else{
 							/*No Result Found or Error*/
-							$("#update_table_payment_body_data tr").remove();
-							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#update_table_payment_body_data');
+							/*No Payment Found*/
+							alert("No Payment Found");
 				  }
 				  
-				  $('#ViewPaymentGalery').modal('toggle');					  
+				 			  
 
 				},
 				error: function(error) {

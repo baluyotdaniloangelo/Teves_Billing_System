@@ -296,6 +296,7 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
+						<button type="button" class="btn new_item bi bi-images" data-bs-toggle="modal" data-bs-target="#ViewPaymentGalery" style="background-color: magenta;"></button>
 					</div>					
 					</div>
 
@@ -459,10 +460,9 @@
 									<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>
 								<?php } ?>
 							</datalist>
-						<label for="purchase_order_bank">Bank</label>
-					
-						 </div>
-						<span class="valid-feedback" id="purchase_order_bankError"></span>
+							<label for="purchase_order_bank">Bank</label>
+							<span class="valid-feedback" id="purchase_order_bankError"></span>
+						</div>
 						
 						</div>
 						
@@ -489,8 +489,9 @@
 							<div class="form-floating mb-3">
 								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_payment_amount" id="purchase_order_payment_amount" required step=".01" placeholder="Amount">
 								<label for="order_quantity">Amount</label>
+								<span class="valid-feedback" id="order_quantityError"></span>
 							</div>
-							 <span class="valid-feedback" id="order_quantityError"></span>
+							 
 						</div>
 						
 						<div class="row mb-3">
@@ -594,6 +595,46 @@
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Close</button>
                   
                 </div>
+            </div>
+        </div>
+    </div>	
+
+ 	<!-- View Payment Gallery Modal-->
+    <div class="modal fade" id="ViewPaymentGalery" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="height: 900px;">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
+ 					<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+                </div>
+				
+				<br>
+				
+					<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" align="center">
+					
+					
+					<div class="carousel-indicators">
+				
+					</div>
+					<div class="carousel-inner" style="height: 700px;">
+					 
+					</div>
+					
+					
+					
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+					  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
+					  <span class="visually-hidden" >Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+					  <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
+					  <span class="visually-hidden">Next</span>
+					</button>
+
+					</div>
+					
+				<br>
+				
             </div>
         </div>
     </div>	

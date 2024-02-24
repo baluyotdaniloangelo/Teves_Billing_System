@@ -11,7 +11,6 @@
 				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
 					<div class="d-flex justify-content-end" id="">
 					
-					
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;"><button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateReportModal"></button>
 				</div>
 					

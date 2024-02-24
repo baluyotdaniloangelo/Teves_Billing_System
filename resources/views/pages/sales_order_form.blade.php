@@ -122,14 +122,35 @@
 												</div>
 												
 												<div class="row mb-2">
-													<label for="or_number" class="col-sm-3 col-form-label">P.O Number</label>
+													<label for="sales_order_po_number" class="col-sm-3 col-form-label">P.O Number</label>
 													<div class="col-sm-9">
-														<input type="text" class="form-control" id="or_number" name="or_number" value="{{ $sales_order_data[0]['sales_order_or_number'] }}" >
+														<input type="text" class="form-control" id="sales_order_po_number" name="sales_order_po_number" value="{{ $sales_order_data[0]['sales_order_po_number'] }}" >
 													</div>
 												</div>
 												
 												<div class="row mb-2">
-													<label for="or_number" class="col-sm-3 col-form-label">Payment Term</label>
+													<label for="sales_order_or_number" class="col-sm-3 col-form-label">Sales Invoice</label>
+													<div class="col-sm-9">
+														<input type="text" class="form-control" id="sales_order_or_number" name="sales_order_or_number" value="{{ $sales_order_data[0]['sales_order_or_number'] }}" title="OR Number">
+													</div>
+												</div>
+												
+												<div class="row mb-2">
+													<label for="sales_order_charge_invoice" class="col-sm-3 col-form-label">Charge Invoice</label>
+													<div class="col-sm-9">
+														<input type="text" class="form-control" id="sales_order_charge_invoice" name="sales_order_charge_invoice" value="{{ $sales_order_data[0]['sales_order_charge_invoice'] }}" >
+													</div>
+												</div>
+												
+												<div class="row mb-2">
+													<label for="sales_order_collection_receipt" class="col-sm-3 col-form-label">Collection Receipt</label>
+													<div class="col-sm-9">
+														<input type="text" class="form-control" id="sales_order_collection_receipt" name="sales_order_collection_receipt" value="{{ $sales_order_data[0]['sales_order_collection_receipt'] }}" >
+													</div>
+												</div>
+												
+												<div class="row mb-2">
+													<label for="payment_term" class="col-sm-3 col-form-label">Payment Term</label>
 													<div class="col-sm-9">
 														<input type="text" class="form-control" id="payment_term" name="payment_term" value="{{ $sales_order_data[0]['sales_order_payment_term'] }}" >
 													</div>
@@ -273,6 +294,7 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
+						<button type="button" class="btn new_item bi bi-images" data-bs-toggle="modal" data-bs-target="#ViewPaymentGalery" style="background-color: magenta;"></button>
 					</div>					
 					</div>
 					
@@ -595,10 +617,10 @@
 									<option value='<?=$receivables_payment_suggestion_cols->receivable_mode_of_payment;?>'>
 								<?php } ?>
 							</datalist>
-						<label for="receivable_mode_of_payment">Mode of Payment</label>
-					
+							<label for="receivable_mode_of_payment">Mode of Payment</label>
+							<span class="valid-feedback" id="receivable_mode_of_paymentError"></span>
 						 </div>
-						<span class="valid-feedback" id="receivable_mode_of_paymentError"></span>
+						
 						
 						</div>
 						
@@ -616,16 +638,18 @@
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" aria-describedby="basic-addon1" name="receivable_reference" id="receivable_reference" required placeholder="Reference No.">
 								<label for="receivable_reference">Reference No.</label>
+								<span class="valid-feedback" id="receivable_referenceError"></span>
 							</div>
-							 <span class="valid-feedback" id="receivable_referenceError"></span>
+							 
 						</div>
 						
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="number" class="form-control" aria-describedby="basic-addon1" name="receivable_payment_amount" id="receivable_payment_amount" required step=".01" placeholder="Amount">
 								<label for="receivable_payment_amount">Amount</label>
+								<span class="valid-feedback" id="receivable_payment_amountError"></span>
 							</div>
-							 <span class="valid-feedback" id="receivable_payment_amountError"></span>
+							 
 						</div>
 						
 						<div class="row mb-3">
@@ -660,6 +684,45 @@
                   </div>
                 </div>
              </div>			
+	
+	<!-- View Payment Gallery Modal-->
+    <div class="modal fade" id="ViewPaymentGalery" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="height: 900px;">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
+ 					<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+                </div>
+				
+				<br>
+				
+					<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" align="center">
+					
+					<div class="carousel-indicators">
+				
+					</div>
+					
+					<div class="carousel-inner" style="height: 700px;">
+					 
+					</div>
+					
+					
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+					  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
+					  <span class="visually-hidden" >Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+					  <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
+					  <span class="visually-hidden">Next</span>
+					</button>
+
+					</div>
+					
+				<br>
+				
+            </div>
+        </div>
+    </div>		
 	
 	<!-- Bill Delete Modal-->
     <div class="modal fade" id="SalesOrderPaymentDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">

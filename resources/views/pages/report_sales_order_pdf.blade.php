@@ -27,7 +27,7 @@
 			text-align:center;
 			color:black;
 			position:relative;
-			left:-17px;
+			left:-10px;
 		}
 	</style>
 	
@@ -47,50 +47,67 @@
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
 			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
 			</td>
-			<td colspan="6" width="50%" style="horizontal-align:center;text-align:left;">
+			<td colspan="5" width="50%" style="horizontal-align:center;text-align:left;">
 				<b style="font-size:16px;"><?=$branch_header['branch_name'];?></b><br>
 			</td>
-			<td colspan="3" align="left" width="40%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td> 
+			<td colspan="4" align="left" width="40%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td> 
 		</tr>
 		
 		<tr>
-			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
+			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:11px;"><?=$branch_header['branch_address'];?></div>
 			</td>
-			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
-			<td colspan="2" align="left" width="23%" style="font-size:11px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
 
 		</tr>		
 		<tr>
-			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
+			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:11px;">VAT REG. TIN : <?=$branch_header['branch_tin'];?></div>
 			</td>
-			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>DATE GENERATED</b></td>
-			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$sales_order_date;?></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>DATE GENERATED</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$sales_order_date;?></td>
 		</tr>
 		<tr>
-			<td colspan="6"  width="50%" style="horizontal-align:center;text-align:left;">
+			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:11px;"><?=$branch_header['branch_owner'];?> - <?=$branch_header['branch_owner_title'];?></div>
 			</td>
-			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>D.R. NO.</b></td>
-			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>D.R. NO.</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
 		</tr>
 		
 		<tr>
-			<td colspan="7"  width="50%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>P.O. NO.</b></td>
-			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_or_number'] }}</td>
+			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>P.O. NO.</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_po_number'] }}</td>
 		</tr>
 		
 		<tr>
-			<td colspan="7"  width="50%" style="horizontal-align:center;text-align:left;"></td>
-			<td colspan="1" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>PAYMENT TERM</b></td>
-			<td colspan="2" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_payment_term'] }}</td>
+			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>SALES INVOICE</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_or_number'] }}</td>
+		</tr>
+
+		<tr>
+			<td colspan="4" width="40%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="27%" style="font-size:11px; font-weight:bold;"><b>COLLECTION RECEIPT</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_collection_receipt'] }}</td>
+		</tr>
+		
+		<tr>
+			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>CHARGE INVOICE</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_charge_invoice'] }}</td>
+		</tr>
+		
+		<tr>
+			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>PAYMENT TERM</b></td>
+			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_payment_term'] }}</td>
 		</tr>
 
 		</table>
-		<br>
-
+		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:10px;">
 			<td colspan="10" style="height:7px !important;" width="100%"></td>
@@ -151,12 +168,12 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 170 / count($sales_order_component);
+			$component_height = 160 / count($sales_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
-				<td colspan="2" align="center"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_component_cols->product_name"; ?></td>
-				<td colspan="2" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_component_cols->product_name"; ?></td>
+				<td colspan="2" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_unit_measurement}}</td>
 				<td colspan="3" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
 				<td colspan="2" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>

@@ -150,10 +150,10 @@
         </div>
     </div>	
 
-	<!-- Bill Delete Modal-->
+	<!-- View Payment Gallery Modal-->
     <div class="modal fade" id="ViewPaymentGalery" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
+            <div class="modal-content" style="height: 900px;">
                 <div class="modal-header header_modal_bg">
                     <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
  					<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
@@ -164,20 +164,20 @@
 					<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" align="center">
 					
 					<div class="carousel-indicators">
-					
-					
+				
 					</div>
 					
-					<div class="carousel-inner">
+					<div class="carousel-inner" style="height: 700px;">
 					 
 					</div>
-
+					
+					
 					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-					  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: orange; border-radius: 15px;"></span>
+					  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
 					  <span class="visually-hidden" >Previous</span>
 					</button>
 					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-					  <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: orange; border-radius: 15px;"></span>
+					  <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
 					  <span class="visually-hidden">Next</span>
 					</button>
 
