@@ -29,9 +29,9 @@
 												</div>		
 												
 												<div class="row mb-2">
-												  <label for="order_date" class="col-sm-3 col-form-label">Date</label>
+												  <label for="order_date" class="col-sm-3 col-form-label" title="DD/MM/YYYY">Date</label>
 												  <div class="col-sm-9">
-												 	<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="<?=date('Y-m-d');?>" required>
+												 	<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="<?=date('Y-m-d');?>" required title="DD/MM/YYYY">
 													<span class="valid-feedback" id="so_order_dateError" title="Required"></span>
 												  </div>
 												</div>
