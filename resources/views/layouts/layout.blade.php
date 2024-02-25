@@ -108,6 +108,15 @@ else if (Request::path()==('sales_order_form')){
 @include('layouts.sales_order_form_script')
 <?php
 }
+/* Request::path(); for Get Method*/
+else if (Request::path()==('receivable_from_billing_form')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.receivable_from_billing_form_script')
+<?php
+}
+
 else if (Request::is('purchaseorder')){
 ?>
 <body class="">

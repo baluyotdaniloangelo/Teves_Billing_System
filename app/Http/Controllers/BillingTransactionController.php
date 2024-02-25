@@ -84,10 +84,6 @@ class BillingTransactionController extends Controller
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 							</div>';
-							/*$actionBtn = '
-								<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
-								</div>';*/
 						}
 						else{
 						
@@ -109,10 +105,6 @@ class BillingTransactionController extends Controller
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 								</div>';
-								/*$actionBtn = '
-								<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
-								</div>';*/
 							}
 
 						}
@@ -130,7 +122,6 @@ class BillingTransactionController extends Controller
 				
 				 ->addColumn('quantity_measurement', function($row){									
 					return  $row->order_quantity." ".$row->product_unit_measurement;
-                    //return $actionBtn;
                 })
 				
 				->rawColumns(['action','quantity_measurement'])
@@ -146,19 +137,19 @@ class BillingTransactionController extends Controller
 		if ($request->ajax()) {
 		
 		$client_idx = $request->client_idx_billed;
+		$start_date_billed = $request->start_date_billed;
+		$end_date_billed = $request->end_date_billed;
 		
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
 					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
 					->where('teves_billing_table.receivable_idx', '<>', 0)
-					/*->where('teves_billing_table.client_idx', '=', $request->client_idx_billed)*/
 					->where(function ($q) use($client_idx) {
 						if ($client_idx) {
 						   $q->where('teves_billing_table.client_idx', $client_idx);
 						}
 						})
-					->where('teves_billing_table.order_date', '>=', $request->start_date_billed)
-                    ->where('teves_billing_table.order_date', '<=', $request->end_date_billed)
+					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
               		->get([
 					'teves_billing_table.billing_id',
 					'teves_billing_table.receivable_idx',
@@ -189,10 +180,6 @@ class BillingTransactionController extends Controller
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 							</div>';
-							/*$actionBtn = '
-								<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
-								</div>';*/
 						}
 						else{
 						
@@ -214,10 +201,6 @@ class BillingTransactionController extends Controller
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 								</div>';
-								/*$actionBtn = '
-								<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
-								</div>';*/
 							}
 
 						}
@@ -439,6 +422,5 @@ class BillingTransactionController extends Controller
 					}	
 			}
 	}
-
 
 }

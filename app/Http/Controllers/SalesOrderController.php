@@ -403,7 +403,7 @@ class SalesOrderController extends Controller
 		
 	}
 	
-	/*Load Site Interface*/
+	/*Load Sales Order Form Interface*/
 	public function sales_order_form(Request $request){
 		
 		$SalesOrderID = $request->sales_order_id;
@@ -485,8 +485,6 @@ class SalesOrderController extends Controller
 						$result = $Receivables->save();
 					
 				}	
-				
-				$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();	
 					
 		return view("pages.sales_order_form", compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','sales_order_data','receivables_payment_suggestion','receivables_details','tab'));
 		

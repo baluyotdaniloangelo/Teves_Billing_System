@@ -104,6 +104,7 @@ class SOBillingTransactionController extends Controller
 		$data = SOBillingTransactionModel::where('so_id', $request->so_id)
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')	
               		->get([
+					'teves_billing_so_table.branch_idx',
 					'teves_billing_so_table.so_id',
 					'teves_billing_so_table.so_number',
 					'teves_billing_so_table.drivers_name',
@@ -199,7 +200,7 @@ class SOBillingTransactionController extends Controller
 		
 	}
 	
-	/*Load Site Interface*/
+	/*Load SO Information. This Page will also enables user to add the Product*/
 	public function so_add_product($SOId){
 
 		if(Session::has('loginID')){
@@ -235,7 +236,6 @@ class SOBillingTransactionController extends Controller
 			return view("pages.billing_so_form_add_product", compact('data','title','product_data','client_data','drivers_name','plate_no', 'SOId','so_data','teves_branch'));
 
 		}
-		
 	}  	
 	
 	public function update_so_post(Request $request){
@@ -243,7 +243,6 @@ class SOBillingTransactionController extends Controller
 		$request->validate([
           'order_date'      		=> 'required',
 		  'order_time'      		=> 'required',
-		  'so_number'      			=> 'required|unique:teves_billing_so_table,so_number',
 		  'so_number'      			=> ['required',Rule::unique('teves_billing_so_table')->where( 
 									fn ($query) =>$query
 										->where('so_id', '<>',  $request->so_id )
@@ -273,6 +272,19 @@ class SOBillingTransactionController extends Controller
 					$SOBilling->plate_no 			= $request->plate_no;
 					$SOBilling->drivers_name 		= $request->drivers_name;
 					$SOBilling->updated_by_user_id 	= Session::get('loginID');
+					
+						/*Update Product*/
+						$billing_update = BillingTransactionModel::where('so_idx', $request->so_id)
+						->update(
+							['branch_idx'			=> $request->branch_id],
+							['order_date' 			=> $request->order_date],
+							['order_time' 			=> $request->order_time],
+							['so_number' 			=> $request->so_number],
+							['client_idx' 			=> $request->client_idx],
+							['plate_no' 			=> $request->plate_no],
+							['drivers_name' 		=> $request->drivers_name],
+							['updated_by_user_idx' 	=> Session::get('loginID')]
+						);
 					
 					$result = $SOBilling->update();		
 			
@@ -304,7 +316,7 @@ class SOBillingTransactionController extends Controller
 					$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);
 									
 					/*SO Details*/
-					$so_info = SOBillingTransactionModel::find($request->so_id, ['so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
+					$so_info = SOBillingTransactionModel::find($request->so_id, ['branch_idx','so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
 					
 					/*Check if Price is From Manual Price*/
 					if($request->product_manual_price!=0){
@@ -318,6 +330,7 @@ class SOBillingTransactionController extends Controller
 					/*insert*/
 					$Billing = new BillingTransactionModel();
 					$Billing->so_idx 				= $request->so_id;
+					$Billing->branch_idx			= $request->branch_idx;
 					$Billing->order_date 			= $so_info->order_date;
 					$Billing->order_time 			= $so_info->order_time;
 					$Billing->order_po_number 		= $so_info->so_number                                                                                                                                                                     ;	
@@ -375,7 +388,7 @@ class SOBillingTransactionController extends Controller
 					$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);				
 					
 					/*SO Details*/
-					$so_info = SOBillingTransactionModel::find($request->so_id, ['so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
+					$so_info = SOBillingTransactionModel::find($request->so_id, ['branch_idx','so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
 					
 					/*Check if Price is From Manual Price*/
 					if($request->product_manual_price!=0){
@@ -389,6 +402,7 @@ class SOBillingTransactionController extends Controller
 					/*insert*/
 					$Billing = new BillingTransactionModel();
 					$Billing = BillingTransactionModel::find($request->billing_id);
+					$Billing->branch_idx			= $request->branch_idx;
 					$Billing->order_date 			= $so_info->order_date;
 					$Billing->order_time 			= $so_info->order_time;
 					$Billing->order_po_number 		= $so_info->so_number                                                                                                                                                                     ;	

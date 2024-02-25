@@ -14,6 +14,8 @@ use Session;
 use Validator;
 use DataTables;
 
+use Illuminate\Support\Facades\DB;
+
 class ReceivablesController extends Controller
 {
 	
@@ -96,9 +98,20 @@ class ReceivablesController extends Controller
 							$menu_for_update = 'editReceivablesFromSalesOrder';
 						}
 					
+										
+					
+/*
+					
+					$actionBtn = '<div align="center" class="action_table_menu_Product">
+										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
+									</div>';
+					*/
 							$actionBtn = '<div align="center" class="action_table_menu_Product">
 										<!--<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery()" id="viewPaymentGalery"></a>-->
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" id="payReceivables" title="Add Payment"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'" title="Update"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
@@ -503,8 +516,15 @@ class ReceivablesController extends Controller
 		/*Delete Payment*/	
 		ReceivablesPaymentModel::where('receivable_idx', $receivableID)->delete();
 		
+		//'receivable_branch_idx' => $Receivables->company_header]);
+		
 		$billing_update = BillingTransactionModel::where('receivable_idx', '=', $receivableID)
-				->update(['receivable_idx' => 0]);
+				->update(
+					[
+					'receivable_idx' => 0,
+					'receivable_branch_idx' => 0
+					],
+				);
 		
 		return 'Deleted';
 		
@@ -586,12 +606,15 @@ class ReceivablesController extends Controller
 			$result = $Receivables->save();
 			
 			/*Update Billing List Affected by the Receivable*/
-
+			/*Included branch_idx February 25, 2024*/
+			
 			$billing_update = BillingTransactionModel::where('client_idx', $client_idx)
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
 				->where('receivable_idx', '=', 0)
-				->update(['receivable_idx' => $Receivables->receivable_id]);
+				->update([
+					'receivable_idx' => $Receivables->receivable_id,
+					'receivable_branch_idx' => $Receivables->company_header]);
 			
 			if($result){
 				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);
@@ -692,4 +715,67 @@ class ReceivablesController extends Controller
 				return response()->json(['success'=>'Error on Update Receivables Information']);
 			}
 	}
+	
+	/*Load Sales Order Form Interface*/
+	public function receivable_from_billing_form(Request $request){
+		
+		$ReceivableID = $request->receivable_id;
+		$tab = $request->tab;
+		
+		$title = 'Receivable and Billing Information Form';
+		$data = array();
+		if(Session::has('loginID')){
+			
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
+			
+			$client_data = ClientModel::all();
+			$product_data = ProductModel::all();
+			
+			$teves_branch = TevesBranchModel::all();
+			
+			$receivables_payment_suggestion = ReceivablesPaymentModel::select('receivable_mode_of_payment')->distinct()->get();
+			
+			$receivables_details = ReceivablesModel::where('receivable_id', '=', $ReceivableID)->first();
+
+			//$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();	
+					
+		return view("pages.billing_to_receivable_form", compact('data','title','product_data','client_data','teves_branch','receivables_payment_suggestion','receivables_details','tab'));
+		
+		}
+		
+	}  	
+
+	/*Generated for receivable after saved*/
+	public function billing_to_receivable_product(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+		
+		$receivable_id = $request->receivable_id;
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+					
+		/*Using Raw Query*/
+		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
+		
+		//return response()->json($billing_data);
+		
+		
+			$paymentlist = ReceivablesPaymentModel::where('receivable_idx', '=', $request->receivable_id)->get();
+			$paymentcount = $paymentlist->count();
+		
+			return response()->json(array('productlist'=>$billing_data,'paymentcount'=>$paymentcount));		
+	}		
+	
 }
