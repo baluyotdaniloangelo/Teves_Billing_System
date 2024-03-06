@@ -203,7 +203,7 @@ class SalesOrderController extends Controller
 			$client_idx = $request->client_idx;
 			
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
-			$control_number = $BranchInfo->branch_initial."-SO-".$last_id+1;
+			$control_number = $BranchInfo->branch_initial."-SO-".($last_id+1);
 			
 			$Salesorder = new SalesOrderModel();
 			$Salesorder->company_header 					= $request->company_header;
@@ -224,7 +224,7 @@ class SalesOrderController extends Controller
 			
 			$receivable_last_id = ReceivablesModel::latest()->first()->receivable_id;
 						
-			$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_last_id+1;	
+			$receivable_control_number = $BranchInfo->branch_initial."-AR-".($receivable_last_id+1);	
 				
 				/*Create Receivable*/
 				$Receivables = new ReceivablesModel();
@@ -259,7 +259,7 @@ class SalesOrderController extends Controller
 		);
 		
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
-			$control_number = $BranchInfo->branch_initial."-SO-".$request->sales_order_id+1;
+			$control_number = $BranchInfo->branch_initial."-SO-".($request->sales_order_id+1);
 			
 			$Salesorder = new SalesOrderModel();
 			$Salesorder = SalesOrderModel::find($request->sales_order_id);
@@ -466,7 +466,7 @@ class SalesOrderController extends Controller
 					
 					$receivable_last_id = ReceivablesModel::latest()->first()->receivable_id;
 								
-					$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_last_id+1;	
+					$receivable_control_number = $BranchInfo->branch_initial."-AR-".($receivable_last_id+1);	
 					
 					/*Automatic Create the Receivable Entry*/
 						
