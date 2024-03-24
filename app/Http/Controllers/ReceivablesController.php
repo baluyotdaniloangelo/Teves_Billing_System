@@ -15,6 +15,7 @@ use Validator;
 use DataTables;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ReceivablesController extends Controller
 {
@@ -776,6 +777,481 @@ class ReceivablesController extends Controller
 			$paymentcount = $paymentlist->count();
 		
 			return response()->json(array('productlist'=>$billing_data,'paymentcount'=>$paymentcount));		
-	}		
+	}	
+	
+	
+	public function billing_receivable_payment_post(Request $request){
+        	 
+		$request->validate([
+		  //$validator = \Validator::make($request->all(),[
+			  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
+			  'receivable_mode_of_payment'      	=> 'required',
+			  'receivable_date_of_payment'      	=> 'required',
+			  'receivable_reference'      		=> ['required',Rule::unique('teves_receivable_payment')->where( 
+												  fn ($query) =>$query
+													  ->where('receivable_idx', $request->receivable_idx_payment)
+													  ->where('receivable_reference', $request->receivable_reference)
+													  ->where('receivable_payment_id', '<>',  $request->receivable_payment_id )
+												  )],
+			  'receivable_payment_amount'       	=> 'required',
+		 ],[
+			  'receivable_mode_of_payment.required' 	=> 'Bank Details is Required',
+			  'receivable_date_of_payment.required' 	=> 'Date of Payment is Required',
+			  'receivable_reference.required' 		=> 'Reference Number Required',
+			  'receivable_payment_amount.required' 	=> 'Payment Amount is Required'
+		 ]);
+			 
+			 if ($request->hasFile('payment_image_reference')) {
+				 
+					 $path = 'files/';
+					 $file = $request->file('payment_image_reference');
+					 @$file_name = time().'_'.@$file->getClientOriginalName();
+
+					  $upload = $file->storeAs($path, $file_name, 'public');
+					  
+					  $path = $request->file('payment_image_reference')->getRealPath();    
+					  $logo = file_get_contents($path);
+					  $image_blob = base64_encode($logo);
+			  
+						  $receivable_idx = $request->receivable_idx_payment;
+						  $receivable_payment_id = $request->receivable_payment_id;
+						  
+						  if($receivable_payment_id==0){
+							  
+							  $PaymentComponent = new ReceivablesPaymentModel();
+							  
+							  $PaymentComponent->receivable_idx 				= $receivable_idx;
+							  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
+							  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+							  $PaymentComponent->image_reference 				= $image_blob;
+							  $result = $PaymentComponent->save();
+							  $result_type = 'Saved';
+						  
+						  }
+						  else{
+						  
+							  $PaymentComponent = new ReceivablesPaymentModel();
+							  
+							  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+							  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
+							  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+							  $PaymentComponent->image_reference 				= $image_blob;
+							  $result = $PaymentComponent->update();
+							  $result_type = 'Updated';
+
+						  }
+				  
+			 }else{	
+			  
+						  $receivable_idx = $request->receivable_idx_payment;
+						  $receivable_payment_id = $request->receivable_payment_id;
+						  
+						  if($receivable_payment_id==0){
+							  
+							  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
+							  
+							  $PurchaseOrderPaymentComponent->receivable_idx 				= $receivable_idx;
+							  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
+							  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+							  
+							  $result = $PurchaseOrderPaymentComponent->save();
+							  $result_type = 'Saved';
+						  
+						  }
+						  else{
+						  
+							  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
+							  $PurchaseOrderPaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+							  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
+							  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+							  
+							  $result = $PurchaseOrderPaymentComponent->update();
+							  $result_type = 'Updated';
+
+						  }
+						  
+			 }
+
+			  /*Get Sales Order ID from Receivable*/
+			  #$sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
+
+			  /*Update Sales Order to Delivered*/
+			  #$salesOrderUpdate_status = new SalesOrderModel();
+			  #$salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+			  #$salesOrderUpdate_status->sales_order_status = 'Delivered';
+			  #$salesOrderUpdate_status->update();
+			  
+			  /*Get Recivable Details [receivable_amount]*/
+			  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
+			  $receivable_amount = $receivable_details->receivable_amount;
+			  
+			  /*Get Payment Details*/
+			  $receivable_total_payment_amount =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
+				  ->sum('receivable_payment_amount');
+			  
+			  /*Compute Balance and Status Creation*/
+						  $remaining_balance = number_format($receivable_amount - $receivable_total_payment_amount+0,2, '.', '');
+						  $_paid_percentage = ($receivable_total_payment_amount / $receivable_amount) * 100;
+					  
+						  $paid_percentage = number_format($_paid_percentage,2,".","");
+					  
+						  /*IF Fully Paid Automatically Update the Status to Paid*/
+						  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+						  {		
+							  
+							  $Receivablestatus = "$paid_percentage% Paid";
+							  
+						  }else if($paid_percentage >= 100)
+						  {	
+							  
+							  $Receivablestatus = "Paid";
+							  
+						  }else{
+							  
+							  $Receivablestatus = "Pending";
+							  
+						  }
+			  
+					  /*Update Receivable Status and Remaining Balance*/
+					  $Receivables_ACTION = new ReceivablesModel();
+					  $Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
+					  $Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
+					  $Receivables_ACTION->receivable_status 		= $Receivablestatus;		
+					  $Receivables_ACTION->update();
+			  
+					  if($result){
+						  return response()->json(array('success' => "Payment Information Successfully $result_type!"), 200);
+					  }
+					  else{
+						  return response()->json(['success'=>'Error on Payment Information']);
+					  }	
+		 }	
+	
+		 public function billing_receivable_delete_payment(Request $request){		
+		  
+			$receivable_payment_id = $request->paymentitemID;
+			$receivable_idx = $request->receivable_idx;
+			
+			ReceivablesPaymentModel::find($receivable_payment_id)->delete();
+			
+					/*Get Sales Order ID from Receivable*/
+					$sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
+	  
+					
+					
+					/*Get Recivable Details [receivable_amount]*/
+					$receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
+					$receivable_amount = $receivable_details->receivable_amount;
+					
+					/*Get Payment Details*/
+					$receivable_total_payment_amount =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
+						->sum('receivable_payment_amount');
+					
+					/*Compute Balance and Status Creation*/
+								$remaining_balance = number_format($receivable_amount - $receivable_total_payment_amount+0,2, '.', '');
+								$_paid_percentage = ($receivable_total_payment_amount / $receivable_amount) * 100;
+							
+								$paid_percentage = number_format($_paid_percentage,2,".","");
+							
+								/*IF Fully Paid Automatically Update the Status to Paid*/
+								if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+								{		
+									
+									$Receivablestatus = "$paid_percentage% Paid";
+									
+								}else if($paid_percentage >= 100)
+								{	
+									
+									$Receivablestatus = "Paid";
+									
+								}else{
+									
+									$Receivablestatus = "Pending";
+									
+								}
+					
+							/*Update Receivable Status and Remaining Balance*/
+							$Receivables_ACTION = new ReceivablesModel();
+							$Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
+							$Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
+							$Receivables_ACTION->receivable_status 		= $Receivablestatus;		
+							$Receivables_ACTION->update();		
+			
+			return 'Deleted';
+			
+	}
+			   
+
+  public function receivable_payment_list(Request $request){		
+  
+		  $data =  ReceivablesPaymentModel::where('receivable_idx', $request->receivable_idx)
+			  ->orderBy('receivable_payment_id', 'asc')
+				->get([
+				  'receivable_payment_id',
+				  'receivable_date_of_payment',
+				  'receivable_mode_of_payment',
+				  'receivable_reference',
+				  'receivable_payment_amount',
+				  'image_reference'
+				  ]);
+	  
+		  return response()->json($data);
+  }
+	  
+  /*Fetch Payment Information*/
+  public function receivable_payment_info(Request $request){
+				  
+				  $data = ReceivablesPaymentModel::where('receivable_payment_id', $request->receivable_payment_id)
+					->get([
+				  'receivable_payment_id',
+				  'receivable_idx',
+				  'receivable_date_of_payment',
+				  'receivable_mode_of_payment',
+				  'receivable_reference',
+				  'receivable_payment_amount',
+				  'image_reference'
+				  ]);
+				  return response()->json($data);
+	  
+  }
+
+  public function sales_order_receivable_payment(Request $request){
+        	 
+	$request->validate([
+	  //$validator = \Validator::make($request->all(),[
+		  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
+		  'receivable_mode_of_payment'      	=> 'required',
+		  'receivable_date_of_payment'      	=> 'required',
+		  'receivable_reference'      		=> ['required',Rule::unique('teves_receivable_payment')->where( 
+											  fn ($query) =>$query
+												  ->where('receivable_idx', $request->receivable_idx_payment)
+												  ->where('receivable_reference', $request->receivable_reference)
+												  ->where('receivable_payment_id', '<>',  $request->receivable_payment_id )
+											  )],
+		  'receivable_payment_amount'       	=> 'required',
+	 ],[
+		  'receivable_mode_of_payment.required' 	=> 'Bank Details is Required',
+		  'receivable_date_of_payment.required' 	=> 'Date of Payment is Required',
+		  'receivable_reference.required' 		=> 'Reference Number Required',
+		  'receivable_payment_amount.required' 	=> 'Payment Amount is Required'
+	 ]);
+		 
+		 if ($request->hasFile('payment_image_reference')) {
+			 
+				 $path = 'files/';
+				 $file = $request->file('payment_image_reference');
+				 @$file_name = time().'_'.@$file->getClientOriginalName();
+
+				  $upload = $file->storeAs($path, $file_name, 'public');
+				  
+				  $path = $request->file('payment_image_reference')->getRealPath();    
+				  $logo = file_get_contents($path);
+				  $image_blob = base64_encode($logo);
+		  
+					  $receivable_idx = $request->receivable_idx_payment;
+					  $receivable_payment_id = $request->receivable_payment_id;
+					  
+					  if($receivable_payment_id==0){
+						  
+						  $PaymentComponent = new ReceivablesPaymentModel();
+						  
+						  $PaymentComponent->receivable_idx 				= $receivable_idx;
+						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
+						  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  $PaymentComponent->image_reference 				= $image_blob;
+						  $result = $PaymentComponent->save();
+						  $result_type = 'Saved';
+					  
+					  }
+					  else{
+					  
+						  $PaymentComponent = new ReceivablesPaymentModel();
+						  
+						  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
+						  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  $PaymentComponent->image_reference 				= $image_blob;
+						  $result = $PaymentComponent->update();
+						  $result_type = 'Updated';
+
+					  }
+			  
+		 }else{	
+		  
+					  $receivable_idx = $request->receivable_idx_payment;
+					  $receivable_payment_id = $request->receivable_payment_id;
+					  
+					  if($receivable_payment_id==0){
+						  
+						  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
+						  
+						  $PurchaseOrderPaymentComponent->receivable_idx 				= $receivable_idx;
+						  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+						  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
+						  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  
+						  $result = $PurchaseOrderPaymentComponent->save();
+						  $result_type = 'Saved';
+					  
+					  }
+					  else{
+					  
+						  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
+						  $PurchaseOrderPaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+						  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+						  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
+						  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  
+						  $result = $PurchaseOrderPaymentComponent->update();
+						  $result_type = 'Updated';
+
+					  }
+					  
+		 }
+
+		  /*Get Sales Order ID from Receivable*/
+		  $sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
+
+		  /*Update Sales Order to Delivered*/
+		  $salesOrderUpdate_status = new SalesOrderModel();
+		  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+		  $salesOrderUpdate_status->sales_order_status = 'Delivered';
+		  $salesOrderUpdate_status->update();
+		  
+		  /*Get Recivable Details [receivable_amount]*/
+		  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
+		  $receivable_amount = $receivable_details->receivable_amount;
+		  
+		  /*Get Payment Details*/
+		  $receivable_total_payment_amount =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
+			  ->sum('receivable_payment_amount');
+		  
+		  /*Compute Balance and Status Creation*/
+					  $remaining_balance = number_format($receivable_amount - $receivable_total_payment_amount+0,2, '.', '');
+					  $_paid_percentage = ($receivable_total_payment_amount / $receivable_amount) * 100;
+				  
+					  $paid_percentage = number_format($_paid_percentage,2,".","");
+				  
+					  /*IF Fully Paid Automatically Update the Status to Paid*/
+					  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+					  {		
+						  
+						  $Receivablestatus = "$paid_percentage% Paid";
+						  
+					  }else if($paid_percentage >= 100)
+					  {	
+						  
+						  $Receivablestatus = "Paid";
+						  
+					  }else{
+						  
+						  $Receivablestatus = "Pending";
+						  
+					  }
+		  
+				  /*Update Receivable Status and Remaining Balance*/
+				  $Receivables_ACTION = new ReceivablesModel();
+				  $Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
+				  $Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
+				  $Receivables_ACTION->receivable_status 		= $Receivablestatus;		
+				  $Receivables_ACTION->update();
+		  
+				  if($result){
+					  return response()->json(array('success' => "Payment Information Successfully $result_type!"), 200);
+				  }
+				  else{
+					  return response()->json(['success'=>'Error on Payment Information']);
+				  }	
+	 }	
+
+  public function sales_order_receivable_delete_payment(Request $request){		
+		  
+	  $receivable_payment_id = $request->paymentitemID;
+	  $receivable_idx = $request->receivable_idx;
+	  
+	  ReceivablesPaymentModel::find($receivable_payment_id)->delete();
+	  
+			  /*Get Sales Order ID from Receivable*/
+			  $sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
+
+			  
+			  
+			  /*Get Recivable Details [receivable_amount]*/
+			  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
+			  $receivable_amount = $receivable_details->receivable_amount;
+			  
+			  /*Get Payment Details*/
+			  $receivable_total_payment_amount =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
+				  ->sum('receivable_payment_amount');
+			  
+			  
+			  /*Compute Balance and Status Creation*/
+						  $remaining_balance = number_format($receivable_amount - $receivable_total_payment_amount+0,2, '.', '');
+						  $_paid_percentage = ($receivable_total_payment_amount / $receivable_amount) * 100;
+					  
+						  $paid_percentage = number_format($_paid_percentage,2,".","");
+					  
+						  /*IF Fully Paid Automatically Update the Status to Paid*/
+						  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+						  {		
+							  
+							  $Receivablestatus = "$paid_percentage% Paid";
+							  
+						  }else if($paid_percentage >= 100)
+						  {	
+							  
+							  $Receivablestatus = "Paid";
+							  
+						  }else{
+							  
+							  $Receivablestatus = "Pending";
+							  
+						  }
+			  
+			  
+					  /*Update Sales Order to Delivered Pending by checking the count of Payment if payment is Zero then update the status to Pending*/
+					  
+					  if($receivable_total_payment_amount==0){
+						  
+						  $salesOrderUpdate_status = new SalesOrderModel();
+						  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+						  $salesOrderUpdate_status->sales_order_status = 'Pending';
+						  $salesOrderUpdate_status->update();
+						  
+					  }else{
+					  
+						  $salesOrderUpdate_status = new SalesOrderModel();
+						  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+						  $salesOrderUpdate_status->sales_order_status = 'Delivered';
+						  $salesOrderUpdate_status->update();
+					  
+					  }
+			  
+					  /*Update Receivable Status and Remaining Balance*/
+					  $Receivables_ACTION = new ReceivablesModel();
+					  $Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
+					  $Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
+					  $Receivables_ACTION->receivable_status 		= $Receivablestatus;		
+					  $Receivables_ACTION->update();		
+	  
+	  return 'Deleted';
+	  
+  }
+
+
 	
 }

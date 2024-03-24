@@ -605,7 +605,7 @@
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('save_sales_order_payment')}}"  method="post" >
+					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('sales_order_receivable_payment_post')}}"  method="post" >
 						@csrf
 						<div class="col-sm-12">
 						

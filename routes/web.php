@@ -198,15 +198,22 @@ Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_o
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');
 
-/*Get Sales Order Payment Item*/
-Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
+/*Get Receivable Payment Item*/
+Route::post('/receivable_payment_list', [ReceivablesController::class,'receivable_payment_list'])->name('receivable_payment_list')->middleware('isLoggedIn');
+/*Get Receivable Per Payment Item*/
+Route::post('/receivable_payment_info', [ReceivablesController::class,'receivable_payment_info'])->name('ReceivablePaymentInfo')->middleware('isLoggedIn');
 
-Route::post('/save_sales_order_payment',[SalesOrderController::class,'save_sales_order_payment'])->name('save_sales_order_payment')->middleware('isLoggedIn');
+/* Sales Order to Receivable Payment Action */
+Route::post('/sales_order_receivable_payment_post',[ReceivablesController::class,'sales_order_receivable_payment_post'])->name('sales_order_receivable_payment_post')->middleware('isLoggedIn');
+/*Delete Sales Order Payment Item*/
+Route::post('/sales_order_receivable_delete_payment', [ReceivablesController::class,'-'])->name('SalesOrderDeletePayment')->middleware('isLoggedIn');
+#Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
 
-/*Get Sales Order Payment Item*/
-Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
-Route::post('/sales_order_payment_info', [SalesOrderController::class,'sales_order_payment_info'])->name('SalesPaymentInfo')->middleware('isLoggedIn');
-Route::post('/sales_order_delete_payment', [SalesOrderController::class,'sales_order_delete_payment'])->name('SalesOrderDeletePayment')->middleware('isLoggedIn');
+/*Billing to Receivable Payment Item*/
+Route::post('/billing_receivable_payment_post',[ReceivablesController::class,'billing_receivable_payment_post'])->name('billing_receivable_payment_post')->middleware('isLoggedIn');
+/*Delete Billing Payment Item*/
+Route::post('/billing_receivable_delete_payment', [ReceivablesController::class,'billing_receivable_delete_payment'])->name('BillingDeletePayment')->middleware('isLoggedIn');
+
 
 /*Delete Purchase Order Payment Item*/
 Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');

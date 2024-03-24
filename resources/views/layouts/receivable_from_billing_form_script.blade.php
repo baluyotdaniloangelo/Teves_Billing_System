@@ -1,7 +1,7 @@
    <script type="text/javascript">
    
 	LoadProduct();
-	//LoadPayment();
+	LoadPayment();
 	LoadReceivables();
 	
 	function ResetPaymentForm(){
@@ -240,12 +240,128 @@
 			   });
 	  } 	
 	  
+	/*Add Payment and Edit With Upload Function*/
+    $('#AddPayment').on('submit', function(e){
+
+	e.preventDefault();
+
+	$('#receivable_mode_of_paymentError').text('');
+	$('#receivable_date_of_payment').text('');
+	$('#receivable_referenceError').text('');
+	$('#receivable_payment_amountError').text('');
+
+	document.getElementById('AddPayment').className = "g-3 needs-validation was-validated";
+
+	var form = this;
+
+	$.ajax({
+		url:$(form).attr('action'),
+		method:$(form).attr('method'),
+		data:new FormData(form),
+		processData:false,
+		dataType:'json',
+		contentType:false,
+		beforeSend:function(){
+			$(form).find('span.error-text').text('');
+		},
+		success:function(data){
+			console.log(data);
+		
+			$('#switch_notice_on').show();
+			$('#sw_on').html(data.success);
+			setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+
+			$('#receivable_mode_of_paymentError').text('');
+			$('#receivable_date_of_paymentError').text('');
+			$('#receivable_referenceError').text('');
+			$('#receivable_payment_amountError').text('');
+			
+			let receivable_payment_id = document.getElementById("receivable_payment_id").value;
+			
+			/*Close Payment Modal if the item is from Receivable*/
+			if(receivable_payment_id!=0){
+				
+				$('#AddPaymentModal').modal('toggle');	
+			
+			}
+			
+			/*Reset Form*/
+			ResetPaymentForm();
+			/*Reload Table*/
+			LoadPayment();
+			LoadProduct();
+		
+		},error: function(error) {
+		
+			console.log(error);	
+			
+			let receivable_reference 	= $("#receivable_reference").val();
+			if(error.responseJSON.errors.receivable_reference=="The receivable reference has already been taken."){
+				
+			receivable_reference_error = "<b>"+ receivable_reference +"</b> has already been taken.";
+			$('#receivable_referenceError').html(receivable_reference_error);
+			document.getElementById('receivable_referenceError').className = "invalid-feedback";
+		
+			$('#receivable_reference').val("");
+		
+			$('#switch_notice_off').show();
+			$('#sw_off').html("Invalid Input" + ' ' + receivable_reference_error);
+			setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		
+		
+		}else {		
+		
+			$('#receivable_mode_of_paymentError').text(error.responseJSON.errors.receivable_mode_of_payment);
+			document.getElementById('receivable_mode_of_paymentError').className = "invalid-feedback";
+			
+			$('#receivable_date_of_payment').text(error.responseJSON.errors.purchase_order_date_of_payment);
+			document.getElementById('receivable_date_of_payment').className = "invalid-feedback";					
+			
+			$('#receivable_referenceError').text(error.responseJSON.errors.receivable_reference);
+			document.getElementById('receivable_referenceError').className = "invalid-feedback";					
+			
+			$('#receivable_payment_amountError').text(error.responseJSON.errors.receivable_payment_amount);
+			document.getElementById('receivable_payment_amountError').className = "invalid-feedback";					
+			
+			$('#switch_notice_off').show();
+			$('#sw_off').html("Invalid Input" + "");
+			setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			
+		
+		}
+	}
+	});
+	});
+
+	//Reset input file
+	$('input[type="file"][name="payment_image_reference"]').val('');
+	//Image preview
+	$('input[type="file"][name="payment_image_reference"]').on('change', function(){
+	var img_path = $(this)[0].value;
+	var img_holder = $('.img-holder');
+	var extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+
+	if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
+		if(typeof(FileReader) != 'undefined'){
+			img_holder.empty();
+			var reader = new FileReader();
+			reader.onload = function(e){
+				$('<img/>',{'src':e.target.result,'class':'img-fluid','style':'max-width:400px;margin-bottom:5px;'}).appendTo(img_holder);
+			}
+			img_holder.show();
+			reader.readAsDataURL($(this)[0].files[0]);
+		}else{
+			$(img_holder).html('This browser does not support FileReader');
+		}
+	}else{
+		$(img_holder).empty();
+	}
+	});
+
 	function LoadPayment() {
 				
 			  let receivable_id = {{ @$receivables_details['receivable_id'] }};
 
 			  $.ajax({
-				url: "/get_sales_order_payment_list",
+				url: "/receivable_payment_list",
 				type:"POST",
 				data:{
 				  receivable_idx:receivable_id,
@@ -365,7 +481,7 @@
 			let sales_order_payment_details_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "{{ route('SalesPaymentInfo') }}",
+				url: "{{ route('ReceivablePaymentInfo') }}",
 				type:"POST",
 				data:{
 				  receivable_payment_id:sales_order_payment_details_id,
@@ -415,7 +531,7 @@
 			let sales_order_payment_details_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "{{ route('SalesPaymentInfo') }}",
+				url: "{{ route('ReceivablePaymentInfo') }}",
 				type:"POST",
 				data:{
 				  receivable_payment_id:sales_order_payment_details_id,
@@ -463,7 +579,7 @@
 			let sales_order_payment_details_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "{{ route('SalesPaymentInfo') }}",
+				url: "{{ route('ReceivablePaymentInfo') }}",
 				type:"POST",
 				data:{
 				  receivable_payment_id:sales_order_payment_details_id,
@@ -515,7 +631,7 @@
 			let paymentitemID 		= document.getElementById("deleteSalesOrderPaymentConfirmed").value;
 			
 			  $.ajax({
-				url: "{{ route('SalesOrderDeletePayment') }}",
+				url: "{{ route('BillingDeletePayment') }}",
 				type:"POST",
 				data:{
 					receivable_idx:receivable_id,

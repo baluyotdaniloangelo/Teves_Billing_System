@@ -169,7 +169,7 @@
     </ul>
 
   </aside><!-- End Sidebar-->
-<!--Modal to User Profile-->
+	<!--Modal to User Profile-->
 	<div class="modal fade" id="UserProfileModal" tabindex="-1">
            <div class="modal-dialog modal-lg">
                   <div class="modal-content">

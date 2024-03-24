@@ -866,7 +866,7 @@
 			  let receivable_id = {{ @$receivables_details['receivable_id'] }};
 
 			  $.ajax({
-				url: "/get_sales_order_payment_list",
+				url: "/receivable_payment_list",
 				type:"POST",
 				data:{
 				  receivable_idx:receivable_id,
@@ -987,7 +987,7 @@
 			let sales_order_payment_details_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "{{ route('SalesPaymentInfo') }}",
+				url: "{{ route('ReceivablePaymentInfo') }}",
 				type:"POST",
 				data:{
 				  receivable_payment_id:sales_order_payment_details_id,
@@ -1037,7 +1037,7 @@
 			let sales_order_payment_details_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "{{ route('SalesPaymentInfo') }}",
+				url: "{{ route('ReceivablePaymentInfo') }}",
 				type:"POST",
 				data:{
 				  receivable_payment_id:sales_order_payment_details_id,
@@ -1085,7 +1085,7 @@
 			let sales_order_payment_details_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "{{ route('SalesPaymentInfo') }}",
+				url: "{{ route('ReceivablePaymentInfo') }}",
 				type:"POST",
 				data:{
 				  receivable_payment_id:sales_order_payment_details_id,
