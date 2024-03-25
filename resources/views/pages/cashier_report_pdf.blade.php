@@ -242,8 +242,8 @@
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;"><?=$other_sales_no;?></td>
                 <td nowrap style="border:1px solid #000;">{{$data_P2_cols->product_name}}</td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P2_cols['product_price'],2,".",",");?></td>
 				<td nowrap style="border:1px solid #000;"><?=number_format($data_P2_cols['order_quantity'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000;"><?=number_format($data_P2_cols['product_price'],2,".",",");?></td>
 				<td nowrap style="border:1px solid #000;"><?=number_format($data_P2_cols['order_total_amount'],2,".",",");?></td>
 			</tr>
             <?php

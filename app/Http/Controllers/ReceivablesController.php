@@ -738,9 +738,10 @@ class ReceivablesController extends Controller
 			
 			$receivables_details = ReceivablesModel::where('receivable_id', '=', $ReceivableID)->first();
 
-			//$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();	
+			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
+			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 					
-		return view("pages.billing_to_receivable_form", compact('data','title','product_data','client_data','teves_branch','receivables_payment_suggestion','receivables_details','tab'));
+		return view("pages.billing_to_receivable_form", compact('data','title','product_data','client_data','teves_branch','receivables_payment_suggestion','receivables_details','tab','drivers_name','plate_no'));
 		
 		}
 		

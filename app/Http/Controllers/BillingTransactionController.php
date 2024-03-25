@@ -14,7 +14,7 @@ use Validator;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Models\TevesBranchModel;
-//use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Models\Activity;
 
 class BillingTransactionController extends Controller
 {

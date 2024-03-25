@@ -184,7 +184,7 @@
 								
 								for(var i=0; i<len; i++){
 							
-								var id = response['productlist'][i].sales_order_component_id;
+								var id = response['productlist'][i].billing_id;
 								var product_name = response['productlist'][i].product_name;
 								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
 								var product_price = response['productlist'][i].product_price;
@@ -209,7 +209,7 @@
 								
 								for(var i=0; i<len; i++){
 							
-								var id = response['productlist'][i].sales_order_component_id;
+								var id = response['productlist'][i].billing_id;
 								var product_name = response['productlist'][i].product_name;
 								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
 								var product_price = response['productlist'][i].product_price;
@@ -218,7 +218,7 @@
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
+								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
@@ -240,6 +240,255 @@
 			   });
 	  } 	
 	  
+	$('body').on('click','#editBill',function(){
+			
+			event.preventDefault();
+			let billID = $(this).data('id');
+			
+			  $.ajax({
+				url: "/bill_info",
+				type:"POST",
+				data:{
+				  billID:billID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-billing-transaction").value = billID;
+					
+					/*Set Details*/
+					document.getElementById("update_order_date").value = response[0].order_date;
+					document.getElementById("update_order_time").value = response[0].order_time;
+					document.getElementById("update_order_po_number").value = response[0].order_po_number;
+					document.getElementById("update_client_idx").value = response[0].client_name;
+					
+					document.getElementById("update_plate_no").value = response[0].plate_no;
+					document.getElementById("update_product_idx").value = response[0].product_name;
+					document.getElementById("update_product_manual_price").value = response[0].product_price;
+					document.getElementById("update_drivers_name").value = response[0].drivers_name;
+					document.getElementById("update_order_quantity").value = response[0].order_quantity;
+					
+					var total_amount = response[0].order_total_amount;
+					$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					$('#UpdateBillingModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+	  
+	$("#update-billing-transaction").click(function(event){			
+			event.preventDefault();
+			
+					/*Reset Warnings*/
+					$('#order_dateError').text('');
+					$('#order_timeError').text('');
+					$('#order_po_numberError').text('');				  
+					$('#client_idxError').text('');
+					$('#plate_noError').text('');
+					$('#drivers_nameError').text('');
+					$('#product_idxError').text('');
+					$('#update_product_manual_priceError').text('');
+					$('#order_quantityError').text('');
+
+			document.getElementById('BillingformEdit').className = "g-3 needs-validation was-validated";
+			
+			let billID 							= document.getElementById("update-billing-transaction").value;
+			let order_date 						= $("input[name=update_order_date]").val();
+			let order_time 						= $("input[name=update_order_time]").val();
+			let order_po_number 				= $("input[name=update_order_po_number]").val();			
+			let client_idx 						= $("#update_client_name option[value='" + $('#update_client_idx').val() + "']").attr('data-id');
+			let plate_no 						= $("input[name=update_plate_no]").val();
+			let drivers_name 					= $("input[name=update_drivers_name]").val();
+			let product_idx 					= $("#product_list option[value='" + $('#update_product_idx').val() + "']").attr('data-id');
+			let update_product_manual_price 	= $("#update_product_manual_price").val();
+			let order_quantity 					= $("input[name=update_order_quantity]").val();
+			
+			/*Client and Product Name*/
+			let client_name 					= $("input[name=update_client_name]").val();
+			let product_name 					= $("input[name=update_product_name]").val();
+			
+			$.ajax({
+				url: "/update_bill_post",
+				type:"POST",
+				data:{
+				  billID:billID,
+				  order_date:order_date,
+				  order_time:order_time,
+				  order_po_number:order_po_number,
+				  client_idx:client_idx,
+				  plate_no:plate_no,
+				  drivers_name:drivers_name,
+				  product_idx:product_idx,
+				  product_manual_price:update_product_manual_price,
+				  order_quantity:order_quantity,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					  
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					$('#update_order_dateError').text('');					
+					$('#update_order_timeError').text('');
+					$('#update_order_po_numberError').text('');
+					$('#update_client_idxError').text('');
+					
+					$('#update_plate_noError').text('');
+					$('#update_drivers_nameError').text('');
+					$('#update_product_idxError').text('');
+					$('#update_product_manual_priceError').text('');
+					$('#update_order_quantityError').text('');
+					$('#UpdateBillingModal').modal('toggle');
+					/*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					LoadProduct();
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	
+				 
+				  $('#update_order_dateError').text(error.responseJSON.errors.order_date);
+				  document.getElementById('update_order_dateError').className = "invalid-feedback";
+				  			  
+				  $('#update_order_timeError').text(error.responseJSON.errors.order_time);
+				  document.getElementById('update_order_timeError').className = "invalid-feedback";		
+
+				  $('#update_order_po_numberError').text(error.responseJSON.errors.order_po_number);
+				  document.getElementById('update_order_po_numberError').className = "invalid-feedback";		
+				
+					if(error.responseJSON.errors.client_idx=='Client is Required'){
+						
+							if(client_name==''){
+								$('#update_client_idxError').html(error.responseJSON.errors.client_idx);
+							}else{
+								$('#update_client_idxError').html("Incorrect Client Name <b>" + client_name + "</b>");
+							}
+						
+							document.getElementById("update_client_idx").value = "";
+							document.getElementById('update_client_idxError').className = "invalid-feedback";
+							
+					}
+					
+				  $('#update_plate_noError').text(error.responseJSON.errors.plate_no);
+				  document.getElementById('update_plate_noError').className = "invalid-feedback";				
+				 
+				  $('#update_drivers_nameError').text(error.responseJSON.errors.drivers_name);
+				  document.getElementById('update_drivers_nameError').className = "invalid-feedback";				
+				  
+				  $('#update_product_idxError').text(error.responseJSON.errors.product_idx);
+				  document.getElementById('update_product_idxError').className = "invalid-feedback";
+
+			      	if(error.responseJSON.errors.product_idx=='Product is Required'){
+						
+							if(product_name==''){
+								$('#update_product_idxError').html(error.responseJSON.errors.product_idx);
+							}else{
+								$('#update_product_idxError').html("Incorrect Product Name <b>" + product_name + "</b>");
+							}
+							
+							document.getElementById("update_product_idx").value = "";
+							document.getElementById('update_product_idxError').className = "invalid-feedback";
+			
+					}
+
+ 				  $('#update_order_quantityError').text(error.responseJSON.errors.order_quantity);
+				  document.getElementById('update_order_quantityError').className = "invalid-feedback";
+		
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+				  
+				}
+			   });	
+	  });
+	  
+	<!--Bill Deletion Confirmation-->
+	$('body').on('click','#deleteBill',function(){
+			
+			event.preventDefault();
+			let billID = $(this).data('id');
+
+			  $.ajax({
+				url: "/bill_info",
+				type:"POST",
+				data:{
+				  billID:billID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("deleteBillConfirmed").value = billID;
+					
+					/*Set Details*/
+					$('#bill_delete_order_date').text(response[0].order_date);
+					$('#bill_delete_order_time').text(response[0].order_time);
+					$('#bill_delete_order_po_number').text(response[0].order_po_number);
+					$('#bill_delete_client_name').text(response[0].client_name);
+					$('#bill_delete_plate_no').text(response[0].plate_no);
+					$('#bill_delete_product_name').text(response[0].product_name);
+					$('#bill_delete_drivers_name').text(response[0].drivers_name);
+					$('#bill_delete_order_quantity').text(response[0].order_quantity);					
+					$('#bill_delete_order_total_amount').text(response[0].order_total_amount);
+
+					$('#BillDeleteModal').modal('toggle');									  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  });
+
+	  <!--Site Confirmed For Deletion-->
+	  $('body').on('click','#deleteBillConfirmed',function(){
+			
+			event.preventDefault();
+
+			let billID = document.getElementById("deleteBillConfirmed").value;
+			
+			  $.ajax({
+				url: "/delete_bill_confirmed",
+				type:"POST",
+				data:{
+				  billID:billID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Bill Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+	
+					LoadProduct();
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					//alert(error);
+				}
+			   });		
+	  });	 
+	 
 	/*Add Payment and Edit With Upload Function*/
     $('#AddPayment').on('submit', function(e){
 
@@ -623,7 +872,7 @@
 	  });	
 
 	  <!-- Confirmed For Deletion-->
-	  $('body').on('click','#deleteSalesOrderPaymentConfirmed',function(){
+	$('body').on('click','#deleteSalesOrderPaymentConfirmed',function(){
 			
 			event.preventDefault();
 			
@@ -655,5 +904,7 @@
 				 console.log(error);
 				}
 			   });		
-	  });	  	  
+	  });	 
+
+ 	  
  </script>
