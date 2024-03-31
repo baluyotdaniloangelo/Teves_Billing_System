@@ -5,6 +5,7 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BillingTransactionController;
 use App\Http\Controllers\SOBillingTransactionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTankController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\SupplierController;
@@ -72,6 +73,8 @@ Route::post('/so_add_product_post', [SOBillingTransactionController::class,'so_a
 Route::post('/get_so_product', [SOBillingTransactionController::class,'get_so_product'])->name('GetSoProduct')->middleware('isLoggedIn');
 Route::post('/so_update_product_post', [SOBillingTransactionController::class,'so_update_product_post'])->name('SOUpdateProductPost')->middleware('isLoggedIn');
 
+
+
 /*Dev Date Nov 30 2022*/
 /*Load Product List*/
 Route::get('/product', [ProductController::class,'product'])->name('product')->middleware('isLoggedIn');
@@ -90,7 +93,10 @@ Route::post('/get_product_pricing_per_branch', [ProductController::class,'get_pr
 Route::post('/save_branches_product_pricing_post', [ProductController::class,'save_branches_product_pricing_post'])->name('save_branches_product_pricing_post')->middleware('isLoggedIn');
 /*Load Product Pricing Per Branch per Billing 01-09-2023*/
 Route::post('/get_product_list_pricing_per_branch', [ProductController::class,'get_product_list_pricing_per_branch'])->name('ProductListPricingPerBranch')->middleware('isLoggedIn');
-
+/**/
+Route::get('/update_product_information', [ProductController::class, 'update_product_information'])->name('update_product_information')->middleware('isLoggedIn');
+/*Product Tank*/
+Route::post('/get_product_tank', [ProductTankController::class,'get_product_tank'])->name('ProductTankPerBranch')->middleware('isLoggedIn');
 
 /*Dev Date Nov 30 2022*/
 /*Load Client List*/

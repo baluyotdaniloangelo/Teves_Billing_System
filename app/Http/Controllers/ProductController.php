@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use App\Models\ProductModel;
+use App\Models\TevesBranchModel;
 use Session;
 use Validator;
 use DataTables;
@@ -209,5 +210,26 @@ class ProductController extends Controller
 
 			return response()->json($product_data);			
 	}
+	
+	/*Load Form Form Interface*/
+	public function update_product_information(Request $request){
+		
+		if(Session::has('loginID')){
+			
+			$productID = $request->productID;
+			$tab = $request->tab;
+			
+			$title = 'Update Product Information';
+			$data = array();
+			
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
+			
+			$teves_branch = TevesBranchModel::all();
+			
+			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID'));
+		
+		}
+		
+	}  		
 	
 }
