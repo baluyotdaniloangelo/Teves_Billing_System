@@ -327,7 +327,8 @@
 								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintReceivable">&nbsp;Receivable</button>
 								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 								
-							</div>					
+							</div>
+							
 						</div>
 					<div class="row mb-2">
 					<div class="col-sm-2">
@@ -795,6 +796,7 @@
             </div>
         </div>
     </div>	
+	
     </section>
 </main>
 

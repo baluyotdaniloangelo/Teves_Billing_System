@@ -42,7 +42,6 @@ Route::get('logout', [UserAuthController::class,'logout']);
 /*Load Billing Transaction*/
 Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
 
-
 Route::get('billing/list', [BillingTransactionController::class, 'getBillingTransactionList'])->name('getBillingTransactionList')->middleware('isLoggedIn');
 
 /*Billed Item to MAnually Generated*/
@@ -73,8 +72,6 @@ Route::post('/so_add_product_post', [SOBillingTransactionController::class,'so_a
 Route::post('/get_so_product', [SOBillingTransactionController::class,'get_so_product'])->name('GetSoProduct')->middleware('isLoggedIn');
 Route::post('/so_update_product_post', [SOBillingTransactionController::class,'so_update_product_post'])->name('SOUpdateProductPost')->middleware('isLoggedIn');
 
-
-
 /*Dev Date Nov 30 2022*/
 /*Load Product List*/
 Route::get('/product', [ProductController::class,'product'])->name('product')->middleware('isLoggedIn');
@@ -97,6 +94,10 @@ Route::post('/get_product_list_pricing_per_branch', [ProductController::class,'g
 Route::get('/update_product_information', [ProductController::class, 'update_product_information'])->name('update_product_information')->middleware('isLoggedIn');
 /*Product Tank*/
 Route::post('/get_product_tank', [ProductTankController::class,'get_product_tank'])->name('ProductTankPerBranch')->middleware('isLoggedIn');
+/*Create Product Tank*/
+Route::post('/create_tank_post', [ProductTankController::class,'create_tank_post'])->name('create_tank_post')->middleware('isLoggedIn');
+/* Product Tank Info*/
+Route::post('/product_tank_info', [ProductTankController::class, 'product_tank_info'])->name('product_tank_info')->middleware('isLoggedIn');
 
 /*Dev Date Nov 30 2022*/
 /*Load Client List*/
@@ -144,7 +145,6 @@ Route::post('/update_user_post', [UserController::class,'update_user_post'])->na
 Route::post('/delete_user_confirmed', [UserController::class, 'delete_user_confirmed'])->name('delete_user_confirmed')->middleware('isLoggedIn');
 /*Update User Account*/
 Route::post('/user_account_post', [UserController::class,'user_account_post'])->name('user_account_post')->middleware('isLoggedIn');
-
 
 /*Receivables*/
 /*December 17, 2022*/
@@ -219,7 +219,6 @@ Route::post('/sales_order_receivable_delete_payment', [ReceivablesController::cl
 Route::post('/billing_receivable_payment_post',[ReceivablesController::class,'billing_receivable_payment_post'])->name('billing_receivable_payment_post')->middleware('isLoggedIn');
 /*Delete Billing Payment Item*/
 Route::post('/billing_receivable_delete_payment', [ReceivablesController::class,'billing_receivable_delete_payment'])->name('BillingDeletePayment')->middleware('isLoggedIn');
-
 
 /*Delete Purchase Order Payment Item*/
 Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
@@ -302,7 +301,6 @@ Route::post('/cashiers_report_info', [CashiersReportController::class, 'cashiers
 /**/
 Route::post('/delete_cashiers_report_info', [CashiersReportController::class, 'delete_cashiers_report_info'])->name('delete_cashiers_report_info')->middleware('isLoggedIn');
 
-
 /*Cashiers Report Part 1*/
 Route::get('/cashiers_report_form/{id}', [CashiersReportController::class, 'cashiers_report_form'])->name('cashiers_report_form')->middleware('isLoggedIn');
 /*Save Cashier's Report Product*/
@@ -313,7 +311,6 @@ Route::post('/get_cashiers_report_product_p1', [CashiersReportController::class,
 Route::post('/delete_cashiers_report_product_p1', [CashiersReportController::class,'delete_cashiers_report_product_p1'])->name('DeleteCashiersProductP1')->middleware('isLoggedIn');
 /*GET Cashiers report product P1*/
 Route::post('/cashiers_report_p1_info', [CashiersReportController::class, 'cashiers_report_p1_info'])->name('CRP1_info')->middleware('isLoggedIn');
-
 
 /*Cashiers Report Part 2*/
 Route::post('/save_product_cashiers_report_PH2', [CashiersReportController::class,'save_product_cashiers_report_PH2'])->name('SAVE_CHR_PH2')->middleware('isLoggedIn');

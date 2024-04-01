@@ -10,7 +10,7 @@ use App\Models\TevesBranchModel;
 use Session;
 use Validator;
 use DataTables;
-
+use Illuminate\Validation\Rule;
 class ProductTankController extends Controller
 {
 	
@@ -18,6 +18,7 @@ class ProductTankController extends Controller
 	public function get_product_tank(Request $request){		
 
 			$data =  ProductTankModel::RightJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_tank_table.branch_idx')
+					->RightJoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_product_tank_table.product_idx')
 					->where('teves_product_tank_table.product_idx', $request->productID)
 					->orderBy('teves_product_tank_table.tank_id', 'asc')
 					->get([
@@ -25,76 +26,54 @@ class ProductTankController extends Controller
 						'teves_product_tank_table.branch_idx',
 						'teves_product_tank_table.tank_name',
 						'teves_product_tank_table.tank_capacity',
-						'teves_branch_table.branch_name'
+						'teves_branch_table.branch_name',
+						'teves_branch_table.branch_code',
+						'teves_product_table.product_unit_measurement'
 					]);
 		
 			return response()->json($data);			
 	}
 
-	public function save_branches_product_pricing_post(Request $request){		
-			
-			$request->validate([
-			'branch_price'  	=> 'required'
-			], 
-			[
-				'branch_price.required' 	=> 'Branch Price is Required'
-			]
-			);
-			
-			$branch_price_id 	= $request->branch_price_id;
-			$branch_price 		= $request->branch_price;
-			
-			if($branch_price!=''){
-				for($count = 0; $count < count($branch_price_id); $count++)
-				{
-					
-						$branch_price_id_item 		= $branch_price_id[$count];
-						$branch_price_item 			= number_format($branch_price[$count],2, '.', '');
-						
-						if(Session::get('UserType')=="Admin"){
-								
-							DB::table('teves_product_branch_price_table')
-							->where('branch_price_id', $branch_price_id_item)
-							->update(['branch_price' => $branch_price_item]);
-							
-						}					
-				}		
-			
-			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
-			
-			}							
-	}		
-	
-	/*Pricing List*/
-	public function get_product_list_pricing_per_branch(Request $request){		
+	public function create_tank_post(Request $request){
 
-			$raw_query_product = "SELECT a.product_id,a.product_name,ifnull(b.branch_price,a.product_price) AS product_price ,c.branch_code FROM teves_product_table AS a
-			LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
-			WHERE c.branch_id = ?";			
-			$product_data = DB::select("$raw_query_product", [$request->branch_idx]);
+		$request->validate([
+          'tank_name'      	=> ['required',Rule::unique('teves_product_tank_table')->where( 
+									fn ($query) =>$query
+										->where('tank_name', $request->tank_name)
+										->where('branch_idx', $request->branch_idx) 
+									)],
+		  'tank_capacity'   	=> 'required',
+		  'branch_idx'   	=> 'required'
+        ], 
+        [
+			'tank_name.required' => 'Tank Name is required',
+			'tank_capacity.required' => 'Tank Capacity is Required',
+			'branch_idx.required' => 'Branch is Required',
+        ]
+		);			
 
-			return response()->json($product_data);			
+			$ProductTank = new ProductTankModel();
+			$ProductTank->product_idx						= $request->product_idx;
+			$ProductTank->tank_name 						= $request->tank_name;
+			$ProductTank->tank_capacity 					= $request->tank_capacity;
+			$ProductTank->branch_idx 						= $request->branch_idx;
+			
+			$result = $ProductTank->save();
+			
+			if($result){
+				return response()->json(['success'=>'Tank Information Successfully Created!']);
+			}
+			else{
+				return response()->json(['success'=>'Error on Insert Tank Information']);
+			}
 	}
 	
-	/*Load Form Form Interface*/
-	public function update_product_information(Request $request){
+	public function product_tank_info(Request $request){
+
+		$tankID = $request->tankID;
+		$data = ProductTankModel::find($tankID, ['branch_idx','tank_name','tank_capacity']);
+		return response()->json($data);
 		
-		if(Session::has('loginID')){
-			
-			$productID = $request->productID;
-			$tab = $request->tab;
-			
-			$title = 'Update Product Information';
-			$data = array();
-			
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
-			
-			$teves_branch = TevesBranchModel::all();
-			
-			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID'));
-		
-		}
-		
-	}  		
+	}
 	
 }

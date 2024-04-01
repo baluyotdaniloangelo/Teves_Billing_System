@@ -144,7 +144,7 @@
 							<div class="tab-pane fade  <?php if($tab=='tank') { echo ' show active'; } ?>"" id="tank" role="tabpanel" aria-labelledby="tank-tab">
 									
 									<div class="d-flex justify-content-end" id="">
-									<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+									<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
 										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductTankModal" id="AddProductTankBTN"></button>
 									</div>											
 									</div>
@@ -155,6 +155,7 @@
 										<th style="text-align:center !important;" class="action_column_class">Action</th>
 										<th style="text-align:center !important;">Item #</th>
 										<th style="text-align:center !important;">Branch</th>
+										<th style="text-align:center !important;">Name</th>
 										<th style="text-align:center !important;">Capacity</th>
 									</tr>
 									</thead>
@@ -164,21 +165,7 @@
 												</tr>
 										</tbody>
 									</table>
-								<!--	<div class="row mb-3">
-									<div class="col-sm-6" align='right'>
-								<div id="loading_data_update_so" style="display:none;">
-									<div class="spinner-border text-success" role="status">
-										<span class="visually-hidden">Loading...</span>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-sm-6" align='right'>
-									<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-product-price-per-branch" value=""> Save</button>
-							</div>	
-							
-							</div>-->
-
+								
 							</div>
 					
 						</div>
@@ -189,13 +176,12 @@
 		</div>
 	</div>
 	
-	
-	<!--Modal to Create SO Product-->
+	<!--Moda Product Tank-->
 	<div class="modal fade" id="AddProductTankModal" tabindex="-1">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Add Product</h5>
+                      <h5 class="modal-title">Add Tank</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
@@ -203,17 +189,39 @@
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-3 needs-validation" id="AddProduct">
+					  <form class="g-3 needs-validation" id="AddProductTank">
+						<div class="row mb-2">
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<select class="form-select form-control" required="" name="branch_idx" id="branch_idx">
+									@foreach ($teves_branch as $teves_branch_cols)
+											<?php 
+											$branch_id = $teves_branch_cols->branch_id;
+													
+											?>
+										<option value="{{$teves_branch_cols->branch_id}}">
+												{{$teves_branch_cols->branch_code}}
+										</option>
+													
+									@endforeach
+								</select>
+								<label for="branch_idx">Branch</label>
+							</div>
+							 <span class="valid-feedback" id="branch_idxError"></span>
+						</div>
+						</div>
+
 
 						<div class="row mb-2">
 						
 						<div class="col-sm-12">
 						
 						<div class="form-floating mb-3">
-						  <input class="form-control" list="product_list" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()"placeholder="Date">
-						  <label for="product_idx">Product</label>
+						  <input class="form-control" name="tank_name" id="tank_name" required autocomplete="off" placeholder="Date">
+						  <label for="tank_name">Name</label>
 						 </div>
-						<span class="valid-feedback" id="product_idxError"></span>
+						<span class="valid-feedback" id="tank_nameError"></span>
 						
 						</div>
 						
@@ -224,28 +232,15 @@
 						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type="number" class="form-control" aria-label="" name="product_manual_price" id="product_manual_price" value="" step=".01" onchange="TotalAmount()" placeholder="Custom Price">
-								<label for="product_manual_price">Custom Price</label>
+								<input type="number" class="form-control" aria-label="" name="tank_capacity" id="tank_capacity" value="" step=".01" placeholder="Capacity">
+								<label for="tank_capacity">Capacity</label>
 							</div>
-						 
+							<span class="valid-feedback" id="tank_capacityError"></span>
+							
 						</div>
 						</div>
 						
-						<div class="col-sm-12">
 						
-							<div class="form-floating mb-3">
-								<input type="number" class="form-control" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" required step=".01" onchange="TotalAmount()" placeholder="Quantity">
-								<label for="order_quantity">Quantity</label>
-							</div>
-							 <span class="valid-feedback" id="order_quantityError"></span>
-						</div>
-
-						<div class="row mb-2">
-						  <label class="col-sm-3 col-form-label">Amount</label>
-						  <div class="col-sm-9">
-								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalAmount">0.00</span>
-						  </div>
-						</div>
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
@@ -254,15 +249,96 @@
 								<span class="visually-hidden">Loading...</span>
 							</div>
 							</div>
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-product"> Save</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-so-save-product"> Reset</button>					  
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-tank"> Save</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-save-tank"> Reset</button>					  
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
 				  
                 </div>
              </div>	
-			 
+
+	<div class="modal fade" id="UpdateProductTankModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Add Tank</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="UpdateProductTank">
+						<div class="row mb-2">
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<select class="form-select form-control" required="" name="update_branch_idx" id="update_branch_idx">
+									@foreach ($teves_branch as $teves_branch_cols)
+											<?php 
+											$branch_id = $teves_branch_cols->branch_id;
+													
+											?>
+										<option value="{{$teves_branch_cols->branch_id}}">
+												{{$teves_branch_cols->branch_code}}
+										</option>
+													
+									@endforeach
+								</select>
+								<label for="update_branch_idx">Branch</label>
+							</div>
+							 <span class="valid-feedback" id="update_branch_idxError"></span>
+						</div>
+						</div>
+
+
+						<div class="row mb-2">
+						
+						<div class="col-sm-12">
+						
+						<div class="form-floating mb-3">
+						  <input class="form-control" name="update_tank_name" id="update_tank_name" required autocomplete="off" placeholder="Date">
+						  <label for="tank_name">Name</label>
+						 </div>
+						<span class="valid-feedback" id="update_tank_nameError"></span>
+						
+						</div>
+						
+						</div>
+						
+						<div class="row mb-2">
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-label="" name="update_tank_capacity" id="update_tank_capacity" value="" step=".01" placeholder="Capacity">
+								<label for="update_tank_capacity">Capacity</label>
+							</div>
+							<span class="valid-feedback" id="update_tank_capacityError"></span>
+							
+						</div>
+						</div>
+						
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+							<div id="loading_data_update_product" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-tank"> Update</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-update-tank"> Reset</button>					  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+				  
+                </div>
+             </div>	
+			 			 
     </section>
 </main>
 
