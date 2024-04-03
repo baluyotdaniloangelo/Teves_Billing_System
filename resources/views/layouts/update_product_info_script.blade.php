@@ -275,8 +275,8 @@
 							
 							var id			 	= response[i].tank_id;
 							var branch_code  	= response[i].branch_code;
-							var tank_name 		= response[i].tank_capacity;
-							var tank_capacity 	= response[i].tank_name;
+							var tank_name 		= response[i].tank_name;
+							var tank_capacity 	= response[i].tank_capacity;
 							
 							var product_unit_measurement 			= response[i].product_unit_measurement;
 							
@@ -418,14 +418,17 @@
 
 			document.getElementById('AddProductTank').className = "g-3 needs-validation was-validated";
 
-			let tank_name 		= $("input[name=tank_name]").val();
-			let tank_capacity 	= $("input[name=tank_capacity]").val();
-			let branch_idx 		= $("#branch_idx").val();
+			let tank_id 	= document.getElementById("update-tank").value;
+			
+			let tank_name 		= $("input[name=update_tank_name]").val();
+			let tank_capacity 	= $("input[name=update_tank_capacity]").val();
+			let branch_idx 		= $("#update_branch_idx").val();
 			
 			  $.ajax({
-				url: "/create_tank_post",
+				url: "/update_tank_post",
 				type:"POST",
 				data:{
+				  tank_id:tank_id,
 				  product_idx:{{ $productID }},
 				  tank_name:tank_name,
 				  tank_capacity:tank_capacity,
@@ -436,8 +439,8 @@
 				  console.log(response);
 				  if(response) {
 					  
-					$('#tank_nameError').text('');
-					$('#tank_capacityError').text('');
+					$('#update_tank_nameError').text('');
+					$('#update_tank_capacityError').text('');
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
@@ -445,7 +448,7 @@
 					
 					document.getElementById("AddProductTank").reset();
 										
-					$('#AddProductTankModal').modal('toggle');	
+					$('#UpdateProductTankModal').modal('toggle');	
 					
 					LoadProductTank();
 				  
@@ -456,18 +459,18 @@
 				 
 				 if(error.responseJSON.errors.tank_name=="The tank name has already been taken."){
 							  
-				  $('#tank_nameError').html("<b>"+ tank_name +"</b> has already been taken.");
-				  document.getElementById('tank_nameError').className = "invalid-feedback";
-				  document.getElementById('tank_name').className = "form-control is-invalid";
-				  $('#update_gateway_sn').val("");
+				  $('#update_tank_nameError').html("<b>"+ tank_name +"</b> has already been taken.");
+				  document.getElementById('update_tank_nameError').className = "invalid-feedback";
+				  document.getElementById('update_tank_name').className = "form-control is-invalid";
+				  $('#update_update_gateway_sn').val("");
 				  
 				}else{
-				  $('#tank_nameError').text(error.responseJSON.errors.tank_name);
-				  document.getElementById('tank_nameError').className = "invalid-feedback";
+				  $('#update_tank_nameError').text(error.responseJSON.errors.tank_name);
+				  document.getElementById('update_tank_nameError').className = "invalid-feedback";
 				}
 				
-				  $('#tank_capacityError').text(error.responseJSON.errors.tank_capacity);
-				  document.getElementById('tank_capacityError').className = "invalid-feedback";			
+				  $('#update_tank_capacityError').text(error.responseJSON.errors.tank_capacity);
+				  document.getElementById('update_tank_capacityError').className = "invalid-feedback";			
 				
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
@@ -477,6 +480,82 @@
 			   });		
 	  });
 	
+
+	<!--Product Deletion Confirmation-->
+	$('body').on('click','#ProductTank_delete',function(){
+			
+			event.preventDefault();
+			let tankID = $(this).data('id');
+			
+			  $.ajax({
+				url: "/product_tank_info",
+				type:"POST",
+				data:{
+				  tankID:tankID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+											
+					/*Set Details*/
+					$('#delete_tank_name').text(response.tank_name);					
+					$('#delete_tank_capacity').text(response.tank_capacity);
+					
+					document.getElementById("deleteTankInfoConfirmed").value = tankID;
+					
+					$('#TankInfoDeleteModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  });	
+	  
+	  
+	<!--Product Confirmed For Deletion-->
+	$('body').on('click','#deleteTankInfoConfirmed',function(){
+			
+			event.preventDefault();
+
+			let tankID = document.getElementById("deleteTankInfoConfirmed").value;
+			
+			  $.ajax({
+				url: "/delete_product_tank_confirmed",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Sales Order Deleted");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					
+					/*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					var table = $("#getSalesOrderList").DataTable();
+				    table.ajax.reload(null, false);
+					/*Reload Page*/
+					//location.reload();
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+				}
+			   });		
+	  });
+	  
 	
   </script>
 	

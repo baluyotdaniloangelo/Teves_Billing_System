@@ -338,6 +338,35 @@
 				  
                 </div>
              </div>	
+
+
+	<!-- Bill Delete Modal-->
+    <div class="modal fade" id="TankInfoDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+				
+				
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Are you sure you want to Delete This Tank?<br>
+				</div>
+				<div align="left"style="margin: 10px;">
+				
+				Name: <span id="delete_tank_name"></span><br>
+				Capacity: <span id="delete_tank_capacity"></span><br>
+				
+				</div>
+                <div class="modal-footer footer_modal_bg">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteTankInfoConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
 			 			 
     </section>
 </main>

@@ -98,6 +98,8 @@ Route::post('/get_product_tank', [ProductTankController::class,'get_product_tank
 Route::post('/create_tank_post', [ProductTankController::class,'create_tank_post'])->name('create_tank_post')->middleware('isLoggedIn');
 /* Product Tank Info*/
 Route::post('/product_tank_info', [ProductTankController::class, 'product_tank_info'])->name('product_tank_info')->middleware('isLoggedIn');
+/*Update Product Tank*/
+Route::post('/update_tank_post', [ProductTankController::class,'update_tank_post'])->name('update_tank_post')->middleware('isLoggedIn');
 
 /*Dev Date Nov 30 2022*/
 /*Load Client List*/

@@ -434,7 +434,10 @@ class PurchaseOrderController_v2 extends Controller
 					'teves_purchase_order_table.purchase_order_id',
 					'teves_purchase_order_table.company_header',
 					'teves_purchase_order_table.purchase_order_date',
-					'teves_purchase_order_table.purchase_order_supplier_idx']);
+					'teves_purchase_order_table.purchase_order_supplier_idx',
+					'teves_purchase_order_table.purchase_order_net_percentage',
+					'teves_purchase_order_table.purchase_order_less_percentage'
+					]);
 					
 					$purchase_order_date = $purchase_order_data[0]->purchase_order_date;
 					$supplier_idx = $purchase_order_data[0]->purchase_order_supplier_idx;
@@ -467,10 +470,10 @@ class PurchaseOrderController_v2 extends Controller
 					
 				$gross_amount = $order_total_amount;
 				
-				$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $request->purchase_order_less_percentage/100;
+				$net_in_percentage 				= $purchase_order_data[0]->purchase_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $purchase_order_data[0]->purchase_order_less_percentage/100;
 							
-				if($request->purchase_order_net_percentage==0){
+				if($purchase_order_data[0]->purchase_order_net_percentage==0){
 							$purchase_order_net_amount 		= 0;
 							$purchase_order_total_due 		=  number_format($gross_amount,4,".","");
 				}else{
@@ -512,10 +515,10 @@ class PurchaseOrderController_v2 extends Controller
 					
 				$gross_amount = $order_total_amount;
 				
-				$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $request->purchase_order_less_percentage/100;
+				$net_in_percentage 				= $purchase_order_data[0]->purchase_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $purchase_order_data[0]->purchase_order_less_percentage/100;
 							
-				if($request->purchase_order_net_percentage==0){
+				if($purchase_order_data[0]->purchase_order_net_percentage==0){
 							$purchase_order_net_amount 		= 0;
 							$purchase_order_total_due 		=  number_format($gross_amount,4,".","");
 				}else{

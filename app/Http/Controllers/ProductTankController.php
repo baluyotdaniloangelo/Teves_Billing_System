@@ -75,5 +75,43 @@ class ProductTankController extends Controller
 		return response()->json($data);
 		
 	}
+
+
+	public function update_tank_post(Request $request){
+
+		$request->validate([
+          'tank_name'      	=> ['required',Rule::unique('teves_product_tank_table')->where( 
+									fn ($query) =>$query
+										->where('tank_name', $request->tank_name)
+										->where('branch_idx', $request->branch_idx)
+										->where('tank_id', '<>',  $request->tank_id )
+									)],
+		  'tank_capacity'   	=> 'required',
+		  'branch_idx'   	=> 'required'
+        ], 
+        [
+			'tank_name.required' => 'Tank Name is required',
+			'tank_capacity.required' => 'Tank Capacity is Required',
+			'branch_idx.required' => 'Branch is Required',
+        ]
+		);			
+
+			//$ProductTank = new ProductTankModel();
+			//$ProductTank = ProductTankModel::find($request->tank_id, ['rtu_sn_number']);
+			$ProductTank = ProductTankModel::find($request->tank_id);
+			$ProductTank->product_idx						= $request->product_idx;
+			$ProductTank->tank_name 						= $request->tank_name;
+			$ProductTank->tank_capacity 					= $request->tank_capacity;
+			$ProductTank->branch_idx 						= $request->branch_idx;
+			
+			$result = $ProductTank->update();
+			
+			if($result){
+				return response()->json(['success'=>'Tank Information Successfully Created!']);
+			}
+			else{
+				return response()->json(['success'=>'Error on Insert Tank Information']);
+			}
+	}
 	
 }
