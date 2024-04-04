@@ -101,6 +101,8 @@ Route::post('/product_tank_info', [ProductTankController::class, 'product_tank_i
 /*Update Product Tank*/
 Route::post('/update_tank_post', [ProductTankController::class,'update_tank_post'])->name('update_tank_post')->middleware('isLoggedIn');
 
+Route::post('/delete_product_tank_confirmed', [ProductTankController::class, 'delete_product_tank_confirmed'])->name('delete_product_tank_confirmed')->middleware('isLoggedIn');
+
 /*Dev Date Nov 30 2022*/
 /*Load Client List*/
 Route::get('/client', [ClientController::class,'client'])->name('client')->middleware('isLoggedIn');

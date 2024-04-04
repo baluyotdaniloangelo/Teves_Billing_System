@@ -76,7 +76,6 @@ class ProductTankController extends Controller
 		
 	}
 
-
 	public function update_tank_post(Request $request){
 
 		$request->validate([
@@ -96,8 +95,6 @@ class ProductTankController extends Controller
         ]
 		);			
 
-			//$ProductTank = new ProductTankModel();
-			//$ProductTank = ProductTankModel::find($request->tank_id, ['rtu_sn_number']);
 			$ProductTank = ProductTankModel::find($request->tank_id);
 			$ProductTank->product_idx						= $request->product_idx;
 			$ProductTank->tank_name 						= $request->tank_name;
@@ -113,5 +110,14 @@ class ProductTankController extends Controller
 				return response()->json(['success'=>'Error on Insert Tank Information']);
 			}
 	}
-	
+
+	/*Delete Meter Information*/
+	public function delete_product_tank_confirmed(Request $request){
+
+		$tank_id = $request->tankID;
+		ProductTankModel::find($tank_id)->delete();
+		return 'Deleted';
+		
+	} 
+ 	
 }

@@ -270,20 +270,11 @@ class SalesOrderController extends Controller
 			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
 			$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
 			$Salesorder->sales_order_dr_number 					= $request->dr_number;
-			
-			/*
-				sales_order_or_number:sales_order_or_number,
-				sales_order_po_number:sales_order_po_number,
-				sales_order_charge_invoice:sales_order_charge_invoice,
-				sales_order_collection_receipt:sales_order_collection_receipt,
-			*/
-			
+		
 			$Salesorder->sales_order_or_number 					= $request->sales_order_or_number;
 			$Salesorder->sales_order_po_number 					= $request->sales_order_po_number;
 			$Salesorder->sales_order_charge_invoice 			= $request->sales_order_charge_invoice;
 			$Salesorder->sales_order_collection_receipt 		= $request->sales_order_collection_receipt;
-			
-			//echo $request->sales_order_collection_receipt;
 			
 			$Salesorder->sales_order_payment_term 				= $request->payment_term;
 			$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
@@ -342,7 +333,6 @@ class SalesOrderController extends Controller
 			$Receivables->company_header 				= $request->company_header;
 			$Receivables->update();
 			
-			//return response()->json(array('productlist'=>$data,'paymentcount'=>$paymentcount));	
 			if($result){
 				return response()->json(array('success' => "Sales Order Successfully Updated!",'sales_order_control_number'=>$control_number), 200);
 			}
@@ -622,8 +612,11 @@ class SalesOrderController extends Controller
 						$Receivables_ACTION = new ReceivablesModel();
 						$Receivables_ACTION = ReceivablesModel::find($request->receivable_id);
 						
+						$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
+						
 						$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
-						$Receivables_ACTION->receivable_amount 			= number_format($sales_order_total_due,2, '.', '');
+						$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
+						$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
 						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
 						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
 						$Receivables_ACTION->receivable_status 		= 'Pending';
@@ -672,10 +665,13 @@ class SalesOrderController extends Controller
 				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
 				$SalesOrderUpdate->update();
 				
+				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
+				
 				/*Update Receivable Amount*/
 				$Receivables_ACTION = new ReceivablesModel();
 				$Receivables_ACTION = ReceivablesModel::find($request->receivable_id);
-				$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
+				$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');
+				$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');				
 				$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
 				$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
 				$Receivables_ACTION->receivable_status 				= 'Pending';		

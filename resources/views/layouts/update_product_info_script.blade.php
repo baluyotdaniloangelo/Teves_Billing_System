@@ -527,7 +527,7 @@
 				url: "/delete_product_tank_confirmed",
 				type:"POST",
 				data:{
-				  sales_order_id:sales_order_id,
+				   tankID:tankID,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -535,18 +535,10 @@
 				  if(response) {
 					
 					$('#switch_notice_off').show();
-					$('#sw_off').html("Sales Order Deleted");
+					$('#sw_off').html("Tank Information Deleted!");
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 					
-					/*
-					If you are using server side datatable, then you can use ajax.reload() 
-					function to reload the datatable and pass the true or false as a parameter for refresh paging.
-					*/
-					
-					var table = $("#getSalesOrderList").DataTable();
-				    table.ajax.reload(null, false);
-					/*Reload Page*/
-					//location.reload();
+					LoadProductTank();
 					
 				  }
 				},
