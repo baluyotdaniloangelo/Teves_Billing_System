@@ -14,12 +14,33 @@ use Illuminate\Validation\Rule;
 class ProductTankController extends Controller
 {
 	
-	/*Pricing List*/
+	/*Tank List*/
 	public function get_product_tank(Request $request){		
 
 			$data =  ProductTankModel::RightJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_tank_table.branch_idx')
 					->RightJoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_product_tank_table.product_idx')
 					->where('teves_product_tank_table.product_idx', $request->productID)
+					->orderBy('teves_product_tank_table.tank_id', 'asc')
+					->get([
+						'teves_product_tank_table.tank_id',
+						'teves_product_tank_table.branch_idx',
+						'teves_product_tank_table.tank_name',
+						'teves_product_tank_table.tank_capacity',
+						'teves_branch_table.branch_name',
+						'teves_branch_table.branch_code',
+						'teves_product_table.product_unit_measurement'
+					]);
+		
+			return response()->json($data);			
+	}
+
+	/*Tank List per Branch*/
+	public function get_product_tank_per_branch(Request $request){		
+
+			$data =  ProductTankModel::RightJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_tank_table.branch_idx')
+					->RightJoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_product_tank_table.product_idx')
+					->where('teves_product_tank_table.product_idx', $request->productID)
+					->where('teves_product_tank_table.branch_idx', $request->branchID)
 					->orderBy('teves_product_tank_table.tank_id', 'asc')
 					->get([
 						'teves_product_tank_table.tank_id',

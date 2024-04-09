@@ -93,7 +93,9 @@ Route::post('/get_product_list_pricing_per_branch', [ProductController::class,'g
 /**/
 Route::get('/update_product_information', [ProductController::class, 'update_product_information'])->name('update_product_information')->middleware('isLoggedIn');
 /*Product Tank*/
-Route::post('/get_product_tank', [ProductTankController::class,'get_product_tank'])->name('ProductTankPerBranch')->middleware('isLoggedIn');
+Route::post('/get_product_tank', [ProductTankController::class,'get_product_tank'])->name('ProductTank')->middleware('isLoggedIn');
+/*Product Tank per Branch*/
+Route::post('/get_product_tank_per_branch', [ProductTankController::class,'get_product_tank_per_branch'])->name('ProductTankPerBranch')->middleware('isLoggedIn');
 /*Create Product Tank*/
 Route::post('/create_tank_post', [ProductTankController::class,'create_tank_post'])->name('create_tank_post')->middleware('isLoggedIn');
 /* Product Tank Info*/
@@ -214,7 +216,7 @@ Route::post('/receivable_payment_list', [ReceivablesController::class,'receivabl
 Route::post('/receivable_payment_info', [ReceivablesController::class,'receivable_payment_info'])->name('ReceivablePaymentInfo')->middleware('isLoggedIn');
 
 /* Sales Order to Receivable Payment Action */
-Route::post('/sales_order_receivable_payment_post',[ReceivablesController::class,'sales_order_receivable_payment_post'])->name('sales_order_receivable_payment_post')->middleware('isLoggedIn');
+Route::post('/sales_order_receivable_payment',[ReceivablesController::class,'sales_order_receivable_payment'])->name('sales_order_receivable_payment')->middleware('isLoggedIn');
 /*Delete Sales Order Payment Item*/
 Route::post('/sales_order_receivable_delete_payment', [ReceivablesController::class,'sales_order_receivable_delete_payment'])->name('SalesOrderDeletePayment')->middleware('isLoggedIn');
 #Route::post('/get_sales_order_payment_list', [SalesOrderController::class,'get_sales_order_payment_list'])->name('get_sales_order_payment_list')->middleware('isLoggedIn');
@@ -365,8 +367,15 @@ Route::post('/save_cashiers_report_PH5', [CashiersReportController::class,'save_
 /*GET Cashiers report P5*/
 Route::post('/cashiers_report_p5_info', [CashiersReportController::class, 'cashiers_report_p5_info'])->name('CRP5_info')->middleware('isLoggedIn');
 
-/*GET Cashiers report P6*/
-Route::post('/cashiers_report_p6_info', [CashiersReportController::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
+/*GET Cashiers Summary Report*/
+Route::post('/cashiers_report_summary_info', [CashiersReportController::class, 'cashiers_report_summary_info'])->name('CashiersReportSummary')->middleware('isLoggedIn');
+
+
+
+/*Cashiers Report Part 6*/
+Route::post('/save_product_cashiers_report_p6', [CashiersReportController::class,'save_product_cashiers_report_p6'])->name('SAVE_CHR_PH6')->middleware('isLoggedIn');
+/* Load P6 */
+Route::post('/get_product_inventory_list', [CashiersReportController::class,'get_product_inventory_list'])->name('GetCashiersP6')->middleware('isLoggedIn');
 
 /*Load Cashiers Report */
 Route::get('/generate_cashier_report_pdf', [CashiersReportController::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');

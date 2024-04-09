@@ -207,8 +207,9 @@
 									@endforeach
 								</select>
 								<label for="branch_idx">Branch</label>
+								 <span class="valid-feedback" id="branch_idxError"></span>
 							</div>
-							 <span class="valid-feedback" id="branch_idxError"></span>
+							
 						</div>
 						</div>
 
@@ -220,8 +221,9 @@
 						<div class="form-floating mb-3">
 						  <input class="form-control" name="tank_name" id="tank_name" required autocomplete="off" placeholder="Date">
 						  <label for="tank_name">Name</label>
+						  <span class="valid-feedback" id="tank_nameError"></span>
 						 </div>
-						<span class="valid-feedback" id="tank_nameError"></span>
+						
 						
 						</div>
 						
@@ -234,8 +236,9 @@
 							<div class="form-floating mb-3">
 								<input type="number" class="form-control" aria-label="" name="tank_capacity" id="tank_capacity" value="" step=".01" placeholder="Capacity">
 								<label for="tank_capacity">Capacity</label>
+								<span class="valid-feedback" id="tank_capacityError"></span>
 							</div>
-							<span class="valid-feedback" id="tank_capacityError"></span>
+							
 							
 						</div>
 						</div>

@@ -255,7 +255,7 @@
 	function LoadProductTank() {
 		
 			  $.ajax({
-				url: "{{ route('ProductTankPerBranch') }}",
+				url: "{{ route('ProductTank') }}",
 				type:"POST",
 				data:{
 				  productID:{{ $productID }},
@@ -353,11 +353,13 @@
 				  $('#tank_nameError').html("<b>"+ tank_name +"</b> has already been taken.");
 				  document.getElementById('tank_nameError').className = "invalid-feedback";
 				  document.getElementById('tank_name').className = "form-control is-invalid";
-				  $('#update_gateway_sn').val("");
+				  $('#tank_name').val("");
 				  
 				}else{
+					
 				  $('#tank_nameError').text(error.responseJSON.errors.tank_name);
 				  document.getElementById('tank_nameError').className = "invalid-feedback";
+				  
 				}
 				
 				  $('#tank_capacityError').text(error.responseJSON.errors.tank_capacity);
@@ -369,7 +371,8 @@
 				  
 				}
 			   });		
-	  });
+			   
+	});
 	
 	<!--Select Tank For Update-->
 	$('body').on('click','#ProductTank_Edit',function(){

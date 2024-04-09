@@ -100,20 +100,11 @@ class ReceivablesController extends Controller
 						}
 					
 										
-					
-/*
-					
-					$actionBtn = '<div align="center" class="action_table_menu_Product">
-										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
-									</div>';
-					*/
 							$actionBtn = '<div align="center" class="action_table_menu_Product">
 										<!--<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery()" id="viewPaymentGalery"></a>-->
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="'.$menu_for_update.'" title="Update"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_edit" title="Update"></a>
+										<!--<a href="#" data-id="$row->receivable_id" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="$menu_for_update" title="Update"></a>-->
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
 					
@@ -294,100 +285,7 @@ class ReceivablesController extends Controller
 		}
 	}
 	
-	/*Save Payment Item*/
-	public function save_receivable_payment_post(Request $request){		
-			
-			$request->validate([
-			'payment_amount'  	=> 'required'
-			], 
-			[
-				'payment_amount.required' 	=> 'Payment Account is Required'
-			]
-			);
-			
-			/*Payment Option*/
-			$receivable_id 				= $request->receivable_id;
-			$payment_id 				= $request->payment_id;
-			$mode_of_payment 			= $request->mode_of_payment;
-			$date_of_payment 			= $request->date_of_payment;
-			$reference_no 				= $request->reference_no;
-			$payment_amount 			= $request->payment_amount;
-			
-			if($payment_amount!=''){
-				for($count = 0; $count < count($mode_of_payment); $count++)
-				{
-					
-						$mode_of_payment_item 	= $mode_of_payment[$count];
-						$date_of_payment_item 	= $date_of_payment[$count];
-						$reference_no_item 		= $reference_no[$count];
-						$payment_amount_item 	= number_format($payment_amount[$count],2, '.', '');
-						$payment_id_item 		= $payment_id[$count];
-				
-					if($payment_id_item==0){
-							
-						$ReceivablePaymentComponent = new ReceivablesPaymentModel();
-						
-						$ReceivablePaymentComponent->receivable_idx 				= $receivable_id;
-						$ReceivablePaymentComponent->receivable_mode_of_payment 	= $mode_of_payment_item;
-						$ReceivablePaymentComponent->receivable_date_of_payment 	= $date_of_payment_item;
-						$ReceivablePaymentComponent->receivable_reference 			= $reference_no_item;
-						$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
-						
-						$ReceivablePaymentComponent->save();
-						
-					}else{
-						
-						if(Session::get('UserType')=="Admin"){
-							
-							$ReceivablePaymentComponent = new ReceivablesPaymentModel();
-							
-							$ReceivablePaymentComponent = ReceivablesPaymentModel::find($payment_id_item);
-							
-							$ReceivablePaymentComponent->receivable_mode_of_payment 	= $mode_of_payment_item;
-							$ReceivablePaymentComponent->receivable_date_of_payment 	= $date_of_payment_item;
-							$ReceivablePaymentComponent->receivable_reference 			= $reference_no_item;
-							$ReceivablePaymentComponent->receivable_payment_amount 		= $payment_amount_item;
-							
-							$ReceivablePaymentComponent->update();
-							
-						}
-						
-					}
-				}		
-				
-			/*Remaining Balance*/
-			/*Get Receivable Details*/
-			$receivable_details = ReceivablesModel::find($receivable_id, ['receivable_amount']);							
-			$receivable_amount = $receivable_details->receivable_amount;
-			
-			/*Get Receivable Payment Details*/
-			$receivable_payment_amount =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivable_id)
-              	->sum('receivable_payment_amount');
-			
-			$remaining_balance = number_format($receivable_amount - $receivable_payment_amount,2, '.', '');
-			
-			/*IF Fully Paid Automatically Update the Status to Paid*/
-			if($remaining_balance <= 0)
-			{
-				$receivable_status = 'Paid';
-			}else{
-				$receivable_status = 'Pending';
-			}
-			
-			/*Update Recievable Table*/
-			$Receivables_update = new ReceivablesModel();
-			$Receivables_update = ReceivablesModel::find($receivable_id);
-			
-			$Receivables_update->receivable_remaining_balance 	= $remaining_balance;
-			$Receivables_update->receivable_status 				= $receivable_status;
-			
-			$result_update = $Receivables_update->update();
-			
-			return response()->json(array('success' => "Receivable Payment Successfully Updated!"), 200);
-			
-			}
-							
-	}
+
 
 	public function create_receivables_from_sale_order_post(Request $request){		
 

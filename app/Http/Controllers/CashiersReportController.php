@@ -9,6 +9,7 @@ use App\Models\CashiersReportModel_P2;
 use App\Models\CashiersReportModel_P3;
 use App\Models\CashiersReportModel_P4;
 use App\Models\CashiersReportModel_P5;
+use App\Models\CashiersReportModel_P6;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
 use Session;
@@ -191,19 +192,13 @@ class CashiersReportController extends Controller
 		
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate = CashiersReportModel::find($request->CashiersReportId);
-			/*$CashiersReportCreate->user_idx 				= Session::get('loginID');*/
 			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->shift 					= $request->shift;
 			$result = $CashiersReportCreate->update();
 			
-			/*Get Last ID
-			$last_transaction_id = $CashiersReportCreate->cashiers_report_id;*/
-			
-			
 			if($result){
-				//return response()->json(['success'=>"Cashier's Report Information Successfully Created!"]);
 				return response()->json(array('success' => "Cashier's Report Information Successfully Updated!", 'cashiers_report_id' => $request->CashiersReportId), 200);
 			}
 			else{
@@ -240,16 +235,18 @@ class CashiersReportController extends Controller
 		return 'Deleted';
 		
 	}
+	
 	/*Fetch client Information*/
 	public function cashiers_report_form($CashiersReportId){
 		
-		$data = array();
+		
 		if(Session::has('loginID')){
+			
+			$data = array();	
+			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$teves_branch = TevesBranchModel::all();
 			
-		}
-		
 		$title = "Cashier' Report";
 		$product_data = ProductModel::all();
 		$CashiersReportData = CashiersReportModel::where('cashiers_report_id', $CashiersReportId)
@@ -267,6 +264,8 @@ class CashiersReportController extends Controller
 			
 		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch'));	
 		
+		}
+		
 	}
 
 	public function cashiers_report_p1_info(Request $request){
@@ -275,8 +274,6 @@ class CashiersReportController extends Controller
 		$product_id = $request->product_id;
 		
 		if($CashiersReportId!=0){
-			
-			//$CHPH1_ID = $request->CHPH1_ID;
 			
 			$data =  CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
 				->where('product_idx', $product_id)
@@ -377,7 +374,6 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P1 = new CashiersReportModel_P1();
 									$CashiersReportModel_P1 = CashiersReportModel_P1::find($CHPH1_ID);
 									
-									//$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
 									$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
 									$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
@@ -489,7 +485,6 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P2 = new CashiersReportModel_P2();
 									$CashiersReportModel_P2 = CashiersReportModel_P2::find($CHPH2_ID);
 									
-									//$CashiersReportModel_P2->user_idx 					= Session::get('loginID');
 									$CashiersReportModel_P2->product_idx 				= $product_idx;
 									$CashiersReportModel_P2->order_quantity 			= $order_quantity;
 									$CashiersReportModel_P2->product_price 				= $product_price;
@@ -682,9 +677,7 @@ class CashiersReportController extends Controller
 			        }
 					 $peso_sales = ($product_price);
              }
-			 
-               
-								
+			 	
 								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
 								
 									$CashiersReportModel_P3 = new CashiersReportModel_P3();
@@ -849,7 +842,6 @@ class CashiersReportController extends Controller
 		$CHPH3_ID = $request->CHPH3_ID;
 		
 		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
-			//->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 				->get([
 					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.item_description',
@@ -1026,7 +1018,125 @@ class CashiersReportController extends Controller
 			
 	}	
 	
-	public function cashiers_report_p6_info(Request $request){
+	
+	public function save_product_cashiers_report_p6(Request $request){	
+
+		$request->validate([
+			'product_idx'  			=> 'required',
+			'tank_idx'  			=> 'required',
+			'beginning_inventory'  	=> 'required',
+			'sales_in_liters_inventory'  		=> 'required',		
+			'delivery_inventory'  			=> 'required',
+			'ending_inventory' 		=> 'required'
+        ], 
+        [
+			'product_idx.required' 			=> 'Product is Required',
+			'tank_idx.required' 			=> 'Tank is Required',
+			'beginning_inventory.required' 	=> 'Beginning Inventory is Required',
+			'sales_in_liters_inventory.required' 		=> 'Sales in Liters is Required',
+			'delivery_inventory.required' 			=> 'Delivery is Required',
+			'ending_inventory.required' 	=> 'Ending Inventory is Required',
+        ]
+		);
+			
+			/*Get Last ID*/
+			$CashiersReportId = $request->CashiersReportId;
+			
+			$product_idx			= $request->product_idx;
+			$tank_idx				= $request->tank_idx;
+			$beginning_inventory 	= $request->beginning_inventory;
+			$sales_in_liters_inventory 		= $request->sales_in_liters_inventory;
+			$delivery_inventory 				= $request->delivery_inventory;
+			$ending_inventory 		= $request->ending_inventory;
+			
+			
+			$book_stock = $beginning_inventory - $sales_in_liters_inventory;
+			$variance = $book_stock - $ending_inventory;
+			
+			$CRPH7_ID 				= $request->CRPH7_ID;
+								
+								if($CRPH7_ID=='' || $CRPH7_ID ==0){	
+								
+									$CashiersReportModel_p6 = new CashiersReportModel_p6();
+									
+									$CashiersReportModel_p6->user_idx 					= Session::get('loginID');
+									$CashiersReportModel_p6->cashiers_report_idx 		= $CashiersReportId;
+									$CashiersReportModel_p6->product_idx 				= $product_idx;
+									$CashiersReportModel_p6->tank_idx	 				= $tank_idx;
+									$CashiersReportModel_p6->beginning_inventory 		= $beginning_inventory;
+									$CashiersReportModel_p6->sales_in_liters 			= $sales_in_liters_inventory;
+									$CashiersReportModel_p6->delivery 					= $delivery_inventory;
+									$CashiersReportModel_p6->ending_inventory 			= $ending_inventory;
+									$CashiersReportModel_p6->book_stock 				= $book_stock;
+									$CashiersReportModel_p6->variance 					= $variance;
+									
+									$result = $CashiersReportModel_p6->save();
+									
+									if($result){
+										return response()->json(['success'=>'Product Inventory Successfully Created!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Product Inventory Information']);
+									}
+									
+								}else{
+																	
+									$CashiersReportModel_p6 = new CashiersReportModel_p6();
+									$CashiersReportModel_p6 = CashiersReportModel_p6::find($CRPH7_ID);
+									
+									$CashiersReportModel_p6->cashiers_report_idx 		= $CashiersReportId;
+									$CashiersReportModel_p6->product_idx 				= $product_idx;
+									$CashiersReportModel_p6->tank_idx	 				= $tank_idx;
+									$CashiersReportModel_p6->beginning_inventory 		= $beginning_inventory;
+									$CashiersReportModel_p6->sales_in_liters 			= $sales_in_liters_inventory;
+									$CashiersReportModel_p6->delivery 					= $delivery_inventory;
+									$CashiersReportModel_p6->ending_inventory 			= $ending_inventory;
+									$CashiersReportModel_p6->book_stock 				= $book_stock;
+									$CashiersReportModel_p6->variance 					= $variance;
+									
+									$result = $CashiersReportModel_p6->update();
+									
+									if($result){
+										return response()->json(['success'=>'Product Inventory Successfully Updated!']);
+									}
+									else{
+										return response()->json(['success'=>'Error on Product Inventory Information']);
+									}
+									
+								}
+								
+	}		
+	
+	/**/
+	public function get_product_inventory_list(Request $request){		
+
+			$data =  CashiersReportModel_p6::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p6.tank_idx')
+					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p6.product_idx')
+					->where('teves_cashiers_report_p6.cashiers_report_idx', $request->CashiersReportId)
+					->orderBy('teves_cashiers_report_p6.product_idx', 'asc')
+					->get([
+						'teves_product_table.product_id',
+						'teves_product_table.product_name',
+						'teves_product_tank_table.tank_id',
+						'teves_product_tank_table.tank_name',
+						'teves_product_tank_table.tank_capacity',
+						'teves_cashiers_report_p6.cashiers_report_p6_id',
+						'teves_cashiers_report_p6.beginning_inventory',
+						'teves_cashiers_report_p6.sales_in_liters',
+						'teves_cashiers_report_p6.delivery',
+						'teves_cashiers_report_p6.ending_inventory',
+						'teves_cashiers_report_p6.book_stock',
+						'teves_cashiers_report_p6.variance'
+					]);
+		
+			return response()->json($data);			
+	}
+
+	
+	
+	
+	/*OLD cashiers_report_p6_info*/
+	public function cashiers_report_summary_info(Request $request){
 
 		$CashiersReportId = $request->CashiersReportId;
 		
@@ -1117,8 +1227,7 @@ class CashiersReportController extends Controller
           
 		$title = 'Cashier Report';
 		  
-		  
-		 $data_P1_premium_95 =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+		$data_P1_premium_95 =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
 			->where('product_idx', 13)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
@@ -1135,7 +1244,7 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p1.order_total_amount'
 					]); 
 					
-		 $data_P1_super_regular =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+		$data_P1_super_regular =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
 			->where('product_idx', 11)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
@@ -1152,7 +1261,7 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p1.order_total_amount'
 					]); 		
 
-		 $data_P1_diesel =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+		$data_P1_diesel =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
 			->where('product_idx', 12)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
@@ -1169,10 +1278,10 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p1.order_total_amount'
 					]);
 
-    		$data_P2 =  CashiersReportModel_P2::where('cashiers_report_id', $request->CashiersReportId)
-			    ->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p2.product_idx')
-				->orderBy('cashiers_report_p2_id', 'asc')
-              	->get([
+    	$data_P2 =  CashiersReportModel_P2::where('cashiers_report_id', $request->CashiersReportId)
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p2.product_idx')
+			->orderBy('cashiers_report_p2_id', 'asc')
+            ->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
 					'teves_cashiers_report_p2.product_price',
@@ -1253,14 +1362,12 @@ class CashiersReportController extends Controller
 		$branch_header = TevesBranchModel::find($CashiersReportData[0]['teves_branch'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
         $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header'));
-		//var_dump($CashiersReportData);
+		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('A4', 'portrait');/*Set to Landscape*/
 		$pdf->render();
 		return $pdf->stream($CashiersReportData[0]['cashiers_name'].".pdf");
-
-		//return view('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand'));
 
 	}
 

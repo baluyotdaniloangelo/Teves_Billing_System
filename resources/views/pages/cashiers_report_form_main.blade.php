@@ -136,6 +136,9 @@
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph5-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph5" type="button" role="tab" aria-controls="ph5" aria-selected="false" tabindex="-1">Cash On Hand</button>
 							</li>
+							<li class="nav-item" role="presentation">
+							  <button class="nav-link" id="ph7-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph7" type="button" role="tab" aria-controls="ph7" aria-selected="false" tabindex="-1">Inventory</button>
+							</li>
 							<!--<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph6-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph6" type="button" role="tab" aria-controls="ph6" aria-selected="false" tabindex="-1" onclick="LoadCashiersReportPH6()">Summary</button>
 							</li>-->
@@ -163,6 +166,9 @@
 							<!--</div>-->
 							<div class="tab-pane fade" id="bordered-ph5" role="tabpanel" aria-labelledby="ph5-tab">						
 							@include('pages.cashiers_report_form_p5')
+							</div>
+							<div class="tab-pane fade" id="bordered-ph7" role="tabpanel" aria-labelledby="ph7-tab">						
+							@include('pages.cashiers_report_form_p7')
 							</div>
 							
 						  </div><!-- End Bordered Tabs -->

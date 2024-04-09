@@ -158,6 +158,7 @@ else if (Request::is('cashiers_report_form/*')){
 <body class="">
 @include('layouts.footer')
 @include('layouts.cashier_report_form_script')
+@include('layouts.cashier_report_form_script_p7')
 <?php
 }
 else if (Request::is('monthly_sales')){
