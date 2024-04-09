@@ -1,48 +1,24 @@
    <script type="text/javascript">
-	/*Load Cashiers Report Phase 1*/
-	//LoadCashiersReportPH1();
-
-/*	function TotalAmount(){
-		
-		let product_price 			= $('#product_name_inventory option[value="' + $('#product_idx_inventory').val() + '"]').attr('data-price');
-		let ending_inventory 	= $("#ending_inventory").val();	
-		var beginning_reading_inventory 		= $("input[name=beginning_reading_inventory]").val();
-		var sales_in_liters_inventory 		= $("input[name=sales_in_liters_inventory]").val();
-		var delivery_inventory 			= $("input[name=delivery_inventory]").val();	
-		let order_quantity 			= (sales_in_liters_inventory - beginning_reading_inventory) - delivery_inventory;
-		
-		if(order_quantity!=0 || order_quantity!=''){
-			if(ending_inventory!='' && ending_inventory!=0){
-				var total_amount = ending_inventory * order_quantity;
-				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#TotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}
-		}		
-	}
 	
-	function UpdateTotalAmount(){
+	function inventory_tank(){
 		
-		let product_price 			= $('#update_product_name_inventory option[value="' + $('#update_product_idx_inventory').val() + '"]').attr('data-price');
-		let ending_inventory 	= $("#update_ending_inventory").val();		
-		var beginning_reading_inventory 		= $("input[name=update_beginning_reading_inventory]").val();
-		var sales_in_liters_inventory 		= $("input[name=update_sales_in_liters_inventory]").val();
-		var delivery_inventory 			= $("input[name=update_delivery_inventory]").val();		
-		let order_quantity 			= (sales_in_liters_inventory - beginning_reading_inventory) - delivery_inventory;
+			var beginning_inventory 			= $("input[name=beginning_inventory]").val();
+			var sales_in_liters_inventory 		= $("input[name=sales_in_liters_inventory]").val();
+			var delivery_inventory 				= $("input[name=delivery_inventory]").val();
+			var ending_inventory 				= $("input[name=ending_inventory]").val();
 		
-		if(order_quantity!=0 || order_quantity!=''){
-			if(ending_inventory!='' && ending_inventory!=0){
-				var total_amount = ending_inventory * order_quantity;
-				$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
-			}
+		if(beginning_inventory!=0 || beginning_inventory!=''){
+			
+				var TotalBookStock = beginning_inventory - sales_in_liters_inventory;
+				var TotalVariance = TotalBookStock - ending_inventory;
+				
+				$('#TotalBookStock').html(TotalBookStock.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#TotalVariance').html(TotalVariance.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			
 		}
 		
 	}		
-*/
+
 	function LoadProductTank() {		
 	
 		let branch_idx 			= $("#teves_branch").val();

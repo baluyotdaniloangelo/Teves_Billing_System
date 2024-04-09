@@ -97,14 +97,14 @@
 						<div class="row mb-2">
 						  <label class="col-sm-4 col-form-label">BOOK STOCK</label>
 						  <div class="col-sm-8">
-								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalInventory">0.00</span>
+								 <span id="TotalBookStock">0.00</span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
 						  <label class="col-sm-4 col-form-label">VARIANCE</label>
 						  <div class="col-sm-8">
-								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalInventory">0.00</span>
+								 <span id="TotalVariance">0.00</span>
 						  </div>
 						</div>
 						
