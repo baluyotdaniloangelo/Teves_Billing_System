@@ -103,7 +103,7 @@ class ReceivablesController extends Controller
 							$actionBtn = '<div align="center" class="action_table_menu_Product">
 										<!--<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery()" id="viewPaymentGalery"></a>-->
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_edit" title="Update"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										<!--<a href="#" data-id="$row->receivable_id" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="$menu_for_update" title="Update"></a>-->
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
@@ -421,7 +421,7 @@ class ReceivablesController extends Controller
 				->update(
 					[
 					'receivable_idx' => 0,
-					'receivable_branch_idx' => 0
+					'branch_idx' => 0
 					],
 				);
 		
@@ -513,7 +513,7 @@ class ReceivablesController extends Controller
 				->where('receivable_idx', '=', 0)
 				->update([
 					'receivable_idx' => $Receivables->receivable_id,
-					'receivable_branch_idx' => $Receivables->company_header]);
+					'branch_idx' => $Receivables->company_header]);
 			
 			if($result){
 				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);

@@ -19,9 +19,9 @@
 								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('receivables') }}" title="Back">  
 								  <span title="Back to Sales Order List">Back</span>
 								</a>
-								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintReceivableOrder">&nbsp;Billing</button>
-								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSOA">&nbsp;SOA</button>
-								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintReceivable">&nbsp;Receivable</button>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintReceivableOrder" onclick="print_billing()">&nbsp;Billing</button>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSOA" onclick="print_soa()">&nbsp;SOA</button>
+								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintReceivable" onclick="print_receivable()">&nbsp;Receivable</button>
 								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
 								
 							</div>					
@@ -276,7 +276,7 @@
 						<div class="row mb-2">
 						  <label for="update_client_idx" class="col-sm-3 col-form-label">Client</label>
 						  <div class="col-sm-9">
-							<input class="form-control" list="update_client_name" name="update_client_name" id="update_client_idx" required autocomplete="off">
+							<input class="form-control" list="update_client_name" name="update_client_name" id="update_client_idx" required autocomplete="off" disabled>
 											<datalist id="update_client_name">
 											  @foreach ($client_data as $client_data_cols)
 											  <option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
@@ -319,8 +319,6 @@
 							  <div class="input-group">
 							  
 									<input class="form-control" list="product_list" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
-									
-									
 									<span class="input-group-text">Manual Price</span>
 									<input type="text" class="form-control" placeholder="0.00" aria-label="" name="update_product_manual_price" id="update_product_manual_price" value="" step=".01" onchange="UpdateTotalAmount()">
 									<span class="valid-feedback" id="update_product_idxError"></span>

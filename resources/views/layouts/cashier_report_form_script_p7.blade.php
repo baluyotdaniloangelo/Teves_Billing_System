@@ -19,6 +19,25 @@
 		
 	}		
 
+	function update_inventory_tank(){
+		
+			var beginning_inventory 			= $("input[name=update_beginning_inventory]").val();
+			var sales_in_liters_inventory 		= $("input[name=update_sales_in_liters_inventory]").val();
+			var delivery_inventory 				= $("input[name=update_delivery_inventory]").val();
+			var ending_inventory 				= $("input[name=update_ending_inventory]").val();
+		
+		if(beginning_inventory!=0 || beginning_inventory!=''){
+			
+				var TotalBookStock = beginning_inventory - sales_in_liters_inventory;
+				var TotalVariance = TotalBookStock - ending_inventory;
+				
+				$('#update_TotalBookStock').html(TotalBookStock.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+				$('#update_TotalVariance').html(TotalVariance.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+			
+		}
+		
+	}
+	
 	function LoadProductTank() {		
 	
 		let branch_idx 			= $("#teves_branch").val();
@@ -149,7 +168,37 @@
 					}
 				   });		
 		 });
-		 
+		
+	$('body').on('click','#CHPH6_Edit',function(){			
+			event.preventDefault();
+			let CHPH6_ID = $(this).data('id');			
+			$.ajax({
+				url: "{{ route('CRP6_info') }}",
+				type:"POST",
+				data:{
+				  CHPH6_ID:CHPH6_ID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  
+				  if(response) {				
+				
+					document.getElementById("update-CRPH6").value = CHPH6_ID;				
+					/*Set Details*/					
+					document.getElementById("update_description_p4").value 	= response[0].description_p4;
+					document.getElementById("update_amount_p4").value 		= response[0].amount_p4;
+					$('#Update_CRPH4_Modal').modal('toggle');	
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	});
+
 	LoadCashiersReportPH6(); 
 
 	function LoadCashiersReportPH6() {		
@@ -169,23 +218,7 @@
 				  if(response!='') {			  
 						var len = response.length;
 						for(var i=0; i<len; i++){
-						
-						
-						/*
-						'teves_product_table.product_id',
-						'teves_product_table.product_name',
-						'teves_product_tank_table.tank_id',
-						'teves_product_tank_table.tank_name',
-						'teves_product_tank_table.tank_capacity',
-						'teves_cashiers_report_p6.cashiers_report_p6_id',
-						'teves_cashiers_report_p6.beginning_inventory',
-						'teves_cashiers_report_p6.sales_in_liters',
-						'teves_cashiers_report_p6.delivery',
-						'teves_cashiers_report_p6.ending_inventory',
-						'teves_cashiers_report_p6.book_stock',
-						'teves_cashiers_report_p6.variance'
-						*/
-							
+
 							var cashiers_report_p6_id = response[i].cashiers_report_p6_id;
 						
 							var product_name = response[i].product_name;
@@ -198,13 +231,6 @@
 							var book_stock = response[i].book_stock.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var variance = response[i].variance.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
-							//var sales_in_liters = response[i].product_name_inventory;
-							//var beginning_reading_inventory = response[i].beginning_reading_inventory;
-							//var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							//var sales_in_liters_inventory = response[i].sales_in_liters_inventory;
-							//var delivery_inventory = response[i].delivery_inventory;
-							//var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							
 							$('#table_product_inventory_body_data tr:last').after("<tr>"+
 							"<td class='product_td' align='left'>"+product_name+"</td>"+
 							"<td class='beginning_reading_inventory_td' align='left'>"+tank_name+"</td>"+
@@ -216,7 +242,8 @@
 							"<td class='manual_price_td' align='right'>"+variance+"</td>"+
 							
 							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CRPH6_Edit' data-id='"+cashiers_report_p6_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP1'  data-id='"+cashiers_report_p6_id+"'></a></div></td>"+
-							"</tr>");				
+							"</tr>");		
+							
 					}			
 				  }else{
 							/*No Result Found or Error*/	

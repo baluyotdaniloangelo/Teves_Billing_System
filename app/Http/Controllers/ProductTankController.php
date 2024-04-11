@@ -60,6 +60,7 @@ class ProductTankController extends Controller
 		$request->validate([
           'tank_name'      	=> ['required',Rule::unique('teves_product_tank_table')->where( 
 									fn ($query) =>$query
+										->where('product_idx', $request->product_idx)
 										->where('tank_name', $request->tank_name)
 										->where('branch_idx', $request->branch_idx) 
 									)],
@@ -102,8 +103,9 @@ class ProductTankController extends Controller
 		$request->validate([
           'tank_name'      	=> ['required',Rule::unique('teves_product_tank_table')->where( 
 									fn ($query) =>$query
+										->where('product_idx', $request->product_idx)
 										->where('tank_name', $request->tank_name)
-										->where('branch_idx', $request->branch_idx)
+										->where('branch_idx', $request->branch_idx) 
 										->where('tank_id', '<>',  $request->tank_id )
 									)],
 		  'tank_capacity'   	=> 'required',

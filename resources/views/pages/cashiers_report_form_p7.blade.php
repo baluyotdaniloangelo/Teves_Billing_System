@@ -135,63 +135,71 @@
 					  <form class="g-3 needs-validation" id="CRPH6_form_edit">
 					  
 					  <div class="row mb-2">
-						  <label for="update_product_idx" class="col-sm-3 col-form-label">PRODUCT</label>
-						  <div class="col-sm-9">
-									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
-									<datalist id="update_product_name">
+						  <label for="update_product_idx" class="col-sm-4 col-form-label">PRODUCT</label>
+						  <div class="col-sm-8">
+									<input class="form-control" list="update_product_name_inventory" name="update_product_name_inventory" id="update_product_idx_inventory" required autocomplete="off" onchange="LoadProductTank()">
+									<datalist id="update_product_name_inventory">
 										@foreach ($product_data as $product_data_cols)
 											<span style="font-family: DejaVu Sans; sans-serif;">
 											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
 											</span>
 										@endforeach
 									</datalist>
-									<span class="valid-feedback" id="update_product_idxError"></span>
+									<span class="valid-feedback" id="update_product_idx_inventoryError"></span>
 							</div>	
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_beginning_reading_inventory" class="col-sm-3 col-form-label">BEGINNING INVENTORY</label>
-						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_beginning_reading_inventory" id="update_beginning_reading_inventory" required step=".01" onchange="UpdateTotalAmount()" >
-							  <span class="valid-feedback" id="update_beginning_reading_inventoryError"></span>						  
+						  <label for="update_product_tank_idx_inventor" class="col-sm-4 col-form-label">TANK</label>
+						  <div class="col-sm-8">
+									<input class="form-control" list="update_product_tank_list" name="update_product_tank_inventory" id="update_product_tank_idx_inventory" required autocomplete="off">
+									<span class="valid-feedback" id="update_product_tank_idx_inventoryError"></span>
+							</div>	
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="beginning_reading_inventory" class="col-sm-4 col-form-label">BEGINNING INVENTORY</label>
+						  <div class="col-sm-8">
+							  <input type="number" class="form-control" placeholder="" aria-label="update_beginning_inventory" aria-describedby="basic-addon1" name="update_beginning_inventory" id="update_beginning_inventory" required step=".01" onchange="update_inventory_tank()" >
+							  <span class="valid-feedback" id="update_beginning_inventoryError"></span>						  
 						  </div>
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_sales_in_liters_inventory" class="col-sm-3 col-form-label">SALES IN LITERS</label>
-						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_sales_in_liters_inventory" id="update_sales_in_liters_inventory" required step=".01" onchange="UpdateTotalAmount()" >
+						  <label for="update_sales_in_liters_inventory" class="col-sm-4 col-form-label">SALES IN LITERS</label>
+						  <div class="col-sm-8">
+							  <input type="number" class="form-control" placeholder="" aria-label="update_sales_in_liters_inventory" aria-describedby="basic-addon1" name="update_sales_in_liters_inventory" id="update_sales_in_liters_inventory" required step=".01" onchange="update_inventory_tank()" >
 							  <span class="valid-feedback" id="update_sales_in_liters_inventoryError"></span>						  
 						  </div>
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_delivery_inventory" class="col-sm-3 col-form-label">DELIVERY</label>
-						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_delivery_inventory" id="update_delivery_inventory" step=".01" onchange="UpdateTotalAmount()" >
+						  <label for="update_delivery_inventory" class="col-sm-4 col-form-label">DELIVERY</label>
+						  <div class="col-sm-8">
+							  <input type="number" class="form-control" placeholder="" aria-label="update_delivery_inventory" aria-describedby="basic-addon1" name="update_delivery_inventory" id="delivery_inventory" required step=".01" onchange="update_inventory_tank()" >
 							  <span class="valid-feedback" id="update_delivery_inventoryError"></span>						  
 						  </div>
 						</div>
 
 						<div class="row mb-2">
-						  <label for="update_ending_inventory" class="col-sm-3 col-form-label" title="Msnual Price">ENDING INVENTORY</label>
-						  <div class="col-sm-9">
-							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_ending_inventory" id="update_ending_inventory" step=".01" onchange="UpdateTotalAmount()" >
+						  <label for="update_ending_inventory" class="col-sm-4 col-form-label" title="Manual Price">ENDING INVENTORY</label>
+						  <div class="col-sm-8">
+							  <input type="number" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" name="update_ending_inventory" id="update_ending_inventory" required step=".01" onchange="update_inventory_tank()" >
 							  <span class="valid-feedback" id="update_ending_inventoryError"></span>						  
 						  </div>
 						</div>						
-						<!---->
+						
 						<div class="row mb-2">
 						  <label class="col-sm-4 col-form-label">BOOK STOCK</label>
 						  <div class="col-sm-8">
-								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalInventory">0.00</span>
+								 <span id="update_TotalBookStock">0.00</span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
 						  <label class="col-sm-4 col-form-label">VARIANCE</label>
 						  <div class="col-sm-8">
-								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="TotalInventory">0.00</span>
+								 <span id="update_TotalVariance">0.00</span>
 						  </div>
 						</div>
 						

@@ -218,7 +218,7 @@
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
+								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
@@ -905,6 +905,167 @@
 				}
 			   });		
 	  });	 
+	  
+	/*Re-print*/
+	function print_billing(){
+	  
+			event.preventDefault();
+			
+			let ReceivableID = {{ @$receivables_details['receivable_id'] }};
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					let client_idx 		= response[0].client_id;
+					let start_date 		= response[0].billing_period_start;
+					let end_date 		= response[0].billing_period_end;
+					let less_per_liter 	= response[0].less_per_liter;
+					let company_header 	= response[0].company_header;
+					
+					let withholding_tax_percentage 	= response[0].receivable_withholding_tax_percentage/100;
+					let net_value_percentage 		= response[0].receivable_net_value_percentage;
+					let vat_value_percentage 		= response[0].receivable_vat_value_percentage/100;
+					
+					/*Open Billing Print Page*/				
+					var query_billing = {
+						receivable_id:ReceivableID,
+						client_idx:client_idx,
+						start_date:start_date,
+						end_date:end_date,
+						company_header:company_header,
+						less_per_liter:less_per_liter,
+						withholding_tax_percentage:withholding_tax_percentage,
+						net_value_percentage:net_value_percentage,
+						vat_value_percentage:vat_value_percentage,
+						_token: "{{ csrf_token() }}"
+					}
 
+					var url_billing = "{{URL::to('generate_receivable_covered_bill_pdf')}}?" + $.param(query_billing)
+					window.open(url_billing);
+
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  
+	  }
+	  
+	function print_receivable(){
+	  
+			event.preventDefault();
+			
+			let ReceivableID = {{ @$receivables_details['receivable_id'] }};
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					let client_idx 		= response[0].client_id;
+					let start_date 		= response[0].billing_period_start;
+					let end_date 		= response[0].billing_period_end;
+					let less_per_liter 	= response[0].less_per_liter;
+					
+					/*Open Billing Print Page*/				
+					var query_billing = {
+						client_idx:client_idx,
+						start_date:start_date,
+						end_date:end_date,
+						less_per_liter:less_per_liter,
+						_token: "{{ csrf_token() }}"
+					}
+		
+					/*Open Receivable Print Page*/
+					
+					var query_receivable = {
+								receivable_id:ReceivableID,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url_receivable = "{{URL::to('generate_receivable_pdf')}}?" + $.param(query_receivable)
+					window.open(url_receivable);
+			
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+
+	}
+	  
+	function print_soa(){
+	  
+			event.preventDefault();
+			
+			let ReceivableID = {{ @$receivables_details['receivable_id'] }};
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					let client_idx 		= response[0].client_id;
+					let start_date 		= response[0].billing_period_start;
+					let end_date 		= response[0].billing_period_end;
+					let less_per_liter 	= response[0].less_per_liter;
+					
+					/*Open Billing Print Page*/				
+					var query_billing = {
+						client_idx:client_idx,
+						start_date:start_date,
+						end_date:end_date,
+						less_per_liter:less_per_liter,
+						_token: "{{ csrf_token() }}"
+					}
+
+					/*Open Receivable Print Page*/
+					
+					var query_receivable = {
+								receivable_id:ReceivableID,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url_receivable = "{{URL::to('generate_receivable_soa_pdf')}}?" + $.param(query_receivable)
+					window.open(url_receivable);
+			
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });
+	  }
  	  
  </script>

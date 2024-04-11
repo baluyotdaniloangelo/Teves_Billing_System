@@ -74,11 +74,11 @@ class ReportController extends Controller
 		$client_idx = $request->client_idx;
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
-		
+		/*
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
 					//->where('teves_billing_table.order_date', '>=', $start_date)
                     //->where('teves_billing_table.order_date', '<=', $end_date)
-					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
+					->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->orderBy('teves_billing_table.order_date', 'asc')
               		->get([
@@ -94,7 +94,7 @@ class ReportController extends Controller
 					'teves_billing_table.order_po_number',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);
+					'teves_billing_table.order_time']);*/
 					
 		/*Using Raw Query*/
 		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? order by `teves_billing_table`.`order_date` asc";			
