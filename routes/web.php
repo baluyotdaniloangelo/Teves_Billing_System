@@ -376,6 +376,8 @@ Route::post('/cashiers_report_summary_info', [CashiersReportController::class, '
 Route::post('/save_product_cashiers_report_p6', [CashiersReportController::class,'save_product_cashiers_report_p6'])->name('SAVE_CHR_PH6')->middleware('isLoggedIn');
 /* Load P6 */
 Route::post('/get_product_inventory_list', [CashiersReportController::class,'get_product_inventory_list'])->name('GetCashiersP6')->middleware('isLoggedIn');
+/*Delete*/
+Route::post('/delete_cashiers_report_p6', [CashiersReportController::class,'delete_cashiers_report_p6'])->name('DeleteCashiersProductP6')->middleware('isLoggedIn');
 
 Route::post('/cashiers_report_p6_info', [CashiersReportController::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
 /*Load Cashiers Report */

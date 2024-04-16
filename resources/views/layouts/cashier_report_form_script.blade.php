@@ -788,8 +788,8 @@
 			
             document.getElementById("update_reference_no_PH3").disabled = false;
             document.getElementById("update_product_manual_price_PH3").disabled = false;
-			document.getElementById("update_product_idx_PH3").disabled = true;
-			document.getElementById("update_order_quantity_PH3").disabled = true;
+			document.getElementById("update_product_idx_PH3").disabled = false;
+			document.getElementById("update_order_quantity_PH3").disabled = false;
 			
             document.getElementById("update_quantity_label").innerHTML = "LITERS/PCS";
             document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";

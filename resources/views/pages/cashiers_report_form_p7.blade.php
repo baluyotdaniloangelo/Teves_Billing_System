@@ -42,14 +42,8 @@
 					  <div class="row mb-2">
 						  <label for="product_idx" class="col-sm-4 col-form-label">PRODUCT</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="product_name_inventory" name="product_name_inventory" id="product_idx_inventory" required autocomplete="off" onchange="LoadProductTank()">
-									<datalist id="product_name_inventory">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									<input class="form-control" list="product_list_inventory" name="product_name_inventory" id="product_idx_inventory" required autocomplete="off" onchange="LoadProductTank()">
+									
 									<span class="valid-feedback" id="product_idx_inventoryError"></span>
 							</div>	
 						</div>	
@@ -137,14 +131,8 @@
 					  <div class="row mb-2">
 						  <label for="update_product_idx" class="col-sm-4 col-form-label">PRODUCT</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="update_product_name_inventory" name="update_product_name_inventory" id="update_product_idx_inventory" required autocomplete="off" onchange="LoadProductTank()">
-									<datalist id="update_product_name_inventory">
-										@foreach ($product_data as $product_data_cols)
-											<span style="font-family: DejaVu Sans; sans-serif;">
-											<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-											</span>
-										@endforeach
-									</datalist>
+									<input class="form-control" list="product_list_inventory" name="update_product_name_inventory" id="update_product_idx_inventory" required autocomplete="off" onchange="LoadProductTank_Update()">
+									
 									<span class="valid-feedback" id="update_product_idx_inventoryError"></span>
 							</div>	
 						</div>	
@@ -176,7 +164,7 @@
 						<div class="row mb-2">
 						  <label for="update_delivery_inventory" class="col-sm-4 col-form-label">DELIVERY</label>
 						  <div class="col-sm-8">
-							  <input type="number" class="form-control" placeholder="" aria-label="update_delivery_inventory" aria-describedby="basic-addon1" name="update_delivery_inventory" id="delivery_inventory" required step=".01" onchange="update_inventory_tank()" >
+							  <input type="number" class="form-control" placeholder="" aria-label="update_delivery_inventory" aria-describedby="basic-addon1" name="update_delivery_inventory" id="update_delivery_inventory" required step=".01" onchange="update_inventory_tank()" >
 							  <span class="valid-feedback" id="update_delivery_inventoryError"></span>						  
 						  </div>
 						</div>
@@ -214,10 +202,18 @@
 	</div>
 
 	<!--Data List for Product Tank-->
-	<datalist id="product_tank_list">
+	<datalist id="product_list_inventory">
 		
 	</datalist>		
 
+	<!--Data List for Product Tank-->
+	<datalist id="product_tank_list">
+		
+	</datalist>		
+	
+	<datalist id="update_product_tank_list">
+	
+	</datalist>		
 	<!-- CRP1 Delete Modal-->
     <div class="modal fade" id="CRPH6DeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -230,15 +226,18 @@
                 <div class="modal-body warning_modal_bg" id="modal-body">
 				Are you sure you want to Delete This Item?<br>
 				</div>
+				
 				<div align="left"style="margin: 10px;">
-				PRODUCT: <span id="CRPH6_delete_product_idx"></span><br>
-				BEGINNING: <span id="CRPH6_delete_beginning_reading_inventory"></span><br>
-				CLOSING: <span id="CRPH6_delete_sales_in_liters_inventory"></span><br>
-				delivery_inventory: <span id="CRPH6_delete_delivery_inventory"></span><br>
-				SALES IN LITERS: <span id="CRPH6_delete_product_order_quantity"></span><br>			
-				PUMP PRICE: <span id="CRPH6_delete_ending_inventory"></span><br>
-				PESO SALES: <span id="CRPH6_delete_order_total_amount"></span><br>
+				Product: <span id="delete_product_idx_inventory"></span><br>
+				Tank: <span id="delete_product_tank_idx_inventory"></span><br>
+				Beginning Inventory: <span id="delete_beginning_inventory"></span><br>
+				Sales in liters: <span id="delete_sales_in_liters_inventory"></span><br>
+				Delivery: <span id="delete_delivery_inventory"></span><br>
+				Ending Inventory: <span id="delete_ending_inventory"></span><br>				
+				Book Stock: <span id="CRPH6_delete_TotalBookStock"></span><br>
+				Variance: <span id="CRPH6_delete_TotalVariance"></span><br>
 				</div>	
+				
                 <div class="modal-footer footer_modal_bg">
                     
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteCRPH6Confirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>

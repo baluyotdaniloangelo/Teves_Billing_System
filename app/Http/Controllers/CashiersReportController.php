@@ -1135,18 +1135,11 @@ class CashiersReportController extends Controller
 	
 	public function cashiers_report_p6_info(Request $request){
 
-		$CRPH6_ID 				= $request->CRPH6_ID;
+		$CHPH6_ID = $request->CHPH6_ID;
 		
-		/*$data =  CashiersReportModel_P4::where('cashiers_report_p4_id', $CHPH4_ID)
-				->get([
-					'teves_cashiers_report_p4.cashiers_report_p4_id',
-					'teves_cashiers_report_p4.description_p4',
-					'teves_cashiers_report_p4.amount_p4'
-					]);	*/
-
 		$data =  CashiersReportModel_p6::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p6.tank_idx')
 					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p6.product_idx')
-					->where('teves_cashiers_report_p6.cashiers_report_p6_id', $CRPH6_ID)
+					->where('teves_cashiers_report_p6.cashiers_report_p6_id', $CHPH6_ID)
 					
 					->get([
 						'teves_product_table.product_id',
@@ -1164,6 +1157,14 @@ class CashiersReportController extends Controller
 					]);
 					
 		return response()->json($data);
+		
+	}
+	
+	public function delete_cashiers_report_p6(Request $request){		
+			
+		$CHPH6_ID = $request->CHPH6_ID;
+		CashiersReportModel_p6::find($CHPH6_ID)->delete();
+		return 'Deleted';
 		
 	}
 	

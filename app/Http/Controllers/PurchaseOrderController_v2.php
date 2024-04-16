@@ -747,7 +747,7 @@ class PurchaseOrderController_v2 extends Controller
 			
 
 						if($result){
-							return response()->json(array('success' => "Payment Information Successfully $result_type!"), 200);
+							return response()->json(array('success' => "Payment Information Successfully!"), 200);
 						}
 						else{
 							return response()->json(['success'=>'Error on Payment Information']);
