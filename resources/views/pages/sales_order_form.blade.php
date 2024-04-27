@@ -331,45 +331,44 @@
 							
 						</div>
 					<div class="row mb-2">
-					<div class="col-sm-2">
-					</div>
-					<div class="col-sm-8">
+					
+					<div class="col-sm-12">
 					<h6>
 						<div class="row mb-2">
-							<label class="col-sm-3 col-form-label">Control Number :</label>
-							<label class="col-sm-9 col-form-label" id='receivable_control_number_info'>{{ $receivables_details['control_number'] }}</label>
+							<label class="col-sm-4 col-form-label">Control Number :</label>
+							<label class="col-sm-8 col-form-label" id='receivable_control_number_info'>{{ $receivables_details['control_number'] }}</label>
 						</div>
 					</h6>
 					
 					<form class="g-2 needs-validation pt-1" id="ReceivableformEditFromSalesOrder">
 						
 						<div class="row mb-2">
-						  <label for="receivable_billing_date_SO" class="col-sm-3 col-form-label">Billing Date : </label>
-						  <div class="col-sm-9">
+						  <label for="receivable_billing_date_SO" class="col-sm-4 col-form-label">Billing Date : </label>
+						  <div class="col-sm-8">
 							<input type="date" class="form-control " name="receivable_billing_date_SO" id="receivable_billing_date_SO" value="" required>
 							<span class="valid-feedback" id="receivable_billing_date_SO_Error"></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="receivable_payment_term_SO" class="col-sm-3 col-form-label">Payment Term : </label>
-						  <div class="col-sm-9">
+						  <label for="receivable_payment_term_SO" class="col-sm-4 col-form-label">Payment Term : </label>
+						  <div class="col-sm-8">
 							<input type="text" class="form-control " name="receivable_payment_term_SO" id="receivable_payment_term_SO" value="">
 							<span class="valid-feedback" id="receivable_payment_term_SO_Error"></span>
 						  </div>
 						</div>							
 						
 						<div class="row mb-2">
-						  <label for="receivable_description_SO" class="col-sm-3 col-form-label">Description : </label>
-						  <div class="col-sm-9">
+						  <label for="receivable_description_SO" class="col-sm-4 col-form-label">Description : </label>
+						  <div class="col-sm-8">
 							<textarea class="form-control" id="receivable_description_SO" style="height: 50px;" required></textarea>
 							<span class="valid-feedback" id="receivable_description_SO_Error"></span>
 						  </div>
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="" class="col-sm-3 col-form-label">Amount : </label>
-						  <label class="col-sm-9 col-form-label" id="receivable_amount_info"></label>
+						  <label for="" class="col-sm-4 col-form-label">Amount : </label>
+						  <label class="col-sm-8 col-form-label" id="receivable_amount_info"></label>
 						</div>
 					<div class="card-footer">
 												<div class="row mb-3">
@@ -390,8 +389,8 @@
 					
 					</form><!-- End Multi Columns Form -->
 					</div>	
-						<div class="col-sm-2">
-					</div>
+						
+						
 					</div>
                 </div>
                 
