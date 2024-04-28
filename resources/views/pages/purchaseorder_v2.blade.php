@@ -94,7 +94,7 @@
 										<div class="col-md-12">
 										<label for="supplier_idx" class="form-label">Supplier's Name</label>
 	
-										 <input class="form-control" list="supplier_name" name="supplier_name" id="supplier_idx" required autocomplete="off">
+										 <input class="form-control" list="supplier_name" name="supplier_name" id="supplier_idx" required autocomplete="off" onChange="SupplierInfo()">
 											<datalist id="supplier_name">
 											  @foreach ($supplier_data as $supplier_data_cols)
 											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">
@@ -106,7 +106,26 @@
 										
 									</div>
 								
+									<hr>
+									
+									<div class="row">
+											<div class="col-md-12">
+												<label for="purchase_order_net_percentage" class="form-label">Net Value</label>
+												<input type="number" class="form-control" id="purchase_order_net_percentage" name="purchase_order_net_percentage">
+											</div>
+									</div>
+									
+									<hr>
+									
+									<div class="row">
+											<div class="col-md-12">
+												<label for="purchase_order_less_percentage" class="form-label">Less Value</label>
+												<input type="number" class="form-control" id="purchase_order_less_percentage" name="purchase_order_less_percentage">
+											</div>
+									</div>
+								
 					</div>
+					
 					<div class="modal-footer modal-footer_form">
 							<div id="loading_data" style="display:none;">
 							<div class="spinner-border text-success" role="status">

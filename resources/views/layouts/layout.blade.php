@@ -143,7 +143,7 @@ else if (Request::is('purchase_order_form/*')){
 	<meta name="csrf-token" content="{{csrf_token()}}">
 	<body class="">
 	@include('layouts.footer')
-	@include('layouts.purchase_order_form_script_v2')
+	@include('layouts.purchase_order_form_script')
 	<?php
 }
 else if (Request::is('cashier_report')){

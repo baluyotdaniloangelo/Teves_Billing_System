@@ -34,7 +34,12 @@ class SupplierController extends Controller
 			'supplier_id',
 			'supplier_name',
 			'supplier_address',
-			'supplier_tin');
+			'supplier_tin',
+			'default_less_percentage',
+			'default_net_percentage',
+			'default_vat_percentage',
+			'default_withholding_tax_percentage',
+			'default_payment_terms');
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row){
@@ -53,7 +58,7 @@ class SupplierController extends Controller
 	/*Fetch supplier Information*/
 	public function supplier_info(Request $request){
 		$supplierID = $request->supplierID;
-		$data = SupplierModel::find($supplierID, ['supplier_name','supplier_address','supplier_tin']);
+		$data = SupplierModel::find($supplierID, ['supplier_name','supplier_address','supplier_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
 		return response()->json($data);
 	}
 
@@ -81,6 +86,13 @@ class SupplierController extends Controller
 			$supplier->supplier_name 			= $request->supplier_name;
 			$supplier->supplier_address 		= $request->supplier_address;
 			$supplier->supplier_tin 			= $request->supplier_tin;
+			
+			$supplier->default_less_percentage 			= $request->default_less_percentage;
+			$supplier->default_net_percentage 			= $request->default_net_percentage;
+			$supplier->default_vat_percentage 			= $request->default_vat_percentage;
+			$supplier->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
+			$supplier->default_payment_terms 				= $request->default_payment_terms;
+			
 			$result = $supplier->save();
 			if($result){
 				return response()->json(['success'=>'Supplier Information Successfully Created!']);
@@ -109,6 +121,14 @@ class SupplierController extends Controller
 			$supplier->supplier_name 			= $request->supplier_name;
 			$supplier->supplier_address 		= $request->supplier_address;
 			$supplier->supplier_tin 			= $request->supplier_tin;
+			
+			$supplier->default_less_percentage 			= $request->default_less_percentage;
+			$supplier->default_net_percentage 			= $request->default_net_percentage;
+			$supplier->default_vat_percentage 			= $request->default_vat_percentage;
+			$supplier->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
+			$supplier->default_payment_terms 				= $request->default_payment_terms;
+			
+			
 			$result = $supplier->update();
 			if($result){
 				return response()->json(['success'=>'supplier Information Successfully Updated!']);

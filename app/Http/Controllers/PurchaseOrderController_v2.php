@@ -190,6 +190,9 @@ class PurchaseOrderController_v2 extends Controller
 			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
 			$Purchaseorder->company_header							= $request->company_header;
 			
+			$Purchaseorder->purchase_order_net_percentage			= $request->default_net_percentage;
+			$Purchaseorder->purchase_order_less_percentage			= $request->default_less_percentage;
+			
 			$result = $Purchaseorder->save();
 			
 			/*Get Last ID*/

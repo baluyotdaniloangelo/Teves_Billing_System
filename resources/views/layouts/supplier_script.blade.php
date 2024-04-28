@@ -18,11 +18,17 @@
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getSupplierList') }}",
+			responsive: true,
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'supplier_name'},   
 					{data: 'supplier_address'},
 					{data: 'supplier_tin'},
+					{data: 'default_less_percentage'},
+					{data: 'default_net_percentage'},
+					{data: 'default_vat_percentage'},
+					{data: 'default_withholding_tax_percentage'},
+					{data: 'default_payment_terms'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
@@ -32,8 +38,18 @@
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreatesupplierModal"></button>'+
 				'</div>').appendTo('#supplier_option');
-	});
-	
+
+	$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});					
+	});	
 	<!--Save New supplier->
 	$("#save-supplier").click(function(event){
 			
@@ -50,6 +66,12 @@
 			let supplier_address 		= $("input[name=supplier_address]").val();
 			let supplier_tin 			= $("input[name=supplier_tin]").val();
 			
+			let default_less_percentage 			= $("input[name=default_less_percentage]").val();
+			let default_net_percentage 				= $("input[name=default_net_percentage]").val();
+			let default_vat_percentage 				= $("input[name=default_vat_percentage]").val();
+			let default_withholding_tax_percentage 	= $("input[name=default_withholding_tax_percentage]").val();
+			let default_payment_terms 				= $("input[name=default_payment_terms]").val();
+			
 			  $.ajax({
 				url: "/create_supplier_post",
 				type:"POST",
@@ -57,6 +79,11 @@
 				  supplier_name:supplier_name,
 				  supplier_address:supplier_address,
 				  supplier_tin:supplier_tin,
+				  default_less_percentage:default_less_percentage,
+				  default_net_percentage:default_net_percentage,
+				  default_vat_percentage:default_vat_percentage,
+				  default_withholding_tax_percentage:default_withholding_tax_percentage,
+				  default_payment_terms:default_payment_terms,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -133,7 +160,13 @@
 					document.getElementById("update_supplier_name").value = response.supplier_name;
 					document.getElementById("update_supplier_address").value = response.supplier_address;
 					document.getElementById("update_supplier_tin").value = response.supplier_tin;
-										
+					
+					document.getElementById("update_default_less_percentage").value = response.default_less_percentage;
+					document.getElementById("update_default_net_percentage").value = response.default_net_percentage;
+					document.getElementById("update_default_vat_percentage").value = response.default_vat_percentage;
+					document.getElementById("update_default_withholding_tax_percentage").value = response.default_withholding_tax_percentage;
+					document.getElementById("update_default_payment_terms").value = response.default_payment_terms;
+					
 					$('#UpdatesupplierModal').modal('toggle');					
 				  
 				  }
@@ -156,10 +189,16 @@
 
 			document.getElementById('supplierformEdit').className = "g-3 needs-validation was-validated";
 			
-			let supplierID 			= document.getElementById("update-supplier").value;
-			let supplier_name 		= $("input[name=update_supplier_name]").val();
+			let supplierID 				= document.getElementById("update-supplier").value;
+			let supplier_name 			= $("input[name=update_supplier_name]").val();
 			let supplier_address 		= $("input[name=update_supplier_address]").val();
 			let supplier_tin 			= $("input[name=update_supplier_tin]").val();
+			
+			let default_less_percentage 			= $("input[name=update_default_less_percentage]").val();
+			let default_net_percentage 				= $("input[name=update_default_net_percentage]").val();
+			let default_vat_percentage 				= $("input[name=update_default_vat_percentage]").val();
+			let default_withholding_tax_percentage 	= $("input[name=update_default_withholding_tax_percentage]").val();
+			let default_payment_terms 				= $("input[name=update_default_payment_terms]").val();
 			
 			  $.ajax({
 				url: "/update_supplier_post",
@@ -169,6 +208,11 @@
 				  supplier_name:supplier_name,
 				  supplier_address:supplier_address,
 				  supplier_tin:supplier_tin,
+				  default_less_percentage:default_less_percentage,
+				  default_net_percentage:default_net_percentage,
+				  default_vat_percentage:default_vat_percentage,
+				  default_withholding_tax_percentage:default_withholding_tax_percentage,
+				  default_payment_terms:default_payment_terms,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

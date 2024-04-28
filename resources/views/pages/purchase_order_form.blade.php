@@ -53,7 +53,7 @@
 								
 								<div class="col-md-12">
 								<label for="update_supplier_name" class="form-label">Supplier's Name</label>
-									<input class="form-control" list="update_supplier_name_list" name="update_supplier_name" id="update_supplier_idx" required autocomplete="off">
+									<input class="form-control" list="update_supplier_name_list" name="update_supplier_name" id="update_supplier_idx" required autocomplete="off" onChange="SupplierInfo()">
 										<datalist id="update_supplier_name_list">
 											@foreach ($supplier_data as $supplier_data_cols)
 											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">

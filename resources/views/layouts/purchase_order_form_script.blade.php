@@ -962,4 +962,36 @@
                 }
             });
 
+
+	<!--Select Supplier-->
+	function SupplierInfo(){
+			
+			let supplierID = $("#update_supplier_name_list option[value='" + $('#update_supplier_idx').val() + "']").attr('data-id');
+			
+			  $.ajax({
+				url: "/supplier_info",
+				type:"POST",
+				data:{
+				  supplierID:supplierID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					
+					document.getElementById("update_purchase_order_less_percentage").value = response.default_less_percentage;
+					document.getElementById("update_purchase_order_net_percentage").value = response.default_net_percentage;				
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	} 
+	
+
 </script>

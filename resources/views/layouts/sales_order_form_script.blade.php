@@ -37,8 +37,6 @@
 			let sales_order_charge_invoice 				= $("input[name=sales_order_charge_invoice]").val();
 			let sales_order_collection_receipt 			= $("input[name=sales_order_collection_receipt]").val();
 			
-			
-			
 			let payment_term 				= $("input[name=payment_term]").val();
 			let delivery_method 			= $("input[name=delivery_method]").val();
 			let hauler 						= $("input[name=hauler]").val();
