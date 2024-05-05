@@ -198,7 +198,7 @@
 											<tr class="data_tr">
 												<td align="left" colspan="6"></td>
 												<td align="left" colspan="1">Discount per liter:</td>
-												<td align="left" ><?=($less_per_liter);?> L</td>
+												<td align="left" ><?=($less_per_liter+0);?> L</td>
 												<td align="left" colspan="1">VATable Sales</td>
 												<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format(($total_payable/$net_value_percentage),2);?></td>
 												

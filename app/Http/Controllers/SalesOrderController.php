@@ -8,6 +8,7 @@ use App\Models\ProductModel;
 use App\Models\ClientModel;
 use App\Models\TevesBranchModel;
 use App\Models\SalesOrderComponentModel;
+use App\Models\SalesOrderDeliveryModel;
 use App\Models\ReceivablesModel;
 use App\Models\ReceivablesPaymentModel;
 use Session;
@@ -680,5 +681,28 @@ class SalesOrderController extends Controller
 				return 'Deleted';
 		
 	} 
-		
+	
+	/*Get List Of Product to Deliver*/
+	public function get_sales_order_product_list_delivery(Request $request){		
+	
+			$raw_query_sales_order_component = "SELECT `teves_sales_order_component_table`.`sales_order_component_id`,
+						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+						`teves_sales_order_component_table`.`product_idx`, 
+						`teves_sales_order_component_table`.`product_price`, 
+						`teves_sales_order_component_table`.`order_quantity`,
+						`teves_sales_order_component_table`.`order_total_amount`
+						from `teves_sales_order_component_table`  left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx` where `sales_order_idx` = ?		  
+						order by `sales_order_component_id` asc";	
+						
+			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_id]);		
+			
+			//$paymentlist = ReceivablesPaymentModel::where('receivable_idx', '=', $request->receivable_idx)->get();
+			//$paymentcount = $paymentlist->count();
+		return response()->json($data);	
+//			return response()->json($data);			
+
+	}
+	
 }

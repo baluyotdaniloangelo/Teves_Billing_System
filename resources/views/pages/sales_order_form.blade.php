@@ -252,6 +252,10 @@
                   <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onclick="LoadProduct()" title='Product List, Create, Update and Delete Product'>Product</button>
                 </li>
 				
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link <?php if($tab=='delivery') { echo 'active'; } ?>" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="true" onclick="" title='Product Delivery List, Create, Update and Delete Delivery'>Delivery</button>
+                </li>
+				
                 <li class="nav-item" role="presentation">
                   <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false" tabindex="-1" onclick="LoadPayment()" title='Payment List, Create, Update and Delete Payment'>Payment</button>
                 </li>
@@ -261,8 +265,10 @@
                 </li>
 				
               </ul>
+			  
               <div class="tab-content pt-2" id="myTabContent">
-                <div class="tab-pane fade  <?php if($tab=='product') { echo ' show active'; } ?>"" id="product" role="tabpanel" aria-labelledby="product-tab">
+               
+			   <div class="tab-pane fade  <?php if($tab=='product') { echo ' show active'; } ?>"" id="product" role="tabpanel" aria-labelledby="product-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN"></button>
@@ -277,6 +283,34 @@
 							<th style="text-align:center !important;">Item #</th>
 							<th style="text-align:center !important;">Description</th>
 							<th style="text-align:center !important;">Price</th>
+							<th style="text-align:center !important;">Quantity</th>
+							<th style="text-align:center !important;">Unit</th>
+							<th style="text-align:center !important;">Amount</th>	
+						</tr>
+						</thead>
+							<tbody id="table_sales_order_product_body_data">
+									<tr style="display: none;">
+										<td>HIDDEN</td>
+									</tr>
+							</tbody>
+						</table>
+                </div>
+				
+				
+                <div class="tab-pane fade  <?php if($tab=='delivery') { echo ' show active'; } ?>"" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
+				<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductDeliveryModal" id=""></button>
+
+					</div>											
+					</div>
+					
+						<table class="table table-striped" id="">
+						<thead>
+						<tr class='report'>
+							<th style="text-align:center !important;" class="action_column_class">Action</th>
+							<th style="text-align:center !important;">Item #</th>
+							<th style="text-align:center !important;">Description</th>
 							<th style="text-align:center !important;">Quantity</th>
 							<th style="text-align:center !important;">Unit</th>
 							<th style="text-align:center !important;">Amount</th>	
@@ -319,7 +353,7 @@
                 
 				<div class="tab-pane fade <?php if($tab=='receivable') { echo 'show active'; } ?>" id="receivable" role="tabpanel" aria-labelledby="receivable-tab">
 		
-		<div class="d-flex justify-content-end" id="">
+				<div class="d-flex justify-content-end" id="">
 		
 							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 							
@@ -796,9 +830,146 @@
         </div>
     </div>	
 	
+	
+	<!--Delivery Form-->
+	
+	
     </section>
+
+	<!--Modal to Create SO Product-->
+	<div class="modal fade" id="AddProductDeliveryModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Add Product Delivery Details</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="AddProduct">
+
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type='date' class='form-control' id='sales_order_dispatch_date' name='sales_order_dispatch_date' value='<?=date('Y-m-d');?>'>
+								<label for="sales_order_dispatch_date">Dispatch Date</label>
+								<span class="valid-feedback" id="sales_order_dispatch_dateError"></span>
+							</div>
+						 
+						</div>
+
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type='date' class='form-control' id='sales_order_departure_date' name='sales_order_departure_date' value='<?=date('Y-m-d');?>'>
+								<label for="sales_order_departure_date">Departure Date</label>
+								<span class="valid-feedback" id="sales_order_departure_dateError"></span>
+							</div>
+						 
+						</div>
+						
+						<div class="col-sm-12">
+						
+						<div class="form-floating mb-3">
+						  <input class="form-control" list="product_list_delivery" name="sales_order_component_product_idx" id="sales_order_component_product_idx" required autocomplete="off" placeholder="Product">
+<!--Data List for Product-->
+	<datalist id="product_list_delivery">
+	<span >	</span>
+	
+	</datalist>								
+						<label for="product_delivery_idx">Product</label>
+						 </div>
+						<span class="valid-feedback" id="product_delivery_idxError"></span>
+						
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_total_load" id="sales_order_delivery_total_load" required step=".01" placeholder="Total Load">
+								<label for="sales_order_delivery_total_load">Total Load</label>
+							</div>
+							 <span class="valid-feedback" id="order_quantityError"></span>
+							 
+						</div>
+
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_withdrawal_reference" id="sales_order_delivery_withdrawal_reference" placeholder="Withdrawal Reference">
+								<label for="sales_order_delivery_withdrawal_reference">Withdrawal Reference</label>
+							</div>
+							 <span class="valid-feedback" id="sales_order_delivery_withdrawal_referenceError"></span>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_hauler_details" id="sales_order_delivery_hauler_details" placeholder="Hauler Details">
+								<label for="sales_order_delivery_hauler_details">Hauler Details</label>
+							</div>
+							 <span class="valid-feedback" id="sales_order_delivery_hauler_detailsError"></span>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_ship_to_account" id="sales_order_delivery_ship_to_account" placeholder="Ship To Account">
+								<label for="sales_order_delivery_ship_to_account">Ship To Account</label>
+							</div>
+							 <span class="valid-feedback" id="sales_order_delivery_ship_to_accountError"></span>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<select class="form-select form-control" required="" name="sales_order_branch_delivery" id="sales_order_branch_delivery">
+									<?php $branch_idx = $sales_order_data[0]['company_header']; ?>
+										
+										@foreach ($teves_branch as $teves_branch_cols)
+											<?php 
+												$branch_id = $teves_branch_cols->branch_id;
+													
+											?>
+												<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
+													{{$teves_branch_cols->branch_code}}
+												</option>
+										@endforeach
+
+								</select>
+								<label for="sales_order_branch_delivery">Branch Delivery</label>
+							</div>
+							<span class="valid-feedback" id="sales_order_branch_deliveryError"></span>
+							 
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+							<div id="loading_data_add_product" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-product"> Save</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-so-save-product"> Reset</button>					  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+				  
+                </div>
+             </div>		
+
+
 </main>
 
-
+	
+	
 @endsection
 

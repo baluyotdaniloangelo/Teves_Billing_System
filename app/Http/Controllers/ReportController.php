@@ -650,7 +650,7 @@ class ReportController extends Controller
           
 		$title = 'BILLING STATEMENT';
 		  
-        $pdf = PDF::loadView('pages.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
+        $pdf = PDF::loadView('printables.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
@@ -709,7 +709,7 @@ class ReportController extends Controller
           
 		$title = 'Billing History';
 		  
-        $pdf = PDF::loadView('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
+        $pdf = PDF::loadView('printables.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
 		
 		/*Download Directly*/
         /*return $pdf->download($client_data['client_name'].".pdf");*/
@@ -717,7 +717,7 @@ class ReportController extends Controller
 		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		$pdf->render();
 		return $pdf->stream($client_data['client_name'].".pdf");
-		//return view('pages.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
+		//return view('printables.report_billing_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
 	}
 	
 	public function generate_receivable_pdf(Request $request){
@@ -772,7 +772,7 @@ class ReportController extends Controller
 		
 		$title = 'RECEIVABLE';
 		  
-        $pdf = PDF::loadView('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_header'));
+        $pdf = PDF::loadView('printables.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_header'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -780,7 +780,7 @@ class ReportController extends Controller
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
 		
-		//return view('pages.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words','receivable_header'));
+		//return view('printables.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words','receivable_header'));
 		
 	}
 	
@@ -848,7 +848,7 @@ class ReportController extends Controller
 		
 		$title = 'STATEMENT OF ACCOUNT';
 		  
-        $pdf = PDF::loadView('pages.report_receivables_soa_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','receivable_header'));
+        $pdf = PDF::loadView('printables.report_receivables_soa_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','receivable_header'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -932,8 +932,8 @@ class ReportController extends Controller
 		
 		$title = 'SALES ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
-		//return view('pages.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
+        $pdf = PDF::loadView('printables.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
+		//return view('printables.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -1028,19 +1028,113 @@ class ReportController extends Controller
 		
 		$title = 'PURCHASE ORDER';
 		  
-        $pdf = PDF::loadView('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));
+        $pdf = PDF::loadView('printables.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));
 		
 		/*Download Directly*/
-        //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER.pdf");
-		//return view('pages.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component'));
+	
 	}
 	
+	public function generate_purchase_order_payment_pdf(Request $request){
+
+		$purchase_order_id = $request->purchase_order_id;
+				
+				$purchase_order_data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+				->join('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+              	->get([
+						'teves_supplier_table.supplier_name',
+						'teves_supplier_table.supplier_tin',
+						'teves_supplier_table.supplier_address',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_collection_receipt_no',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
+						'teves_purchase_order_table.purchase_order_delivery_receipt_no',
+						'teves_purchase_order_table.purchase_order_bank',
+						'teves_purchase_order_table.purchase_order_date_of_payment',
+						'teves_purchase_order_table.purchase_order_reference_no',
+						'teves_purchase_order_table.purchase_order_payment_amount',
+						'teves_purchase_order_table.purchase_order_delivery_method',
+						'teves_purchase_order_table.purchase_loading_terminal',
+						'teves_purchase_order_table.purchase_order_date_of_pickup',
+						'teves_purchase_order_table.purchase_order_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_gross_amount',
+						'teves_purchase_order_table.purchase_order_total_liters',
+						'teves_purchase_order_table.purchase_order_net_percentage', 
+						'teves_purchase_order_table.purchase_order_net_amount',
+						'teves_purchase_order_table.purchase_order_less_percentage',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.hauler_operator',
+						'teves_purchase_order_table.lorry_driver',
+						'teves_purchase_order_table.plate_number',
+						'teves_purchase_order_table.contact_number',
+						'teves_purchase_order_table.purchase_destination',
+						'teves_purchase_order_table.purchase_destination_address',
+						'teves_purchase_order_table.purchase_date_of_departure',
+						'teves_purchase_order_table.purchase_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_instructions',
+						'teves_purchase_order_table.purchase_order_note',
+						'teves_purchase_order_table.company_header'
+				]);
+
+		$purchase_order_amt =  number_format($purchase_order_data[0]['purchase_order_total_payable'],2,".","");
+		
+		@$amount_split_whole_to_decimal = explode('.',$purchase_order_amt);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$amount_in_word_decimal = "";
+		}else{
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
+		}
+		
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;
+		
+		$purchase_order_component = PurchaseOrderComponentModel::where('teves_purchase_order_component_table.purchase_order_idx', $purchase_order_id)	
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_purchase_order_component_table.product_idx')	
+			->orderBy('purchase_order_component_id', 'asc')
+              	->get([
+					'teves_purchase_order_component_table.purchase_order_component_id',
+					'teves_purchase_order_component_table.product_idx',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_purchase_order_component_table.product_price',
+					'teves_purchase_order_component_table.order_quantity',
+					'teves_purchase_order_component_table.order_total_amount'
+					]);
+
+		$purchase_payment_component = PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $purchase_order_id)
+			->orderBy('purchase_order_payment_details_id', 'asc')
+              	->get([
+					'teves_purchase_order_payment_details.purchase_order_bank',
+					'teves_purchase_order_payment_details.purchase_order_date_of_payment',
+					'teves_purchase_order_payment_details.purchase_order_reference_no',
+					'teves_purchase_order_payment_details.purchase_order_payment_amount',
+					]);
+
+		$branch_header = TevesBranchModel::find($purchase_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'PURCHASE ORDER';
+		  
+        $pdf = PDF::loadView('printables.report_purchase_order_payment_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));
+		
+		/*Download Directly*/
+		/*Stream for Saving/Printing*/
+		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER_PAYMENT.pdf");
+	
+	}	
+	
+	
 	public function generate_test_pdf(Request $request){
-	/*Manually set paper*/
-		//$so_id = $request->receivable_id;
+	
 		$SOId = 1;
 					
 		$so_data = SOBillingTransactionModel::where('so_id', $SOId)
@@ -1063,7 +1157,7 @@ class ReportController extends Controller
 		
 		$title = 'SALES ORDER';
 		  
-        $pdf = PDF::loadView('pages.print_so_pdf', compact('title', 'so_header','so_data'));
+        $pdf = PDF::loadView('printables.print_so_pdf', compact('title', 'so_header','so_data'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

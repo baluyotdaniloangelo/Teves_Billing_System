@@ -178,6 +178,8 @@ Route::post('/save_receivable_payment_post', [ReceivablesController::class,'save
 Route::post('/create_receivables_from_sale_order_post', [ReceivablesController::class,'create_receivables_from_sale_order_post'])->name('create_receivables_from_sale_order_post')->middleware('isLoggedIn');
 Route::post('/update_receivables_from_sale_order_post', [ReceivablesController::class,'update_receivables_from_sale_order_post'])->name('update_receivables_from_sale_order_post')->middleware('isLoggedIn');
 
+
+
 Route::get('/receivable_from_billing_form', [ReceivablesController::class, 'receivable_from_billing_form'])->name('receivable_from_billing_form')->middleware('isLoggedIn');
 Route::post('/billing_to_receivable_product', [ReceivablesController::class,'billing_to_receivable_product'])->name('billing_to_receivable_product')->middleware('isLoggedIn');
 
@@ -203,6 +205,8 @@ Route::post('/update_sales_status', [SalesOrderController::class,'update_sales_s
 Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,'update_sales_order_delivery_status'])->name('update_sales_order_delivery_status')->middleware('isLoggedIn');
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
+
+Route::post('/get_sales_order_product_list_delivery', [SalesOrderController::class,'get_sales_order_product_list_delivery'])->name('ProductListDelivery')->middleware('isLoggedIn');
 
 /*New Version for Sales Order*/
 Route::get('/sales_order_form', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
@@ -276,6 +280,9 @@ Route::post('upload', [PurchaseOrderController_v2::class, 'store']);
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 /*Download Purchase Order via PDF*/
 Route::get('/generate_purchase_order_pdf', [ReportController::class,'generate_purchase_order_pdf'])->name('generate_purchase_order_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_payment_pdf', [ReportController::class,'generate_purchase_order_payment_pdf'])->name('generate_purchase_order_payment_pdf')->middleware('isLoggedIn');
+
+
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
 Route::get('/generate_receivable_soa_pdf', [ReportController::class,'generate_receivable_soa_pdf'])->name('generate_receivable_soa_pdf')->middleware('isLoggedIn');

@@ -1413,7 +1413,7 @@ class CashiersReportController extends Controller
 		
 		$branch_header = TevesBranchModel::find($CashiersReportData[0]['teves_branch'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
-        $pdf = PDF::loadView('pages.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header','data_PH6_inventory'));
+        $pdf = PDF::loadView('printables.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header','data_PH6_inventory'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/

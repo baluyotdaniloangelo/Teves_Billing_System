@@ -376,6 +376,9 @@
 								$(".action_column_class").show();
 								document.getElementById("AddSalesOrderProductBTN").disabled = false;
 								
+								$("#product_list_delivery span").remove();
+								$('<span style="display: none;"></span>').appendTo('#product_list_delivery');
+								
 								for(var i=0; i<len; i++){
 							
 								var id = response['productlist'][i].sales_order_component_id;
@@ -395,6 +398,11 @@
 								"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
 								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
 								"</tr>");
+								
+								$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+id+"' value='"+product_name+"'>" +
+								"</span>");
+								
 								}
 								
 							}
@@ -1233,5 +1241,46 @@
 				  
 				}
 			   });		
-	  });	  
+	  });	
+
+	//LoadProductListDelivery();
+	
+	function LoadProductListDelivery() {		
+	
+		$("#product_list_delivery span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list_delivery');
+
+			  $.ajax({
+				url: "{{ route('ProductListDelivery') }}",
+				type:"POST",
+				data:{
+				  sales_order_id:{{ $SalesOrderID }},
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {	
+				  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+product_id+"' value='"+product_name+"'>" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
+	
  </script>

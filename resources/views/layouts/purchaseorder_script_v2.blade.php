@@ -356,5 +356,18 @@
 				}
 			   });	
 	} 
+	
+	/*Re-print*/
+	$('body').on('click','#PrintPurchaseOrder',function(){	  
 	  
+			let purchaseOrderID = $(this).data('id');
+			var query = {
+						purchase_order_id:purchaseOrderID,
+						_token: "{{ csrf_token() }}"
+					}
+
+			var url = "{{URL::to('generate_purchase_order_pdf')}}?" + $.param(query)
+			window.open(url);
+	  
+	  });	  
  </script>
