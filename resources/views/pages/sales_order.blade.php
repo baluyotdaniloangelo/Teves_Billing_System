@@ -28,6 +28,7 @@
 													<th class="none">Withholding Tax : </th>
 													<th class="none">Net Amount : </th>
 													<th class="none">Total Due : </th>
+													<th class="all">Delivery Status</th>
 													<th class="all">Payment Status</th>
 													<th class="all">Action</th>
 												</tr>
@@ -48,6 +49,7 @@
 													<th class="none">Withholding Tax : </th>
 													<th class="none">Net Amount : </th>
 													<th class="none">Total Due : </th>
+													<th class="all">Delivery Status</th>
 													<th class="all">Payment Status</th>
 													<th class="all">Action</th>								
 												</tr>

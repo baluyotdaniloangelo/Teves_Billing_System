@@ -61,7 +61,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_payment_status']);
+					'teves_sales_order_table.sales_order_payment_status',
+					'teves_sales_order_table.sales_order_delivery_status']);
 					
 		}else{
 			
@@ -77,14 +78,15 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_payment_status']);	
+					'teves_sales_order_table.sales_order_payment_status',
+					'teves_sales_order_table.sales_order_delivery_status']);	
 			
 		}			
 	
 		return DataTables::of($data)
 				->addIndexColumn()
 				
-				->addColumn('sales_order_payment_status', function($row){			
+				/*->addColumn('sales_order_payment_status', function($row){			
 	
 					$sales_status_selected = $row->sales_order_payment_status;
 	
@@ -96,7 +98,7 @@ class SalesOrderController extends Controller
                     return $actionBtn;
 					
                 })
-				
+				*/
                 ->addColumn('action', function($row){
 					
 					if($row->sales_order_status=='Pending'){
@@ -120,7 +122,7 @@ class SalesOrderController extends Controller
 					
                     return $actionBtn;
                 })
-				->rawColumns(['action','sales_order_payment_status'])
+				->rawColumns(['action'])
                 ->make(true);
 		}		
     }

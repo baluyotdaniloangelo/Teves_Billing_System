@@ -1042,12 +1042,12 @@ class ReceivablesController extends Controller
 					  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
 					  {		
 						  
-						  $Receivablestatus = "$paid_percentage% Paid";
+						  $Receivablestatus = "$paid_percentage%";
 						  
 					  }else if($paid_percentage >= 100)
 					  {	
 						  
-						  $Receivablestatus = "Paid";
+						  $Receivablestatus = "$paid_percentage%";
 						  
 					  }else{
 						  
@@ -1105,12 +1105,12 @@ class ReceivablesController extends Controller
 						  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
 						  {		
 							  
-							  $Receivablestatus = "$paid_percentage% Paid";
-							  
+							  $Receivablestatus = "$paid_percentage%";
+						  
 						  }else if($paid_percentage >= 100)
 						  {	
-							  
-							  $Receivablestatus = "Paid";
+						  
+						  $Receivablestatus = "$paid_percentage%";
 							  
 						  }else{
 							  

@@ -85,6 +85,45 @@ class SalesOrderDeliveryController extends Controller
 		$sales_order_delivery_details_id = $request->sales_order_delivery_details_id;
 		SalesOrderDeliveryModel::find($sales_order_delivery_details_id)->delete();
 		
+		
+						  /*Get Total Sales Order Quantity*/
+					$sales_total_order_quantity =  SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('order_quantity');
+					
+				  /*Get Delivery Total Quantity*/
+					$sales_total_order_delivery_quantity =  SalesOrderDeliveryModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('sales_order_delivery_quantity');
+			  
+					$remaining_balance = number_format($sales_total_order_quantity - $sales_total_order_delivery_quantity+0,2, '.', '');
+					$_delivery_percentage = ($sales_total_order_delivery_quantity / $sales_total_order_quantity) * 100;
+				  
+					  $delivery_percentage = number_format($_delivery_percentage,2,".","");
+				  
+					  /*IF Fully Paid Automatically Update the Status to Paid*/
+					  if($delivery_percentage >= 0.01 && $delivery_percentage <= 99)
+					  {		
+						  
+						  $DeliveryStatus = "$delivery_percentage%";
+						  
+					  }else if($delivery_percentage >= 100)
+					  {	
+						  
+						  $DeliveryStatus = "$delivery_percentage%";
+						  
+					  }else{
+						  
+						  $DeliveryStatus = "Pending";
+						  
+					  }
+			  
+				  /*Update Sales Order to Delivered*/
+				  $salesOrderUpdate_status = new SalesOrderModel();
+				  $salesOrderUpdate_status = SalesOrderModel::find($request->sales_order_id);
+				  $salesOrderUpdate_status->sales_order_delivery_status = $DeliveryStatus;
+				  $salesOrderUpdate_status->update();
+		
+		
+		
 		return 'Deleted';
 		
 	} 	
@@ -151,16 +190,42 @@ class SalesOrderDeliveryController extends Controller
 							
 					}
 				
-				  /*Get Total Quantity*/
+				  /*Get Total Sales Order Quantity*/
+					$sales_total_order_quantity =  SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('order_quantity');
 					
+				  /*Get Delivery Total Quantity*/
+					$sales_total_order_delivery_quantity =  SalesOrderDeliveryModel::where('sales_order_idx', $request->sales_order_id)
+					->sum('sales_order_delivery_quantity');
+			  
+					$remaining_balance = number_format($sales_total_order_quantity - $sales_total_order_delivery_quantity+0,2, '.', '');
+					$_delivery_percentage = ($sales_total_order_delivery_quantity / $sales_total_order_quantity) * 100;
+				  
+					  $delivery_percentage = number_format($_delivery_percentage,2,".","");
+				  
+					  /*IF Fully Paid Automatically Update the Status to Paid*/
+					  if($delivery_percentage >= 0.01 && $delivery_percentage <= 99)
+					  {		
+						  
+						  $DeliveryStatus = "$delivery_percentage%";
+						  
+					  }else if($delivery_percentage >= 100)
+					  {	
+						  
+						  $DeliveryStatus = "$delivery_percentage%";
+						  
+					  }else{
+						  
+						  $DeliveryStatus = "Pending";
+						  
+					  }
+			  
 				  /*Update Sales Order to Delivered*/
 				  $salesOrderUpdate_status = new SalesOrderModel();
-				  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
-				  $salesOrderUpdate_status->sales_order_payment_status = $Receivablestatus;
+				  $salesOrderUpdate_status = SalesOrderModel::find($request->sales_order_id);
+				  $salesOrderUpdate_status->sales_order_delivery_status = $DeliveryStatus;
 				  $salesOrderUpdate_status->update();
 					
-
-									
 						/*Response*/
 						if($result){
 							return response()->json(array('success' => "Product Information Successfully $action_taken!"), 200);
@@ -171,53 +236,4 @@ class SalesOrderDeliveryController extends Controller
 		
 	}		
 	
-	/*Delete Product Information*/
-	public function delete_sales_order_component_confirmed(Request $request){
-
-		/*Delete on Sales Order Table*/
-		$sales_order_component_id = $request->sales_order_component_id;
-		
-		/*Delete on Sales Order Product Component*/	
-		SalesOrderComponentModel::where('sales_order_component_id', $sales_order_component_id)->delete();
-		
-				$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
-				->sum('order_total_amount');
-					
-				$gross_amount = $order_total_amount;
-				
-				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $request->sales_order_less_percentage/100;
-							
-				if($request->sales_order_net_percentage==0){
-							$sales_order_net_amount 		= 0;
-							$sales_order_total_due 			=  number_format($gross_amount,2,".","");
-				}else{
-							$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
-							$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
-				}
-				
-				/*Update Sales Order*/
-				$SalesOrderUpdate = new SalesOrderModel();
-				$SalesOrderUpdate = SalesOrderModel::find($request->sales_order_id);
-				$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
-				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
-				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
-				$SalesOrderUpdate->update();
-				
-				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
-				
-				/*Update Receivable Amount*/
-				$Receivables_ACTION = new ReceivablesModel();
-				$Receivables_ACTION = ReceivablesModel::find($request->receivable_id);
-				$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');
-				$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');				
-				$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
-				$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-				$Receivables_ACTION->receivable_status 				= 'Pending';		
-				$Receivables_ACTION->update();
-	
-				return 'Deleted';
-		
-	} 
-
 }
