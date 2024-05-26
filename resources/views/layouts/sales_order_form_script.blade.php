@@ -152,8 +152,11 @@
 				  if(response) {
 					
 					/*Set Details*/
+					
+					var receivable_amount = response[0].receivable_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+					
 					document.getElementById("receivable_control_number_info").innerHTML = response[0].control_number;	
-					document.getElementById("receivable_amount_info").innerHTML = response[0].receivable_amount;
+					document.getElementById("receivable_amount_info").innerHTML = "<span >&#8369; "+receivable_amount+"</span>";
 					
 					document.getElementById("receivable_billing_date_SO").value = response[0].billing_date;
 					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
@@ -353,6 +356,7 @@
 								for(var i=0; i<len; i++){
 							
 								var id = response['productlist'][i].sales_order_component_id;
+								var product_idx = response['productlist'][i].product_idx;
 								var product_name = response['productlist'][i].product_name;
 								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
 								var product_price = response['productlist'][i].product_price;
@@ -360,14 +364,18 @@
 								
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
+								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
-								"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
-								"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
-								"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
-								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+
+								"<td class='calibration_td' align='right'>"+order_quantity+" "+product_unit_measurement+"</td>"+
+								"<td class='manual_price_td' align='right'><span >&#8369; "+order_total_amount+"</span></td>"+
 								"</tr>");
+								
+								$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+id+"' product-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
 								
 								}
 								
@@ -382,6 +390,7 @@
 								for(var i=0; i<len; i++){
 							
 								var id = response['productlist'][i].sales_order_component_id;
+								var product_idx = response['productlist'][i].product_idx;
 								var product_name = response['productlist'][i].product_name;
 								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
 								var product_price = response['productlist'][i].product_price;
@@ -393,14 +402,13 @@
 								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
-								"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
-								"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
-								"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
-								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+
+								"<td class='calibration_td' align='right'>"+order_quantity+" "+product_unit_measurement+"</td>"+
+								"<td class='manual_price_td' align='right'><span >&#8369; "+order_total_amount+"</span></td>"+
 								"</tr>");
 								
 								$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
-								"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+id+"' value='"+product_name+"'>" +
+								"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+id+"' product-id='"+product_idx+"' value='"+product_name+"'>" +
 								"</span>");
 								
 								}
@@ -897,8 +905,9 @@
 							var receivable_mode_of_payment 		= response[i].receivable_mode_of_payment;
 							var receivable_date_of_payment 		= response[i].receivable_date_of_payment;
 							var receivable_reference			= response[i].receivable_reference;
-							var receivable_payment_amount 		= response[i].receivable_payment_amount;
 							var image_reference 				= response[i].image_reference;
+							
+							var receivable_payment_amount = response[i].receivable_payment_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							if(image_reference==null){
 								
@@ -908,7 +917,7 @@
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
-								"<td class='update_purchase_order_payment_amount_td' align='center'>"+receivable_payment_amount+"</td>");
+								"<td class='update_purchase_order_payment_amount_td' align='right'><span >&#8369; "+receivable_payment_amount+"</span></td>");
 								
 							}else{
 								
@@ -918,7 +927,7 @@
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
-								"<td class='update_purchase_order_payment_amount_td' align='center'>"+receivable_payment_amount+"</td>");
+								"<td class='update_purchase_order_payment_amount_td' align='right'><span >&#8369; "+receivable_payment_amount+"</span></td>");
 							
 							}	
 							
@@ -1243,44 +1252,6 @@
 			   });		
 	  });	
 
-	//LoadProductListDelivery();
-	
-	function LoadProductListDelivery() {		
-	
-		$("#product_list_delivery span").remove();
-		$('<span style="display: none;"></span>').appendTo('#product_list_delivery');
 
-			  $.ajax({
-				url: "{{ route('ProductListDelivery') }}",
-				type:"POST",
-				data:{
-				  sales_order_id:{{ $SalesOrderID }},
-				  _token: "{{ csrf_token() }}"
-				},
-				success:function(response){						
-				  console.log(response);
-				  if(response!='') {	
-				  
-						var len = response.length;
-						for(var i=0; i<len; i++){
-						
-							var product_id = response[i].product_id;						
-							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							var product_name = response[i].product_name;
-	
-							$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
-							"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+product_id+"' value='"+product_name+"'>" +
-							"</span>");	
-							
-					}			
-				  }else{
-							/*No Result Found or Error*/	
-				  }
-				},
-				error: function(error) {
-				 console.log(error);	 
-				}
-			   });
-	}
 	
  </script>

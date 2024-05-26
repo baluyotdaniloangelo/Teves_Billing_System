@@ -29,7 +29,7 @@
 				{data: ({sales_order_net_amount,sales_order_less_percentage}) => (Number(sales_order_net_amount)*Number(sales_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
 				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
-				{data: 'delivery_status', name: 'delivery_status', orderable: true, searchable: true},	
+				{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},	
 				{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],

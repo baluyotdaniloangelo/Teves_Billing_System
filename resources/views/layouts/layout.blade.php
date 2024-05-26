@@ -113,6 +113,7 @@ else if (Request::path()==('sales_order_form')){
 <body class="">
 @include('layouts.footer')
 @include('layouts.sales_order_form_script')
+@include('layouts.sales_order_form_delivery_script')
 <?php
 }
 /* Request::path(); for Get Method*/

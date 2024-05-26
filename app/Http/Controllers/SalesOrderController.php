@@ -61,7 +61,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_status']);
+					'teves_sales_order_table.sales_order_payment_status']);
 					
 		}else{
 			
@@ -77,30 +77,17 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_status']);	
+					'teves_sales_order_table.sales_order_payment_status']);	
 			
 		}			
 	
 		return DataTables::of($data)
 				->addIndexColumn()
 				
-				->addColumn('delivery_status', function($row){			
-									
-				/*if($row->sales_order_status=='Pending'){
-					
-					$sales_status_selected = '<div align="center" class="action_table_menu_Product">
-												<select class="sales_order_status_'.$row->sales_order_id.'" name="sales_order_status_'.$row->sales_order_id.'" id="sales_order_status_'.$row->sales_order_id.'" onchange="sales_order_status('.$row->sales_order_id.')">	
-													<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Delivered">Delivered</option>
-												</select>
-											  </div>';
-											  
-				}
-				else{*/
-					
-					$sales_status_selected = $row->sales_order_status;
-					
-				/*}*/
-					
+				->addColumn('sales_order_payment_status', function($row){			
+	
+					$sales_status_selected = $row->sales_order_payment_status;
+	
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 						'.$sales_status_selected.'
@@ -133,7 +120,7 @@ class SalesOrderController extends Controller
 					
                     return $actionBtn;
                 })
-				->rawColumns(['action','delivery_status'])
+				->rawColumns(['action','sales_order_payment_status'])
                 ->make(true);
 		}		
     }
@@ -681,28 +668,5 @@ class SalesOrderController extends Controller
 				return 'Deleted';
 		
 	} 
-	
-	/*Get List Of Product to Deliver*/
-	public function get_sales_order_product_list_delivery(Request $request){		
-	
-			$raw_query_sales_order_component = "SELECT `teves_sales_order_component_table`.`sales_order_component_id`,
-						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
-						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
-						`teves_sales_order_component_table`.`product_idx`, 
-						`teves_sales_order_component_table`.`product_price`, 
-						`teves_sales_order_component_table`.`order_quantity`,
-						`teves_sales_order_component_table`.`order_total_amount`
-						from `teves_sales_order_component_table`  left join `teves_product_table` on	 
-						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx` where `sales_order_idx` = ?		  
-						order by `sales_order_component_id` asc";	
-						
-			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_id]);		
-			
-			//$paymentlist = ReceivablesPaymentModel::where('receivable_idx', '=', $request->receivable_idx)->get();
-			//$paymentcount = $paymentlist->count();
-		return response()->json($data);	
-//			return response()->json($data);			
-
-	}
 	
 }

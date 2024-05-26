@@ -12,8 +12,9 @@ class SalesOrderDeliveryModel extends Model
 	protected $fillable = [
         'sales_order_delivery_details_id',
 		'sales_order_idx',
+		'receivable_idx',
 		'sales_order_component_product_idx',
-        'sales_order_quantity',
+        'sales_order_delivery_quantity',
         'sales_order_dispatch_date',
 		'sales_order_departure_date',
 		'sales_order_delivery_total_load',

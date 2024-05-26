@@ -925,7 +925,6 @@ class ReceivablesController extends Controller
   public function sales_order_receivable_payment(Request $request){
         	 
 	$request->validate([
-	  //$validator = \Validator::make($request->all(),[
 		  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
 		  'receivable_mode_of_payment'      	=> 'required',
 		  'receivable_date_of_payment'      	=> 'required',
@@ -1024,12 +1023,6 @@ class ReceivablesController extends Controller
 
 		  /*Get Sales Order ID from Receivable*/
 		  $sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
-
-		  /*Update Sales Order to Delivered*/
-		  $salesOrderUpdate_status = new SalesOrderModel();
-		  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
-		  $salesOrderUpdate_status->sales_order_status = 'Delivered';
-		  $salesOrderUpdate_status->update();
 		  
 		  /*Get Recivable Details [receivable_amount]*/
 		  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
@@ -1061,6 +1054,12 @@ class ReceivablesController extends Controller
 						  $Receivablestatus = "Pending";
 						  
 					  }
+					  
+		  		  /*Update Sales Order to Delivered*/
+				  $salesOrderUpdate_status = new SalesOrderModel();
+				  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+				  $salesOrderUpdate_status->sales_order_payment_status = $Receivablestatus;
+				  $salesOrderUpdate_status->update();
 		  
 				  /*Update Receivable Status and Remaining Balance*/
 				  $Receivables_ACTION = new ReceivablesModel();
@@ -1086,8 +1085,6 @@ class ReceivablesController extends Controller
 	  
 			  /*Get Sales Order ID from Receivable*/
 			  $sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
-
-			  
 			  
 			  /*Get Recivable Details [receivable_amount]*/
 			  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
@@ -1098,7 +1095,7 @@ class ReceivablesController extends Controller
 				  ->sum('receivable_payment_amount');
 			  
 			  
-			  /*Compute Balance and Status Creation*/
+						/*Compute Balance and Status Creation*/
 						  $remaining_balance = number_format($receivable_amount - $receivable_total_payment_amount+0,2, '.', '');
 						  $_paid_percentage = ($receivable_total_payment_amount / $receivable_amount) * 100;
 					  
@@ -1120,10 +1117,9 @@ class ReceivablesController extends Controller
 							  $Receivablestatus = "Pending";
 							  
 						  }
-			  
-			  
+						  
 					  /*Update Sales Order to Delivered Pending by checking the count of Payment if payment is Zero then update the status to Pending*/
-					  
+					  /*
 					  if($receivable_total_payment_amount==0){
 						  
 						  $salesOrderUpdate_status = new SalesOrderModel();
@@ -1138,8 +1134,14 @@ class ReceivablesController extends Controller
 						  $salesOrderUpdate_status->sales_order_status = 'Delivered';
 						  $salesOrderUpdate_status->update();
 					  
-					  }
-			  
+					  }*/
+			  		  		  
+					  /*Update Sales Order to Delivered*/
+					  $salesOrderUpdate_status = new SalesOrderModel();
+					  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+					  $salesOrderUpdate_status->sales_order_payment_status = $Receivablestatus;
+					  $salesOrderUpdate_status->update();
+				  
 					  /*Update Receivable Status and Remaining Balance*/
 					  $Receivables_ACTION = new ReceivablesModel();
 					  $Receivables_ACTION = ReceivablesModel::find($receivable_idx);		

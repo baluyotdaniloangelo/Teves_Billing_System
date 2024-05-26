@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
+use App\Http\Controllers\SalesOrderDeliveryController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderController_v2;
 use App\Http\Controllers\CashiersReportController;
@@ -206,13 +207,19 @@ Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 
-Route::post('/get_sales_order_product_list_delivery', [SalesOrderController::class,'get_sales_order_product_list_delivery'])->name('ProductListDelivery')->middleware('isLoggedIn');
 
 /*New Version for Sales Order*/
 Route::get('/sales_order_form', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
 Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_order_component_info'])->name('sales_order_component_info')->middleware('isLoggedIn');
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');
+
+/*Sales Order Delivery*/
+Route::post('/sales_order_component_delivery_compose', [SalesOrderDeliveryController::class,'sales_order_component_delivery_compose'])->name('SalesOrderDeliveryCompose')->middleware('isLoggedIn');
+Route::post('/get_sales_order_product_list_delivery', [SalesOrderDeliveryController::class,'get_sales_order_product_list_delivery'])->name('ProductListDelivery')->middleware('isLoggedIn');
+Route::post('/sales_order_component_delivery_info', [SalesOrderDeliveryController::class,'sales_order_component_delivery_info'])->name('SalesOrderDeliveryInfo')->middleware('isLoggedIn');
+Route::post('/delete_sales_order_product_delivery_confirmed', [SalesOrderDeliveryController::class,'delete_sales_order_product_delivery_confirmed'])->name('SalesOrderDeleteDelivery')->middleware('isLoggedIn');
+
 
 /*Get Receivable Payment Item*/
 Route::post('/receivable_payment_list', [ReceivablesController::class,'receivable_payment_list'])->name('receivable_payment_list')->middleware('isLoggedIn');
