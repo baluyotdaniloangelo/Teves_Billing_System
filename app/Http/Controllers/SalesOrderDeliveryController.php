@@ -86,7 +86,7 @@ class SalesOrderDeliveryController extends Controller
 		SalesOrderDeliveryModel::find($sales_order_delivery_details_id)->delete();
 		
 		
-						  /*Get Total Sales Order Quantity*/
+				   /*Get Total Sales Order Quantity*/
 					$sales_total_order_quantity =  SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
 					->sum('order_quantity');
 					

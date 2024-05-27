@@ -331,6 +331,9 @@
 		$("#table_sales_order_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_sales_order_product_body_data');
 		
+		$("#product_list_delivery span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list_delivery');
+		
 		let receivable_id = {{ @$receivables_details['receivable_id'] }};
 
 			  $.ajax({
@@ -383,9 +386,6 @@
 								
 								$(".action_column_class").show();
 								document.getElementById("AddSalesOrderProductBTN").disabled = false;
-								
-								$("#product_list_delivery span").remove();
-								$('<span style="display: none;"></span>').appendTo('#product_list_delivery');
 								
 								for(var i=0; i<len; i++){
 							

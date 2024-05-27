@@ -1,0 +1,3 @@
+ALTER TABLE `teves_sales_order_table`
+	CHANGE COLUMN `sales_order_status` `sales_order_payment_status` VARCHAR(50) NULL DEFAULT 'Pending' COLLATE 'utf8mb4_general_ci' AFTER `sales_order_payment_amount`,
+	ADD COLUMN `sales_order_delivery_status` VARCHAR(50) NULL DEFAULT 'Pending' AFTER `sales_order_payment_status`;

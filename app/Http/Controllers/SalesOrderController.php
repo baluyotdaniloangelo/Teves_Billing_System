@@ -101,7 +101,7 @@ class SalesOrderController extends Controller
 				*/
                 ->addColumn('action', function($row){
 					
-					if($row->sales_order_status=='Pending'){
+					if($row->sales_order_payment_status=='Pending'){
 				
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
@@ -589,12 +589,17 @@ class SalesOrderController extends Controller
 									$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
 						}
 						
+						
+						
+						
+						
+						
 						$SalesOrderUpdate = new SalesOrderModel();
 						$SalesOrderUpdate = SalesOrderModel::find($request->sales_order_id);
 						$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
 						$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
 						$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
-						$SalesOrderUpdate->sales_order_status = 'Pending';
+						//$SalesOrderUpdate->sales_order_status = 'Pending';
 						$SalesOrderUpdate->update();			
 						
 						
@@ -609,7 +614,7 @@ class SalesOrderController extends Controller
 						$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
 						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
 						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-						$Receivables_ACTION->receivable_status 		= 'Pending';
+						//$Receivables_ACTION->receivable_status 		= 'Pending';
 						$Receivables_ACTION->update();
 									
 						/*Response*/
@@ -664,7 +669,7 @@ class SalesOrderController extends Controller
 				$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');				
 				$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
 				$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-				$Receivables_ACTION->receivable_status 				= 'Pending';		
+				//$Receivables_ACTION->receivable_status 				= 'Pending';		
 				$Receivables_ACTION->update();
 	
 				return 'Deleted';
