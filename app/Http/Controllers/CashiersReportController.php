@@ -15,7 +15,7 @@ use App\Models\TevesBranchModel;
 use Session;
 use Validator;
 use DataTables;
-
+use Illuminate\Support\Facades\DB;
 /*PDF*/
 use PDF;
 
@@ -333,15 +333,22 @@ class CashiersReportController extends Controller
 			
 			$CHPH1_ID 				= $request->CHPH1_ID;
 
-								/*Product Details*/
-								$product_info = ProductModel::find($product_idx, ['product_price']);					
-								
-								/*Check if Price is From Manual Price*/
-								if($product_manual_price!=0){
-									$product_price = $product_manual_price;
-								}else{
-									$product_price = $product_info->product_price;
-								}
+					/*Check if Price is From Manual Price*/
+					if($product_manual_price!=0){
+						
+						$product_price = $request->product_manual_price;
+						
+					}else{
+	
+						/*Product Details*/
+						$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
+						LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
+						WHERE b.branch_idx = ? and b.product_idx = ?";			
+						$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);		
+						
+						$product_price = $product_info[0]->product_price;
+
+					}
 						
 								$order_quantity = ($closing_reading - $beginning_reading) - $calibration;
 								$peso_sales = ($order_quantity * $product_price);
@@ -355,7 +362,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
 									$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
 									$CashiersReportModel_P1->closing_reading 			= $closing_reading;
-									$CashiersReportModel_P1->calibration 				= $calibration;
+									$CashiersReportModel_P1->calibration 				= $calibration+0;
 									$CashiersReportModel_P1->order_quantity 			= $order_quantity;
 									$CashiersReportModel_P1->product_price 				= $product_price;
 									$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
@@ -378,7 +385,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
 									$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
 									$CashiersReportModel_P1->closing_reading 			= $closing_reading;
-									$CashiersReportModel_P1->calibration 				= $calibration;
+									$CashiersReportModel_P1->calibration 				= $calibration+0;
 									$CashiersReportModel_P1->order_quantity 			= $order_quantity;
 									$CashiersReportModel_P1->product_price 				= $product_price;
 									$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
@@ -448,15 +455,22 @@ class CashiersReportController extends Controller
 			
 			$CHPH2_ID 				= $request->CHPH2_ID;
 
-								/*Product Details*/
-								$product_info = ProductModel::find($product_idx, ['product_price']);					
-								
-								/*Check if Price is From Manual Price*/
-								if($product_manual_price!=0){
-									$product_price = $product_manual_price;
-								}else{
-									$product_price = $product_info->product_price;
-								}
+					/*Check if Price is From Manual Price*/
+					if($product_manual_price!=0){
+						
+						$product_price = $request->product_manual_price;
+						
+					}else{
+	
+						/*Product Details*/
+						$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
+						LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
+						WHERE b.branch_idx = ? and b.product_idx = ?";			
+						$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);		
+						
+						$product_price = $product_info[0]->product_price;
+
+					}
 						
 								$peso_sales = ($order_quantity * $product_price);
 								

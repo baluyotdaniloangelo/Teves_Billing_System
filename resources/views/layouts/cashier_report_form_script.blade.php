@@ -57,7 +57,8 @@
 					$('#report_dateError').text('');
 
 					LoadCashiersReportPH1();
-				  
+					LoadProductList(teves_branch);
+					document.getElementById("CRPH1_Modal_add").disabled = false;
 				  }
 				},
 				error: function(error) {
@@ -69,6 +70,8 @@
 				  document.getElementById('teves_branchError').className = "invalid-feedback";
 				  document.getElementById('teves_branch').className = "form-control is-invalid";
 				  $('#teves_branch').val("");
+				  
+				  
 				  
 				}else{
 				  $('#teves_branchError').text(error.responseJSON.errors.teves_branch);
@@ -87,10 +90,81 @@
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
 				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);
+				
+				document.getElementById("CRPH1_Modal_add").disabled = false;
 				  
 				}
 			   });		
 	  });
+
+
+	function LoadProductList(branch_id) {		
+	
+		$("#product_name span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_name');
+		
+		$("#product_name_PH2 span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_name_PH2');
+
+		$("#product_list_PH3 span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list_PH3');
+
+		$("#product_list_inventory span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list_inventory');
+			  $.ajax({
+				url: "{{ route('ProductListPricingPerBranch') }}",
+				type:"POST",
+				data:{
+				  branch_idx:branch_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var product_id = response[i].product_id;						
+							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name = response[i].product_name;
+	
+							$('#product_name span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+							$('#product_name_PH2 span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+							$('#product_list_PH3 span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+							$('#product_list_inventory span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							"</span>");	
+							
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
+	
+	function UpdateBranch(){ 
+	
+		$('#switch_notice_off').show();
+		$('#sw_off').html("You selected a new branch, to confirm changes click the update button");
+		setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },2000);
+		
+		/*Disable the Add Product Button Until Changes not Save*/
+		document.getElementById("CRPH1_Modal_add").disabled = false;
+		
+	}
 
 	function TotalAmount(){
 		
@@ -149,7 +223,8 @@
 			var closing_reading 		= $("input[name=closing_reading]").val();
 			var calibration 			= $("input[name=calibration]").val();
 			var product_manual_price 	= $("input[name=product_manual_price]").val();
-			
+			let teves_branch 			= $("#teves_branch").val();
+
 			document.getElementById('CRPH1_form').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
@@ -159,6 +234,7 @@
 					data:{
 					  CHPH1_ID:0,
 					  CashiersReportId:CashiersReportId,
+					  branch_idx:teves_branch,
 					  product_idx:product_idx,
 					  beginning_reading:beginning_reading,
 					  closing_reading:closing_reading,
@@ -304,7 +380,8 @@
 			var closing_reading 		= $("input[name=update_closing_reading]").val();
 			var calibration 			= $("input[name=update_calibration]").val();
 			var product_manual_price 	= $("input[name=update_product_manual_price]").val();
-			
+			let teves_branch 			= $("#teves_branch").val();
+
 			document.getElementById('CRPH1_form_edit').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
@@ -315,6 +392,7 @@
 					  CHPH1_ID:CHPH1_ID,
 					  CashiersReportId:CashiersReportId,
 					  product_idx:product_idx,
+					  branch_idx:teves_branch,
 					  beginning_reading:beginning_reading,
 					  closing_reading:closing_reading,
 					  calibration:calibration,
@@ -438,7 +516,8 @@
 			var product_idx 			= $('#product_name_PH2 option[value="' + $('#product_idx_PH2').val() + '"]').attr('data-id');
 			var order_quantity 			= $("input[name=order_quantity_PH2]").val();
 			var product_manual_price 	= $("input[name=product_manual_price_PH2]").val();
-			
+			let teves_branch 			= $("#teves_branch").val();
+
 			document.getElementById('CRPH2_form').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
@@ -449,6 +528,7 @@
 					  CHPH2_ID:0,
 					  CashiersReportId:CashiersReportId,
 					  product_idx:product_idx,
+					  branch_idx:teves_branch,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
 					  _token: "{{ csrf_token() }}"
@@ -573,7 +653,8 @@
 			var product_idx 			= $('#update_product_name_PH2 option[value="' + $('#update_product_idx_PH2').val() + '"]').attr('data-id');
 			var order_quantity 			= $("input[name=update_order_quantity_PH2]").val();
 			var product_manual_price 	= $("input[name=update_product_manual_price_PH2]").val();
-			
+			let teves_branch 			= $("#teves_branch").val();
+
 			document.getElementById('CRPH2_form_edit').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
@@ -584,6 +665,7 @@
 					  CHPH2_ID:CHPH2_ID,
 					  CashiersReportId:CashiersReportId,
 					  product_idx:product_idx,
+					  branch_idx:teves_branch,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
 					  _token: "{{ csrf_token() }}"
@@ -828,6 +910,10 @@
 			var order_quantity 			    = $("input[name=order_quantity_PH3]").val();
 			var product_manual_price 	    = $("input[name=product_manual_price_PH3]").val();
 			
+			let teves_branch 			= $("#teves_branch").val();
+
+
+
 			document.getElementById('CRPH3_form').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
@@ -840,6 +926,7 @@
 					  miscellaneous_items_type:miscellaneous_items_type,
                       reference_no:reference_no,
                       product_idx:product_idx,
+					  branch_idx:teves_branch,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 

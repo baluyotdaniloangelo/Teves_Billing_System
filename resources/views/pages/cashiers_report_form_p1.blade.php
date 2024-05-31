@@ -1,7 +1,7 @@
 	<!--Part 1-->
 	
 	<div align="right">
-			<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH1_Modal"></button>
+			<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH1_Modal" id="CRPH1_Modal_add"></button>
 	</div>
 	<br>
 		<table class="table" id="table_product_data">

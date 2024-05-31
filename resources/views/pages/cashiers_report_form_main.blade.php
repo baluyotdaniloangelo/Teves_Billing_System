@@ -35,7 +35,7 @@
 								<div class="row mb-2">
 								  <label for="teves_branch" class="col-sm-4 col-form-label">Branch</label>
 								  <div class="col-sm-8">
-									<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
+									<select class="form-select form-control" required="" name="teves_branch" id="teves_branch" onchange="UpdateBranch()">
 										<?php $branch_idx = $CashiersReportData[0]['teves_branch']; ?>
 										
 										@foreach ($teves_branch as $teves_branch_cols)

@@ -323,8 +323,9 @@
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
-					$('#update_purchase_supplier_nameError').text('');					
-					
+					$('#update_purchase_supplier_nameError').text('');	
+					LoadProductList(company_header);
+					document.getElementById("AddPurchaseOrderProductBTN").disabled = false;
 				  }
 				},
 				beforeSend:function()
