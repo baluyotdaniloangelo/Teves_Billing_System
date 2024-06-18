@@ -261,11 +261,17 @@
 				<li class="nav-item" role="presentation">
                   <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" onclick="LoadProduct()">Product</button>
                 </li>
+				
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="true" onclick="" title='Product Delivery List, Create, Update and Delete Delivery'>Delivery</button>
+                </li>
+				
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Payment</button>
                 </li>
                
               </ul>
+			  
               <div class="tab-content pt-2" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 				<div class="d-flex justify-content-end" id="">
@@ -292,6 +298,33 @@
 							</tbody>
 						</table>
                 </div>
+				
+               <div class="tab-pane fade" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
+				<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductDeliveryModal" id="" onclick="ResetDeliveryForm()" title="Add Sales Order Delivery Items"></button>
+						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintPurchaseOrderDeliveyStatus" title="Print Purchase Order Delivered Item / Status"></button>
+					</div>											
+					</div>
+					
+						<table class="table table-striped" id="">
+						<thead>
+						<tr class='report'>
+							<th style="text-align:center !important;" class="">Action</th>
+							<th style="text-align:center !important;">Item #</th>
+							<th style="text-align:center !important;">Delivery Date</th>
+							<th style="text-align:center !important;">Product</th>
+							<th style="text-align:center !important;">Quantity</th>
+						</tr>
+						</thead>
+							<tbody id="product_list_delivery_data">
+									<tr style="display: none;">
+										<td>HIDDEN</td>
+									</tr>
+							</tbody>
+						</table>
+                </div>				
+				
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
@@ -643,5 +676,171 @@
 </main>
 
 
+	<!--Modal to Product Delivery-->
+	<div class="modal fade" id="AddProductDeliveryModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Add Product Delivery Details</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="AddProductDelivery">
+
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type='date' class='form-control' id='purchase_order_delivery_date' name='purchase_order_delivery_date' value='<?=date('Y-m-d');?>' max="9999-12-31" required>
+								<label for="purchase_order_delivery_date">Delivery Date</label>
+								<span class="valid-feedback" id="purchase_order_delivery_dateError"></span>
+							</div>
+						 
+						</div>
+
+						
+						<div class="col-sm-12">
+						
+						<div class="form-floating mb-3">
+						  <input class="form-control" list="product_list_delivery" name="purchase_order_component_product_idx" id="purchase_order_component_product_idx" required autocomplete="off" placeholder="Product">
+						<!--Data List for Product-->
+							<datalist id="product_list_delivery">
+							<span >	</span>
+							
+							</datalist>								
+							<label for="product_delivery_idx">Product</label>
+							<span class="valid-feedback" id="purchase_order_component_product_idxError"></span>
+						 </div>
+						
+						
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_quantity" id="purchase_order_delivery_quantity" required step=".01" placeholder="Quantity">
+								<label for="purchase_order_delivery_quantity">Quantity</label>
+								<span class="valid-feedback" id="purchase_order_delivery_quantityError"></span>
+							</div>
+							 
+							 
+						</div>
+
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_withdrawal_reference" id="purchase_order_delivery_withdrawal_reference" placeholder="Withdrawal Reference">
+								<label for="purchase_order_delivery_withdrawal_reference">Withdrawal Reference</label>
+							</div>
+							 <span class="valid-feedback" id="purchase_order_delivery_withdrawal_referenceError"></span>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_hauler_details" id="purchase_order_delivery_hauler_details" placeholder="Hauler Details">
+								<label for="purchase_order_delivery_hauler_details">Hauler Details</label>
+							</div>
+							 <span class="valid-feedback" id="purchase_order_delivery_hauler_detailsError"></span>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_remarks" id="purchase_order_delivery_remarks" placeholder="Ship To Account">
+								<label for="purchase_order_delivery_remarks">Remarks</label>
+							</div>
+							 <span class="valid-feedback" id="purchase_order_delivery_remarksError"></span>
+							 
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+							<div id="loading_data_add_product_delivery" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-product-delivery"> Save</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-so-save-product"> Reset</button>					  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+				  
+                </div>
+             </div>		
+			 
+	<!-- Product Delivery Delete Modal-->
+    <div class="modal fade" id="PurchaseOrderProductDeliveryDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+				
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Are you sure you want to Delete This Product Delivery?<br>
+				</div>
+				<div align="left"style="margin: 10px;">
+				
+				Delivery Date: <span id="delete_delivery_purchase_order_delivery_date"></span><br>
+				
+				Product: <span id="delete_delivery_delete_product_name"></span><br>
+				Quantity: <span id="delete_delivery_delete_purchase_order_delivery_quantity"></span><br>
+				
+				Withdrawal Reference: <span id="delete_delivery_purchase_order_delivery_withdrawal_reference"></span><br>
+				Hauler Details: <span id="delete_delivery_purchase_order_delivery_hauler_details"></span><br>
+				
+				Remarks: <span id="delete_delivery_purchase_order_delivery_remarks"></span><br>
+				
+				</div>
+                <div class="modal-footer footer_modal_bg">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deletePurchaseOrderProdcutDeliveryConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+	
+		<!-- Product Delivery Delete Modal-->
+    <div class="modal fade" id="PurchaseOrderProductDeliveryViewModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+				
+				
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Delivery Information<br>
+				</div>
+				<div align="left"style="margin: 10px;">
+				
+				Delivery Date: <span id="view_delivery_purchase_order_delivery_date"></span><br>
+				
+				Product: <span id="view_delivery_delete_product_name"></span><br>
+				Quantity: <span id="view_delivery_delete_purchase_order_delivery_quantity"></span><br>
+				
+				Withdrawal Reference: <span id="view_delivery_purchase_order_delivery_withdrawal_reference"></span><br>
+				Hauler Details: <span id="view_delivery_purchase_order_delivery_hauler_details"></span><br>
+				
+				Remarks: <span id="view_delivery_purchase_order_delivery_remarks"></span><br>
+				
+				</div>
+                <div class="modal-footer footer_modal_bg">
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 

@@ -1,0 +1,2 @@
+ALTER TABLE `user_tb`
+	ADD COLUMN `user_branch_access_type` VARCHAR(100) NOT NULL COMMENT 'All or Selected' AFTER `user_type`;

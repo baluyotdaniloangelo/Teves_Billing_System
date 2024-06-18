@@ -41,13 +41,15 @@ class UserController extends Controller
 		'user_real_name',
 		'user_name',
 		'user_type',
+		'user_branch_access_type',
         'created_at',
         'updated_at'
 		);		
 
 		return DataTables::of($data)
 				->addIndexColumn()
-                ->addColumn('action', function($row){	
+                /*
+				->addColumn('action', function($row){	
 					
 					$actionBtn = '
 					<div class="action_table_menu_switch">
@@ -57,7 +59,32 @@ class UserController extends Controller
                     return $actionBtn;
                 
 				})
-				
+				*/
+				->addColumn('action', function($row){	
+					
+					if($row->user_branch_access_type=='ALL'){
+						
+						$actionBtn = '
+						<div class="action_table_menu_switch">
+						<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
+						<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
+						</div>';
+						
+					}
+					
+					else{
+					
+						$actionBtn = '
+						<div class="action_table_menu_switch">
+						<a href="#" data-id="'.$row->user_id.'" class="bi bi-building btn_icon_table btn_icon_table_view" id="UserAccess" title="Add User Site Access"></a>
+						<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
+						<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
+						</div>';
+					
+					}
+                    return $actionBtn;
+                
+				})
 				->addColumn('created_at_dt_format', function($row){						
                     return $row->created_at;
 				})
@@ -74,6 +101,7 @@ class UserController extends Controller
 				
 				->rawColumns(['action','created_at_dt_format','updated_at_dt_format'])
                 ->make(true);
+				
 		}	
     }
 
@@ -121,6 +149,7 @@ class UserController extends Controller
 			$UserList->user_name 		= $request->user_name;
 			$UserList->user_password 	= hash::make($request->user_password);
 			$UserList->user_type 		= $request->user_type;
+			$UserList->user_branch_access_type 		= $request->user_access;
 			
 			$result = $UserList->save();
 			
@@ -172,6 +201,7 @@ class UserController extends Controller
 			$UserList->user_name 		= $request->user_name;
 			if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
 			$UserList->user_type 		= $request->user_type;
+			$UserList->user_branch_access_type 		= $request->user_access;
 			
 			$result = $UserList->update();
 			

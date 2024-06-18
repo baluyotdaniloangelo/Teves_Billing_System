@@ -29,7 +29,30 @@ class ReceivablesController extends Controller
 			$data = array();
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$teves_branch = TevesBranchModel::all();
+			
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
 			
 			return view("pages.receivables", compact('data','title','teves_branch'));
 			
@@ -51,7 +74,30 @@ class ReceivablesController extends Controller
 			$client_data = ClientModel::all();
 			
 			$product_data = ProductModel::all();
-			$teves_branch = TevesBranchModel::all();
+			
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
 			
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
@@ -630,7 +676,29 @@ class ReceivablesController extends Controller
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
 			
-			$teves_branch = TevesBranchModel::all();
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
 			
 			$receivables_payment_suggestion = ReceivablesPaymentModel::select('receivable_mode_of_payment')->distinct()->get();
 			

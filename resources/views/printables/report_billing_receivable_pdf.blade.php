@@ -261,19 +261,37 @@
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="6"></td>
-				<td align="right" colspan="2">Date:</td>
+				<td align="left" colspan="2">Reviewed by:</td>
+				<td align="center" colspan="3" style="border-bottom:1px solid #000;">&nbsp;</td>
+				<td align="right" colspan="3">Date:</td>
 				<td align="center" colspan="2" style="border-bottom:1px solid #000;">&nbsp;</td>
-				
-				
 			</tr>
+			
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="6"></td>
-				<td align="right" colspan="2">Time:</td>
+				<td align="left" colspan="2"></td>
+				<td align="center" colspan="3">Pricing and Sales In-Charge</td>
+				<td align="right" colspan="3">Time:</td>
 				<td align="center" colspan="2" style="border-bottom:1px solid #000;">&nbsp;</td>
-				
-				
 			</tr>
+
+			<tr class="data_tr" style="font-size:12px;">
+				<td align="left" colspan="10">&nbsp;</td>
+			</tr>
+			
+			<tr class="data_tr" style="font-size:12px;">
+				<td align="left" colspan="2">Billing For Release:</td>
+				<td align="center" colspan="3" style="border-bottom:1px solid #000;">&nbsp;</td>
+				<td align="right" colspan="3"></td>
+				<td align="center" colspan="2">&nbsp;</td>
+			</tr>
+			
+			<tr class="data_tr" style="font-size:12px;">
+				<td align="left" colspan="2"></td>
+				<td align="center" colspan="3">Accounting In-Charge</td>
+				<td align="right" colspan="3"></td>
+				<td align="center" colspan="2">&nbsp;</td>
+			</tr>
+			
 			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
 			<tr style="font-size:12px;font-style: italic;"><td colspan="10">This billing statement is not valid for claims of taxes. Please refer to Sales Invoice issued.</td></tr>
 		</tbody>

@@ -29,7 +29,31 @@ class PurchaseOrderController_v2 extends Controller
 			$product_data = ProductModel::all();
 			$supplier_data = SupplierModel::all();	
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$teves_branch = TevesBranchModel::all();
+			
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
+			
 			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','purchase_destination')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 		
@@ -52,7 +76,8 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_order_control_number',
 						'teves_supplier_table.supplier_name',
 						'teves_purchase_order_table.purchase_order_total_payable',
-						'teves_purchase_order_table.purchase_status'
+						'teves_purchase_order_table.purchase_status',
+						'teves_purchase_order_table.purchase_order_delivery_status'
 				]);
 	
 		return DataTables::of($data)
@@ -98,7 +123,30 @@ class PurchaseOrderController_v2 extends Controller
 			$supplier_data = SupplierModel::all();
 			$product_data = ProductModel::all();
 			
-			$teves_branch = TevesBranchModel::all();
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
+			
 			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 			
@@ -182,7 +230,7 @@ class PurchaseOrderController_v2 extends Controller
 			
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
 			
-			$control_number = $BranchInfo->branch_initial."-PO-".$last_id+1;
+			$control_number = $BranchInfo->branch_initial."-PO-".$last_id+2;
 			
 			$Purchaseorder = new PurchaseOrderModel();	
 			$Purchaseorder->purchase_order_control_number 			= $control_number;
@@ -300,24 +348,24 @@ class PurchaseOrderController_v2 extends Controller
 
 	public function delete_purchase_order_product(Request $request){		
 			
-		$productitemID = $request->purchase_order_component_id;
-		PurchaseOrderComponentModel::find($productitemID)->delete();
+				$productitemID = $request->purchase_order_component_id;
+				PurchaseOrderComponentModel::find($productitemID)->delete();
 		
-		$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
-				->sum('order_total_amount');
+				$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
+						->sum('order_total_amount');
 					
 				$gross_amount = $order_total_amount;
 		
-		$PurchaseOrderInfo = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
-              	->get([
-						'purchase_order_net_percentage', 
-						'purchase_order_less_percentage'
-				]);	
+				$PurchaseOrderInfo = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+						->get([
+								'purchase_order_net_percentage', 
+								'purchase_order_less_percentage'
+						]);	
 				
 				$net_in_percentage 				= $PurchaseOrderInfo[0]->purchase_order_net_percentage;/*1.12*/
 				$less_in_percentage 			= $PurchaseOrderInfo[0]->purchase_order_less_percentage/100;
 							
-				if($request->sales_order_net_percentage==0){
+				if($PurchaseOrderInfo[0]->purchase_order_net_percentage==0){
 							$purchase_order_net_amount 			= 0;
 							$purchase_order_total_due 			=  number_format($gross_amount,2,".","");
 				}else{
@@ -330,9 +378,9 @@ class PurchaseOrderController_v2 extends Controller
 				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
 				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
 				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_due;
-				$PurchaseOrderUpdate->update();				
+				$PurchaseOrderUpdate->update();	
 		
-		return 'Deleted';
+				return 'Deleted';
 				
 	}
 	
@@ -467,38 +515,11 @@ class PurchaseOrderController_v2 extends Controller
 						$PurchaseOrderComponent->order_total_amount 	= $order_total_amount;
 						
 						$result = $PurchaseOrderComponent->save();
-				
-				$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
-					->sum('order_total_amount');
-					
-				$gross_amount = $order_total_amount;
-				
-				$net_in_percentage 				= $purchase_order_data[0]->purchase_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $purchase_order_data[0]->purchase_order_less_percentage/100;
-							
-				if($purchase_order_data[0]->purchase_order_net_percentage==0){
-							$purchase_order_net_amount 		= 0;
-							$purchase_order_total_due 		=  number_format($gross_amount,4,".","");
-				}else{
-							$purchase_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,4,".","");
-							$purchase_order_total_due 		=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),4,".","");
-				}
-				
-				$PurchaseOrderUpdate = new PurchaseOrderModel();
-				$PurchaseOrderUpdate = PurchaseOrderModel::find($request->purchase_order_id);
-				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
-				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
-				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_due;
-				$PurchaseOrderUpdate->update();				
-				
-						if($result){
-							return response()->json(array('success' => "Product Information Successfully Created!"), 200);
-						}
-						else{
-							return response()->json(['success'=>'Error on Creation Product Information']);
-						}				
 						
-					}else{
+						$action = 'Insert';
+						
+					}
+					else{
 						
 						/*UPDATE*/
 						$PurchaseOrderComponent = new PurchaseOrderComponentModel();
@@ -512,37 +533,51 @@ class PurchaseOrderController_v2 extends Controller
 						$PurchaseOrderComponent->order_total_amount 	= $order_total_amount;
 						
 						$result = $PurchaseOrderComponent->update();
+
+						$action = 'Update';
+										
+					}
 				
-				$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
-					->sum('order_total_amount');
+					$sum_of_total_order_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
+						->sum('order_total_amount');
+						
+					 $gross_amount = $sum_of_total_order_amount;
 					
-				$gross_amount = $order_total_amount;
+					$net_in_percentage 				= $purchase_order_data[0]->purchase_order_net_percentage;/*1.12*/
+					$less_in_percentage 			= $purchase_order_data[0]->purchase_order_less_percentage/100;
+								
+					if($purchase_order_data[0]->purchase_order_net_percentage==0){
+								$purchase_order_net_amount 		= 0;
+								$purchase_order_total_due 		=  number_format($gross_amount,4,".","");
+					}else{
+								$purchase_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,4,".","");
+								$purchase_order_total_due 		=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),4,".","");
+					}
+					
+					$PurchaseOrderUpdate = new PurchaseOrderModel();
+					$PurchaseOrderUpdate = PurchaseOrderModel::find($request->purchase_order_id);
+					$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
+					$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
+					$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_due;
+					$PurchaseOrderUpdate->update();		
 				
-				$net_in_percentage 				= $purchase_order_data[0]->purchase_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $purchase_order_data[0]->purchase_order_less_percentage/100;
-							
-				if($purchase_order_data[0]->purchase_order_net_percentage==0){
-							$purchase_order_net_amount 		= 0;
-							$purchase_order_total_due 		=  number_format($gross_amount,4,".","");
+				if($action=='Insert'){
+					
+						if($result){
+							return response()->json(array('success' => "Product Information Successfully Created!"), 200);
+						}
+						else{
+							return response()->json(['success'=>'Error on Creation Product Information']);
+						}	
 				}else{
-							$purchase_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,4,".","");
-							$purchase_order_total_due 		=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),4,".","");
-				}
-				
-				$PurchaseOrderUpdate = new PurchaseOrderModel();
-				$PurchaseOrderUpdate = PurchaseOrderModel::find($request->purchase_order_id);
-				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
-				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
-				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_due;
-				$PurchaseOrderUpdate->update();				
-				
+						
 						if($result){
 							return response()->json(array('success' => "Product Information Successfully Updated!"), 200);
 						}
 						else{
 							return response()->json(['success'=>'Error on Update Product Information']);
-						}				
-					}
+						}	
+				}
 				
 	}
 

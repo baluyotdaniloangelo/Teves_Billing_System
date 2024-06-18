@@ -145,6 +145,7 @@ else if (Request::is('purchase_order_form/*')){
 	<body class="">
 	@include('layouts.footer')
 	@include('layouts.purchase_order_form_script')
+	@include('layouts.purchase_order_form_delivery_script')
 	<?php
 }
 else if (Request::is('cashier_report')){

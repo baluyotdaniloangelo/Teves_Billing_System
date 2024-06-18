@@ -29,12 +29,10 @@ class SalesOrderDeliveryController extends Controller
 						`teves_sales_order_delivery_details`.`sales_order_component_idx`,
 						`teves_sales_order_delivery_details`.`sales_order_component_product_idx`, 
 						`teves_sales_order_delivery_details`.`sales_order_delivery_quantity`,
-						`teves_sales_order_delivery_details`.`sales_order_dispatch_date`,
-						`teves_sales_order_delivery_details`.`sales_order_departure_date`,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_date`,
 						`teves_sales_order_delivery_details`.`sales_order_delivery_withdrawal_reference`,
 						`teves_sales_order_delivery_details`.`sales_order_delivery_hauler_details`,
-						`teves_sales_order_delivery_details`.`sales_order_delivery_ship_to_account`,
-						`teves_sales_order_delivery_details`.`sales_order_branch_delivery`
+						`teves_sales_order_delivery_details`.`sales_order_delivery_remarks`
 						
 						from `teves_sales_order_delivery_details`  left join `teves_product_table` on	 
 						`teves_product_table`.`product_id` = `teves_sales_order_delivery_details`.`sales_order_component_product_idx` where `teves_sales_order_delivery_details`.`sales_order_idx` = ?		  
@@ -56,18 +54,12 @@ class SalesOrderDeliveryController extends Controller
 						`teves_sales_order_delivery_details`.`sales_order_component_idx`,
 						`teves_sales_order_delivery_details`.`sales_order_component_product_idx`, 
 						`teves_sales_order_delivery_details`.`sales_order_delivery_quantity`,
-						`teves_sales_order_delivery_details`.`sales_order_dispatch_date`,
-						`teves_sales_order_delivery_details`.`sales_order_departure_date`,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_date`,
 						`teves_sales_order_delivery_details`.`sales_order_delivery_withdrawal_reference`,
 						`teves_sales_order_delivery_details`.`sales_order_delivery_hauler_details`,
-						`teves_sales_order_delivery_details`.`sales_order_delivery_ship_to_account`,
-						`teves_sales_order_delivery_details`.`sales_order_branch_delivery`,
-						`teves_branch_table`.`branch_name`
+						`teves_sales_order_delivery_details`.`sales_order_delivery_remarks`
 						from `teves_sales_order_delivery_details`  left join `teves_product_table` on	 
 						`teves_product_table`.`product_id` = `teves_sales_order_delivery_details`.`sales_order_component_product_idx` 
-						
-						left join `teves_branch_table` on	 
-						`teves_branch_table`.`branch_id` = `teves_sales_order_delivery_details`.`sales_order_branch_delivery` 
 						
 						where `teves_sales_order_delivery_details`.`sales_order_delivery_details_id` = ?		  
 						order by `teves_sales_order_delivery_details`.`sales_order_delivery_details_id` asc";	
@@ -131,10 +123,12 @@ class SalesOrderDeliveryController extends Controller
 	public function sales_order_component_delivery_compose(Request $request){
 
 		$request->validate([
+		  'sales_order_delivery_date'   => 'required',
 		  'sales_order_component_product_idx'   => 'required',
 		  'sales_order_delivery_quantity'     => 'required',
         ], 
         [
+			'sales_order_delivery_date.required' 	=> 'Delivery Date is Required',
 			'sales_order_component_product_idx.required' 	=> 'Product is Required',
 			'sales_order_delivery_quantity.required' 		=> 'Quantity is Required'
         ]
@@ -152,14 +146,12 @@ class SalesOrderDeliveryController extends Controller
 						
 						$SalesOrderDeliveryComponent->sales_order_delivery_quantity 				= $request->sales_order_delivery_quantity;
 						
-						$SalesOrderDeliveryComponent->sales_order_dispatch_date 					= $request->sales_order_dispatch_date;
-						$SalesOrderDeliveryComponent->sales_order_departure_date 					= $request->sales_order_departure_date;
+						$SalesOrderDeliveryComponent->sales_order_delivery_date 					= $request->sales_order_delivery_date;
 						
 						$SalesOrderDeliveryComponent->sales_order_delivery_withdrawal_reference 	= $request->sales_order_delivery_withdrawal_reference;
 						$SalesOrderDeliveryComponent->sales_order_delivery_hauler_details 			= $request->sales_order_delivery_hauler_details;
 						
-						$SalesOrderDeliveryComponent->sales_order_delivery_ship_to_account 			= $request->sales_order_delivery_ship_to_account;
-						$SalesOrderDeliveryComponent->sales_order_branch_delivery 					= $request->sales_order_branch_delivery;
+						$SalesOrderDeliveryComponent->sales_order_delivery_remarks 			= $request->sales_order_delivery_remarks;
 						
 						$result = $SalesOrderDeliveryComponent->save();	
 				
@@ -175,14 +167,12 @@ class SalesOrderDeliveryController extends Controller
 						
 						$SalesOrderDeliveryComponent->sales_order_delivery_quantity 				= $request->sales_order_delivery_quantity;
 						
-						$SalesOrderDeliveryComponent->sales_order_dispatch_date 					= $request->sales_order_dispatch_date;
-						$SalesOrderDeliveryComponent->sales_order_departure_date 					= $request->sales_order_departure_date;
+						$SalesOrderDeliveryComponent->sales_order_delivery_date 					= $request->sales_order_delivery_date;
 						
 						$SalesOrderDeliveryComponent->sales_order_delivery_withdrawal_reference 	= $request->sales_order_delivery_withdrawal_reference;
 						$SalesOrderDeliveryComponent->sales_order_delivery_hauler_details 			= $request->sales_order_delivery_hauler_details;
 						
-						$SalesOrderDeliveryComponent->sales_order_delivery_ship_to_account 			= $request->sales_order_delivery_ship_to_account;
-						$SalesOrderDeliveryComponent->sales_order_branch_delivery 					= $request->sales_order_branch_delivery;
+						$SalesOrderDeliveryComponent->sales_order_delivery_remarks 			= $request->sales_order_delivery_remarks;
 						
 						$result = $SalesOrderDeliveryComponent->update();
 				

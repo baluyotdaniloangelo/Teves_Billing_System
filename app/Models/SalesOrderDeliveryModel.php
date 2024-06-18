@@ -20,7 +20,7 @@ class SalesOrderDeliveryModel extends Model
 		'sales_order_delivery_total_load',
         'sales_order_delivery_withdrawal_reference',
         'sales_order_delivery_hauler_details',
-        'sales_order_delivery_ship_to_account',
+        'sales_order_delivery_remarks',
         'sales_order_branch_delivery',
         'created_at',
 		'updated_at'

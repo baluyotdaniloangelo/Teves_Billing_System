@@ -71,6 +71,9 @@
 		$("#table_purchase_order_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_purchase_order_product_body_data');
 
+		$("#product_list_delivery span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list_delivery');
+
 			  $.ajax({
 				url: "/get_purchase_order_product_list",
 				type:"POST",
@@ -92,6 +95,7 @@
 							for(var i=0; i<len; i++){
 								
 								var id = response['productlist'][i].purchase_order_component_id;
+								var product_idx = response['productlist'][i].product_idx;
 								var product_name = response['productlist'][i].product_name;
 								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
 								var product_price = response['productlist'][i].product_price;
@@ -107,6 +111,9 @@
 								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
 								"</tr>");	
 								
+								$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+id+"' product-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
 							}
 						
 						}else{
@@ -117,6 +124,7 @@
 							for(var i=0; i<len; i++){
 								
 								var id = response['productlist'][i].purchase_order_component_id;
+								var product_idx = response['productlist'][i].product_idx;
 								var product_name = response['productlist'][i].product_name;
 								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
 								var product_price = response['productlist'][i].product_price;
@@ -131,7 +139,11 @@
 								"<td class='manual_price_td' align='center'>"+product_price+"</td>"+
 								"<td class='calibration_td' align='center'>"+order_quantity+" "+product_unit_measurement+"</td>"+
 								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-								"</tr>");			
+								"</tr>");		
+
+								$('#product_list_delivery span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='Product:"+product_name + " | Quantity:"+order_quantity+"' data-id='"+id+"' product-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
 								
 							}							
 						}
@@ -386,6 +398,21 @@
 	  
 	});
 	  
+	  
+		/*Saler Order Status*/
+	$('body').on('click','#PrintPurchaseOrderDeliveyStatus',function(){	  
+	  
+			let purchaseOrderID = {{ $PurchaseOrderID }};
+			var query = {
+						purchase_order_id:purchaseOrderID,
+						_token: "{{ csrf_token() }}"
+					}
+
+			var url = "{{URL::to('generate_purchase_order_delivery_status_pdf')}}?" + $.param(query)
+			window.open(url);
+	  
+	});
+	
 	function UpdateBranch(){ 
 	
 		$('#switch_notice_off').show();
@@ -607,7 +634,7 @@
 			let purchase_order_component_id = $(this).data('id');
 			
 			  $.ajax({
-				url: "/purchase_order_component_info",
+				url: "/purchase_order_product_info",
 				type:"POST",
 				data:{
 				  purchase_order_component_id:purchase_order_component_id,

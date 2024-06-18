@@ -17,8 +17,8 @@
 			let sales_order_id 								= {{ $SalesOrderID }};
 			let receivable_id 								= {{ @$receivables_details['receivable_id'] }};
 			
-			let sales_order_dispatch_date 					= $("input[name=sales_order_dispatch_date]").val();
-			let sales_order_departure_date 					= $("input[name=sales_order_departure_date]").val();
+			let sales_order_delivery_date 					= $("input[name=sales_order_delivery_date]").val();
+			//let sales_order_departure_date 					= $("input[name=sales_order_departure_date]").val();
 			
 			let sales_order_component_product_idx 			= $("#product_list_delivery option[value='" + $('#sales_order_component_product_idx').val() + "']").attr('product-id');
 			let sales_order_component_idx 					= $("#product_list_delivery option[value='" + $('#sales_order_component_product_idx').val() + "']").attr('data-id');
@@ -26,8 +26,8 @@
 			let sales_order_delivery_quantity 				= $("#sales_order_delivery_quantity").val();
 			let sales_order_delivery_withdrawal_reference 	= $("input[name=sales_order_delivery_withdrawal_reference]").val();
 			let sales_order_delivery_hauler_details 		= $("input[name=sales_order_delivery_hauler_details]").val();
-			let sales_order_delivery_ship_to_account 		= $("input[name=sales_order_delivery_ship_to_account]").val();
-			let sales_order_branch_delivery 				= $("#sales_order_branch_delivery").val();
+			let sales_order_delivery_remarks 		= $("input[name=sales_order_delivery_remarks]").val();
+			//let sales_order_branch_delivery 				= $("#sales_order_branch_delivery").val();
 			
 			  $.ajax({
 				url: "{{ route('SalesOrderDeliveryCompose') }}",
@@ -36,15 +36,15 @@
 				  sales_order_delivery_details_id:sales_order_delivery_details_id,
 				  sales_order_id:sales_order_id,
 				  receivable_id:receivable_id,
-				  sales_order_dispatch_date:sales_order_dispatch_date,
-				  sales_order_departure_date:sales_order_departure_date,
+				  sales_order_delivery_date:sales_order_delivery_date,
+				  //sales_order_departure_date:sales_order_departure_date,
 				  sales_order_component_idx:sales_order_component_idx, 
 				  sales_order_component_product_idx:sales_order_component_product_idx,   
 				  sales_order_delivery_hauler_details:sales_order_delivery_hauler_details,
 				  sales_order_delivery_quantity:sales_order_delivery_quantity,
 				  sales_order_delivery_withdrawal_reference:sales_order_delivery_withdrawal_reference,
-				  sales_order_delivery_ship_to_account:sales_order_delivery_ship_to_account,
-				  sales_order_branch_delivery:sales_order_branch_delivery,
+				  sales_order_delivery_remarks:sales_order_delivery_remarks,
+				  //sales_order_branch_delivery:sales_order_branch_delivery,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -62,8 +62,8 @@
 						$('#sales_order_component_product_idx').val("");
 						$('#sales_order_delivery_quantity').val("");
 						$('#sales_order_delivery_withdrawal_reference').val("");
-						$('#sales_order_delivery_ship_to_account').val("");
-						$('#sales_order_branch_delivery').val("");
+						$('#sales_order_delivery_remarks').val("");
+						//$('#sales_order_branch_delivery').val("");
 						
 						document.getElementById("save-product-delivery").value = 0;
 						
@@ -145,14 +145,14 @@
 					
 					/*Set Details*/
 					document.getElementById("save-product-delivery").value = sales_order_delivery_details_id;
-					document.getElementById("sales_order_dispatch_date").value = response[0].sales_order_dispatch_date;
-					document.getElementById("sales_order_departure_date").value = response[0].sales_order_departure_date;
+					document.getElementById("sales_order_delivery_date").value = response[0].sales_order_delivery_date;
+					//document.getElementById("sales_order_departure_date").value = response[0].sales_order_departure_date;
 					document.getElementById("sales_order_component_product_idx").value = response[0].product_name;
 					document.getElementById("sales_order_delivery_quantity").value = response[0].sales_order_delivery_quantity;
 					document.getElementById("sales_order_delivery_withdrawal_reference").value = response[0].sales_order_delivery_withdrawal_reference;
 					document.getElementById("sales_order_delivery_hauler_details").value = response[0].sales_order_delivery_hauler_details;
-					document.getElementById("sales_order_delivery_ship_to_account").value = response[0].sales_order_delivery_ship_to_account;
-					document.getElementById("sales_order_branch_delivery").value = response[0].sales_order_branch_delivery;
+					document.getElementById("sales_order_delivery_remarks").value = response[0].sales_order_delivery_remarks;
+					//document.getElementById("sales_order_branch_delivery").value = response[0].sales_order_branch_delivery;
 					
 					$('#AddProductDeliveryModal').modal('toggle');					
 				  
@@ -184,15 +184,15 @@
 					
 					document.getElementById("deleteSalesOrderProdcutDeliveryConfirmed").value = sales_order_delivery_details_id;
 					
-					$('#delete_delivery_sales_order_dispatch_date').text(response[0].sales_order_dispatch_date);
-					$('#delete_delivery_sales_order_departure_date').text(response[0].sales_order_departure_date);
+					$('#delete_delivery_sales_order_delivery_date').text(response[0].sales_order_delivery_date);
+					//$('#delete_delivery_sales_order_departure_date').text(response[0].sales_order_departure_date);
 					$('#delete_delivery_delete_product_name').text(response[0].product_name);
 					$('#delete_delivery_delete_sales_order_delivery_quantity').text(response[0].sales_order_delivery_quantity);
 					
 					$('#delete_delivery_sales_order_delivery_withdrawal_reference').text(response[0].sales_order_delivery_withdrawal_reference);
 					$('#delete_delivery_sales_order_delivery_hauler_details').text(response[0].sales_order_delivery_hauler_details);
-					$('#delete_delivery_sales_order_delivery_ship_to_account').text(response[0].sales_order_delivery_ship_to_account);
-					$('#delete_delivery_sales_order_branch_delivery').text(response[0].branch_name);
+					$('#delete_delivery_sales_order_delivery_remarks').text(response[0].sales_order_delivery_remarks);
+					//$('#delete_delivery_sales_order_branch_delivery').text(response[0].branch_name);
 
 					$('#SalesOrderProductDeliveryDeleteModal').modal('toggle');				
 					
@@ -223,15 +223,15 @@
 				  console.log(response);
 				  if(response) {
 					
-					$('#view_delivery_sales_order_dispatch_date').text(response[0].sales_order_dispatch_date);
-					$('#view_delivery_sales_order_departure_date').text(response[0].sales_order_departure_date);
+					$('#view_delivery_sales_order_delivery_date').text(response[0].sales_order_delivery_date);
+					//$('#view_delivery_sales_order_departure_date').text(response[0].sales_order_departure_date);
 					$('#view_delivery_delete_product_name').text(response[0].product_name);
 					$('#view_delivery_delete_sales_order_delivery_quantity').text(response[0].sales_order_delivery_quantity);
 					
 					$('#view_delivery_sales_order_delivery_withdrawal_reference').text(response[0].sales_order_delivery_withdrawal_reference);
 					$('#view_delivery_sales_order_delivery_hauler_details').text(response[0].sales_order_delivery_hauler_details);
-					$('#view_delivery_sales_order_delivery_ship_to_account').text(response[0].sales_order_delivery_ship_to_account);
-					$('#view_delivery_sales_order_branch_delivery').text(response[0].branch_name);
+					$('#view_delivery_sales_order_delivery_remarks').text(response[0].sales_order_delivery_remarks);
+					// $('#view_delivery_sales_order_branch_delivery').text(response[0].branch_name);
 
 					$('#SalesOrderProductDeliveryViewModal').modal('toggle');				
 					
@@ -288,14 +288,14 @@
 		
 			/*Set Details*/
 			document.getElementById("save-product-delivery").value = '';
-			document.getElementById("sales_order_dispatch_date").value = '';
-			document.getElementById("sales_order_departure_date").value = '';
+			document.getElementById("sales_order_delivery_date").value = '';
+			//document.getElementById("sales_order_departure_date").value = '';
 			document.getElementById("sales_order_component_product_idx").value = '';
 			document.getElementById("sales_order_delivery_quantity").value = '';
 			document.getElementById("sales_order_delivery_withdrawal_reference").value = '';
 			document.getElementById("sales_order_delivery_hauler_details").value = '';
-			document.getElementById("sales_order_delivery_ship_to_account").value = '';
-			document.getElementById("sales_order_branch_delivery").value = '';
+			document.getElementById("sales_order_delivery_remarks").value = '';
+			//document.getElementById("sales_order_branch_delivery").value = '';
 		
 	}
 	  
@@ -328,8 +328,8 @@
 									
 									var product_name = response['productlist_delivery'][i].product_name;
 									var product_unit_measurement = response['productlist_delivery'][i].product_unit_measurement;
-									var sales_order_departure_date = response['productlist_delivery'][i].sales_order_departure_date;
-									var sales_order_dispatch_date = response['productlist_delivery'][i].sales_order_dispatch_date;
+									//var sales_order_departure_date = response['productlist_delivery'][i].sales_order_departure_date;
+									var sales_order_delivery_date = response['productlist_delivery'][i].sales_order_delivery_date;
 									var sales_order_delivery_withdrawal_reference = response['productlist_delivery'][i].sales_order_delivery_withdrawal_reference;
 									var sales_order_delivery_quantity = response['productlist_delivery'][i].sales_order_delivery_quantity;
 									
@@ -339,8 +339,7 @@
 									"<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProductDelivery_Edit' data-id='"+id+"'></a>"+
 									"<a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='SalesOrderProductDelivery_Delete'  data-id='"+id+"'></a></div></td>"+
 									"<td align='center'>" + (i+1) + "</td>" +
-									"<td class='manual_price_td' align='center'>"+sales_order_departure_date+"</td>"+
-									"<td class='manual_price_td' align='center'>"+sales_order_departure_date+"</td>"+
+									"<td class='manual_price_td' align='center'>"+sales_order_delivery_date+"</td>"+
 									"<td class='product_td' align='left'>"+product_name+"</td>"+
 									"<td class='calibration_td' align='right'>"+sales_order_delivery_quantity+" "+product_unit_measurement+"</td>"+
 									"</tr>");

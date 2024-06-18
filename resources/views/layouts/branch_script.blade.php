@@ -22,6 +22,7 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'branch_code'},   
 					{data: 'branch_name'},
+					{data: 'branch_initial'},
 					{data: 'branch_tin'},
 					{data: 'branch_address'},
 					{data: 'branch_contact_number'},
@@ -30,7 +31,7 @@
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
-					{ className: 'text-center', targets: [0] },
+					{ className: 'text-center', targets: [0, 3] },
 			]
 		});
 	
@@ -64,6 +65,7 @@
 
 			let branch_code 			= $("input[name=branch_code]").val();
 			let branch_name 			= $("input[name=branch_name]").val();
+			let branch_initial 			= $("input[name=branch_initial]").val();
 			let branch_tin 				= $("input[name=branch_tin]").val();
 			let branch_address 			= $("input[name=branch_address]").val();
 			let branch_contact_number 	= $("input[name=branch_contact_number]").val();
@@ -76,6 +78,7 @@
 				data:{
 				  branch_code:branch_code,
 				  branch_name:branch_name,
+				  branch_initial:branch_initial,
 				  branch_tin:branch_tin,
 				  branch_address:branch_address,
 				  branch_contact_number:branch_contact_number,
@@ -92,6 +95,7 @@
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#client_nameError').text('');
+					$('#branch_initialError').text('');	
 					$('#client_addressError').text('');
 					$('#client_tinError').text('');
 					
@@ -189,6 +193,7 @@
 			let branchID 				= document.getElementById("update-branch").value;
 			let branch_code 			= $("input[name=update_branch_code]").val();
 			let branch_name 			= $("input[name=update_branch_name]").val();
+			let branch_initial 			= $("input[name=update_branch_initial]").val();
 			let branch_tin 				= $("input[name=update_branch_tin]").val();
 			
 			let branch_address 			= $("input[name=update_branch_address]").val();
@@ -203,6 +208,7 @@
 				  branchID:branchID,
 				  branch_code:branch_code,
 				  branch_name:branch_name,
+				  branch_initial:branch_initial,
 				  branch_tin:branch_tin,
 				  branch_address:branch_address,
 				  branch_contact_number:branch_contact_number,
@@ -215,6 +221,7 @@
 				  if(response) {
 					
 					$('#update_branch_nameError').text('');	
+					$('#update_branch_initialError').text('');	
 					$('#update_branch_addressError').text('');
 					$('#update_branch_tinError').text('');
 					

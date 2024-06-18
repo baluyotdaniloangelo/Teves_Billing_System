@@ -592,6 +592,20 @@
 			window.open(url);
 	  
 	});
+	
+	/*Saler Order Status*/
+	$('body').on('click','#PrintSalesOrderDeliveyStatus',function(){	  
+	  
+			let salesOrderID = {{ $SalesOrderID }};
+			var query = {
+						sales_order_id:salesOrderID,
+						_token: "{{ csrf_token() }}"
+					}
+
+			var url = "{{URL::to('generate_sales_order_delivery_status_pdf')}}?" + $.param(query)
+			window.open(url);
+	  
+	});
 	 
 	/*Print Statement of Account from Receivable*/
 	$('body').on('click','#PrintSOA',function(){	  

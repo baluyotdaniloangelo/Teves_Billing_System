@@ -18,7 +18,7 @@ use DataTables;
 use Illuminate\Support\Facades\DB;
 /*PDF*/
 use PDF;
-
+use Illuminate\Validation\Rule;
 class CashiersReportController extends Controller
 {
 	
@@ -29,7 +29,30 @@ class CashiersReportController extends Controller
 		$data = array();
 		if(Session::has('loginID')){
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$teves_branch = TevesBranchModel::all();
+			
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
 			
 		}
 		return view("pages.cashiers_report", compact('data','title','teves_branch'));
@@ -245,7 +268,30 @@ class CashiersReportController extends Controller
 			$data = array();	
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$teves_branch = TevesBranchModel::all();
+			
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
 			
 		$title = "Cashier' Report";
 		$product_data = ProductModel::all();
@@ -310,10 +356,32 @@ class CashiersReportController extends Controller
 	
 	public function save_product_cashiers_report_p1(Request $request){	
 
+		$CHPH1_ID 				= $request->CHPH1_ID;
+		
 		$request->validate([
 			'product_idx'  			=> 'required',
-			'beginning_reading'  	=> 'required',
-			'closing_reading'  		=> 'required',		
+			'beginning_reading'  	=> ['required',Rule::unique('teves_cashiers_report_p1')->where( 
+									fn ($query) =>$query
+										->where('cashiers_report_id', $request->CashiersReportId)
+										->where('product_idx', $request->product_idx) 
+										->where('beginning_reading', $request->beginning_reading)
+										->where(function ($r) use($CHPH1_ID) {
+													if ($CHPH1_ID) {
+													   $r->where('cashiers_report_p1_id', '<>', $CHPH1_ID);
+													}
+										})										
+									)],
+			'closing_reading'  		=> ['required',Rule::unique('teves_cashiers_report_p1')->where( 
+									fn ($query) =>$query
+										->where('cashiers_report_id', $request->CashiersReportId)
+										->where('product_idx', $request->product_idx) 
+										->where('closing_reading', $request->closing_reading) 
+										->where(function ($r) use($CHPH1_ID) {
+													if ($CHPH1_ID) {
+													   $r->where('cashiers_report_p1_id', '<>', $CHPH1_ID);
+													}
+										})
+									)],	
         ], 
         [
 			'product_idx.required' 	=> 'Product is Required',
@@ -330,8 +398,6 @@ class CashiersReportController extends Controller
 			$closing_reading 			= $request->closing_reading;
 			$calibration 				= $request->calibration;
 			$product_manual_price 		= $request->product_manual_price;
-			
-			$CHPH1_ID 				= $request->CHPH1_ID;
 
 					/*Check if Price is From Manual Price*/
 					if($product_manual_price!=0){
@@ -1064,7 +1130,7 @@ class CashiersReportController extends Controller
 			$ending_inventory 			= $request->ending_inventory;
 			
 			
-			$book_stock = $beginning_inventory - $sales_in_liters_inventory;
+			$book_stock = ($beginning_inventory - $sales_in_liters_inventory) + $delivery_inventory;
 			$variance = $book_stock - $ending_inventory;
 			
 			$CRPH6_ID 				= $request->CRPH6_ID;

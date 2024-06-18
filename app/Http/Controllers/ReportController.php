@@ -940,8 +940,101 @@ class ReportController extends Controller
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER.pdf");
+		
 	}
 
+	public function generate_sales_order_delivery_status_pdf(Request $request){
+
+		$request->validate([
+			'sales_order_id'      		=> 'required'
+        ], 
+        [
+			'sales_order_id.required' 	=> 'Please select a receivable_id'
+        ]
+		);
+
+		$sales_order_id = $request->sales_order_id;
+					
+				$sales_order_data = SalesOrderModel::where('teves_sales_order_table.sales_order_id', $sales_order_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+              	->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.sales_order_date',
+					'teves_sales_order_table.sales_order_client_idx',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_client_table.client_tin',
+					'teves_sales_order_table.sales_order_control_number',
+					'teves_sales_order_table.sales_order_dr_number',
+					'teves_sales_order_table.sales_order_or_number',		
+					'teves_sales_order_table.sales_order_po_number',
+					'teves_sales_order_table.sales_order_charge_invoice',
+					'teves_sales_order_table.sales_order_collection_receipt',					
+					'teves_sales_order_table.sales_order_payment_term',
+					'teves_sales_order_table.sales_order_delivered_to',
+					'teves_sales_order_table.sales_order_delivered_to_address',
+					'teves_sales_order_table.sales_order_delivery_method',
+					'teves_sales_order_table.sales_order_gross_amount',
+					'teves_sales_order_table.sales_order_net_amount',
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_hauler',
+					'teves_sales_order_table.sales_order_required_date',
+					'teves_sales_order_table.sales_order_instructions',
+					'teves_sales_order_table.sales_order_note',
+					'teves_sales_order_table.sales_order_net_percentage',
+					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.company_header'
+				]);
+			
+		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+	
+	   \DB::statement("SET SQL_MODE=''");
+	
+		$raw_query_sales_order_delivery_total_component = "SELECT 
+						`teves_sales_order_component_table`.`sales_order_component_id`,
+						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+						IFNULL(sum(`teves_sales_order_component_table`.`order_quantity`),0) as total_order_quantity,
+						IFNULL(sum(`teves_sales_order_delivery_details`.`sales_order_delivery_quantity`),0) as total_delivered_quantity
+						from `teves_sales_order_component_table` left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx`
+						LEFT JOIN teves_sales_order_delivery_details ON `teves_sales_order_component_table`.`sales_order_component_id` = teves_sales_order_delivery_details.sales_order_component_idx
+						 where `teves_sales_order_component_table`.`sales_order_idx` = ?		  
+						group by `teves_sales_order_component_table`.`product_idx` 
+						order by `teves_sales_order_component_table`.`product_idx` asc";	
+						
+		$sales_order_delivery_total_component = DB::select("$raw_query_sales_order_delivery_total_component", [ $sales_order_id]);	
+		
+		$raw_query_sales_order_delivery_component = "SELECT 
+						`teves_product_table`.`product_name`,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_date`,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_quantity`,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_withdrawal_reference`,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_hauler_details`,
+						`teves_sales_order_delivery_details`.`sales_order_delivery_remarks`
+						from `teves_sales_order_component_table` left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx`
+						LEFT JOIN teves_sales_order_delivery_details ON `teves_sales_order_component_table`.`sales_order_component_id` = teves_sales_order_delivery_details.sales_order_component_idx
+						 where `teves_sales_order_delivery_details`.`sales_order_idx` = ?	
+						order by `teves_sales_order_component_table`.`product_idx` asc";	
+						
+		$sales_order_delivery_component = DB::select("$raw_query_sales_order_delivery_component", [ $sales_order_id]);	
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'SALES ORDER';
+		  
+        $pdf = PDF::loadView('printables.report_sales_order_delivery_status_pdf', compact('title', 'sales_order_data', 'user_data', 'sales_order_delivery_total_component', 'sales_order_delivery_component', 'branch_header'));
+		
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER_DELIVERY_STATUS.pdf");
+	}
+	
 	public function generate_purchase_order_pdf(Request $request){
 
 		$purchase_order_id = $request->purchase_order_id;
@@ -1036,6 +1129,7 @@ class ReportController extends Controller
 		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER.pdf");
 	
 	}
+	
 	
 	public function generate_purchase_order_payment_pdf(Request $request){
 
@@ -1132,6 +1226,139 @@ class ReportController extends Controller
 	
 	}	
 	
+	
+	public function generate_purchase_order_delivery_status_pdf(Request $request){
+
+		$purchase_order_id = $request->purchase_order_id;
+				
+				$purchase_order_data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+				->join('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+              	->get([
+						'teves_supplier_table.supplier_name',
+						'teves_supplier_table.supplier_tin',
+						'teves_supplier_table.supplier_address',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_collection_receipt_no',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
+						'teves_purchase_order_table.purchase_order_delivery_receipt_no',
+						'teves_purchase_order_table.purchase_order_bank',
+						'teves_purchase_order_table.purchase_order_date_of_payment',
+						'teves_purchase_order_table.purchase_order_reference_no',
+						'teves_purchase_order_table.purchase_order_payment_amount',
+						'teves_purchase_order_table.purchase_order_delivery_method',
+						'teves_purchase_order_table.purchase_loading_terminal',
+						'teves_purchase_order_table.purchase_order_date_of_pickup',
+						'teves_purchase_order_table.purchase_order_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_gross_amount',
+						'teves_purchase_order_table.purchase_order_total_liters',
+						'teves_purchase_order_table.purchase_order_net_percentage', 
+						'teves_purchase_order_table.purchase_order_net_amount',
+						'teves_purchase_order_table.purchase_order_less_percentage',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.hauler_operator',
+						'teves_purchase_order_table.lorry_driver',
+						'teves_purchase_order_table.plate_number',
+						'teves_purchase_order_table.contact_number',
+						'teves_purchase_order_table.purchase_destination',
+						'teves_purchase_order_table.purchase_destination_address',
+						'teves_purchase_order_table.purchase_date_of_departure',
+						'teves_purchase_order_table.purchase_date_of_arrival',
+						'teves_purchase_order_table.purchase_order_instructions',
+						'teves_purchase_order_table.purchase_order_note',
+						'teves_purchase_order_table.company_header'
+				]);
+
+		$purchase_order_amt =  number_format($purchase_order_data[0]['purchase_order_total_payable'],2,".","");
+		
+		@$amount_split_whole_to_decimal = explode('.',$purchase_order_amt);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$amount_in_word_decimal = "";
+		}else{
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
+		}
+		
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;
+		
+		/*
+		$purchase_order_component = PurchaseOrderComponentModel::where('teves_purchase_order_component_table.purchase_order_idx', $purchase_order_id)	
+			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_purchase_order_component_table.product_idx')	
+			->orderBy('purchase_order_component_id', 'asc')
+              	->get([
+					'teves_purchase_order_component_table.purchase_order_component_id',
+					'teves_purchase_order_component_table.product_idx',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_purchase_order_component_table.product_price',
+					'teves_purchase_order_component_table.order_quantity',
+					'teves_purchase_order_component_table.order_total_amount'
+					]);
+
+		$purchase_payment_component = PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $purchase_order_id)
+			->orderBy('purchase_order_payment_details_id', 'asc')
+              	->get([
+					'teves_purchase_order_payment_details.purchase_order_bank',
+					'teves_purchase_order_payment_details.purchase_order_date_of_payment',
+					'teves_purchase_order_payment_details.purchase_order_reference_no',
+					'teves_purchase_order_payment_details.purchase_order_payment_amount',
+					]);
+		*/
+		
+		$branch_header = TevesBranchModel::find($purchase_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		
+		
+			   \DB::statement("SET SQL_MODE=''");
+	
+		$raw_query_purchase_order_delivery_total_component = "SELECT 
+						`teves_purchase_order_component_table`.`purchase_order_component_id`,
+						IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+						IFNULL(sum(`teves_purchase_order_component_table`.`order_quantity`),0) as total_order_quantity,
+						IFNULL(sum(`teves_purchase_order_delivery_details`.`purchase_order_delivery_quantity`),0) as total_delivered_quantity
+						from `teves_purchase_order_component_table` left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx`
+						LEFT JOIN teves_purchase_order_delivery_details ON `teves_purchase_order_component_table`.`purchase_order_component_id` = teves_purchase_order_delivery_details.purchase_order_component_idx
+						 where `teves_purchase_order_component_table`.`purchase_order_idx` = ?		  
+						group by `teves_purchase_order_component_table`.`product_idx` 
+						order by `teves_purchase_order_component_table`.`product_idx` asc";	
+						
+		$purchase_order_delivery_total_component = DB::select("$raw_query_purchase_order_delivery_total_component", [ $purchase_order_id]);	
+		
+		$raw_query_purchase_order_delivery_component = "SELECT 
+						`teves_product_table`.`product_name`,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+						`teves_purchase_order_delivery_details`.`purchase_order_delivery_date`,
+						`teves_purchase_order_delivery_details`.`purchase_order_delivery_quantity`,
+						`teves_purchase_order_delivery_details`.`purchase_order_delivery_withdrawal_reference`,
+						`teves_purchase_order_delivery_details`.`purchase_order_delivery_hauler_details`,
+						`teves_purchase_order_delivery_details`.`purchase_order_delivery_remarks`
+						from `teves_purchase_order_component_table` left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx`
+						LEFT JOIN teves_purchase_order_delivery_details ON `teves_purchase_order_component_table`.`purchase_order_component_id` = teves_purchase_order_delivery_details.purchase_order_component_idx
+						 where `teves_purchase_order_delivery_details`.`purchase_order_idx` = ?	
+						order by `teves_purchase_order_component_table`.`product_idx` asc";	
+						
+		$purchase_order_delivery_component = DB::select("$raw_query_purchase_order_delivery_component", [ $purchase_order_id]);	
+		
+		
+		
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'PURCHASE ORDER';
+		  
+        $pdf = PDF::loadView('printables.report_purchase_order_delivery_status_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_delivery_component', 'purchase_order_delivery_total_component','branch_header'));
+		
+		/*Download Directly*/
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER_DELIVERY_STATUS.pdf");
+	
+	}	
 	
 	public function generate_test_pdf(Request $request){
 	

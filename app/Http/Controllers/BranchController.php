@@ -35,6 +35,7 @@ class BranchController extends Controller
 			'branch_id',
 			'branch_code',
 			'branch_name',
+			'branch_initial',
 			'branch_tin',
 			'branch_address',
 			'branch_contact_number',
@@ -94,6 +95,7 @@ class BranchController extends Controller
 			$branch = new BranchModel();
 			$branch->branch_code 	= $request->branch_code;
 			$branch->branch_name 	= $request->branch_name;
+			$branch->branch_initial = $request->branch_initial;
 			$branch->branch_tin 	= $request->branch_tin;
 			$branch->branch_address 		= $request->branch_address;
 			$branch->branch_contact_number 	= $request->branch_contact_number;
@@ -138,6 +140,7 @@ class BranchController extends Controller
 			$branch = BranchModel::find($request->branchID);
 			$branch->branch_code 	= $request->branch_code;
 			$branch->branch_name 	= $request->branch_name;
+			$branch->branch_initial = $request->branch_initial;
 			$branch->branch_tin 	= $request->branch_tin;
 			$branch->branch_address 		= $request->branch_address;
 			$branch->branch_contact_number 	= $request->branch_contact_number;

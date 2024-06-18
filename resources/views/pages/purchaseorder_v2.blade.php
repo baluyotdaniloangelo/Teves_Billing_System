@@ -24,7 +24,8 @@
 													<th class="all">Control Number</th>
 													<th class="all">Supplier</th>
 													<th class="none">Total Payable</th>
-													<th class="all">Status</th>
+													<th class="all">Delivery Status</th>
+													<th class="all">Payment Status</th>
 													<th class="all">Action</th>
 												</tr>
 											</thead>				
@@ -40,7 +41,8 @@
 													<th class="all">Control Number</th>
 													<th class="all">Supplier</th>
 													<th class="none">Total Payable</th>
-													<th class="all">Status</th>
+													<th class="all">Delivery Status</th>
+													<th class="all">Payment Status</th>
 													<th class="all">Action</th>
 												</tr>
 											</tfoot>	

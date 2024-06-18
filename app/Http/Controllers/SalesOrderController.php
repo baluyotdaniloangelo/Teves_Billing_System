@@ -30,7 +30,31 @@ class SalesOrderController extends Controller
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$teves_branch = TevesBranchModel::all();
+			
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
+			
 			$sales_order_delivered_to = SalesOrderModel::select('sales_order_delivered_to')->distinct()->get();
 			$sales_order_delivered_to_address = SalesOrderModel::select('sales_order_delivered_to_address')->distinct()->get();
 		
@@ -187,13 +211,13 @@ class SalesOrderController extends Controller
 			'client_idx.required' 			=> 'Client is Required'
         ]
 		);
-
-			@$last_id = SalesOrderModel::latest()->first()->sales_order_id;
-
+			
+			$last_id = SalesOrderModel::latest()->first()->sales_order_id;
+			
 			$client_idx = $request->client_idx;
 			
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
-			$control_number = $BranchInfo->branch_initial."-SO-".($last_id+1);
+			$control_number = $BranchInfo->branch_initial."-SO-".($last_id+2);
 			
 			$Salesorder = new SalesOrderModel();
 			$Salesorder->company_header 					= $request->company_header;
@@ -214,7 +238,7 @@ class SalesOrderController extends Controller
 			
 			$receivable_last_id = ReceivablesModel::latest()->first()->receivable_id;
 						
-			$receivable_control_number = $BranchInfo->branch_initial."-AR-".($receivable_last_id+1);	
+			$receivable_control_number = $BranchInfo->branch_initial."-AR-".($receivable_last_id+2);	
 				
 				/*Create Receivable*/
 				$Receivables = new ReceivablesModel();
@@ -397,7 +421,30 @@ class SalesOrderController extends Controller
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
 			
-			$teves_branch = TevesBranchModel::all();
+			if($data->user_branch_access_type=='ALL'){
+				
+				$teves_branch = TevesBranchModel::all();
+			
+			}else{
+				
+				$userID = Session::get('loginID');
+				
+				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+				{
+					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+				})
+							
+							->where('teves_user_branch_access.user_idx', '=', $userID)
+							->get([
+							'teves_branch_table.branch_id',
+							'teves_user_branch_access.user_idx',
+							'teves_user_branch_access.branch_idx',
+							'teves_branch_table.branch_code',
+							'teves_branch_table.branch_name'
+							]);
+				
+			}	
+			
 			$sales_order_delivered_to = SalesOrderModel::select('sales_order_delivered_to')->distinct()->get();
 			$sales_order_delivered_to_address = SalesOrderModel::select('sales_order_delivered_to_address')->distinct()->get();
 			

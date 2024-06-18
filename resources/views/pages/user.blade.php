@@ -139,7 +139,7 @@
 						<div class="row mb-2">
 						  <label for="user_type" class="col-sm-3 col-form-label">User Type:</label>
 						  <div class="col-sm-9">
-								<select class="form-select form-control" required="" name="user_type" id="user_type">
+								<select class="form-select form-control" required="" name="user_type" id="user_type" onchange="ChangeAccessType()">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
 								<option value="User">User</option>
@@ -147,6 +147,17 @@
 							<span class="valid-feedback" id="user_typeError"></span>
 						  </div>
 						</div>	
+						
+						<div class="row mb-2">
+						  <label for="user_access" class="col-sm-3 col-form-label">User Access:</label>
+						  <div class="col-sm-9">
+								<select class="form-select form-control" required="" name="user_access" id="user_access">
+								<option value="BYBRANCH" selected>Assign by Branch</option>
+								<option value="ALL">All</option>
+								</select>
+							<span class="valid-feedback" id="user_accessError"></span>
+						  </div>
+						</div>
 						
 						</div>
 						
@@ -210,7 +221,7 @@
 						<div class="row mb-2">
 						  <label for="update_user_type" class="col-sm-3 col-form-label">User Type:</label>
 						  <div class="col-sm-9">
-								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type">
+								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="ChangeAccessType_Update()">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
 								<option value="User">User</option>
@@ -218,6 +229,17 @@
 							<span class="valid-feedback" id="update_user_typeError"></span>
 						  </div>
 						</div>	
+						
+						<div class="row mb-2">
+						  <label for="update_user_access" class="col-sm-3 col-form-label">User Access:</label>
+						  <div class="col-sm-9">
+								<select class="form-select form-control" required="" name="update_user_access" id="update_user_access">
+								<option value="BYBRANCH" selected>Assign by Branch</option>
+								<option value="ALL">All</option>
+								</select>
+							<span class="valid-feedback" id="update_user_accessError"></span>
+						  </div>
+						</div>
 						
 						</div>
 						
@@ -232,6 +254,97 @@
                 </div>
                   </div>
 	
+	
+			<!--Modal to Create User-->
+	<div class="modal fade" id="SiteUserAccessModal" tabindex="-1">
+           <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+				  
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">User Site Access</h5>
+					  
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+					  
+                    </div>
+					
+                    <div class="modal-body">
+						<div class="row mb-3">
+						
+							<div class="col-sm-4">
+							
+									<ol class="list-group list-group-numbered">
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+									  <div class="ms-2 me-auto">
+										<div class="fw-bold">Name</div>
+										<span id="user_real_name_info_site_access"></span>
+									  </div>
+									 
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+									  <div class="ms-2 me-auto">
+										<div class="fw-bold">Username</div>
+										<span id="user_name_info_site_access"></span>
+									  </div>
+									 
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+									  <div class="ms-2 me-auto">
+										<div class="fw-bold">User Type</div>
+										<span id="user_type_info_site_access"></span>
+									  </div>
+									  
+									</li>
+								  </ol>
+							  
+							</div>
+							
+							<div class="col-sm-8">
+							
+									<div class="table-responsive">
+										<table class="table table-bordered dataTable" id="UserSiteAccessList" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th class="all"></th>
+													<th class="all">#</th>
+													<th class="all">Branch Code</th>
+													<th class="all">Branch Name</th>
+												</tr>
+											</thead>				
+											
+											<tbody>
+												
+											</tbody>
+											
+											<tfoot>
+												<tr>
+													<th class="all"></th>
+													<th class="all">#</th>
+													<th class="all">Branch Code</th>
+													<th class="all">Branch Name</th>
+												</tr>
+											</tfoot>
+											
+										</table>
+										
+									</div>
+							</div>		
+	
+                  </div>
+				  
+					
+					
+                </div>
+				
+					<div class="modal-footer modal-footer_form">
+						
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-user-site-access"> Submit</button>
+						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="update-clear-user"> Clear Form</button>-->
+						  
+				    </div>
+            </div>
+			
     </section>
 </main>
 

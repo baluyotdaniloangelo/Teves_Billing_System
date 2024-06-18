@@ -15,9 +15,10 @@ use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\SalesOrderDeliveryController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\PurchaseOrderController_v2;
 use App\Http\Controllers\CashiersReportController;
-
+use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 /*
 |--------------------------------------------------------------------------
@@ -153,6 +154,12 @@ Route::post('/delete_user_confirmed', [UserController::class, 'delete_user_confi
 /*Update User Account*/
 Route::post('/user_account_post', [UserController::class,'user_account_post'])->name('user_account_post')->middleware('isLoggedIn');
 
+
+/*Branch Access*/
+Route::get('user_branch_access', [UserBranchAccessController::class, 'getUserBranchAccess'])->name('getUserBranchAccess')->middleware('isLoggedIn');
+/*Add Site Access*/
+Route::post('/add_user_access_post', [UserBranchAccessController::class,'add_user_access_post'])->name('add_user_access_post')->middleware('isLoggedIn');
+
 /*Receivables*/
 /*December 17, 2022*/
 /*Load Create Receivable Interface June 18, 2023*/
@@ -206,7 +213,7 @@ Route::post('/update_sales_status', [SalesOrderController::class,'update_sales_s
 Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,'update_sales_order_delivery_status'])->name('update_sales_order_delivery_status')->middleware('isLoggedIn');
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
-
+Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class,'generate_sales_order_delivery_status_pdf'])->name('generate_sales_order_delivery_status_pdf')->middleware('isLoggedIn');
 
 /*New Version for Sales Order*/
 Route::get('/sales_order_form', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
@@ -283,10 +290,19 @@ Route::post('/save_purchase_order_payment',[PurchaseOrderController_v2::class,'s
 
 Route::post('upload', [PurchaseOrderController_v2::class, 'store']);
 
+/*Purchase Order Delivery*/
+Route::post('/purchase_order_component_delivery_compose', [PurchaseOrderDeliveryController::class,'purchase_order_component_delivery_compose'])->name('PurchaseOrderDeliveryCompose')->middleware('isLoggedIn');
+Route::post('/get_purchase_order_product_list_delivery', [PurchaseOrderDeliveryController::class,'get_purchase_order_product_list_delivery'])->name('PurchaseOrderProductListDelivery')->middleware('isLoggedIn');
+Route::post('/purchase_order_component_delivery_info', [PurchaseOrderDeliveryController::class,'purchase_order_component_delivery_info'])->name('PurchaseOrderDeliveryInfo')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_product_delivery_confirmed', [PurchaseOrderDeliveryController::class,'delete_purchase_order_product_delivery_confirmed'])->name('PurchaseOrderDeleteDelivery')->middleware('isLoggedIn');
+
+
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 /*Download Purchase Order via PDF*/
 Route::get('/generate_purchase_order_pdf', [ReportController::class,'generate_purchase_order_pdf'])->name('generate_purchase_order_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_delivery_status_pdf', [ReportController::class,'generate_purchase_order_delivery_status_pdf'])->name('generate_purchase_order_delivery_status_pdf')->middleware('isLoggedIn');
+
 Route::get('/generate_purchase_order_payment_pdf', [ReportController::class,'generate_purchase_order_payment_pdf'])->name('generate_purchase_order_payment_pdf')->middleware('isLoggedIn');
 
 

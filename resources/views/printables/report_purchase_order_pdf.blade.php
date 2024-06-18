@@ -105,7 +105,7 @@
 		</tr>
 		
 		<tr>
-			<td colspan="4" align="left" style="font-size:12px; font-weight:bold;">TIN No.</td>
+			<td colspan="4" align="left" style="font-size:12px; font-weight:bold;">TIN</td>
 			<td colspan="6" align="left" style="font-size:12px; border-bottom:1px solid #000;" class="td_colon">{{ $purchase_order_data[0]['supplier_tin'] }}</td>			
 		</tr>
 		

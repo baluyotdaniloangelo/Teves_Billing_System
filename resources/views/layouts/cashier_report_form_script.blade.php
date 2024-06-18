@@ -267,15 +267,41 @@
 					},
 					error: function(error) {
 					 console.log(error);
-						/*alert(error);*/
+						
 							$('#product_idxError').text(error.responseJSON.errors.product_idx);
 							document.getElementById('product_idxError').className = "invalid-feedback";
 							
-							$('#beginning_readingError').text(error.responseJSON.errors.beginning_reading);
-							document.getElementById('beginning_readingError').className = "invalid-feedback";
 							
-							$('#closing_readingError').text(error.responseJSON.errors.closing_reading);
-							document.getElementById('closing_readingError').className = "invalid-feedback";
+							if(error.responseJSON.errors.beginning_reading=="The beginning reading has already been taken."){
+							  
+								$('#beginning_readingError').text("The Beginning Reading already exist for the Selected Product.");
+								document.getElementById('beginning_readingError').className = "invalid-feedback";	
+								
+								$('#beginning_reading').val("");
+								  
+							}else {
+								
+								$('#beginning_readingError').text(error.responseJSON.errors.beginning_reading);
+								document.getElementById('beginning_readingError').className = "invalid-feedback";		
+								
+							}
+				
+							if(error.responseJSON.errors.closing_reading=="The closing reading has already been taken."){
+							  
+								$('#closing_readingError').text("The Closing Reading already exist for the Selected Product.");
+								document.getElementById('closing_readingError').className = "invalid-feedback";	
+								
+								$('#closing_reading').val("");
+								  
+							}else {
+								
+								$('#closing_readingError').text(error.responseJSON.errors.closing_reading);
+								document.getElementById('closing_readingError').className = "invalid-feedback";		
+								
+							}
+							
+							
+							
 					}
 				   });		
 		 });
@@ -418,15 +444,38 @@
 					},
 					error: function(error) {
 					 console.log(error);
-						/*alert(error);*/
+					 
 							$('#update_product_idxError').text(error.responseJSON.errors.product_idx);
 							document.getElementById('update_product_idxError').className = "invalid-feedback";
 							
-							$('#update_beginning_readingError').text(error.responseJSON.errors.beginning_reading);
-							document.getElementById('update_beginning_readingError').className = "invalid-feedback";
+							if(error.responseJSON.errors.beginning_reading=="The beginning reading has already been taken."){
+							  
+								$('#update_beginning_readingError').text("The Beginning Reading already exist for the Selected Product.");
+								document.getElementById('update_beginning_readingError').className = "invalid-feedback";	
+								
+								$('#update_beginning_reading').val("");
+								  
+							}else {
+								
+								$('#update_beginning_readingError').text(error.responseJSON.errors.beginning_reading);
+								document.getElementById('update_beginning_readingError').className = "invalid-feedback";		
+								
+							}
+				
+							if(error.responseJSON.errors.closing_reading=="The closing reading has already been taken."){
+							  
+								$('#update_closing_readingError').text("The Closing Reading already exist for the Selected Product.");
+								document.getElementById('update_closing_readingError').className = "invalid-feedback";	
+								
+								$('#update_closing_reading').val("");
+								  
+							}else {
+								
+								$('#update_closing_readingError').text(error.responseJSON.errors.closing_reading);
+								document.getElementById('update_closing_readingError').className = "invalid-feedback";		
+								
+							}
 							
-							$('#update_closing_readingError').text(error.responseJSON.errors.closing_reading);
-							document.getElementById('update_closing_readingError').className = "invalid-feedback";
 					}
 				   });		
 	});

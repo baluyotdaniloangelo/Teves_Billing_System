@@ -22,6 +22,7 @@
 													<th>#</th>
 													<th>Branch Code</th>
 													<th>Branch Name</th>
+													<th>Branch Initial</th>
 													<th>TIN</th>
 													<th title='Default Value' class="none">Address</th>
 													<th class="none">Contact Number</th>
@@ -40,6 +41,7 @@
 													<th>#</th>
 													<th>Branch Code</th>
 													<th>Branch Name</th>
+													<th>Branch Initial</th>
 													<th>TIN</th>
 													<th title='Default Value' class="none">Address</th>
 													<th class="none">Contact Number</th>
@@ -113,6 +115,14 @@
 						  </div>
 						</div>
 
+						<div class="row mb-2">
+						  <label for="branch_name" class="col-sm-3 col-form-label">Branch Initial</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="branch_initial" id="branch_initial" value="" required>
+							<span class="valid-feedback" id="branch_initialError"></span>
+						  </div>
+						</div>
+						
 						<div class="row mb-2">
 						  <label for="branch_tin" class="col-sm-3 col-form-label">TIN</label>
 						  <div class="col-sm-9">
@@ -194,7 +204,15 @@
 							<span class="valid-feedback" id="update_branch_nameError"></span>
 						  </div>
 						</div>
-
+						
+						<div class="row mb-2">
+						  <label for="branch_name" class="col-sm-3 col-form-label">Branch Initial</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="update_branch_initial" id="update_branch_initial" value="" required>
+							<span class="valid-feedback" id="update_branch_initialError"></span>
+						  </div>
+						</div>
+						
 						<div class="row mb-2">
 						  <label for="update_branch_tin" class="col-sm-3 col-form-label">TIN</label>
 						  <div class="col-sm-9">

@@ -36,7 +36,7 @@
 							<div class="row mb-2">
 												  <div class="col-sm-12">
 												  <label for="sales_order_date" class="form-label">Date</label>
-													<input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="{{ $sales_order_data[0]['sales_order_date'] }}" required>
+													<input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="{{ $sales_order_data[0]['sales_order_date'] }}" required max="9999-12-31" >
 													<span class="valid-feedback" id="sales_order_dateError"></span>
 												  </div>
 												</div>
@@ -272,7 +272,7 @@
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN"></button>
-
+						
 					</div>											
 					</div>
 					
@@ -296,11 +296,11 @@
                 </div>
 				
 				
-                <div class="tab-pane fade  <?php if($tab=='delivery') { echo ' show active'; } ?>"" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
+                <div class="tab-pane fade  <?php if($tab=='delivery') { echo ' show active'; } ?>" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductDeliveryModal" id="" onclick="ResetDeliveryForm()"></button>
-
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductDeliveryModal" id="" onclick="ResetDeliveryForm()" title="Add Sales Order Delivery Items"></button>
+						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrderDeliveyStatus" title="Print Sales Order Delivered Item / Status"></button>
 					</div>											
 					</div>
 					
@@ -309,8 +309,7 @@
 						<tr class='report'>
 							<th style="text-align:center !important;" class="">Action</th>
 							<th style="text-align:center !important;">Item #</th>
-							<th style="text-align:center !important;">Dispatch Date</th>
-							<th style="text-align:center !important;">Departure Date</th>
+							<th style="text-align:center !important;">Delivery Date</th>
 							<th style="text-align:center !important;">Product</th>
 							<th style="text-align:center !important;">Quantity</th>
 						</tr>
@@ -660,7 +659,7 @@
 						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type='date' class='form-control' id='receivable_date_of_payment' name='receivable_date_of_payment' value='<?=date('Y-m-d');?>'>
+								<input type='date' class='form-control' id='receivable_date_of_payment' name='receivable_date_of_payment' value='<?=date('Y-m-d');?>' max="9999-12-31" >
 								<label for="receivable_date_of_payment">Date of Payment</label>
 								<span class="valid-feedback" id="receivable_date_of_paymentError"></span>
 							</div>
@@ -834,7 +833,7 @@
 	
     </section>
 
-	<!--Modal to Create SO Product-->
+	<!--Modal to Product Delivery-->
 	<div class="modal fade" id="AddProductDeliveryModal" tabindex="-1">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -852,22 +851,13 @@
 						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type='date' class='form-control' id='sales_order_dispatch_date' name='sales_order_dispatch_date' value='<?=date('Y-m-d');?>'>
-								<label for="sales_order_dispatch_date">Dispatch Date</label>
-								<span class="valid-feedback" id="sales_order_dispatch_dateError"></span>
+								<input type='date' class='form-control' id='sales_order_delivery_date' name='sales_order_delivery_date' value='<?=date('Y-m-d');?>' max="9999-12-31" required>
+								<label for="sales_order_delivery_date">Delivery Date</label>
+								<span class="valid-feedback" id="sales_order_delivery_dateError"></span>
 							</div>
 						 
 						</div>
 
-						<div class="col-sm-12">
-						
-							<div class="form-floating mb-3">
-								<input type='date' class='form-control' id='sales_order_departure_date' name='sales_order_departure_date' value='<?=date('Y-m-d');?>'>
-								<label for="sales_order_departure_date">Departure Date</label>
-								<span class="valid-feedback" id="sales_order_departure_dateError"></span>
-							</div>
-						 
-						</div>
 						
 						<div class="col-sm-12">
 						
@@ -899,8 +889,8 @@
 						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_withdrawal_reference" id="sales_order_delivery_withdrawal_reference" placeholder="Withdrawal Reference">
-								<label for="sales_order_delivery_withdrawal_reference">Withdrawal Reference</label>
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_withdrawal_reference" id="sales_order_delivery_withdrawal_reference" placeholder="Delivery Reference">
+								<label for="sales_order_delivery_withdrawal_reference">Delivery Reference</label>
 							</div>
 							 <span class="valid-feedback" id="sales_order_delivery_withdrawal_referenceError"></span>
 							 
@@ -919,25 +909,25 @@
 						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_ship_to_account" id="sales_order_delivery_ship_to_account" placeholder="Ship To Account">
-								<label for="sales_order_delivery_ship_to_account">Ship To Account</label>
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="sales_order_delivery_remarks" id="sales_order_delivery_remarks" placeholder="Ship To Account">
+								<label for="sales_order_delivery_remarks">Remarks</label>
 							</div>
-							 <span class="valid-feedback" id="sales_order_delivery_ship_to_accountError"></span>
+							 <span class="valid-feedback" id="sales_order_delivery_remarksError"></span>
 							 
 						</div>
 						
-						<div class="col-sm-12">
+						<!--<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
 								<select class="form-select form-control" required="" name="sales_order_branch_delivery" id="sales_order_branch_delivery">
-									<?php $branch_idx = $sales_order_data[0]['company_header']; ?>
+									<//?php $branch_idx = $sales_order_data[0]['company_header']; ?>
 										
 										@foreach ($teves_branch as $teves_branch_cols)
-											<?php 
+											<//?php 
 												$branch_id = $teves_branch_cols->branch_id;
 													
-											?>
-												<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
+											//?>
+												<option value="{{$teves_branch_cols->branch_id}}" <//?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
 													{{$teves_branch_cols->branch_code}}
 												</option>
 										@endforeach
@@ -947,7 +937,7 @@
 							</div>
 							<span class="valid-feedback" id="sales_order_branch_deliveryError"></span>
 							 
-						</div>
+						</div>-->
 						
 						</div>
 						
@@ -980,17 +970,15 @@
 				</div>
 				<div align="left"style="margin: 10px;">
 				
-				Dispatch Date: <span id="delete_delivery_sales_order_dispatch_date"></span><br>
-				Departure Date: <span id="delete_delivery_sales_order_departure_date"></span><br>
+				Delivery Date: <span id="delete_delivery_sales_order_delivery_date"></span><br>
 				
 				Product: <span id="delete_delivery_delete_product_name"></span><br>
 				Quantity: <span id="delete_delivery_delete_sales_order_delivery_quantity"></span><br>
 				
-				Withdrawal Reference: <span id="delete_delivery_sales_order_delivery_withdrawal_reference"></span><br>
+				Delivery Reference: <span id="delete_delivery_sales_order_delivery_withdrawal_reference"></span><br>
 				Hauler Details: <span id="delete_delivery_sales_order_delivery_hauler_details"></span><br>
 				
-				Ship to Account: <span id="delete_delivery_sales_order_delivery_ship_to_account"></span><br>
-				Branch Delivery: <span id="delete_delivery_sales_order_branch_delivery"></span><br>
+				Remarks: <span id="delete_delivery_sales_order_delivery_remarks"></span><br>
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">
@@ -1017,17 +1005,15 @@
 				</div>
 				<div align="left"style="margin: 10px;">
 				
-				Dispatch Date: <span id="view_delivery_sales_order_dispatch_date"></span><br>
-				Departure Date: <span id="view_delivery_sales_order_departure_date"></span><br>
+				Delivery Date: <span id="view_delivery_sales_order_delivery_date"></span><br>
 				
 				Product: <span id="view_delivery_delete_product_name"></span><br>
 				Quantity: <span id="view_delivery_delete_sales_order_delivery_quantity"></span><br>
 				
-				Withdrawal Reference: <span id="view_delivery_sales_order_delivery_withdrawal_reference"></span><br>
+				Delivery Reference: <span id="view_delivery_sales_order_delivery_withdrawal_reference"></span><br>
 				Hauler Details: <span id="view_delivery_sales_order_delivery_hauler_details"></span><br>
 				
-				Ship to Account: <span id="view_delivery_sales_order_delivery_ship_to_account"></span><br>
-				Branch Delivery: <span id="view_delivery_sales_order_branch_delivery"></span><br>
+				Remarks: <span id="view_delivery_sales_order_delivery_remarks"></span><br>
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">

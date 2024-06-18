@@ -36,7 +36,7 @@
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7] },
+					{ className: 'text-center', targets: [0, 4, 5, 6, 7] },
 			],
 			
 		});
@@ -46,6 +46,38 @@
 		  '</div>').appendTo('#user_option');
 	});
 	
+	
+	function ChangeAccessType_Add(){
+
+		let user_type 				= $("#user_type").val();
+		var user_type_selected 		= $('#user_type').find(":selected").val();
+		
+
+		if(user_type_selected=='Admin'){
+			document.getElementById('user_access').value = 'ALL';
+		}
+		else{
+			document.getElementById('user_access').value = 'BYBRANCH';
+		}
+		
+	}
+	
+
+	function ChangeAccessType_Update(){
+
+		let user_type 				= $("#update_user_type").val();
+		var user_type_selected 		= $('#update_user_type').find(":selected").val();
+		
+
+		if(user_type_selected=='Admin'){
+			document.getElementById('update_user_access').value = 'ALL';
+		}
+		else{
+			document.getElementById('update_user_access').value = 'BYBRANCH';
+		}
+		
+	}
+
 	
 	<!--Save New Site-->
 	$("#save-user").click(function(event){
@@ -64,6 +96,7 @@
 			let user_name 			= $("input[name=user_name]").val();
 			let user_password 		= $("input[name=user_password]").val();
 			let user_type 			= $("#user_type").val();
+			let user_access 		= $("#user_access").val();
 			let user_job_title 		= $("input[name=user_job_title]").val();
 			
 			  $.ajax({
@@ -74,6 +107,7 @@
 				  user_name:user_name,
 				  user_password:user_password,
 				  user_type:user_type,
+				  user_access:user_access,
 				  user_job_title:user_job_title,
 				  _token: "{{ csrf_token() }}"
 				},
@@ -201,7 +235,8 @@
 			let user_real_name 		= $("input[name=update_user_real_name]").val();
 			let user_name 			= $("input[name=update_user_name]").val();
 			let user_password 		= $("input[name=update_user_password]").val();
-			let user_type 			= $("#update_user_type").val();			
+			let user_type 			= $("#update_user_type").val();		
+			let user_access 		= $("#update_user_access").val();
 			let user_job_title 		= $("input[name=update_user_job_title]").val();
 			
 			$.ajax({
@@ -213,6 +248,7 @@
 				  user_name:user_name,
 				  user_password:user_password,
 				  user_type:user_type,
+				  user_access:user_access,
 				  user_job_title:user_job_title,
 				  _token: "{{ csrf_token() }}"
 				},
@@ -349,4 +385,144 @@
 			   });	
 		
 	  });
+	  
+
+	<!--Select Site-->
+	$('body').on('click','#UserAccess',function(){
+			
+			event.preventDefault();
+			let UserID = $(this).data('id');
+			
+			  $.ajax({
+				url: "{{ route('getUserBranchAccess') }}",
+				type:"GET",
+				data:{
+				  UserID:UserID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(result){
+				  console.log(result);
+				  if(result) {
+					
+					document.getElementById("update-user-site-access").value = UserID;
+					LoadSiteList.clear().draw();
+					LoadSiteList.rows.add(result.data).draw();
+					
+					/*Get User Info*/
+					UserSiteInfo(UserID);
+					
+					$('#SiteUserAccessModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	});  
+
+	let LoadSiteList = $('#UserSiteAccessList').DataTable( {
+				"language": {
+						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+			    }, 
+				//processing: true,
+				//serverSide: true,
+				//stateSave: true,/*Remember Searches*/
+				responsive: true,
+				paging: true,
+				searching: true,
+				info: true,
+				data: [],
+				"columns": [
+					{data: 'action', name: 'action', orderable: false, searchable: false},   
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'branch_code'},
+					{data: 'branch_name'}
+				]
+	} );
+  
+	$('body').on('click','#update-user-site-access',function(){
+			
+			event.preventDefault();
+
+			let userID = document.getElementById("update-user-site-access").value;
+
+			var site_checklist_item = [];		
+			$.each($("input[name='site_checklist']:checked"), function(){
+			site_checklist_item.push($(this).val());
+			});
+			var site_checklist_item_checked = site_checklist_item.join(",");
+			
+				$.ajax({
+				url: "/add_user_access_post",
+				type:"POST",
+				data:{
+				  userID:userID,
+				  site_items:site_checklist_item_checked,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  
+				  if(response) {
+					
+					$('.success_modal_bg').html(response.success);
+					$('#SuccessModal').modal('toggle');	
+				  }
+				},
+				error: function(errors) {
+				 console.log(errors);
+				 
+					$('#InvalidModal').modal('toggle');
+				}
+			   });	
+	});
+	  
+	function UserSiteInfo(UserID){
+			
+			event.preventDefault();
+			
+			  $.ajax({
+				url: "/user_info",
+				type:"POST",
+				data:{
+				  UserID:UserID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-user").value = UserID;
+					
+					/*Set User Details*/
+					$('#user_real_name_info_site_access').html(response.user_real_name);
+					$('#user_name_info_site_access').html(response.user_name);
+					$('#user_type_info_site_access').html(response.user_type);			
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  };
+	  
+	function ResetFormUser(){
+			
+			event.preventDefault();
+			$('#CreateUserform')[0].reset();
+
+			document.getElementById('CreateUserform').className = "g-3 needs-validation";
+	}		  
+	  
 </script>
