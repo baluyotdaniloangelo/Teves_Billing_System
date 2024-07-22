@@ -110,19 +110,6 @@ class SalesOrderController extends Controller
 		return DataTables::of($data)
 				->addIndexColumn()
 				
-				/*->addColumn('sales_order_payment_status', function($row){			
-	
-					$sales_status_selected = $row->sales_order_payment_status;
-	
-					$actionBtn = '
-					<div align="center" class="action_table_menu_Product">
-						'.$sales_status_selected.'
-					</div>';
-					
-                    return $actionBtn;
-					
-                })
-				*/
                 ->addColumn('action', function($row){
 					
 					if($row->sales_order_payment_status=='Pending'){
@@ -248,6 +235,7 @@ class SalesOrderController extends Controller
 				$Receivables->billing_date 						= $request->sales_order_date;
 				$Receivables->payment_term 						= $request->payment_term;
 				$Receivables->receivable_name 					= $control_number;
+				$Receivables->receivable_amount 				= 0;
 				$Receivables->receivable_status 				= 'Pending';
 				$Receivables->receivable_description 			= $receivable_control_number;
 				$Receivables->company_header 					= $request->company_header;
@@ -272,87 +260,118 @@ class SalesOrderController extends Controller
         ]
 		);
 		
-			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
-			$control_number = $BranchInfo->branch_initial."-SO-".($request->sales_order_id+1);
+			$sales_order_data = SalesOrderModel::where('sales_order_id', $request->sales_order_id)
+				->get(['created_at']);
 			
-			$Salesorder = new SalesOrderModel();
-			$Salesorder = SalesOrderModel::find($request->sales_order_id);
-			$Salesorder->sales_order_client_idx 				= $request->client_idx;
-			$Salesorder->sales_order_control_number 			= $control_number;
-			$Salesorder->company_header 						= $request->company_header;
-			$Salesorder->sales_order_date 						= $request->sales_order_date;
-			$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
-			$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
-			$Salesorder->sales_order_dr_number 					= $request->dr_number;
-		
-			$Salesorder->sales_order_or_number 					= $request->sales_order_or_number;
-			$Salesorder->sales_order_po_number 					= $request->sales_order_po_number;
-			$Salesorder->sales_order_charge_invoice 			= $request->sales_order_charge_invoice;
-			$Salesorder->sales_order_collection_receipt 		= $request->sales_order_collection_receipt;
+			$startTimeStamp = strtotime($sales_order_data[0]['created_at']);
+			$endTimeStamp = strtotime(date('y-m-d'));
+			$timeDiff = abs($endTimeStamp - $startTimeStamp);
+			$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+			// and you might want to convert to integer
+			$numberDays = intval($numberDays);
+
+			if(Session::get('UserType')=="Admin"){
 			
-			$Salesorder->sales_order_payment_term 				= $request->payment_term;
-			$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
-			$Salesorder->sales_order_hauler 					= $request->hauler;
-			$Salesorder->sales_order_required_date 				= $request->required_date;
-			$Salesorder->sales_order_instructions 				= $request->instructions;
-			$Salesorder->sales_order_note 						= $request->note;
-			
-			$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
-			$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
-			
-			$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
-			
-			$result = $Salesorder->update();
-			
-			/*Get Last ID*/
-			$last_transaction_id = $request->sales_order_id;
-			
-			$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
-					->sum('order_total_amount');
-					
-			$gross_amount = $order_total_amount;
-			
-			$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
-			$less_in_percentage 			= $request->sales_order_less_percentage/100;
-						
-			if($request->sales_order_net_percentage==0){
-						$sales_order_net_amount 		= 0;
-						$sales_order_total_due 			=  number_format($gross_amount,2,".","");
-			}else{
-						$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
-						$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
-			}
-			
-			$SalesOrderUpdate = new SalesOrderModel();
-			$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
-			$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
-			$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
-			$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
-			$SalesOrderUpdate->update();
-			
-			/*Update Control Number on Receivable*/
-			/*Get Receivable ID*/
+				$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
+				$control_number = $BranchInfo->branch_initial."-SO-".($request->sales_order_id+1);
 				
-			$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
-				->get(['receivable_id']);
-					
-			$receivable_id = $receivable_data[0]->receivable_id;
+				$Salesorder = new SalesOrderModel();
+				$Salesorder = SalesOrderModel::find($request->sales_order_id);
+				$Salesorder->sales_order_client_idx 				= $request->client_idx;
+				$Salesorder->sales_order_control_number 			= $control_number;
+				$Salesorder->company_header 						= $request->company_header;
+				$Salesorder->sales_order_date 						= $request->sales_order_date;
+				$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
+				$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
+				$Salesorder->sales_order_dr_number 					= $request->dr_number;
+			
+				$Salesorder->sales_order_or_number 					= $request->sales_order_or_number;
+				$Salesorder->sales_order_po_number 					= $request->sales_order_po_number;
+				$Salesorder->sales_order_charge_invoice 			= $request->sales_order_charge_invoice;
+				$Salesorder->sales_order_collection_receipt 		= $request->sales_order_collection_receipt;
+				
+				$Salesorder->sales_order_payment_term 				= $request->payment_term;
+				$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
+				$Salesorder->sales_order_hauler 					= $request->hauler;
+				$Salesorder->sales_order_required_date 				= $request->required_date;
+				$Salesorder->sales_order_instructions 				= $request->instructions;
+				$Salesorder->sales_order_note 						= $request->note;
+				
+				$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
+				$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
+				
+				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
+				
+				$result = $Salesorder->update();
+				
+				/*Get Last ID*/
+				$last_transaction_id = $request->sales_order_id;
+				
+				$order_total_amount = SalesOrderComponentModel::where('sales_order_idx', $request->sales_order_id)
+						->sum('order_total_amount');
 						
-			/*Recievable Control Number*/			
-			$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_id;	
+				$gross_amount = $order_total_amount;
+				
+				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $request->sales_order_less_percentage/100;
+							
+				if($request->sales_order_net_percentage==0){
+							$sales_order_net_amount 		= 0;
+							$sales_order_total_due 			=  number_format($gross_amount,2,".","");
+				}else{
+							$sales_order_net_amount 		=  number_format($gross_amount/$net_in_percentage,2,".","");
+							$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+				}
+				
+				$SalesOrderUpdate = new SalesOrderModel();
+				$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
+				$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
+				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
+				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
+				$SalesOrderUpdate->update();
+				
+				/*Update Control Number on Receivable*/
+				/*Get Receivable ID*/
+					
+				$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
+					->get(['receivable_id']);
+						
+				$receivable_id = $receivable_data[0]->receivable_id;
+							
+				/*Recievable Control Number*/			
+				$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_id;	
+				
+				
+				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
+				
+				$Receivables = new ReceivablesModel();
+				$Receivables = ReceivablesModel::find($receivable_id);
+				$Receivables->control_number 				= $receivable_control_number;
+				$Receivables->company_header 				= $request->company_header;
+				
+				$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
+				$Receivables->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
+				$Receivables->receivable_amount 			= number_format($sales_order_total_due,2, '.', '');
+				$Receivables->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
+				
+				$Receivables->update();
+				
+				if($result){
+					return response()->json(array('success' => "Sales Order Successfully Updated!",'sales_order_control_number'=>$control_number), 200);
+				}
+				else{
+					return response()->json(['success'=>'Error on Update Sales Order Information']);
+				}
 			
-			$Receivables = new ReceivablesModel();
-			$Receivables = ReceivablesModel::find($receivable_id);
-			$Receivables->control_number 				= $receivable_control_number;
-			$Receivables->company_header 				= $request->company_header;
-			$Receivables->update();
+			}else{
 			
-			if($result){
-				return response()->json(array('success' => "Sales Order Successfully Updated!",'sales_order_control_number'=>$control_number), 200);
+				if($numberDays>=1){
+					return response()->json(['success'=>'You can no longer Edit this Sales Order item or Ask the Admin to Edit']);
+				}
+			
 			}
-			else{
-				return response()->json(['success'=>'Error on Update Sales Order Information']);
-			}
+			
+			
 	}
 	
 	public function get_sales_order_product_list(Request $request){		
@@ -361,7 +380,8 @@ class SalesOrderController extends Controller
 						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
 						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
 						`teves_sales_order_component_table`.`product_idx`, `teves_sales_order_component_table`.`product_price`, `teves_sales_order_component_table`.`order_quantity`,
-						`teves_sales_order_component_table`.`order_total_amount`
+						`teves_sales_order_component_table`.`order_total_amount`,
+						`teves_sales_order_component_table`.`created_at`
 						from `teves_sales_order_component_table`  left join `teves_product_table` on	 
 						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx` where `sales_order_idx` = ?		  
 						order by `sales_order_component_id` asc";	
@@ -636,17 +656,11 @@ class SalesOrderController extends Controller
 									$sales_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
 						}
 						
-						
-						
-						
-						
-						
 						$SalesOrderUpdate = new SalesOrderModel();
 						$SalesOrderUpdate = SalesOrderModel::find($request->sales_order_id);
 						$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
 						$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
 						$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
-						//$SalesOrderUpdate->sales_order_status = 'Pending';
 						$SalesOrderUpdate->update();			
 						
 						
@@ -657,11 +671,10 @@ class SalesOrderController extends Controller
 						$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
 						
 						$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
-						$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
 						$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
+						$Receivables_ACTION->receivable_amount			 	= number_format($sales_order_total_due,2, '.', '');
 						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-						//$Receivables_ACTION->receivable_status 		= 'Pending';
+						
 						$Receivables_ACTION->update();
 									
 						/*Response*/
@@ -712,11 +725,12 @@ class SalesOrderController extends Controller
 				/*Update Receivable Amount*/
 				$Receivables_ACTION = new ReceivablesModel();
 				$Receivables_ACTION = ReceivablesModel::find($request->receivable_id);
+				
 				$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');
 				$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');				
 				$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
 				$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-				//$Receivables_ACTION->receivable_status 				= 'Pending';		
+				
 				$Receivables_ACTION->update();
 	
 				return 'Deleted';

@@ -367,7 +367,6 @@
 								
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
-								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
@@ -398,8 +397,34 @@
 								
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
+								var created_at = response['productlist'][i].created_at;
+								
+								const oneDay = 24 * 60 * 60 * 1000; 	/*hours*minutes*seconds*milliseconds*/
+								const firstDate = new Date(created_at);
+								const secondDate = new Date();			/*Now*/
+
+								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));						
+								
+									<?php
+									if(Session::get('UserType')=="Admin"){
+									?>
+										action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a>";		
+									<?php
+									}
+									else{
+									?>
+										if(diffDays>=1){
+											action_controls = "";
+											}else{
+											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a>";		
+										
+										}
+									<?php									
+									}
+									?>
+								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a></div></td>"+
+								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+
@@ -651,7 +676,7 @@
 					
 					/*Set Details*/
 					
-					document.getElementById("sales_order_less_percentage").value = response.default_less_percentage;
+					document.getElementById("sales_order_less_percentage").value = response.default_withholding_tax_percentage;
 					document.getElementById("sales_order_net_percentage").value = response.default_net_percentage;		
 					document.getElementById("payment_term").value = response.default_payment_terms;		
 				  
@@ -923,11 +948,37 @@
 							
 							var receivable_payment_amount = response[i].receivable_payment_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
+							
+							var created_at = response[i].created_at;
+								
+								const oneDay = 24 * 60 * 60 * 1000; 	/*hours*minutes*seconds*milliseconds*/
+								const firstDate = new Date(created_at);
+								const secondDate = new Date();			/*Now*/
+
+								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+									
+									<?php
+									if(Session::get('UserType')=="Admin"){
+									?>
+											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";		
+									<?php
+									}
+									else{
+									?>
+										if(diffDays>=1){
+											action_controls = "";
+											}else{
+											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";				
+										}
+									<?php									
+									}
+									?>
+									
 							if(image_reference==null){
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td><div align='center' class='action_table_menu_Product' >"+action_controls+"</div></td>"+	
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
@@ -937,7 +988,7 @@
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td><div align='center' class='action_table_menu_Product' >"+action_controls+" <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+

@@ -82,13 +82,15 @@
 					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
 					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },				
 					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					{data: 'receivable_status'},
+					//{data: 'receivable_status'},
+					{data: 'sales_order_payment_status'},
+					{data: 'sales_order_delivery_status'},
 					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 10] },
+					{ className: 'text-center', targets: [0, 1, 2, 10, 11] },
 			]
 		});
 				

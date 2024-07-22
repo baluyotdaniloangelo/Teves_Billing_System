@@ -25,7 +25,7 @@
 													<th class="all">S.O No.</th>
 													<th class="all">Account Name</th>
 													<th class="none">Driver's Name</th>
-													<th class="none">Plate Number</th>
+													<th class="none">Description</th>
 													<th>Action</th>
 												</tr>
 											</thead>				
@@ -42,7 +42,7 @@
 													<th class="all">S.O No.</th>
 													<th class="all">Account Name</th>
 													<th class="none">Driver's Name</th>
-													<th class="none">Plate Number</th>
+													<th class="none">Description</th>
 													<th>Action</th>
 												</tr>
 											</tfoot>
@@ -73,7 +73,7 @@
 				PO #: <span id="bill_delete_order_po_number"></span><br>
 				Client: <span id="bill_delete_client_name"></span><br>
 				
-				Plate #: <span id="bill_delete_plate_no"></span><br>
+				Description: <span id="bill_delete_plate_no"></span><br>
 				Driver: <span id="bill_delete_drivers_name"></span><br>
 				
 				Product: <span id="bill_delete_product_name"></span><br>
@@ -112,7 +112,7 @@
 				PO #: <span id="view_order_po_number"></span><br>
 				Client: <span id="view_client_name"></span><br>
 				
-				Plate #: <span id="view_plate_no"></span><br>
+				Description: <span id="view_plate_no"></span><br>
 				Driver: <span id="view_drivers_name"></span><br>
 				
 				Product: <span id="view_product_name"></span><br>
@@ -200,7 +200,7 @@
 														</div>
 														
 														<div class="row mb-2">
-														  <label for="plate_no" class="col-sm-3 col-form-label">Plate Number</label>
+														  <label for="plate_no" class="col-sm-3 col-form-label">Description</label>
 														  <div class="col-sm-9">
 															<input type="text" class="form-control " name="so_plate_no" id="so_plate_no" value="" required list="so_plate_no_list">
 															<datalist id="so_plate_no_list">
@@ -309,7 +309,7 @@
 						
 						<li class="list-group-item d-flex justify-content-between align-items-start">
 						  <div class="ms-2 me-auto">
-							<div class="fw-bold">Description/Plate No.</div>
+							<div class="fw-bold">Description</div>
 							<div id="delete_so_plate_no"></div>
 						  </div>
 						 

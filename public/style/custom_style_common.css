@@ -126,6 +126,12 @@ form.user .form-control-user {
 	font-size:1rem;
 }
 
+.btn_icon_table_delivery {
+    background-color: #7aff00;
+    color: black;
+    font-size: 1rem;
+}
+
 .btn_icon_table_delete{
     background-color: #dc3545;
 	color: black;

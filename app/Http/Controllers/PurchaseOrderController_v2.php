@@ -74,6 +74,7 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_order_id',
 						'teves_purchase_order_table.purchase_order_date',
 						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
 						'teves_supplier_table.supplier_name',
 						'teves_purchase_order_table.purchase_order_total_payable',
 						'teves_purchase_order_table.purchase_status',
@@ -299,6 +300,38 @@ class PurchaseOrderController_v2 extends Controller
 			
 			$result = $Purchaseorder->update();
 			
+			
+			
+				$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
+						->sum('order_total_amount');
+					
+				$gross_amount = $order_total_amount;
+		
+				$PurchaseOrderInfo = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
+						->get([
+								'purchase_order_net_percentage', 
+								'purchase_order_less_percentage'
+						]);	
+				
+				$net_in_percentage 				= $PurchaseOrderInfo[0]->purchase_order_net_percentage;/*1.12*/
+				$less_in_percentage 			= $PurchaseOrderInfo[0]->purchase_order_less_percentage/100;
+							
+				if($PurchaseOrderInfo[0]->purchase_order_net_percentage==0){
+							$purchase_order_net_amount 			= 0;
+							$purchase_order_total_due 			=  number_format($gross_amount,4,".","");
+				}else{
+							$purchase_order_net_amount 			=  number_format($gross_amount/$net_in_percentage,4,".","");
+							$purchase_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),4,".","");
+				}
+				
+				$PurchaseOrderUpdate = new PurchaseOrderModel();
+				$PurchaseOrderUpdate = PurchaseOrderModel::find($request->purchase_order_id);
+				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
+				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
+				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_due;
+				$PurchaseOrderUpdate->update();	
+			
+			
 			/*Get Last ID*/
 			$last_transaction_id = $Purchaseorder->purchase_order_id;
 			
@@ -308,6 +341,7 @@ class PurchaseOrderController_v2 extends Controller
 			else{
 				return response()->json(['success'=>'Error on Update Purchase Order Information']);
 			}
+			
 	}
 	
 	public function get_purchase_order_product_list(Request $request){		
@@ -367,10 +401,10 @@ class PurchaseOrderController_v2 extends Controller
 							
 				if($PurchaseOrderInfo[0]->purchase_order_net_percentage==0){
 							$purchase_order_net_amount 			= 0;
-							$purchase_order_total_due 			=  number_format($gross_amount,2,".","");
+							$purchase_order_total_due 			=  number_format($gross_amount,4,".","");
 				}else{
-							$purchase_order_net_amount 			=  number_format($gross_amount/$net_in_percentage,2,".","");
-							$purchase_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),2,".","");
+							$purchase_order_net_amount 			=  number_format($gross_amount/$net_in_percentage,4,".","");
+							$purchase_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),4,".","");
 				}
 				
 				$PurchaseOrderUpdate = new PurchaseOrderModel();
@@ -654,11 +688,6 @@ class PurchaseOrderController_v2 extends Controller
 				'purchase_order_payment_amount.required' 	=> 'Payment Amount is Required'
            ]);
 		   
-		  
-
-           //if(!$validator->passes()){
-          //     return response()->json(['error'=>1,'error'=>$validator->errors()->toArray()]);
-         //  }else{
 			   if ($request->hasFile('payment_image_reference')) {
 				   
 					   $path = 'files/';
@@ -761,12 +790,12 @@ class PurchaseOrderController_v2 extends Controller
 							if($paid_percentage >= 0.01 && $paid_percentage <= 99.9)
 							{	
 								
-								$PurchaseOrderstatus = "$paid_percentage% Paid";
+								$PurchaseOrderstatus = "$paid_percentage%";
 								
 							}else if($paid_percentage >= 100)
 							{	
 								
-								$PurchaseOrderstatus = "Paid";
+								$PurchaseOrderstatus = "$paid_percentage%";
 								
 							}else{
 								

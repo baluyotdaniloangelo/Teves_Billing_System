@@ -149,7 +149,7 @@
 				<?php
 			}else{
 				?>
-				<td colspan="4" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
+				<td colspan="4" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">Sales Order:<?=$receivable_data[0]['receivable_name'];?><br/>{{ $receivable_data[0]['receivable_description'] }}</td>
 				<?php
 			}
 			?>

@@ -180,7 +180,7 @@
 							
 							if(response['paymentcount']!=0){
 							
-								$(".action_column_class").hide();
+								//$(".action_column_class").hide();
 								
 								for(var i=0; i<len; i++){
 							
@@ -193,6 +193,7 @@
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
@@ -205,7 +206,7 @@
 								
 							}else{
 								
-								$(".action_column_class").show();
+								//$(".action_column_class").show();
 								
 								for(var i=0; i<len; i++){
 							
@@ -217,15 +218,74 @@
 								
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
-								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
-								"<td align='center'>" + (i+1) + "</td>" +
-								"<td class='product_td' align='left'>"+product_name+"</td>"+
-								"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
-								"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
-								"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
-								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-								"</tr>");
+								
+								var created_at = response['productlist'][i].created_at;
+								
+								const oneDay = 24 * 60 * 60 * 1000; 		// hours*minutes*seconds*milliseconds
+								const firstDate = new Date(created_at);
+								const secondDate = new Date();	/*Now*/
+
+								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+								
+								<?php
+								
+									if(Session::get('UserType')=="Admin"){
+										?>
+										
+										
+										$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+										"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
+										"<td align='center'>" + (i+1) + "</td>" +
+										"<td class='product_td' align='left'>"+product_name+"</td>"+
+										"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
+										"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
+										"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
+										"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+										"</tr>");
+										
+										
+										<?php
+									}else{
+											
+											?>
+											
+												if(diffDays>=1){
+									
+													//$(".action_column_class").hide();
+													$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
+													"<td align='center'>" + (i+1) + "</td>" +
+													"<td class='product_td' align='left'>"+product_name+"</td>"+
+													"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
+													"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
+													"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
+													"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+													"</tr>");
+													
+												}else{
+													
+													
+													$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
+													"<td align='center'>" + (i+1) + "</td>" +
+													"<td class='product_td' align='left'>"+product_name+"</td>"+
+													"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
+													"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
+													"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
+													"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+													"</tr>");
+													
+													
+												}
+											
+											<?php
+										
+									}
+								
+								?>
+								
+								
+
 								}
 								
 							}
@@ -489,6 +549,45 @@
 			   });		
 	  });	 
 	 
+	<!--Bill Deletion Confirmation-->
+	$('body').on('click','#viewBill',function(){
+			
+			event.preventDefault();
+			let billID = $(this).data('id');
+
+			  $.ajax({
+				url: "/bill_info",
+				type:"POST",
+				data:{
+				  billID:billID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Set Details*/
+					$('#bill_view_order_date').text(response[0].order_date);
+					$('#bill_view_order_time').text(response[0].order_time);
+					$('#bill_view_order_po_number').text(response[0].order_po_number);
+					$('#bill_view_client_name').text(response[0].client_name);
+					$('#bill_view_plate_no').text(response[0].plate_no);
+					$('#bill_view_product_name').text(response[0].product_name);
+					$('#bill_view_drivers_name').text(response[0].drivers_name);
+					$('#bill_view_order_quantity').text(response[0].order_quantity);					
+					$('#bill_view_order_total_amount').text(response[0].order_total_amount);
+
+					$('#BillViewModal').modal('toggle');									  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  });	 
+	 
+	 
 	/*Add Payment and Edit With Upload Function*/
     $('#AddPayment').on('submit', function(e){
 
@@ -638,11 +737,38 @@
 							var receivable_payment_amount 		= response[i].receivable_payment_amount;
 							var image_reference 				= response[i].image_reference;
 							
+							
+								var created_at = response[i].created_at;
+								
+								const oneDay = 24 * 60 * 60 * 1000; 		// hours*minutes*seconds*milliseconds
+								const firstDate = new Date(created_at);
+								const secondDate = new Date();	/*Now*/
+
+								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+								
+									<?php
+									if(Session::get('UserType')=="Admin"){
+									?>
+										action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";		
+									<?php
+									}
+									else{
+									?>
+										if(diffDays>=1){
+											action_controls = "";
+											}else{
+											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";		
+										
+										}
+									<?php									
+									}
+									?>								
+							
 							if(image_reference==null){
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td><div align='center' class='action_table_menu_Product' >" + action_controls +" </div></td>"+	
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
@@ -650,9 +776,11 @@
 								
 							}else{
 								
+								payment_btn_view = " <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a>";
+								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td><div align='center' class='action_table_menu_Product' >" + action_controls +" " + payment_btn_view + " </div></td>"+	
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+

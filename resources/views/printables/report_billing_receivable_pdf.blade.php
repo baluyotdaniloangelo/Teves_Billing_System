@@ -269,7 +269,7 @@
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3">Pricing and Sales In-Charge</td>
+				<td align="center" colspan="3" nowrap>Pricing and Sales In-Charge</td>
 				<td align="right" colspan="3">Time:</td>
 				<td align="center" colspan="2" style="border-bottom:1px solid #000;">&nbsp;</td>
 			</tr>
@@ -279,7 +279,7 @@
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="2">Billing For Release:</td>
+				<td align="left" colspan="2" nowrap>Billing For Release:</td>
 				<td align="center" colspan="3" style="border-bottom:1px solid #000;">&nbsp;</td>
 				<td align="right" colspan="3"></td>
 				<td align="center" colspan="2">&nbsp;</td>
@@ -287,7 +287,7 @@
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3">Accounting In-Charge</td>
+				<td align="center" colspan="3" nowrap>Accounting In-Charge</td>
 				<td align="right" colspan="3"></td>
 				<td align="center" colspan="2">&nbsp;</td>
 			</tr>

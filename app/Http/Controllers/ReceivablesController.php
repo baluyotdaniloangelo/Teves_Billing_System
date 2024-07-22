@@ -115,7 +115,7 @@ class ReceivablesController extends Controller
 		
 		if(Session::has('loginID')){
 			
-			$list = ReceivablesModel::get();
+			// $list = ReceivablesModel::get();
 			if ($request->ajax()) {
 
 			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
@@ -133,7 +133,8 @@ class ReceivablesController extends Controller
 						'teves_receivable_table.receivable_withholding_tax',
 						'teves_receivable_table.receivable_amount',
 						'teves_receivable_table.receivable_remaining_balance',
-						'teves_receivable_table.receivable_status']);
+						'teves_receivable_table.receivable_status',
+						'teves_receivable_table.created_at']);
 											
 					return DataTables::of($data)
 					->addIndexColumn()
@@ -146,18 +147,49 @@ class ReceivablesController extends Controller
 						}
 					
 										
-							$actionBtn = '<div align="center" class="action_table_menu_Product">
-										<!--<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery()" id="viewPaymentGalery"></a>-->
+							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-										<!--<a href="#" data-id="$row->receivable_id" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="$menu_for_update" title="Update"></a>-->
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
-					
-							if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
-										return '';
+							
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+							
+							if($numberDays>=1){
+
+							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										</div>';
+										
 							}else{
-										return $actionBtn;
+							
+							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+										</div>';
+										
+							}
+							// if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
+										// return '';
+							// }else{
+										// return $actionBtn;
+							// }
+								
+							if(Session::get('UserType')=="Admin"){
+										return $actionBtn_admin;
+							}else{
+								
+								if($row->receivable_status != 'Paid'){
+										return $actionBtn_user;
+								}else{
+										return '';
+								}
+										
 							}
 						
 					})
@@ -191,13 +223,14 @@ class ReceivablesController extends Controller
 	/*Recievable from Billing*/
 	public function getReceivablesList_sales_order(Request $request)
     {
-		
+					
 		if(Session::has('loginID')){
 			
-			$list = ReceivablesModel::get();
+			//$list = ReceivablesModel::get();
 			if ($request->ajax()) {
 
 			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+						->join('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
 						->WHERE('teves_receivable_table.sales_order_idx', '<>', '0')
 						->get([
 						'teves_receivable_table.receivable_id',
@@ -212,7 +245,10 @@ class ReceivablesController extends Controller
 						'teves_receivable_table.receivable_withholding_tax',
 						'teves_receivable_table.receivable_amount',
 						'teves_receivable_table.receivable_remaining_balance',
-						'teves_receivable_table.receivable_status']);
+						'teves_receivable_table.receivable_status',
+						'teves_sales_order_table.sales_order_payment_status',
+					    'teves_sales_order_table.sales_order_delivery_status'
+						]);
 											
 					return DataTables::of($data)
 					->addIndexColumn()
@@ -220,17 +256,37 @@ class ReceivablesController extends Controller
 				
 							$menu_for_update = 'editReceivablesFromSalesOrder';
 
-							$actionBtn = '<div align="center" class="action_table_menu_Product">
+							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
 										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
 										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
 										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
 					
-							if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
-										return '';
+							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
+										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
+										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+									</div>';
+					
+							// if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
+										// return '';
+							// }else{
+										// return $actionBtn;
+							// }
+							
+								
+							if(Session::get('UserType')=="Admin"){
+										return $actionBtn_admin;
 							}else{
-										return $actionBtn;
+								
+								if($row->receivable_status != 'Paid'){
+										return $actionBtn_user;
+								}else{
+										return '';
+								}
+										
 							}
 						
 					})
@@ -402,22 +458,42 @@ class ReceivablesController extends Controller
 			'receivable_description.required' 	=> 'Description is Required'
         ]
 		);
+		
+			$receivable_data = ReceivablesModel::where('receivable_id', $request->ReceivableID)
+              		->get(['teves_receivable_table.created_at']);
+		
+			$startTimeStamp = strtotime($receivable_data[0]['created_at']);
+			$endTimeStamp = strtotime(date('y-m-d'));
+			$timeDiff = abs($endTimeStamp - $startTimeStamp);
+			$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+			// and you might want to convert to integer
+			$numberDays = intval($numberDays);
 
-			$ReceivableID = $request->ReceivableID;
-			/*Update to Receivables*/
-			$Receivables = new ReceivablesModel();
-			$Receivables = ReceivablesModel::find($ReceivableID);
-			$Receivables->billing_date 					= $request->billing_date;
-			$Receivables->payment_term 					= $request->payment_term;
-			$Receivables->receivable_description 		= $request->receivable_description;
-			$Receivables->updated_by_user_id 			= Session::get('loginID');
-			$result = $Receivables->update();
+			if(Session::get('UserType')=="Admin"){
+				
+					$ReceivableID = $request->ReceivableID;
+					/*Update to Receivables*/
+					$Receivables = new ReceivablesModel();
+					$Receivables = ReceivablesModel::find($ReceivableID);
+					$Receivables->billing_date 					= $request->billing_date;
+					$Receivables->payment_term 					= $request->payment_term;
+					$Receivables->receivable_description 		= $request->receivable_description;
+					$Receivables->updated_by_user_id 			= Session::get('loginID');
+					$result = $Receivables->update();
 
-			if($result){
-				return response()->json(array('success' => 'Receivable Information Successfully Updated!', 'receivable_id' => $request->ReceivableID), 200);
-			}
-			else{
-				return response()->json(['success'=>'Error on Update Receivables Information']);
+					if($result){
+						return response()->json(array('success' => 'Receivable Information Successfully Updated!', 'receivable_id' => $request->ReceivableID), 200);
+					}
+					else{
+						return response()->json(['success'=>'Error on Update Receivables Information']);
+					}
+					
+			}else{
+			
+				if($numberDays>=1){
+					return response()->json(['success'=>'You can no longer Edit this Receivables item or Ask the Admin to Edit']);
+				}
+			
 			}
 	}
 		
@@ -447,7 +523,8 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_net_value_percentage',
 					'teves_receivable_table.receivable_vat_value_percentage',
 					'teves_receivable_table.receivable_withholding_tax_percentage',
-					'teves_receivable_table.company_header']);
+					'teves_receivable_table.company_header',
+					'teves_receivable_table.created_at']);
 					return response()->json($data);
 		
 	}
@@ -582,7 +659,15 @@ class ReceivablesController extends Controller
 			/*Get Client ID from Receivable*/
 			$client_idx = ReceivablesModel::where('receivable_id', $request->ReceivableID)
 			  		->get([
-					'teves_receivable_table.client_idx']);		
+					'teves_receivable_table.client_idx',
+					'teves_receivable_table.created_at']);		
+
+			$startTimeStamp = strtotime($client_idx[0]['created_at']);
+			$endTimeStamp = strtotime(date('y-m-d'));
+			$timeDiff = abs($endTimeStamp - $startTimeStamp);
+			$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+			// and you might want to convert to integer
+			$numberDays = intval($numberDays);
 
 			$start_date = $request->start_date;
 			$end_date = $request->end_date;
@@ -651,14 +736,28 @@ class ReceivablesController extends Controller
 			$Receivables->less_per_liter 				= $request->less_per_liter;
 			$Receivables->company_header 				= $request->company_header;
 			
-			$result = $Receivables->update();
+			if(Session::get('UserType')=="Admin"){
+				
+					$result = $Receivables->update();
+					
+					if($result){
+						return response()->json(['success'=>'Receivables Information Successfully Updated!']);
+					}
+					else{
+						return response()->json(['success'=>'Error on Update Receivables Information']);
+					}
+					
+			}else{
 			
-			if($result){
-				return response()->json(['success'=>'Receivables Information Successfully Updated!']);
+				if($numberDays>=1){
+			
+					// $result = $Receivables->update();
+					return response()->json(['success'=>'You can no longer Edit this Receivable item.']);
+				}
+			
 			}
-			else{
-				return response()->json(['success'=>'Error on Update Receivables Information']);
-			}
+				
+			
 	}
 	
 	/*Load Sales Order Form Interface*/
@@ -734,7 +833,7 @@ class ReceivablesController extends Controller
 		$end_date = $request->end_date;
 					
 		/*Using Raw Query*/
-		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`, `teves_billing_table`.`created_at` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
 		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
 		
 		//return response()->json($billing_data);
@@ -911,8 +1010,6 @@ class ReceivablesController extends Controller
 			
 					/*Get Sales Order ID from Receivable*/
 					$sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
-	  
-					
 					
 					/*Get Recivable Details [receivable_amount]*/
 					$receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
@@ -967,7 +1064,9 @@ class ReceivablesController extends Controller
 				  'receivable_mode_of_payment',
 				  'receivable_reference',
 				  'receivable_payment_amount',
-				  'image_reference'
+				  'created_at',
+				  'image_reference',
+				  'created_at'
 				  ]);
 	  
 		  return response()->json($data);
@@ -1066,7 +1165,7 @@ class ReceivablesController extends Controller
 						  $PurchaseOrderPaymentComponent->receivable_idx 				= $receivable_idx;
 						  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-						  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
+						  $PurchaseOrderPaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
 						  
 						  $result = $PurchaseOrderPaymentComponent->save();

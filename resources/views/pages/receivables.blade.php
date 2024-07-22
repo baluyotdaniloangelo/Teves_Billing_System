@@ -76,7 +76,7 @@
 				
                 <div class="tab-pane fade" id="bordered-salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
 											<div class="table-responsive" style="">
-												<table class="table table-bordered dataTable display" id="getReceivablesListSales" width="100%" cellspacing="0">
+												<table class="table table-bordered dataTable display nowrap" id="getReceivablesListSales" width="100%" cellspacing="0">
 												<thead>
 													<tr>
 														<th class="all">No.</th>
@@ -89,9 +89,11 @@
 														<th class="none">Total Amount Due : </th>
 														<th class="none">Total Amount Rendered : </th>
 														<th class="none">Remaining Balance : </th>
-														<th class="all">Status</th>
+														<!--<th class="all">Status</th>-->
+														<th class="all">Payment Status</th>
+														<th class="all">Delivery Status</th>
 														<th class="all">Generate</th>
-														<th class="all">Action</th>
+														<th class="all" nowrap>Action</th>
 													</tr>
 												</thead>				
 												
@@ -111,9 +113,11 @@
 														<th class="none">Total Amount Due : </th>
 														<th class="none">Total Amount Rendered : </th>
 														<th class="none">Remaining Balance : </th>
-														<th class="all">Status</th>
+														<!--<th class="all">Status</th>-->
+														<th class="all">Payment Status</th>
+														<th class="all">Delivery Status</th>
 														<th class="all">Generate</th>
-														<th class="all">Action</th>												
+														<th class="all" nowrap>Action</th>												
 													</tr>
 												</tfoot>	
 											</table>

@@ -70,7 +70,7 @@
 												</div>
 												
 												<div class="row mb-2">
-												  <label for="so_plate_no" class="col-sm-3 col-form-label">Plate Number</label>
+												  <label for="so_plate_no" class="col-sm-3 col-form-label">Description</label>
 												  <div class="col-sm-9">
 													<input type="text" class="form-control " name="so_plate_no" id="so_plate_no" value="{{ $so_data[0]['plate_no'] }}" required list="so_plate_no_list">
 													<datalist id="so_plate_no_list">

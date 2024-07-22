@@ -801,6 +801,7 @@ class ReportController extends Controller
               	->get([
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
+					'teves_receivable_table.receivable_name',
 					'teves_receivable_table.billing_date',
 					'teves_client_table.client_name',
 					'teves_client_table.client_address',

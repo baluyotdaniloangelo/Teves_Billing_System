@@ -76,7 +76,7 @@
 					
 					/*Set Details*/
 					
-					document.getElementById("sales_order_less_percentage").value = response.default_less_percentage;
+					document.getElementById("sales_order_less_percentage").value = response.default_withholding_tax_percentage;
 					document.getElementById("sales_order_net_percentage").value = response.default_net_percentage;		
 					document.getElementById("payment_term").value = response.default_payment_terms;		
 				  

@@ -75,7 +75,7 @@
                 <div class="tab-pane fade" id="bordered-billed" role="tabpanel" aria-labelledby="billed-tab">
 					<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
-						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#BilledModal"></button>
+						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#BilledModal"> Options</button>
 					</div>					
 					</div>
 									    <div class="table-responsive">

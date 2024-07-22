@@ -23,14 +23,15 @@
 					{data: 'purchase_order_date'},
 					{data: 'purchase_order_control_number'},
 					{data: 'supplier_name'},
+					{data: 'purchase_order_sales_order_number'},
 					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },
-					{data: 'purchase_status'},
 					{data: 'purchase_order_delivery_status'},
+					{data: 'purchase_status'},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 5, 6] },
+					{ className: 'text-center', targets: [0, 1, 5, 6, 7] },
 			]
 		});
 				/**/

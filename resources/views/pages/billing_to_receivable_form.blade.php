@@ -393,6 +393,46 @@
             </div>
         </div>
     </div>	
+
+	<!-- Site Delete Modal-->
+    <div class="modal fade" id="BillViewModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+				
+				
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Details<br>
+				</div>
+				<div align="left"style="margin: 10px;">
+				Date: <span id="bill_view_order_date"></span><br>
+				Time: <span id="bill_view_order_time"></span><br>
+				
+				PO #: <span id="bill_view_order_po_number"></span><br>
+				Client: <span id="bill_view_client_name"></span><br>
+				
+				Plate #: <span id="bill_view_plate_no"></span><br>
+				Driver: <span id="bill_view_drivers_name"></span><br>
+				
+				Product: <span id="bill_view_product_name"></span><br>
+				Quantity: <span id="bill_view_order_quantity"></span><br>
+				
+				Total Amount: <span id="bill_view_order_total_amount"></span><br>
+				
+				
+				</div>
+                <div class="modal-footer footer_modal_bg">
+                    
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+
 	
 	<!--Data List for Product-->
 	<datalist id="product_list">

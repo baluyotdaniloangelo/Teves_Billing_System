@@ -104,7 +104,7 @@ class SOBillingTransactionController extends Controller
 							if($numberDays>=1){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
-								<a href="#" data-id="'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewSO"></a>
+								<a href="#" data-id="'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view" id="viewSO"></a>
 								</div>';
 							}else{
 								$actionBtn = '
