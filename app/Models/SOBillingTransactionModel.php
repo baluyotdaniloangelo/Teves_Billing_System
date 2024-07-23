@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Contracts\Activity;
+use Illuminate\Database\Eloquent\Model;
+
+use Session;
 
 class SOBillingTransactionModel extends Model
 {
 
-    //use HasFactory;
 	use LogsActivity;
+	
+	public function tapActivity(Activity $activity, string $eventName)
+	{
+    $activity->causer_id = Session::get('loginID');
+	}
 	
 	protected $table = 'teves_billing_so_table';
 

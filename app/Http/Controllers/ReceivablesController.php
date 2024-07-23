@@ -736,6 +736,18 @@ class ReceivablesController extends Controller
 			$Receivables->less_per_liter 				= $request->less_per_liter;
 			$Receivables->company_header 				= $request->company_header;
 			
+			/*Update Billing List Affected by the Receivable*/
+			/*Included branch_idx February 25, 2024*/
+			
+			$billing_update = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
+				->where('order_date', '>=', $start_date)
+                ->where('order_date', '<=', $end_date)
+				->where('receivable_idx', '=', 0)
+				->update([
+					'receivable_idx' => $request->ReceivableID,
+					'branch_idx' => $request->company_header]);
+			
+			
 			if(Session::get('UserType')=="Admin"){
 				
 					$result = $Receivables->update();

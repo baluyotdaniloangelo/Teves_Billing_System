@@ -136,11 +136,12 @@
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
 		
-            <a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
-              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span>Product</span>
-            </a>
+          
 			
 			<?php if($data->user_type=="Admin"){ ?>
+			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
+              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span>Product</span>
+            </a>
 			
 			<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
               <i class="bi bi-building navbar_icon" title="Manage Client list"></i><span>Branch</span>

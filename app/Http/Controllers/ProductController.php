@@ -49,15 +49,12 @@ class ProductController extends Controller
 				->addIndexColumn()
                 ->addColumn('action', function($row){
 					
-					//update_product_information
-					//href="so_add_product/'.$row->so_id.'"
 					
-					$actionBtn = '
-					
-					<div align="center" class="action_table_menu_Product">
+					$actionBtn = '<div align="center" class="action_table_menu_Product">
 					<a href="update_product_information?productID='.$row->product_id.'&tab=branchprice" data-id="'.$row->product_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="" title="Edit Product Information, Add Price per branch and Tank"></a>
 					<a href="#" data-id="'.$row->product_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteProduct"></a>
 					</div>';
+					
                     return $actionBtn;
 
                 })
