@@ -13,6 +13,9 @@
 			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
+			
+						// 'teves_receivable_table.billing_period_start',
+						// 'teves_receivable_table.billing_period_end',
 			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
@@ -21,6 +24,8 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'billing_date'},
+					{data: 'billing_period_start'},
+					{data: 'billing_period_end'},
 					{data: 'control_number'},
 					{data: 'client_name'},
 					{data: 'receivable_description'},
@@ -35,7 +40,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 2, 10] },
+					{ className: 'text-center', targets: [0, 1, 4, 12] },
 			]
 		});
 		

@@ -11,6 +11,10 @@ use Validator;
 use DataTables;
 use Illuminate\Support\Facades\Storage;
 
+/*Email Function*/
+use App\Mail\ResetPassword;
+use Illuminate\Support\Facades\Mail;
+
 class UserController extends Controller
 {
 	
@@ -41,6 +45,7 @@ class UserController extends Controller
 		'user_real_name',
 		'user_name',
 		'user_type',
+		'user_email_address',
 		'user_branch_access_type',
         'created_at',
         'updated_at'
@@ -48,18 +53,6 @@ class UserController extends Controller
 
 		return DataTables::of($data)
 				->addIndexColumn()
-                /*
-				->addColumn('action', function($row){	
-					
-					$actionBtn = '
-					<div class="action_table_menu_switch">
-					<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
-					<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
-					</div>';
-                    return $actionBtn;
-                
-				})
-				*/
 				->addColumn('action', function($row){	
 					
 					if($row->user_branch_access_type=='ALL'){
@@ -110,7 +103,7 @@ class UserController extends Controller
 	public function user_info(Request $request){
 
 		$UserID = $request->UserID;
-		$data = UserAccountModel::find($UserID, ['user_name','user_real_name','user_type', 'user_job_title']);
+		$data = UserAccountModel::find($UserID, ['user_name','user_real_name','user_type', 'user_job_title', 'user_email_address']);
 		return response()->json($data);
 		
 	}
@@ -127,10 +120,11 @@ class UserController extends Controller
 	public function create_user_post(Request $request){
 		
 		$request->validate([
-		  'user_real_name'  => 'required|unique:user_tb,user_real_name',
-		  'user_name'      	=> 'required|unique:user_tb,user_name',
-		  'user_password'   => 'required|min:6|max:20',
-		  'user_type'    	=> 'required',
+		  'user_real_name'  		=> 'required|unique:user_tb,user_real_name',
+		  'user_name'      			=> 'required|unique:user_tb,user_name',
+		  'user_password'			=> 'required|min:6|max:20',
+		  'user_type'    			=> 'required',
+		  'user_email_address'   	=> 'unique:user_tb,user_email_address,'.$request->userID.',user_id',
         ], 
         [
 			'user_real_name.required' => 'Name is required',
@@ -144,21 +138,43 @@ class UserController extends Controller
 			#insert
 					
 			$UserList = new UserAccountModel();
-			$UserList->user_real_name 	= $request->user_real_name;
-			$UserList->user_job_title 	= $request->user_job_title;
-			$UserList->user_name 		= $request->user_name;
-			$UserList->user_password 	= hash::make($request->user_password);
-			$UserList->user_type 		= $request->user_type;
-			$UserList->user_branch_access_type 		= $request->user_access;
+			$UserList->user_real_name 			= $request->user_real_name;
+			$UserList->user_job_title 			= $request->user_job_title;
+			$UserList->user_name 				= $request->user_name;
+			$UserList->user_email_address 		= $request->user_email_address;
+			$UserList->user_password 			= hash::make($request->user_password);
+			$UserList->user_type 				= $request->user_type;
+			$UserList->user_branch_access_type 	= $request->user_access;
 			
 			$result = $UserList->save();
 			
+			/*Get Last ID*/
+			$last_transaction_id = $UserList->user_id;
+				
 			if($result){
-				return response()->json(['success'=>'User Information Successfully Created!']);
+				
+						/*Call Email Function*/
+						if($request->user_email_address!=''){
+						
+							$title 			= 'Teves Billing System Portal:User Account Created';
+							$body 			= 'Your Account has been successfully created. Please use the provided Credentials below.';
+							$name 			= $request->user_real_name;
+							$user_id 		= $last_transaction_id;
+							$user_name 		= $request->user_name;
+							$user_password 	= $request->user_password;
+
+							// Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_name, $user_password));
+							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
+						}
+				
+				return response()->json(array('success' => "User Information successfully created!", 'user_id' => $last_transaction_id), 200);
+				
+				/*Send Email*/
 			}
 			else{
 				return response()->json(['success'=>'Error on Insert User Information']);
 			}
+			
 	}
 	
 	public function update_user_post(Request $request){
@@ -196,17 +212,41 @@ class UserController extends Controller
 			#insert		
 			$UserList = new UserAccountModel();
 			$UserList = UserAccountModel::find($request->userID);
-			$UserList->user_job_title 	= $request->user_job_title;
-			$UserList->user_real_name 	= $request->user_real_name;
-			$UserList->user_name 		= $request->user_name;
+			$UserList->user_job_title 					= $request->user_job_title;
+			$UserList->user_real_name 					= $request->user_real_name;
+			$UserList->user_name 						= $request->user_name;
 			if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
-			$UserList->user_type 		= $request->user_type;
-			$UserList->user_branch_access_type 		= $request->user_access;
+			$UserList->user_type 						= $request->user_type;
+			$UserList->user_email_address 				= $request->user_email_address;
+			$UserList->user_branch_access_type 			= $request->user_access;
+			$UserList->updated_by_user_id 				= Session::get('loginID');
 			
 			$result = $UserList->update();
 			
+			if($request->user_password!=''){ 
+			
+				$UserList->user_password 	= hash::make($request->user_password); 
+						
+						/*Call Email Function*/
+						if($request->user_email_address!=''){
+						
+							$title 			= 'Teves Billing System Portal:Reset Password';
+							$body 			= 'Your Password has been successfully Changed. Please use the provided password below.';
+							$name 			= $request->user_real_name;
+							$user_id 		= $request->userID;
+							$user_name 		= $request->user_name;
+							$user_password 	= $request->user_password;
+
+							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
+							
+						}
+						
+			
+			}/*Kung BInago Lang Password saka ma update*/
+			
 			if($result){
-				return response()->json(['success'=>'User Information Successfully Updated!']);
+				return response()->json(['success'=>'User Information successfully updated!']);
+				/*Send Email*/
 			}
 			else{
 				return response()->json(['success'=>'Error on Update User Information']);

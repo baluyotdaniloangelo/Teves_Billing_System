@@ -30,7 +30,8 @@
 					{data: 'user_real_name'},   
 					{data: 'user_job_title'},	
 					{data: 'user_name'}, 					
-					{data: 'user_type'},			
+					{data: 'user_type'},
+					{data: 'user_email_address', className: "text-left"},						
 					{data: 'created_at_dt_format', name: 'switch_status', orderable: true, searchable: false},
 					{data: 'updated_at_dt_format', name: 'switch_status', orderable: true, searchable: false},
 					{data: 'action', name: 'action', orderable: false, searchable: false},
@@ -96,6 +97,7 @@
 			let user_name 			= $("input[name=user_name]").val();
 			let user_password 		= $("input[name=user_password]").val();
 			let user_type 			= $("#user_type").val();
+			let user_email_address 	= $("input[name=user_email_address_management]").val();
 			let user_access 		= $("#user_access").val();
 			let user_job_title 		= $("input[name=user_job_title]").val();
 			
@@ -107,6 +109,7 @@
 				  user_name:user_name,
 				  user_password:user_password,
 				  user_type:user_type,
+				  user_email_address:user_email_address,
 				  user_access:user_access,
 				  user_job_title:user_job_title,
 				  _token: "{{ csrf_token() }}"
@@ -122,6 +125,9 @@
 					$('#user_passwordError').text('');
 					$('#user_typeError').text('');		
 					$('#user_job_titleError').text('');
+					
+					$('#user_email_address_managementError').text('');
+					document.getElementById('user_email_address_management').className = "form-control";
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
@@ -148,6 +154,20 @@
 					
 				  $('#user_real_nameError').text(error.responseJSON.errors.user_real_name);
 				  document.getElementById('user_real_nameError').className = "invalid-feedback";		
+				
+				}
+				
+				if(error.responseJSON.errors.user_email_address=="The user email address has already been taken."){
+							  
+				  $('#user_email_address_managementError').html("<b>"+ user_email_address +"</b> has already been taken.");
+				  document.getElementById('user_email_address_managementError').className = "invalid-feedback";
+				  document.getElementById('user_email_address_management').className = "form-control is-invalid";
+				  $('#user_email_address_management').val("");
+				  
+				}else{
+					
+				  $('#user_email_address_managementError').text(error.responseJSON.errors.user_email_address);
+				  document.getElementById('user_email_address_managementError').className = "invalid-feedback";		
 				
 				}
 				
@@ -206,6 +226,7 @@
 					document.getElementById("update_user_real_name").value = response.user_real_name;
 					document.getElementById("update_user_name").value = response.user_name;
 					document.getElementById("update_user_type").value = response.user_type;
+					document.getElementById("update_user_email_address_management").value = response.user_email_address;
 					document.getElementById("update_user_job_title").value = response.user_job_title;
 					$('#UpdateUserModal').modal('toggle');					
 				  
@@ -236,6 +257,7 @@
 			let user_name 			= $("input[name=update_user_name]").val();
 			let user_password 		= $("input[name=update_user_password]").val();
 			let user_type 			= $("#update_user_type").val();		
+			let user_email_address 	= $("input[name=update_user_email_address_management]").val();
 			let user_access 		= $("#update_user_access").val();
 			let user_job_title 		= $("input[name=update_user_job_title]").val();
 			
@@ -246,6 +268,7 @@
 				  userID:userID,
 				  user_real_name:user_real_name,
 				  user_name:user_name,
+				  user_email_address:user_email_address,
 				  user_password:user_password,
 				  user_type:user_type,
 				  user_access:user_access,
@@ -259,6 +282,8 @@
 					$('#update_user_real_nameError').text('');
 					$('#update_switch_timerError').text('');					
 					$('#update_user_typeError').text('');
+					$('#update_user_email_address_managementError').text('');
+					document.getElementById('update_user_email_address_management').className = "form-control";
 					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
@@ -299,6 +324,21 @@
 					
 				  $('#update_user_nameError').text(error.responseJSON.errors.user_real_name);
 				  document.getElementById('update_user_nameError').className = "invalid-feedback";		
+				
+				}
+				
+				
+				if(error.responseJSON.errors.user_email_address=="The user email address has already been taken."){
+							  
+				  $('#update_user_email_address_managementError').html("<b>"+ user_email_address +"</b> has already been taken.");
+				  document.getElementById('update_user_email_address_managementError').className = "invalid-feedback";
+				  document.getElementById('update_user_email_address_management').className = "form-control is-invalid";
+				  $('#update_user_email_address_management').val("");
+				  
+				}else{
+					
+				  $('#update_user_email_address_managementError').text(error.responseJSON.errors.user_email_address);
+				  document.getElementById('update_user_email_address_managementError').className = "invalid-feedback";		
 				
 				}
 					

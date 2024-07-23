@@ -124,6 +124,8 @@ class ReceivablesController extends Controller
 						'teves_receivable_table.receivable_id',
 						'teves_receivable_table.sales_order_idx',
 						'teves_receivable_table.billing_date',
+						'teves_receivable_table.billing_period_start',
+						'teves_receivable_table.billing_period_end',
 						'teves_client_table.client_name',
 						'teves_receivable_table.control_number',		
 						'teves_receivable_table.receivable_description',
@@ -145,8 +147,7 @@ class ReceivablesController extends Controller
 						}else{
 							$menu_for_update = 'editReceivablesFromSalesOrder';
 						}
-					
-										
+									
 							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>

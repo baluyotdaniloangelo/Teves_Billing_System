@@ -34,10 +34,11 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th nowrap>Real Name</th>
+													<th nowrap>Name</th>
 													<th>Job Title</th>
 													<th nowrap>User Name</th>
 													<th>User Type</th>
+													<th>Email Address</th>
 													<th>Date Created</th>
 													<th>Date Updated</th>	
 													<th>Action</th>
@@ -48,18 +49,7 @@
 												
 											</tbody>
 											
-											<tfoot>
-												<tr>
-													<th>#</th>
-													<th nowrap>Real Name</th>
-													<th>Job Title</th>
-													<th nowrap>User Name</th>
-													<th>User Type</th>
-													<th>Date Created</th>
-													<th>Date Updated</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>	
+											
 										</table>
 									</div>		
 				</div>									
@@ -127,6 +117,14 @@
 							<span class="valid-feedback" id="user_nameError"></span>
 						  </div>
 						</div>
+						
+						<div class="row mb-2">
+						  <label for="user_name" class="col-sm-3 col-form-label">Email Address:</label>
+						  <div class="col-sm-9">
+							<input type="email" class="form-control " name="user_email_address_management" id="user_email_address_management" value="">
+							<span class="valid-feedback" id="user_email_address_managementError"></span>
+						  </div>
+						</div>
 
 						<div class="row mb-2">
 						  <label for="user_password" class="col-sm-3 col-form-label">Password:</label>
@@ -139,7 +137,7 @@
 						<div class="row mb-2">
 						  <label for="user_type" class="col-sm-3 col-form-label">User Type:</label>
 						  <div class="col-sm-9">
-								<select class="form-select form-control" required="" name="user_type" id="user_type" onchange="ChangeAccessType()">
+								<select class="form-select form-control" required="" name="user_type" id="user_type" onchange="">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
 								<option value="User">User</option>
@@ -209,6 +207,14 @@
 							<span class="valid-feedback" id="update_user_nameError"></span>
 						  </div>
 						</div>
+						
+						<div class="row mb-2">
+						  <label for="user_name" class="col-sm-3 col-form-label">Email Address:</label>
+						  <div class="col-sm-9">
+							<input type="email" class="form-control " name="update_user_email_address_management" id="update_user_email_address_management" value="">
+							<span class="valid-feedback" id="update_user_email_address_managementError"></span>
+						  </div>
+						</div>
 
 						<div class="row mb-2">
 						  <label for="update_user_password" class="col-sm-3 col-form-label">Password:</label>
@@ -221,7 +227,7 @@
 						<div class="row mb-2">
 						  <label for="update_user_type" class="col-sm-3 col-form-label">User Type:</label>
 						  <div class="col-sm-9">
-								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="ChangeAccessType_Update()">
+								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
 								<option value="User">User</option>

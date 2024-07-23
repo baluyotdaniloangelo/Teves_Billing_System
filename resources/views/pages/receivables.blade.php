@@ -35,6 +35,8 @@
 													<tr>
 														<th class="all">No.</th>
 														<th class="all">Date</th>
+														<th class="none">Start Date:</th>
+														<th class="none">End Date:</th>
 														<th class="all">Control Number</th>
 														<th class="all">Account Name</th>
 														<th class="none">Description : </th>
@@ -57,6 +59,8 @@
 													<tr>
 														<th class="all">No.</th>
 														<th class="all">Date</th>
+														<th class="none">Start Date:</th>
+														<th class="none">End Date:</th>
 														<th class="all">Control Number</th>
 														<th class="all">Account Name</th>
 														<th class="none">Description : </th>
