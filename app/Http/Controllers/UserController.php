@@ -256,23 +256,54 @@ class UserController extends Controller
 
 	public function user_account_post(Request $request){
 		
+			// if($request->user_password!=''){		
+					// $request->validate([
+					  // 'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
+					  // 'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					  // 'user_password'   => 'required|min:6|max:20'
+					// ], 
+					// [
+						// 'user_real_name.required' => 'Name is required',
+						// 'user_name.required' => 'User Name is Required',
+						// 'user_password.required' => 'Password is Required'
+					// ]
+					// );
+			// }
+			// else{
+					// $request->validate([
+					  // 'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
+					  // 'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					// ], 
+					// [
+						// 'user_real_name.required' => 'Name is required',
+						// 'user_name.required' => 'User Name is Required'
+					// ]
+					// );
+			// }
+
 			if($request->user_password!=''){		
 					$request->validate([
-					  'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_password'   => 'required|min:6|max:20'
+					
+					  'user_real_name'  		=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
+					  'user_name'      			=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					  'user_password'   		=> 'required|min:6|max:20',
+					  'user_email_address'   	=> 'unique:user_tb,user_email_address,'.$request->userID.',user_id',
+					  
 					], 
 					[
-						'user_real_name.required' => 'Name is required',
-						'user_name.required' => 'User Name is Required',
-						'user_password.required' => 'Password is Required'
+					
+					 'user_real_name.required' => 'Name is required',
+					 'user_name.required' => 'User Name is Required',
+					 'user_password.required' => 'Password is Required'
+					
 					]
 					);
 			}
 			else{
 					$request->validate([
-					  'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					  'user_real_name'  	=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
+					  'user_name'      		=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					  'user_email_address'  => 'unique:user_tb,user_email_address,'.$request->userID.',user_id',
 					], 
 					[
 						'user_real_name.required' => 'Name is required',
@@ -280,15 +311,51 @@ class UserController extends Controller
 					]
 					);
 			}
-
 	
+	
+	
+	
+			// $UserList = new UserAccountModel();
+			// $UserList = UserAccountModel::find($request->userID);
+			// $UserList->user_real_name 	= $request->user_real_name;
+			// $UserList->user_name 		= $request->user_name;
+			// if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
+			
+			// $result = $UserList->update();
+			
+				
 			$UserList = new UserAccountModel();
 			$UserList = UserAccountModel::find($request->userID);
-			$UserList->user_real_name 	= $request->user_real_name;
-			$UserList->user_name 		= $request->user_name;
-			if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
 			
+			$UserList->user_real_name 			= $request->user_real_name;
+			$UserList->user_name 				= $request->user_name;
+			$UserList->user_email_address 		= $request->user_email_address;
+			
+			/*Kung Binago Lang Password saka ma update*/
+			if($request->user_password!=''){ 
+						
+						$UserList->user_password 	= hash::make($request->user_password); 
+						
+						/*Call Email Function*/
+						if($request->user_email_address!=''){
+				
+							$title 			= 'Centralized Automated Meter Reading: Password Reset';
+							$body 			= 'Your password has been changed successfully. Please use below password to log in.';
+							$name 			= $request->user_real_name;
+							$user_id 		= $request->userID;
+							$user_name 		= $request->user_name;
+							$user_password 	= $request->user_password;
+							
+							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
+							
+						}
+				
+			}
+			
+			$UserList->updated_by_user_id 	= Session::get('loginID');
 			$result = $UserList->update();
+			
+			
 			
 			if($result){
 				return response()->json(['success'=>'Account Information Successfully Updated!']);

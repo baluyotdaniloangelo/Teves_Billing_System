@@ -212,6 +212,13 @@ else if (Request::is('monthly_sales')){
 }
 ?>
 <script>
+	const AccountUserform = document.querySelector('#AccountUserform');
+	
+	AccountUserform.addEventListener('change', function() {
+		//enable
+		document.getElementById("account-user").disabled = false;
+	});
+
 	<!--Selected Account For Update-->
 	$('body').on('click','#accountUser',function(){
 			
@@ -228,11 +235,13 @@ else if (Request::is('monthly_sales')){
 				  console.log(response);
 				  if(response) {
 					
+					document.getElementById("account-user").disabled = true;
 					document.getElementById("account-user").value = {{$data->user_id}};
 					
 					/*Set Switch Details*/
 					document.getElementById("account_user_real_name").value = response.user_real_name;
 					document.getElementById("account_user_name").value = response.user_name;
+					document.getElementById("user_email_address").value = response.user_email_address;
 					
 					$('#UserProfileModal').modal('toggle');					
 				  
@@ -260,6 +269,7 @@ else if (Request::is('monthly_sales')){
 			let user_real_name 		= $("input[name=account_user_real_name]").val();
 			let user_name 			= $("input[name=account_user_name]").val();
 			let user_password 		= $("input[name=account_user_password]").val();
+			let user_email_address 		= $("input[name=user_email_address]").val();
 			
 			$.ajax({
 				url: "/user_account_post",
@@ -269,6 +279,7 @@ else if (Request::is('monthly_sales')){
 				  user_real_name:user_real_name,
 				  user_name:user_name,
 				  user_password:user_password,
+				  user_email_address:user_email_address,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -278,6 +289,7 @@ else if (Request::is('monthly_sales')){
 					$('#account_user_real_nameError').text('');
 					$('#account_switch_timerError').text('');		
 					$('#account_user_typeError').text('');
+					$('#user_email_addressError').text('');	
 					
 					$('.success_modal_bg').html(response.success);
 					$('#SuccessModal').modal('toggle');

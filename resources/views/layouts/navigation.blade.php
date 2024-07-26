@@ -201,6 +201,14 @@
 						</div>
 
 						<div class="row mb-2">
+						  <label for="user_email_address" class="col-sm-3 col-form-label" title="You Valid Email Address">Email Address:</label>
+						  <div class="col-sm-9">
+							<input type="email" class="form-control " name="user_email_address" id="user_email_address" value="" placeholder="Email Address">
+							<span class="valid-feedback" id="user_email_addressError" title="Required"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
 						  <label for="account_user_password" class="col-sm-3 col-form-label">Password:</label>
 						  <div class="col-sm-9">
 							<input type="password" placeholder="Optional" class="form-control " name="account_user_password" id="account_user_password" value="">
@@ -212,8 +220,8 @@
 						
                     <div class="modal-footer modal-footer_form">
 						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon" id="account-user"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon" id="clear-user-account"> Clear Form</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon form_button_icon" id="account-user"> Submit</button>
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon  form_button_icon" id="clear-user-account"> Clear Form</button>
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->

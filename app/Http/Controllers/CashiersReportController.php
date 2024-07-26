@@ -65,13 +65,21 @@ class CashiersReportController extends Controller
 		
 		$list = CashiersReportModel::get();
 		if ($request->ajax()) {
-
+			
+			/*
+			July 25, 2024
+			Sa Non - Admin User Pwede nya makita lahat ng Chashier's Report Pero hindi niya pwede i-edit ang hindi niya report. 
+			After One Day sa Paggawa nya ng Report, Admin na lang ang pwede mag edit.
+			*/
+			
 			if(Session::get('UserType')!="Admin"){
 				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
 				 ->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
-              	 ->where('teves_cashiers_report.user_idx', '=', Session::get('loginID'))	
+              	 /*->where('teves_cashiers_report.user_idx', '=', Session::get('loginID'))|*/
+				 ->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
 				 ->get([				
 					'teves_cashiers_report.cashiers_report_id',
+					'teves_cashiers_report.user_idx',
 					'user_tb.user_real_name',
 					'teves_branch_table.branch_code',
 					'teves_cashiers_report.cashiers_name',
@@ -85,6 +93,7 @@ class CashiersReportController extends Controller
 				->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
 				->get([				
 					'teves_cashiers_report.cashiers_report_id',
+					'teves_cashiers_report.user_idx',
 					'user_tb.user_real_name',
 					'teves_branch_table.branch_code',
 					'teves_cashiers_report.cashiers_name',
@@ -122,12 +131,25 @@ class CashiersReportController extends Controller
 								</div>';
 							}
 							else{
-								$actionBtn = '
-								<div align="center" class="action_table_menu_client">
-								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
-								<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
-								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
-								</div>';
+								
+								if(Session::get('loginID')==$row->user_idx){
+								
+									$actionBtn = '
+									<div align="center" class="action_table_menu_client">
+									<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+									<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
+									<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
+									</div>';
+								
+								}else{
+									
+									$actionBtn = '
+									<div align="center" class="action_table_menu_client">
+									<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+									</div>';
+								
+								}
+								
 							}
 							
 						}
