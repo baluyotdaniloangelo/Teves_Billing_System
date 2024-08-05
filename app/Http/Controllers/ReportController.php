@@ -105,7 +105,7 @@ class ReportController extends Controller
 	}	
 	
 	/*Generated for receivable but not save*/
-	public function  (Request $request){
+	public function generate_report_recievable (Request $request){
 
 		$request->validate([
           'client_idx'      		=> 'required',
@@ -995,13 +995,13 @@ class ReportController extends Controller
 						`teves_sales_order_component_table`.`sales_order_component_id`,
 						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
 						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
-						IFNULL(sum(`teves_sales_order_component_table`.`order_quantity`),0) as total_order_quantity,
+						IFNULL((`teves_sales_order_component_table`.`order_quantity`),0) as total_order_quantity,
 						IFNULL(sum(`teves_sales_order_delivery_details`.`sales_order_delivery_quantity`),0) as total_delivered_quantity
 						from `teves_sales_order_component_table` left join `teves_product_table` on	 
 						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx`
 						LEFT JOIN teves_sales_order_delivery_details ON `teves_sales_order_component_table`.`sales_order_component_id` = teves_sales_order_delivery_details.sales_order_component_idx
 						 where `teves_sales_order_component_table`.`sales_order_idx` = ?		  
-						group by `teves_sales_order_component_table`.`product_idx` 
+						group by `teves_sales_order_delivery_details`.`sales_order_component_idx` 
 						order by `teves_sales_order_component_table`.`product_idx` asc";	
 						
 		$sales_order_delivery_total_component = DB::select("$raw_query_sales_order_delivery_total_component", [ $sales_order_id]);	
