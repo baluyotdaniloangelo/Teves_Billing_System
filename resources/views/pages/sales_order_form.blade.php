@@ -100,7 +100,7 @@
 									  
 														<label for="sales_order_net_percentage" class="col-sm-3 col-form-label">Net Value</label>
 														<div class="col-sm-9">			  
-															<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" value="{{ $sales_order_data[0]['sales_order_net_percentage'] }}" >
+															<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" value="{{ $sales_order_data[0]['sales_order_net_percentage'] }}" disabled>
 														</div>
 												
 												</div>
@@ -108,7 +108,7 @@
 									  
 														<label for="sales_order_less_percentage" class="col-sm-3 col-form-label">Less Value</label>
 														<div class="col-sm-9">			  
-															<input type="number" class="form-control" id="sales_order_less_percentage" name="sales_order_less_percentage" value="{{ $sales_order_data[0]['sales_order_less_percentage'] }}" >
+															<input type="number" class="form-control" id="sales_order_less_percentage" name="sales_order_less_percentage" value="{{ $sales_order_data[0]['sales_order_less_percentage'] }}" disabled>
 														</div>
 												
 												</div>

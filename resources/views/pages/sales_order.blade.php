@@ -132,14 +132,14 @@
 								<div class="row">
 										<div class="col-md-12">
 											<label for="sales_order_net_percentage" class="form-label">Net Value</label>
-											<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage">
+											<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" disabled>
 										</div>
 								</div>
 								<hr>
 								<div class="row">
 										<div class="col-md-12">
 											<label for="sales_order_less_percentage" class="form-label">Less Value</label>
-											<input type="number" class="form-control" id="sales_order_less_percentage" name="sales_order_less_percentage">
+											<input type="number" class="form-control" id="sales_order_less_percentage" name="sales_order_less_percentage" disabled>
 										</div>
 								</div>
 								<hr>

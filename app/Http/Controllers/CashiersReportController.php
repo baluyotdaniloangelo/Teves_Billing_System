@@ -124,7 +124,7 @@ class CashiersReportController extends Controller
 							</div>';
 						}else{
 							
-							if($numberDays>=1){
+							if($numberDays>=3){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_client">
 								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>

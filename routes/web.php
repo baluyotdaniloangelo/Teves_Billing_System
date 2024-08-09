@@ -128,6 +128,16 @@ Route::post('/generate_report_recievable', [ReportController::class,'generate_re
 /*Generate via Web Page View - For receivable*/
 Route::post('/generate_report_recievable_after_saved', [ReportController::class,'generate_report_recievable_after_saved'])->name('generate_report_recievable_after_saved')->middleware('isLoggedIn');
 
+
+/*Load SOA Summary Report History Interface*/
+Route::get('/soa_summary_history', [ReportController::class,'soa_summary_history'])->name('soa_summary_history')->middleware('isLoggedIn');
+/*Generate via Web Page View - For receivable*/
+//Route::post('/generate_report_recievable', [ReportController::class,'generate_report_recievable'])->name('generate_report_recievable')->middleware('isLoggedIn');
+/*Generate via Web Page View - For receivable*/
+//Route::post('/generate_report_recievable_after_saved', [ReportController::class,'generate_report_recievable_after_saved'])->name('generate_report_recievable_after_saved')->middleware('isLoggedIn');
+
+
+
 /*Generate via Web Page View*/
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
 /*Download Directly via Excel*/

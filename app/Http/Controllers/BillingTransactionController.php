@@ -116,7 +116,7 @@ class BillingTransactionController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 							
-							if($numberDays>=1){
+							if($numberDays>=3){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
@@ -212,7 +212,7 @@ class BillingTransactionController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 							
-							if($numberDays>=1){
+							if($numberDays>=3){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>

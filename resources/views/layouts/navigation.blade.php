@@ -123,10 +123,23 @@
       </li>
 	
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('report') }}" title="Report">
+        <!--<a class="nav-link navbar_bg" href="#" title="Report">-->
+		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
           <i class="bi bi-graph-up navbar_icon"></i>
-          <span title="Generate Billing History">Report</span>
+          <span title="Generate Billing History">Report</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
+		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
+          <li>
+			<a href="{{ route('report') }}" class="sidebar_li_a" title="Billing History">
+              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span> Billing History</span>
+            </a>
+			<!--
+			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">
+              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span> SOA Summary</span>
+            </a>
+			-->
+		  </li>
+		</ul>
       </li>
 	  
       <li class="nav-item">

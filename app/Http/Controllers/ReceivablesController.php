@@ -161,7 +161,7 @@ class ReceivablesController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 							
-							if($numberDays>=1){
+							if($numberDays>=3){
 
 							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
@@ -491,7 +491,7 @@ class ReceivablesController extends Controller
 					
 			}else{
 			
-				if($numberDays>=1){
+				if($numberDays>=3){
 					return response()->json(['success'=>'You can no longer Edit this Receivables item or Ask the Admin to Edit']);
 				}
 			
@@ -762,7 +762,7 @@ class ReceivablesController extends Controller
 					
 			}else{
 			
-				if($numberDays>=1){
+				if($numberDays>=3){
 			
 					// $result = $Receivables->update();
 					return response()->json(['success'=>'You can no longer Edit this Receivable item.']);

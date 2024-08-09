@@ -354,7 +354,7 @@
 									else{
 									?>
 									
-										if(diffDays>=1){
+										if(diffDays>=3){
 										
 											action_controls = "";
 									

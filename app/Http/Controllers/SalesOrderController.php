@@ -365,7 +365,7 @@ class SalesOrderController extends Controller
 			
 			}else{
 			
-				if($numberDays>=1){
+				if($numberDays>=3){
 					return response()->json(['success'=>'You can no longer Edit this Sales Order item or Ask the Admin to Edit']);
 				}
 			

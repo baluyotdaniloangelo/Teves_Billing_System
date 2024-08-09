@@ -85,6 +85,13 @@ else if (Request::is('billing_history')){
 @include('layouts.billing_history_script')
 <?php
 }
+else if (Request::is('soa_summary_history')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.soa_summary_report_script')
+<?php
+}
 else if (Request::is('user')){
 ?>
 <body class="">

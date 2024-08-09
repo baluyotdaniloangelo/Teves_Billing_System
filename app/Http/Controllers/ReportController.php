@@ -104,6 +104,96 @@ class ReportController extends Controller
 		
 	}	
 	
+	
+	public function soa_summary_history(){
+		
+		$title = 'SOA Summary';
+		$data = array();
+		if(Session::has('loginID')){
+			
+			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			
+			$client_data = ClientModel::all();
+			
+			//$product_data = ProductModel::all();
+			$teves_branch = TevesBranchModel::all();
+			
+			//$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
+			//$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
+		
+		}
+
+		return view("pages.soa_summary_report", compact('data','title','client_data','teves_branch'));
+		
+	}  	
+	
+	public function generate_reportf(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		/*
+		$data = BillingTransactionModel::where('client_idx', $client_idx)
+					//->where('teves_billing_table.order_date', '>=', $start_date)
+                    //->where('teves_billing_table.order_date', '<=', $end_date)
+					->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->orderBy('teves_billing_table.order_date', 'asc')
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.receivable_idx',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);*/
+					
+		/*Using Raw Query*/
+		//$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` >= ? and `teves_billing_table`.`order_date` <= ? order by `teves_billing_table`.`order_date` asc";			
+		//$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date]);
+
+	   $receivable_data = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+					->where('teves_receivable_table.billing_date', '>=', $start_date)
+                    ->where('teves_receivable_table.billing_date', '<=', $end_date)
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+              	->get([
+					'teves_receivable_table.receivable_name',
+					'teves_receivable_table.billing_date',
+					'teves_receivable_table.control_number',
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount',
+					'receivable_remaining_balance'
+				]);	
+
+
+		return response()->json($billing_data);
+		
+	}	
+	
+		
+	
+	
 	/*Generated for receivable but not save*/
 	public function generate_report_recievable (Request $request){
 
