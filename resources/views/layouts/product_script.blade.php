@@ -1,3 +1,7 @@
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
    <script type="text/javascript">
 
 	<!--Load Table-->
@@ -5,7 +9,7 @@
 
 		var ProductListTable = $('#getProductList').DataTable({
 			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -17,21 +21,33 @@
 			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
+			scrollCollapse: true,
+			scrollY: '500px',
 			ajax: "{{ route('getProductList') }}",
+			info: true,
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'product_name'},   
-					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
-					{data: 'product_unit_measurement'},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
-			],
-			columnDefs: [
-					{ className: 'text-center', targets: [0, 3, 4] },
+					{data: 'product_price', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
+					{data: 'product_unit_measurement', className: "text-center"},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			]
+			
 		});
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateProductModal"></button>'+
 				'</div>').appendTo('#product_option');
+				
+				autoAdjustColumns(ProductListTable);
+
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }		
 	});
 	
 	<!--Save New product->

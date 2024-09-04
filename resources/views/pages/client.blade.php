@@ -16,11 +16,11 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getclientList" width="100%" cellspacing="0">
+									<table class="table dataTable display nowrap cell-border" id="getclientList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Client Name</th>
+													<th class="all">Client Name</th>
 													<th>Address</th>
 													<th>TIN</th>
 													<th title='Default Value' class="none">Discount(Less)</th>
@@ -28,7 +28,7 @@
 													<th class="none">Vat</th>
 													<th class="none">Withhoding Tax</th>
 													<th class="none">Payment Terms</th>
-													<th>Action</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
@@ -36,20 +36,7 @@
 												
 											</tbody>
 											
-											<tfoot>
-												<tr>
-													<th>#</th>
-													<th>Client Name</th>
-													<th>Address</th>
-													<th>TIN</th>
-													<th title='Default Value' class="none">Discount(Less)</th>
-													<th class="none">Net</th>
-													<th class="none">Vat</th>
-													<th class="none">Withhoding Tax</th>
-													<th class="none">Payment Terms</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
+											
 											
 										</table>
 									</div>		

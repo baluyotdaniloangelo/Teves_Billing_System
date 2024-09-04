@@ -71,7 +71,34 @@ class BillingTransactionController extends Controller
 	
 		$list = BillingTransactionModel::get();
 		if ($request->ajax()) {
-
+	
+	if(Session::get('UserType')!="Admin"){
+		
+    	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
+					->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+					->where('receivable_idx', '=', 0)
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.receivable_idx',
+					'teves_receivable_table.control_number',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_client_table.client_name',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time',
+					'teves_billing_table.created_at',
+					'teves_billing_table.created_by_user_idx']);
+					
+	}else{
+	
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
 					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
@@ -91,7 +118,10 @@ class BillingTransactionController extends Controller
 					'teves_client_table.client_name',
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time',
-					'teves_billing_table.created_at',]);
+					'teves_billing_table.created_at',
+					'teves_billing_table.created_by_user_idx']);	
+	
+	}
 		
 		return DataTables::of($data)
 				
@@ -116,7 +146,7 @@ class BillingTransactionController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 							
-							if($numberDays>=3){
+							if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_id){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
@@ -161,8 +191,41 @@ class BillingTransactionController extends Controller
 		$client_idx = $request->client_idx_billed;
 		$start_date_billed = $request->start_date_billed;
 		$end_date_billed = $request->end_date_billed;
+		//billed_list
+	if(Session::get('UserType')!="Admin"){
 		
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
+					->where('teves_billing_table.receivable_idx', '<>', 0)
+					->where(function ($q) use($client_idx) {
+						if ($client_idx) {
+						   $q->where('teves_billing_table.client_idx', $client_idx);
+						}
+						})
+					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
+					->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.receivable_idx',
+					'teves_receivable_table.control_number',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_client_table.client_name',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time',
+					'teves_billing_table.created_at',]);
+					
+	}
+	else{
+		
+		    	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
 					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
 					->where('teves_billing_table.receivable_idx', '<>', 0)
@@ -188,6 +251,8 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.order_date',
 					'teves_billing_table.order_time',
 					'teves_billing_table.created_at',]);
+					
+	}
 		
 		return DataTables::of($data)
 				
@@ -430,11 +495,6 @@ class BillingTransactionController extends Controller
 					$Billing->order_total_amount 	= $order_total_amount;
 										
 					$result = $Billing->update();
-
-					$lastActivity = Activity::all()->last(); //returns the last logged activity
-					$lastActivity->causer;
-					$lastActivity->getExtraProperty('key'); //returns 'value'
-					$lastActivity->where('properties->key', 'value')->get(); // get all activity where the `key` custom property is 'value'
 				
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Updated!", 'so_error' => false), 200);

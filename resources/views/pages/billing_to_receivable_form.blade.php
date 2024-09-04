@@ -91,7 +91,7 @@
 						<div class="row mb-2">
 						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Net Value</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12">
+							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12" disabled>
 							<span class="valid-feedback" id=""></span>
 						  </div>
 						</div>
@@ -99,7 +99,7 @@
 						<div class="row mb-2">
 						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">VAT Value</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12">
+							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12" disabled>
 							<span class="valid-feedback" id=""></span>
 						  </div>
 						</div>
@@ -107,7 +107,7 @@
 						<div class="row mb-2">
 						  <label for="less_per_liter" class="col-sm-3 col-form-label" title="Applicable to All Product with Liter as a unit of measurement">Withholding Tax</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1">
+							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1" disabled>
 							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>
 						</div>						

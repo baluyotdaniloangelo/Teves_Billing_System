@@ -15,20 +15,20 @@
 		 
             <div class="card-body">			
 				<div class="p-d3">
-									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getsupplierList" width="100%" cellspacing="0">
+									
+										<table class="table dataTable display nowrap cell-border" id="getsupplierList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Supplier Name</th>
+													<th class="all">Supplier Name</th>
 													<th>Address</th>
-													<th>TIN</th>
+													<th class="all">TIN</th>
 													<th title='Default Value' class="none">Discount(Less)</th>
 													<th class="none">Net</th>
 													<th class="none">Vat</th>
 													<th class="none">Withhoding Tax</th>
 													<th class="none">Payment Terms</th>
-													<th>Action</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
@@ -36,23 +36,8 @@
 												
 											</tbody>
 											
-											<tfoot>
-												<tr>
-													<th>#</th>
-													<th>Supplier Name</th>
-													<th>Address</th>
-													<th>TIN</th>
-													<th title='Default Value' class="none">Discount(Less)</th>
-													<th class="none">Net</th>
-													<th class="none">Vat</th>
-													<th class="none">Withhoding Tax</th>
-													<th class="none">Payment Terms</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
-											
 										</table>
-									</div>		
+											
 				</div>									
                    
             </div>

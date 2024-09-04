@@ -16,7 +16,7 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable display" id="getSOBillingTransactionList" width="100%" cellspacing="0">
+									<table class="table dataTable display nowrap cell-border" id="getSOBillingTransactionList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th class="all">#</th>
@@ -34,18 +34,7 @@
 												
 											</tbody>
 	
-											<tfoot>
-												<tr>
-													<th class="all">#</th>
-													<th class="all">Date</th>
-													<th class="all">Time</th>
-													<th class="all">S.O No.</th>
-													<th class="all">Account Name</th>
-													<th class="none">Driver's Name</th>
-													<th class="none">Description</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
+											
 										</table>
 									</div>		
 				</div>									

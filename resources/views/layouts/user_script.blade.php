@@ -1,13 +1,14 @@
    <!-- Page level plugins -->
-   <script src="{{asset('datatables/jquery.dataTables.js')}}"></script>
-   <script src="{{asset('datatables/dataTables.bootstrap4.js')}}"></script>
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
    <script type="text/javascript">
 	<!--Load Table-->				
 	$(function () {
 				
 		var switchTable = $('#userList').DataTable({
 			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -20,21 +21,24 @@
 			responsive: true,
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
+			scrollCollapse: true,
+			scrollCollapse: true,
+			scrollY: '500px',
 			ajax: {
 				url : "{{ route('UserList') }}",
 				method : 'POST',
 				data: { _token: "{{ csrf_token() }}" },
 			},
 			columns: [
-					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},    
-					{data: 'user_real_name'},   
-					{data: 'user_job_title'},	
-					{data: 'user_name'}, 					
-					{data: 'user_type'},
-					{data: 'user_email_address', className: "text-left"},						
-					{data: 'created_at_dt_format', name: 'switch_status', orderable: true, searchable: false},
-					{data: 'updated_at_dt_format', name: 'switch_status', orderable: true, searchable: false},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-right"},    
+					{data: 'user_real_name', className: "text-left"},   
+					{data: 'user_job_title', className: "text-left"},	
+					{data: 'user_name', className: "text-left"}, 					
+					{data: 'user_type', className: "text-left"},
+					{data: 'user_email_address', className: "text-left"},					
+					{data: 'created_at_dt_format', name: 'switch_status', orderable: true, searchable: false, className: "text-left"},
+					{data: 'updated_at_dt_format', name: 'switch_status', orderable: true, searchable: false, className: "text-left"},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 4, 5, 6, 7] },
@@ -43,8 +47,19 @@
 		});
 		  /*Add Options*/
 		  $('<div class="btn-group" role="group" aria-label="Basic outlined example"style="margin-top: -50px; position: absolute;">'+
-		  '<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateUserModal"></button>'+
+		  '<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateUserModal" onclick="ResetFormUser()"></button>'+
 		  '</div>').appendTo('#user_option');
+		  
+		  autoAdjustColumns(switchTable);
+
+		 /*Adjust Table Column*/
+		 function autoAdjustColumns(table) {
+			 var container = table.table().container();
+			 var resizeObserver = new ResizeObserver(function () {
+				 table.columns.adjust();
+			 });
+			 resizeObserver.observe(container);
+		 }	
 	});
 	
 	
@@ -135,6 +150,10 @@
 					
 					document.getElementById("CreateUserform").reset();
 				
+					if(user_access=='BYSITE'){
+						UpdateUserAccess(response.user_id);
+					}
+				
 					var table = $("#userList").DataTable();
 				    table.ajax.reload(null, false);
 				  
@@ -171,6 +190,7 @@
 				
 				}
 				
+				
 				if(error.responseJSON.errors.user_name=="The user name has already been taken."){
 							  
 				  $('#user_nameError').html("<b>"+ user_name +"</b> has already been taken.");
@@ -180,7 +200,7 @@
 				  
 				}else{
 					
-				  $('#user_nameError').text(error.responseJSON.errors.user_real_name);
+				  $('#user_nameError').text(error.responseJSON.errors.user_name);
 				  document.getElementById('user_nameError').className = "invalid-feedback";		
 				
 				}
@@ -202,9 +222,29 @@
 			   });
 		
 	  });
+	  
+	function ResetFormUser(){
+			
+			event.preventDefault();
+			$('#CreateUserform')[0].reset();
+
+			$('#user_email_address_managementError').html("");
+			document.getElementById('user_email_address_managementError').className = "valid-feedback";
+			document.getElementById('user_email_address_management').className = "form-control";
+
+			document.getElementById('CreateUserform').className = "g-3 needs-validation";
+			
+	}		  
 
 	<!--Select Site For Update-->
 	$('body').on('click','#editUser',function(){
+			
+			$('#UpdateUserform')[0].reset();
+			$('#update_user_real_nameError').text('');				  
+			$('#update_user_nameError').text('');
+			$('#update_user_passwordError').text('');
+			$('#update_user_typeError').text('');
+			$('#update_user_job_titleError').text('');
 			
 			event.preventDefault();
 			let UserID = $(this).data('id');
@@ -221,6 +261,7 @@
 				  if(response) {
 					
 					document.getElementById("update-user").value = UserID;
+					document.getElementById("update-user").disabled = true;
 					
 					/*Set Switch Details*/
 					document.getElementById("update_user_real_name").value = response.user_real_name;
@@ -238,6 +279,81 @@
 				}
 			   });		
 	  });
+
+	document.getElementById("update_user_real_name").addEventListener('change', doThing_account_management);
+	document.getElementById("update_user_name").addEventListener('change', doThing_account_management);
+	document.getElementById("update_user_email_address_management").addEventListener('change', doThing_account_management);
+
+	document.getElementById("update_user_password").addEventListener('change', doThing_account_management);
+	document.getElementById("update_user_type").addEventListener('change', doThing_account_management);
+	document.getElementById("update_user_access").addEventListener('change', doThing_account_management);
+	document.getElementById("update_user_job_title").addEventListener('change', doThing_account_management);
+	
+	function doThing_account_management(){
+
+			let userID = document.getElementById("update-user").value;
+		
+			let user_real_name 		= $("input[name=update_user_real_name]").val();
+			let user_name 			= $("input[name=update_user_name]").val();
+			let user_email_address 	= $("input[name=update_user_email_address_management]").val();
+			let user_password 		= $("input[name=update_user_password]").val();
+			let user_type 			= $("#update_user_type").val();	
+			let user_access 		= $("#update_user_access").val();
+			let user_job_title 		= $("input[name=update_user_job_title]").val();
+		
+		$.ajax({
+				url: "/user_info",
+				type:"POST",
+				data:{
+				  UserID:userID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {				
+				  
+				  
+				  if(user_password!==''){
+						
+						 //alert('S1');
+						if(response.user_real_name===user_real_name && response.user_name===user_name && response.user_email_address===user_email_address && response.user_type===user_type && response.user_branch_access_type===user_access && response.user_job_title===user_job_title){
+							
+							document.getElementById("update-user").disabled = false;
+							//alert('b');
+							
+						}else{
+							
+							document.getElementById("update-user").disabled = false;
+							//alert('c');
+						}
+					
+				  }else{
+					  
+					  // alert('S2');
+					  if(response.user_real_name===user_real_name && response.user_name===user_name && response.user_email_address===user_email_address && response.user_type===user_type && response.user_branch_access_type===user_access && response.user_job_title===user_job_title){
+							
+							document.getElementById("update-user").disabled = true;
+							//alert('d')
+							
+						}else{
+							
+							document.getElementById("update-user").disabled = false;
+							//alert('e')
+							
+						}
+					  
+				  }
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		 
+	   
+    }
+	  
 
 	$("#update-user").click(function(event){
 			
@@ -427,11 +543,10 @@
 	  });
 	  
 
-	<!--Select Site-->
-	$('body').on('click','#UserAccess',function(){
+	<!--Update User Site Access-->
+	function UpdateUserAccess(UserID){
 			
 			event.preventDefault();
-			let UserID = $(this).data('id');
 			
 			  $.ajax({
 				url: "{{ route('getUserBranchAccess') }}",
@@ -460,7 +575,7 @@
 					alert(error);
 				}
 			   });		
-	});  
+	}
 
 	let LoadSiteList = $('#UserSiteAccessList').DataTable( {
 				"language": {

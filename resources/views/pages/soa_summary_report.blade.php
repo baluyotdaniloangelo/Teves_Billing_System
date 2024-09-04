@@ -47,7 +47,11 @@
 						<div class="col-sm-6">
 							
 							<div class="ms-2">
-								<div class="fw-bold">SALES ORDER PERIOD: <span id="po_info" style="font-weight: normal;"></span></div>			
+								<div class="fw-bold">GENERATION DATE: <span id="" style="font-weight: normal;"><?=date("m/d/Y");?></span></div>			
+							</div>
+							
+							<div class="ms-2">
+								<div class="fw-bold">PERIOD: <span id="po_info" style="font-weight: normal;"></span></div>			
 							</div>
 							
 						</div>
@@ -58,11 +62,12 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Transaction Date</th>
-													<th>Reference No.</th>
-													<th>Description</th>
-													<th>Amount</th>
-													<th>Remaining Balance</th>
+													<th style="text-align:left">Transaction Date</th>
+													<th style="text-align:left">Reference No.</th>
+													<th style="text-align:left">Description</th>
+													<th style="text-align:right">Amount</th>
+													<th style="text-align:right">Remaining Balance&nbsp;</th>
+													<th style="text-align:right">Current Balance&nbsp;</th>
 												</tr>
 											</thead>				
 											
@@ -79,7 +84,7 @@
 
 	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateReportModal" tabindex="-1">
-              <div class="modal-dialog modal-xl">
+              <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Report</h5>
@@ -134,37 +139,6 @@
 						  </div>
 						</div>
 						
-						<div class="row mb-2">
-						  <label for="less_per_liter" class="col-sm-4 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Discount Per Liter</label>
-						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="">
-							<span class="valid-feedback" id="less_per_literError"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="net_value_percentage" class="col-sm-4 col-form-label" title="Net Value">Net Value</label>
-						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12">
-							<span class="valid-feedback" id="net_value_percentage_taxError"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="vat_value_percentage" class="col-sm-4 col-form-label" title="Net Value">VAT Value</label>
-						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12">
-							<span class="valid-feedback" id="vat_value_percentageError"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="withholding_tax_percentage" class="col-sm-4 col-form-label" title="Withholding Tax">Withholding Tax</label>
-						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1">
-							<span class="valid-feedback" id="withholding_taxError"></span>
-						  </div>
-						</div>
 						
 						</div>
 						

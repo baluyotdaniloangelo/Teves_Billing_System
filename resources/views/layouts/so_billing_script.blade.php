@@ -1,3 +1,7 @@
+    <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
 	<script type="text/javascript">
 	<!--Load Table-->
 	$(function () {
@@ -6,7 +10,7 @@
 			"language": {
 						 "decimal": ".",
             "thousands": ",",
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -24,13 +28,12 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date'},
-					{data: 'order_time'},
+					{data: 'order_time', orderable: false},
 					{data: 'so_number'},					
 					{data: 'client_name'},  
 					{data: 'drivers_name'}, 
-					{data: 'plate_no'},  					
-					 
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'plate_no'},  		
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [

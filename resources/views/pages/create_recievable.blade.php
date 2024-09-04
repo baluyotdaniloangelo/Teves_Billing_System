@@ -262,7 +262,7 @@
               <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Report</h5>
+                      <h5 class="modal-title">Create Receivable - Generate List</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -286,7 +286,7 @@
 						<div class="row mb-2">
 						  <label for="client_id" class="col-sm-4 col-form-label">Client</label>
 						  <div class="col-sm-8">
-							<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off">
+							<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off" onchange="get_client_details()">
 								<datalist id="client_name">
 									@foreach ($client_data as $client_data_cols)
 										<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
@@ -323,7 +323,7 @@
 						<div class="row mb-2">
 						  <label for="net_value_percentage" class="col-sm-4 col-form-label" title="Net Value">Net Value</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12">
+							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12" disabled>
 							<span class="valid-feedback" id="net_value_percentage_taxError"></span>
 						  </div>
 						</div>
@@ -331,7 +331,7 @@
 						<div class="row mb-2">
 						  <label for="vat_value_percentage" class="col-sm-4 col-form-label" title="Net Value">VAT Value</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12">
+							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12" disabled>
 							<span class="valid-feedback" id="vat_value_percentageError"></span>
 						  </div>
 						</div>
@@ -339,7 +339,7 @@
 						<div class="row mb-2">
 						  <label for="withholding_tax_percentage" class="col-sm-4 col-form-label" title="Withholding Tax">Withholding Tax</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1">
+							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1" disabled>
 							<span class="valid-feedback" id="withholding_taxError"></span>
 						  </div>
 						</div>

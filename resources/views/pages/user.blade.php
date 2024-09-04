@@ -30,18 +30,18 @@
 				
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="userList" width="100%" cellspacing="0">
+										<table class="table dataTable display nowrap cell-border" id="userList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
-													<th nowrap>Name</th>
-													<th>Job Title</th>
-													<th nowrap>User Name</th>
+													<th class="all">#</th>
+													<th class="all" >Name</th>
+													<th class="">Job Title</th>
+													<th  class="all">User Name</th>
 													<th>User Type</th>
 													<th>Email Address</th>
-													<th>Date Created</th>
-													<th>Date Updated</th>	
-													<th>Action</th>
+													<th class="none">Date Created:</th>
+													<th class="none">Date Updated:</th>	
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
@@ -105,7 +105,7 @@
 						<div class="row mb-2">
 						  <label for="user_job_title" class="col-sm-3 col-form-label">Job Title:</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="user_job_title" id="user_job_title" value="" required>
+							<input type="text" class="form-control " name="user_job_title" id="user_job_title" value="">
 							<span class="valid-feedback" id="user_job_titleError"></span>
 						  </div>
 						</div>
@@ -121,7 +121,7 @@
 						<div class="row mb-2">
 						  <label for="user_name" class="col-sm-3 col-form-label">Email Address:</label>
 						  <div class="col-sm-9">
-							<input type="email" class="form-control " name="user_email_address_management" id="user_email_address_management" value="">
+							<input type="email" class="form-control " name="user_email_address_management" id="user_email_address_management" value="" required>
 							<span class="valid-feedback" id="user_email_address_managementError"></span>
 						  </div>
 						</div>
@@ -137,9 +137,10 @@
 						<div class="row mb-2">
 						  <label for="user_type" class="col-sm-3 col-form-label">User Type:</label>
 						  <div class="col-sm-9">
-								<select class="form-select form-control" required="" name="user_type" id="user_type" onchange="">
+								<select class="form-select form-control" required="" name="user_type" id="user_type" onchange="ChangeAccessType_Add()">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
+								<option value="Supervisor">Supervisor</option>
 								<option value="User">User</option>
 								</select>
 							<span class="valid-feedback" id="user_typeError"></span>
@@ -195,7 +196,7 @@
 						<div class="row mb-2">
 						  <label for="update_user_job_title" class="col-sm-3 col-form-label">Job Title:</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_user_job_title" id="update_user_job_title" value="" required>
+							<input type="text" class="form-control " name="update_user_job_title" id="update_user_job_title" value="">
 							<span class="valid-feedback" id="update_user_job_titleError"></span>
 						  </div>
 						</div>
@@ -211,7 +212,7 @@
 						<div class="row mb-2">
 						  <label for="user_name" class="col-sm-3 col-form-label">Email Address:</label>
 						  <div class="col-sm-9">
-							<input type="email" class="form-control " name="update_user_email_address_management" id="update_user_email_address_management" value="">
+							<input type="email" class="form-control " name="update_user_email_address_management" id="update_user_email_address_management" value="" required>
 							<span class="valid-feedback" id="update_user_email_address_managementError"></span>
 						  </div>
 						</div>
@@ -227,9 +228,10 @@
 						<div class="row mb-2">
 						  <label for="update_user_type" class="col-sm-3 col-form-label">User Type:</label>
 						  <div class="col-sm-9">
-								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="">
+								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="ChangeAccessType_Update()">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
+								<option value="Supervisor">Supervisor</option>
 								<option value="User">User</option>
 								</select>
 							<span class="valid-feedback" id="update_user_typeError"></span>
@@ -252,7 +254,6 @@
                     <div class="modal-footer modal-footer_form">
 						
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-user"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="update-clear-user"> Clear Form</button>
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->

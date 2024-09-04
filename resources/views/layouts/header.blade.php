@@ -26,11 +26,17 @@
 
   <!-- Template Main CSS File -->
   <link href="{{asset('NiceAdmin-pro/assets/css/style.css')}}" rel="stylesheet">
+  <!-- Custom styles for this page
+  <link href="{{asset('datatables/dataTables.bootstrap4.css')}}" rel="stylesheet"> -->
+   <!--Responsive Datatable Plugin
+  <link href="{{asset('datatables/responsive.dataTables.min.css')}}" rel="stylesheet">-->
+
   <!-- Custom styles for this page -->
-  <link href="{{asset('datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
-   <!--Responsive Datatable Plugin-->
-  <link href="{{asset('datatables/responsive.dataTables.min.css')}}" rel="stylesheet">
-  
+  <link href="{{asset('Datatables/2.0.8/css/dataTables.dataTables.css')}}" rel="stylesheet">
+  <!--Responsive Datatable Plugin-->
+  <link href="{{asset('Datatables/responsive/3.0.2/css/responsive.dataTables.css')}}" rel="stylesheet">  
+ 
+ 
   <link href="{{asset('style/custom_style_common.css')}}" rel="stylesheet">
   <link href="{{asset('style/custom_style_teves.css')}}" rel="stylesheet">
  

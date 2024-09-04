@@ -2,14 +2,21 @@
 
 namespace App\Models;
 
-//use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Contracts\Activity;
 use Illuminate\Database\Eloquent\Model;
-//use Spatie\Activitylog\Traits\LogsActivity;
+
+use Session;
 
 class BillingTransactionModel extends Model
 {
     //use HasFactory;
-	//use LogsActivity;
+	use LogsActivity;
+	
+	public function tapActivity(Activity $activity, string $eventName)
+	{
+    $activity->causer_id = Session::get('loginID');
+	}
 	
 	protected $table = 'teves_billing_table';
 
@@ -24,8 +31,10 @@ class BillingTransactionModel extends Model
         'order_date',
         'order_time',
         'order_po_number',
-        'created_at',
-		'updated_at'
+		'created_at',
+		'created_by_user_id',
+		'updated_at',
+		'updated_by_user_id'
     ];
 	
     protected $primaryKey = 'billing_id';
@@ -44,7 +53,11 @@ class BillingTransactionModel extends Model
         'product_idx',
         'product_price',
 		'order_quantity',
-		'order_total_amount'
+		'order_total_amount',
+		'created_at',
+		'created_by_user_id',
+		'updated_at',
+		'updated_by_user_id'
     ];
 	
 }

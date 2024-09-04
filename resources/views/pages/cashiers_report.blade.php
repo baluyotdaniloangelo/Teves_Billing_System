@@ -14,7 +14,7 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getCashierReport" width="100%" cellspacing="0">
+									<table class="table dataTable display nowrap cell-border" id="getCashierReport" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -32,18 +32,7 @@
 												
 											</tbody>
 											
-											<tfoot>
-												<tr>
-													<th>#</th>
-													<th>Date</th>
-													<?php if($data->user_type=="Admin"){ ?><th>Encoder's Name</th><?php } ?>
-													<th>Cashier's Name</th>
-													<th>Branch</th>
-													<th>Employee's On-Duty</th>
-													<th>Shift</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
+											
 										</table>
 									</div>		
 				</div>									        

@@ -1,10 +1,14 @@
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
 <script type="text/javascript">
 	<!--Load Table-->
 	$(function () {
 
 		var BranchListTable = $('#getbranchList').DataTable({
 			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -18,6 +22,8 @@
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getBranchList') }}",
 			responsive: true,
+			scrollCollapse: true,
+			scrollY: '500px',
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'branch_code'},   
@@ -28,7 +34,7 @@
 					{data: 'branch_contact_number'},
 					{data: 'branch_owner'},
 					{data: 'branch_owner_title'},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 3] },
@@ -38,7 +44,18 @@
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBranchModal"></button>'+
 				'</div>').appendTo('#branch_option');
-					
+				
+		autoAdjustColumns(BranchListTable);
+
+		 /*Adjust Table Column*/
+		 function autoAdjustColumns(table) {
+			 var container = table.table().container();
+			 var resizeObserver = new ResizeObserver(function () {
+				 table.columns.adjust();
+			 });
+			 resizeObserver.observe(container);
+		 }		
+				
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();
  

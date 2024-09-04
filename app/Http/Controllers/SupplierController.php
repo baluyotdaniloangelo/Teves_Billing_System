@@ -14,14 +14,19 @@ class SupplierController extends Controller
 	/*Load supplier Interface*/
 	public function supplier(){
 		
-		$title = 'Supplier';
-		$data = array();
-		if(Session::has('loginID')){
+		
+		
+		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+			
+			$title = 'Supplier';
+			$data = array();
+		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$supplier_data = SupplierModel::all();		
+			$supplier_data = SupplierModel::all();	
+			return view("pages.supplier", compact('data','title'));
 		}
 		
-		return view("pages.supplier", compact('data','title'));
+		
 	
 	}   
 	

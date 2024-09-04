@@ -69,7 +69,10 @@ class SOBillingTransactionController extends Controller
 		$list = SOBillingTransactionModel::get();
 		if ($request->ajax()) {
 
+	if(Session::get('UserType')!="Admin"){
+		
     	$data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+					->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
               		->get([
 					'teves_billing_so_table.so_id',
 					'teves_billing_so_table.so_number',
@@ -78,7 +81,24 @@ class SOBillingTransactionController extends Controller
 					'teves_client_table.client_name',
 					'teves_billing_so_table.order_date',
 					'teves_billing_so_table.order_time',
-					'teves_billing_so_table.created_at']);
+					'teves_billing_so_table.created_at',
+					'teves_billing_so_table.created_by_user_id']);
+					
+	}else{
+		
+		$data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+              		->get([
+					'teves_billing_so_table.so_id',
+					'teves_billing_so_table.so_number',
+					'teves_billing_so_table.drivers_name',
+					'teves_billing_so_table.plate_no',
+					'teves_client_table.client_name',
+					'teves_billing_so_table.order_date',
+					'teves_billing_so_table.order_time',
+					'teves_billing_so_table.created_at',
+					'teves_billing_so_table.created_by_user_id']);
+					
+	}
 		
 		return DataTables::of($data)
 				
@@ -101,11 +121,12 @@ class SOBillingTransactionController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 							
-							if($numberDays>=3){
-								$actionBtn = '
+							if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_id){
+								/*$actionBtn = '
 								<div align="center" class="action_table_menu_site">
 								<a href="#" data-id="'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view" id="viewSO"></a>
-								</div>';
+								</div>';*/
+								$actionBtn = '';
 							}else{
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">

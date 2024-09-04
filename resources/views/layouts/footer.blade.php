@@ -92,9 +92,3 @@
   <script src="{{asset('NiceAdmin-pro/assets/js/main.js')}}"></script>
   <!-- Bootstrap core JavaScript-->
   <script src="{{asset('/jquery/jquery-3.6.0.min.js')}}"></script>
-  <!-- Page level plugins -->
-  <script src="{{asset('datatables/jquery.dataTables.js')}}"></script>
-  <script src="{{asset('datatables/dataTables.bootstrap4.js')}}"></script>
-  
-  <!--Responsive Datatable Plugin-->
-  <script src="{{asset('datatables/dataTables.responsive.min.js')}}"></script>

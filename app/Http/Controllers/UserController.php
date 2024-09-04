@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\UserAccountModel;
 use Hash;
@@ -21,14 +22,15 @@ class UserController extends Controller
 	/*Load UserList Interface*/
 	public function user(){
 		
-			$title = 'User List';
-			$data = array();
-			if(Session::has('loginID')){
+			
+			if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+			
+				$title = 'User List';
+				$data = array();
 				$data = User::where('user_id', '=', Session::get('loginID'))->first();
+				return view("pages.user", compact('data','title'));
 			
 			}
-	
-			return view("pages.user", compact('data','title'));
 		
 	}   
 	
@@ -69,12 +71,13 @@ class UserController extends Controller
 					
 						$actionBtn = '
 						<div class="action_table_menu_switch">
-						<a href="#" data-id="'.$row->user_id.'" class="bi bi-building btn_icon_table btn_icon_table_view" id="UserAccess" title="Add User Site Access"></a>
 						<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
 						<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
+						<a href="#" data-id="'.$row->user_id.'" class="bi bi-building btn_icon_table btn_icon_table_view" id="UserAccess" onclick="UpdateUserAccess('.$row->user_id.')" title="Add User Site Access"></a>
 						</div>';
 					
 					}
+					
                     return $actionBtn;
                 
 				})
@@ -103,7 +106,7 @@ class UserController extends Controller
 	public function user_info(Request $request){
 
 		$UserID = $request->UserID;
-		$data = UserAccountModel::find($UserID, ['user_name','user_real_name','user_type', 'user_job_title', 'user_email_address']);
+		$data = UserAccountModel::find($UserID, ['user_name','user_real_name','user_type', 'user_job_title', 'user_email_address', 'user_branch_access_type']);
 		return response()->json($data);
 		
 	}
@@ -124,18 +127,20 @@ class UserController extends Controller
 		  'user_name'      			=> 'required|unique:user_tb,user_name',
 		  'user_password'			=> 'required|min:6|max:20',
 		  'user_type'    			=> 'required',
-		  'user_email_address'   	=> 'unique:user_tb,user_email_address,'.$request->userID.',user_id',
+		  'user_email_address'   	=> ['required',Rule::unique('user_tb')->where( 
+												fn ($query) =>$query
+													->where('user_email_address', $request->user_email_address)
+													->where('user_email_address', '!=', '')
+												)]
         ], 
         [
-			'user_real_name.required' => 'Name is required',
-			'user_name.required' => 'User Name is Required',
-			'user_password.required' => 'Password is Required',
-			'user_type.required' => 'User Type is Required'
+			'user_real_name.required'	 	=> 'Name is required',
+			'user_name.required' 			=> 'User Name is Required',
+			'user_password.required' 		=> 'Password is Required',
+			'user_email_address.required' 	=> 'Email Address is Required',
+			'user_type.required' 			=> 'User Type is Required'
         ]
 		);
-
-			#$data = $request->all();
-			#insert
 					
 			$UserList = new UserAccountModel();
 			$UserList->user_real_name 			= $request->user_real_name;
@@ -153,23 +158,21 @@ class UserController extends Controller
 				
 			if($result){
 				
-						/*Call Email Function*/
+						/*Call Email Function to Send Mail*/
 						if($request->user_email_address!=''){
 						
 							$title 			= 'Teves Billing System Portal:User Account Created';
-							$body 			= 'Your Account has been successfully created. Please use the provided Credentials below.';
+							$body 			= 'Your User Account has been successfully created. Please use the provided Credentials below.';
 							$name 			= $request->user_real_name;
 							$user_id 		= $last_transaction_id;
 							$user_name 		= $request->user_name;
 							$user_password 	= $request->user_password;
-
-							// Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_name, $user_password));
+							
 							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
 						}
 				
 				return response()->json(array('success' => "User Information successfully created!", 'user_id' => $last_transaction_id), 200);
 				
-				/*Send Email*/
 			}
 			else{
 				return response()->json(['success'=>'Error on Insert User Information']);
@@ -178,38 +181,51 @@ class UserController extends Controller
 	}
 	
 	public function update_user_post(Request $request){
-		
+			
 			if($request->user_password!=''){		
 					$request->validate([
-					  'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_password'   => 'required|min:6|max:20',
-					  'user_type'    	=> 'required',
+					  'user_real_name'  		=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
+					  'user_name'      			=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					  'user_email_address'   	=> ['required',Rule::unique('user_tb')->where( 
+												fn ($query) =>$query
+													->where('user_email_address', $request->user_email_address)
+													->where('user_email_address', '!=', '')
+													->where('user_id','!=', $request->userID) 
+												)],
+					  'user_password'   		=> 'required|min:6|max:20',
+					  'user_type'    			=> 'required',
 					], 
 					[
-						'user_real_name.required' => 'Name is required',
-						'user_name.required' => 'User Name is Required',
-						'user_password.required' => 'Password is Required',
-						'user_type.required' => 'User Type is Required'
+						'user_real_name.required' 		=> 'Name is Required',
+						'user_name.required' 			=> 'User Name is Required',
+						'user_password.required' 		=> 'Password is Required',
+						'user_email_address.required' 	=> 'Email Address is Required',
+						'user_type.required' 			=> 'User Type is Required'
 					]
 					);
 			}
 			else{
 					$request->validate([
-					  'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_type'    	=> 'required',
+					  'user_real_name'  		=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
+					  'user_name'      			=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
+					  'user_email_address'   	=> ['required',Rule::unique('user_tb')->where( 
+												fn ($query) =>$query
+													->where('user_email_address', $request->user_email_address)
+													->where('user_email_address', '!=', '')
+													->where('user_id','!=', $request->userID) 
+												)],
+					  'user_type'    			=> 'required',
 					], 
 					[
-						'user_real_name.required' => 'Name is required',
-						'user_name.required' => 'User Name is Required',
-						'user_type.required' => 'User Type is Required'
+						'user_real_name.required' 		=> 'Name is Required',
+						'user_name.required' 			=> 'User Name is Required',
+						'user_email_address.required' 	=> 'Email Address is Required',
+						'user_type.required' 			=> 'User Type is Required'
 					]
 					);
-			}
+			}			
 			
-			#$data = $request->all();
-			#insert		
+			
 			$UserList = new UserAccountModel();
 			$UserList = UserAccountModel::find($request->userID);
 			$UserList->user_job_title 					= $request->user_job_title;
@@ -231,7 +247,7 @@ class UserController extends Controller
 						if($request->user_email_address!=''){
 						
 							$title 			= 'Teves Billing System Portal:Reset Password';
-							$body 			= 'Your Password has been successfully Changed. Please use the provided password below.';
+							$body 			= 'Your Password has been changed successfully. Please use below password to log in.';
 							$name 			= $request->user_real_name;
 							$user_id 		= $request->userID;
 							$user_name 		= $request->user_name;
@@ -241,7 +257,6 @@ class UserController extends Controller
 							
 						}
 						
-			
 			}/*Kung BInago Lang Password saka ma update*/
 			
 			if($result){

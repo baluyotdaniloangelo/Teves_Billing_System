@@ -16,40 +16,25 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getbranchList" width="100%" cellspacing="0">
+									<table class="table dataTable display nowrap cell-border" id="getbranchList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
-													<th>Branch Code</th>
-													<th>Branch Name</th>
+													<th class="all">#</th>
+													<th class="all">Branch Code</th>
+													<th class="all">Branch Name</th>
 													<th>Branch Initial</th>
-													<th>TIN</th>
-													<th title='Default Value' class="none">Address</th>
-													<th class="none">Contact Number</th>
-													<th class="none">Owner</th>
-													<th class="none">Owner Position/Title</th>
-													<th>Action</th>
+													<th class="all">TIN</th>
+													<th title='Default Value' class="none">Address:</th>
+													<th class="none">Contact Number:</th>
+													<th class="none">Owner:</th>
+													<th class="none">Owner Position/Title:</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											
 											<tbody>
 												
 											</tbody>
-											
-											<tfoot>
-												<tr>
-													<th>#</th>
-													<th>Branch Code</th>
-													<th>Branch Name</th>
-													<th>Branch Initial</th>
-													<th>TIN</th>
-													<th title='Default Value' class="none">Address</th>
-													<th class="none">Contact Number</th>
-													<th class="none">Owner</th>
-													<th class="none">Owner Position/Title</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
 											
 										</table>
 									</div>		

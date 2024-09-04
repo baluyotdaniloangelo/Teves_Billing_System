@@ -27,7 +27,9 @@ class SOBillingTransactionModel extends Model
         'order_time',
         'so_number',
         'created_at',
-		'updated_at'
+		'created_by_user_id',
+		'updated_at',
+		'updated_by_user_id'
     ];
 	
     protected $primaryKey = 'so_id';

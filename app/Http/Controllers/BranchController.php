@@ -16,13 +16,18 @@ class BranchController extends Controller
 	/*Load Branch Interface*/
 	public function branch(){
 
-		$title = 'Branch';
-		$data = array();
-		if(Session::has('loginID')){
+		
+		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+			
+			$title = 'Branch';
+			$data = array();
+		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$client_data = BranchModel::all();		
+			
+			return view("pages.branch", compact('data','title'));
 		}
-		return view("pages.branch", compact('data','title'));
+		
 
 	}   
 

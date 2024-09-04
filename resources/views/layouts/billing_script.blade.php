@@ -1,4 +1,8 @@
-   <script type="text/javascript">
+    <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
+ <script type="text/javascript">
 	<!--Load Table-->
 	$(function () {
 
@@ -6,7 +10,7 @@
 			"language": {
 						 "decimal": ".",
             "thousands": ",",
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -20,12 +24,14 @@
 			pageLength: 10,
 			stateSave: true,/*Remember Searches*/
 			responsive: true,
+			scrollCollapse: true,
+			scrollY: '500px',
 			ajax: "{{ route('getBillingTransactionList') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date'},
-					{data: 'order_time'},
-					{data: 'control_number'},  					
+					{data: 'order_time',orderable: false},
+					{data: 'control_number'},  				
 					{data: 'drivers_name'},     
 					{data: 'order_po_number'},     
 					{data: 'plate_no'},     
@@ -33,7 +39,7 @@
 					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }, 					
 					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
 					{data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
@@ -42,6 +48,17 @@
 			]
 		});
 				
+		autoAdjustColumns(BillingListTable);
+
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }	
+				 
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();
  
@@ -97,14 +114,16 @@
 				//serverSide: true,
 				//stateSave: true,/*Remember Searches*/
 				responsive: true,
+				scrollCollapse: true,
+				scrollY: '500px',
 				paging: true,
 				searching: true,
 				info: true,
 				data: [],
 				"columns": [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'order_date'},
-					{data: 'order_time'},
+					{data: 'order_date', className: "text-center"},
+					{data: 'order_time', orderable: false},
 					{data: 'control_number'},  					
 					{data: 'drivers_name'},     
 					{data: 'order_po_number'},     
@@ -113,10 +132,23 @@
 					{data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }, 					
 					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
 					{data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 				]
-			} );
+			} 
+			);
+			
+			autoAdjustColumns(BillingListTable_billed);
 
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }	
+
+	
 	function TotalAmount(){
 		
 		let product_price 			= $("#product_name option[value='" + $('#product_idx').val() + "']").attr('data-price');

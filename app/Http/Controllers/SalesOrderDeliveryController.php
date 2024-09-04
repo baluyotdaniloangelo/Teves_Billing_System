@@ -36,7 +36,7 @@ class SalesOrderDeliveryController extends Controller
 						`teves_sales_order_delivery_details`.`created_at`
 						from `teves_sales_order_delivery_details`  left join `teves_product_table` on	 
 						`teves_product_table`.`product_id` = `teves_sales_order_delivery_details`.`sales_order_component_product_idx` where `teves_sales_order_delivery_details`.`sales_order_idx` = ?		  
-						order by `teves_sales_order_delivery_details`.`sales_order_delivery_details_id` asc";	
+						order by `teves_sales_order_delivery_details`.`sales_order_delivery_date` asc";	
 						
 			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_id]);		
 			
@@ -62,7 +62,7 @@ class SalesOrderDeliveryController extends Controller
 						`teves_product_table`.`product_id` = `teves_sales_order_delivery_details`.`sales_order_component_product_idx` 
 						
 						where `teves_sales_order_delivery_details`.`sales_order_delivery_details_id` = ?		  
-						order by `teves_sales_order_delivery_details`.`sales_order_delivery_details_id` asc";	
+						order by `teves_sales_order_delivery_details`.`sales_order_delivery_date` asc";	
 						
 			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_delivery_details_id]);	
 			

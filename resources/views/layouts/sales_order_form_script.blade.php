@@ -413,8 +413,8 @@
 									}
 									else{
 									?>
-										if(diffDays>=1){
-											action_controls = "";
+										if(diffDays>=3){
+											action_controls = "ssss";
 											}else{
 											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a>";		
 										
@@ -424,7 +424,7 @@
 									?>
 								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ></div></td>"+
+								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' >"+action_controls+"</div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+

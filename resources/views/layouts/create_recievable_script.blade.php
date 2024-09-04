@@ -553,6 +553,12 @@
 					$('#client_address_receivables').text(response.client_address);
 					$('#client_tin_receivables').text(response.client_tin);
 					
+
+					
+					document.getElementById("net_value_percentage").value = response.default_net_percentage;
+					document.getElementById("vat_value_percentage").value = response.default_vat_percentage;
+					document.getElementById("withholding_tax_percentage").value = response.default_withholding_tax_percentage;					
+					
 				  }
 				},
 				error: function(error) {
@@ -562,7 +568,7 @@
 			   });	
 	  
 	}
-	
+
 	function download_billing_report_excel(){
 		  
 			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));

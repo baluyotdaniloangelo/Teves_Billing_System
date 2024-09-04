@@ -30,7 +30,7 @@
 				
                 <div class="tab-pane fade show active" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
 											<div class="table-responsive">
-										<table class="table table-bordered dataTable display" id="getBillingTransactionList" width="100%" cellspacing="0">
+											<table class="table dataTable display nowrap cell-border" id="getBillingTransactionList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th class="all">#</th>
@@ -51,23 +51,7 @@
 											<tbody>
 												
 											</tbody>
-	
-											<tfoot>
-												<tr>
-													<th class="all">#</th>
-													<th class="all">Date</th>
-													<th class="all">Time</th>
-													<th class="all">Control Number</th>
-													<th class="all">Driver's Name</th>
-													<th class="all">S.O No.</th>
-													<th class="all">Description</th>																	
-													<th class="all">Product</th>
-													<th class="none">Price : </th>
-													<th class="none">Quantity : </th>
-													<th class="none">Amount : </th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
+									
 										</table>
 									</div>
 				</div>
@@ -79,7 +63,8 @@
 					</div>					
 					</div>
 									    <div class="table-responsive">
-										<table class="table table-bordered dataTable display" id="BillingListTable_billed" width="100%" cellspacing="0">
+										
+										<table class="table dataTable display nowrap cell-border" id="BillingListTable_billed" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th class="all">#</th>
@@ -100,23 +85,7 @@
 											<tbody>
 												
 											</tbody>
-	
-											<tfoot>
-												<tr>
-													<th class="all">#</th>
-													<th class="all">Date</th>
-													<th class="all">Time</th>
-													<th class="all">Control Number</th>
-													<th class="all">Driver's Name</th>
-													<th class="all">S.O No.</th>
-													<th class="all">Description</th>																	
-													<th class="all">Product</th>
-													<th class="none">Price : </th>
-													<th class="none">Quantity : </th>
-													<th class="none">Amount : </th>
-													<th>Action</th>
-												</tr>
-											</tfoot>
+												
 										</table>
 									</div>
 				</div>

@@ -36,7 +36,7 @@ class PurchaseOrderDeliveryController extends Controller
 						
 						from `teves_purchase_order_delivery_details`  left join `teves_product_table` on	 
 						`teves_product_table`.`product_id` = `teves_purchase_order_delivery_details`.`purchase_order_component_product_idx` where `teves_purchase_order_delivery_details`.`purchase_order_idx` = ?		  
-						order by `teves_purchase_order_delivery_details`.`purchase_order_delivery_details_id` asc";	
+						order by `teves_purchase_order_delivery_details`.`purchase_order_delivery_date` asc";	
 						
 			$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_id]);		
 			
@@ -62,7 +62,7 @@ class PurchaseOrderDeliveryController extends Controller
 						`teves_product_table`.`product_id` = `teves_purchase_order_delivery_details`.`purchase_order_component_product_idx` 
 						
 						where `teves_purchase_order_delivery_details`.`purchase_order_delivery_details_id` = ?		  
-						order by `teves_purchase_order_delivery_details`.`purchase_order_delivery_details_id` asc";	
+						order by `teves_purchase_order_delivery_details`.`purchase_order_delivery_date` asc";	
 						
 			$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_delivery_details_id]);	
 			

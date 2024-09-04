@@ -16,7 +16,7 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable display" id="getPurchaseOrderList" width="100%" cellspacing="0">
+									<table class="table dataTable display nowrap cell-border" id="getPurchaseOrderList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th class="all">#</th>
@@ -35,19 +35,7 @@
 												
 											</tbody>
 											
-											<tfoot>
-												<tr>
-													<th class="all">#</th>
-													<th class="all">Date</th>
-													<th class="all">Control Number</th>
-													<th class="all">Supplier</th>
-													<th class="all">Sales Order #</th>
-													<th class="none">Total Payable</th>
-													<th class="all">Delivery Status</th>
-													<th class="all">Payment Status</th>
-													<th class="all">Action</th>
-												</tr>
-											</tfoot>	
+											
 										</table>
 									</div>		
 				</div>									

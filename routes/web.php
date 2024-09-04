@@ -132,10 +132,11 @@ Route::post('/generate_report_recievable_after_saved', [ReportController::class,
 /*Load SOA Summary Report History Interface*/
 Route::get('/soa_summary_history', [ReportController::class,'soa_summary_history'])->name('soa_summary_history')->middleware('isLoggedIn');
 /*Generate via Web Page View - For receivable*/
-//Route::post('/generate_report_recievable', [ReportController::class,'generate_report_recievable'])->name('generate_report_recievable')->middleware('isLoggedIn');
+Route::post('/generate_soa_summary', [ReportController::class,'generate_soa_summary'])->name('generate_soa_summary')->middleware('isLoggedIn');
 /*Generate via Web Page View - For receivable*/
+Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_soa_summary_pdf')->middleware('isLoggedIn');
+//Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_receivable_soa_pdf')->middleware('isLoggedIn');
 //Route::post('/generate_report_recievable_after_saved', [ReportController::class,'generate_report_recievable_after_saved'])->name('generate_report_recievable_after_saved')->middleware('isLoggedIn');
-
 
 
 /*Generate via Web Page View*/

@@ -1,10 +1,14 @@
-<script type="text/javascript">
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
+   <script type="text/javascript">
 	<!--Load Table-->
 	$(function () {
 
 		var ReceivableListTable_billing = $('#getReceivablesListBilling').DataTable({
 			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -13,13 +17,12 @@
 			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
-			
-						// 'teves_receivable_table.billing_period_start',
-						// 'teves_receivable_table.billing_period_end',
 			/*processing: true,*/
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			responsive: true,
+			scrollCollapse: true,
+			scrollY: '500px',
 			ajax: "{{ route('getReceivablesList_billing') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
@@ -35,8 +38,8 @@
 					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },				
 					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_status'},
-					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'action_print', name: 'action_print', orderable: false, searchable: false, className: "text-center"},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
@@ -47,6 +50,17 @@
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
 				'</div>').appendTo('#receivable_option');
+				
+				autoAdjustColumns(ReceivableListTable_billing);
+
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }	
 				
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();
@@ -62,7 +76,7 @@
 
 		var ReceivableListTable_sales = $('#getReceivablesListSales').DataTable({
 			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -75,6 +89,8 @@
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
 			responsive: true,
+			scrollCollapse: true,
+			scrollY: '500px',
 			ajax: "{{ route('getReceivablesList_sales_order') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
@@ -90,14 +106,25 @@
 					//{data: 'receivable_status'},
 					{data: 'sales_order_payment_status'},
 					{data: 'sales_order_delivery_status'},
-					{data: 'action_print', name: 'action_print', orderable: false, searchable: false},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'action_print', name: 'action_print', orderable: false, searchable: false, className: "text-center"},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
 					{ className: 'text-center', targets: [0, 1, 2, 10, 11] },
 			]
 		});
+		
+		autoAdjustColumns(ReceivableListTable_sales);
+
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }			
 				
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();

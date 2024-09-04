@@ -17,17 +17,17 @@ class ProductController extends Controller
 	/*Load Product Interface*/
 	public function product(){
 		
-		$title = 'Product';
-		$data = array();
-		if(Session::has('loginID')){
+		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+			
+			$title = 'Product';
+			$data = array();
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$product_data = ProductModel::all();
+			return view("pages.product", compact('data','title'));
 		
 		}
-
-		return view("pages.product", compact('data','title'));
 		
 	}   
 	

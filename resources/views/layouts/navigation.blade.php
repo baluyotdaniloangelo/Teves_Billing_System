@@ -84,7 +84,7 @@
 		
 		<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('billing') }}" title="Billing Transaction">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
-          <span title="iew Billing Transaction History">Billing History</span>
+          <span title="iew Billing Transaction History">Billing Transaction</span>
         </a>
 
           </li>
@@ -133,11 +133,11 @@
 			<a href="{{ route('report') }}" class="sidebar_li_a" title="Billing History">
               <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span> Billing History</span>
             </a>
-			<!--
+			<!---->
 			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">
               <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span> SOA Summary</span>
             </a>
-			-->
+			
 		  </li>
 		</ul>
       </li>

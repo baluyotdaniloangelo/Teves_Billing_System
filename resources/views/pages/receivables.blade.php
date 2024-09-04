@@ -30,7 +30,7 @@
 				
                 <div class="tab-pane fade show active" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
 											<div class="table-responsive" style="">
-												<table class="table table-bordered dataTable display" id="getReceivablesListBilling" width="100%" cellspacing="0">
+												<table class="table dataTable display nowrap cell-border" id="getReceivablesListBilling" width="100%" cellspacing="0">
 												<thead>
 													<tr>
 														<th class="all">No.</th>
@@ -55,32 +55,13 @@
 													
 												</tbody>
 												
-												<tfoot>
-													<tr>
-														<th class="all">No.</th>
-														<th class="all">Date</th>
-														<th class="none">Start Date:</th>
-														<th class="none">End Date:</th>
-														<th class="all">Control Number</th>
-														<th class="all">Account Name</th>
-														<th class="none">Description : </th>
-														<th class="none">Total Sales : </th>
-														<th class="none">Withholding Tax : </th>
-														<th class="none">Total Amount Due : </th>
-														<th class="none">Total Amount Rendered : </th>
-														<th class="none">Remaining Balance : </th>
-														<th class="all">Status</th>
-														<th class="all">Generate</th>
-														<th class="all">Action</th>												
-													</tr>
-												</tfoot>	
 												</table>  
 											</div>
 				</div>
 				
                 <div class="tab-pane fade" id="bordered-salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
 											<div class="table-responsive" style="">
-												<table class="table table-bordered dataTable display nowrap" id="getReceivablesListSales" width="100%" cellspacing="0">
+												<table class="table dataTable display nowrap cell-border" id="getReceivablesListSales" width="100%" cellspacing="0">
 												<thead>
 													<tr>
 														<th class="all">No.</th>
@@ -105,25 +86,7 @@
 													
 												</tbody>
 												
-												<tfoot>
-													<tr>
-														<th class="all">No.</th>
-														<th class="all">Date</th>
-														<th class="all">Control Number</th>
-														<th class="all">Account Name</th>
-														<th class="none">Description : </th>
-														<th class="none">Total Sales : </th>
-														<th class="none">Withholding Tax : </th>
-														<th class="none">Total Amount Due : </th>
-														<th class="none">Total Amount Rendered : </th>
-														<th class="none">Remaining Balance : </th>
-														<!--<th class="all">Status</th>-->
-														<th class="all">Payment Status</th>
-														<th class="all">Delivery Status</th>
-														<th class="all">Generate</th>
-														<th class="all" nowrap>Action</th>												
-													</tr>
-												</tfoot>	
+												
 											</table>
 										</div>
 				</div>

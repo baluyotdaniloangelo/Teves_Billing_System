@@ -16,7 +16,7 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="getProductList" width="100%" cellspacing="0">
+										<table class="table dataTable display nowrap cell-border" id="getProductList" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -31,15 +31,6 @@
 												
 											</tbody>
 											
-											<tfoot>
-												<tr>
-													<th>#</th>
-													<th>Product Name</th>
-													<th>Default Price</th>
-													<th>Unit of Measurement</th>
-													<th>Action</th>
-												</tr>
-											</tfoot>	
 										</table>
 									</div>		
 				</div>									

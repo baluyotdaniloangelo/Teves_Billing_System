@@ -1,10 +1,14 @@
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
    <script type="text/javascript">
 	<!--Load Table-->
 	$(function () {
 
-		var ReceivableListTable = $('#getPurchaseOrderList').DataTable({
+		var PurchaseOrderTable = $('#getPurchaseOrderList').DataTable({
 			"language": {
-						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
@@ -16,6 +20,8 @@
 			/*processing: true,*/
 			serverSide: true,
 			responsive: true,
+			scrollCollapse: true,
+			scrollY: '500px',
 			stateSave: true,/*Remember Searches*/
 			ajax: "{{ route('getPurchaseOrderList_v2') }}",
 			columns: [
@@ -27,7 +33,7 @@
 					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },
 					{data: 'purchase_order_delivery_status'},
 					{data: 'purchase_status'},
-					{data: 'action', name: 'action', orderable: false, searchable: false},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
@@ -38,7 +44,18 @@
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreatePurchaseOrderModal"></button>'+
 				'</div>').appendTo('#purchase_order_option');
-				
+			
+			autoAdjustColumns(PurchaseOrderTable);
+
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }
+		
 		$('a.toggle-vis').on('click', function (e) {
         e.preventDefault();
  

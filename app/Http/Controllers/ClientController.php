@@ -13,10 +13,12 @@ class ClientController extends Controller
 	
 	/*Load client Interface*/
 	public function client(){
-		$title = 'Client';
-		$data = array();
+		
 
-		if(Session::has('loginID')){
+		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+		
+			$title = 'Client';
+			$data = array();
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$client_data = ClientModel::all();		
