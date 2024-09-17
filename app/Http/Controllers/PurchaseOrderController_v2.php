@@ -442,7 +442,7 @@ class PurchaseOrderController_v2 extends Controller
 							$paid_percentage = number_format($_paid_percentage,2,".","");
 						
 							/*IF Fully Paid Automatically Update the Status to Paid*/
-							if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+							if($paid_percentage >= 0.01 && $paid_percentage <= 99.99)
 							{		
 								
 								$PurchaseOrderstatus = "$paid_percentage% Paid";
@@ -787,7 +787,7 @@ class PurchaseOrderController_v2 extends Controller
 							$paid_percentage = number_format($_paid_percentage,2,".","");
 						
 							/*IF Fully Paid Automatically Update the Status to Paid*/
-							if($paid_percentage >= 0.01 && $paid_percentage <= 99.9)
+							if($paid_percentage >= 0.01 && $paid_percentage <= 99.99)
 							{	
 								
 								$PurchaseOrderstatus = "$paid_percentage%";

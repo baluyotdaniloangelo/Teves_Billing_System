@@ -1,3 +1,7 @@
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
 <script type="text/javascript">
 
 	<!--Load Table-->
@@ -21,6 +25,7 @@
 			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
 			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
 			
+			let company_header 					= $("#company_header").val();	  
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -31,6 +36,7 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
+				  company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -55,21 +61,22 @@
 						var total_liters = 0;
 						var total_liters_discount = 0;
 						
-						var len = response.length;
+						var len = response['data'].length;
 						for(var i=0; i<len; i++){
-							var billing_id = response[i].billing_id;
-							var drivers_name = response[i].drivers_name;
-							var order_date = response[i].order_date;
-							var order_po_number = response[i].order_po_number;
-							var plate_no = response[i].plate_no;
-							var product_name = response[i].product_name;
-							var product_unit_measurement = response[i].product_unit_measurement;
-							var order_quantity = response[i].order_quantity;
-							var product_price = response[i].product_price;
-							var order_total_amount = response[i].order_total_amount;
-							var order_time = response[i].order_time;
 							
-							total_due += response[i].order_total_amount;
+							var billing_id = response['data'][i].billing_id;
+							var drivers_name = response['data'][i].drivers_name;
+							var order_date = response['data'][i].order_date;
+							var order_po_number = response['data'][i].order_po_number;
+							var plate_no = response['data'][i].plate_no;
+							var product_name = response['data'][i].product_name;
+							var product_unit_measurement = response['data'][i].product_unit_measurement;
+							var order_quantity = response['data'][i].order_quantity;
+							var product_price = response['data'][i].product_price;
+							var order_total_amount = response['data'][i].order_total_amount;
+							var order_time = response['data'][i].order_time;
+							
+							total_due += response['data'][i].order_total_amount;
 							
 							if(product_unit_measurement=='L'){
 								total_liters += order_quantity;
@@ -77,33 +84,10 @@
 								total_liters += 0;
 							}
 							
-							var receivable_idx = response[i].receivable_idx;/*Added June 18, 2023*/
-							if(receivable_idx=='0'){
-								//Editable
-								$action = "<td align='center' id='editBill' data-id="+billing_id+"><a href='#' class='btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit'></a></td>" +
-								"<td align='center' id='deleteBill' data-id="+billing_id+"><a class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete'></a></td>";			
-							}else{
-								$action = "<td align='center'></td>" +
-								"<td align='center'></td>";	
-							}
-							var tr_str = "<tr>" +
-								"<td align='center'>" + (i+1) + "</td>" +
-								"<td align='center'>" + order_date + "</td>" +
-								"<td align='center'>" + order_time + "</td>" +
-								"<td align='center'>" + drivers_name + "</td>" +
-								"<td align='center'>" + order_po_number + "</td>" +
-								"<td align='center'>" + plate_no + "</td>" +
-								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>" + order_quantity.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " " + product_unit_measurement +"</td>" +
-								"<td align='center'>" + product_price.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								$action +
-								"</tr>";
-							
-							/*Attached the Data on the Table Body*/
-							$("#billingstatementreport tbody").append(tr_str);
-							
 						}			
+						
+						LoadBillingHistoryData.clear().draw();
+						LoadBillingHistoryData.rows.add(response.data).draw();	
 						
 							total_liters_discount = total_liters * less_per_liter;
 															
@@ -140,25 +124,32 @@
 
 							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
+								
+							if(total_amount_payable==0){
+								
+								$("#download_options").html('');
+								
+								$("#save_options").html('');
+								
+							}else{
+								
+								$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+								'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf(0)"> PDF</button>'+
+								'</div>');
+								
+								$("#save_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+								'<button type="button" class="btn btn-outline-primary btn-sm bi bi-save" onclick="ReceivableformOpen()"> Save as Receivables</button>'+
+								'</div>');
+								
+							}
 							
-							/*Temporary removed excel*/
-							//'<button type="button" class="btn btn-outline-primary btn-sm bi bi-file-earmark-excel" onclick="download_billing_report_excel()"> Excel</button>'+
 							
-							
-							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_billing_report_pdf(0)"> PDF</button>'+
-							'</div>');
-							
-							$("#save_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi bi-save" onclick="ReceivableformOpen()"> Save as Receivables</button>'+
-							'</div>');
 
 				  }else{
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');
 							/*No Result Found*/
 							$('#total_due').text('');
-							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 				 
 							$("#download_options").html('');
 							
@@ -212,7 +203,7 @@
 			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
 			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
-			
+			let company_header 					= $("#company_header").val();
 			  $.ajax({
 				url: "/generate_report_recievable_after_saved",
 				type:"POST",
@@ -222,6 +213,7 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
+				  company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -242,22 +234,22 @@
 						var total_liters = 0;
 						var total_liters_discount = 0;
 						
-						var len = response.length;
+						var len = response['data'].length;
 						for(var i=0; i<len; i++){
-							var billing_id = response[i].billing_id;
-							var billing_id = response[i].billing_id;
-							var drivers_name = response[i].drivers_name;
-							var order_date = response[i].order_date;
-							var order_po_number = response[i].order_po_number;
-							var plate_no = response[i].plate_no;
-							var product_name = response[i].product_name;
-							var product_unit_measurement = response[i].product_unit_measurement;
-							var order_quantity = response[i].order_quantity;
-							var product_price = response[i].product_price;
-							var order_total_amount = response[i].order_total_amount;
-							var order_time = response[i].order_time;
 							
-							total_due += response[i].order_total_amount;
+							var billing_id = response['data'][i].billing_id;
+							var drivers_name = response['data'][i].drivers_name;
+							var order_date = response['data'][i].order_date;
+							var order_po_number = response['data'][i].order_po_number;
+							var plate_no = response['data'][i].plate_no;
+							var product_name = response['data'][i].product_name;
+							var product_unit_measurement = response['data'][i].product_unit_measurement;
+							var order_quantity = response['data'][i].order_quantity;
+							var product_price = response['data'][i].product_price;
+							var order_total_amount = response['data'][i].order_total_amount;
+							var order_time = response['data'][i].order_time;
+							
+							total_due += response['data'][i].order_total_amount;
 							
 							if(product_unit_measurement=='L'){
 								total_liters += order_quantity;
@@ -265,34 +257,10 @@
 								total_liters += 0;
 							}
 							
-							var receivable_idx = response[i].receivable_idx;/*Added June 18, 2023*/
-							if(receivable_idx=='0'){
-								//Editable
-								$action = "<td align='center' id='editBill' data-id="+billing_id+"><a href='#' class='btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit'></a></td>" +
-								"<td align='center' id='deleteBill' data-id="+billing_id+"><a class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete'></a></td>";			
-							}else{
-								$action = "<td align='center'></td>" +
-								"<td align='center'></td>";	
-							}
-							
-							var tr_str = "<tr>" +
-								"<td align='center'>" + (i+1) + "</td>" +
-								"<td align='center'>" + order_date + "</td>" +
-								"<td align='center'>" + order_time + "</td>" +
-								"<td align='center'>" + drivers_name + "</td>" +
-								"<td align='center'>" + order_po_number + "</td>" +
-								"<td align='center'>" + plate_no + "</td>" +
-								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>" + order_quantity.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " " + product_unit_measurement +"</td>" +
-								"<td align='center'>" + product_price.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								$action + 
-								"</tr>";
-							
-							/*Attached the Data on the Table Body*/
-							$("#billingstatementreport tbody").append(tr_str);
-							
 						}			
+						
+						LoadBillingHistoryData.clear().draw();
+						LoadBillingHistoryData.rows.add(response.data).draw();	
 						
 							total_liters_discount = total_liters * less_per_liter;
 															
@@ -385,6 +353,8 @@
 			let withholding_tax_percentage 	= $("input[name=withholding_tax_percentage]").val() / 100;
 			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
 			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
+			
+			let company_header 					= $("#company_header").val();
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -396,6 +366,7 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
+				  company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -414,22 +385,65 @@
 						var total_liters = 0;
 						var total_liters_discount = 0;
 						
-						var len = response.length;
-						for(var i=0; i<len; i++){
-							var billing_id = response[i].billing_id;
-							var billing_id = response[i].billing_id;
-							var drivers_name = response[i].drivers_name;
-							var order_date = response[i].order_date;
-							var order_po_number = response[i].order_po_number;
-							var plate_no = response[i].plate_no;
-							var product_name = response[i].product_name;
-							var product_unit_measurement = response[i].product_unit_measurement;
-							var order_quantity = response[i].order_quantity;
-							var product_price = response[i].product_price;
-							var order_total_amount = response[i].order_total_amount;
-							var order_time = response[i].order_time;
+						// var len = response.length;
+						// for(var i=0; i<len; i++){
+							// var billing_id = response[i].billing_id;
+							// var billing_id = response[i].billing_id;
+							// var drivers_name = response[i].drivers_name;
+							// var order_date = response[i].order_date;
+							// var order_po_number = response[i].order_po_number;
+							// var plate_no = response[i].plate_no;
+							// var product_name = response[i].product_name;
+							// var product_unit_measurement = response[i].product_unit_measurement;
+							// var order_quantity = response[i].order_quantity;
+							// var product_price = response[i].product_price;
+							// var order_total_amount = response[i].order_total_amount;
+							// var order_time = response[i].order_time;
 							
-							total_due += response[i].order_total_amount;
+							// total_due += response[i].order_total_amount;
+							
+							// if(product_unit_measurement=='L'){
+								// total_liters += order_quantity;
+							// }else{
+								// total_liters += 0;
+							// }
+							
+							// var tr_str = "<tr>" +
+								// "<td align='center'>" + (i+1) + "</td>" +
+								// "<td align='center'>" + order_date + "</td>" +
+								// "<td align='center'>" + order_time + "</td>" +
+								// "<td align='center'>" + drivers_name + "</td>" +
+								// "<td align='center'>" + order_po_number + "</td>" +
+								// "<td align='center'>" + plate_no + "</td>" +
+								// "<td align='center'>" + product_name + "</td>" +
+								// "<td align='center'>" + order_quantity.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " " + product_unit_measurement +"</td>" +
+								// "<td align='center'>" + product_price.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
+								// "<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
+								// "<td align='center' id='editBill' data-id="+billing_id+"><a href='#' class='btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit'></a></td>" +
+								// "<td align='center' id='deleteBill' data-id="+billing_id+"><a class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete'></a></td>" +
+								// "</tr>";
+							
+							// /*Attached the Data on the Table Body*/
+							// $("#billingstatementreport tbody").append(tr_str);
+							
+						// }	
+
+							var len = response['data'].length;
+						for(var i=0; i<len; i++){
+							
+							var billing_id = response['data'][i].billing_id;
+							var drivers_name = response['data'][i].drivers_name;
+							var order_date = response['data'][i].order_date;
+							var order_po_number = response['data'][i].order_po_number;
+							var plate_no = response['data'][i].plate_no;
+							var product_name = response['data'][i].product_name;
+							var product_unit_measurement = response['data'][i].product_unit_measurement;
+							var order_quantity = response['data'][i].order_quantity;
+							var product_price = response['data'][i].product_price;
+							var order_total_amount = response['data'][i].order_total_amount;
+							var order_time = response['data'][i].order_time;
+							
+							total_due += response['data'][i].order_total_amount;
 							
 							if(product_unit_measurement=='L'){
 								total_liters += order_quantity;
@@ -437,25 +451,10 @@
 								total_liters += 0;
 							}
 							
-							var tr_str = "<tr>" +
-								"<td align='center'>" + (i+1) + "</td>" +
-								"<td align='center'>" + order_date + "</td>" +
-								"<td align='center'>" + order_time + "</td>" +
-								"<td align='center'>" + drivers_name + "</td>" +
-								"<td align='center'>" + order_po_number + "</td>" +
-								"<td align='center'>" + plate_no + "</td>" +
-								"<td align='center'>" + product_name + "</td>" +
-								"<td align='center'>" + order_quantity.toLocaleString("en-PH", {minimumFractionDigits: 2}) + " " + product_unit_measurement +"</td>" +
-								"<td align='center'>" + product_price.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"<td align='center'>" + order_total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"<td align='center' id='editBill' data-id="+billing_id+"><a href='#' class='btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit'></a></td>" +
-								"<td align='center' id='deleteBill' data-id="+billing_id+"><a class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete'></a></td>" +
-								"</tr>";
-							
-							/*Attached the Data on the Table Body*/
-							$("#billingstatementreport tbody").append(tr_str);
-							
 						}			
+						
+						LoadBillingHistoryData.clear().draw();
+						LoadBillingHistoryData.rows.add(response.data).draw();	
 						
 							total_liters_discount = total_liters * less_per_liter;
 															
@@ -528,6 +527,58 @@
 			   });
 		
 	  };
+
+
+		/*Load to Datatables*/	
+		let LoadBillingHistoryData = $('#billingstatementreport').DataTable( {
+				"language": {
+						"emptyTable": "No Result Found",
+						"infoEmpty": "No entries to show"
+			    }, 
+				// processing: true,
+				//serverSide: true,
+				//stateSave: true,/*Remember Searches*/
+				responsive: false,
+				paging: true,
+				searching: false,
+				info: false,
+				data: [],
+				scrollCollapse: true,
+				scrollY: '500px',
+				
+				scrollx: false,
+				"columns": [
+				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
+				/*1*/	{data: 'order_date', className: "text-left", orderable: false },
+				/*2*/	{data: 'order_time', className: "text-left", orderable: false },
+				/*3*/	{data: 'drivers_name', className: "text-left", orderable: false },
+				/*4*/	{data: 'order_po_number', className: "text-left", orderable: false },		
+				/*5*/	{data: 'plate_no', className: "text-left", orderable: false },	
+				/*6*/	{data: 'product_name', className: "text-left", orderable: false },
+				/*7*/	{data: 'order_quantity', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+						{data: 'product_unit_measurement', className: "text-center", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+						// { data: null , 
+							 // render : function ( data, type, full ) { 
+								// return full['order_quantity']+' '+full['product_unit_measurement'];}, className: "text-right"
+							  // },
+				/*8*/	{data: 'product_price', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*9*/	{data: 'order_total_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2 , '' ) },
+						{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"}
+				],
+				
+		} );
+		
+	autoAdjustColumns(LoadBillingHistoryData);
+
+		 /*Adjust Table Column*/
+		 function autoAdjustColumns(table) {
+			 var container = table.table().container();
+			 var resizeObserver = new ResizeObserver(function () {
+				 table.columns.adjust();
+			 });
+			 resizeObserver.observe(container);
+		 }
+
 	    
 	function get_client_details(){
 		  

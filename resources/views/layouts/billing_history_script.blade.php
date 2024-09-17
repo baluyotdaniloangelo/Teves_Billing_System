@@ -29,6 +29,7 @@
 			let net_value_percentage 		= $("input[name=net_value_percentage]").val();
 			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val() / 100;
 			
+			let company_header 					= $("#company_header").val();	  
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
@@ -38,6 +39,7 @@
 				  client_idx:client_idx,
 				  start_date:start_date,
 				  end_date:end_date,
+				  company_header:company_header,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -61,7 +63,6 @@
 						
 						var len = response['data'].length;
 						for(var i=0; i<len; i++){
-							//response['data'][i].multiplier;
 							
 							var billing_id = response['data'][i].billing_id;
 							var drivers_name = response['data'][i].drivers_name;
@@ -101,7 +102,7 @@
 							
 							/*Set Grand Total and Billing Date*/
 							let total_due_str = total_due.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							alert(total_due_str);
+							
 							total_amount_payable = total_due - (total_liters_discount + with_holding_tax); 				
 													
 							$('#total_due').text(total_due_str.toLocaleString("en-PH", {maximumFractionDigits: 2}));
@@ -176,7 +177,7 @@
 		
 	  });
 
-		/*Load to Dtatables*/	
+		/*Load to Datatables*/	
 		let LoadBillingHistoryData = $('#billingstatementreport').DataTable( {
 				"language": {
 						"emptyTable": "No Result Found",
@@ -208,13 +209,10 @@
 							 // render : function ( data, type, full ) { 
 								// return full['order_quantity']+' '+full['product_unit_measurement'];}, className: "text-right"
 							  // },
-				/*7*/	{data: 'product_price', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*7*/	{data: 'order_total_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }
+				/*8*/	{data: 'product_price', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*9*/	{data: 'order_total_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2 , '' ) }
 				],
 				
-				
-      
-
 		} );
 		
 	autoAdjustColumns(LoadBillingHistoryData);

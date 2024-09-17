@@ -364,7 +364,7 @@
 					
 					/*Set Details*/
 					
-					document.getElementById("purchase_order_less_percentage").value = response.default_less_percentage;
+					document.getElementById("purchase_order_less_percentage").value = response.default_withholding_tax_percentage;
 					document.getElementById("purchase_order_net_percentage").value = response.default_net_percentage;				
 				  
 				  }

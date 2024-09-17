@@ -55,7 +55,6 @@
 						
 									<div class="table-responsive">
 										<table class="table dataTable display nowrap cell-border"  id="billingstatementreport" width="100%" cellspacing="0">
-										<!--<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0" style="font-size:12px !important">-->
 											<thead>
 												<tr>
 													<th>#</th>
@@ -115,7 +114,7 @@
 												
 											</tr>
 											
-											<tr class="" >
+											<tr class="">
 												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"><b></b></td>
 												<td align="left" ></td>

@@ -26,12 +26,12 @@
 			ajax: "{{ route('getReceivablesList_billing') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'billing_date'},
-					{data: 'billing_period_start'},
-					{data: 'billing_period_end'},
-					{data: 'control_number'},
-					{data: 'client_name'},
-					{data: 'receivable_description'},
+					{data: 'billing_date', className: "text-center"},
+					{data: 'billing_period_start', orderable: false},
+					{data: 'billing_period_end', orderable: false},
+					{data: 'control_number', className: "text-left", orderable: false},
+					{data: 'client_name', className: "text-left", orderable: false},
+					{data: 'receivable_description', className: "text-left"},
 					{data: 'receivable_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_withholding_tax', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
 					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
@@ -94,16 +94,15 @@
 			ajax: "{{ route('getReceivablesList_sales_order') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'billing_date'},
-					{data: 'control_number'},
-					{data: 'client_name'},
-					{data: 'receivable_description'},
+					{data: 'billing_date', className: "text-center"},
+					{data: 'control_number', className: "text-left", orderable: false},
+					{data: 'client_name', className: "text-left", orderable: false},
+					{data: 'receivable_description', className: "text-left"},
 					{data: 'receivable_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'receivable_withholding_tax', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
 					{data: 'receivable_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },					
 					{data: ({receivable_amount,receivable_remaining_balance}) => (Number(receivable_amount)-Number(receivable_remaining_balance)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },				
 					{data: 'receivable_remaining_balance', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					//{data: 'receivable_status'},
 					{data: 'sales_order_payment_status'},
 					{data: 'sales_order_delivery_status'},
 					{data: 'action_print', name: 'action_print', orderable: false, searchable: false, className: "text-center"},
@@ -114,6 +113,7 @@
 					{ className: 'text-center', targets: [0, 1, 2, 10, 11] },
 			]
 		});
+		
 		
 		autoAdjustColumns(ReceivableListTable_sales);
 

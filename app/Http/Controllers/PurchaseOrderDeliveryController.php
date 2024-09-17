@@ -92,7 +92,7 @@ class PurchaseOrderDeliveryController extends Controller
 					  $delivery_percentage = number_format($_delivery_percentage,2,".","");
 				  
 					  /*IF Fully Paid Automatically Update the Status to Paid*/
-					  if($delivery_percentage >= 0.01 && $delivery_percentage <= 99)
+					  if($delivery_percentage >= 0.01 && $delivery_percentage <= 99.99)
 					  {		
 						  
 						  $DeliveryStatus = "$delivery_percentage%";
@@ -194,7 +194,7 @@ class PurchaseOrderDeliveryController extends Controller
 					  $delivery_percentage = number_format($_delivery_percentage,2,".","");
 				  
 					  /*IF Fully Paid Automatically Update the Status to Paid*/
-					  if($delivery_percentage >= 0.01 && $delivery_percentage <= 99)
+					  if($delivery_percentage >= 0.01 && $delivery_percentage <= 99.99)
 					  {		
 						  
 						  $DeliveryStatus = "$delivery_percentage%";

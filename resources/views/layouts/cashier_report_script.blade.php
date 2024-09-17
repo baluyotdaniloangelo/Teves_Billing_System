@@ -26,14 +26,14 @@
 			scrollY: '500px',
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					{data: 'report_date'},
+					{data: 'report_date', className: "text-center"},
 					<?php if($data->user_type=="Admin"){ ?>
 					{data: 'user_real_name'},
 					<?php } ?>			
-					{data: 'cashiers_name'},		
-					{data: 'branch_code'},		
-					{data: 'forecourt_attendant'},
-					{data: 'shift'},
+					{data: 'cashiers_name', orderable: false},		
+					{data: 'branch_code', orderable: false},		
+					{data: 'forecourt_attendant', orderable: false},
+					{data: 'shift', orderable: false},
 					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],

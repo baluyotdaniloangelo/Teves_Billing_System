@@ -983,7 +983,7 @@ class ReceivablesController extends Controller
 						  $paid_percentage = number_format($_paid_percentage,2,".","");
 					  
 						  /*IF Fully Paid Automatically Update the Status to Paid*/
-						  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+						  if($paid_percentage >= 0.01 && $paid_percentage <= 99.99)
 						  {		
 							  
 							  $Receivablestatus = "$paid_percentage% Paid";
@@ -1039,7 +1039,7 @@ class ReceivablesController extends Controller
 								$paid_percentage = number_format($_paid_percentage,2,".","");
 							
 								/*IF Fully Paid Automatically Update the Status to Paid*/
-								if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+								if($paid_percentage >= 0.01 && $paid_percentage <= 99.99)
 								{		
 									
 									$Receivablestatus = "$paid_percentage% Paid";
@@ -1219,7 +1219,7 @@ class ReceivablesController extends Controller
 					  $paid_percentage = number_format($_paid_percentage,2,".","");
 				  
 					  /*IF Fully Paid Automatically Update the Status to Paid*/
-					  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+					  if($paid_percentage >= 0.01 && $paid_percentage <= 99.99)
 					  {		
 						  
 						  $Receivablestatus = "$paid_percentage%";
@@ -1282,7 +1282,7 @@ class ReceivablesController extends Controller
 						  $paid_percentage = number_format($_paid_percentage,2,".","");
 					  
 						  /*IF Fully Paid Automatically Update the Status to Paid*/
-						  if($paid_percentage >= 0.01 && $paid_percentage <= 99)
+						  if($paid_percentage >= 0.01 && $paid_percentage <= 99.99)
 						  {		
 							  
 							  $Receivablestatus = "$paid_percentage%";

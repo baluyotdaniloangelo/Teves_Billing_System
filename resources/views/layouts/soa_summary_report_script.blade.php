@@ -1,3 +1,8 @@
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
+   
 <script type="text/javascript">
 
 	<!--Load Table-->
@@ -9,9 +14,6 @@
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');		
-					
-					/*Reset Table Upon Resubmit form*/					
-					$("#billingstatementreport tbody").html("");					
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
@@ -43,44 +45,9 @@
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
-					
-						//var total_due = 0;
-						//var total_liters = 0;
-						var receivable_current_balance = 0;
 						
-						var len = response.length;
-						for(var i=0; i<len; i++){
-							
-							var billing_id = response[i].billing_id;
-							var billing_date = response[i].billing_date;
-							var control_number = response[i].control_number;
-							var receivable_description = response[i].receivable_description;
-							var receivable_amount = response[i].receivable_amount;
-							var receivable_remaining_balance = response[i].receivable_remaining_balance;
-							
-							//_current_balance += order_quantity;
-							
-							 receivable_current_balance += 0 + response[i].receivable_remaining_balance;
-							
-							
-							
-						//	total_due += response[i].order_total_amount;
-							
-							var tr_str = "<tr>" +
-								"<td align='center'>" + (i+1) + "</td>" +
-								"<td align='left'>" + billing_date + "</td>" +
-								"<td align='left'>" + control_number + "</td>" +
-								"<td align='left'>" + receivable_description +"</td>" +
-								"<td align='right'>" + receivable_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"<td align='right'>" + receivable_remaining_balance.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"<td align='right'>" + receivable_current_balance.toLocaleString("en-PH", {minimumFractionDigits: 2}) + "</td>" +
-								"</tr>";
-							
-							/*Attached the Data on the Table Body*/
-							$("#billingstatementreport tbody").append(tr_str);
-							
-						}			
-						
+							LoadSOASummaryData.clear().draw();
+							LoadSOASummaryData.rows.add(response.data).draw();	
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -91,7 +58,7 @@
 							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
-								$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf()"> PDF</button>'+
 							'</div>');
 							
@@ -100,7 +67,6 @@
 							$('#CreateReportModal').modal('toggle');
 							/*No Result Found*/
 							$('#total_due').text('');
-							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 							$("#download_options").html(''); 
 				
 					}
@@ -125,16 +91,16 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
-				  document.getElementById('client_idxError').className = "invalid-feedback";
+					$('#client_idxError').text(error.responseJSON.errors.client_idx);
+					document.getElementById('client_idxError').className = "invalid-feedback";
 				  			  
-				  $('#start_dateError').text(error.responseJSON.errors.start_date);
-				  document.getElementById('start_dateError').className = "invalid-feedback";		
+					$('#start_dateError').text(error.responseJSON.errors.start_date);
+					document.getElementById('start_dateError').className = "invalid-feedback";		
 
-				  $('#end_dateError').text(error.responseJSON.errors.end_date);
-				  document.getElementById('end_dateError').className = "invalid-feedback";		
+					$('#end_dateError').text(error.responseJSON.errors.end_date);
+					document.getElementById('end_dateError').className = "invalid-feedback";		
 				
-				$('#InvalidModal').modal('toggle');				  	  
+					$('#InvalidModal').modal('toggle');				  	  
 				  
 				}
 			   });
@@ -142,6 +108,42 @@
 	  });
 
 
+		/*Load to Datatables*/	
+		let LoadSOASummaryData = $('#soasummary').DataTable( {
+				"language": {
+						"emptyTable": "No Result Found",
+						"infoEmpty": "No entries to show"
+			    }, 
+				responsive: false,
+				paging: true,
+				searching: false,
+				info: false,
+				data: [],
+				scrollCollapse: true,
+				scrollY: '500px',
+				scrollx: false,
+				"columns": [
+				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
+				/*1*/	{data: 'billing_date', className: "text-left", orderable: false },
+				/*2*/	{data: 'control_number', className: "text-left", orderable: false },
+				/*3*/	{data: 'receivable_description', className: "text-left", orderable: false },	
+				/*4*/	{data: 'receivable_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*5*/	{data: 'receivable_remaining_balance', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*6*/	{data: 'current_balance', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				],
+				
+		} );
+		
+	autoAdjustColumns(LoadSOASummaryData);
+
+		 /*Adjust Table Column*/
+		 function autoAdjustColumns(table) {
+			 var container = table.table().container();
+			 var resizeObserver = new ResizeObserver(function () {
+				 table.columns.adjust();
+			 });
+			 resizeObserver.observe(container);
+		 }
 
 	function get_client_details(){
 		  
@@ -197,6 +199,4 @@
 		window.open(url);
 	  
 	}
-	    
-
 </script>

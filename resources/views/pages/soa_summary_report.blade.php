@@ -58,16 +58,16 @@
 						</div>
 						
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0" style="font-size:12px !important">
+										<table class="table dataTable display nowrap cell-border"  id="soasummary" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
-													<th style="text-align:left">Transaction Date</th>
-													<th style="text-align:left">Reference No.</th>
-													<th style="text-align:left">Description</th>
-													<th style="text-align:right">Amount</th>
-													<th style="text-align:right">Remaining Balance&nbsp;</th>
-													<th style="text-align:right">Current Balance&nbsp;</th>
+													<th>Transaction Date</th>
+													<th>Reference No.</th>
+													<th>Description</th>
+													<th>Amount</th>
+													<th>Remaining Balance&nbsp;</th>
+													<th>Current Balance&nbsp;</th>
 												</tr>
 											</thead>				
 											

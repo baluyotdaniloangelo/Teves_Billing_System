@@ -61,7 +61,8 @@
 						</div>
 						
 									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0" style="font-size:12px !important">
+										<!--<table class="table table-bordered dataTable" id="billingstatementreport" width="100%" cellspacing="0" style="font-size:12px !important">-->
+										<table class="table dataTable display nowrap cell-border"  id="billingstatementreport" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -72,9 +73,10 @@
 													<th>Description</th>
 													<th>Product</th>
 													<th>Quantity</th>
+													<th>Unit</th>
 													<th>Price</th>
 													<th>Amount</th>
-													<th colspan="2">Action</th>
+													<th>Action</th>
 												</tr>
 											</thead>				
 											
@@ -84,61 +86,61 @@
 											<tfoot>
 											
 											<tr class="" >
-												<td align="left" colspan="6"></td>
-												<td align="left" nowrap>Total Volume (L) (Fuel):</td>
+												<td align="left" colspan="5"></td>
+												<td align="right" colspan="2" nowrap style="text-align: right;">Total Volume (L) (Fuel):</td>
 												<td align="left" nowrap><span id="total_volume" style="font-weight: normal;"></span></td>
+												<td align="left" nowrap><span id="" style="font-weight: normal;">L</span></td>
 												<td align="left" nowrap><b>Total Sales:</b></td>
-												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="total_due" style="font-weight: normal;"></span></td>
-											</tr>
-											
-											<tr class="" >
-												<td align="left" colspan="6"></td>
-												<td align="left" colspan="1" nowrap>Discount Per liter (Fuel):</td>
-												<td align="left" nowrap><span id="report_less_per_liter" style="font-weight: normal;"></span></td>
-												<td align="left" colspan="1" nowrap>VATable Sales</td>
-												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vatable_sales" style="font-weight: normal;"></span></td>
+												<td align="left" nowrap nowrap colspan="1"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span>  <span id="total_due" style="font-weight: normal;"></span></td>
+												<td align="left" ></td>
 												
 											</tr>
 											
 											<tr class="" >
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="5"></td>
+												<td align="right" colspan="2" nowrap style="text-align: right;">Discount Per liter (Fuel):</td>
+												<td align="left" nowrap><span id="report_less_per_liter" style="font-weight: normal;"></span></td>
+												<td align="left" nowrap><span id="" style="font-weight: normal;">L</span></td>
+												<td align="left" colspan="1" nowrap>VATable Sales</td>
+												<td align="left" nowrap nowrap colspan="1"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vatable_sales" style="font-weight: normal;"></span></td>
+												<td align="left" ></td>
+											</tr>
+											
+											<tr class="" >
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"><b></b></td>
 												<td align="left" ></td>
 												<td align="left" nowrap colspan="1">VAT Amount</td>
-												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vat_amount" style="font-weight: normal;"></span></td>
-												
+												<td align="left" nowrap nowrap colspan="1"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="vat_amount" style="font-weight: normal;"></span></td>
+												<td align="left" ></td>
 											</tr>
 											
 											<tr class="" >
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"><b></b></td>
 												<td align="left" ></td>
 												<td align="left" nowrap colspan="1">Less: Discount </td>
-												<td align="left" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_liters_discount" style="font-weight: normal;"></span></td>
-												
+												<td align="left" nowrap nowrap colspan="1"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_liters_discount" style="font-weight: normal;"></span></td>
+												<td align="left" ></td>
 											</tr>
 											
-											<tr class="" >
-												<td align="left" colspan="6"></td>
+											<tr class="">
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"><b></b></td>
 												<td align="left" ></td>
 												<td align="left" nowrap colspan="1">Less: With Holding Tax </td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="with_holding_tax" style="font-weight: normal;"></span></td>
-												
+												<td align="left" nowrap colspan="1"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="with_holding_tax" style="font-weight: normal;"></span></td>
+												<td align="left" ></td>
 											</tr>
 											
 											<tr class="" >
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												
 												<td align="left" nowrap colspan="1"><b>TOTAL AMOUNT DUE:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_payable" style="font-weight: normal;"></span></td>
-											</tr>
-											
-											<tr class="" >
-												<td align="left" colspan="10"></td>
-	
+												<td align="left" nowrap colspan="1"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_payable" style="font-weight: normal;"></span></td>
+												<td align="left" ></td>
 											</tr>
 											
 											</tfoot>
