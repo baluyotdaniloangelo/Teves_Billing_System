@@ -140,7 +140,7 @@
 							  <button class="nav-link" id="ph7-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph7" type="button" role="tab" aria-controls="ph7" aria-selected="false" tabindex="-1">Inventory</button>
 							</li>
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph7-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph7" type="button" role="tab" aria-controls="ph7" aria-selected="false" tabindex="-1">Dipstick Inventory</button>
+							  <button class="nav-link" id="ph8-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph8" type="button" role="tab" aria-controls="ph8" aria-selected="false" tabindex="-1">Dipstick Inventory</button>
 							</li>
 							<!--<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph6-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph6" type="button" role="tab" aria-controls="ph6" aria-selected="false" tabindex="-1" onclick="LoadCashiersReportPH6()">Summary</button>
@@ -173,7 +173,7 @@
 							<div class="tab-pane fade" id="bordered-ph7" role="tabpanel" aria-labelledby="ph7-tab">						
 							@include('pages.cashiers_report_form_p7')
 							</div>
-							<div class="tab-pane fade" id="bordered-ph7" role="tabpanel" aria-labelledby="ph8-tab">						
+							<div class="tab-pane fade" id="bordered-ph8" role="tabpanel" aria-labelledby="ph8-tab">						
 							@include('pages.cashiers_report_form_p8')
 							</div>
 							

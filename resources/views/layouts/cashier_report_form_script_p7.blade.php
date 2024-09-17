@@ -421,6 +421,7 @@
 						
 							var product_name = response[i].product_name;
 							var tank_name = response[i].tank_name;		
+							var tank_capacity = response[i].tank_capacity;		
 							
 							var beginning_inventory = response[i].beginning_inventory.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var sales_in_liters = response[i].sales_in_liters.toLocaleString("en-PH", {maximumFractionDigits: 2});
@@ -432,6 +433,7 @@
 							$('#table_product_inventory_body_data tr:last').after("<tr>"+
 							"<td class='product_td' align='left'>"+product_name+"</td>"+
 							"<td class='beginning_reading_inventory_td' align='left'>"+tank_name+"</td>"+
+							"<td class='beginning_reading_dipstick_inventory_td' align='right'>"+tank_capacity+"</td>"+
 							"<td class='sales_in_liters_inventory_td' align='right'>"+beginning_inventory+"</td>"+
 							"<td class='delivery_inventory_td' align='right'>"+sales_in_liters+"</td>"+
 							"<td class='delivery_inventory_td' align='right'>"+delivery+"</td>"+
