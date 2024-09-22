@@ -2,40 +2,32 @@
 	
 	function inventory_tank(){
 		
-			var beginning_inventory 			= $("input[name=beginning_inventory]").val();
-			var sales_in_liters_inventory 		= $("input[name=sales_in_liters_inventory]").val();
-			var delivery_inventory 				= $("input[name=delivery_inventory]").val();
-			var ending_inventory 				= $("input[name=ending_inventory]").val();
+			var beginning_inventory 			= $("input[name=beginning_inventory]").val() || 0;
+			var sales_in_liters_inventory 		= $("input[name=sales_in_liters_inventory]").val() || 0;
+			var delivery_inventory 				= $("input[name=delivery_inventory]").val() || 0;
+			var ending_inventory 				= $("input[name=ending_inventory]").val() || 0;
 		
-		if(beginning_inventory!=0 || beginning_inventory!=''){
-			
-				var TotalBookStock = beginning_inventory - sales_in_liters_inventory;
-				var TotalVariance = TotalBookStock - ending_inventory;
+				var TotalBookStock = parseFloat(beginning_inventory) - parseFloat(sales_in_liters_inventory);
+				var TotalVariance = parseFloat(TotalBookStock) - parseFloat(ending_inventory);
 				
 				$('#TotalBookStock').html(TotalBookStock.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 				$('#TotalVariance').html(TotalVariance.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 			
-		}
-		
 	}		
 
 	function update_inventory_tank(){
 		
-			var beginning_inventory 			= $("input[name=update_beginning_inventory]").val();
-			var sales_in_liters_inventory 		= $("input[name=update_sales_in_liters_inventory]").val();
-			var delivery_inventory 				= $("input[name=update_delivery_inventory]").val();
-			var ending_inventory 				= $("input[name=update_ending_inventory]").val();
-		
-		if(beginning_inventory!=0 || beginning_inventory!=''){
+			var beginning_inventory 			= $("input[name=update_beginning_inventory]").val() || 0;
+			var sales_in_liters_inventory 		= $("input[name=update_sales_in_liters_inventory]").val() || 0;
+			var delivery_inventory 				= $("input[name=update_delivery_inventory]").val() || 0;
+			var ending_inventory 				= $("input[name=update_ending_inventory]").val() || 0;
 			
-				var TotalBookStock = beginning_inventory - sales_in_liters_inventory;
-				var TotalVariance = TotalBookStock - ending_inventory;
+				var TotalBookStock = parseFloat(beginning_inventory) - parseFloat(sales_in_liters_inventory);
+				var TotalVariance = parseFloat(TotalBookStock) - parseFloat(ending_inventory);
 				
 				$('#update_TotalBookStock').html(TotalBookStock.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 				$('#update_TotalVariance').html(TotalVariance.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 			
-		}
-		
 	}
 
 	LoadProductListForInventory();
@@ -81,10 +73,15 @@
 	
 
 	
-	function LoadProductTank() {		
+	function LoadProductTank(inventory_mode) {		
 	
 		let branch_idx 			= $("#teves_branch").val();
-		var product_id 			= $('#product_list_inventory option[value="' + $('#product_idx_inventory').val() + '"]').attr('data-id');
+		
+		if(inventory_mode=='dipstick'){
+			var product_id 			= $('#product_list_inventory option[value="' + $('#product_idx_dipstick_inventory').val() + '"]').attr('data-id');
+		}else{
+			var product_id 			= $('#product_list_inventory option[value="' + $('#product_idx_inventory').val() + '"]').attr('data-id');
+		}
 		
 		$("#product_tank_list span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_tank_list');
@@ -123,10 +120,16 @@
 	}
 	
 	
-		function LoadProductTank_Update() {		
+		function LoadProductTank_Update(inventory_mode) {		
 	
 		let branch_idx 			= $("#teves_branch").val();
-		var product_id 			= $('#product_list_inventory option[value="' + $('#update_product_idx_inventory').val() + '"]').attr('data-id');
+		
+		if(inventory_mode=='dipstick'){
+			var product_id 			= $('#product_list_inventory option[value="' + $('#update_product_idx_dipstick_inventory').val() + '"]').attr('data-id');
+		}else{
+			var product_id 			= $('#product_list_inventory option[value="' + $('#update_product_idx_inventory').val() + '"]').attr('data-id');
+			//alert(product_id);
+		}
 		
 		$("#update_product_tank_list span").remove();
 		$('<span style="display: none;"></span>').appendTo('#update_product_tank_list');
@@ -143,7 +146,7 @@
 				  console.log(response);
 				  if(response!='') {			
 				  
-						document.getElementById("update_product_tank_idx_inventory").value 	= '';
+						//document.getElementById("update_product_tank_idx_inventory").value 	= '';
 						
 						var len = response.length;
 						for(var i=0; i<len; i++){
@@ -272,16 +275,17 @@
 				  console.log(response);
 				  
 				  if(response) {				
-				
+					
 					document.getElementById("update-CRPH6").value = CHPH6_ID;				
 					/*Set Details*/					
 					
-					document.getElementById("update_product_idx_inventory").value 		= response[0].product_name;
-					document.getElementById("update_product_tank_idx_inventory").value 	= response[0].tank_name;
 					
+					
+					document.getElementById("update_product_idx_inventory").value 		= response[0].product_name;
+					LoadProductTank_Update();
+					document.getElementById("update_product_tank_idx_inventory").value 	= response[0].tank_name;
 					document.getElementById("update_beginning_inventory").value 		= response[0].beginning_inventory;
 					document.getElementById("update_sales_in_liters_inventory").value 	= response[0].sales_in_liters;
-					
 					document.getElementById("update_delivery_inventory").value 			= response[0].delivery;
 					document.getElementById("update_ending_inventory").value 			= response[0].ending_inventory;
 					
@@ -290,6 +294,7 @@
 				
 					$('#update_TotalBookStock').html(TotalBookStock.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					$('#update_TotalVariance').html(TotalVariance.toLocaleString("en-PH", {minimumFractionDigits: 2}));
+					
 					
 					
 					$('#Update_CRPH6_Modal').modal('toggle');	

@@ -603,9 +603,8 @@
 					$('#client_name_receivables').text(response.client_name);
 					$('#client_address_receivables').text(response.client_address);
 					$('#client_tin_receivables').text(response.client_tin);
-					
 
-					
+					document.getElementById("less_per_liter").value = response.default_less_percentage;
 					document.getElementById("net_value_percentage").value = response.default_net_percentage;
 					document.getElementById("vat_value_percentage").value = response.default_vat_percentage;
 					document.getElementById("withholding_tax_percentage").value = response.default_withholding_tax_percentage;					

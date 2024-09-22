@@ -317,7 +317,7 @@
 						<div class="row mb-2">
 						  <label for="less_per_liter" class="col-sm-4 col-form-label" title="Applicable to All Product with Liter as unit of measurement">Discount Per Liter</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="">
+							<input type="text" class="form-control " name="less_per_liter" id="less_per_liter" value="" disabled>
 							<span class="valid-feedback" id="less_per_literError"></span>
 						  </div>
 						</div>

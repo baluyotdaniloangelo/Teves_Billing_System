@@ -123,8 +123,8 @@
 								<hr>
 								<div class="row">
 										<div class="col-md-12">
-											<label for="sales_order_less_percentage" class="form-label">Less Value</label>
-											<input type="number" class="form-control" id="sales_order_less_percentage" name="sales_order_less_percentage" disabled>
+											<label for="sales_order_withholding_tax" class="form-label">Withholding Tax</label>
+											<input type="number" class="form-control" id="sales_order_withholding_tax" name="sales_order_withholding_tax" disabled>
 										</div>
 								</div>
 								<hr>

@@ -435,7 +435,7 @@ Route::post('/delete_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Con
 Route::post('/cashiers_report_p7_info', [CashiersReport_Dipstick_Inventory_Controller::class, 'cashiers_report_p7_info'])->name('CRP7_info')->middleware('isLoggedIn');
 
 /*Load Cashiers Report VIA PDF */
-Route::get('/generate_cashier_report_pdf', [CashiersReport::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
+//Route::get('/generate_cashier_report_pdf', [CashiersReport::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
 
 
 /*Dev Date Nov 30 2022*/
