@@ -8,7 +8,8 @@
 			<thead>
 					<tr class='report'>
 						<th style="text-align:center !important;">Product</th>
-						<th style="text-align:center !important;">Tank</th>
+						<th style="text-align:center !important;">Tank Name</th>
+						<th style="text-align:center !important;">Tank Capacity</th>
 						<th style="text-align:center !important;">Beginning Inventory</th>
 						<th style="text-align:center !important;">Sales in Liters</th>
 						<th style="text-align:center !important;">Delivery</th>

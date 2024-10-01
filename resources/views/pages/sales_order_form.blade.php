@@ -106,9 +106,9 @@
 												</div>
 												<div class="row mb-2">
 									  
-														<label for="sales_order_less_percentage" class="col-sm-3 col-form-label">Less Value</label>
+														<label for="sales_order_withholding_tax" class="col-sm-3 col-form-label">Withholding Tax</label>
 														<div class="col-sm-9">			  
-															<input type="number" class="form-control" id="sales_order_less_percentage" name="sales_order_less_percentage" value="{{ $sales_order_data[0]['sales_order_less_percentage'] }}" disabled>
+															<input type="number" class="form-control" id="sales_order_withholding_tax" name="sales_order_withholding_tax" value="{{ $sales_order_data[0]['sales_order_withholding_tax'] }}" disabled>
 														</div>
 												
 												</div>

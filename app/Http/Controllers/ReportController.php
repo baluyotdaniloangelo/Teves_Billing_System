@@ -1183,7 +1183,7 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_instructions',
 					'teves_sales_order_table.sales_order_note',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.company_header'
 				]);
 			
@@ -1269,7 +1269,7 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_instructions',
 					'teves_sales_order_table.sales_order_note',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.company_header'
 				]);
 			

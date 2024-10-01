@@ -32,7 +32,7 @@
 				{data: 'client_name'},   
 				{data: 'sales_order_payment_term'},   
 				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
-				{data: ({sales_order_net_amount,sales_order_less_percentage}) => (Number(sales_order_net_amount)*Number(sales_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				{data: ({sales_order_net_amount,sales_order_withholding_tax}) => (Number(sales_order_net_amount)*Number(sales_order_withholding_tax/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
 				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'sales_order_delivery_status'},  
@@ -94,7 +94,7 @@
 					
 					/*Set Details*/
 					
-					document.getElementById("sales_order_less_percentage").value = response.default_withholding_tax_percentage;
+					document.getElementById("sales_order_withholding_tax").value = response.default_withholding_tax_percentage;
 					document.getElementById("sales_order_net_percentage").value = response.default_net_percentage;		
 					document.getElementById("payment_term").value = response.default_payment_terms;		
 				  
@@ -126,7 +126,7 @@
 
 			let payment_term 				= $("input[name=payment_term]").val();
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
-			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
+			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 			
 			  $.ajax({
 				url: "/create_sales_order_post",
@@ -138,7 +138,7 @@
 				  sales_order_date:sales_order_date,
 				  payment_term:payment_term,
 				  sales_order_net_percentage:sales_order_net_percentage,
-				  sales_order_less_percentage:sales_order_less_percentage,
+				  sales_order_withholding_tax:sales_order_withholding_tax,
 				  _token: "{{ csrf_token() }}"
 				},
 			

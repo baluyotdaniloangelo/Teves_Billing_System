@@ -81,7 +81,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_payment_term',	
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
-					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_control_number',			
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
@@ -168,7 +168,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_instructions',
 					'teves_sales_order_table.sales_order_note',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_payment_type']);
 					return response()->json($data);
 		
@@ -215,10 +215,10 @@ class SalesOrderController extends Controller
 			
 			$Salesorder->sales_order_payment_term 			= $request->payment_term;
 			$Salesorder->sales_order_net_percentage 		= $request->sales_order_net_percentage;
-			$Salesorder->sales_order_less_percentage 		= $request->sales_order_less_percentage;
+			$Salesorder->sales_order_withholding_tax 		= $request->sales_order_withholding_tax;
 			
 			$Salesorder->sales_order_payment_type 			= $request->sales_order_payment_type;
-			
+			$Salesorder->created_by_user_id 				= Session::get('loginID');
 			$result = $Salesorder->save();
 			
 			/*Get Last ID*/
@@ -273,13 +273,13 @@ class SalesOrderController extends Controller
 
 			if(Session::get('UserType')=="Admin"){
 			
-				$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
-				$control_number = $BranchInfo->branch_initial."-SO-".($request->sales_order_id+1);
+				/*$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();*/			
+				/*$control_number = $BranchInfo->branch_initial."-SO-".($request->sales_order_id+1);*/
 				
 				$Salesorder = new SalesOrderModel();
 				$Salesorder = SalesOrderModel::find($request->sales_order_id);
 				$Salesorder->sales_order_client_idx 				= $request->client_idx;
-				$Salesorder->sales_order_control_number 			= $control_number;
+				/*$Salesorder->sales_order_control_number 			= $control_number;*/
 				$Salesorder->company_header 						= $request->company_header;
 				$Salesorder->sales_order_date 						= $request->sales_order_date;
 				$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
@@ -299,10 +299,10 @@ class SalesOrderController extends Controller
 				$Salesorder->sales_order_note 						= $request->note;
 				
 				$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
-				$Salesorder->sales_order_less_percentage 			= $request->sales_order_less_percentage;
+				$Salesorder->sales_order_withholding_tax 			= $request->sales_order_withholding_tax;
 				
 				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
-				
+				$Salesorder->updated_by_user_id 					= Session::get('loginID');
 				$result = $Salesorder->update();
 				
 				/*Get Last ID*/
@@ -313,8 +313,8 @@ class SalesOrderController extends Controller
 						
 				$gross_amount = $order_total_amount;
 				
-				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $request->sales_order_less_percentage/100;
+				$net_in_percentage 									= $request->sales_order_net_percentage;/*1.12*/
+				$less_in_percentage 								= $request->sales_order_withholding_tax/100;
 							
 				if($request->sales_order_net_percentage==0){
 							$sales_order_net_amount 		= 0;
@@ -326,9 +326,10 @@ class SalesOrderController extends Controller
 				
 				$SalesOrderUpdate = new SalesOrderModel();
 				$SalesOrderUpdate = SalesOrderModel::find($last_transaction_id);
-				$SalesOrderUpdate->sales_order_gross_amount = number_format($gross_amount,2,".","");
-				$SalesOrderUpdate->sales_order_net_amount = $sales_order_net_amount;
-				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
+				$SalesOrderUpdate->sales_order_gross_amount 			= number_format($gross_amount,2,".","");
+				$SalesOrderUpdate->sales_order_net_amount 				= $sales_order_net_amount;
+				$SalesOrderUpdate->sales_order_total_due 				= $sales_order_total_due;
+				$SalesOrderUpdate->updated_by_user_id 					= Session::get('loginID');
 				$SalesOrderUpdate->update();
 				
 				/*Update Control Number on Receivable*/
@@ -340,25 +341,25 @@ class SalesOrderController extends Controller
 				$receivable_id = $receivable_data[0]->receivable_id;
 							
 				/*Recievable Control Number*/			
-				$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_id;	
+				/*$receivable_control_number = $BranchInfo->branch_initial."-AR-".$receivable_id;	*/
 				
 				
-				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
+				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_withholding_tax/100;
 				
 				$Receivables = new ReceivablesModel();
 				$Receivables = ReceivablesModel::find($receivable_id);
-				$Receivables->control_number 				= $receivable_control_number;
+				/*$Receivables->control_number 				= $receivable_control_number;*/
 				$Receivables->company_header 				= $request->company_header;
 				
 				$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
 				$Receivables->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
 				$Receivables->receivable_amount 			= number_format($sales_order_total_due,2, '.', '');
 				$Receivables->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
-				
+				$Receivables->updated_by_user_id 			= Session::get('loginID');
 				$Receivables->update();
 				
 				if($result){
-					return response()->json(array('success' => "Sales Order Successfully Updated!",'sales_order_control_number'=>$control_number), 200);
+					return response()->json(array('success' => "Sales Order Successfully Updated!"), 200);
 				}
 				else{
 					return response()->json(['success'=>'Error on Update Sales Order Information']);
@@ -503,7 +504,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_reference_no',
 					'teves_sales_order_table.sales_order_payment_amount',
 					'teves_sales_order_table.sales_order_net_percentage',
-					'teves_sales_order_table.sales_order_less_percentage',
+					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_payment_type']);
 				
 				if($receivables_details==NULL){
@@ -647,7 +648,7 @@ class SalesOrderController extends Controller
 						$gross_amount = $order_total_amount;
 						
 						$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
-						$less_in_percentage 			= $request->sales_order_less_percentage/100;
+						$less_in_percentage 			= $request->sales_order_withholding_tax/100;
 									
 						if($request->sales_order_net_percentage==0){
 									$sales_order_net_amount 		= 0;
@@ -669,7 +670,7 @@ class SalesOrderController extends Controller
 						$Receivables_ACTION = new ReceivablesModel();
 						$Receivables_ACTION = ReceivablesModel::find($request->receivable_id);
 						
-						$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
+						$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_withholding_tax/100;
 						
 						$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
 						$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
@@ -703,7 +704,7 @@ class SalesOrderController extends Controller
 				$gross_amount = $order_total_amount;
 				
 				$net_in_percentage 				= $request->sales_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $request->sales_order_less_percentage/100;
+				$less_in_percentage 			= $request->sales_order_withholding_tax/100;
 							
 				if($request->sales_order_net_percentage==0){
 							$sales_order_net_amount 		= 0;
@@ -721,7 +722,7 @@ class SalesOrderController extends Controller
 				$SalesOrderUpdate->sales_order_total_due = $sales_order_total_due;
 				$SalesOrderUpdate->update();
 				
-				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_less_percentage/100;
+				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_withholding_tax/100;
 				
 				/*Update Receivable Amount*/
 				$Receivables_ACTION = new ReceivablesModel();
