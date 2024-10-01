@@ -15,6 +15,11 @@ class UserAuthController extends Controller
         return view("auth.login");
     }
 
+	public function passwordreset(){
+		$title = 'Reset Password';
+        return view("auth.reset", compact('title'));
+    }
+	
     public function loginUser(Request $request){ 
 		
 		$request->validate([

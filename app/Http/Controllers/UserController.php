@@ -354,7 +354,7 @@ class UserController extends Controller
 						/*Call Email Function*/
 						if($request->user_email_address!=''){
 				
-							$title 			= 'Centralized Automated Meter Reading: Password Reset';
+							$title 			= 'Teves Billing System Portal: Password Reset';
 							$body 			= 'Your password has been changed successfully. Please use below password to log in.';
 							$name 			= $request->user_real_name;
 							$user_id 		= $request->userID;

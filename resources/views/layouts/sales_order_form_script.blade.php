@@ -44,7 +44,7 @@
 			let instructions 				= $("#instructions").val();
 			let note 						= $("#note").val();
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
-			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
+			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 			
 			  $.ajax({
 				url: "/update_sales_order_post",
@@ -71,7 +71,7 @@
 				  instructions:instructions,
 				  note:note,
 				  sales_order_net_percentage:sales_order_net_percentage,
-				  sales_order_less_percentage:sales_order_less_percentage,
+				  sales_order_withholding_tax:sales_order_withholding_tax,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -237,7 +237,7 @@
 			let receivable_id 			= {{ @$receivables_details['receivable_id'] }};
 			
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
-			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
+			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 			
 			  $.ajax({
 				url: "{{ route('SalesOrderComponentCompose') }}",
@@ -252,7 +252,7 @@
 				  product_manual_price:product_manual_price,
 				  order_quantity:order_quantity,
 				  sales_order_net_percentage:sales_order_net_percentage,
-				  sales_order_less_percentage:sales_order_less_percentage,
+				  sales_order_withholding_tax:sales_order_withholding_tax,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -515,7 +515,7 @@
 			let product_name 				= $("input[name=edit_product_name]").val();
 			
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
-			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
+			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 
 			  $.ajax({
 				url: "{{ route('SalesOrderComponentCompose') }}",
@@ -530,7 +530,7 @@
 				  product_manual_price:product_manual_price,
 				  order_quantity:order_quantity,
 				  sales_order_net_percentage:sales_order_net_percentage,
-				  sales_order_less_percentage:sales_order_less_percentage,
+				  sales_order_withholding_tax:sales_order_withholding_tax,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -676,7 +676,7 @@
 					
 					/*Set Details*/
 					
-					document.getElementById("sales_order_less_percentage").value = response.default_withholding_tax_percentage;
+					document.getElementById("sales_order_withholding_tax").value = response.default_withholding_tax_percentage;
 					document.getElementById("sales_order_net_percentage").value = response.default_net_percentage;		
 					document.getElementById("payment_term").value = response.default_payment_terms;		
 				  
@@ -734,7 +734,7 @@
 			
 			let sales_order_component_id 	= document.getElementById("deleteSalesOrderComponentConfirmed").value;
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
-			let sales_order_less_percentage = $("input[name=sales_order_less_percentage]").val();
+			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 			
 			  $.ajax({
 				url: "{{ route('SalesOrderDeleteComponent') }}",
@@ -744,7 +744,7 @@
 					receivable_id:receivable_id,
 					sales_order_component_id:sales_order_component_id,
 					sales_order_net_percentage:sales_order_net_percentage,
-					sales_order_less_percentage:sales_order_less_percentage,
+					sales_order_withholding_tax:sales_order_withholding_tax,
 					_token: "{{ csrf_token() }}"
 				},
 				success:function(response){

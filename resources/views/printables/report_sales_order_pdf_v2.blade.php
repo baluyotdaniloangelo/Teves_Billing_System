@@ -185,27 +185,29 @@
 			@endforeach
 
 		<tr style="font-size:12px;">
-			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Gross Amount </td>
+			<td colspan="6"></td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Gross Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_gross_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:12px;">
-			
-			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Net Amount </td>
+			<td colspan="6"></td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Net Amount </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_net_amount'],2);?>
 		</tr>
 		
 		<tr style="font-size:12px;">
-			
-			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less 1% </td>
+			<td colspan="6"></td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Withholding Tax (<?=$sales_order_data[0]['sales_order_withholding_tax'];?>%) </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_net_amount']*$sales_order_data[0]['sales_order_withholding_tax']/100,2);?>
 		</tr>		
 
 		<tr style="font-size:12px;">			
-			<td colspan="8" align="right" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Due </td>
+			<td colspan="6"></td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Due </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($sales_order_data[0]['sales_order_total_due'],2);?>
 		</tr>		

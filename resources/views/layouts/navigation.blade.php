@@ -233,8 +233,8 @@
 						
                     <div class="modal-footer modal-footer_form">
 						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill navbar_icon form_button_icon" id="account-user"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill navbar_icon  form_button_icon" id="clear-user-account"> Clear Form</button>
+						  <button type="submit" class="btn btn-success bi bi-save-fill navbar_icon form_button_icon" id="account-user"> Submit</button>
+						  <button type="reset" class="btn btn-primary bi bi-backspace-fill navbar_icon  form_button_icon" id="clear-user-account"> Clear Form</button>
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->

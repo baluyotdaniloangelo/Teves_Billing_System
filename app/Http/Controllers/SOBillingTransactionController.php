@@ -338,21 +338,23 @@ class SOBillingTransactionController extends Controller
 					$SOBilling->plate_no 			= $request->plate_no;
 					$SOBilling->drivers_name 		= $request->drivers_name;
 					$SOBilling->updated_by_user_id 	= Session::get('loginID');
-					
+					$result = $SOBilling->update();	
+
 						/*Update Product*/
 						$billing_update = BillingTransactionModel::where('so_idx', $request->so_id)
 						->update(
-							['branch_idx'			=> $request->branch_id],
-							['order_date' 			=> $request->order_date],
-							['order_time' 			=> $request->order_time],
-							['so_number' 			=> $request->so_number],
-							['client_idx' 			=> $request->client_idx],
-							['plate_no' 			=> $request->plate_no],
-							['drivers_name' 		=> $request->drivers_name],
-							['updated_by_user_idx' 	=> Session::get('loginID')]
+							['branch_idx'			=> $request->branch_id,
+							'order_date' 			=> $request->order_date,
+							'order_time' 			=> $request->order_time,
+							'order_po_number' 		=> $request->so_number,
+							'client_idx' 			=> $request->client_idx,
+							'plate_no' 			=> $request->plate_no,
+							'drivers_name' 		=> $request->drivers_name,
+							'updated_by_user_idx' 	=> Session::get('loginID')]
 						);
+					//$billing_update->update();
 					
-					$result = $SOBilling->update();		
+						
 			
 					if($result){
 						return response()->json(array('success' => "SO Information Successfully Updated!", 'so_id' => $request->so_id), 200);
@@ -480,7 +482,7 @@ class SOBillingTransactionController extends Controller
 					$Billing->order_quantity 		= $request->order_quantity;
 					$Billing->order_total_amount 	= $order_total_amount;
 					
-					$result = $Billing->save();
+					$result = $Billing->update();
 			
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Updated!"), 200);

@@ -21,6 +21,8 @@ use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
 use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
+use App\Http\Controllers\EmailController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +43,11 @@ Route::get('/',[UserAuthController::class,'login'])->middleware('alreadyLoggedIn
 Route::post('login-user', [UserAuthController::class,'loginUser'])->name('login-user');
 /*Logout*/
 Route::get('logout', [UserAuthController::class,'logout']);
+
+/*Reset Password - Unable to Login*/
+Route::get('/passwordreset',[UserAuthController::class,'passwordreset'])->name('passwordreset');
+Route::post('/reset-password', [EmailController::class, 'sendTemporaryPasswordtoEmail'])->name('sendTemporaryPasswordtoEmail');
+
 
 /*Load Billing Transaction*/
 Route::get('/billing', [BillingTransactionController::class,'billing'])->name('billing')->middleware('isLoggedIn');
@@ -450,6 +457,7 @@ Route::post('/branch_info', [BranchController::class, 'branch_info'])->name('Bra
 Route::post('/update_branch_post', [BranchController::class,'update_branch_post'])->name('UpdateBranch')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_branch_confirmed', [BranchController::class, 'delete_branch_confirmed'])->name('DeleteBranch')->middleware('isLoggedIn');
+
 
 
 /* Sales Summary */
