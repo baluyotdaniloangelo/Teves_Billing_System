@@ -16,7 +16,7 @@
                   <div class="pt-4 pb-0">
 				  
 				  <div class="d-flex justify-content-center py-4">
-					<img src="{{asset('client_logo/logo-r.png')}}" alt="" style="width:120px;">
+					<img src="{{asset('client_logo/logo-2.png')}}" alt="" style="width:120px;">
 				  </div>
                   
 				  <h5 class="card-title text-center pb-0 fs-6" style="font-weight:bold !important; padding:0px !important; color: #00000;">Teves Billing System Portal:Reset Password</h5>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CashiersReportModel;
-use App\Models\CashiersReportModel_p7;
+use App\Models\CashiersReportModel_p6;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
 use Session;
@@ -17,7 +17,7 @@ use Illuminate\Validation\Rule;
 class CashiersReport_Dipstick_Inventory_Controller extends Controller
 {
 	
-	public function save_product_cashiers_report_p7(Request $request){	
+	public function save_product_cashiers_report_p6(Request $request){	
 
 		$request->validate([
 			'product_idx'  					=> 'required',
@@ -58,22 +58,22 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 								
 								if($CRPH7_ID=='' || $CRPH7_ID ==0){	
 								
-									$CashiersReportModel_p7 = new CashiersReportModel_p7();
+									$CashiersReportModel_p6 = new CashiersReportModel_p6();
 									
-									$CashiersReportModel_p7->user_idx 					= Session::get('loginID');
-									$CashiersReportModel_p7->cashiers_report_idx 		= $CashiersReportId;
-									$CashiersReportModel_p7->product_idx 				= $product_idx;
-									$CashiersReportModel_p7->tank_idx	 				= $tank_idx;
-									$CashiersReportModel_p7->beginning_inventory 		= $beginning_inventory;
-									$CashiersReportModel_p7->sales_in_liters 			= $sales_in_liters_inventory;
-									$CashiersReportModel_p7->ugt_pumping	 			= $ugt_pumping_inventory;
-									$CashiersReportModel_p7->delivery 					= $delivery_inventory;
-									$CashiersReportModel_p7->ending_inventory 			= $ending_inventory;
-									$CashiersReportModel_p7->book_stock 				= $book_stock;
-									$CashiersReportModel_p7->variance 					= $variance;
-									$CashiersReportModel_p7->created_by_user_id 		= Session::get('loginID');
+									$CashiersReportModel_p6->user_idx 					= Session::get('loginID');
+									$CashiersReportModel_p6->cashiers_report_idx 		= $CashiersReportId;
+									$CashiersReportModel_p6->product_idx 				= $product_idx;
+									$CashiersReportModel_p6->tank_idx	 				= $tank_idx;
+									$CashiersReportModel_p6->beginning_inventory 		= $beginning_inventory;
+									$CashiersReportModel_p6->sales_in_liters 			= $sales_in_liters_inventory;
+									$CashiersReportModel_p6->ugt_pumping	 			= $ugt_pumping_inventory;
+									$CashiersReportModel_p6->delivery 					= $delivery_inventory;
+									$CashiersReportModel_p6->ending_inventory 			= $ending_inventory;
+									$CashiersReportModel_p6->book_stock 				= $book_stock;
+									$CashiersReportModel_p6->variance 					= $variance;
+									$CashiersReportModel_p6->created_by_user_id 		= Session::get('loginID');
 						
-									$result = $CashiersReportModel_p7->save();
+									$result = $CashiersReportModel_p6->save();
 									
 									if($result){
 										return response()->json(['success'=>'Product Inventory Successfully Created!']);
@@ -84,21 +84,21 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 									
 								}else{
 																	
-									$CashiersReportModel_p7 = new CashiersReportModel_p7();
-									$CashiersReportModel_p7 = CashiersReportModel_p7::find($CRPH7_ID);
+									$CashiersReportModel_p6 = new CashiersReportModel_p6();
+									$CashiersReportModel_p6 = CashiersReportModel_p6::find($CRPH7_ID);
 									
-									$CashiersReportModel_p7->cashiers_report_idx 		= $CashiersReportId;
-									$CashiersReportModel_p7->product_idx 				= $product_idx;
-									$CashiersReportModel_p7->tank_idx	 				= $tank_idx;
-									$CashiersReportModel_p7->beginning_inventory 		= $beginning_inventory;
-									$CashiersReportModel_p7->sales_in_liters 			= $sales_in_liters_inventory;
-									$CashiersReportModel_p7->ugt_pumping	 			= $ugt_pumping_inventory;
-									$CashiersReportModel_p7->delivery 					= $delivery_inventory;
-									$CashiersReportModel_p7->ending_inventory 			= $ending_inventory;
-									$CashiersReportModel_p7->book_stock 				= $book_stock;
-									$CashiersReportModel_p7->variance 					= $variance;
-									$CashiersReportModel_p7->updated_by_user_id 		= Session::get('loginID');
-									$result = $CashiersReportModel_p7->update();
+									$CashiersReportModel_p6->cashiers_report_idx 		= $CashiersReportId;
+									$CashiersReportModel_p6->product_idx 				= $product_idx;
+									$CashiersReportModel_p6->tank_idx	 				= $tank_idx;
+									$CashiersReportModel_p6->beginning_inventory 		= $beginning_inventory;
+									$CashiersReportModel_p6->sales_in_liters 			= $sales_in_liters_inventory;
+									$CashiersReportModel_p6->ugt_pumping	 			= $ugt_pumping_inventory;
+									$CashiersReportModel_p6->delivery 					= $delivery_inventory;
+									$CashiersReportModel_p6->ending_inventory 			= $ending_inventory;
+									$CashiersReportModel_p6->book_stock 				= $book_stock;
+									$CashiersReportModel_p6->variance 					= $variance;
+									$CashiersReportModel_p6->updated_by_user_id 		= Session::get('loginID');
+									$result = $CashiersReportModel_p6->update();
 									
 									if($result){
 										return response()->json(['success'=>'Product Inventory Successfully Updated!']);
@@ -114,37 +114,37 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 	/**/
 	public function get_product_dipstick_inventory_list(Request $request){		
 
-			$data =  CashiersReportModel_p7::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p7.tank_idx')
-					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p7.product_idx')
-					->where('teves_cashiers_report_p7.cashiers_report_idx', $request->CashiersReportId)
-					->orderBy('teves_cashiers_report_p7.product_idx', 'asc')
+			$data =  CashiersReportModel_p6::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p6.tank_idx')
+					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p6.product_idx')
+					->where('teves_cashiers_report_p6.cashiers_report_idx', $request->CashiersReportId)
+					->orderBy('teves_cashiers_report_p6.product_idx', 'asc')
 					->get([
 						'teves_product_table.product_id',
 						'teves_product_table.product_name',
 						'teves_product_tank_table.tank_id',
 						'teves_product_tank_table.tank_name',
 						'teves_product_tank_table.tank_capacity',
-						'teves_cashiers_report_p7.cashiers_report_p7_id',
-						'teves_cashiers_report_p7.beginning_inventory',
-						'teves_cashiers_report_p7.sales_in_liters',
-						'teves_cashiers_report_p7.ugt_pumping',
-						'teves_cashiers_report_p7.delivery',
-						'teves_cashiers_report_p7.ending_inventory',
-						'teves_cashiers_report_p7.book_stock',
-						'teves_cashiers_report_p7.variance'
+						'teves_cashiers_report_p6.cashiers_report_p6_id',
+						'teves_cashiers_report_p6.beginning_inventory',
+						'teves_cashiers_report_p6.sales_in_liters',
+						'teves_cashiers_report_p6.ugt_pumping',
+						'teves_cashiers_report_p6.delivery',
+						'teves_cashiers_report_p6.ending_inventory',
+						'teves_cashiers_report_p6.book_stock',
+						'teves_cashiers_report_p6.variance'
 					]);
 		
 			return response()->json($data);			
 	}
 
 	
-	public function cashiers_report_p7_info(Request $request){
+	public function cashiers_report_p6_info(Request $request){
 
 		$CHPH7_ID = $request->CHPH7_ID;
 		
-		$data =  CashiersReportModel_p7::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p7.tank_idx')
-					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p7.product_idx')
-					->where('teves_cashiers_report_p7.cashiers_report_p7_id', $CHPH7_ID)
+		$data =  CashiersReportModel_p6::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p6.tank_idx')
+					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p6.product_idx')
+					->where('teves_cashiers_report_p6.cashiers_report_p6_id', $CHPH7_ID)
 					
 					->get([
 						'teves_product_table.product_id',
@@ -152,24 +152,24 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 						'teves_product_tank_table.tank_id',
 						'teves_product_tank_table.tank_name',
 						'teves_product_tank_table.tank_capacity',
-						'teves_cashiers_report_p7.cashiers_report_p7_id',
-						'teves_cashiers_report_p7.beginning_inventory',
-						'teves_cashiers_report_p7.sales_in_liters',
-						'teves_cashiers_report_p7.ugt_pumping',
-						'teves_cashiers_report_p7.delivery',
-						'teves_cashiers_report_p7.ending_inventory',
-						'teves_cashiers_report_p7.book_stock',
-						'teves_cashiers_report_p7.variance'
+						'teves_cashiers_report_p6.cashiers_report_p6_id',
+						'teves_cashiers_report_p6.beginning_inventory',
+						'teves_cashiers_report_p6.sales_in_liters',
+						'teves_cashiers_report_p6.ugt_pumping',
+						'teves_cashiers_report_p6.delivery',
+						'teves_cashiers_report_p6.ending_inventory',
+						'teves_cashiers_report_p6.book_stock',
+						'teves_cashiers_report_p6.variance'
 					]);
 					
 		return response()->json($data);
 		
 	}
 	
-	public function delete_cashiers_report_p7(Request $request){		
+	public function delete_cashiers_report_p6(Request $request){		
 			
 		$CHPH7_ID = $request->CHPH7_ID;
-		CashiersReportModel_p7::find($CHPH7_ID)->delete();
+		CashiersReportModel_p6::find($CHPH7_ID)->delete();
 		return 'Deleted';
 		
 	}

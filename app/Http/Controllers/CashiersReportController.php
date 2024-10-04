@@ -10,7 +10,7 @@ use App\Models\CashiersReportModel_P3;
 use App\Models\CashiersReportModel_P4;
 use App\Models\CashiersReportModel_P5;
 use App\Models\CashiersReportModel_P6;
-use App\Models\CashiersReportModel_P7;
+//use App\Models\CashiersReportModel_P7;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
 use Session;
@@ -1507,6 +1507,7 @@ class CashiersReportController extends Controller
 						'teves_product_tank_table.tank_capacity',
 						'teves_cashiers_report_p6.cashiers_report_p6_id',
 						'teves_cashiers_report_p6.beginning_inventory',
+						'teves_cashiers_report_p6.ugt_pumping',
 						'teves_cashiers_report_p6.sales_in_liters',
 						'teves_cashiers_report_p6.delivery',
 						'teves_cashiers_report_p6.ending_inventory',
@@ -1514,7 +1515,7 @@ class CashiersReportController extends Controller
 						'teves_cashiers_report_p6.variance'
 					]);
 		
-		
+				/*
 				$data_PH7_inventory =  CashiersReportModel_p7::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p7.tank_idx')
 					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p7.product_idx')
 					->where('teves_cashiers_report_p7.cashiers_report_idx', $request->CashiersReportId)
@@ -1534,10 +1535,10 @@ class CashiersReportController extends Controller
 						'teves_cashiers_report_p7.book_stock',
 						'teves_cashiers_report_p7.variance'
 					]);
-					
+				*/	
 		$branch_header = TevesBranchModel::find($CashiersReportData[0]['teves_branch'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
-        $pdf = PDF::loadView('printables.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header','data_PH6_inventory', 'data_PH7_inventory'));
+        $pdf = PDF::loadView('printables.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header','data_PH6_inventory'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/

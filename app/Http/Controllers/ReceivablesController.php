@@ -539,13 +539,10 @@ class ReceivablesController extends Controller
 		/*Delete Payment*/	
 		ReceivablesPaymentModel::where('receivable_idx', $receivableID)->delete();
 		
-		//'receivable_branch_idx' => $Receivables->company_header]);
-		
 		$billing_update = BillingTransactionModel::where('receivable_idx', '=', $receivableID)
 				->update(
 					[
-					'receivable_idx' => 0,
-					'branch_idx' => 0
+					'receivable_idx' => 0
 					],
 				);
 		
@@ -636,8 +633,7 @@ class ReceivablesController extends Controller
                 ->where('order_date', '<=', $end_date)
 				->where('receivable_idx', '=', 0)
 				->update([
-					'receivable_idx' => $Receivables->receivable_id,
-					'branch_idx' => $Receivables->company_header]);
+					'receivable_idx' => $Receivables->receivable_id]);
 			
 			if($result){
 				return response()->json(array('success' => true, 'receivable_id' => $Receivables->receivable_id), 200);
@@ -745,9 +741,7 @@ class ReceivablesController extends Controller
                 ->where('order_date', '<=', $end_date)
 				->where('receivable_idx', '=', 0)
 				->update([
-					'receivable_idx' => $request->ReceivableID,
-					'branch_idx' => $request->company_header]);
-			
+					'receivable_idx' => $request->ReceivableID]);
 			
 			if(Session::get('UserType')=="Admin"){
 				
@@ -763,14 +757,10 @@ class ReceivablesController extends Controller
 			}else{
 			
 				if($numberDays>=3){
-			
-					// $result = $Receivables->update();
 					return response()->json(['success'=>'You can no longer Edit this Receivable item.']);
 				}
 			
 			}
-				
-			
 	}
 	
 	/*Load Sales Order Form Interface*/
@@ -1014,7 +1004,7 @@ class ReceivablesController extends Controller
 					  }	
 		 }	
 	
-		 public function billing_receivable_delete_payment(Request $request){		
+	public function billing_receivable_delete_payment(Request $request){		
 		  
 			$receivable_payment_id = $request->paymentitemID;
 			$receivable_idx = $request->receivable_idx;
@@ -1067,7 +1057,7 @@ class ReceivablesController extends Controller
 	}
 			   
 
-  public function receivable_payment_list(Request $request){		
+	public function receivable_payment_list(Request $request){		
   
 		  $data =  ReceivablesPaymentModel::where('receivable_idx', $request->receivable_idx)
 			  ->orderBy('receivable_payment_id', 'asc')
@@ -1085,8 +1075,8 @@ class ReceivablesController extends Controller
 		  return response()->json($data);
   }
 	  
-  /*Fetch Payment Information*/
-  public function receivable_payment_info(Request $request){
+	/*Fetch Payment Information*/
+	public function receivable_payment_info(Request $request){
 				  
 				  $data = ReceivablesPaymentModel::where('receivable_payment_id', $request->receivable_payment_id)
 					->get([

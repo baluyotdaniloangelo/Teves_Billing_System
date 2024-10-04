@@ -98,6 +98,7 @@
         </a>
       </li>
 	  
+	  <?php if($data->user_type=="Admin"){ ?>
 	   <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('salesorder') }}" title="Create Sales Order">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
@@ -106,7 +107,7 @@
       </li>
 		
 	  
-		<?php if($data->user_type=="Admin"){ ?>
+		
 	  <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('purchaseorder_v2') }}" title="Create Sales Order">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
@@ -131,7 +132,7 @@
 		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
           <li>
 			<a href="{{ route('report') }}" class="sidebar_li_a" title="Billing History">
-              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span> Billing History</span>
+              <i class="bi bi-cart navbar_icon" title="Manage Product list"></i><span> Billing History</span>
             </a>
 			<!---->
 			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">
