@@ -550,7 +550,7 @@
 							</tr>
 		</table>
 		
-       <br>
+       <!--<br>
 	   		<table cellspacing="0" width="100%">
 			
 					<tr class='report'>
@@ -569,30 +569,31 @@
 						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Book Stock</th>
 						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Variance</th>
 					</tr>
-					<?php
+					<//?php
 					$PH6_inventory_count = 1;
 					?>
 					@foreach ($data_PH6_inventory as $data_PH6_inventory_cols)
 					<tr class="data_tr" style="text-align: center; font-size:11px;">
 						
-						<td nowrap style="border:1px solid #000;" width="10%"><?=$PH6_inventory_count;?></td>
-						<td nowrap style="border:1px solid #000;"><?=$data_PH6_inventory_cols['product_name'];?></td>
-						<td nowrap style="border:1px solid #000;"><?=$data_PH6_inventory_cols['tank_name'];?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=$data_PH6_inventory_cols['tank_capacity'];?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['beginning_inventory'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['sales_in_liters'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['delivery'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['ending_inventory'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['book_stock'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['variance'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000;" width="10%"><//?=$PH6_inventory_count;?></td>
+						<td nowrap style="border:1px solid #000;"><//?=$data_PH6_inventory_cols['product_name'];?></td>
+						<td nowrap style="border:1px solid #000;"><//?=$data_PH6_inventory_cols['tank_name'];?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=$data_PH6_inventory_cols['tank_capacity'];?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['beginning_inventory'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['sales_in_liters'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['delivery'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['ending_inventory'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['book_stock'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['variance'],2,".",",");?></td>
 						
 					</tr>
 					<?php
-					$PH6_inventory_count++;
+					//$PH6_inventory_count++;
 					?>
 					@endforeach
 					
 		</table>
+		-->
 		<br>
 	   		<table cellspacing="0" width="100%">
 			
@@ -614,26 +615,26 @@
 						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Variance</th>
 					</tr>
 					<?php
-					$PH7_inventory_count = 1;
+					$PH6_inventory_count = 1;
 					?>
-					@foreach ($data_PH7_inventory as $data_PH7_inventory_cols)
+					@foreach ($data_PH6_inventory as $data_PH6_inventory_cols)
 					<tr class="data_tr" style="text-align: center; font-size:11px;">
 						
-						<td nowrap style="border:1px solid #000;" width="10%"><?=$PH7_inventory_count;?></td>
-						<td nowrap style="border:1px solid #000;"><?=$data_PH7_inventory_cols['product_name'];?></td>
-						<td nowrap style="border:1px solid #000;"><?=$data_PH7_inventory_cols['tank_name'];?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=$data_PH7_inventory_cols['tank_capacity'];?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['beginning_inventory'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['sales_in_liters'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['ugt_pumping'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['delivery'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['ending_inventory'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['book_stock'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH7_inventory_cols['variance'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000;" width="10%"><?=$PH6_inventory_count;?></td>
+						<td nowrap style="border:1px solid #000;"><?=$data_PH6_inventory_cols['product_name'];?></td>
+						<td nowrap style="border:1px solid #000;"><?=$data_PH6_inventory_cols['tank_name'];?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=$data_PH6_inventory_cols['tank_capacity'];?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['beginning_inventory'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['sales_in_liters'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['ugt_pumping'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['delivery'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['ending_inventory'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['book_stock'],2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['variance'],2,".",",");?></td>
 						
 					</tr>
 					<?php
-					$PH7_inventory_count++;
+					$PH6_inventory_count++;
 					?>
 					@endforeach
 					

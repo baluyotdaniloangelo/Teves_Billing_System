@@ -22,10 +22,10 @@ class BillingTransactionController extends Controller
 	/*Load Site Interface*/
 	public function billing(){
 		
-		$title = 'Billing Transaction';
-		$data = array();
-
 		if(Session::has('loginID')){
+			
+			$title = 'Billing Transaction';
+			$data = array();
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			

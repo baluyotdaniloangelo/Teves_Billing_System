@@ -26,9 +26,11 @@ class CashiersReportController extends Controller
 	/*Load client Interface*/
 	public function cashierReport(){
 		
-		$title = "Cashier' Report";
-		$data = array();
 		if(Session::has('loginID')){
+			
+			$title = "Cashier' Report";
+			$data = array();
+		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			if($data->user_branch_access_type=='ALL'){
@@ -55,8 +57,9 @@ class CashiersReportController extends Controller
 				
 			}	
 			
+			return view("pages.cashiers_report", compact('data','title','teves_branch'));
+			
 		}
-		return view("pages.cashiers_report", compact('data','title','teves_branch'));
 		
 	}   
 	
@@ -64,32 +67,11 @@ class CashiersReportController extends Controller
 	public function getCashierReport(Request $request)
     {
 		
-		$list = CashiersReportModel::get();
 		if ($request->ajax()) {
 			
-			/*
-			July 25, 2024
-			Sa Non - Admin User Pwede nya makita lahat ng Chashier's Report Pero hindi niya pwede i-edit ang hindi niya report. 
-			After One Day sa Paggawa nya ng Report, Admin na lang ang pwede mag edit.
-			*/
-			
-			if(Session::get('UserType')!="Admin"){
-				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-				 ->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
-              	 /*->where('teves_cashiers_report.user_idx', '=', Session::get('loginID'))|*/
-				 ->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
-				 ->get([				
-					'teves_cashiers_report.cashiers_report_id',
-					'teves_cashiers_report.user_idx',
-					'user_tb.user_real_name',
-					'teves_branch_table.branch_code',
-					'teves_cashiers_report.cashiers_name',
-					'teves_cashiers_report.forecourt_attendant',
-					'teves_cashiers_report.report_date',
-					'teves_cashiers_report.shift',
-					'teves_cashiers_report.created_at',
-					'teves_cashiers_report.updated_at']);
-			}else{
+			if(Session::get('UserType')!="Encoder"){
+				
+				/*For Admin,Supervisor, and Accounting_Staff*/
 				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')	
 				->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
 				->get([				
@@ -103,6 +85,24 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.shift',
 					'teves_cashiers_report.created_at',
 					'teves_cashiers_report.updated_at']);
+				
+			}else{
+				
+				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+				 ->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')		
+				 ->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+				 ->get([				
+					'teves_cashiers_report.cashiers_report_id',
+					'teves_cashiers_report.user_idx',
+					'user_tb.user_real_name',
+					'teves_branch_table.branch_code',
+					'teves_cashiers_report.cashiers_name',
+					'teves_cashiers_report.forecourt_attendant',
+					'teves_cashiers_report.report_date',
+					'teves_cashiers_report.shift',
+					'teves_cashiers_report.created_at',
+					'teves_cashiers_report.updated_at']);
+					
 			}
 	
 			return DataTables::of($data)
@@ -112,20 +112,31 @@ class CashiersReportController extends Controller
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
 						$timeDiff = abs($endTimeStamp - $startTimeStamp);
-						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						$numberDays = $timeDiff/3600;  // 86400 seconds in one day (3600 for 1hr)
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin" && Session::get('UserType')=="Supervisor"){
+							
 							$actionBtn = '
 							<div align="center" class="action_table_menu_client">
 							<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
 							<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
 							<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
 							</div>';
-						}else{
 							
-							if($numberDays>=3){
+						}
+						elseif(Session::get('UserType')=="Accounting_Staff"){
+							
+							$actionBtn = '
+							<div align="center" class="action_table_menu_client">
+							<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+							</div>';
+							
+						}
+						else{
+							
+							if($numberDays>=1){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_client">
 								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
@@ -154,7 +165,6 @@ class CashiersReportController extends Controller
 							}
 							
 						}
-						
 						
 						return $actionBtn;
 						

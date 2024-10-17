@@ -1,0 +1,7 @@
+ALTER TABLE `teves_cashiers_report_p6`
+	ADD COLUMN `ugt_pumping` DOUBLE NULL DEFAULT NULL AFTER `sales_in_liters`;
+	
+ALTER TABLE `teves_cashiers_report_p6`
+	CHANGE COLUMN `ugt_pumping` `ugt_pumping` DOUBLE NULL DEFAULT '0' AFTER `sales_in_liters`;
+	
+UPDATE teves_cashiers_report_p6 SET ugt_pumping=0;

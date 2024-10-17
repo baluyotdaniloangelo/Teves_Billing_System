@@ -422,24 +422,24 @@ Route::post('/cashiers_report_summary_info', [CashiersReportController::class, '
 
 
 /*Cashiers Report Part 6*/
-Route::post('/save_product_cashiers_report_p6', [CashiersReportController::class,'save_product_cashiers_report_p6'])->name('SAVE_CHR_PH6')->middleware('isLoggedIn');
+Route::post('/save_product_cashiers_report_p6', [CashiersReport_Dipstick_Inventory_Controller::class,'save_product_cashiers_report_p6'])->name('SAVE_CHR_PH6')->middleware('isLoggedIn');
 /* Load P6 */
-Route::post('/get_product_inventory_list', [CashiersReportController::class,'get_product_inventory_list'])->name('GetCashiersP6')->middleware('isLoggedIn');
+Route::post('/get_product_inventory_list', [CashiersReport_Dipstick_Inventory_Controller::class,'get_product_dipstick_inventory_list'])->name('GetCashiersP6')->middleware('isLoggedIn');
 /*Delete*/
-Route::post('/delete_cashiers_report_p6', [CashiersReportController::class,'delete_cashiers_report_p6'])->name('DeleteCashiersProductP6')->middleware('isLoggedIn');
+Route::post('/delete_cashiers_report_p6', [CashiersReport_Dipstick_Inventory_Controller::class,'delete_cashiers_report_p6'])->name('DeleteCashiersProductP6')->middleware('isLoggedIn');
 
-Route::post('/cashiers_report_p6_info', [CashiersReportController::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
+Route::post('/cashiers_report_p6_info', [CashiersReport_Dipstick_Inventory_Controller::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
 /*Load Cashiers Report */
-Route::get('/generate_cashier_report_pdf', [CashiersReportController::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_cashier_report_pdf', [CashiersReport_Dipstick_Inventory_Controller::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
 
 /*Cahiers's Report Dipstick Inventory*/
-Route::post('/save_product_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Controller::class,'save_product_cashiers_report_p7'])->name('SAVE_CHR_PH7')->middleware('isLoggedIn');
+// Route::post('/save_product_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Controller::class,'save_product_cashiers_report_p7'])->name('SAVE_CHR_PH7')->middleware('isLoggedIn');
 /* Load P6 */
-Route::post('/get_product_dipstick_inventory_list', [CashiersReport_Dipstick_Inventory_Controller::class,'get_product_dipstick_inventory_list'])->name('GetCashiersP7')->middleware('isLoggedIn');
+// Route::post('/get_product_dipstick_inventory_list', [CashiersReport_Dipstick_Inventory_Controller::class,'get_product_dipstick_inventory_list'])->name('GetCashiersP7')->middleware('isLoggedIn');
 /*Delete*/
-Route::post('/delete_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Controller::class,'delete_cashiers_report_p7'])->name('DeleteCashiersProductP7')->middleware('isLoggedIn');
+// Route::post('/delete_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Controller::class,'delete_cashiers_report_p7'])->name('DeleteCashiersProductP7')->middleware('isLoggedIn');
 
-Route::post('/cashiers_report_p7_info', [CashiersReport_Dipstick_Inventory_Controller::class, 'cashiers_report_p7_info'])->name('CRP7_info')->middleware('isLoggedIn');
+// Route::post('/cashiers_report_p7_info', [CashiersReport_Dipstick_Inventory_Controller::class, 'cashiers_report_p7_info'])->name('CRP7_info')->middleware('isLoggedIn');
 
 /*Load Cashiers Report VIA PDF */
 //Route::get('/generate_cashier_report_pdf', [CashiersReport::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');

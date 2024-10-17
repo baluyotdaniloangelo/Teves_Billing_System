@@ -54,9 +54,9 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 			$book_stock = ($beginning_inventory - $sales_in_liters_inventory - $ugt_pumping_inventory) + $delivery_inventory;
 			$variance = $book_stock - $ending_inventory;
 			
-			$CRPH7_ID 				= $request->CRPH7_ID;
+			$CRPH6_ID 				= $request->CRPH6_ID;
 								
-								if($CRPH7_ID=='' || $CRPH7_ID ==0){	
+								if($CRPH6_ID=='' || $CRPH6_ID ==0){	
 								
 									$CashiersReportModel_p6 = new CashiersReportModel_p6();
 									
@@ -85,7 +85,7 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 								}else{
 																	
 									$CashiersReportModel_p6 = new CashiersReportModel_p6();
-									$CashiersReportModel_p6 = CashiersReportModel_p6::find($CRPH7_ID);
+									$CashiersReportModel_p6 = CashiersReportModel_p6::find($CRPH6_ID);
 									
 									$CashiersReportModel_p6->cashiers_report_idx 		= $CashiersReportId;
 									$CashiersReportModel_p6->product_idx 				= $product_idx;
@@ -137,14 +137,13 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 			return response()->json($data);			
 	}
 
-	
 	public function cashiers_report_p6_info(Request $request){
 
-		$CHPH7_ID = $request->CHPH7_ID;
+		$CHPH6_ID = $request->CHPH6_ID;
 		
 		$data =  CashiersReportModel_p6::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p6.tank_idx')
 					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p6.product_idx')
-					->where('teves_cashiers_report_p6.cashiers_report_p6_id', $CHPH7_ID)
+					->where('teves_cashiers_report_p6.cashiers_report_p6_id', $CHPH6_ID)
 					
 					->get([
 						'teves_product_table.product_id',
@@ -168,8 +167,8 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 	
 	public function delete_cashiers_report_p6(Request $request){		
 			
-		$CHPH7_ID = $request->CHPH7_ID;
-		CashiersReportModel_p6::find($CHPH7_ID)->delete();
+		$CHPH6_ID = $request->CHPH6_ID;
+		CashiersReportModel_p6::find($CHPH6_ID)->delete();
 		return 'Deleted';
 		
 	}

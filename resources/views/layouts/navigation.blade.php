@@ -152,11 +152,12 @@
 		
           
 			
-			<?php if($data->user_type=="Admin"){ ?>
+			<?php if($data->user_type=="Admin" || $data->user_type=="Accounting_Staff"){ ?>
 			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
-              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span>Product</span>
+              <i class="bi bi-cart navbar_icon" title="Manage Product list"></i><span>Product</span>
             </a>
-			
+			<?php } ?>
+			<?php if($data->user_type=="Admin"){ ?>
 			<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
               <i class="bi bi-building navbar_icon" title="Manage Client list"></i><span>Branch</span>
             </a>

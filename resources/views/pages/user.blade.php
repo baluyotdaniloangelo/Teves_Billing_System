@@ -232,6 +232,7 @@
 								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="ChangeAccessType_Update()">
 								<option selected="" disabled="" value="">Choose...</option>
 								<option value="Admin">Admin</option>
+								<option value="Supervisor">Supervisor</option>
 								<option value="Accounting_Staff">Accounting Staff</option>
 								<option value="Encoder">Encoder</option>
 								</select>

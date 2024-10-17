@@ -1219,7 +1219,7 @@ class ReportController extends Controller
 		
 		$title = 'SALES ORDER';
 		  
-        $pdf = PDF::loadView('printables.report_sales_order_pdf_v2', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
+        $pdf = PDF::loadView('printables.report_sales_order_pdf_v3', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
 		//return view('printables.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		
 		/*Download Directly*/
