@@ -300,7 +300,7 @@
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:160px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
+			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:120px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
 			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:100px !important;">{{$sales_order_data[0]->sales_order_note}}</td>
 		</tr>
 		<tr>

@@ -112,7 +112,7 @@ class CashiersReportController extends Controller
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
 						$timeDiff = abs($endTimeStamp - $startTimeStamp);
-						$numberDays = $timeDiff/3600;  // 86400 seconds in one day (3600 for 1hr)
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day (3600 for 1hr)
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						

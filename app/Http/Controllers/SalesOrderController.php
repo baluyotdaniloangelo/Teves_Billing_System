@@ -86,7 +86,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',
-					'teves_sales_order_table.sales_order_delivery_status']);
+					'teves_sales_order_table.sales_order_delivery_status',
+					'teves_sales_order_table.created_at']);
 					
 		}else{
 			
@@ -104,7 +105,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',
-					'teves_sales_order_table.sales_order_delivery_status']);	
+					'teves_sales_order_table.sales_order_delivery_status',
+					'teves_sales_order_table.created_at']);	
 			
 		}			
 	
@@ -113,7 +115,15 @@ class SalesOrderController extends Controller
 				
                 ->addColumn('action', function($row){
 					
-					if($row->sales_order_payment_status=='Pending'){
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+					
+					
+					//if($row->sales_order_payment_status=='Pending'){
 				
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
@@ -122,17 +132,34 @@ class SalesOrderController extends Controller
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
-					}else{	
+					//}else{	
 					
-						$actionBtn = '
+						$actionBtn_view_only = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						</div>';
 					
-					}
+					//}
 					
-                    return $actionBtn;
+							if(Session::get('UserType')=="Admin"){
+										return $actionBtn;
+							}
+							if(Session::get('UserType')=="Supervisor"){
+										return '';/*View and Print Only*/
+							}
+							if(Session::get('UserType')=="Accounting_Staff"){
+										
+										/*Access within 24 Hrs*/
+										if($numberDays>=1){
+											return $actionBtn_view_only;
+										}else{
+											return $actionBtn;/*View and Print Only*/
+										}
+										
+							}else{
+										return '';/*View and Print Only*/
+							}
+					
                 })
 				->rawColumns(['action'])
                 ->make(true);

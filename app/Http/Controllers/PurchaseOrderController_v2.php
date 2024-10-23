@@ -78,7 +78,8 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_supplier_table.supplier_name',
 						'teves_purchase_order_table.purchase_order_total_payable',
 						'teves_purchase_order_table.purchase_status',
-						'teves_purchase_order_table.purchase_order_delivery_status'
+						'teves_purchase_order_table.purchase_order_delivery_status',
+						'teves_purchase_order_table.created_at'
 				]);
 	
 		return DataTables::of($data)
@@ -99,6 +100,8 @@ class PurchaseOrderController_v2 extends Controller
                 })
 				
 				->addColumn('action', function($row){
+					
+					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
@@ -106,7 +109,39 @@ class PurchaseOrderController_v2 extends Controller
 					<a href="purchase_order_form/'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deletePurchaseOrder"></a>
 					</div>';
-                    return $actionBtn;
+					
+					$actionBtn_view_only = '
+					<div align="center" class="action_table_menu_Product">
+					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
+					<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->purchase_order_id.')" id="viewPaymentGalery"></a>
+					</div>';
+					
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+						
+							if(Session::get('UserType')=="Admin"){
+										return $actionBtn;
+							}
+							if(Session::get('UserType')=="Supervisor"){
+										return '';/*View and Print Only*/
+							}
+							if(Session::get('UserType')=="Accounting_Staff"){
+										
+										/*Access within 24 Hrs*/
+										if($numberDays>=1){
+											return $actionBtn_view_only;
+										}else{
+											return $actionBtn;/*View and Print Only*/
+										}
+										
+							}else{
+										return '';/*View and Print Only*/
+							}
+						
                 })
 				->rawColumns(['action','status'])
                 ->make(true);
@@ -150,9 +185,7 @@ class PurchaseOrderController_v2 extends Controller
 			
 			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
-			
-			
-					
+				
 		return view("pages.purchase_order_form", compact('data','title','product_data','supplier_data','teves_branch', 'purchase_data_suggestion','purchase_payment_suggestion', 'PurchaseOrderID'));
 		}
 		
@@ -300,8 +333,6 @@ class PurchaseOrderController_v2 extends Controller
 			
 			$result = $Purchaseorder->update();
 			
-			
-			
 				$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
 						->sum('order_total_amount');
 					
@@ -424,7 +455,6 @@ class PurchaseOrderController_v2 extends Controller
 		$purchase_order_idx = $request->purchase_order_idx;
 		
 		PurchaseOrderPaymentModel::find($paymentitemID)->delete();
-		
 		
 							/*Update Status*/
 							/*Remaining Balance*/
