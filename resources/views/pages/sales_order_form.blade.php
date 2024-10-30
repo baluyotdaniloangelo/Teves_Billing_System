@@ -11,7 +11,7 @@
 				<h5 class="card-title" align="center">Sales Order Information</h5>
 				<div class="row mb-2">
 					<div class="col-sm-6">
-					<h6>Control Number : <span class="badge" id='control_no' style="background-color: orange !important; color:#000 !important; font-weight:bold;">{{ $sales_order_data[0]['sales_order_control_number'] }}</span></h6>
+					<h6>S.O. No : <span class="badge" id='control_no' style="background-color: orange !important; color:#000 !important; font-weight:bold;">{{ $sales_order_data[0]['sales_order_control_number'] }}</span></h6>
 					</div>
 					<div class="col-sm-6">
 						<div class="d-flex justify-content-end" id="">

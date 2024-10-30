@@ -109,13 +109,15 @@ class SalesOrderController extends Controller
 					
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
 						$actionBtn_view_only = '
-						<div align="center" class="action_table_menu_Product">
+						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						</div>';
 					
@@ -403,6 +405,25 @@ class SalesOrderController extends Controller
 
 	}
 
+
+	public function get_sales_order_product_list_preview(Request $request){		
+	
+			$raw_query_sales_order_component = "SELECT `teves_sales_order_component_table`.`sales_order_component_id`,
+						IFNULL(`teves_product_table`.`product_name`,`teves_sales_order_component_table`.item_description) as product_name,
+						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+						`teves_sales_order_component_table`.`product_idx`, `teves_sales_order_component_table`.`product_price`, `teves_sales_order_component_table`.`order_quantity`,
+						`teves_sales_order_component_table`.`order_total_amount`,
+						`teves_sales_order_component_table`.`created_at`
+						from `teves_sales_order_component_table`  left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_sales_order_component_table`.`product_idx` where `sales_order_idx` = ?		  
+						order by `sales_order_component_id` asc";	
+						
+			$data = DB::select("$raw_query_sales_order_component", [ $request->sales_order_id]);		
+		
+			return response()->json(array('productlist'=>$data));			
+
+	}
+	
 	public function delete_sales_order_item(Request $request){		
 			
 		$productitemID = $request->productitemID;

@@ -285,6 +285,103 @@
 			   });		
 	  });
 	  
+	  
+	  
+	<!--Product Deletion Confirmation-->
+	$('body').on('click','#SalesOrderPreview',function(){
+			
+			event.preventDefault();
+			let sales_order_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "/sales_order_info",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("deleteSalesOrderConfirmed").value = sales_order_id;
+											
+					/*Set Details*/
+					$('#preview_product_sales_order_date').text(response[0].sales_order_date);
+					$('#preview_product_sales_control_number').text(response[0].sales_order_control_number);
+					$('#preview_product_client_name').text(response[0].client_name);
+					$('#preview_product_dr_number').text(response[0].sales_order_dr_number);					
+					$('#preview_product_or_number').text(response[0].sales_order_or_number);
+					$('#preview_product_total_due').text(response[0].sales_order_total_due);
+					
+					$('#SalesOrderPreviewModal').modal('toggle');
+					
+					 LoadProduct_Preview(sales_order_id);
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  });		  
+	  
+	function LoadProduct_Preview(sales_order_id) {
+		
+		$("#table_sales_order_product_body_data tr").remove();
+		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_sales_order_product_body_data');
+		
+			  $.ajax({
+				url: "/get_sales_order_product_list_preview",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  
+				  console.log(response['productlist']);
+				  var len = response['productlist'].length;
+				  
+					  if(response['productlist']!='') {			  
+								
+								for(var i=0; i<len; i++){
+							
+								var product_name = response['productlist'][i].product_name;
+								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
+								var product_price = response['productlist'][i].product_price;
+								var order_quantity = response['productlist'][i].order_quantity;
+								
+								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+								
+								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+								"<td align='center'>" + (i+1) + "</td>" +
+								"<td class='product_td' align='left'>"+product_name+"</td>"+
+								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+
+								"<td class='calibration_td' align='right'>"+order_quantity+" "+product_unit_measurement+"</td>"+
+								"<td class='manual_price_td' align='right'><span >&#8369; "+order_total_amount+"</span></td>"+
+								"</tr>");
+								
+								
+								}
+								
+						
+					  }
+				  else{
+							/*No Result Found or Error*/	
+				  }
+				  
+				  
+				  
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	  } 	  
+	  
+	  
 	/*Re-print*/
 	$('body').on('click','#PrintSalesOrder',function(){	  
 	  

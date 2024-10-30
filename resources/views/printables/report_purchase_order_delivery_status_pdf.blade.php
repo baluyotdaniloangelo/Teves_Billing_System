@@ -151,7 +151,6 @@
 			
 			$delivery_balance = $total_order_quantity - $total_delivered_quantity;
 			
-			// $component_height = 160 / count($purchase_order_delivery_total_component);
 			$component_height = 15;
 			
 			?>
@@ -182,18 +181,18 @@
 		<br>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		<tr style="font-size:12px;border:0 solid #000;">
+		<tr style="font-size:12px;border:1 solid gray;">
 			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:20px !important; ">DELIVERED ITEMS</td>
 		</tr>
-		<tr style="font-size:12px;border-top:1 solid #000; border-bottom:1 solid #000;">		
+		<tr style="font-size:12px;border:1px solid gray;">			
 
-			<td colspan="1" width="5%" align="center">ITEM #</td>	
-			<td colspan="1" width="10%" align="center">DELIVERY DATE</td>		
-			<td colspan="2" width="20%" align="center">PRODUCT</td>
-			<td colspan="2" width="20%" align="center">QUANTITY</td>	
-			<td colspan="2" width="20%" align="center">WITHDRAWAL REFERENCE</td>
-			<td colspan="2" width="20%" align="center">HAULER DETAILS</td>
-			<td colspan="2" width="20%" align="center">REMARKS</td>		
+			<td colspan="1" width="5%" align="center" style="border:1px solid gray;">ITEM #</td>	
+			<td colspan="1" width="10%" align="center" style="border:1px solid gray;">DELIVERY DATE</td>		
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">PRODUCT</td>
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">QUANTITY</td>	
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">WITHDRAWAL REFERENCE</td>
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">HAULER DETAILS</td>
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">REMARKS</td>		
 						
 					
 		</tr>									
@@ -204,24 +203,17 @@
 			?>
 			@foreach ($purchase_order_delivery_component as $purchase_order_delivery_component_cols)
 			<?php
-			
-			// if($purchase_order_delivery_total_component_cols->product_unit_measurement=='L' || $purchase_order_delivery_total_component_cols->product_unit_measurement=='l'){
-				// $total_liters += $purchase_order_delivery_total_component_cols->order_quantity;
-			// }else{
-				// $total_liters += 0;
-			// }
-			
-			// $component_height = 160 / count($purchase_order_delivery_total_component);
+
 			   $component_height = 15;
 			?>
 			<tr class="data_tr" style="font-size:12px;">
-				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$no_delivered_item"; ?></td>
-				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_date; ?></td>
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo @$purchase_order_delivery_component_cols->product_name; ?></td>
-				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity; ?> {{@$purchase_order_delivery_component_cols->product_unit_measurement}}</td>
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_withdrawal_reference; ?></td>
-				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details;?></td>
-				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_remarks;?></td>			
+				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$no_delivered_item"; ?></td>
+				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_date; ?></td>
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->product_name; ?></td>
+				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity; ?> {{@$purchase_order_delivery_component_cols->product_unit_measurement}}</td>
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_withdrawal_reference; ?></td>
+				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details;?></td>
+				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_remarks;?></td>			
 			</tr>
 			<?php 
 			$no_delivered_item++; 

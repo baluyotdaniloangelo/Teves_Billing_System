@@ -225,6 +225,8 @@ Route::post('/create_sales_order_post', [SalesOrderController::class,'create_sal
 Route::post('/update_sales_order_post', [SalesOrderController::class,'update_sales_order_post'])->name('update_sales_order_post')->middleware('isLoggedIn');
 /*Get Sales Order Product Item*/
 Route::post('/get_sales_order_product_list', [SalesOrderController::class,'get_sales_order_product_list'])->name('get_sales_order_product_list')->middleware('isLoggedIn');
+/*Get Sales Order Product Item 10/30/2024*/
+Route::post('/get_sales_order_product_list_preview', [SalesOrderController::class,'get_sales_order_product_list_preview'])->name('get_sales_order_product_list_preview')->middleware('isLoggedIn');
 /*Delete Sales Order Product Item*/
 Route::post('/delete_sales_order_item', [SalesOrderController::class,'delete_sales_order_item'])->name('delete_sales_order_item')->middleware('isLoggedIn');
 /*Update Sales Order Status*/

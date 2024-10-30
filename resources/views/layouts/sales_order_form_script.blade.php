@@ -414,7 +414,7 @@
 									else{
 									?>
 										if(diffDays>=3){
-											action_controls = "ssss";
+											action_controls = "";
 											}else{
 											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a>";		
 										

@@ -61,7 +61,7 @@
 			<td colspan="4"  width="40%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:12px;"><?=$branch_header['branch_address'];?></div>
 			</td>		
-			<td colspan="2" align="left" width="20%" style="font-size:12px; font-weight:bold;;"><b>CONTROL NO.</b></td>
+			<td colspan="2" align="left" width="20%" style="font-size:12px; font-weight:bold;;"><b>S.O. NO.</b></td>
 			<td colspan="3" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
 		</tr>		
 		<?php
@@ -183,18 +183,18 @@
 		<br>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		<tr style="font-size:12px;border:0 solid #000;">
+		<tr style="font-size:12px;border:1 solid gray;">
 			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:20px !important; ">DELIVERED ITEMS</td>
 		</tr>
-		<tr style="font-size:12px;border-top:1 solid #000; border-bottom:1 solid #000;">		
+		<tr style="font-size:12px;border:1px solid gray;">		
 
-			<td colspan="1" width="5%" align="center">ITEM #</td>	
-			<td colspan="1" width="10%" align="center">DELIVERY DATE</td>		
-			<td colspan="2" width="20%" align="center">PRODUCT</td>
-			<td colspan="2" width="20%" align="center">QUANTITY</td>	
-			<td colspan="2" width="20%" align="center">DELIVERY REFERENCE</td>
-			<td colspan="2" width="20%" align="center">HAULER DETAILS</td>
-			<td colspan="2" width="20%" align="center">REMARKS</td>		
+			<td colspan="1" width="5%" align="center" style="border:1px solid gray;">ITEM #</td>	
+			<td colspan="1" width="10%" align="center" style="border:1px solid gray;">DELIVERY DATE</td>		
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">PRODUCT</td>
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">QUANTITY</td>	
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">DELIVERY REFERENCE</td>
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">HAULER DETAILS</td>
+			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">REMARKS</td>		
 						
 					
 		</tr>									
@@ -208,13 +208,13 @@
 			   $component_height = 15;
 			?>
 			<tr class="data_tr" style="font-size:12px;">
-				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$no_delivered_item"; ?></td>
-				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_delivery_component_cols->sales_order_delivery_date"; ?></td>
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_delivery_component_cols->product_name"; ?></td>
-				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_delivery_component_cols->sales_order_delivery_quantity"; ?> {{$sales_order_delivery_component_cols->product_unit_measurement}}</td>
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_delivery_component_cols->sales_order_delivery_withdrawal_reference"; ?></td>
-				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$sales_order_delivery_component_cols->sales_order_delivery_hauler_details;?></td>
-				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$sales_order_delivery_component_cols->sales_order_delivery_remarks;?></td>			
+				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$no_delivered_item"; ?></td>
+				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$sales_order_delivery_component_cols->sales_order_delivery_date"; ?></td>
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$sales_order_delivery_component_cols->product_name"; ?></td>
+				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$sales_order_delivery_component_cols->sales_order_delivery_quantity"; ?> {{$sales_order_delivery_component_cols->product_unit_measurement}}</td>
+				<td colspan="2" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$sales_order_delivery_component_cols->sales_order_delivery_withdrawal_reference"; ?></td>
+				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important; border:1px solid gray;"><?=$sales_order_delivery_component_cols->sales_order_delivery_hauler_details;?></td>
+				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=$sales_order_delivery_component_cols->sales_order_delivery_remarks;?></td>			
 			</tr>
 			<?php 
 			$no_delivered_item++; 

@@ -45,7 +45,7 @@
 		
 		<tr>
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
-			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
+			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:100px;">
 			</td>
 			<td colspan="5" width="50%" style="horizontal-align:center;text-align:left;">
 				<b style="font-size:16px;"><?=$branch_header['branch_name'];?></b><br>
@@ -55,22 +55,22 @@
 		
 		<tr>
 			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:11px;"><?=$branch_header['branch_address'];?></div>
+			<div style="font-size:10px;"><?=$branch_header['branch_address'];?></div>
 			</td>
-			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>CONTROL NO.</b></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>S.O. NO.</b></td>
 			<td colspan="4" align="left" width="23%" style="font-size:11px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
 
 		</tr>		
 		<tr>
 			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:11px;">VAT REG. TIN : <?=$branch_header['branch_tin'];?></div>
+			<div style="font-size:10px;">VAT REG. TIN : <?=$branch_header['branch_tin'];?></div>
 			</td>
 			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>DATE GENERATED</b></td>
 			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$sales_order_date;?></td>
 		</tr>
 		<tr>
 			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:11px;"><?=$branch_header['branch_owner'];?> - <?=$branch_header['branch_owner_title'];?></div>
+			<div style="font-size:10px;"><?=$branch_header['branch_owner'];?> - <?=$branch_header['branch_owner_title'];?></div>
 			</td>
 			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold;"><b>D.R. NO.</b></td>
 			<td colspan="4" align="left" width="23%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_dr_number'] }}</td>
