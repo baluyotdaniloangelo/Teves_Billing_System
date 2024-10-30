@@ -132,6 +132,9 @@
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph7-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph7" type="button" role="tab" aria-controls="ph7" aria-selected="false" tabindex="-1">Dipstick Inventory</button>
 							</li>
+							<li class="nav-item" role="presentation">
+							  <button class="nav-link" id="ph8-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph8" type="button" role="tab" aria-controls="ph8" aria-selected="false" tabindex="-1">Payment</button>
+							</li>
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
 							<div class="tab-pane fade show active" id="bordered-ph1" role="tabpanel" aria-labelledby="ph1-tab">
@@ -150,6 +153,10 @@
 							<div class="tab-pane fade" id="bordered-ph7" role="tabpanel" aria-labelledby="ph7-tab">						
 							@include('pages.cashiers_report_form_p7')
 							</div>
+							<div class="tab-pane fade" id="bordered-ph8" role="tabpanel" aria-labelledby="ph8-tab">						
+							@include('pages.cashiers_report_form_p8_payment')
+							</div>
+							
 							
 							
 						  </div><!-- End Bordered Tabs -->

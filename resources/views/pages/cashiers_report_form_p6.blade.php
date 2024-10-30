@@ -31,6 +31,17 @@
                     <th scope="row">THEORETICAL SALES</th>
                     <td style="text-align: right !important;"><span id="theoretical_sales">0.00</span></td>
                   </tr>
+				  
+				   <tr>
+                    <th scope="row">TOTAL CASH PAYMENT</th>
+                    <td style="text-align: right !important;"><span id="total_cash_payment">0.00</span></td>
+                  </tr>
+				  
+				   <tr>
+                    <th scope="row">TOTAL NON-CASH PAYMENT</th>
+                    <td style="text-align: right !important;"><span id="total_non_cash_payment">0.00</span></td>
+                  </tr>
+				  
 				  <tr>
                     <th scope="row">TOTAL CASH</th>
                     <td style="text-align: right !important;"><span id="cash_on_hand">0.00</span></td>

@@ -67,13 +67,19 @@ class SalesOrderController extends Controller
 	/*Fetch Product List using Datatable*/
 	public function getSalesOrderList(Request $request)
     {
-		$list = SalesOrderModel::get();
+		
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+		
 		if ($request->ajax()) {
-
-		if(Session::get('UserType')=="Admin"){
-
+			
 			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
-					
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
               		->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
@@ -88,27 +94,6 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_payment_status',
 					'teves_sales_order_table.sales_order_delivery_status',
 					'teves_sales_order_table.created_at']);
-					
-		}else{
-			
-			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
-              		->whereDate('teves_sales_order_table.created_at', date('Y-m-d'))
-					->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
-					->get([
-					'teves_sales_order_table.sales_order_id',
-					'teves_sales_order_table.sales_order_date',
-					'teves_client_table.client_name',
-					'teves_sales_order_table.sales_order_payment_term',	
-					'teves_sales_order_table.sales_order_gross_amount',	
-					'teves_sales_order_table.sales_order_net_amount',
-					'teves_sales_order_table.sales_order_control_number',			
-					'teves_sales_order_table.sales_order_payment_term',
-					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_payment_status',
-					'teves_sales_order_table.sales_order_delivery_status',
-					'teves_sales_order_table.created_at']);	
-			
-		}			
 	
 		return DataTables::of($data)
 				->addIndexColumn()
@@ -122,9 +107,6 @@ class SalesOrderController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 					
-					
-					//if($row->sales_order_payment_status=='Pending'){
-				
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
@@ -132,22 +114,18 @@ class SalesOrderController extends Controller
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
-					//}else{	
-					
 						$actionBtn_view_only = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						</div>';
 					
-					//}
-					
 							if(Session::get('UserType')=="Admin"){
 										return $actionBtn;
 							}
-							if(Session::get('UserType')=="Supervisor"){
+							else if(Session::get('UserType')=="Supervisor"){
 										return '';/*View and Print Only*/
 							}
-							if(Session::get('UserType')=="Accounting_Staff"){
+							else if(Session::get('UserType')=="Accounting_Staff"){
 										
 										/*Access within 24 Hrs*/
 										if($numberDays>=1){
@@ -164,6 +142,7 @@ class SalesOrderController extends Controller
 				->rawColumns(['action'])
                 ->make(true);
 		}		
+		}
     }
 
 	/*Fetch Product Information*/

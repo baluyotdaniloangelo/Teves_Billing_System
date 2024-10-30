@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 //use Request;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\ClientModel;
 use App\Models\CashiersReportModel;
 use App\Models\CashiersReportModel_P1;
 use App\Models\CashiersReportModel_P2;
@@ -10,7 +11,7 @@ use App\Models\CashiersReportModel_P3;
 use App\Models\CashiersReportModel_P4;
 use App\Models\CashiersReportModel_P5;
 use App\Models\CashiersReportModel_P6;
-//use App\Models\CashiersReportModel_P7;
+use App\Models\CashiersReportModel_P8;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
 use Session;
@@ -67,30 +68,19 @@ class CashiersReportController extends Controller
 	public function getCashierReport(Request $request)
     {
 		
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+			
 		if ($request->ajax()) {
 			
-			if(Session::get('UserType')!="Encoder"){
-				
-				/*For Admin,Supervisor, and Accounting_Staff*/
-				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')	
-				->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')				
-				->get([				
-					'teves_cashiers_report.cashiers_report_id',
-					'teves_cashiers_report.user_idx',
-					'user_tb.user_real_name',
-					'teves_branch_table.branch_code',
-					'teves_cashiers_report.cashiers_name',
-					'teves_cashiers_report.forecourt_attendant',
-					'teves_cashiers_report.report_date',
-					'teves_cashiers_report.shift',
-					'teves_cashiers_report.created_at',
-					'teves_cashiers_report.updated_at']);
-				
-			}else{
-				
 				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
 				 ->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')		
-				 ->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+				 ->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
 				 ->get([				
 					'teves_cashiers_report.cashiers_report_id',
 					'teves_cashiers_report.user_idx',
@@ -102,9 +92,7 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.shift',
 					'teves_cashiers_report.created_at',
 					'teves_cashiers_report.updated_at']);
-					
-			}
-	
+			
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row){
@@ -116,7 +104,7 @@ class CashiersReportController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						
-						if(Session::get('UserType')=="Admin" && Session::get('UserType')=="Supervisor"){
+						if(Session::get('UserType')=="Admin" || Session::get('UserType')=="Supervisor"){
 							
 							$actionBtn = '
 							<div align="center" class="action_table_menu_client">
@@ -173,7 +161,7 @@ class CashiersReportController extends Controller
 					->rawColumns(['action'])
 					->make(true);
 		}
-		
+		}
     }
 
 	public function create_cashier_report_post(Request $request){
@@ -301,6 +289,7 @@ class CashiersReportController extends Controller
 			$data = array();	
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
+			$client_data = ClientModel::all();
 			
 			if($data->user_branch_access_type=='ALL'){
 				
@@ -341,7 +330,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
-		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch'));	
+		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch','client_data'));	
 		
 		}
 		
@@ -673,12 +662,30 @@ class CashiersReportController extends Controller
 				'product_manual_price' 	=> 'required',	
 			], 
 			[
-				'item_description'      	=> 'required',
-				'product_manual_price.required' 	=> 'Required',
+				'item_description'      	=> 'Item Description required',
+				'product_manual_price.required' 	=> 'Amount Required',
 			]
 			);
 			
-		}else{
+		}
+		else if($miscellaneous_items_type=='SALES_CREDIT'){
+			
+			$request->validate([
+				'miscellaneous_items_type' 	=> 'required',
+				'item_description'      	=> 'required',
+				'order_quantity'  			=> 'required',
+				'client_idx'				=> 'required'
+			], 
+			[
+				'miscellaneous_items_type.required' 	=> 'Type is Required',
+				'item_description'      	=> 'Item Description required',
+				'order_quantity.required' 	=> 'Order Quantity is Required',
+				'client_idx.required' 		=> 'Account Name is Required',
+			]
+			);	
+			
+		}
+		else{
 			
 			$request->validate([
 				'miscellaneous_items_type' 	=> 'required',
@@ -687,7 +694,7 @@ class CashiersReportController extends Controller
 			], 
 			[
 				'miscellaneous_items_type.required' 	=> 'Type is Required',
-				'item_description'      	=> 'required',
+				'item_description'      	=> 'Item Description required',
 				'order_quantity.required' 	=> 'Order Quantity is Required',
 			]
 			);	
@@ -799,6 +806,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->reference_no 				= $reference_no;
+									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
 									$CashiersReportModel_P3->item_description 			= $request->item_description;
 									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
@@ -821,6 +829,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3 = CashiersReportModel_P3::find($CHPH3_ID);
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->reference_no 				= $reference_no;
+									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
 									$CashiersReportModel_P3->item_description 			= $request->item_description;
 									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
@@ -870,10 +879,12 @@ class CashiersReportController extends Controller
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
             ->where('miscellaneous_items_type','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					'teves_client_table.client_name',
 					'teves_cashiers_report_p3.pump_price',
 					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.discounted_price',
@@ -911,8 +922,10 @@ class CashiersReportController extends Controller
 		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
 		->where('miscellaneous_items_type','=','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->get([
 					'teves_product_table.product_name',
+					'teves_client_table.client_name',
 					'teves_product_table.product_id',
 					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
@@ -1313,6 +1326,19 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report_p5.twenty_five_cent_deno',
 			'teves_cashiers_report_p5.cash_drop'
 			]);
+			
+		$PH8_SUM_cash_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+        ->sum('cash_payment_amount');	
+		
+		$PH8_SUM_limitless_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+        ->sum('limitless_payment_amount');	
+		
+		$PH8_SUM_credit_debit_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+		->sum('credit_debit_payment_amount');	
+		
+		$PH8_SUM_ewallet_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+		->sum('ewallet_payment_amount');	
+		
 		
 		$one_thousand_deno 		= $_PH5_SUM[0]->one_thousand_deno * 1000;
 		
@@ -1334,7 +1360,17 @@ class CashiersReportController extends Controller
 		$PH5_SUM = $cash_drop + $one_thousand_deno + $five_hundred_deno + $two_hundred_deno + $one_hundred_deno + $fifty_deno + $twenty_deno + $ten_deno + $five_deno + $one_deno + $twenty_five_cent_deno;
         		
 		if($CashiersReportId!=0){
-				return response()->json(array('success' => "Success", 'fuel_sales_total' => $PH1_SUM, 'other_sales_total' => $PH2_SUM, 'miscellaneous_total' => $PH3_SUM, 'theoretical_sales' => $PH4_SUM, 'cash_on_hand' => $PH5_SUM), 200);
+				return response()->json(array('success' => "Success",
+				'fuel_sales_total' => $PH1_SUM,
+				'other_sales_total' => $PH2_SUM,
+				'miscellaneous_total' => $PH3_SUM,
+				'theoretical_sales' => $PH4_SUM,
+				'cash_on_hand' => $PH5_SUM,
+				'total_cash_payment_amount' => $PH8_SUM_cash_payment_amount,
+				'total_limitless_payment_amount' => $PH8_SUM_limitless_payment_amount,
+				'total_credit_debit_payment_amount' => $PH8_SUM_credit_debit_payment_amount,
+				'total_ewallet_payment_amount' => $PH8_SUM_ewallet_payment_amount
+				), 200);
 		}
 		else{
 				return response()->json(['success'=>"Error on Load"]);
@@ -1440,8 +1476,10 @@ class CashiersReportController extends Controller
 		$data_SALES_CREDIT =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
 			->where('miscellaneous_items_type','=','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->get([
 					'teves_product_table.product_name',
+					'teves_client_table.client_name',
 					'teves_product_table.product_id',
 					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
@@ -1525,30 +1563,36 @@ class CashiersReportController extends Controller
 						'teves_cashiers_report_p6.variance'
 					]);
 		
-				/*
-				$data_PH7_inventory =  CashiersReportModel_p7::Join('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p7.tank_idx')
-					->Join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p7.product_idx')
-					->where('teves_cashiers_report_p7.cashiers_report_idx', $request->CashiersReportId)
-					->orderBy('teves_cashiers_report_p7.product_idx', 'asc')
-					->get([
-						'teves_product_table.product_id',
-						'teves_product_table.product_name',
-						'teves_product_tank_table.tank_id',
-						'teves_product_tank_table.tank_name',
-						'teves_product_tank_table.tank_capacity',
-						'teves_cashiers_report_p7.cashiers_report_p7_id',
-						'teves_cashiers_report_p7.beginning_inventory',
-						'teves_cashiers_report_p7.sales_in_liters',
-						'teves_cashiers_report_p7.ugt_pumping',
-						'teves_cashiers_report_p7.delivery',
-						'teves_cashiers_report_p7.ending_inventory',
-						'teves_cashiers_report_p7.book_stock',
-						'teves_cashiers_report_p7.variance'
-					]);
-				*/	
+		$PH8_SUM_cash_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+        ->sum('cash_payment_amount');	
+		
+		$PH8_SUM_limitless_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+        ->sum('limitless_payment_amount');	
+		
+		$PH8_SUM_credit_debit_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+		->sum('credit_debit_payment_amount');	
+		
+		$PH8_SUM_ewallet_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
+		->sum('ewallet_payment_amount');	
+		
+		
 		$branch_header = TevesBranchModel::find($CashiersReportData[0]['teves_branch'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
-        $pdf = PDF::loadView('printables.cashier_report_pdf', compact('title', 'CashiersReportData', 'data_P1_premium_95', 'data_P1_super_regular', 'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT', 'data_DISCOUNTS', 'data_OTHERS', 'data_theoretical_sales', 'data_Cash_on_hand','branch_header','data_PH6_inventory'));
+        $pdf = PDF::loadView('printables.cashier_report_pdf', compact('title',
+		'CashiersReportData',
+		'data_P1_premium_95',
+		'data_P1_super_regular',
+		'data_P1_diesel', 'data_P2', 'data_SALES_CREDIT',
+		'data_DISCOUNTS', 'data_OTHERS',
+		'data_theoretical_sales',
+		'data_Cash_on_hand',
+		'branch_header',
+		'data_PH6_inventory',
+		'PH8_SUM_cash_payment_amount',
+		'PH8_SUM_limitless_payment_amount',
+		'PH8_SUM_credit_debit_payment_amount',
+		'PH8_SUM_ewallet_payment_amount'
+		));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/

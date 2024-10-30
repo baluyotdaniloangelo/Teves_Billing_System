@@ -68,16 +68,21 @@ class BillingTransactionController extends Controller
 	/*This will only Fetch the Unbilled Transaction*/
 	public function getBillingTransactionList(Request $request)
     {
-	
-		$list = BillingTransactionModel::get();
+
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+			
 		if ($request->ajax()) {
 	
-	if(Session::get('UserType')!="Admin"){
-		
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
 					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
-					//->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
 					->where('receivable_idx', '=', 0)
               		->get([
 					'teves_billing_table.billing_id',
@@ -96,33 +101,7 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.order_time',
 					'teves_billing_table.created_at',
 					'teves_billing_table.created_by_user_idx']);
-					
-	}else{
-	
-    	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
-					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
-					->where('receivable_idx', '=', 0)
-              		->get([
-					'teves_billing_table.billing_id',
-					'teves_billing_table.receivable_idx',
-					'teves_receivable_table.control_number',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_product_table.product_unit_measurement',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_client_table.client_name',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time',
-					'teves_billing_table.created_at',
-					'teves_billing_table.created_by_user_idx']);	
-	
-	}
-		
+
 		return DataTables::of($data)
 				
 				->addIndexColumn()				
@@ -130,23 +109,28 @@ class BillingTransactionController extends Controller
 						
 					if($row->receivable_idx==0){
 						
-						if(Session::get('UserType')=="Admin"){
-							$actionBtn = '
-							<div align="center" class="action_table_menu_site">
-							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
-							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
-							</div>';
-						}
-						else{
-						
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
 						$timeDiff = abs($endTimeStamp - $startTimeStamp);
 						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
+						
+						$numberHours = $timeDiff/3600;  // 3600 1 hr
+						// and you might want to convert to integer
+						$numberHours = intval($numberHours);
+						
+						if(Session::get('UserType')=="Admin"){
+							$actionBtn = '
+							<div align="center" class="action_table_menu_site">
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+							</div>';
+						}
+						else if(Session::get('UserType')=="Accounting_Staff"){
 							
-							if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_idx){
+							if($numberDays>=1){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
@@ -154,6 +138,32 @@ class BillingTransactionController extends Controller
 							}else{
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+								</div>';
+							}
+							
+						}
+						else if(Session::get('UserType')=="Supervisor"){
+							
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';
+			
+						}
+						else{
+						
+							if($numberHours>=1 || Session::get('loginID')!=$row->created_by_user_idx){
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';
+							}else{
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 								</div>';
@@ -179,20 +189,22 @@ class BillingTransactionController extends Controller
 				->rawColumns(['action','quantity_measurement'])
                 ->make(true);		
 		}
+		}
     }
 	
 	/*Manualy Fetch the Billed transaction by Date Range,Client or Product*/
 	public function getBillingTransactionList_Billed(Request $request)
     {
+
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
 	
-		$list = BillingTransactionModel::get();
 		if ($request->ajax()) {
 		
 		$client_idx = $request->client_idx_billed;
 		$start_date_billed = $request->start_date_billed;
 		$end_date_billed = $request->end_date_billed;
-		//billed_list
-	if(Session::get('UserType')!="Admin"){
 		
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
@@ -204,37 +216,11 @@ class BillingTransactionController extends Controller
 						}
 						})
 					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
-					->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
-              		->get([
-					'teves_billing_table.billing_id',
-					'teves_billing_table.receivable_idx',
-					'teves_receivable_table.control_number',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_product_table.product_unit_measurement',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_client_table.client_name',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time',
-					'teves_billing_table.created_at',]);
-					
-	}
-	else{
-		
-		    	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
-					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
-					->where('teves_billing_table.receivable_idx', '<>', 0)
-					->where(function ($q) use($client_idx) {
-						if ($client_idx) {
-						   $q->where('teves_billing_table.client_idx', $client_idx);
-						}
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
 						})
-					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
               		->get([
 					'teves_billing_table.billing_id',
 					'teves_billing_table.receivable_idx',
@@ -252,8 +238,6 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.order_time',
 					'teves_billing_table.created_at',]);
 					
-	}
-		
 		return DataTables::of($data)
 				
 				->addIndexColumn()				
@@ -310,6 +294,7 @@ class BillingTransactionController extends Controller
 				
 				->rawColumns(['action','quantity_measurement'])
                 ->make(true);		
+		}
 		}
     }
 

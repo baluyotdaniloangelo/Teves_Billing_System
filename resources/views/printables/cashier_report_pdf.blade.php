@@ -258,15 +258,16 @@
 		<table cellspacing="0" width="100%">
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="4">MISCELLANEOUS ITEMS</td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="5">MISCELLANEOUS ITEMS</td>
 		</tr>
 		
         <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="4">SALES ORDER - CREDIT SALES</td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="5">SALES ORDER - CREDIT SALES</td>
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000;" width="10%">#</td>
+		  <td style="font-size:11px; border:1px solid #000;">Account Name</td>
 		  <td style="font-size:11px; border:1px solid #000;">Product</td>
 		  <td style="font-size:11px; border:1px solid #000;">Liters</td>
           <td style="font-size:11px; border:1px solid #000;">Amount</td>
@@ -278,6 +279,7 @@
             @foreach ($data_SALES_CREDIT as $data_SALES_CREDIT_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px; ">
 				<td nowrap style="border:1px solid #000;"><?=$sc;?></td>
+				<td nowrap style="border:1px solid #000;">{{$data_SALES_CREDIT_cols->client_name}}</td>
 				<td nowrap style="border:1px solid #000;">{{$data_SALES_CREDIT_cols->product_name}}</td>
 				<td nowrap style="border:1px solid #000;"><?=number_format($data_SALES_CREDIT_cols['order_quantity'],2,".",",");?></td>
 				<td nowrap style="border:1px solid #000;"><?=number_format($data_SALES_CREDIT_cols['order_total_amount'],2,".",",");?></td>
@@ -371,45 +373,81 @@
 		                  <td width="45%">
 								<table cellspacing="0" width="100%">		
 								<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-								  <td style="font-size:11px; border:1px solid #000;" colspan="2">SUMMARY</td>
+								  <td style="font-size:11px; border:1px solid #000;" colspan="3">SUMMARY</td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">FUEL SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan=2>FUEL SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_fuel_sales,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;">OTHER SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan=2>OTHER SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($other_sales_total,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan="2">MISCELLANEOUS ITEMS</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan="3">MISCELLANEOUS ITEMS</td>
 								   
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right; background-color: #c6e0b4;">SALES ORDER - CREDIT SALES</td>
+								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">SALES ORDER - CREDIT SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_sales_credit,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right; background-color: #c6e0b4;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
+								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_discount,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right; background-color: #c6e0b4;">OTHERS</td>
+								  <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">OTHERS</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_others_msc,2,".",",");?></td>
 								</tr>
 								<?php
 								$theoretical_sales_total = ($total_fuel_sales + $other_sales_total) - ($total_sales_credit+$total_discount+$total_others_msc)
 								?>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">THEORETICAL SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>THEORETICAL SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($theoretical_sales_total,2,".",",");?></td>
 								</tr>
+								<tr>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>TOTAL CASH PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_cash_payment_amount,2,".",",");?></td>
+								</tr>
+								
+								<tr>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan="3">NON-CASH PAYMENT</td>
+								   
+								</tr>
+
+								<tr>
+								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">LIMITLESSS PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_limitless_payment_amount,2,".",",");?></td>
+								</tr>
+								<tr>
+								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CREDIT/DEBIT PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_credit_debit_payment_amount,2,".",",");?></td>
+								</tr>
+								<tr>
+								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">GCASH PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_ewallet_payment_amount,2,".",",");?></td>
+								</tr>
+								<?php 
+									$total_non_cash_payment = $PH8_SUM_limitless_payment_amount+$PH8_SUM_credit_debit_payment_amount+$PH8_SUM_ewallet_payment_amount;
+								?>
+								<tr>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>TOTAL NON-CASH PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_non_cash_payment,2,".",",");?></td>
+								</tr>
+								
 								<?php
 								
 								$one_thousand_deno 		= $data_Cash_on_hand[0]->one_thousand_deno;
@@ -449,28 +487,28 @@
 									$one_deno_total +
 									$twenty_five_cent_deno_total;
 									
-								$short_over = $total_cash_on_hand - ($theoretical_sales_total);
+								$short_over = $total_cash_on_hand - ($theoretical_sales_total + $PH8_SUM_cash_payment_amount + $total_non_cash_payment);
 								?>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CASH ON HAND</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>CASH ON HAND</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_cash_on_hand,2,".",",");?></td>
 								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CASH - SHORT/OVER</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>CASH - SHORT/OVER</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($short_over,2,".",",");?></td>
 								</tr>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=2>&nbsp;</td>
+								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=3>&nbsp;</td>
 								</tr>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=2>&nbsp;</td>
+								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=3>&nbsp;</td>
 								</tr>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=2>&nbsp;</td>
+								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=3>&nbsp;</td>
 								</tr>
 								<tr>
-								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=2>&nbsp;</td>
+								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=3>&nbsp;</td>
 								</tr>
 								</table>
 							</td>

@@ -19,6 +19,7 @@ use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\PurchaseOrderController_v2;
 use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
+use App\Http\Controllers\CashiersReport_Payment_Controller;
 use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
@@ -429,20 +430,20 @@ Route::post('/get_product_inventory_list', [CashiersReport_Dipstick_Inventory_Co
 Route::post('/delete_cashiers_report_p6', [CashiersReport_Dipstick_Inventory_Controller::class,'delete_cashiers_report_p6'])->name('DeleteCashiersProductP6')->middleware('isLoggedIn');
 
 Route::post('/cashiers_report_p6_info', [CashiersReport_Dipstick_Inventory_Controller::class, 'cashiers_report_p6_info'])->name('CRP6_info')->middleware('isLoggedIn');
-/*Load Cashiers Report */
-Route::get('/generate_cashier_report_pdf', [CashiersReport_Dipstick_Inventory_Controller::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
 
-/*Cahiers's Report Dipstick Inventory*/
-// Route::post('/save_product_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Controller::class,'save_product_cashiers_report_p7'])->name('SAVE_CHR_PH7')->middleware('isLoggedIn');
+/*Print Via PDF - Cashiers Report */
+Route::get('/generate_cashier_report_pdf', [CashiersReportController::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
+
+
+/*Cashiers Report Part - Cash Payment*/
+Route::post('/save_cash_payment_cashiers_report_p8', [CashiersReport_Payment_Controller::class,'save_cash_payment_cashiers_report_p8'])->name('SAVE_CHR_PH8')->middleware('isLoggedIn');
 /* Load P6 */
-// Route::post('/get_product_dipstick_inventory_list', [CashiersReport_Dipstick_Inventory_Controller::class,'get_product_dipstick_inventory_list'])->name('GetCashiersP7')->middleware('isLoggedIn');
+Route::post('/get_cash_payment_inventory_list', [CashiersReport_Payment_Controller::class,'get_cash_payment_inventory_list'])->name('GetCashiersP8')->middleware('isLoggedIn');
 /*Delete*/
-// Route::post('/delete_cashiers_report_p7', [CashiersReport_Dipstick_Inventory_Controller::class,'delete_cashiers_report_p7'])->name('DeleteCashiersProductP7')->middleware('isLoggedIn');
+Route::post('/delete_cash_payment_report', [CashiersReport_Payment_Controller::class,'delete_cash_payment_report'])->name('DeleteCashiersProductP8')->middleware('isLoggedIn');
 
-// Route::post('/cashiers_report_p7_info', [CashiersReport_Dipstick_Inventory_Controller::class, 'cashiers_report_p7_info'])->name('CRP7_info')->middleware('isLoggedIn');
+Route::post('/cashiers_report_p8_info', [CashiersReport_Payment_Controller::class, 'cashiers_report_p8_info'])->name('CRP8_info')->middleware('isLoggedIn');
 
-/*Load Cashiers Report VIA PDF */
-//Route::get('/generate_cashier_report_pdf', [CashiersReport::class,'generate_cashier_report_pdf'])->name('generate_cashier_report_pdf')->middleware('isLoggedIn');
 
 
 /*Dev Date Nov 30 2022*/

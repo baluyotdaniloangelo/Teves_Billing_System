@@ -66,15 +66,24 @@ class PurchaseOrderController_v2 extends Controller
 	/*Fetch Product List using Datatable*/
 	public function getPurchaseOrderList_v2(Request $request){
 		
-		$list = PurchaseOrderModel::get();
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+			
 		if ($request->ajax()) {
 
 		$data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+						->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_purchase_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
               	->get([
 						'teves_purchase_order_table.purchase_order_id',
 						'teves_purchase_order_table.purchase_order_date',
 						'teves_purchase_order_table.purchase_order_control_number',
 						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
 						'teves_supplier_table.supplier_name',
 						'teves_purchase_order_table.purchase_order_total_payable',
 						'teves_purchase_order_table.purchase_status',
@@ -85,22 +94,11 @@ class PurchaseOrderController_v2 extends Controller
 		return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('status', function($row){
-					
-					/*				
-				if($row->purchase_status=='Pending'){
-					$purchase_status_selected = '<option disabled="" value="">Choose...</option><option selected value="Pending">Pending</option><option value="Paid">Paid</option>';
-				}else if($row->purchase_status=='Paid'){
-					$purchase_status_selected = '<option disabled="" value="">Choose...</option><option value="Pending">Pending</option><option selected value="Paid">Paid</option>';
-				}else{
-					$purchase_status_selected = '<option disabled="" selected value="">Choose...</option><option value="Pending">Pending</option><option value="Paid">Paid</option>';
-				}*/
-					
 					$actionBtn = $row->purchase_status;
                     return $actionBtn;
                 })
 				
 				->addColumn('action', function($row){
-					
 					
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
@@ -126,10 +124,10 @@ class PurchaseOrderController_v2 extends Controller
 							if(Session::get('UserType')=="Admin"){
 										return $actionBtn;
 							}
-							if(Session::get('UserType')=="Supervisor"){
+							else if(Session::get('UserType')=="Supervisor"){
 										return '';/*View and Print Only*/
 							}
-							if(Session::get('UserType')=="Accounting_Staff"){
+							else if(Session::get('UserType')=="Accounting_Staff"){
 										
 										/*Access within 24 Hrs*/
 										if($numberDays>=1){
@@ -146,6 +144,7 @@ class PurchaseOrderController_v2 extends Controller
 				->rawColumns(['action','status'])
                 ->make(true);
 		}		
+		}
     }
 
 	/*Load Purchase Order Interface*/

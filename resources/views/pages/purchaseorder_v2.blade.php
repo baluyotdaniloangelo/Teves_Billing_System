@@ -24,6 +24,7 @@
 													<th class="all">Control Number</th>
 													<th class="all">Supplier</th>
 													<th class="all">Sales Order #</th>
+													<th class="all">Sales Invoice #</th>
 													<th class="none">Total Payable</th>
 													<th class="all">Delivery Status</th>
 													<th class="all">Payment Status</th>

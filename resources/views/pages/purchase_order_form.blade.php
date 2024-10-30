@@ -96,7 +96,7 @@
 							<div class="row mb-2">	
 								
 									<div class="col-md-6">
-										<label for="update_purchase_order_official_receipt_no" class="form-label">Official Receipt #</label>
+										<label for="update_purchase_order_official_receipt_no" class="form-label">Sales Invoice #</label>
 										<input type="text" class="form-control" id="update_purchase_order_official_receipt_no" name="update_purchase_order_official_receipt_no">
 										<span class="valid-feedback" id="update_purchase_order_official_receipt_nooError"></span>
 									</div>

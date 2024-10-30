@@ -308,8 +308,6 @@ class ReportController extends Controller
 		
 		$data = BillingTransactionModel::where('client_idx', $client_idx)
 					->where('teves_billing_table.branch_idx', $company_header)
-					//->where('teves_billing_table.order_date', '>=', $start_date)
-                    //->where('teves_billing_table.order_date', '<=', $end_date)
 					->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
 					->where('teves_billing_table.receivable_idx', '=', 0)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
@@ -338,14 +336,36 @@ class ReportController extends Controller
 						
 					if($row->receivable_idx==0){
 						
-						if(Session::get('UserType')=="Admin"){
-							$actionBtn = '
-							<div align="center" class="action_table_menu_site">
-							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
-							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
-							</div>';
-						}
-						else{
+						// if(Session::get('UserType')=="Admin"){
+							// $actionBtn = '
+							// <div align="center" class="action_table_menu_site">
+							// <a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+							// <a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+							// </div>';
+						// }
+						// else{
+						
+						// $startTimeStamp = strtotime($row->created_at);
+						// $endTimeStamp = strtotime(date('y-m-d'));
+						// $timeDiff = abs($endTimeStamp - $startTimeStamp);
+						// $numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// // and you might want to convert to integer
+						// $numberDays = intval($numberDays);
+							
+							// if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_idx){
+								// $actionBtn = '
+								// <div align="center" class="action_table_menu_site">
+								// <a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								// </div>';
+							// }else{
+								// $actionBtn = '
+								// <div align="center" class="action_table_menu_site">
+								// <a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+								// <a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+								// </div>';
+							// }
+
+						// }
 						
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
@@ -353,8 +373,22 @@ class ReportController extends Controller
 						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
+						
+						$numberHours = $timeDiff/3600;  // 3600 1 hr
+						// and you might want to convert to integer
+						$numberHours = intval($numberHours);
+						
+						if(Session::get('UserType')=="Admin"){
+							$actionBtn = '
+							<div align="center" class="action_table_menu_site">
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+							</div>';
+						}
+						else if(Session::get('UserType')=="Accounting_Staff"){
 							
-							if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_idx){
+							if($numberDays>=1){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
@@ -362,6 +396,32 @@ class ReportController extends Controller
 							}else{
 								$actionBtn = '
 								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+								</div>';
+							}
+							
+						}
+						else if(Session::get('UserType')=="Supervisor"){
+							
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';
+			
+						}
+						else{
+						
+							if($numberHours>=1 || Session::get('loginID')!=$row->created_by_user_idx){
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';
+							}else{
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
 								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
 								</div>';
@@ -407,26 +467,6 @@ class ReportController extends Controller
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
 		$company_header = $request->company_header;
-		/*$data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('teves_billing_table.order_date', '>=', $start_date)
-                    ->where('teves_billing_table.order_date', '<=', $end_date)
-					->where('teves_billing_table.receivable_idx', '=', $receivable_id)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-					->orderBy('teves_billing_table.order_date', 'asc')
-              		->get([
-					'teves_billing_table.billing_id',
-					'teves_billing_table.receivable_idx',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_product_table.product_unit_measurement',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);*/
 					
 		/*Using Raw Query*/
 					
@@ -1408,7 +1448,7 @@ class ReportController extends Controller
 		
 		$title = 'PURCHASE ORDER';
 		  
-        $pdf = PDF::loadView('printables.report_purchase_order_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));
+        $pdf = PDF::loadView('printables.report_purchase_order_pdf_v3', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/

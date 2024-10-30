@@ -872,7 +872,7 @@
 			document.getElementById("product_idx_PH3").disabled = false;
 			document.getElementById("order_quantity_PH3").disabled = false;
 			
-            document.getElementById("quantity_label").innerHTML = "LITERS";
+            document.getElementById("quantity_label").innerHTML = "QUANTITY";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
 
         }/*else if(miscellaneous_items_type == 'SALES_CREDIT'){
@@ -922,7 +922,7 @@
 			document.getElementById("update_product_idx_PH3").disabled = false;
 			document.getElementById("update_order_quantity_PH3").disabled = false;
 			
-            document.getElementById("update_quantity_label").innerHTML = "LITERS/PCS";
+            document.getElementById("update_quantity_label").innerHTML = "QUANTITY";
             document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
 
 		}else{
@@ -950,6 +950,7 @@
 
             var miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
             var reference_no 			    = $("input[name=reference_no_PH3]").val();
+			var client_idx 			    = $('#sold_to_client_name_list option[value="' + $('#sold_to_client_id').val() + '"]').attr('data-id');
 			
 			/*Product ID*/
 			var product_idx 			    = $('#product_list_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');
@@ -960,8 +961,6 @@
 			var product_manual_price 	    = $("input[name=product_manual_price_PH3]").val();
 			
 			let teves_branch 			= $("#teves_branch").val();
-
-
 
 			document.getElementById('CRPH3_form').className = "g-3 needs-validation was-validated";
 			
@@ -974,6 +973,7 @@
 					  CashiersReportId:CashiersReportId,
 					  miscellaneous_items_type:miscellaneous_items_type,
                       reference_no:reference_no,
+					  client_idx:client_idx,
                       product_idx:product_idx,
 					  branch_idx:teves_branch,
 					  item_description:product_name,
@@ -1099,13 +1099,15 @@
 							var product_idx = response[i].product_idx;						
 							var unit_price = response[i].unit_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var product_name = response[i].product_name;
+							var client_name = response[i].client_name;
 							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_product_data_msc_SALES_CREDIT tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
-							"<td class='product_td' align='center'>"+product_name+"</td>"+
+							"<td align='left'>"+client_name+"</td>"+
+							"<td align='left'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
@@ -1188,6 +1190,7 @@
 					
 					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
 					document.getElementById("update_product_idx_PH3").value 			= response[0].product_name;
+					document.getElementById("update_sold_to_client_id").value 			= response[0].client_name;
 					document.getElementById("update_order_quantity_PH3").value 			= response[0].order_quantity;
 					document.getElementById("update_product_manual_price_PH3").value 	= response[0].unit_price;
 					
@@ -1311,7 +1314,7 @@
 			let CHPH3_ID 					= document.getElementById("update-CRPH3").value;
 			var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 			var reference_no 				= $("input[name=update_reference_no_PH3]").val();
-	
+			var client_idx 			    	= $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			var product_idx 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
 			/*Product Name*/
 			let product_name 				= $("input[name=update_product_name_PH3]").val();
@@ -1329,7 +1332,8 @@
 					  CHPH3_ID:CHPH3_ID,
 					  CashiersReportId:CashiersReportId,
 					  miscellaneous_items_type:miscellaneous_items_type, 
-					  reference_no:reference_no,
+					  reference_no:reference_no, 
+					  client_idx:client_idx,
 					  product_idx:product_idx,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 
@@ -2656,10 +2660,17 @@
 					other_sales_total = response.other_sales_total;
 					total_sales = fuel_sales_total + other_sales_total;
 					miscellaneous_total = response.miscellaneous_total;
+					
+					
+					total_cash_payment = response.total_cash_payment_amount;
+					
+					total_non_cash_payment = response.total_limitless_payment_amount + response.total_credit_debit_payment_amount + response.total_ewallet_payment_amount;
+					
 					theoretical_sales = total_sales - miscellaneous_total;
+					
 					cash_on_hand = response.cash_on_hand;
 					
-					cash_short_or_over = cash_on_hand - (theoretical_sales);				
+					cash_short_or_over = cash_on_hand - (theoretical_sales + total_cash_payment + total_non_cash_payment);				
 					
 					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
@@ -2668,6 +2679,10 @@
 					$('#total_sales').html(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
 					$('#miscellaneous_total').html(miscellaneous_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+					
+					$('#total_cash_payment').html(total_cash_payment.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+					
+					$('#total_non_cash_payment').html(total_non_cash_payment.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					
 					$('#theoretical_sales').html(theoretical_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					

@@ -30,6 +30,7 @@
 					{data: 'purchase_order_control_number'},
 					{data: 'supplier_name'},
 					{data: 'purchase_order_sales_order_number'},
+					{data: 'purchase_order_official_receipt_no'},
 					{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },
 					{data: 'purchase_order_delivery_status'},
 					{data: 'purchase_status'},
@@ -37,7 +38,7 @@
 			],
 			order: [[ 1, "desc" ]],
 			columnDefs: [
-					{ className: 'text-center', targets: [0, 1, 5, 6, 7] },
+					{ className: 'text-center', targets: [0, 1, 6, 7, 8, 9] },
 			]
 		});
 				/**/

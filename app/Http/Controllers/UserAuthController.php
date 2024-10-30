@@ -33,6 +33,7 @@ class UserAuthController extends Controller
 				
 				$request->session()->put('loginID', $user->user_id);
 				$request->session()->put('UserType', $user->user_type);
+				$request->session()->put('user_branch_access_type', $user->user_branch_access_type);
 				
 				return redirect('billing');
 				

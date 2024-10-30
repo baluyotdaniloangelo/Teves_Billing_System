@@ -70,13 +70,14 @@
           <i class="bi bi-file-spreadsheet navbar_icon"></i><span title="Billing">Billing</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="billing-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-		
-            <a class="nav-link navbar_bg sidebar_li_a" href="{{ route('create_so_billing') }}" title="Create Billing Transaction">
+        
+		<li>
+		<?php if($data->user_type!="Supervisor"){ ?>
+        <a class="nav-link navbar_bg sidebar_li_a" href="{{ route('create_so_billing') }}" title="Create Billing Transaction">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
           <span title="Create SO/Billing">Create</span>
         </a>
-
+		<?php } ?>
 		<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('so') }}" title="SO List">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
           <span title="New Billing Transaction History">SO List</span>
@@ -98,7 +99,7 @@
         </a>
       </li>
 	  
-	  <?php if($data->user_type=="Admin"){ ?>
+	  <?php if($data->user_type=="Admin" || $data->user_type=="Accounting_Staff"){ ?>
 	   <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('salesorder') }}" title="Create Sales Order">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
@@ -143,6 +144,7 @@
 		</ul>
       </li>
 	  
+	  <?php if($data->user_type=="Admin" || $data->user_type=="Accounting_Staff"){ ?>
       <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
           <i class="bi bi-gear navbar_icon"></i><span title="Manage Product, Client and System User Account">Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -150,8 +152,6 @@
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
 		
-          
-			
 			<?php if($data->user_type=="Admin" || $data->user_type=="Accounting_Staff"){ ?>
 			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
               <i class="bi bi-cart navbar_icon" title="Manage Product list"></i><span>Product</span>
@@ -179,8 +179,7 @@
           </li>
         </ul>
       </li><!-- End Components Nav -->
-
-	  <!-- End Charts Nav -->
+	  <?php } ?>
 
     </ul>
 

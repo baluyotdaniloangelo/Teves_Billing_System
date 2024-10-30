@@ -115,11 +115,16 @@ class ReceivablesController extends Controller
 		
 		if(Session::has('loginID')){
 			
-			// $list = ReceivablesModel::get();
+			$current_user = Session::get('loginID');
 			if ($request->ajax()) {
 
 			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
 						->WHERE('teves_receivable_table.sales_order_idx', '=', '0')
+						->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_receivable_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
 						->get([
 						'teves_receivable_table.receivable_id',
 						'teves_receivable_table.sales_order_idx',
@@ -161,53 +166,24 @@ class ReceivablesController extends Controller
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
 							
-							/*if($numberDays>=3){
-
-							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										</div>';
-										
-							}else{*/
-							
 							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										</div>';
-										
-							/*}*/
-							// if($row->receivable_status == 'Paid' && Session::get('UserType')!="Admin"){
-										// return '';
-							// }else{
-										// return $actionBtn;
-							// }
-								
-							/*
-							if(Session::get('UserType')=="Admin"){
-										return $actionBtn_admin;
-							}else{
-								
-								if($row->receivable_status != 'Paid'){
-										return $actionBtn_user;
-								}else{
-										return '';
-								}
-										
-							}
-							*/
 							
 							if(Session::get('UserType')=="Admin"){
 										return $actionBtn_admin;
 							}
-							if(Session::get('UserType')=="Supervisor"){
+							else if(Session::get('UserType')=="Supervisor"){
 										return '';/*View and Print Only*/
 							}
-							if(Session::get('UserType')=="Accounting_Staff"){
+							else if(Session::get('UserType')=="Accounting_Staff"){
 										
 										/*Access within 24 Hrs*/
 										if($numberDays>=1){
-											return $actionBtn_admin;
-										}else{
 											return '';/*View and Print Only*/
+										}else{
+											return $actionBtn_admin;
 										}
 										
 							}else{
@@ -247,13 +223,18 @@ class ReceivablesController extends Controller
     {
 					
 		if(Session::has('loginID')){
-			
-			//$list = ReceivablesModel::get();
+			$current_user = Session::get('loginID');
 			if ($request->ajax()) {
 
 			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
 						->join('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
 						->WHERE('teves_receivable_table.sales_order_idx', '<>', '0')
+						/*Query only from Assigned Branch*/
+						->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_receivable_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
 						->get([
 						'teves_receivable_table.receivable_id',
 						'teves_receivable_table.sales_order_idx',
@@ -303,16 +284,17 @@ class ReceivablesController extends Controller
 							if(Session::get('UserType')=="Admin"){
 										return $actionBtn_admin;
 							}
-							if(Session::get('UserType')=="Supervisor"){
+							else if(Session::get('UserType')=="Supervisor"){
 										return '';/*View and Print Only*/
 							}
-							if(Session::get('UserType')=="Accounting_Staff"){
+							else if(Session::get('UserType')=="Accounting_Staff"){
 										
 										/*Access within 24 Hrs*/
 										if($numberDays>=1){
-											return $actionBtn_admin;
-										}else{
 											return '';/*View and Print Only*/
+										}else{
+											
+											return $actionBtn_admin;
 										}
 										
 							}else{

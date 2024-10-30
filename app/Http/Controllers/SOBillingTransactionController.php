@@ -66,13 +66,21 @@ class SOBillingTransactionController extends Controller
 	public function getSOBillingTransactionList(Request $request)
     {
 
-		$list = SOBillingTransactionModel::get();
+	if(Session::has('loginID')){
+			
+		$current_user = Session::get('loginID');
+		
 		if ($request->ajax()) {
 
-	if(Session::get('UserType')!="Admin"){
+	//if(Session::get('UserType')!="Admin"){
 		
     	$data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
 					->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})
               		->get([
 					'teves_billing_so_table.so_id',
 					'teves_billing_so_table.so_number',
@@ -84,21 +92,21 @@ class SOBillingTransactionController extends Controller
 					'teves_billing_so_table.created_at',
 					'teves_billing_so_table.created_by_user_id']);
 					
-	}else{
+	//}else{
 		
-		$data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
-              		->get([
-					'teves_billing_so_table.so_id',
-					'teves_billing_so_table.so_number',
-					'teves_billing_so_table.drivers_name',
-					'teves_billing_so_table.plate_no',
-					'teves_client_table.client_name',
-					'teves_billing_so_table.order_date',
-					'teves_billing_so_table.order_time',
-					'teves_billing_so_table.created_at',
-					'teves_billing_so_table.created_by_user_id']);
+		// $data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+              		// ->get([
+					// 'teves_billing_so_table.so_id',
+					// 'teves_billing_so_table.so_number',
+					// 'teves_billing_so_table.drivers_name',
+					// 'teves_billing_so_table.plate_no',
+					// 'teves_client_table.client_name',
+					// 'teves_billing_so_table.order_date',
+					// 'teves_billing_so_table.order_time',
+					// 'teves_billing_so_table.created_at',
+					// 'teves_billing_so_table.created_by_user_id']);
 					
-	}
+	//}
 		
 		return DataTables::of($data)
 				
@@ -140,6 +148,7 @@ class SOBillingTransactionController extends Controller
 				->rawColumns(['action'])
                 ->make(true);		
 		}
+	}
     }
 
 	public function so_info(Request $request){

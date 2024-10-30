@@ -22,7 +22,8 @@
 						<thead>
 							<tr class='report'>
 								<th style="text-align:center !important;">#</th>
-								<th style="text-align:center !important;">Product</th>
+								<th style="text-align:left !important;">Account Name</th>
+								<th style="text-align:left !important;">Product</th>
 								<th style="text-align:center !important;">Liters</th>
 								<th style="text-align:center !important;">Pump Price</th>
 								<th style="text-align:center !important;">Amount</th>
@@ -119,6 +120,19 @@
 					  </div>
 
 					  <div class="row mb-2">
+						  <label for="sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
+						  <div class="col-sm-8">
+									<input class="form-control" list="sold_to_client_name_list" name="sold_to_client_name" id="sold_to_client_id" autocomplete="off">
+												<datalist id="sold_to_client_name_list">
+												  @foreach ($client_data as $client_data_cols)
+												  <option label="{{$client_data_cols->client_name}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}}">
+												  @endforeach
+												</datalist>
+									<span class="valid-feedback" id="sold_to_client_idError"></span>
+									</div>	
+					  </div>
+					  
+					  <div class="row mb-2">
 						  <label for="product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT / DESCRIPTION</label>
 						  <div class="col-sm-8">
 									<input class="form-control" list="product_list_PH3" name="product_name_PH3" id="product_idx_PH3" required autocomplete="off" onchange="TotalAmount_PH3()">
@@ -209,6 +223,19 @@
 									<span class="valid-feedback" id="update_reference_no_PH3Error"></span>
 									</div>	
 					  </div>					  
+					  
+					  <div class="row mb-2">
+						  <label for="update_sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
+						  <div class="col-sm-8">
+									<input class="form-control" list="update_sold_to_client_name_list" name="update_sold_to_client_name" id="update_sold_to_client_id" autocomplete="off">
+												<datalist id="update_sold_to_client_name_list">
+												  @foreach ($client_data as $client_data_cols)
+												  <option label="{{$client_data_cols->client_name}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}}">
+												  @endforeach
+												</datalist>
+									<span class="valid-feedback" id="update_sold_to_client_idError"></span>
+									</div>	
+					  </div>
 					  
 					  <div class="row mb-2">
 						  <label for="update_product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT / DESCRIPTION</label>
