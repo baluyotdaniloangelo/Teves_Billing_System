@@ -366,8 +366,54 @@
 
 		<br>
 	   <?php
+	   
             $total_fuel_sales = $order_total_amount_P1_premium_95 + $order_total_amount_P1_super_regular + $order_total_amount_P1_diesel;
-        ?>
+       		$total_non_cash_payment = $PH8_SUM_limitless_payment_amount + $PH8_SUM_credit_debit_payment_amount + $PH8_SUM_gcash_payment_amount + $PH8_SUM_online_payment_amount;
+			$theoretical_sales_total = ($total_fuel_sales + $other_sales_total) - ($total_sales_credit+$total_discount+$total_others_msc);
+		
+								$one_thousand_deno 		= $data_Cash_on_hand[0]->one_thousand_deno;
+								$five_hundred_deno 		= $data_Cash_on_hand[0]->five_hundred_deno;
+								$two_hundred_deno 		= $data_Cash_on_hand[0]->two_hundred_deno;
+								$one_hundred_deno		= $data_Cash_on_hand[0]->one_hundred_deno;
+								$fifty_deno 			= $data_Cash_on_hand[0]->fifty_deno;
+								$twenty_deno 			= $data_Cash_on_hand[0]->twenty_deno;
+								$ten_deno 				= $data_Cash_on_hand[0]->ten_deno;
+								$five_deno 				= $data_Cash_on_hand[0]->five_deno;
+								$one_deno 				= $data_Cash_on_hand[0]->one_deno;
+								$twenty_five_cent_deno 	= $data_Cash_on_hand[0]->twenty_five_cent_deno;
+								$cash_drop 				= $data_Cash_on_hand[0]->cash_drop;
+								
+								$one_thousand_deno_total 	= $one_thousand_deno * 1000;
+								$five_hundred_deno_total 	= $five_hundred_deno * 500;
+								$two_hundred_deno_total 	= $two_hundred_deno * 200;
+								$one_hundred_deno_total 	= $one_hundred_deno * 100;
+								
+								$fifty_deno_total 			= $fifty_deno * 50;
+								$twenty_deno_total 			= $twenty_deno * 20;
+								$ten_deno_total 			= $ten_deno * 10;
+								$five_deno_total 			= $five_deno * 5;
+								$one_deno_total 			= $one_deno * 1;
+								$twenty_five_cent_deno_total = $twenty_five_cent_deno * 0.25;
+								
+								$total_cash_on_hand = 
+									$one_thousand_deno_total + 
+									$five_hundred_deno_total + 
+									$two_hundred_deno_total + 
+									$one_hundred_deno_total +
+									$fifty_deno_total + 
+									$twenty_deno_total +
+									$ten_deno_total + 
+									$five_deno_total +
+									$one_deno_total +
+									$twenty_five_cent_deno_total;
+									
+								$total_cash_tansaction = $total_cash_on_hand + $cash_drop;
+								
+								$short_over = $theoretical_sales_total - ($total_cash_tansaction + $total_non_cash_payment);
+								
+								
+								?>
+								
 		<table cellspacing="0" width="100%">		
                         <tr>
 		                  <td width="45%">
@@ -408,16 +454,14 @@
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">OTHERS</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_others_msc,2,".",",");?></td>
 								</tr>
-								<?php
-								$theoretical_sales_total = ($total_fuel_sales + $other_sales_total) - ($total_sales_credit+$total_discount+$total_others_msc)
-								?>
+								
 								<tr>
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>THEORETICAL SALES</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($theoretical_sales_total,2,".",",");?></td>
 								</tr>
 								<tr>
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>TOTAL CASH PAYMENT</td>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_cash_payment_amount,2,".",",");?></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_cash_tansaction,2,".",",");?></td>
 								</tr>
 								
 								<tr>
@@ -438,69 +482,25 @@
 								<tr>
 								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">GCASH PAYMENT</td>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_ewallet_payment_amount,2,".",",");?></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_gcash_payment_amount,2,".",",");?></td>
 								</tr>
-								<?php 
-									$total_non_cash_payment = $PH8_SUM_limitless_payment_amount+$PH8_SUM_credit_debit_payment_amount+$PH8_SUM_ewallet_payment_amount;
-								?>
+								<tr>
+								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">ONLINE PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_online_payment_amount,2,".",",");?></td>
+								</tr>
+								
 								<tr>
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>TOTAL NON-CASH PAYMENT</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_non_cash_payment,2,".",",");?></td>
 								</tr>
 								
-								<?php
-								
-								$one_thousand_deno 		= $data_Cash_on_hand[0]->one_thousand_deno;
-								$five_hundred_deno 		= $data_Cash_on_hand[0]->five_hundred_deno;
-								$two_hundred_deno 		= $data_Cash_on_hand[0]->two_hundred_deno;
-								$one_hundred_deno		= $data_Cash_on_hand[0]->one_hundred_deno;
-								$fifty_deno 			= $data_Cash_on_hand[0]->fifty_deno;
-								$twenty_deno 			= $data_Cash_on_hand[0]->twenty_deno;
-								$ten_deno 				= $data_Cash_on_hand[0]->ten_deno;
-								$five_deno 				= $data_Cash_on_hand[0]->five_deno;
-								$one_deno 				= $data_Cash_on_hand[0]->one_deno;
-								$twenty_five_cent_deno 	= $data_Cash_on_hand[0]->twenty_five_cent_deno;
-								$cash_drop 				= $data_Cash_on_hand[0]->cash_drop;
-								
-								$one_thousand_deno_total 	= $one_thousand_deno * 1000;
-								$five_hundred_deno_total 	= $five_hundred_deno * 500;
-								$two_hundred_deno_total 	= $two_hundred_deno * 200;
-								$one_hundred_deno_total 	= $one_hundred_deno * 100;
-								
-								$fifty_deno_total 			= $fifty_deno * 50;
-								$twenty_deno_total 			= $twenty_deno * 20;
-								$ten_deno_total 			= $ten_deno * 10;
-								$five_deno_total 			= $five_deno * 5;
-								$one_deno_total 			= $one_deno * 1;
-								$twenty_five_cent_deno_total = $twenty_five_cent_deno * 0.25;
-								
-								$total_cash_on_hand = 
-									$cash_drop + 
-									$one_thousand_deno_total + 
-									$five_hundred_deno_total + 
-									$two_hundred_deno_total + 
-									$one_hundred_deno_total +
-									$fifty_deno_total + 
-									$twenty_deno_total +
-									$ten_deno_total + 
-									$five_deno_total +
-									$one_deno_total +
-									$twenty_five_cent_deno_total;
-									
-								$short_over = $total_cash_on_hand - ($theoretical_sales_total + $PH8_SUM_cash_payment_amount + $total_non_cash_payment);
-								?>
-								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>CASH ON HAND</td>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_cash_on_hand,2,".",",");?></td>
-								</tr>
 
 								<tr>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>CASH - SHORT/OVER</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>CASH(SHORT/OVER)</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($short_over,2,".",",");?></td>
 								</tr>
-								<tr>
-								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=3>&nbsp;</td>
-								</tr>
+
 								<tr>
 								   <td style="font-size:11px; border:1px solid #fff; text-align:left;" colspan=3>&nbsp;</td>
 								</tr>
@@ -582,56 +582,17 @@
 							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan='2'>Cash drop</td>
 							  <td style="text-align:right; font-size:11px; border:1px solid #000;"><?=number_format($cash_drop,2,".",",");?></td>
 							</tr>
+							<tr style="font-size:11px; border:1px solid #000; " >
+							  <td style="font-size:11px; border:1px solid #000; background-color: #c6e0b4;" colspan='2'>Total Cash Transaction</td>
+							  <td style="text-align:right; font-size:11px; border:1px solid #000;"><?=number_format($total_cash_tansaction,2,".",",");?></td>
+							</tr>
+							
 							</table>
 							
 							</td>
 							</tr>
 		</table>
 		
-       <!--<br>
-	   		<table cellspacing="0" width="100%">
-			
-					<tr class='report'>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;" colspan='10'>Inventory</th>
-					</tr>
-					
-					<tr class='report'>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">#</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Product</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Tank Name</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Tank Capacity</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Beginning Inventory</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Sales in Liters</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Delivery</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Ending Inventory</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Book Stock</th>
-						<td style="font-size:11px; border:1px solid #000; text-align:center; background-color: #c6e0b4;">Variance</th>
-					</tr>
-					<//?php
-					$PH6_inventory_count = 1;
-					?>
-					@foreach ($data_PH6_inventory as $data_PH6_inventory_cols)
-					<tr class="data_tr" style="text-align: center; font-size:11px;">
-						
-						<td nowrap style="border:1px solid #000;" width="10%"><//?=$PH6_inventory_count;?></td>
-						<td nowrap style="border:1px solid #000;"><//?=$data_PH6_inventory_cols['product_name'];?></td>
-						<td nowrap style="border:1px solid #000;"><//?=$data_PH6_inventory_cols['tank_name'];?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=$data_PH6_inventory_cols['tank_capacity'];?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['beginning_inventory'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['sales_in_liters'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['delivery'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['ending_inventory'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['book_stock'],2,".",",");?></td>
-						<td nowrap style="border:1px solid #000; text-align:right;"><//?=number_format($data_PH6_inventory_cols['variance'],2,".",",");?></td>
-						
-					</tr>
-					<?php
-					//$PH6_inventory_count++;
-					?>
-					@endforeach
-					
-		</table>
-		-->
 		<br>
 	   		<table cellspacing="0" width="100%">
 			

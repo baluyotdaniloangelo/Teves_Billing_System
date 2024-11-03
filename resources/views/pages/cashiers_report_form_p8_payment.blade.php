@@ -8,10 +8,11 @@
 			<thead>
 					<tr class='report'>
 						<!--<th style="text-align:center !important;">#</th>-->
-						<th style="text-align:center !important;">Cash Payment</th>
+						
 						<th style="text-align:center !important;">Limitless Payment</th>
 						<th style="text-align:center !important;">Credit/Debit Payment</th>
 						<th style="text-align:center !important;">GCASH Payment</th>
+						<th style="text-align:center !important;">Online Payment</th>
 						<th style="text-align:center !important;" colspan="2">ACTION</th>
 					</tr>
 			</thead>
@@ -34,18 +35,12 @@
 						<form class="g-3 needs-validation" id="CRPH8_form">		
 						
 							
-							<div class="row mb-2">
-							  <label for="cash_payment_amount" class="col-sm-4 col-form-label">Cash Payment</label>
-							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="cash_payment_amount" id="cash_payment_amount" step=".01" value="0">
-								  <span class="valid-feedback" id="cash_payment_amountError"></span>						  
-							  </div>
-							</div>	
+								
 							
 							<div class="row mb-2">
 							  <label for="limitless_payment_amount" class="col-sm-4 col-form-label">Limitless Payment</label>
 							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="limitless_payment_amount" id="limitless_payment_amount" step=".01" value="0">
+								  <input type="number" class="form-control" placeholder="" name="limitless_payment_amount" id="limitless_payment_amount" step=".01" value="0" required>
 								  <span class="valid-feedback" id="limitless_payment_amountError"></span>						  
 							  </div>
 							</div>	
@@ -53,18 +48,26 @@
 							<div class="row mb-2">
 							  <label for="credit_debit_payment_amount" class="col-sm-4 col-form-label">Credit/Debit Payment</label>
 							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="credit_debit_payment_amount" id="credit_debit_payment_amount" step=".01" value="0">
+								  <input type="number" class="form-control" placeholder="" name="credit_debit_payment_amount" id="credit_debit_payment_amount" step=".01" value="0" required>
 								  <span class="valid-feedback" id="credit_debit_payment_amountError"></span>						  
 							  </div>
 							</div>
 
 							<div class="row mb-2">
-							  <label for="ewallet_payment_amount" class="col-sm-4 col-form-label" title="Manual Price">GCASH Payment</label>
+							  <label for="gcash_payment_amount" class="col-sm-4 col-form-label" title="Manual Price">GCASH Payment</label>
 							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="ewallet_payment_amount" id="ewallet_payment_amount" step=".01" value="0">
-								  <span class="valid-feedback" id="ewallet_payment_amountError"></span>						  
+								  <input type="number" class="form-control" placeholder="" name="gcash_payment_amount" id="gcash_payment_amount" step=".01" value="0" required >
+								  <span class="valid-feedback" id="gcash_payment_amountError"></span>						  
 							  </div>
-							</div>						
+							</div>	
+
+							<div class="row mb-2">
+							  <label for="online_payment_amount" class="col-sm-4 col-form-label">Online Payment</label>
+							  <div class="col-sm-8">
+								  <input type="number" class="form-control" placeholder="" name="online_payment_amount" id="online_payment_amount" step=".01" value="0" required>
+								  <span class="valid-feedback" id="online_payment_amountError"></span>						  
+							  </div>
+							</div>							
 							
 						
 					</div>
@@ -91,17 +94,9 @@
 						<form class="g-3 needs-validation" id="update_CRPH8_form">		
 							
 							<div class="row mb-2">
-							  <label for="update_cash_payment_amount" class="col-sm-4 col-form-label">Cash Payment</label>
-							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="update_cash_payment_amount" id="update_cash_payment_amount" step=".01">
-								  <span class="valid-feedback" id="update_cash_payment_amountError"></span>						  
-							  </div>
-							</div>
-							
-							<div class="row mb-2">
 							  <label for="update_limitless_payment_amount" class="col-sm-4 col-form-label">Limitless Payment</label>
 							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="update_limitless_payment_amount" id="update_limitless_payment_amount" required step=".01" onchange="update_dipstick_inventory_compute()" >
+								  <input type="number" class="form-control" placeholder="" name="update_limitless_payment_amount" id="update_limitless_payment_amount" required step=".01"  >
 								  <span class="valid-feedback" id="update_limitless_payment_amountError"></span>						  
 							  </div>
 							</div>	
@@ -109,20 +104,27 @@
 							<div class="row mb-2">
 							  <label for="update_credit_debit_payment_amount" class="col-sm-4 col-form-label">Credit/Debit Payment</label>
 							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="update_credit_debit_payment_amount" id="update_credit_debit_payment_amount" required step=".01" onchange="update_dipstick_inventory_compute()" >
+								  <input type="number" class="form-control" placeholder="" name="update_credit_debit_payment_amount" id="update_credit_debit_payment_amount" required step=".01"  >
 								  <span class="valid-feedback" id="update_credit_debit_payment_amountError"></span>						  
 							  </div>
 							</div>
 
 							<div class="row mb-2">
-							  <label for="update_ewallet_payment_amount" class="col-sm-4 col-form-label" title="Manual Price">GCASH Payment</label>
+							  <label for="update_gcash_payment_amount" class="col-sm-4 col-form-label" title="Manual Price">GCASH Payment</label>
 							  <div class="col-sm-8">
-								  <input type="number" class="form-control" placeholder="" name="update_ewallet_payment_amount" id="update_ewallet_payment_amount" required step=".01" onchange="update_dipstick_inventory_compute()" >
-								  <span class="valid-feedback" id="update_ewallet_payment_amountError"></span>						  
+								  <input type="number" class="form-control" placeholder="" name="update_gcash_payment_amount" id="update_gcash_payment_amount" required step=".01"  >
+								  <span class="valid-feedback" id="update_gcash_payment_amountError"></span>						  
 							  </div>
-							</div>						
+							</div>
+
+							<div class="row mb-2">
+							  <label for="update_online_payment_amount" class="col-sm-4 col-form-label">Online Payment</label>
+							  <div class="col-sm-8">
+								  <input type="number" class="form-control" placeholder="" name="update_online_payment_amount" id="update_online_payment_amount" step=".01">
+								  <span class="valid-feedback" id="update_online_payment_amountError"></span>						  
+							  </div>
+							</div>
 							
-						
 					</div>
 					
                     <div class="modal-footer">
@@ -148,10 +150,11 @@
 				</div>
 				
 				<div align="left"style="margin: 10px;">
-				Cash Payment: <span id="delete_cash_payment_amount"></span><br>
+				
 				Limitless Payment: <span id="delete_limitless_payment_amount"></span><br>
 				Credit/Debit Payment: <span id="delete_credit_debit_payment_amount"></span><br>
-				GCASH Payment: <span id="delete_ewallet_payment_amount"></span><br>	
+				GCASH Payment: <span id="delete_gcash_payment_amount"></span><br>	
+				Online Payment: <span id="delete_online_payment_amount"></span><br>
 				</div>	
 				
                 <div class="modal-footer footer_modal_bg">

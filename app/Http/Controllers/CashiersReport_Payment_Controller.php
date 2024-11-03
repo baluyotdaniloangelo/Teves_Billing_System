@@ -19,6 +19,22 @@ class CashiersReport_Payment_Controller extends Controller
 	
 	public function save_cash_payment_cashiers_report_p8(Request $request){	
 
+		$request->validate([
+			'online_payment_amount'  		=> 'required',
+			'limitless_payment_amount'  	=> 'required',
+			'gcash_payment_amount'  		=> 'required',
+			'credit_debit_payment_amount'  	=> 'required'
+        ], 
+        [
+			'online_payment_amount.required' 		=> 'Online Payment is Required',
+			'limitless_payment_amount.required' 	=> 'Limitless Payment is Required',
+			'gcash_payment_amount.required' 		=> 'Beginning Inventory is Required',
+			'credit_debit_payment_amount.required' 	=> 'Sales in Liters is Required'
+        ]
+		);
+
+
+
 			$CashiersReportId 		= $request->CashiersReportId;
 			$CRPH8_ID 				= $request->CRPH8_ID;
 								
@@ -28,10 +44,10 @@ class CashiersReport_Payment_Controller extends Controller
 									
 									$CashiersReportModel_P8->user_idx 						= Session::get('loginID');
 									$CashiersReportModel_P8->cashiers_report_idx 			= $CashiersReportId;
-									$CashiersReportModel_P8->cash_payment_amount 			= $request->cash_payment_amount;
+									$CashiersReportModel_P8->online_payment_amount 			= $request->online_payment_amount;
 									$CashiersReportModel_P8->limitless_payment_amount 		= $request->limitless_payment_amount;
 									$CashiersReportModel_P8->credit_debit_payment_amount 	= $request->credit_debit_payment_amount;
-									$CashiersReportModel_P8->ewallet_payment_amount	 		= $request->ewallet_payment_amount;
+									$CashiersReportModel_P8->gcash_payment_amount	 		= $request->gcash_payment_amount;
 									$CashiersReportModel_P8->created_by_user_id 			= Session::get('loginID');
 						
 									$result = $CashiersReportModel_P8->save();
@@ -47,10 +63,10 @@ class CashiersReport_Payment_Controller extends Controller
 																	
 									$CashiersReportModel_P8 = new CashiersReportModel_P8();
 									$CashiersReportModel_P8 = CashiersReportModel_P8::find($CRPH8_ID);
-									$CashiersReportModel_P8->cash_payment_amount 			= $request->cash_payment_amount;
+									$CashiersReportModel_P8->online_payment_amount 			= $request->online_payment_amount;
 									$CashiersReportModel_P8->limitless_payment_amount 		= $request->limitless_payment_amount;
 									$CashiersReportModel_P8->credit_debit_payment_amount 	= $request->credit_debit_payment_amount;
-									$CashiersReportModel_P8->ewallet_payment_amount	 		= $request->ewallet_payment_amount;
+									$CashiersReportModel_P8->gcash_payment_amount	 		= $request->gcash_payment_amount;
 									$CashiersReportModel_P8->updated_by_user_id 			= Session::get('loginID');
 									$result = $CashiersReportModel_P8->update();
 									
@@ -72,10 +88,10 @@ class CashiersReport_Payment_Controller extends Controller
 					->orderBy('teves_cashiers_report_p8.cashiers_report_p8_id', 'asc')
 					->get([
 						'teves_cashiers_report_p8.cashiers_report_p8_id',
-						'teves_cashiers_report_p8.cash_payment_amount',
+						'teves_cashiers_report_p8.online_payment_amount',
 						'teves_cashiers_report_p8.limitless_payment_amount',
 						'teves_cashiers_report_p8.credit_debit_payment_amount',
-						'teves_cashiers_report_p8.ewallet_payment_amount'
+						'teves_cashiers_report_p8.gcash_payment_amount'
 					]);
 		
 			return response()->json($data);			
@@ -87,10 +103,10 @@ class CashiersReport_Payment_Controller extends Controller
 		
 		$data =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_p8_id', $CRPH8_ID)
 					->get([
-						'teves_cashiers_report_p8.cash_payment_amount',
+						'teves_cashiers_report_p8.online_payment_amount',
 						'teves_cashiers_report_p8.limitless_payment_amount',
 						'teves_cashiers_report_p8.credit_debit_payment_amount',
-						'teves_cashiers_report_p8.ewallet_payment_amount' 
+						'teves_cashiers_report_p8.gcash_payment_amount' 
 					]);
 					
 		return response()->json($data);

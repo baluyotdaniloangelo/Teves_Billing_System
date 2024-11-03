@@ -42,10 +42,10 @@
                     <td style="text-align: right !important;"><span id="total_non_cash_payment">0.00</span></td>
                   </tr>
 				  
-				  <tr>
+				  <!--<tr>
                     <th scope="row">TOTAL CASH</th>
                     <td style="text-align: right !important;"><span id="cash_on_hand">0.00</span></td>
-                  </tr>
+                  </tr>-->
 				  <tr>
                     <th scope="row">CASH (SHORT)/OVER</th>
                     <td style="text-align: right !important;"><span id="cash_short_or_over">0.00</span></td>
