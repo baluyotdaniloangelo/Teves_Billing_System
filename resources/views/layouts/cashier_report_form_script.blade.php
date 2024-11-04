@@ -2661,16 +2661,13 @@
 					total_sales = fuel_sales_total + other_sales_total;
 					miscellaneous_total = response.miscellaneous_total;
 					
-					
-					//total_cash_payment = response.total_online_payment_amount;
-					
 					total_non_cash_payment = response.total_limitless_payment_amount + response.total_credit_debit_payment_amount + response.total_gcash_payment_amount + response.total_online_payment_amount;
 					
 					theoretical_sales = total_sales - miscellaneous_total;
 					
 					cash_on_hand = response.cash_on_hand;
 					
-					cash_short_or_over = theoretical_sales - (cash_on_hand + total_non_cash_payment);				
+					cash_short_or_over = (cash_on_hand + total_non_cash_payment) - theoretical_sales;				
 					
 					$('#fuel_sales_total').html(fuel_sales_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 					

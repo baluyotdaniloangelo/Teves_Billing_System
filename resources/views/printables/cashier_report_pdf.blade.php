@@ -409,7 +409,7 @@
 									
 								$total_cash_tansaction = $total_cash_on_hand + $cash_drop;
 								
-								$short_over = $theoretical_sales_total - ($total_cash_tansaction + $total_non_cash_payment);
+								$short_over = ($total_cash_tansaction + $total_non_cash_payment) - $theoretical_sales_total;
 								
 								
 								?>
