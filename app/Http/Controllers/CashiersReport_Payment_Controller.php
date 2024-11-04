@@ -28,12 +28,10 @@ class CashiersReport_Payment_Controller extends Controller
         [
 			'online_payment_amount.required' 		=> 'Online Payment is Required',
 			'limitless_payment_amount.required' 	=> 'Limitless Payment is Required',
-			'gcash_payment_amount.required' 		=> 'Beginning Inventory is Required',
-			'credit_debit_payment_amount.required' 	=> 'Sales in Liters is Required'
+			'gcash_payment_amount.required' 		=> 'GCASH Payment is Required',
+			'credit_debit_payment_amount.required' 	=> 'Credit/Debit Payment is Required'
         ]
 		);
-
-
 
 			$CashiersReportId 		= $request->CashiersReportId;
 			$CRPH8_ID 				= $request->CRPH8_ID;
