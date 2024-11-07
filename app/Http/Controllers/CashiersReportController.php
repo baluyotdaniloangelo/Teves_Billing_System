@@ -767,7 +767,7 @@ class CashiersReportController extends Controller
 			        }
 					$peso_sales = ($order_quantity * $product_price);
 
-            }else if($miscellaneous_items_type=='OTHERS'){
+            }else if($miscellaneous_items_type=='OTHERS' || $miscellaneous_items_type=='CASHOUT'){
 
                    
 				        $discounted_price 	= 0;
@@ -879,7 +879,7 @@ class CashiersReportController extends Controller
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
             ->where('miscellaneous_items_type','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
-			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
+			->leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
@@ -922,7 +922,7 @@ class CashiersReportController extends Controller
 		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
 		->where('miscellaneous_items_type','=','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
-			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
+			->leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->get([
 					'teves_product_table.product_name',
 					'teves_client_table.client_name',
@@ -1476,7 +1476,7 @@ class CashiersReportController extends Controller
 		$data_SALES_CREDIT =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
 			->where('miscellaneous_items_type','=','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
-			->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
+			->leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->get([
 					'teves_product_table.product_name',
 					'teves_client_table.client_name',
