@@ -1073,6 +1073,7 @@ class ReportController extends Controller
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.company_header',
+					'teves_receivable_table.created_by_user_id',
 					'billing_period_start',
 					'billing_period_end'
 				]);
@@ -1094,7 +1095,7 @@ class ReportController extends Controller
 		$receivable_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		$user_data = User::where('user_id', '=', $receivable_data[0]['created_by_user_id'])->first();
 		
 		$title = 'RECEIVABLE';
 		  
@@ -1138,6 +1139,7 @@ class ReportController extends Controller
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
 					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.created_by_user_id',
 					'billing_period_start',
 					'billing_period_end',
 					'company_header'
@@ -1171,7 +1173,7 @@ class ReportController extends Controller
 	
 		
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		$user_data = User::where('user_id', '=', $receivable_data[0]['created_by_user_id'])->first();
 		
 		$title = 'STATEMENT OF ACCOUNT';
 		  
@@ -1224,7 +1226,8 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_note',
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.company_header'
+					'teves_sales_order_table.company_header',
+					'teves_sales_order_table.created_by_user_id'
 				]);
 			
 		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
@@ -1255,7 +1258,7 @@ class ReportController extends Controller
 		$sales_order_component = DB::select("$raw_query_sales_order_component", [ $sales_order_id]);	
 		
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_id'])->first();
 		
 		$title = 'SALES ORDER';
 		  
@@ -1402,7 +1405,8 @@ class ReportController extends Controller
 						'teves_purchase_order_table.purchase_date_of_arrival',
 						'teves_purchase_order_table.purchase_order_instructions',
 						'teves_purchase_order_table.purchase_order_note',
-						'teves_purchase_order_table.company_header'
+						'teves_purchase_order_table.company_header',
+						'teves_purchase_order_table.created_by_user_id'
 				]);
 
 		$purchase_order_amt =  number_format($purchase_order_data[0]['purchase_order_total_payable'],2,".","");
@@ -1444,8 +1448,8 @@ class ReportController extends Controller
 		$branch_header = TevesBranchModel::find($purchase_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
-		
+		//$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		$user_data = User::where('user_id', '=', $purchase_order_data[0]['created_by_user_id'])->first();
 		$title = 'PURCHASE ORDER';
 		  
         $pdf = PDF::loadView('printables.report_purchase_order_pdf_v3', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_component', 'purchase_payment_component','branch_header'));

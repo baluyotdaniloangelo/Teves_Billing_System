@@ -274,6 +274,7 @@ class PurchaseOrderController_v2 extends Controller
 			$Purchaseorder->purchase_order_net_percentage			= $request->default_net_percentage;
 			$Purchaseorder->purchase_order_less_percentage			= $request->default_less_percentage;
 			
+			$Purchaseorder->created_by_user_id 						= Session::get('loginID');
 			$result = $Purchaseorder->save();
 			
 			/*Get Last ID*/
@@ -329,6 +330,7 @@ class PurchaseOrderController_v2 extends Controller
 			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
 			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
 			$Purchaseorder->company_header							= $request->company_header;		
+			$Purchaseorder->updated_by_user_id 						= Session::get('loginID');
 			
 			$result = $Purchaseorder->update();
 			
