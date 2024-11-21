@@ -353,14 +353,13 @@
 								var product_price = response['productlist'][i].product_price;
 								var order_quantity = response['productlist'][i].order_quantity;
 								
-								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+								//var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+
 								"<td class='calibration_td' align='right'>"+order_quantity+" "+product_unit_measurement+"</td>"+
-								"<td class='manual_price_td' align='right'><span >&#8369; "+order_total_amount+"</span></td>"+
 								"</tr>");
 								
 								

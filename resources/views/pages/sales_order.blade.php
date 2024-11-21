@@ -177,10 +177,10 @@
 						<thead>
 						<tr class='report'>
 							<th style="text-align:center !important;">Item #</th>
-							<th style="text-align:center !important;">Description</th>
-							<th style="text-align:center !important;">Price</th>
-							<th style="text-align:center !important;">Quantity</th>
-							<th style="text-align:center !important;">Amount</th>	
+							<th style="text-align:left !important;">Description</th>
+							<th style="text-align:right !important;">Price</th>
+							<th style="text-align:right !important;">Quantity</th>
+							<!--<th style="text-align:center !important;">Amount</th>	-->
 						</tr>
 						</thead>
 							<tbody id="table_sales_order_product_body_data">
