@@ -145,11 +145,11 @@
 		</tr>
 		<tr style="font-size:12px;border:0 solid #000;">		
 
-			<td colspan="2" width="20%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:15px !important;">DESCRIPTION</td>		
-			<td colspan="2" width="20%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">QUANTITY</td>
+			<td colspan="5" width="45%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:15px !important;">DESCRIPTION</td>		
+			<td colspan="2" width="15%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">QUANTITY</td>
 			<td colspan="1" width="10%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT</td>		
-			<td colspan="3" width="30%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT PRICE</td>
-			<td colspan="2" width="20%" align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">AMOUNT</td>		
+			<td colspan="1" width="15%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT PRICE</td>
+			<td colspan="1" width="15%" align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">AMOUNT</td>		
 					
 		</tr>									
 		<tr style="font-size:12px;border:0 solid #000;">
@@ -172,11 +172,11 @@
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_component_cols->product_name"; ?></td>
+				<td colspan="5" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_component_cols->product_name"; ?></td>
 				<td colspan="2" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_unit_measurement}}</td>
-				<td colspan="3" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
-				<td colspan="2" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
+				<td colspan="1" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
+				<td colspan="1" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
 			<?php 
 			$no++; 
