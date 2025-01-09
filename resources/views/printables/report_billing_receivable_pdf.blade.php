@@ -141,6 +141,7 @@
 				<th class="data_th" style="border:1px solid #000;">#</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Date</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Time</th>
+				<th class="data_th" nowrap style="border:1px solid #000;">Branch</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Driver's Name</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">S.O. No.</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Description</th>
@@ -165,6 +166,7 @@
 				<td align="center" nowrap style="border:1px solid #000;"><?=$no;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$order_date;?></td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_time}}</td>
+				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->branch_initial}}</td>
 				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->drivers_name}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->plate_no}}</td>

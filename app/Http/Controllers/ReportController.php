@@ -305,67 +305,41 @@ class ReportController extends Controller
 		$end_date = $request->end_date;
 		
 		$company_header = $request->company_header;
+		$all_branches = $request->all_branches;	
 		
-		$data = BillingTransactionModel::where('client_idx', $client_idx)
-					->where('teves_billing_table.branch_idx', $company_header)
-					->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
-					->where('teves_billing_table.receivable_idx', '=', 0)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-					->orderBy('teves_billing_table.order_date', 'asc')
-              		->get([
-					'teves_billing_table.billing_id',
-					'teves_billing_table.receivable_idx',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_name',
-					'teves_product_table.product_unit_measurement',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time',
-					'teves_billing_table.created_at',
-					'teves_billing_table.created_by_user_idx']);
-		
+			$data = BillingTransactionModel::where('client_idx', $client_idx)
+						->where(function ($r) use($all_branches,$company_header) {
+							if ($all_branches=='NO') {
+							   $r->where('teves_billing_table.branch_idx', $company_header);
+							}
+						})
+						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
+						->where('teves_billing_table.receivable_idx', '=', 0)
+						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
+						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+						->orderBy('teves_billing_table.order_date', 'asc')
+						->get([
+						'teves_billing_table.billing_id',
+						'teves_billing_table.receivable_idx',
+						'teves_billing_table.drivers_name',
+						'teves_billing_table.plate_no',
+						'teves_product_table.product_name',
+						'teves_product_table.product_unit_measurement',
+						'teves_billing_table.product_price',
+						'teves_billing_table.order_quantity',					
+						'teves_billing_table.order_total_amount',
+						'teves_billing_table.order_po_number',
+						'teves_billing_table.order_date',
+						'teves_billing_table.order_time',
+						'teves_billing_table.created_at',
+						'teves_billing_table.created_by_user_idx',
+						'teves_branch_table.branch_initial']);
 				return DataTables::of($data)
 				
 				->addIndexColumn()				
                 ->addColumn('action', function($row){
 						
 					if($row->receivable_idx==0){
-						
-						// if(Session::get('UserType')=="Admin"){
-							// $actionBtn = '
-							// <div align="center" class="action_table_menu_site">
-							// <a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
-							// <a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
-							// </div>';
-						// }
-						// else{
-						
-						// $startTimeStamp = strtotime($row->created_at);
-						// $endTimeStamp = strtotime(date('y-m-d'));
-						// $timeDiff = abs($endTimeStamp - $startTimeStamp);
-						// $numberDays = $timeDiff/86400;  // 86400 seconds in one day
-						// // and you might want to convert to integer
-						// $numberDays = intval($numberDays);
-							
-							// if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_idx){
-								// $actionBtn = '
-								// <div align="center" class="action_table_menu_site">
-								// <a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
-								// </div>';
-							// }else{
-								// $actionBtn = '
-								// <div align="center" class="action_table_menu_site">
-								// <a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
-								// <a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
-								// </div>';
-							// }
-
-						// }
 						
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
@@ -467,12 +441,48 @@ class ReportController extends Controller
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
 		$company_header = $request->company_header;
-					
+		$all_branches = $request->all_branches;			
 		/*Using Raw Query*/
-					
-		$raw_query = "select `teves_billing_table`.`billing_id`,`teves_billing_table`.`receivable_idx`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`,'teves_billing_table.created_at', 'teves_billing_table.created_by_user_idx' from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? and `teves_billing_table`.`branch_idx` = ? order by `teves_billing_table`.`order_date` asc";			
-		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id,$company_header]);
-				
+		
+/*
+		if($all_branches=="NO"){
+			$raw_query = "select `teves_billing_table`.`billing_id`,`teves_billing_table`.`receivable_idx`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`,'teves_billing_table.created_at', 'teves_billing_table.created_by_user_idx' from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? and `teves_billing_table`.`branch_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+			$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id,$company_header]);
+		}
+		else{
+			$raw_query = "select `teves_billing_table`.`billing_id`,`teves_billing_table`.`receivable_idx`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`,'teves_billing_table.created_at', 'teves_billing_table.created_by_user_idx' from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+			$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
+		}
+*/		
+		
+		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+						->where(function ($r) use($all_branches,$company_header) {
+							if ($all_branches=='NO') {
+							   $r->where('teves_billing_table.branch_idx', $company_header);
+							}
+						})
+						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
+						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
+						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
+						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+						->orderBy('teves_billing_table.order_date', 'asc')
+						->get([
+						'teves_billing_table.billing_id',
+						'teves_billing_table.receivable_idx',
+						'teves_billing_table.drivers_name',
+						'teves_billing_table.plate_no',
+						'teves_product_table.product_name',
+						'teves_product_table.product_unit_measurement',
+						'teves_billing_table.product_price',
+						'teves_billing_table.order_quantity',					
+						'teves_billing_table.order_total_amount',
+						'teves_billing_table.order_po_number',
+						'teves_billing_table.order_date',
+						'teves_billing_table.order_time',
+						'teves_billing_table.created_at',
+						'teves_billing_table.created_by_user_idx',
+						'teves_branch_table.branch_initial']);
+						
 				return DataTables::of($billing_data)
 				
 				->addIndexColumn()				
@@ -957,9 +967,35 @@ class ReportController extends Controller
 		
 		
 		/*Using Raw Query*/
-		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
-		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
-		
+		//$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+		//$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
+		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+						/*->where(function ($r) use($all_branches,$company_header) {
+							if ($all_branches=='NO') {
+							   $r->where('teves_billing_table.branch_idx', $company_header);
+							}
+						})*/
+						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
+						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
+						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
+						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+						->orderBy('teves_billing_table.order_date', 'asc')
+						->get([
+						'teves_billing_table.billing_id',
+						'teves_billing_table.receivable_idx',
+						'teves_billing_table.drivers_name',
+						'teves_billing_table.plate_no',
+						'teves_product_table.product_name',
+						'teves_product_table.product_unit_measurement',
+						'teves_billing_table.product_price',
+						'teves_billing_table.order_quantity',					
+						'teves_billing_table.order_total_amount',
+						'teves_billing_table.order_po_number',
+						'teves_billing_table.order_date',
+						'teves_billing_table.order_time',
+						'teves_billing_table.created_at',
+						'teves_billing_table.created_by_user_idx',
+						'teves_branch_table.branch_initial']);
 		
 		
 		/*Recievable Data*/

@@ -31,6 +31,7 @@
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date', className: "text-center"},
 					{data: 'order_time',orderable: false, className: "text-center"},
+					{data: 'branch_code',orderable: false, className: "text-center"},
 					{data: 'control_number', className: "text-left",orderable: false,},  				
 					{data: 'drivers_name',orderable: false,},     
 					{data: 'order_po_number',orderable: false,},     

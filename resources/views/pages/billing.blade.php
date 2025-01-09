@@ -36,6 +36,7 @@
 													<th class="all">#</th>
 													<th class="all">Date</th>
 													<th class="all">Time</th>
+													<th class="all">Branch</th>
 													<th class="all">Control Number</th>
 													<th class="all">Driver's Name</th>
 													<th class="all">S.O No.</th>

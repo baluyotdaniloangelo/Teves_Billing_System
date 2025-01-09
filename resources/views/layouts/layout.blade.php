@@ -75,7 +75,7 @@ else if (Request::is('create_recievable')){
 ?>
 <body class="">
 @include('layouts.footer')
-@include('layouts.create_recievable_script')
+@include('layouts.create_recievable_script_v2')
 <?php
 }
 else if (Request::is('billing_history')){

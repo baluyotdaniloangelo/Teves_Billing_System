@@ -77,6 +77,7 @@ class BillingTransactionController extends Controller
 	
     	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+              		->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
 					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
@@ -91,6 +92,7 @@ class BillingTransactionController extends Controller
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
 					'teves_product_table.product_name',
+					'teves_branch_table.branch_code',
 					'teves_product_table.product_unit_measurement',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',					

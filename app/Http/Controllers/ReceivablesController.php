@@ -102,7 +102,7 @@ class ReceivablesController extends Controller
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 		
-			return view("pages.create_recievable", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
+			return view("pages.create_recievable_v2", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
 		
 		}
 	
@@ -581,7 +581,10 @@ class ReceivablesController extends Controller
 			$withholding_tax_percentage = $request->withholding_tax_percentage;
 			$net_value_percentage = $request->net_value_percentage;
 			$vat_value_percentage = $request->vat_value_percentage;
-		
+			
+			/*Added Janu 9, 2025*/
+			$all_branches = $request->all_branches;
+			
 			$receivable_amount = BillingTransactionModel::where('client_idx', $client_idx)
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
@@ -614,6 +617,7 @@ class ReceivablesController extends Controller
 			$Receivables->control_number 			= $control_number;
 			$Receivables->billing_date 				= date('Y-m-d');
 			$Receivables->payment_term 				= $request->payment_term;
+			$Receivables->all_branches 				= $all_branches;
 			$Receivables->receivable_description 	= $request->receivable_description;
 			
 			$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');			
