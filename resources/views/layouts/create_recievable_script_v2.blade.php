@@ -606,7 +606,9 @@
 			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val()/100;
 		 	/*Added May 6, 2023*/
 			let company_header 					= $("#company_header").val();	  
-			
+			/*Added January 9, 2025*/
+			var _all_branches 				= $('.all_branches:checked').val() || 'off';
+			var all_branches 				= (_all_branches ==="on") ? "YES":"NO";
 		var query = {
 			receivable_id:receivable_id,
 			client_idx:client_idx,
@@ -617,6 +619,7 @@
 			withholding_tax_percentage:withholding_tax_percentage,
 			net_value_percentage:net_value_percentage,
 			vat_value_percentage:vat_value_percentage,
+			all_branches:all_branches,
 			_token: "{{ csrf_token() }}"
 		}
 	

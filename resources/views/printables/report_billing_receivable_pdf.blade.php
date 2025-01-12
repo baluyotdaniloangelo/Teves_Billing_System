@@ -190,7 +190,7 @@
 			@endforeach
 	
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left">Total Volume:</td>
 												<td align="left"><?=number_format($total_liters,2);?> L</td>
 												<td align="left"><b>Total Sales:</b></td>
@@ -198,7 +198,7 @@
 											</tr>
 											<!--'withholding_tax_percentage','net_value_percentage','vat_value_percentage'-->
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1">Discount per liter:</td>
 												<td align="left" ><?=($less_per_liter+0);?> L</td>
 												<td align="left" colspan="1">VATable Sales</td>
@@ -207,7 +207,7 @@
 											</tr>
 											
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1">VAT Amount</td>
@@ -216,7 +216,7 @@
 											</tr>
 									
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1">Less: Discount</td>
@@ -225,7 +225,7 @@
 											</tr>
 											
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1">Less: With Holding Tax</td>
@@ -234,7 +234,7 @@
 											</tr>
 									
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1"><b>TOTAL AMOUNT DUE:</b></td>
@@ -245,56 +245,56 @@
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2">Prepared by:</td>
-				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{@$user_data->user_real_name}}</td>
+				<td align="center" colspan="4" style="border-bottom:1px solid #000;">{{@$user_data->user_real_name}}</td>
 				<td align="left" colspan="5"></td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3">{{@$user_data->user_job_title}}</td>
+				<td align="center" colspan="4">{{@$user_data->user_job_title}}</td>
 				<td align="left" colspan="5"></td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="6"></td>
-				<td align="right" colspan="2">Received by:</td>
+				<td align="right" colspan="3">Received by:</td>
 				<td align="center" colspan="2" style="border-bottom:1px solid #000;">&nbsp;</td>
 				
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2">Reviewed by:</td>
-				<td align="center" colspan="3" style="border-bottom:1px solid #000;">&nbsp;</td>
+				<td align="center" colspan="4" style="border-bottom:1px solid #000;">&nbsp;</td>
 				<td align="right" colspan="3">Date:</td>
 				<td align="center" colspan="2" style="border-bottom:1px solid #000;">&nbsp;</td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3" nowrap>Pricing and Sales In-Charge</td>
+				<td align="center" colspan="4" nowrap>Pricing and Sales In-Charge</td>
 				<td align="right" colspan="3">Time:</td>
 				<td align="center" colspan="2" style="border-bottom:1px solid #000;">&nbsp;</td>
 			</tr>
 
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="10">&nbsp;</td>
+				<td align="left" colspan="11">&nbsp;</td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2" nowrap>Billing For Release:</td>
-				<td align="center" colspan="3" style="border-bottom:1px solid #000;">&nbsp;</td>
+				<td align="center" colspan="4" style="border-bottom:1px solid #000;">&nbsp;</td>
 				<td align="right" colspan="3"></td>
 				<td align="center" colspan="2">&nbsp;</td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3" nowrap>Accounting In-Charge</td>
+				<td align="center" colspan="4" nowrap>Accounting In-Charge</td>
 				<td align="right" colspan="3"></td>
 				<td align="center" colspan="2">&nbsp;</td>
 			</tr>
 			
-			<tr style="font-size:12px;"><td colspan="10">&nbsp;</td></tr>
+			<tr style="font-size:12px;"><td colspan="11">&nbsp;</td></tr>
 			<tr style="font-size:12px;font-style: italic;"><td colspan="10">This billing statement is not valid for claims of taxes. Please refer to Sales Invoice issued.</td></tr>
 		</tbody>
 		</table>

@@ -225,15 +225,7 @@
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
-				
-		
-		
-		
-		
-		
-		
-		
-		
+			
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:50px !important;font-style: italic;">In Words</td>
 			<td colspan="8" style="border-top:1px solid gray; border-bottom:1px solid gray; text-align:center;">&nbsp;<?php echo strtoupper($amount_in_words); ?></td>
@@ -424,6 +416,11 @@
 		</tr>
 			<?php 
 			$no_p = 1;
+			$total_payment = 0;
+			
+			
+		
+		//number_format($purchase_order_data[0]['purchase_order_total_payable'],4);
 			?>
 			
 			@foreach ($purchase_payment_component as $purchase_payment_component_cols)
@@ -433,6 +430,8 @@
 				<?php
 				$_purchase_order_date_of_payment=date_create($purchase_payment_component_cols['purchase_order_date_of_payment']);
 				$purchase_order_date_of_payment = strtoupper(date_format($_purchase_order_date_of_payment,"M/d/Y"));
+				
+				$total_payment += $purchase_payment_component_cols->purchase_order_payment_amount;
 				?>
 			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;"><?=$purchase_order_date_of_payment;?></td>
 			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">{{$purchase_payment_component_cols->purchase_order_reference_no}}</td>
@@ -445,7 +444,32 @@
 			?>
 			
 			@endforeach
-
+		
+		<tr style="font-size:12px;">			
+			<td colspan="5"></td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Payment </td>
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<?=number_format($total_payment,4);?></td>
+		</tr>
+		<?php
+		
+		//$payment_grand_total 			= number_format(str_replace( ',', '',$total_payment),4);
+		$payment_grand_total 			= str_replace(',', '',$total_payment);
+		$payment_purchase_order_total_payable  = str_replace(',', '',$purchase_order_data[0]['purchase_order_total_payable']);
+		
+		$overpayment = $payment_grand_total - $payment_purchase_order_total_payable;
+		
+		if($overpayment>=1){
+		?>
+		<tr style="font-size:12px;">			
+			<td colspan="5"></td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Over Payment </td>
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<?=number_format($overpayment,4);?></td>
+		</tr>	
+		<?php
+		}
+		?>
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>

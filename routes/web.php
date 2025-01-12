@@ -215,6 +215,7 @@ Route::post('/billing_to_receivable_product', [ReceivablesController::class,'bil
 /*January 04, 2023*/
 Route::get('/salesorder', [SalesOrderController::class,'salesorder'])->name('salesorder')->middleware('isLoggedIn');
 Route::get('salesorder/list', [SalesOrderController::class, 'getSalesOrderList'])->name('getSalesOrderList')->middleware('isLoggedIn');
+Route::get('salesorder/list_delivered', [SalesOrderController::class, 'getSalesOrderList_delivered'])->name('getSalesOrderList_delivered')->middleware('isLoggedIn');
 /*GET Sales Order Info*/
 Route::post('/sales_order_info', [SalesOrderController::class, 'sales_order_info'])->name('sales_order_info')->middleware('isLoggedIn');
 /*Confirm Delete Sales Order*/

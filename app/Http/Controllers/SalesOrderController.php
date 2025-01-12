@@ -60,11 +60,11 @@ class SalesOrderController extends Controller
 		
 		}
 
-		return view("pages.sales_order", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch'));
+		return view("pages.sales_order_v2", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch'));
 		
 	}   
 	
-	/*Fetch Product List using Datatable*/
+	/*Fetch Sales Order List using Datatable*/
 	public function getSalesOrderList(Request $request)
     {
 		
@@ -75,6 +75,7 @@ class SalesOrderController extends Controller
 		if ($request->ajax()) {
 			
 			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+					->where('sales_order_delivery_status', 'Pending')
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
@@ -146,6 +147,91 @@ class SalesOrderController extends Controller
 		}		
 		}
     }
+
+	/*Fetch Delivered Sales Order List using Datatable*/
+	public function getSalesOrderList_delivered(Request $request)
+    {
+		
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+		
+		if ($request->ajax()) {
+			
+			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+					->where('sales_order_delivery_status','<>', 'Pending')
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})	
+              		->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.sales_order_date',
+					'teves_client_table.client_name',
+					'teves_sales_order_table.sales_order_payment_term',	
+					'teves_sales_order_table.sales_order_gross_amount',	
+					'teves_sales_order_table.sales_order_net_amount',	
+					'teves_sales_order_table.sales_order_withholding_tax',
+					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_payment_term',
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_payment_status',
+					'teves_sales_order_table.sales_order_delivery_status',
+					'teves_sales_order_table.created_at']);
+	
+		return DataTables::of($data)
+				->addIndexColumn()
+				
+                ->addColumn('action', function($row){
+					
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+					
+						$actionBtn = '
+						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
+						</div>';
+					
+						$actionBtn_view_only = '
+						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						</div>';
+					
+							if(Session::get('UserType')=="Admin"){
+										return $actionBtn;
+							}
+							else if(Session::get('UserType')=="Supervisor"){
+										return '';/*View and Print Only*/
+							}
+							else if(Session::get('UserType')=="Accounting_Staff"){
+										
+										/*Access within 24 Hrs*/
+										if($numberDays>=1){
+											return $actionBtn_view_only;
+										}else{
+											return $actionBtn;/*View and Print Only*/
+										}
+										
+							}else{
+										return '';/*View and Print Only*/
+							}
+					
+                })
+				->rawColumns(['action'])
+                ->make(true);
+		}		
+		}
+    }
+
 
 	/*Fetch Product Information*/
 	public function sales_order_info(Request $request){

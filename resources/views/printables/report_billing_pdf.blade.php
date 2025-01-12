@@ -92,6 +92,7 @@
 				<th class="data_th" style="border:1px solid #000;">#</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Date</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Time</th>
+				<th class="data_th" nowrap style="border:1px solid #000;">Branch</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Driver's Name</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">S.O. No.</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Description</th>
@@ -116,6 +117,7 @@
 				<td align="center" nowrap style="border:1px solid #000;"><?=$no;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$order_date;?></td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_time}}</td>
+				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->branch_initial}}</td>
 				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->drivers_name}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->plate_no}}</td>
@@ -139,7 +141,7 @@
 			@endforeach
 	
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left">Total Volume:</td>
 												<td align="left"><?=number_format($total_liters,2);?> L</td>
 												<td align="left"><b>Total Sales:</b></td>
@@ -147,7 +149,7 @@
 											</tr>
 											<!--'withholding_tax_percentage','net_value_percentage','vat_value_percentage'-->
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1">Discount per liter:</td>
 												<td align="left" ><?=($less_per_liter+0);?> L</td>
 												<td align="left" colspan="1">VATable Sales</td>
@@ -156,7 +158,7 @@
 											</tr>
 											
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1">VAT Amount</td>
@@ -165,7 +167,7 @@
 											</tr>
 									
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1">Less: Discount</td>
@@ -174,7 +176,7 @@
 											</tr>
 											
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1">Less: With Holding Tax</td>
@@ -183,7 +185,7 @@
 											</tr>
 									
 											<tr class="data_tr">
-												<td align="left" colspan="6"></td>
+												<td align="left" colspan="7"></td>
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" colspan="1"><b>TOTAL AMOUNT DUE:</b></td>
