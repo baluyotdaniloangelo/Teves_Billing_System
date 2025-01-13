@@ -512,7 +512,7 @@
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_reference_no" id="purchase_order_reference_no" required placeholder="Reference No.">
-								<label for="order_quantity">Reference No.</label>
+								<label for="purchase_order_reference_no">Reference No.</label>
 								<span class="valid-feedback" id="purchase_order_reference_noError"></span>
 							</div>
 							 
@@ -521,8 +521,17 @@
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_payment_amount" id="purchase_order_payment_amount" required step=".01" placeholder="Amount">
-								<label for="order_quantity">Amount</label>
-								<span class="valid-feedback" id="order_quantityError"></span>
+								<label for="purchase_order_payment_amount">Amount</label>
+								<span class="valid-feedback" id="purchase_order_payment_amountError"></span>
+							</div>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_payment_withdraw_equivalent_amount" id="purchase_order_payment_withdraw_equivalent_amount" required step=".01" placeholder="Amount">
+								<label for="purchase_order_payment_withdraw_equivalent_amount">Withdraw Equivalent Amount</label>
+								<span class="valid-feedback" id="purchase_order_payment_withdraw_equivalent_amountError"></span>
 							</div>
 							 
 						</div>

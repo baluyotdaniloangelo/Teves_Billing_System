@@ -1,0 +1,2 @@
+ALTER TABLE `teves_purchase_order_payment_details`
+	ADD COLUMN `purchase_order_payment_withdraw_equivalent_amount` DOUBLE NULL DEFAULT NULL AFTER `purchase_order_payment_amount`;
