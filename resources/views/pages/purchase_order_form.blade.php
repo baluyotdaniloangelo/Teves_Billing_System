@@ -526,7 +526,7 @@
 							</div>
 							 
 						</div>
-						
+						<!--
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_payment_withdraw_equivalent_amount" id="purchase_order_payment_withdraw_equivalent_amount" required step=".01" placeholder="Amount">
@@ -534,7 +534,7 @@
 								<span class="valid-feedback" id="purchase_order_payment_withdraw_equivalent_amountError"></span>
 							</div>
 							 
-						</div>
+						</div>-->
 						
 						<div class="row mb-3">
 							<div class="col-sm-12">
