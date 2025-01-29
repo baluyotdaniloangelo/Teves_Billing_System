@@ -263,7 +263,7 @@
                 </li>
 				
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="true" onclick="" title='Product Delivery List, Create, Update and Delete Delivery'>Delivery</button>
+                  <button class="nav-link" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="true" onclick="" title='Product Withdrawal List, Create, Update and Delete Withdrawal'>Withdrawal</button>
                 </li>
 				
                 <li class="nav-item" role="presentation">
@@ -312,9 +312,10 @@
 						<tr class='report'>
 							<th style="text-align:center !important;" class="">Action</th>
 							<th style="text-align:center !important;">Item #</th>
-							<th style="text-align:center !important;">Delivery Date</th>
+							<th style="text-align:center !important;">Date</th>
 							<th style="text-align:center !important;">Product</th>
 							<th style="text-align:center !important;">Quantity</th>
+							<th style="text-align:center !important;">Amount</th>
 						</tr>
 						</thead>
 							<tbody id="product_list_delivery_data">
@@ -690,7 +691,7 @@
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Add Product Delivery Details</h5>
+                      <h5 class="modal-title">Add Product Withdrawal Details</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
@@ -704,7 +705,7 @@
 						
 							<div class="form-floating mb-3">
 								<input type='date' class='form-control' id='purchase_order_delivery_date' name='purchase_order_delivery_date' value='<?=date('Y-m-d');?>' max="9999-12-31" required>
-								<label for="purchase_order_delivery_date">Delivery Date</label>
+								<label for="purchase_order_delivery_date">Withdrawal Date</label>
 								<span class="valid-feedback" id="purchase_order_delivery_dateError"></span>
 							</div>
 						 
@@ -795,11 +796,11 @@
                 </div>
 				
                 <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Product Delivery?<br>
+				Are you sure you want to Delete This Product Withdrawal?<br>
 				</div>
 				<div align="left"style="margin: 10px;">
 				
-				Delivery Date: <span id="delete_delivery_purchase_order_delivery_date"></span><br>
+				Withdrawal Date: <span id="delete_delivery_purchase_order_delivery_date"></span><br>
 				
 				Product: <span id="delete_delivery_delete_product_name"></span><br>
 				Quantity: <span id="delete_delivery_delete_purchase_order_delivery_quantity"></span><br>
@@ -830,11 +831,11 @@
 				
 				
                 <div class="modal-body warning_modal_bg" id="modal-body">
-				Delivery Information<br>
+				Withdrawal Information<br>
 				</div>
 				<div align="left"style="margin: 10px;">
 				
-				Delivery Date: <span id="view_delivery_purchase_order_delivery_date"></span><br>
+				Withdrawal Date: <span id="view_delivery_purchase_order_delivery_date"></span><br>
 				
 				Product: <span id="view_delivery_delete_product_name"></span><br>
 				Quantity: <span id="view_delivery_delete_purchase_order_delivery_quantity"></span><br>

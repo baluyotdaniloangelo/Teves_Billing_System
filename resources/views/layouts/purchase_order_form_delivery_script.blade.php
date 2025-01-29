@@ -310,10 +310,15 @@
 									
 									var product_name = response['productlist_delivery'][i].product_name;
 									var product_unit_measurement = response['productlist_delivery'][i].product_unit_measurement;
-									//var purchase_order_departure_date = response['productlist_delivery'][i].purchase_order_departure_date;
 									var purchase_order_delivery_date = response['productlist_delivery'][i].purchase_order_delivery_date;
 									var purchase_order_delivery_withdrawal_reference = response['productlist_delivery'][i].purchase_order_delivery_withdrawal_reference;
 									var purchase_order_delivery_quantity = response['productlist_delivery'][i].purchase_order_delivery_quantity;
+									var ordered_price = response['productlist_delivery'][i].ordered_price;
+									
+									_withdrawal_amount = purchase_order_delivery_quantity * ordered_price;
+									
+									var withdrawal_amount = _withdrawal_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+								
 									
 									$('#product_list_delivery_data tr:last').after("<tr>"+
 									"<td class=''><div align='center' class='action_table_menu_Product' >"+
@@ -324,6 +329,7 @@
 									"<td class='manual_price_td' align='center'>"+purchase_order_delivery_date+"</td>"+
 									"<td class='product_td' align='left'>"+product_name+"</td>"+
 									"<td class='calibration_td' align='right'>"+purchase_order_delivery_quantity+" "+product_unit_measurement+"</td>"+
+									"<td class='calibration_td' align='right'>"+withdrawal_amount+"</td>"+
 									"</tr>");
 									
 								}

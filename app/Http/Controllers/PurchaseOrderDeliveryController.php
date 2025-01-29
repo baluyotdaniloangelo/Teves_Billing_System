@@ -29,13 +29,16 @@ class PurchaseOrderDeliveryController extends Controller
 						`teves_purchase_order_delivery_details`.`purchase_order_component_idx`,
 						`teves_purchase_order_delivery_details`.`purchase_order_component_product_idx`, 
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_quantity`,
+						`teves_purchase_order_component_table`.`product_price` AS ordered_price,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_date`,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_withdrawal_reference`,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_hauler_details`,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_remarks`
-						
-						from `teves_purchase_order_delivery_details`  left join `teves_product_table` on	 
-						`teves_product_table`.`product_id` = `teves_purchase_order_delivery_details`.`purchase_order_component_product_idx` where `teves_purchase_order_delivery_details`.`purchase_order_idx` = ?		  
+							from `teves_purchase_order_delivery_details` left join `teves_product_table` on	 
+						`teves_product_table`.`product_id` = `teves_purchase_order_delivery_details`.`purchase_order_component_product_idx`
+						left join `teves_purchase_order_component_table` on	 
+						`teves_purchase_order_component_table`.`purchase_order_component_id` = `teves_purchase_order_delivery_details`.`purchase_order_component_idx`
+						where `teves_purchase_order_delivery_details`.`purchase_order_idx` = ?		  
 						order by `teves_purchase_order_delivery_details`.`purchase_order_delivery_date` asc";	
 						
 			$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_id]);		

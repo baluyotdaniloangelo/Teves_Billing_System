@@ -1325,6 +1325,7 @@ class ReportController extends Controller
 						IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_date`,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_quantity`,
+						`teves_purchase_order_component_table`.`product_price` AS ordered_price,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_withdrawal_reference`,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_hauler_details`,
 						`teves_purchase_order_delivery_details`.`purchase_order_delivery_remarks`
