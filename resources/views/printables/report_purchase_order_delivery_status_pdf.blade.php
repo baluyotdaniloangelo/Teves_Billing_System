@@ -54,7 +54,7 @@
 			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
 			</td>
 			<td colspan="6" width="30%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;"><?=$branch_header['branch_name'];?></b></td>
-			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: skyblue; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title }} - Delivery Status</b></td>
+			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: skyblue; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title }} - Withdrawal Status</b></td>
 		</tr>
 		
 		<tr>
@@ -130,7 +130,7 @@
 			<td colspan="2" width="20%" align="center">#</td>
 			<td colspan="2" width="20%" align="center">PRODUCT</td>
 			<td colspan="2" width="20%" align="center">TOTAL ORDER</td>	
-			<td colspan="2" width="20%" align="center">TOTAL DELIVERED</td>	
+			<td colspan="2" width="20%" align="center">TOTAL WITHDRAWAL</td>	
 			<td colspan="2" width="20%" align="center">TOTAL PENDING</td>
 						
 		</tr>			
@@ -177,24 +177,24 @@
 
 	  	</table>		
 		
-		<!--Delivered Item-->
+		<!--WITHDRAWAL Item-->
 		<br>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:12px;border:1 solid gray;">
-			<td colspan="15" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:20px !important; ">DELIVERED ITEMS</td>
+			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:20px !important; ">WITHDRAWAL ITEMS</td>
 		</tr>
 		<tr style="font-size:12px;border:1px solid gray;">			
 
-			<td colspan="1" width="5%" align="center" style="border:1px solid gray;">ITEM #</td>	
-			<td colspan="1" width="10%" align="center" style="border:1px solid gray;">DELIVERY DATE</td>		
-			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">PRODUCT</td>
-			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">QUANTITY</td>	
-			<td colspan="1" width="20%" align="center" style="border:1px solid gray;">PRICE</td>	
-			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">AMOUNT</td>	
-			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">WITHDRAWAL REFERENCE</td>
-			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">HAULER DETAILS</td>
-			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">REMARKS</td>		
+			<td colspan="1" width="" align="center" style="border:1px solid gray;">ITEM #</td>	
+			<td colspan="1" width="" align="center" style="border:1px solid gray;">DELIVERY DATE</td>		
+			<td colspan="2" width="10%" align="center" style="border:1px solid gray;">PRODUCT</td>
+			<td colspan="1" width="10%" align="center" style="border:1px solid gray;">QUANTITY</td>	
+			<td colspan="1" width="" align="center" style="border:1px solid gray;">PRICE</td>	
+			<td colspan="1" width="" align="center" style="border:1px solid gray;">AMOUNT</td>	
+			<td colspan="2" width="10%" align="center" style="border:1px solid gray;">REFERENCE</td>
+			<td colspan="2" width="" align="center" style="border:1px solid gray;">HAULER DETAILS</td>
+			<td colspan="1" width="" align="center" style="border:1px solid gray;">REMARKS</td>		
 						
 					
 		</tr>									
@@ -218,12 +218,12 @@
 				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$no_delivered_item"; ?></td>
 				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_date; ?></td>
 				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->product_name; ?></td>
-				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity; ?> {{@$purchase_order_delivery_component_cols->product_unit_measurement}}</td>
+				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity; ?> {{@$purchase_order_delivery_component_cols->product_unit_measurement}}</td>
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$ordered_price; ?></td>
-				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$withdrawal_amount; ?></td>
+				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$withdrawal_amount; ?></td>
 				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_withdrawal_reference; ?></td>
-				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details;?></td>
-				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_remarks;?></td>			
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details;?></td>
+				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_remarks;?></td>			
 			</tr>
 			<?php 
 			$no_delivered_item++; 
