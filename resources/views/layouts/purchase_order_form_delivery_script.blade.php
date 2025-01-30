@@ -329,6 +329,7 @@
 									"<td class='manual_price_td' align='center'>"+purchase_order_delivery_date+"</td>"+
 									"<td class='product_td' align='left'>"+product_name+"</td>"+
 									"<td class='calibration_td' align='right'>"+purchase_order_delivery_quantity+" "+product_unit_measurement+"</td>"+
+									"<td class='calibration_td' align='right'>"+ordered_price+"</td>"+
 									"<td class='calibration_td' align='right'>"+withdrawal_amount+"</td>"+
 									"</tr>");
 									

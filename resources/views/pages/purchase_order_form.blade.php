@@ -315,6 +315,7 @@
 							<th style="text-align:center !important;">Date</th>
 							<th style="text-align:center !important;">Product</th>
 							<th style="text-align:center !important;">Quantity</th>
+							<th style="text-align:center !important;">Price</th>
 							<th style="text-align:center !important;">Amount</th>
 						</tr>
 						</thead>

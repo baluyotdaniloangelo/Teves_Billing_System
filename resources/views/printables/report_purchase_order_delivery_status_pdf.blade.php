@@ -182,7 +182,7 @@
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:12px;border:1 solid gray;">
-			<td colspan="14" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:20px !important; ">DELIVERED ITEMS</td>
+			<td colspan="15" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:20px !important; ">DELIVERED ITEMS</td>
 		</tr>
 		<tr style="font-size:12px;border:1px solid gray;">			
 
@@ -190,6 +190,7 @@
 			<td colspan="1" width="10%" align="center" style="border:1px solid gray;">DELIVERY DATE</td>		
 			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">PRODUCT</td>
 			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">QUANTITY</td>	
+			<td colspan="1" width="20%" align="center" style="border:1px solid gray;">PRICE</td>	
 			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">AMOUNT</td>	
 			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">WITHDRAWAL REFERENCE</td>
 			<td colspan="2" width="20%" align="center" style="border:1px solid gray;">HAULER DETAILS</td>
@@ -218,6 +219,7 @@
 				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_date; ?></td>
 				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->product_name; ?></td>
 				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity; ?> {{@$purchase_order_delivery_component_cols->product_unit_measurement}}</td>
+				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$ordered_price; ?></td>
 				<td colspan="2" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$withdrawal_amount; ?></td>
 				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_withdrawal_reference; ?></td>
 				<td colspan="2" align="left" nowrap style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details;?></td>
