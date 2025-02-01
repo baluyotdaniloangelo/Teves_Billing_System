@@ -191,7 +191,7 @@
 			<td colspan="2" width="10%" align="center" style="border:1px solid gray;">PRODUCT</td>
 			<td colspan="1" width="10%" align="center" style="border:1px solid gray;">QUANTITY</td>	
 			<td colspan="1" width="" align="center" style="border:1px solid gray;">INVOICE PRICE</td>	
-			<td colspan="1" width="" align="center" style="border:1px solid gray;">AMOUNT</td>	
+			<td colspan="1" width="" align="center" style="border:1px solid gray;">GROSS AMOUNT</td>	
 			<td colspan="2" width="10%" align="center" style="border:1px solid gray;">REFERENCE</td>
 			<td colspan="2" width="" align="center" style="border:1px solid gray;">HAULER DETAILS</td>
 			<td colspan="1" width="" align="center" style="border:1px solid gray;">REMARKS</td>		
