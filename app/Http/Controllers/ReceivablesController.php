@@ -754,7 +754,7 @@ class ReceivablesController extends Controller
 			$billing_update = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
 				->where('order_date', '>=', $start_date)
                 ->where('order_date', '<=', $end_date)
-				->where('receivable_idx', '=', 0)
+				->where('receivable_idx', '=', $request->ReceivableID)
 				->update([
 					'receivable_idx' => $request->ReceivableID,
 	'branch_idx'=>$request->company_header]);
