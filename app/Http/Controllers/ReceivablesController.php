@@ -756,7 +756,8 @@ class ReceivablesController extends Controller
                 ->where('order_date', '<=', $end_date)
 				->where('receivable_idx', '=', 0)
 				->update([
-					'receivable_idx' => $request->ReceivableID]);
+					'receivable_idx' => $request->ReceivableID]
+					'branch_idx'=>$request->company_header);
 			
 			if(Session::get('UserType')=="Admin"){
 				
