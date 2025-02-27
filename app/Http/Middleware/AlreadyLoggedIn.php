@@ -16,10 +16,12 @@ class AlreadyLoggedIn
      */
     public function handle(Request $request, Closure $next)
     {
-		if(Session()->has('loginID') && (url('/')==$request->url()))
+		if(Session()->has('loginID'))
+		//if(Session()->has('loginID') && (url('/')==$request->url()))
 		{
 			//return redirect('login')->with('fail', "You Have to Login First");
-			return back();
+			//return back();
+			return redirect('billing');
 		}
         return $next($request);
     }

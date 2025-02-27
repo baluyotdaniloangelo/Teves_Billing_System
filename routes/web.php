@@ -40,6 +40,7 @@ Route::get('/sample1', [CAMRSampleExcel::class,'sample1'])->name('site')->middle
 */
 
 /*Login Page*/
+//Route::get('/',[UserAuthController::class,'login']);
 Route::get('/',[UserAuthController::class,'login'])->middleware('alreadyLoggedIn');
 Route::post('login-user', [UserAuthController::class,'loginUser'])->name('login-user');
 /*Logout*/

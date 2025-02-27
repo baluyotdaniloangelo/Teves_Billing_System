@@ -38,51 +38,55 @@ class ReportController extends Controller
 	/*Load Billing History Report Interface*/
 	public function billing_history(){
 		
-		$title = 'Billing History';
-		$data = array();
 		if(Session::has('loginID')){
 			
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
-			$client_data = ClientModel::all();
-			
-			$product_data = ProductModel::all();
-			//$teves_branch = TevesBranchModel::all();
-			
-			if($data->user_branch_access_type=='ALL'){
+			$title = 'Billing History';
+			$data = array();
+			if(Session::has('loginID')){
 				
-				$teves_branch = TevesBranchModel::all();
+				$data = User::where('user_id', '=', Session::get('loginID'))->first();
+				
+				$client_data = ClientModel::all();
+				
+				$product_data = ProductModel::all();
+				//$teves_branch = TevesBranchModel::all();
+				
+				if($data->user_branch_access_type=='ALL'){
+					
+					$teves_branch = TevesBranchModel::all();
+				
+				}else{
+					
+					$userID = Session::get('loginID');
+					
+					$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
+					{
+						$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
+					})
+								
+								->where('teves_user_branch_access.user_idx', '=', $userID)
+								->get([
+								'teves_branch_table.branch_id',
+								'teves_user_branch_access.user_idx',
+								'teves_user_branch_access.branch_idx',
+								'teves_branch_table.branch_code',
+								'teves_branch_table.branch_name'
+								]);
+					
+				}	
+				
+				$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
+				$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 			
-			}else{
-				
-				$userID = Session::get('loginID');
-				
-				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
-				{
-					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
-				})
-							
-							->where('teves_user_branch_access.user_idx', '=', $userID)
-							->get([
-							'teves_branch_table.branch_id',
-							'teves_user_branch_access.user_idx',
-							'teves_user_branch_access.branch_idx',
-							'teves_branch_table.branch_code',
-							'teves_branch_table.branch_name'
-							]);
-				
-			}	
-			
-			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
-			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
+			}
+
+			return view("pages.billing_history", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
 		
 		}
-
-		return view("pages.billing_history", compact('data','title','client_data','drivers_name','plate_no','product_data','teves_branch'));
-		
 	}  	
 	
 	public function generate_report(Request $request){
+
 
 		$request->validate([
           'client_idx'      		=> 'required',
@@ -114,10 +118,12 @@ class ReportController extends Controller
 	
 	public function soa_summary_history(){
 		
+
+		if(Session::has('loginID')){
+
 		$title = 'Statement of Account - Summary';
 		$data = array();
-		if(Session::has('loginID')){
-			
+		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$client_data = ClientModel::all();
@@ -229,6 +235,8 @@ class ReportController extends Controller
 	
 	public function generate_soa_summary_pdf(Request $request){
 
+		if(Session::has('loginID')){
+			
 		$request->validate([
 			'client_idx'      		=> 'required',
 			'client_idx'      		=> 'required',
@@ -282,6 +290,7 @@ class ReportController extends Controller
 		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($client_data['client_name']."_RECEIVABLE_SOA.pdf");
 		
+		}
 	}		
 	
 	
