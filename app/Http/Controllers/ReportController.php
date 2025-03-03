@@ -1347,13 +1347,49 @@ class ReportController extends Controller
 		$purchase_order_delivery_component = DB::select("$raw_query_purchase_order_delivery_component", [ $purchase_order_id]);	
 		
 		
+		/*Transaction Item*/
+		
+		$raw_query_purchase_order_transaction = "select * from (
+			SELECT 
+			 ('PO') AS source_tb,
+			 purchase_order_date AS transaction_date,
+			 purchase_order_control_number AS item_description,
+			 (purchase_order_net_amount*(purchase_order_less_percentage/100)) AS amount,
+			 created_at
+			FROM teves_purchase_order_table
+			where `teves_purchase_order_table`.`purchase_order_id` = ?
+
+		union
+		   SELECT 
+				('Delivery') AS source_tb,
+				`teves_purchase_order_delivery_details`.`purchase_order_delivery_date` AS transaction_date,
+				 CONCAT(`teves_product_table`.`product_name`,' - (', `teves_purchase_order_delivery_details`.`purchase_order_delivery_withdrawal_reference`,')') AS item_description,
+				(`teves_purchase_order_delivery_details`.`purchase_order_delivery_quantity` * `teves_purchase_order_component_table`.`product_price`) AS amount,
+				`teves_purchase_order_delivery_details`.`created_at`
+			from `teves_purchase_order_component_table` left join `teves_product_table` on	 
+			`teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx`
+			LEFT JOIN teves_purchase_order_delivery_details ON `teves_purchase_order_component_table`.`purchase_order_component_id` = teves_purchase_order_delivery_details.purchase_order_component_idx
+			where `teves_purchase_order_delivery_details`.`purchase_order_idx` = ?	
+		union
+			SELECT 
+				('Payment') AS source_tb,
+				purchase_order_date_of_payment AS transaction_date,
+				purchase_order_reference_no AS item_description,
+				purchase_order_payment_amount AS amount,
+				created_at
+			FROM teves_purchase_order_payment_details
+			where `teves_purchase_order_payment_details`.`purchase_order_idx` = ?
+		) as t
+		order by created_at asc;";	
+						
+		$purchase_order_transaction_item = DB::select("$raw_query_purchase_order_transaction", [ $purchase_order_id, $purchase_order_id, $purchase_order_id]);
 		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'PURCHASE ORDER';
 		  
-        $pdf = PDF::loadView('printables.report_purchase_order_delivery_status_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_delivery_component', 'purchase_order_delivery_total_component','branch_header'));
+        $pdf = PDF::loadView('printables.report_purchase_order_delivery_status_pdf', compact('title', 'purchase_order_data', 'user_data', 'amount_in_words', 'purchase_order_delivery_component', 'purchase_order_delivery_total_component','purchase_order_transaction_item','branch_header'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/

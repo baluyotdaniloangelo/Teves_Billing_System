@@ -318,13 +318,7 @@
 		<div class="page-break"></div>
 		
 	<table class="" width="100%" cellspacing="0" cellpadding="1">
-		
-			<?php
-				$_purchase_order_date=date_create($purchase_order_data[0]['purchase_order_date']);
-				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
-				
-				$logo = $branch_header['branch_logo'];
-			?>
+
 			
 		<tr>
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
