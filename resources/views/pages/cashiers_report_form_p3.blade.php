@@ -111,13 +111,7 @@
 									</div>	
 					  </div>
 
-                      <div class="row mb-2">
-						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">REFERENCE NO.</label>
-						  <div class="col-sm-8">
-									<input class="form-control" list="reference_no_PH3" name="reference_no_PH3" id="reference_no_PH3" autocomplete="off">
-									<span class="valid-feedback" id="reference_no_PH3Error"></span>
-									</div>	
-					  </div>
+                      
 
 					  <div class="row mb-2">
 						  <label for="sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
@@ -129,6 +123,14 @@
 												  @endforeach
 												</datalist>
 									<span class="valid-feedback" id="sold_to_client_idError"></span>
+									</div>	
+					  </div>
+					  
+					  <div class="row mb-2">
+						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">REFERENCE NO.</label>
+						  <div class="col-sm-8">
+									<input class="form-control" list="reference_no_PH3" name="reference_no_PH3" id="reference_no_PH3" autocomplete="off">
+									<span class="valid-feedback" id="reference_no_PH3Error"></span>
 									</div>	
 					  </div>
 					  
@@ -216,13 +218,7 @@
 									</div>	
 					  </div>
 
-                      <div class="row mb-2">
-						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">REFERENCE NO.</label>
-						  <div class="col-sm-8">
-									<input class="form-control" list="update_reference_no_PH3" name="update_reference_no_PH3" id="update_reference_no_PH3" autocomplete="off">
-									<span class="valid-feedback" id="update_reference_no_PH3Error"></span>
-									</div>	
-					  </div>					  
+                      					  
 					  
 					  <div class="row mb-2">
 						  <label for="update_sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
@@ -234,6 +230,14 @@
 												  @endforeach
 												</datalist>
 									<span class="valid-feedback" id="update_sold_to_client_idError"></span>
+									</div>	
+					  </div>
+					  
+					  <div class="row mb-2">
+						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">REFERENCE NO.</label>
+						  <div class="col-sm-8">
+									<input class="form-control" list="update_reference_no_PH3" name="update_reference_no_PH3" id="update_reference_no_PH3" autocomplete="off">
+									<span class="valid-feedback" id="update_reference_no_PH3Error"></span>
 									</div>	
 					  </div>
 					  

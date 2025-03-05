@@ -867,7 +867,7 @@
 
         }else if(miscellaneous_items_type == 'SALES_CREDIT'){
 
-            document.getElementById("reference_no_PH3").disabled = true;
+            document.getElementById("reference_no_PH3").disabled = false;
             document.getElementById("product_manual_price_PH3").disabled = false;
 			document.getElementById("product_idx_PH3").disabled = false;
 			document.getElementById("order_quantity_PH3").disabled = false;
