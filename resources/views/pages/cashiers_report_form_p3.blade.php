@@ -116,7 +116,7 @@
 					  <div class="row mb-2">
 						  <label for="sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="sold_to_client_name_list" name="sold_to_client_name" id="sold_to_client_id" autocomplete="off">
+									<input class="form-control" list="sold_to_client_name_list" name="sold_to_client_name" id="sold_to_client_id" autocomplete="off" onchange="load_so_reference_no(0)">
 												<datalist id="sold_to_client_name_list">
 												  @foreach ($client_data as $client_data_cols)
 												  <option label="{{$client_data_cols->client_name}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}}">
@@ -129,7 +129,8 @@
 					  <div class="row mb-2">
 						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">REFERENCE NO.</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="reference_no_PH3" name="reference_no_PH3" id="reference_no_PH3" autocomplete="off">
+									<input class="form-control" list="so_list_reference" name="reference_no_PH3" id="reference_no_PH3" autocomplete="off">
+												
 									<span class="valid-feedback" id="reference_no_PH3Error"></span>
 									</div>	
 					  </div>
@@ -223,7 +224,7 @@
 					  <div class="row mb-2">
 						  <label for="update_sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="update_sold_to_client_name_list" name="update_sold_to_client_name" id="update_sold_to_client_id" autocomplete="off">
+									<input class="form-control" list="update_sold_to_client_name_list" name="update_sold_to_client_name" id="update_sold_to_client_id" autocomplete="off" onchange="load_so_reference_no(1)">
 												<datalist id="update_sold_to_client_name_list">
 												  @foreach ($client_data as $client_data_cols)
 												  <option label="{{$client_data_cols->client_name}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}}">
@@ -236,7 +237,8 @@
 					  <div class="row mb-2">
 						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">REFERENCE NO.</label>
 						  <div class="col-sm-8">
-									<input class="form-control" list="update_reference_no_PH3" name="update_reference_no_PH3" id="update_reference_no_PH3" autocomplete="off">
+									<input class="form-control" list="so_list_reference" name="update_reference_no_PH3" id="update_reference_no_PH3" autocomplete="off" >
+												
 									<span class="valid-feedback" id="update_reference_no_PH3Error"></span>
 									</div>	
 					  </div>
@@ -296,6 +298,9 @@
              </div>		
 	</div>
 	
+	<datalist id="so_list_reference">
+	</datalist>
+												
 	<!--Product List-->
 	<datalist id="product_list_PH3">
 		@foreach ($product_data as $product_data_cols)

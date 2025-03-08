@@ -84,6 +84,12 @@ else if (Request::is('billing_history')){
 @include('layouts.footer')
 @include('layouts.billing_history_script')
 <?php
+}else if (Request::is('daily_sales')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.daily_sales_script')
+<?php
 }
 else if (Request::is('soa_summary_history')){
 ?>

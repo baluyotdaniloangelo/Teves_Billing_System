@@ -262,7 +262,7 @@
 		</tr>
 		
         <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="5">SALES ORDER - CREDIT SALES</td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="5">SALES ORDER - CREDIT SALES - RETAIL</td>
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >

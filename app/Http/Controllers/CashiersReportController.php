@@ -12,6 +12,10 @@ use App\Models\CashiersReportModel_P4;
 use App\Models\CashiersReportModel_P5;
 use App\Models\CashiersReportModel_P6;
 use App\Models\CashiersReportModel_P8;
+
+use App\Models\SOBillingTransactionModel;
+use App\Models\BillingTransactionModel;
+
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
 use Session;
@@ -186,7 +190,8 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->cashiers_name 			= $request->cashiers_name;
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
 			$CashiersReportCreate->report_date 				= $request->report_date;
-			$CashiersReportCreate->shift 				= $request->shift;
+			$CashiersReportCreate->cashier_report_remarks 	= $request->cashier_report_remarks;
+			$CashiersReportCreate->shift 					= $request->shift;
 			$result = $CashiersReportCreate->save();
 			
 			/*Get Last ID*/
@@ -240,6 +245,7 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->shift 					= $request->shift;
+			$CashiersReportCreate->cashier_report_remarks 	= $request->cashier_report_remarks;
 			$result = $CashiersReportCreate->update();
 			
 			if($result){
@@ -265,6 +271,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.forecourt_attendant',
 			'teves_cashiers_report.report_date',
 			'teves_cashiers_report.shift',
+			'teves_cashiers_report.cashier_report_remarks',
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 		
@@ -327,6 +334,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.forecourt_attendant',
 			'teves_cashiers_report.report_date',
 			'teves_cashiers_report.shift',
+			'teves_cashiers_report.cashier_report_remarks',
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
@@ -659,7 +667,7 @@ class CashiersReportController extends Controller
 			
 			$request->validate([
 				'item_description'      	=> 'required',
-				'product_manual_price' 	=> 'required',	
+				'product_manual_price' 		=> 'required',	
 			], 
 			[
 				'item_description'      	=> 'Item Description required',
@@ -746,6 +754,84 @@ class CashiersReportController extends Controller
 					
 					$peso_sales = ($order_quantity * $product_price);
 					
+					if($CHPH3_ID=='' || $CHPH3_ID ==0){	
+					
+					/*Insert New SO*/
+					/*Save to SO and Billing ITEM*/
+					/*insert SO*/
+						
+						$reference_no_id = $request->reference_no_id;
+						
+						if($reference_no_id==''){
+					
+							$SOBilling = new SOBillingTransactionModel();
+							$SOBilling->cashiers_report_idx	= $CashiersReportId;
+							$SOBilling->branch_idx 			= $request->branch_idx;
+							$SOBilling->order_date 			= $request->report_date;
+							$SOBilling->order_time 			= '00:00';
+							$SOBilling->so_number 			= $reference_no;	
+							$SOBilling->client_idx 			= $request->client_idx;
+							$SOBilling->plate_no 			= 'N/A';
+							$SOBilling->drivers_name 		= 'N/A';
+							$SOBilling->created_by_user_id 	= Session::get('loginID');
+							$result_so = $SOBilling->save();
+							
+							$so_id 		= $SOBilling->so_id;
+							
+						}else{
+							
+							$so_id 		= $request->reference_no_id;
+							
+						}
+						
+						/*Insert Product SO*/	
+						$Billing = new BillingTransactionModel();
+						$Billing->so_idx 				= $so_id;
+						$Billing->cashiers_report_idx 	= $CashiersReportId;
+						$Billing->order_date 			= $request->report_date;
+						$Billing->order_time 			= '00:00';
+						$Billing->order_po_number 		= $reference_no;	
+						$Billing->client_idx 			= $request->client_idx;
+						$Billing->plate_no 				= 'N/A';
+						$Billing->drivers_name 			= 'N/A';
+						$Billing->product_idx 			= $request->product_idx;
+						$Billing->product_price 		= $product_price;
+						$Billing->order_quantity 		= $request->order_quantity;
+						$Billing->order_total_amount 	= $peso_sales;
+						$result_Billing = $Billing->save();
+						
+						$billing_id 		= $Billing->billing_id;
+					}
+					else{
+						
+						
+						$billing_id =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
+								->get([
+									'teves_cashiers_report_p3.billing_idx',
+									]);	
+									
+						$so_id 		= $request->reference_no_id;
+						
+						/*UPDATE*/
+						/*Insert Product SO*/	
+						$Billing = new BillingTransactionModel();
+						$Billing = BillingTransactionModel::find($billing_id[0]['billing_idx']);
+						$Billing->so_idx 				= $so_id;
+						$Billing->order_date 			= $request->report_date;
+						//$Billing->order_time 			= '00:00';
+						$Billing->order_po_number 		= $reference_no;	
+						$Billing->client_idx 			= $request->client_idx;
+						//$Billing->plate_no 				= 'N/A';
+						//$Billing->drivers_name 			= 'N/A';
+						$Billing->product_idx 			= $request->product_idx;
+						$Billing->product_price 		= $product_price;
+						$Billing->order_quantity 		= $request->order_quantity;
+						$Billing->order_total_amount 	= $peso_sales;
+						//$result_Billing = $Billing->save();
+						$result = $Billing->update();
+						
+					}
+					
             }else if($miscellaneous_items_type=='DISCOUNTS'){
 
                     if($pump_price==0){
@@ -803,6 +889,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3 = new CashiersReportModel_P3();
 									
 									$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
+									$CashiersReportModel_P3->billing_idx 				= $billing_id;
 									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->reference_no 				= $reference_no;
@@ -926,8 +1013,10 @@ class CashiersReportController extends Controller
 				->get([
 					'teves_product_table.product_name',
 					'teves_client_table.client_name',
+					'teves_cashiers_report_p3.client_idx',
 					'teves_product_table.product_id',
 					'teves_cashiers_report_p3.miscellaneous_items_type',
+					'teves_cashiers_report_p3.reference_no',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.pump_price',
@@ -984,11 +1073,23 @@ class CashiersReportController extends Controller
 	public function delete_cashiers_report_product_p3(Request $request){		
 			
 		$CHPH3_ID = $request->CHPH3_ID;
+		
+		/*Get Billing ID*/
+		$billing_id =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
+			->get([
+					'teves_cashiers_report_p3.billing_idx',
+				]);	
+		
+		/*Delete from Cashiers Report*/
 		CashiersReportModel_P3::find($CHPH3_ID)->delete();
+		
+		/*Delete from Billing*/
+		BillingTransactionModel::where('billing_id', $billing_id[0]['billing_idx'])->delete();
+	
 		return 'Deleted';
 		
 	}
-
+											
 	/*Part Four (MSC Reports)*/
 	public function save_cashiers_report_PH4(Request $request){	
 

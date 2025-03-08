@@ -24,6 +24,9 @@ use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
 
+
+/*Daily Sales - March 6, 2025*/
+use App\Http\Controllers\DailySalesReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -147,6 +150,11 @@ Route::post('/generate_soa_summary', [ReportController::class,'generate_soa_summ
 Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_soa_summary_pdf')->middleware('isLoggedIn');
 //Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_receivable_soa_pdf')->middleware('isLoggedIn');
 //Route::post('/generate_report_recievable_after_saved', [ReportController::class,'generate_report_recievable_after_saved'])->name('generate_report_recievable_after_saved')->middleware('isLoggedIn');
+
+/*Daily Sales Reports*/
+Route::get('/daily_sales', [DailySalesReportController::class,'daily_sales_page'])->name('daily_sales')->middleware('isLoggedIn');
+Route::post('/generate_daily_sales', [DailySalesReportController::class,'generate_daily_sales'])->name('generate_daily_sales')->middleware('isLoggedIn');
+Route::get('/generate_daily_sales_report_pdf', [DailySalesReportController::class,'generate_daily_sales_report_pdf'])->name('generate_daily_sales_report_pdf')->middleware('isLoggedIn');
 
 
 /*Generate via Web Page View*/
@@ -393,6 +401,9 @@ Route::post('/cashiers_report_p3_info_SALES_CREDIT', [CashiersReportController::
 Route::post('/cashiers_report_p3_info_OTHERS', [CashiersReportController::class, 'cashiers_report_p3_info_OTHERS'])->name('CRP3_info_OTHERS')->middleware('isLoggedIn');
 /*GET Cashiers report product P3*/
 Route::post('/cashiers_report_p3_info_DISCOUNT', [CashiersReportController::class, 'cashiers_report_p3_info_DISCOUNT'])->name('CRP3_info_DISCOUNT')->middleware('isLoggedIn');
+
+Route::post('/so_reference_list', [SOBillingTransactionController::class, 'so_reference_list'])->name('so_reference_list')->middleware('isLoggedIn');
+
 
 /*Cashiers Report Part 3.1
 Route::post('/save_product_cashiers_report_PH3_1', [CashiersReportController::class,'save_product_cashiers_report_PH3_1'])->name('SAVE_CHR_PH3_1')->middleware('isLoggedIn');

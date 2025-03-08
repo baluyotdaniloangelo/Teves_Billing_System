@@ -169,7 +169,33 @@ class SOBillingTransactionController extends Controller
 		return response()->json($data);
 		
 	}
-
+	
+	/*Load SO Reference*/
+	public function so_reference_list(Request $request){
+	    	
+			$current_user = Session::get('loginID');
+			$branch_idx = $request->teves_branch;
+			
+			/*Disable SQL Violation*/
+			\DB::statement("SET SQL_MODE=''");
+			
+			$raw_query = "SELECT 
+			`teves_billing_so_table`.`so_id`, 
+			`teves_billing_so_table`.`so_number`
+			 FROM 
+			 teves_billing_table
+				right join teves_billing_so_table on `teves_billing_so_table`.`so_id` = `teves_billing_table`.`so_idx`
+				WHERE 
+			 `teves_billing_so_table`.`branch_idx` = ? 
+			 AND `teves_billing_so_table`.`client_idx` = ?
+			 group by `teves_billing_so_table`.`so_id`";
+			
+			$data = DB::select("$raw_query", [$branch_idx,$request->client_idx]);			
+					
+			return response()->json($data);			
+	
+	}
+	
 	/*Delete SO and Product Information*/
 	public function delete_so_confirmed(Request $request){
 
@@ -291,6 +317,7 @@ class SOBillingTransactionController extends Controller
 			'teves_client_table.client_name',
 			'teves_client_table.client_id',
 			'teves_billing_so_table.so_number',
+			'teves_billing_so_table.cashiers_report_idx',
 			'teves_billing_so_table.branch_idx',
 			'teves_billing_so_table.order_date',
 			'teves_billing_so_table.order_time',

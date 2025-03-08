@@ -120,11 +120,27 @@
 						<div class="row mb-2">
 						  <label for="shift" class="col-sm-3 col-form-label">Shift</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="shift" id="shift" value="" required>
+							<!--<input type="text" class="form-control " name="shift" id="shift" value="" required>-->
+							<select class="form-select form-control" required="" name="shift" id="shift">
+										<option value="1st Shift">1st Shift</option>
+										<option value="2nd Shift">2nd Shift</option>
+										<option value="3rd Shift">3rd Shift</option>
+										<option value="4th Shift">4th Shift</option>
+										<option value="5th Shift">5th Shift</option>
+										<option value="6th Shift">6th Shift</option>
+									</select>
 							<span class="valid-feedback" id="shiftError"></span>
 						  </div>
 						</div>						
-									
+							
+						<div class="row mb-2">
+						  <label for="cashier_report_remarks" class="col-sm-3 col-form-label">Remarks</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="cashier_report_remarks" id="cashier_report_remarks">
+							<span class="valid-feedback" id="cashier_report_remarksError"></span>
+						  </div>
+						</div>
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">				

@@ -81,8 +81,23 @@
 								<div class="row mb-2">
 								  <label for="shift" class="col-sm-4 col-form-label">Shift</label>
 								  <div class="col-sm-8">
-									<input type="text" class="form-control " name="shift" id="shift" value="{{ $CashiersReportData[0]['shift'] }}" required>
+									<select class="form-select form-control" required="" name="shift" id="shift">
+										<option value="1st Shift" <?php if($CashiersReportData[0]['shift']=='1st Shift'){ echo "selected";}?>>1st Shift</option>
+										<option value="2nd Shift" <?php if($CashiersReportData[0]['shift']=='2nd Shift'){ echo "selected";}?>>2nd Shift</option>
+										<option value="3rd Shift" <?php if($CashiersReportData[0]['shift']=='3rd Shift'){ echo "selected";}?>>3rd Shift</option>
+										<option value="4th Shift" <?php if($CashiersReportData[0]['shift']=='4th Shift'){ echo "selected";}?>>4th Shift</option>
+										<option value="5th Shift" <?php if($CashiersReportData[0]['shift']=='5th Shift'){ echo "selected";}?>>5th Shift</option>
+										<option value="6th Shift" <?php if($CashiersReportData[0]['shift']=='6th Shift'){ echo "selected";}?>>6th Shift</option>
+									</select>
 									<span class="valid-feedback" id="shiftError"></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
+								  <label for="cashier_report_remarks" class="col-sm-4 col-form-label">Remarks</label>
+								  <div class="col-sm-8">
+									<input type="text" class="form-control" name="cashier_report_remarks" id="cashier_report_remarks" value="{{ $CashiersReportData[0]['cashier_report_remarks'] }}" >
+									<span class="valid-feedback" id="cashier_report_remarksError"></span>
 								  </div>
 								</div>
 								

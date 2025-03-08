@@ -29,7 +29,8 @@
 			let forecourt_attendant 		= $("input[name=forecourt_attendant]").val();
 			let cashiers_name 				= $("input[name=cashiers_name]").val();
 			let report_date 				= $("input[name=report_date]").val();
-			let shift 						= $("input[name=shift]").val();
+			let shift 						= $("#shift").val();
+			let cashier_report_remarks 		= $("input[name=cashier_report_remarks]").val();
 			
 			  $.ajax({
 				url: "/update_cashier_report_post",
@@ -40,6 +41,7 @@
 				  cashiers_name:cashiers_name,
 				  forecourt_attendant:forecourt_attendant,
 				  report_date:report_date,
+				  cashier_report_remarks:cashier_report_remarks,
 				  shift:shift,
 				  _token: "{{ csrf_token() }}"
 				},
@@ -550,7 +552,6 @@
 		}	
 	});
 
-
 	/*Part 2*/
 	$("#save-CRPH2").click(function(event){
 		
@@ -750,7 +751,6 @@
 				   });		
 		 });
 
-
 	<!--CRPH1 Deletion Confirmation-->	
 	$('body').on('click','#deleteCashiersProductP2',function(){
 			event.preventDefault();
@@ -938,6 +938,56 @@
         }
     }
 
+
+	function load_so_reference_no(submit_mode) {		
+	
+		
+		if(submit_mode == 0){
+			
+			var client_idx = $('#sold_to_client_name_list option[value="' + $('#sold_to_client_id').val() + '"]').attr('data-id');
+			
+		}else{
+			
+			var client_idx = $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
+			
+		}
+		
+		let teves_branch 				= $("#teves_branch").val();
+		
+		$("#so_list_reference option").remove();
+		$('<option style="display: none;"></option>').appendTo('#so_list_reference');
+		
+			  $.ajax({
+				url: "{{ route('so_reference_list') }}",
+				type:"POST",
+				data:{
+				  client_idx:client_idx,
+				  teves_branch:teves_branch,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response);
+				  if(response!='') {			  
+						var len = response.length;
+						for(var i=0; i<len; i++){
+						
+							var so_id = response[i].so_id;		
+							var so_number = response[i].so_number;
+	
+							$('#so_list_reference option:last').after("<option label='"+so_number+"' data-id='"+so_id+"' value='"+so_number+"' data-price='"+so_number+"' >");	
+						
+					}			
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	}
+
+
 	$("#save-CRPH3").click(function(event){
 		
 			event.preventDefault();
@@ -946,11 +996,14 @@
 			$('#order_quantity_PH3Error').text('');
 			$('#product_manual_price_PH3Error').text('');
 			
-			let CashiersReportId 		= {{ $CashiersReportId }};			
+			let CashiersReportId 			= {{ $CashiersReportId }};			
 
             var miscellaneous_items_type 	= $("#miscellaneous_items_type_PH3").val();
+			
             var reference_no 			    = $("input[name=reference_no_PH3]").val();
-			var client_idx 			    = $('#sold_to_client_name_list option[value="' + $('#sold_to_client_id').val() + '"]').attr('data-id');
+			var reference_no_id 			= $('#so_list_reference option[value="' + $('#reference_no_PH3').val() + '"]').attr('data-id');/*IF Available*/
+			
+			var client_idx 			   		= $('#sold_to_client_name_list option[value="' + $('#sold_to_client_id').val() + '"]').attr('data-id');
 			
 			/*Product ID*/
 			var product_idx 			    = $('#product_list_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');
@@ -960,7 +1013,8 @@
 			var order_quantity 			    = $("input[name=order_quantity_PH3]").val();
 			var product_manual_price 	    = $("input[name=product_manual_price_PH3]").val();
 			
-			let teves_branch 			= $("#teves_branch").val();
+			let teves_branch 				= $("#teves_branch").val();
+			var report_date 			    = $("input[name=report_date]").val();
 
 			document.getElementById('CRPH3_form').className = "g-3 needs-validation was-validated";
 			
@@ -973,12 +1027,14 @@
 					  CashiersReportId:CashiersReportId,
 					  miscellaneous_items_type:miscellaneous_items_type,
                       reference_no:reference_no,
+                      reference_no_id:reference_no_id,
 					  client_idx:client_idx,
                       product_idx:product_idx,
 					  branch_idx:teves_branch,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 
-					  product_manual_price:product_manual_price, 
+					  product_manual_price:product_manual_price,
+					  report_date:report_date,
 					  _token: "{{ csrf_token() }}"
 					},
 					success:function(response){
@@ -1195,7 +1251,13 @@
 					document.getElementById("update_product_manual_price_PH3").value 	= response[0].unit_price;
 					
 					
+					document.getElementById("update_reference_no_PH3").value 	= response[0].reference_no;
+					
+					let client_idx = response[0].client_idx;	
+					load_so_reference_no(client_idx);
+					
 					update_input_settings_create_PH3();
+					
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 
@@ -1313,7 +1375,12 @@
 			let CashiersReportId 			= {{ $CashiersReportId }};			
 			let CHPH3_ID 					= document.getElementById("update-CRPH3").value;
 			var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
-			var reference_no 				= $("input[name=update_reference_no_PH3]").val();
+			
+			//var reference_no 				= $("input[name=update_reference_no_PH3]").val();
+			
+			var reference_no 			    = $("input[name=update_reference_no_PH3]").val();
+			var reference_no_id 			= $('#so_list_reference option[value="' + $('#update_reference_no_PH3').val() + '"]').attr('data-id');/*IF Available*/
+			
 			var client_idx 			    	= $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			var product_idx 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
 			/*Product Name*/
@@ -1321,7 +1388,7 @@
 			
 			var order_quantity 				= $("input[name=update_order_quantity_PH3]").val();
 			var product_manual_price 		= $("input[name=update_product_manual_price_PH3]").val();
-			
+			var report_date 			    = $("input[name=report_date]").val();
 			document.getElementById('CRPH3_form_edit').className = "g-3 needs-validation was-validated";
 			
 				/*Delete the Selected Item*/			
@@ -1333,11 +1400,13 @@
 					  CashiersReportId:CashiersReportId,
 					  miscellaneous_items_type:miscellaneous_items_type, 
 					  reference_no:reference_no, 
+					  reference_no_id:reference_no_id,
 					  client_idx:client_idx,
 					  product_idx:product_idx,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
+					  report_date:report_date,
 					  _token: "{{ csrf_token() }}"
 					},
 					success:function(response){
@@ -1474,6 +1543,7 @@
 	$('body').on('click','#deleteCRPH3Confirmed',function(){
 			
 		let CHPH3_ID = document.getElementById("deleteCRPH3Confirmed").value;
+		let CashiersReportId 			= {{ $CashiersReportId }};
 		
 		if(CHPH3_ID!=0){
 			/*Delete the Selected Item*/	

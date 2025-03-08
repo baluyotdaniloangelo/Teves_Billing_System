@@ -3,22 +3,22 @@
 
 <main id="main" class="main">	
     <section class="section">
-
+<div class="card"> 
+<div class="card-header"><h5 class="card-title">Update SO Information</h5></div>
+<div class="card-body">
         <div class="row mb-2">
-			
 			<div class="col-sm-4">
-			
-			
 			<div class="card">
-            <div class="card-header"><h5 class="card-title">Update SO Information</h5></div>
             <div class="card-body">
 				<br>
 				<form class="g-3 needs-validation" id="SOBillingformUpdate">
-					
+				
+												<?php echo $cashiers_report_idx = $so_data[0]['cashiers_report_idx']; ?>
+												
 												<div class="row mb-2">
 												  <label for="branch_id" class="col-sm-3 col-form-label">Branch</label>
 												  <div class="col-sm-9">
-												 	<select class="form-select form-control" required="" name="branch_id" id="branch_id" onchange="UpdateBranch()">
+												 	<select class="form-select form-control" required="" name="branch_id" id="branch_id" onchange="UpdateBranch()" <?php if($cashiers_report_idx!=0){ echo "disabled"; } ?> >
 													<?php $branch_idx = $so_data[0]['branch_idx']; ?>
 													@foreach ($teves_branch as $teves_branch_cols)
 													<?php 
@@ -35,7 +35,7 @@
 												<div class="row mb-2">
 												  <label for="so_order_date" class="col-sm-3 col-form-label">Date</label>
 												  <div class="col-sm-9">
-													<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="{{ $so_data[0]['order_date'] }}" required>
+													<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="{{ $so_data[0]['order_date'] }}" required <?php if($cashiers_report_idx!=0){ echo "disabled"; } ?> >
 													<span class="valid-feedback" id="so_order_dateError" title="Required"></span>
 												  </div>
 												</div>
@@ -59,7 +59,7 @@
 												<div class="row mb-2">
 												  <label for="so_client_idx" class="col-sm-3 col-form-label">Client</label>
 												  <div class="col-sm-9">
-													<input class="form-control" list="so_client_name" name="so_client_name" id="so_client_idx" required autocomplete="off" value="{{ $so_data[0]['client_name'] }}">
+													<input class="form-control" list="so_client_name" name="so_client_name" id="so_client_idx" required autocomplete="off" value="{{ $so_data[0]['client_name'] }}" <?php if($cashiers_report_idx!=0){ echo "disabled"; } ?> >
 														<datalist id="so_client_name">
 															@foreach ($client_data as $client_data_cols)
 																<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
@@ -128,7 +128,7 @@
 						  <span title="Back to Sales Order List">Back</span>
 						</a>
 						
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id='AddProductBTN'></button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id='AddProductBTN' <?php if($cashiers_report_idx!=0){ echo "disabled"; } ?> ></button>
 						
 					</div>					
 				  </div>
@@ -348,7 +348,7 @@
 			</span>
 		@endforeach
 	</datalist>	
-
+</div></div>
     </section>
 </main>
 

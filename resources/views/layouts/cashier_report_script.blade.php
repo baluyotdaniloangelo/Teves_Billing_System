@@ -75,7 +75,8 @@
 			let cashiers_name 				= $("input[name=cashiers_name]").val();
 			let forecourt_attendant 		= $("input[name=forecourt_attendant]").val();
 			let report_date 				= $("input[name=report_date]").val();
-			let shift 						= $("input[name=shift]").val();
+			let cashier_report_remarks 		= $("input[name=cashier_report_remarks]").val();
+			let shift 						= $("#shift").val();
 			
 			  $.ajax({
 				url: "/create_cashier_report_post",
@@ -85,6 +86,7 @@
 				  cashiers_name:cashiers_name,
 				  forecourt_attendant:forecourt_attendant,
 				  report_date:report_date,
+				  cashier_report_remarks:cashier_report_remarks,
 				  shift:shift,
 				  _token: "{{ csrf_token() }}"
 				},

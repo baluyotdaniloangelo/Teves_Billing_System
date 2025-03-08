@@ -133,11 +133,15 @@
 		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
           <li>
 			<a href="{{ route('report') }}" class="sidebar_li_a" title="Billing History">
-              <i class="bi bi-cart navbar_icon" title="Manage Product list"></i><span> Billing History</span>
+              <i class="bi bi-file-earmark-text navbar_icon" title="Billing History"></i><span> Billing History</span>
             </a>
 			<!---->
 			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">
-              <i class="bi bi-cart navbar_icon" title="Msnage Product list"></i><span> SOA Summary</span>
+              <i class="bi bi-file-earmark-text navbar_icon" title="SOA Summary"></i><span> SOA Summary</span>
+            </a>
+			
+			<a href="{{ route('daily_sales') }}" class="sidebar_li_a" title="Daily Sales">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Daily Sales</span>
             </a>
 			
 		  </li>
