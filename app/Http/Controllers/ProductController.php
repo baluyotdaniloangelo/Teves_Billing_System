@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
+use App\Models\ProductPricePerBranchModel;
+use App\Models\ProductPricePerBranchHistoryModel;
 use Session;
 use Validator;
 use DataTables;
@@ -35,7 +37,7 @@ class ProductController extends Controller
 	public function getProductList(Request $request)
     {
 
-		$list = ProductModel::get();
+		//$list = ProductModel::get();
 		if ($request->ajax()) {
 
     	$data = ProductModel::select(
@@ -44,12 +46,10 @@ class ProductController extends Controller
 		'product_price',
 		'product_unit_measurement');
 		
-
 		return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('action', function($row){
-					
-					
+								
 					$actionBtn = '<div align="center" class="action_table_menu_Product">
 					<a href="update_product_information?productID='.$row->product_id.'&tab=branchprice" data-id="'.$row->product_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="" title="Edit Product Information, Add Price per branch and Tank"></a>
 					<a href="#" data-id="'.$row->product_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteProduct"></a>
@@ -151,7 +151,7 @@ class ProductController extends Controller
 	}
 	
 	/*Pricing List*/
-	public function get_product_pricing_per_branch(Request $request){		
+	public function get_product_pricing_per_branch_old(Request $request){		
 
 			$data =  ProductModel::Join('teves_product_branch_price_table', 'teves_product_table.product_id', '=', 'teves_product_branch_price_table.product_idx')
               		->Join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_branch_price_table.branch_idx')
@@ -165,7 +165,76 @@ class ProductController extends Controller
 		
 			return response()->json($data);			
 	}
+	
+	public function get_product_pricing_per_branch(Request $request){		
 
+		if ($request->ajax()) {
+
+    	$data =  ProductPricePerBranchModel::Join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_branch_price_table.branch_idx')
+					->where('teves_product_branch_price_table.product_idx', $request->productID)
+					->orderBy('teves_product_branch_price_table.branch_price_id', 'asc')
+					->get([
+						'teves_product_branch_price_table.branch_price_id',
+						'teves_branch_table.branch_code',
+						'teves_product_branch_price_table.branch_price',
+						'teves_product_branch_price_table.buying_price',
+						'teves_product_branch_price_table.profit_margin_type',
+						'teves_product_branch_price_table.profit_margin',
+						'teves_product_branch_price_table.profit_margin_in_peso',
+					]);
+		
+		return DataTables::of($data)
+				->addIndexColumn()
+                ->addColumn('action', function($row){
+					$actionBtn = '<div align="center" class="action_table_menu_Product">
+					<a href="#" data-id="'.$row->branch_price_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditProductPriceperBranch" title="Edit Product Branch Price"></a>
+					<a href="#" data-id="'.$row->branch_price_id.'" class="btn-warning btn-circle btn-sm bi bi-clock-fill btn_icon_table btn_icon_table_view" id="ViewProductPriceperBranchHistory" title="View Product Branch Price History"></a>
+					</div>';
+                    return $actionBtn;
+                })
+				
+				->rawColumns(['action'])
+                ->make(true);
+		}	
+		
+	}
+	
+	public function get_product_pricing_per_branch_history(Request $request){		
+
+		if ($request->ajax()) {
+
+    	$data =  ProductPricePerBranchHistoryModel::Join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_branch_price_table_history.branch_idx')
+					->where('teves_product_branch_price_table_history.branch_price_idx', $request->branch_price_id)
+					->orderBy('teves_product_branch_price_table_history.date_of_changes', 'desc')
+					->get([
+						'teves_branch_table.branch_code',
+						'teves_product_branch_price_table_history.date_of_changes',
+						'teves_product_branch_price_table_history.time_of_changes',
+						'teves_product_branch_price_table_history.branch_price',
+						'teves_product_branch_price_table_history.buying_price',
+						'teves_product_branch_price_table_history.profit_margin_type',
+						'teves_product_branch_price_table_history.profit_margin',
+						'teves_product_branch_price_table_history.profit_margin_in_peso',
+					]);
+		
+		return DataTables::of($data)
+				->addIndexColumn()
+                /*->addColumn('action', function($row){
+					$actionBtn = '<div align="center" class="action_table_menu_Product">
+					<a href="#" data-id="'.$row->branch_price_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditProductPriceperBranch" title="Edit Product Branch Price"></a>
+					<a href="#" data-id="'.$row->branch_price_id.'" class="btn-warning btn-circle btn-sm bi bi-clock-fill btn_icon_table btn_icon_table_view" id="ViewProductPriceperBranchHistory" title="Wiew Product Branch Price History"></a>
+					</div>';
+                    return $actionBtn;
+                })*/
+				
+				//->rawColumns(['action'])
+                ->make(true);
+		}	
+		
+	}	
+	
+	
+	/*Old way to save product price per branch*/
 	public function save_branches_product_pricing_post(Request $request){		
 			
 			$request->validate([
@@ -199,6 +268,99 @@ class ProductController extends Controller
 			
 			}							
 	}		
+	
+	public function product_price_per_branch_info(Request $request){		
+		
+		if(Session::has('loginID')){	
+			
+			$branch_price_id = $request->branch_price_id;
+			
+			$data =  ProductModel::Join('teves_product_branch_price_table', 'teves_product_table.product_id', '=', 'teves_product_branch_price_table.product_idx')
+              		->Join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_branch_price_table.branch_idx')
+					->where('teves_product_branch_price_table.branch_price_id', $branch_price_id)
+					->get([
+						'teves_product_branch_price_table.branch_price_id',
+						'teves_product_table.product_name',
+						'teves_branch_table.branch_name',
+						'teves_branch_table.branch_code',
+						'teves_product_branch_price_table.buying_price',
+						'teves_product_branch_price_table.profit_margin',
+						'teves_product_branch_price_table.profit_margin_type',
+						'teves_product_branch_price_table.branch_price',
+					]);	
+				return response()->json($data);		
+		}
+	
+	}	
+	//update_product_price_per_branch_post
+	public function update_product_price_per_branch_post(Request $request){		
+	
+			$request->validate([
+				'buying_price'  	=> 'required',
+				'profit_margin'  	=> 'required'
+			], 
+			[
+				'buying_price.required' 	=> 'Buying Price is Required',
+				'profit_margin.required' 	=> 'Profit Margin is Required'
+			]
+			);
+			
+			$productID					= $request->productID;
+			$branch_price_id 			= $request->branch_price_id;
+			$buying_price 				= $request->buying_price;
+			$profit_margin 				= $request->profit_margin;
+			$profit_margin_type 		= $request->profit_margin_type;
+			
+			if($profit_margin_type=='Percentage'){
+				$branch_price = $buying_price + ($buying_price * ($profit_margin/100));
+				$profit_margin_in_peso = ($buying_price * ($profit_margin/100));
+			}else{
+				$branch_price = $buying_price + $profit_margin;
+				$profit_margin_in_peso = $profit_margin;
+			}
+
+
+						if(Session::get('UserType')=="Admin"){
+									
+						$ProductBranchPrice = new ProductPricePerBranchModel();
+						$ProductBranchPrice = ProductPricePerBranchModel::find($branch_price_id);
+						
+						$ProductBranchPrice->branch_price 			= $branch_price;
+						$ProductBranchPrice->buying_price 			= $buying_price;
+						$ProductBranchPrice->profit_margin 			= $profit_margin;
+						$ProductBranchPrice->profit_margin_type 	= $profit_margin_type;
+						$ProductBranchPrice->profit_margin_in_peso 	= $profit_margin_in_peso;
+						$ProductBranchPrice->modified_by_user_idx 				= Session::get('loginID');
+									
+						$ProductBranchPrice->update();						
+
+						/*History*/
+						/*Get Branch Info*/
+						$ProductBranchPrice_Info =  ProductModel::Join('teves_product_branch_price_table', 'teves_product_table.product_id', '=', 'teves_product_branch_price_table.product_idx')
+						->Join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_branch_price_table.branch_idx')
+						->where('teves_product_branch_price_table.branch_price_id', $branch_price_id)
+						->get([
+							'teves_product_branch_price_table.branch_idx'
+						]);	
+						
+						$branch_idx = $ProductBranchPrice_Info[0]['branch_idx'];
+					
+						$ProductBranchPrice_history = new ProductPricePerBranchHistoryModel();
+						$ProductBranchPrice_history->branch_price_idx 		= $branch_price_id;
+						$ProductBranchPrice_history->product_idx 			= $productID;
+						$ProductBranchPrice_history->branch_idx 			= $branch_idx;
+						$ProductBranchPrice_history->branch_price 			= $branch_price;
+						$ProductBranchPrice_history->buying_price 			= $buying_price;
+						$ProductBranchPrice_history->profit_margin 			= $profit_margin;
+						$ProductBranchPrice_history->profit_margin_type 	= $profit_margin_type;
+						$ProductBranchPrice_history->profit_margin_in_peso 	= $profit_margin_in_peso;
+						$ProductBranchPrice_history->created_by_user_idx 	= Session::get('loginID');			
+						$ProductBranchPrice_history->save();		
+						
+						return response()->json(array('success' => "Branch Price Successfully Updated!"), 200);
+			
+			}							
+	}			
 	
 	/*Pricing List*/
 	public function get_product_list_pricing_per_branch(Request $request){		

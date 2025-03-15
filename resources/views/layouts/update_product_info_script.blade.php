@@ -1,3 +1,8 @@
+   <!-- Page level plugins -->
+   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
+   
    <script type="text/javascript">
 
 	ProductInfo();
@@ -146,7 +151,6 @@
 			   });	
 	  });	  
 
-
 	loadPricingListPerBranch();
 	
 	function loadPricingListPerBranch() {
@@ -160,33 +164,14 @@
 				},
 				success:function(response){
 						
-								
 				  console.log(response);
 				  if(response!='') {
 					  
-					  //document.getElementById("save-product-price-per-branch").value = productID;
-					  
-					    $("#branch_pricing_table_body_data tr").remove();
-						$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#branch_pricing_table_body_data');
-					  
-						var len = response.length;
-						for(var i=0; i<len; i++){
-							
-							var id = response[i].branch_price_id;
-							var branch_code 			= response[i].branch_code;
-							var branch_price 			= response[i].branch_price;
-							
-							$('#branch_pricing_table_body_data tr:last').after("<tr>"+
-							"<td class='item_no' align='center'>"+(i+1)+"</td>"+
-							"<td class='branch_code_no_td' align='left' data-id='' id='branch_id'>"+branch_code+"</td>"+
-							"<td class='payment_amount_td' data-id='"+id+"' id='branch_price_id' align='center'><input type='number' class='form-control branch_price' id='branch_price' name='branch_price' value='"+branch_price+"'></td>"+
-							"</tr>");
-							
-						}			
+					ProductPricingPerBranchListTable.clear().draw();
+					ProductPricingPerBranchListTable.rows.add(response.data).draw();	
+		
 				  }else{
 							/*No Result Found or Error*/
-							$("#branch_pricing_table_body_data tr").remove();
-							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#branch_pricing_table_body_data');
 				  }
 				},
 				error: function(error) {
@@ -195,57 +180,265 @@
 			   });
 	}  	  
 
-	$("#save-product-price-per-branch").click(function(event){
-
-			event.preventDefault();
-				
-				let productID 			= {{ $productID }};
-				
-				var branch_price_id = [];
-				var branch_price = [];
-				  
-				  $.each($("[id='branch_price_id']"), function(){
-					branch_price_id.push($(this).attr("data-id"));
-				  });
-				  
-				  $('.branch_price').each(function(){
-					if($(this).val() == ''){
-						alert('Price is Empty');
-						exit(); 
-					}else{  				  
-				   		branch_price.push($(this).val());
-					}				  
-				  });		
+	<!--Load Table-->
+	let ProductPricingPerBranchListTable = $('#product_price_branch').DataTable({
+			"language": {
+						"lengthMenu":'<select class="dt-input">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+		    },
+			/*processing: true,*/
+			responsive: true,
+			paging: true,
+			searching: false,
+			info: false,
+			data: [],
+			//scrollCollapse: true,
+			//scrollY: '500px',
+			//scrollx: false,
+			columns: [
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'branch_code'},
+					{data: 'buying_price', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
+					{data: 'profit_margin', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
+					{data: 'profit_margin_type'},
+					{data: 'profit_margin_in_peso', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
+					{data: 'branch_price', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
+			],
+			columnDefs: [
+					//{ className: 'text-center', targets: [0, 3] },
+			]
+		});
+	
+	/*Product Prices History of Changes*/
+	$('body').on('click','#ViewProductPriceperBranchHistory',function(){
 			
-				$.ajax({
-				url: "/save_branches_product_pricing_post",
+			event.preventDefault();
+			let branch_price_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "{{ route('ProductPricingPerBranchHistory') }}",
 				type:"POST",
 				data:{
 				  branch_price_id:branch_price_id,
-				  branch_price:branch_price,
 				  _token: "{{ csrf_token() }}"
 				},
-			
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					  
+					
+					//document.getElementById("save-product-price-per-branch").value = productID;
+					
+					/*Set Details*/		
+					//document.getElementById("branch_product_name").innerHTML = response.product_name;
+					//document.getElementById("branch_product_price").innerHTML = response.product_price;
+					//document.getElementById("branch_product_unit").innerHTML = response.product_unit_measurement;	
+					
+					
+					
+					ProductPricingPerBranchHistoryListTable.clear().draw();
+					ProductPricingPerBranchHistoryListTable.rows.add(response.data).draw();	
+					
+					/*Set Details of Product information to Modal of History*/
+					loadPricingPerBranch_history(branch_price_id);
+					
+					$('#ProductHistoryChangesModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });	  
+
+	<!--Select Tank For Update-->
+	function loadPricingPerBranch_history(branch_price_id) {
+			
+			//event.preventDefault();
+			//let branch_price_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "/product_price_per_branch_info",
+				type:"POST",
+				data:{
+				  branch_price_id:branch_price_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+							
+					/*Set Details*/
+					$('#product_name_history_view').text(response[0].product_name);
+					$('#branch_price_history_view').text(response[0].branch_price);
+					$('#branch_name_history_view').text(response[0].branch_name);
+					$('#branch_code_history_view').text(response[0].branch_code);
+					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+			   
+	}
+
+
+
+	<!--Load Table-->
+	let ProductPricingPerBranchHistoryListTable = $('#product_price_branch_history').DataTable({
+			"language": {
+						"lengthMenu":'<select class="dt-input">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+		    },
+			/*processing: true,*/
+			responsive: true,
+			paging: true,
+			searching: false,
+			info: true,
+			data: [],
+			//scrollCollapse: true,
+			//scrollY: '500px',
+			//scrollx: false,
+			columns: [
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'date_of_changes', orderable: true, className: "text-left"},
+					{data: 'time_of_changes', orderable: true, className: "text-left"},
+					{data: 'branch_code', className: "text-center"},
+					{data: 'buying_price', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-left" },
+					{data: 'profit_margin', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-left" },
+					{data: 'profit_margin_type', className: "text-left"},
+					{data: 'profit_margin_in_peso', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-left" },
+					{data: 'branch_price', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" }
+					
+			],
+			columnDefs: [
+					//{ className: 'text-center', targets: [0, 3] },
+			]
+		});	
+
+	<!--Select Tank For Update-->
+	$('body').on('click','#EditProductPriceperBranch',function(){
+			
+			event.preventDefault();
+			let branch_price_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "/product_price_per_branch_info",
+				type:"POST",
+				data:{
+				  branch_price_id:branch_price_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("update-branch-price").value = branch_price_id;
+							
+					/*Set Details*/
+					$('#branch_name_price').text(response[0].branch_name);
+					$('#branch_code_price').text(response[0].branch_code);
+					$('#branch_price').text(response[0].branch_price);
+					//alert(response[0].branch_price);
+					
+					document.getElementById("update_buying_price").value = response[0].buying_price;
+					document.getElementById("update_profit_margin").value = response[0].profit_margin;
+					document.getElementById("update_profit_margin_type").value = response[0].profit_margin_type;
+										
+					$('#UpdateProductPricePerBranchModal').modal('toggle');		
+					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  });
+
+	$("#update-branch-price").click(function(event){			
+			event.preventDefault();
+			
+					/*Reset Warnings*/
+					$('#update_buying_priceError').text('');
+					$('#update_profit_marginError').text('');
+					
+
+			document.getElementById('UpdateProductPricePerBranch').className = "g-3 needs-validation was-validated";
+			
+			let productID 			= {{ $productID }};
+			
+			let branch_price_id 	= document.getElementById("update-branch-price").value;
+			
+			let buying_price 		= $("input[name=update_buying_price]").val();
+			let profit_margin 		= $("input[name=update_profit_margin]").val();
+			let profit_margin_type 	= $("#update_profit_margin_type").val();
+			
+			  $.ajax({
+				url: "/update_product_price_per_branch_post",
+				type:"POST",
+				data:{
+				  productID:productID,
+				  branch_price_id:branch_price_id,
+				  buying_price:buying_price,
+				  profit_margin:profit_margin,
+				  profit_margin_type:profit_margin_type,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					$('#update_buying_priceError').text('');	
+					$('#update_profit_marginError').text('');
+					
 					$('#switch_notice_on').show();
 					$('#sw_on').html(response.success);
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
+					/*Close form*/
+					$('#UpdateProductPricePerBranchModal').modal('toggle');
+					
+					/*Refresh Table*/
+					loadPricingListPerBranch();
+				  
 				  }
 				},
 				error: function(error) {
+				 console.log(error);	
+				
+				
+					$('#update_buying_priceError').text(error.responseJSON.errors.buying_price);
+					document.getElementById('update_buying_priceError').className = "invalid-feedback";
 					
-				 console.log(error);
-								
-				$('#switch_notice_off').show();
-				$('#sw_off').html("Invalid Input");
-				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);			  	  
+					$('#update_profit_marginError').text(error.responseJSON.errors.profit_margin);
+					document.getElementById('update_profit_marginError').className = "invalid-feedback";			
+				
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Invalid Input");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);		  	  
 				  
 				}
-			   });	
+			   });
+		
 	  });
 
 
@@ -262,37 +455,15 @@
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
-						
-								
+									
 				  console.log(response);
 				  if(response!='') {
 					  
-					    $("#branch_tank_table_body_data tr").remove();
-						$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#branch_tank_table_body_data');
-					  
-						var len = response.length;
-						for(var i=0; i<len; i++){
-							
-							var id			 	= response[i].tank_id;
-							var branch_code  	= response[i].branch_code;
-							var tank_name 		= response[i].tank_name;
-							var tank_capacity 	= response[i].tank_capacity;
-							
-							var product_unit_measurement 			= response[i].product_unit_measurement;
-							
-							$('#branch_tank_table_body_data tr:last').after("<tr>"+
-							"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='ProductTank_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='ProductTank_delete'  data-id='"+id+"'></a></div></td>"+
-							"<td class='item_no' align='center'>"+(i+1)+"</td>"+
-							"<td class='branch_code_no_td' align='center' data-id='' id='branch_id'>"+branch_code+"</td>"+
-							"<td class='branch_code_no_td' align='left' data-id='' id='branch_id'>"+tank_name+"</td>"+
-							"<td class='branch_code_no_td' align='center' data-id='' id='branch_id'>"+tank_capacity+" "+product_unit_measurement+"</td>"+
-							"</tr>");
-							
-						}			
+							ProductTankListTable.clear().draw();
+							ProductTankListTable.rows.add(response.data).draw();	
+			
 				  }else{
 							/*No Result Found or Error*/
-							$("#branch_tank_table_body_data tr").remove();
-							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#branch_tank_table_body_data');
 				  }
 				},
 				error: function(error) {
@@ -300,7 +471,42 @@
 				}
 			   });
 	}  
-	
+
+
+	<!--Load Table-->
+	let ProductTankListTable = $('#ProductTankListTable').DataTable({
+			"language": {
+						"lengthMenu":'<select class="dt-input">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+		    },
+			/*processing: true,*/
+			responsive: false,
+			paging: true,
+			searching: false,
+			info: false,
+			data: [],
+			//scrollCollapse: true,
+			//scrollY: '500px',
+			//scrollx: false,
+			columns: [
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'branch_code'},
+					{data: 'tank_name'},
+					{data: 'tank_capacity', orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
+					{data: 'product_unit_measurement'},
+					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
+			],
+			columnDefs: [
+					//{ className: 'text-center', targets: [0, 3] },
+			]
+		});
+		
 	<!--Save New Tank->
 	$("#save-tank").click(function(event){
 			

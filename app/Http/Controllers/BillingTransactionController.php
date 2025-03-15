@@ -300,43 +300,6 @@ class BillingTransactionController extends Controller
 		}
     }
 
-	/*Fetch Site Information*/
-	public function bill_info(Request $request){
-
-		$billID = $request->billID;
-		
-		$data = BillingTransactionModel::where('billing_id', $request->billID)
-					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-					->LeftJoin('teves_billing_so_table', 'teves_billing_so_table.so_id', '=', 'teves_billing_table.so_idx')
-              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
-              		->get([
-					'teves_billing_so_table.branch_idx as branch_id',
-					'teves_billing_table.drivers_name',
-					'teves_billing_table.plate_no',
-					'teves_product_table.product_id as product_idx',
-					'teves_product_table.product_name',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',					
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.order_po_number',
-					'teves_client_table.client_name',
-					'teves_client_table.client_id as client_idx',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_date',
-					'teves_billing_table.order_time']);
-		return response()->json($data);
-		
-	}
-
-	/*Delete Site Information*/
-	public function delete_bill_confirmed(Request $request){
-
-		$billID = $request->billID;
-		BillingTransactionModel::find($billID)->delete();
-		return 'Deleted';
-		
-	} 
-
 	public function create_bill_post(Request $request){
 
 		$request->validate([

@@ -31,7 +31,7 @@
 				
 				<div class="row mb-2">
 				
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						
 						<form class="g-3 needs-validation" id="ProductformEdit">
 							<div class="row mb-2">
@@ -88,7 +88,7 @@
 						
 					</div>
 					
-					<div class="col-sm-8">
+					<div class="col-sm-9">
 					
 					    <ul class="nav nav-tabs" id="myTab" role="tablist">
 							<!-- nav-link active -->
@@ -106,18 +106,20 @@
 						
 							<div class="tab-pane fade  <?php if($tab=='branchprice') { echo ' show active'; } ?>"" id="branchprice" role="tabpanel" aria-labelledby="branchprice-tab">
 									
-									<table class="table table-striped" id="">
+									<table class="table dataTable display nowrap cell-border" id="product_price_branch" width="100%" cellspacing="0" >
 									<thead>
 									<tr class='report'>
-										<th style="text-align:center !important;">Item #</th>
-										<th style="text-align:center !important;">Branch</th>
-										<th style="text-align:center !important;">Price</th>
+										<th class="all">Item #</th>
+										<th class="all">Branch</th>
+										<th class="none">Buying Price:</th>
+										<th class="none">Profit Margin:</th>
+										<th class="none">Type:</th>
+										<th class="none">In Peso:</th>
+										<th class="all">Selling Price</th>
+										<th class="all">Action</th>
 									</tr>
 									</thead>
-										<tbody id="branch_pricing_table_body_data">
-												<tr style="display: none;">
-													<td>HIDDEN</td>
-												</tr>
+										<tbody>
 										</tbody>
 									</table>
 									<div class="row mb-3">
@@ -128,10 +130,6 @@
 									</div>
 								</div>
 							</div>
-							
-							<div class="col-sm-6" align='right'>
-									<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-product-price-per-branch" value=""> Save</button>
-							</div>	
 							
 							</div>
 
@@ -149,20 +147,18 @@
 									</div>											
 									</div>
 									
-									<table class="table table-striped" id="">
+									<table class="table dataTable display nowrap cell-border" id="ProductTankListTable" width="100%">
 									<thead>
 									<tr class='report'>
-										<th style="text-align:center !important;" class="action_column_class">Action</th>
-										<th style="text-align:center !important;">Item #</th>
-										<th style="text-align:center !important;">Branch</th>
-										<th style="text-align:center !important;">Name</th>
-										<th style="text-align:center !important;">Capacity</th>
+										<th >Item #</th>
+										<th >Branch</th>
+										<th >Name</th>
+										<th >Capacity</th>
+										<th >Unit</th>
+										<th >Action</th>
 									</tr>
 									</thead>
-										<tbody id="branch_tank_table_body_data">
-												<tr style="display: none;">
-													<td>HIDDEN</td>
-												</tr>
+										<tbody>
 										</tbody>
 									</table>
 								
@@ -177,7 +173,7 @@
 	</div>
 	
 	<!--Moda Product Tank-->
-	<div class="modal fade" id="AddProductTankModal" tabindex="-1">
+	<div class="modal fade" id="AddProductTankModal" tabindex="-1" data-bs-backdrop="static">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
@@ -261,11 +257,11 @@
                 </div>
              </div>	
 
-	<div class="modal fade" id="UpdateProductTankModal" tabindex="-1">
+	<div class="modal fade" id="UpdateProductTankModal" tabindex="-1" data-bs-backdrop="static">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Add Tank</h5>
+                      <h5 class="modal-title">Update Tank</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
 						
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
@@ -370,7 +366,156 @@
             </div>
         </div>
     </div>
-			 			 
+			 	
+
+	<div class="modal fade" id="UpdateProductPricePerBranchModal" data-bs-backdrop="static" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Update Price per Branch</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="UpdateProductPricePerBranch">
+
+						<div class="row mb-2">
+						<div class="col-sm-12">
+								<ol class="list-group list-group-numbered">
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+									  <div class="ms-2 me-auto">
+										<div class="fw-bold">Branch Name</div>
+										<span id="branch_name_price"></span>
+									  </div>
+									 
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+									  <div class="ms-2 me-auto">
+										<div class="fw-bold">Branch Code</div>
+										<div id="branch_code_price"></div>
+									  </div>
+									 
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+									  <div class="ms-2 me-auto">
+										<div class="fw-bold">Branch Price</div>
+										<span id="branch_price"></span>
+									  </div>
+									  
+									</li>
+							  </ol>
+						</div>
+						</div>
+						<br>
+						<div class="row mb-2">
+						
+						<div class="col-sm-12">
+						
+						<div class="form-floating mb-3">
+						  <input type="number" class="form-control " name="update_buying_price" id="update_buying_price" value="" required="" step=".01">
+						  <label for="update_buying_price">Buying Price</label>
+						 </div>
+						<span class="valid-feedback" id="update_buying_priceError"></span>
+						
+						</div>
+						
+						</div>						
+						
+						<div class="row mb-2">
+						
+						<div class="col-sm-12">
+						
+						<div class="form-floating mb-3">
+						  <input type="number" class="form-control " name="update_profit_margin" id="update_profit_margin" value="" required="" step=".01">
+						  <label for="update_profit_margin">Profit Margin</label>
+						 </div>
+						<span class="valid-feedback" id="update_profit_marginError"></span>
+						
+						</div>
+						
+						</div>
+
+						<div class="row mb-2">
+						<div class="col-sm-12">
+						
+							<div class="form-floating mb-3">
+								<select class="form-select form-control" required="" name="update_profit_margin_type" id="update_profit_margin_type">
+										<option value="Percentage">Percentage</option>
+										<option value="Peso">Peso</option>
+								</select>
+								<label for="update_profit_margin_type">Profit Margin Type</label>
+							</div>
+							 <span class="valid-feedback" id="update_profit_margin_typeError"></span>
+						</div>
+						</div>						
+	
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+							<div id="loading_data_update_product" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-branch-price"> Update</button>
+						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-update-branch-price"> Reset</button>-->				  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+				  
+                </div>
+             </div>	
+
+<div id="ProductHistoryChangesModal" class="modal custom-modal fade" data-bs-backdrop="static" role="dialog">
+<!--<div class="modal fade show" id="" tabindex="-1" aria-modal="true" role="dialog">-->
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Price Changes<br>
+				</div>
+				
+				<div align="left" style="margin: 10px;">
+				Product: <span id="product_name_history_view"></span><br>
+				Price: <span id="branch_price_history_view"></span><br>
+				Branch Name: <span id="branch_name_history_view"></span><br>
+				Branch Code: <span id="branch_code_history_view"></span><br>
+					<div class="table-responsive">
+						<table class="table dataTable display nowrap cell-border" width="100%" cellspacing="0" id="product_price_branch_history">
+							<thead>
+								<tr>
+									<th class="all">Item #</th>
+									<th class="all">Date</th>
+									<th class="all">Time</th>
+									<th class="all">Branch</th>
+									<th class="none">Buying Price:</th>
+									<th class="none">Profit Margin:</th>
+									<th class="none">Type:</th>
+									<th class="none">In Peso:</th>
+									<th class="all">Selling Price</th>
+								</tr>
+							</thead>
+								<tbody>
+								</tbody>
+						</table>
+					</div>
+				</div>
+                <div class="modal-footer footer_modal_bg">
+                 	<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Close</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     </section>
 </main>
 

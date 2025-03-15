@@ -15,7 +15,7 @@ class ProductTankController extends Controller
 {
 	
 	/*Tank List*/
-	public function get_product_tank(Request $request){		
+	public function get_product_tank_old(Request $request){		
 
 			$data =  ProductTankModel::RightJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_tank_table.branch_idx')
 					->RightJoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_product_tank_table.product_idx')
@@ -32,6 +32,40 @@ class ProductTankController extends Controller
 					]);
 		
 			return response()->json($data);			
+	}
+	
+	/*New for Datatable - March 11, 2025*/
+	public function get_product_tank(Request $request){		
+
+		if ($request->ajax()) {
+
+    	$data =  ProductTankModel::RightJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_product_tank_table.branch_idx')
+					->RightJoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_product_tank_table.product_idx')
+					->where('teves_product_tank_table.product_idx', $request->productID)
+					->orderBy('teves_product_tank_table.tank_id', 'asc')
+					->get([
+						'teves_product_tank_table.tank_id',
+						'teves_product_tank_table.branch_idx',
+						'teves_product_tank_table.tank_name',
+						'teves_product_tank_table.tank_capacity',
+						'teves_branch_table.branch_name',
+						'teves_branch_table.branch_code',
+						'teves_product_table.product_unit_measurement'
+					]);
+		
+		return DataTables::of($data)
+				->addIndexColumn()
+                ->addColumn('action', function($row){
+					$actionBtn = '<div align="center" class="action_table_menu_Product">
+					<a href="#" data-id="'.$row->tank_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="ProductTank_Edit" title="Edit Product Branch Tank"></a>
+					<a href="#" data-id="'.$row->tank_id.'" class="btn-warning btn-circle btn-sm bi bi-trash3-fill btn_icon_table btn_icon_table_delete" id="ProductTank_delete" title="Edit Product Branch Tank"></a>
+					</div>';
+                    return $actionBtn;
+                })
+				
+				->rawColumns(['action'])
+                ->make(true);
+		}	
 	}
 
 	/*Tank List per Branch*/

@@ -283,6 +283,29 @@ class CashiersReportController extends Controller
 			
 		$CashiersReportID = $request->CashiersReportID;
 		CashiersReportModel::find($CashiersReportID)->delete();
+		
+		/*Delete Component*/
+		/*P1*/
+		CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportID)->delete();
+		/*P2*/
+		CashiersReportModel_P2::where('cashiers_report_id', $CashiersReportID)->delete();
+		/*P3*/
+		CashiersReportModel_P3::where('cashiers_report_id', $CashiersReportID)->delete();
+		/*P4*/
+		CashiersReportModel_P4::where('cashiers_report_id', $CashiersReportID)->delete();
+		/*P5*/
+		CashiersReportModel_P5::where('cashiers_report_id', $CashiersReportID)->delete();
+		/*P6*/
+		CashiersReportModel_p6::where('cashiers_report_idx', $CashiersReportID)->delete();
+		/*P8*/
+		CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportID)->delete();
+		
+		/*Delete SO and Billing ITEM*/
+		
+		SOBillingTransactionModel::where('cashiers_report_idx', $CashiersReportID)->delete();
+		
+		BillingTransactionModel::where('cashiers_report_idx', $CashiersReportID)->delete();
+		
 		return 'Deleted';
 		
 	}
@@ -1244,7 +1267,6 @@ class CashiersReportController extends Controller
 			}
 			
 	}	
-	
 	
 	public function save_product_cashiers_report_p6(Request $request){	
 

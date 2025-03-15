@@ -77,14 +77,16 @@
 		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1">
 		<tr style="font-size:12px;">
-			<td colspan="1" align="left" width="30%"><b>CASHIER ON DUTY</b></td>
-			<td colspan="9" align="left" style="border-bottom:1px solid #000;" width="70%" class="td_colon">{{ $CashiersReportData[0]['cashiers_name'] }}</td>			
+			<td colspan="1" align="left" width="15%"><b>CASHIER ON DUTY</b></td>
+			<td colspan="4" align="left" style="border-bottom:1px solid #000;" width="70%" class="td_colon">{{ $CashiersReportData[0]['cashiers_name'] }}</td>			
+			<td colspan="1" align="left" width="15%"><b>ENCODER</b></td>
+			<td colspan="4" align="left" style="border-bottom:1px solid #000;" width="70%" class="td_colon">{{ $CashiersReportData[0]['user_real_name'] }}</td>			
 		</tr>
 	
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left" width="30%"><b>FORECOURT ATTENDANT</b></td>
 			<td colspan="9" align="left" style="border-bottom:1px solid #000;" width="70%" class="td_colon">{{ $CashiersReportData[0]['forecourt_attendant'] }}</td>	
-				</tr>
+		</tr>
 	
 		<tr style="font-size:12px;">
 			<td colspan="10" style="height:5.66px !important;"></td>

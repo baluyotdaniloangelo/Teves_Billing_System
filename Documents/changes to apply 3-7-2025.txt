@@ -24,3 +24,22 @@ update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE '%Secnd%';
 update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '%8-5%';
 update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE '%2%';
 update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '%WHOLEDAY%';
+
+ALTER TABLE `teves_product_branch_price_table`
+	ADD COLUMN `buying_price` DOUBLE NOT NULL DEFAULT '0' AFTER `branch_price`,
+	ADD COLUMN `profit_margin` DOUBLE NOT NULL DEFAULT '0' AFTER `buying_price`,
+	ADD COLUMN `profit_margin_type` VARCHAR(50) NOT NULL DEFAULT '0' COMMENT 'By Percentage or Peso(+2 pesos)' AFTER `profit_margin`;
+
+ALTER TABLE `teves_product_branch_price_table`
+	CHANGE COLUMN `profit_margin_type` `profit_margin_type` VARCHAR(50) NOT NULL DEFAULT '0' COMMENT 'By Percentage or Peso(+2 pesos)' COLLATE 'utf8mb4_general_ci' AFTER `buying_price`,
+	CHANGE COLUMN `branch_price` `branch_price` DOUBLE NOT NULL DEFAULT '0' AFTER `profit_margin`;
+
+ALTER TABLE `teves_product_branch_price_table`
+	CHANGE COLUMN `profit_margin_type` `profit_margin_type` VARCHAR(50) NOT NULL DEFAULT 'Peso' COMMENT 'By Percentage or Peso(+2 pesos)' COLLATE 'utf8mb4_general_ci' AFTER `buying_price`;
+
+ALTER TABLE `teves_product_branch_price_table`
+	ADD COLUMN `profit_margin_in_peso` DOUBLE NOT NULL DEFAULT '0' AFTER `profit_margin`;
+
+ALTER TABLE `teves_product_branch_price_table`
+	ADD COLUMN `created_by_user_idx` INT NULL DEFAULT NULL AFTER `created_at`,
+	ADD COLUMN `modified_by_user_idx` INT NULL DEFAULT NULL AFTER `updated_at`;

@@ -14,7 +14,7 @@ use Validator;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 //use Spatie\Activitylog\Models\Activity;
-
+use App\Models\CashiersReportModel_P3;
 class SOBillingTransactionController extends Controller
 {
 	
@@ -376,7 +376,7 @@ class SOBillingTransactionController extends Controller
 					$SOBilling->updated_by_user_id 	= Session::get('loginID');
 					$result = $SOBilling->update();	
 
-						/*Update Product*/
+						/*Update Product under this SO*/
 						$billing_update = BillingTransactionModel::where('so_idx', $request->so_id)
 						->update(
 							['branch_idx'			=> $request->branch_id,
@@ -388,10 +388,7 @@ class SOBillingTransactionController extends Controller
 							'drivers_name' 		=> $request->drivers_name,
 							'updated_by_user_idx' 	=> Session::get('loginID')]
 						);
-					//$billing_update->update();
 					
-						
-			
 					if($result){
 						return response()->json(array('success' => "SO Information Successfully Updated!", 'so_id' => $request->so_id), 200);
 					}
@@ -503,9 +500,11 @@ class SOBillingTransactionController extends Controller
 					
 					$order_total_amount = $request->order_quantity * $product_price;	
 					
+					$billID = $request->billing_id;
+					
 					/*insert*/
 					$Billing = new BillingTransactionModel();
-					$Billing = BillingTransactionModel::find($request->billing_id);
+					$Billing = BillingTransactionModel::find($billID);
 					$Billing->branch_idx			= $request->branch_idx;
 					$Billing->order_date 			= $so_info->order_date;
 					$Billing->order_time 			= $so_info->order_time;
@@ -519,7 +518,17 @@ class SOBillingTransactionController extends Controller
 					$Billing->order_total_amount 	= $order_total_amount;
 					
 					$result = $Billing->update();
-			
+					
+					/*Update Cashiers Report Part 3*/
+					$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
+					->update([
+						'product_idx' 			=> $request->product_idx,
+						'order_quantity' 		=> $request->order_quantity,
+						'pump_price' 			=> $product_price,
+						'order_total_amount' 	=> $order_total_amount
+						]);
+					
+					
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Updated!"), 200);
 					}
@@ -527,4 +536,46 @@ class SOBillingTransactionController extends Controller
 						return response()->json(['success'=>'Error on Insert Bill Information']);
 					}				
 	}		
+	
+	
+	/*Fetch Bill Information*/
+	public function bill_info(Request $request){
+
+		$billID = $request->billID;
+		
+		$data = BillingTransactionModel::where('billing_id', $request->billID)
+					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+					->LeftJoin('teves_billing_so_table', 'teves_billing_so_table.so_id', '=', 'teves_billing_table.so_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
+              		->get([
+					'teves_billing_so_table.branch_idx as branch_id',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_client_table.client_name',
+					'teves_client_table.client_id as client_idx',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time']);
+		return response()->json($data);
+		
+	}
+
+	/*Delete Bill Information*/
+	public function delete_bill_confirmed(Request $request){
+
+		$billID = $request->billID;
+		BillingTransactionModel::find($billID)->delete();	
+		
+		/*Delete from Cashiers Report*/
+		CashiersReportModel_P3::where('billing_idx', $billID)->delete();
+		
+		return 'Deleted';
+		
+	} 
 }
