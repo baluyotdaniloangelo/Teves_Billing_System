@@ -18,7 +18,10 @@ use App\Models\TevesBranchModel;
 //use App\Models\PurchaseOrderPaymentModel;
 
 use App\Models\CashiersReportModel;
+use App\Models\CashiersReportModel_P1;
 use App\Models\CashiersReportModel_P3;
+use App\Models\CashiersReportModel_P2;
+use App\Models\CashiersReportModel_P8;
 
 use App\Models\ClientModel;
 use Session;
@@ -124,9 +127,200 @@ class DailySalesReportController extends Controller
 		/*Disable SQL Violation*/
 			\DB::statement("SET SQL_MODE=''");
 			
-		/*Raw*/			
-		
-				$raw_query = "SELECT  
+		/*Raw*/
+				/*Start - Cash on Hand*/	 
+				$raw_query_cash_tansaction = "SELECT  
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p5.one_thousand_deno*1000+
+					teves_cashiers_report_p5.five_hundred_deno*500+
+					teves_cashiers_report_p5.two_hundred_deno*200+
+					teves_cashiers_report_p5.one_hundred_deno*100+
+					teves_cashiers_report_p5.fifty_deno*50+
+					teves_cashiers_report_p5.twenty_deno*20+
+					teves_cashiers_report_p5.ten_deno*10+
+					teves_cashiers_report_p5.five_deno*5+
+					teves_cashiers_report_p5.one_deno*1+
+					teves_cashiers_report_p5.twenty_five_cent_deno*0.25+
+					teves_cashiers_report_p5.cash_drop
+					),0) from `teves_cashiers_report_p5`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p5`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '1st Shift'
+					) AS first_shift_total_cash_tansaction,
+					 
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p5.one_thousand_deno*1000+
+					teves_cashiers_report_p5.five_hundred_deno*500+
+					teves_cashiers_report_p5.two_hundred_deno*200+
+					teves_cashiers_report_p5.one_hundred_deno*100+
+					teves_cashiers_report_p5.fifty_deno*50+
+					teves_cashiers_report_p5.twenty_deno*20+
+					teves_cashiers_report_p5.ten_deno*10+
+					teves_cashiers_report_p5.five_deno*5+
+					teves_cashiers_report_p5.one_deno*1+
+					teves_cashiers_report_p5.twenty_five_cent_deno*0.25+
+					teves_cashiers_report_p5.cash_drop
+					),0) from `teves_cashiers_report_p5`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p5`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '2nd Shift'
+					) AS second_shift_total_cash_tansaction,
+					  
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p5.one_thousand_deno*1000+
+					teves_cashiers_report_p5.five_hundred_deno*500+
+					teves_cashiers_report_p5.two_hundred_deno*200+
+					teves_cashiers_report_p5.one_hundred_deno*100+
+					teves_cashiers_report_p5.fifty_deno*50+
+					teves_cashiers_report_p5.twenty_deno*20+
+					teves_cashiers_report_p5.ten_deno*10+
+					teves_cashiers_report_p5.five_deno*5+
+					teves_cashiers_report_p5.one_deno*1+
+					teves_cashiers_report_p5.twenty_five_cent_deno*0.25+
+					teves_cashiers_report_p5.cash_drop
+					),0) from `teves_cashiers_report_p5`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p5`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '3rd Shift'
+					) AS third_shift_total_cash_tansaction,
+					
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p5.one_thousand_deno*1000+
+					teves_cashiers_report_p5.five_hundred_deno*500+
+					teves_cashiers_report_p5.two_hundred_deno*200+
+					teves_cashiers_report_p5.one_hundred_deno*100+
+					teves_cashiers_report_p5.fifty_deno*50+
+					teves_cashiers_report_p5.twenty_deno*20+
+					teves_cashiers_report_p5.ten_deno*10+
+					teves_cashiers_report_p5.five_deno*5+
+					teves_cashiers_report_p5.one_deno*1+
+					teves_cashiers_report_p5.twenty_five_cent_deno*0.25+
+					teves_cashiers_report_p5.cash_drop
+					),0) from `teves_cashiers_report_p5`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p5`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '4th Shift'
+					) AS fourth_shift_total_cash_tansaction,
+					
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p5.one_thousand_deno*1000+
+					teves_cashiers_report_p5.five_hundred_deno*500+
+					teves_cashiers_report_p5.two_hundred_deno*200+
+					teves_cashiers_report_p5.one_hundred_deno*100+
+					teves_cashiers_report_p5.fifty_deno*50+
+					teves_cashiers_report_p5.twenty_deno*20+
+					teves_cashiers_report_p5.ten_deno*10+
+					teves_cashiers_report_p5.five_deno*5+
+					teves_cashiers_report_p5.one_deno*1+
+					teves_cashiers_report_p5.twenty_five_cent_deno*0.25+
+					teves_cashiers_report_p5.cash_drop
+					),0) from `teves_cashiers_report_p5`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p5`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '5th Shift'
+					) AS fifth_shift_total_cash_tansaction,
+					
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p5.one_thousand_deno*1000+
+					teves_cashiers_report_p5.five_hundred_deno*500+
+					teves_cashiers_report_p5.two_hundred_deno*200+
+					teves_cashiers_report_p5.one_hundred_deno*100+
+					teves_cashiers_report_p5.fifty_deno*50+
+					teves_cashiers_report_p5.twenty_deno*20+
+					teves_cashiers_report_p5.ten_deno*10+
+					teves_cashiers_report_p5.five_deno*5+
+					teves_cashiers_report_p5.one_deno*1+
+					teves_cashiers_report_p5.twenty_five_cent_deno*0.25+
+					teves_cashiers_report_p5.cash_drop
+					),0) from `teves_cashiers_report_p5`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p5`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '6th Shift'
+					) AS sixth_shift_total_cash_tansaction";
+					
+				 $daily_cash_tansaction_data = DB::select("$raw_query_cash_tansaction", [$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end]
+											);
+				
+				 $shift_cash_tansaction_sum = $daily_cash_tansaction_data[0]->first_shift_total_cash_tansaction + 
+				 $daily_cash_tansaction_data[0]->second_shift_total_cash_tansaction +
+				 $daily_cash_tansaction_data[0]->third_shift_total_cash_tansaction + 
+				 $daily_cash_tansaction_data[0]->fourth_shift_total_cash_tansaction + 
+				 $daily_cash_tansaction_data[0]->fifth_shift_total_cash_tansaction + 
+				 $daily_cash_tansaction_data[0]->sixth_shift_total_cash_tansaction;
+				 /* End - Cash On Hand*/
+			
+				/*Start - Other Sales*/
+				$total_other_sales_1st_shift =  CashiersReportModel_P2::where('shift','1st Shift')
+				->where('teves_branch',$company_header)
+				->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+				->join('teves_cashiers_report', 'teves_cashiers_report.cashierys_report_id', '=', 'teves_cashiers_report_p2.cashiers_report_id')
+				->sum('order_total_amount');
+				
+				$total_other_sales_2nd_shift =  CashiersReportModel_P2::where('shift','2nd Shift')
+				->where('teves_branch',$company_header)
+				->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+				->join('teves_cashiers_report', 'teves_cashiers_report.cashierys_report_id', '=', 'teves_cashiers_report_p2.cashiers_report_id')
+				->sum('order_total_amount');
+				
+				$total_other_sales_3rd_shift =  CashiersReportModel_P2::where('shift','3rd Shift')
+				->where('teves_branch',$company_header)
+				->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+				->join('teves_cashiers_report', 'teves_cashiers_report.cashierys_report_id', '=', 'teves_cashiers_report_p2.cashiers_report_id')
+				->sum('order_total_amount');
+				
+				$total_other_sales_4th_shift =  CashiersReportModel_P2::where('shift','4th Shift')
+				->where('teves_branch',$company_header)
+				->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+				->join('teves_cashiers_report', 'teves_cashiers_report.cashierys_report_id', '=', 'teves_cashiers_report_p2.cashiers_report_id')
+				->sum('order_total_amount');
+				
+				$total_other_sales_5th_shift =  CashiersReportModel_P2::where('shift','5th Shift')
+				->where('teves_branch',$company_header)
+				->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+				->join('teves_cashiers_report', 'teves_cashiers_report.cashierys_report_id', '=', 'teves_cashiers_report_p2.cashiers_report_id')
+				->sum('order_total_amount');
+				
+				$total_other_sales_6th_shift =  CashiersReportModel_P2::where('shift','6th Shift')
+				->where('teves_branch',$company_header)
+				->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+				->join('teves_cashiers_report', 'teves_cashiers_report.cashierys_report_id', '=', 'teves_cashiers_report_p2.cashiers_report_id')
+				->sum('order_total_amount');
+				
+				$total_other_sales = $total_other_sales_1st_shift + $total_other_sales_2nd_shift + $total_other_sales_3rd_shift + $total_other_sales_4th_shift + $total_other_sales_5th_shift + $total_other_sales_6th_shift;
+				/*End - Other Sales*/
+				
+				
+				/*SALES ORDER - CREDIT SALES - RETAIL*/
+				$raw_query_sales = "SELECT  
 					(select
 					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
 					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
@@ -136,7 +330,7 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`report_date` <= ? and
 					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'SALES_CREDIT' AND
 					`teves_cashiers_report`.`shift` = '1st Shift' order by `cashiers_report_p3_id` asc 
-					) AS first_shift,
+					) AS first_shift_sales,
 					(select
 					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
 					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
@@ -146,7 +340,7 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`report_date` <= ? and
 					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'SALES_CREDIT' AND
 					`teves_cashiers_report`.`shift` = '2nd Shift' order by `cashiers_report_p3_id` asc 
-					) AS second_shift,
+					) AS second_shift_sales,
 					(select
 					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
 					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
@@ -156,7 +350,7 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`report_date` <= ? and
 					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'SALES_CREDIT' AND
 					`teves_cashiers_report`.`shift` = '3rd Shift' order by `cashiers_report_p3_id` asc 
-					) AS third_shift,
+					) AS third_shift_sales,
 					(select
 					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
 					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
@@ -166,7 +360,7 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`report_date` <= ? and
 					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'SALES_CREDIT' AND
 					`teves_cashiers_report`.`shift` = '4th Shift' order by `cashiers_report_p3_id` asc 
-					) AS fourth_shift,
+					) AS fourth_shift_sales,
 					(select
 					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
 					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
@@ -176,7 +370,7 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`report_date` <= ? and
 					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'SALES_CREDIT' AND
 					`teves_cashiers_report`.`shift` = '5th Shift' order by `cashiers_report_p3_id` asc 
-					) AS fifth_shift,
+					) AS fifth_shift_sales,
 					(select
 					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
 					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
@@ -186,9 +380,9 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`report_date` <= ? and
 					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'SALES_CREDIT' AND
 					`teves_cashiers_report`.`shift` = '6th Shift' order by `cashiers_report_p3_id` asc 
-					) AS sixth_shift";	
-							   
-				$daily_data = DB::select("$raw_query", [$company_header,$hourly_start,$hourly_end,
+					) AS sixth_shift_sales";	
+					
+				$daily_sales_data = DB::select("$raw_query_sales", [$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end,
@@ -196,22 +390,388 @@ class DailySalesReportController extends Controller
 											$company_header,$hourly_start,$hourly_end]
 											);
 				
-				 $shift_total_sum = $daily_data[0]->first_shift + 
-				 $daily_data[0]->second_shift +
-				 $daily_data[0]->third_shift + 
-				 $daily_data[0]->fourth_shift + 
-				 $daily_data[0]->fifth_shift + 
-				 $daily_data[0]->sixth_shift;
+				 $shift_total_sales_sum = $daily_sales_data[0]->first_shift_sales + 
+				 $daily_sales_data[0]->second_shift_sales +
+				 $daily_sales_data[0]->third_shift_sales + 
+				 $daily_sales_data[0]->fourth_shift_sales + 
+				 $daily_sales_data[0]->fifth_shift_sales + 
+				 $daily_sales_data[0]->sixth_shift_sales;
+				 /*SALES ORDER - CREDIT SALES - RETAIL*/
+				 
+				 
+				/*DISCOUNTS*/
+				$raw_query_DISCOUNTS = "SELECT  
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'DISCOUNTS' AND
+					`teves_cashiers_report`.`shift` = '1st Shift' order by `cashiers_report_p3_id` asc 
+					) AS first_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'DISCOUNTS' AND
+					`teves_cashiers_report`.`shift` = '2nd Shift' order by `cashiers_report_p3_id` asc 
+					) AS second_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'DISCOUNTS' AND
+					`teves_cashiers_report`.`shift` = '3rd Shift' order by `cashiers_report_p3_id` asc 
+					) AS third_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'DISCOUNTS' AND
+					`teves_cashiers_report`.`shift` = '4th Shift' order by `cashiers_report_p3_id` asc 
+					) AS fourth_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'DISCOUNTS' AND
+					`teves_cashiers_report`.`shift` = '5th Shift' order by `cashiers_report_p3_id` asc 
+					) AS fifth_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` = 'DISCOUNTS' AND
+					`teves_cashiers_report`.`shift` = '6th Shift' order by `cashiers_report_p3_id` asc 
+					) AS sixth_shift_discounts";	
+					
+				$daily_discounts_data = DB::select("$raw_query_DISCOUNTS", [$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end]
+											);
 				
+				 $shift_total_discounts_sum = $daily_discounts_data[0]->first_shift_discounts + 
+				 $daily_discounts_data[0]->second_shift_discounts +
+				 $daily_discounts_data[0]->third_shift_discounts + 
+				 $daily_discounts_data[0]->fourth_shift_discounts + 
+				 $daily_discounts_data[0]->fifth_shift_discounts + 
+				 $daily_discounts_data[0]->sixth_shift_discounts;
+				 /*DISCOUNTS*/				 
+				 
+				 /*CASH OUT AND OTHER*/
+					$raw_query_CASHOUT_OTHER = "SELECT  
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` in ('CASHOUT', 'OTHERS') AND
+					`teves_cashiers_report`.`shift` = '1st Shift' order by `cashiers_report_p3_id` asc 
+					) AS first_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` in ('CASHOUT', 'OTHERS') AND
+					`teves_cashiers_report`.`shift` = '2nd Shift' order by `cashiers_report_p3_id` asc 
+					) AS second_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` in ('CASHOUT', 'OTHERS') AND
+					`teves_cashiers_report`.`shift` = '3rd Shift' order by `cashiers_report_p3_id` asc 
+					) AS third_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` in ('CASHOUT', 'OTHERS') AND
+					`teves_cashiers_report`.`shift` = '4th Shift' order by `cashiers_report_p3_id` asc 
+					) AS fourth_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` in ('CASHOUT', 'OTHERS') AND
+					`teves_cashiers_report`.`shift` = '5th Shift' order by `cashiers_report_p3_id` asc 
+					) AS fifth_shift_discounts,
+					(select
+					ifnull(sum(teves_cashiers_report_p3.order_total_amount),0) from `teves_cashiers_report_p3`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p3`.`cashiers_report_id` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report_p3`.`miscellaneous_items_type` in ('CASHOUT', 'OTHERS') AND
+					`teves_cashiers_report`.`shift` = '6th Shift' order by `cashiers_report_p3_id` asc 
+					) AS sixth_shift_discounts";	
+					
+				$daily_cashout_other_data = DB::select("$raw_query_CASHOUT_OTHER", [$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end,
+											$company_header,$hourly_start,$hourly_end]
+											);
+				
+				$shift_total_cashout_other_sum = $daily_cashout_other_data[0]->first_shift_discounts + 
+				 $daily_cashout_other_data[0]->second_shift_discounts +
+				 $daily_cashout_other_data[0]->third_shift_discounts + 
+				 $daily_cashout_other_data[0]->fourth_shift_discounts + 
+				 $daily_cashout_other_data[0]->fifth_shift_discounts + 
+				 $daily_cashout_other_data[0]->sixth_shift_discounts;		 
+				 /*CASH OUT AND OTHER*/
+				 
+
+				/*Start - Non Cash Payment
+				$raw_query_total_non_cash_payment = "SELECT  
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p8.online_payment_amount+
+					teves_cashiers_report_p8.limitless_payment_amount+
+					teves_cashiers_report_p8.credit_debit_payment_amount+
+					teves_cashiers_report_p8.gcash_payment_amount
+					),0) from `teves_cashiers_report_p8`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p8`.`cashiers_report_idx` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '1st Shift'
+					) AS first_shift_total_non_cash_payment, 
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p8.online_payment_amount+
+					teves_cashiers_report_p8.limitless_payment_amount+
+					teves_cashiers_report_p8.credit_debit_payment_amount+
+					teves_cashiers_report_p8.gcash_payment_amount
+					),0) from `teves_cashiers_report_p8`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p8`.`cashiers_report_idx` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '2nd Shift'
+					) AS second_shift_total_non_cash_payment, 
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p8.online_payment_amount+
+					teves_cashiers_report_p8.limitless_payment_amount+
+					teves_cashiers_report_p8.credit_debit_payment_amount+
+					teves_cashiers_report_p8.gcash_payment_amount
+					),0) from `teves_cashiers_report_p8`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p8`.`cashiers_report_idx` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '3rd Shift'
+					) AS third_shift_total_non_cash_payment,
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p8.online_payment_amount+
+					teves_cashiers_report_p8.limitless_payment_amount+
+					teves_cashiers_report_p8.credit_debit_payment_amount+
+					teves_cashiers_report_p8.gcash_payment_amount
+					),0) from `teves_cashiers_report_p8`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p8`.`cashiers_report_idx` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '4th Shift'
+					) AS fourth_shift_total_non_cash_payment,
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p8.online_payment_amount+
+					teves_cashiers_report_p8.limitless_payment_amount+
+					teves_cashiers_report_p8.credit_debit_payment_amount+
+					teves_cashiers_report_p8.gcash_payment_amount
+					),0) from `teves_cashiers_report_p8`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p8`.`cashiers_report_idx` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '5th Shift'
+					) AS fifth_shift_total_non_cash_payment,
+					(select
+					ifnull(sum(
+					teves_cashiers_report_p8.online_payment_amount+
+					teves_cashiers_report_p8.limitless_payment_amount+
+					teves_cashiers_report_p8.credit_debit_payment_amount+
+					teves_cashiers_report_p8.gcash_payment_amount
+					),0) from `teves_cashiers_report_p8`
+					join `teves_cashiers_report` ON `teves_cashiers_report`.`cashiers_report_id` = `teves_cashiers_report_p8`.`cashiers_report_idx` 
+					WHERE 
+					`teves_cashiers_report`.`teves_branch` = ? AND
+					`teves_cashiers_report`.`report_date` >= ? and
+					`teves_cashiers_report`.`report_date` <= ? and
+					`teves_cashiers_report`.`shift` = '6th Shift'
+					) AS sixth_shift_total_non_cash_payment";
+			
+					$daily_non_cash_payment_data = DB::select("$raw_query_total_non_cash_payment", [$company_header,$hourly_start,$hourly_end,
+								$company_header,$hourly_start,$hourly_end,
+								$company_header,$hourly_start,$hourly_end,
+								$company_header,$hourly_start,$hourly_end,
+								$company_header,$hourly_start,$hourly_end,
+								$company_header,$hourly_start,$hourly_end]
+								);
+								
+				 $shift_non_cash_payment_sum = $daily_non_cash_payment_data[0]->first_shift_total_non_cash_payment + 
+					$daily_non_cash_payment_data[0]->second_shift_total_non_cash_payment +
+					$daily_non_cash_payment_data[0]->third_shift_total_non_cash_payment + 
+					$daily_non_cash_payment_data[0]->fourth_shift_total_non_cash_payment + 
+					$daily_non_cash_payment_data[0]->fifth_shift_total_non_cash_payment + 
+					$daily_non_cash_payment_data[0]->sixth_shift_total_non_cash_payment;	*/		
+				/*End - Non Cash Payment*/
+
+			/*Start - Fuel Sales*/
+			$fuel_ids = [11,12,13];
+			
+			$total_fuel_sales_1st_shift =  CashiersReportModel_P1::where('shift','1st Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->whereIn('product_idx', $fuel_ids)
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p1.cashiers_report_id')
+			->sum('order_total_amount'); 
+						
+			$total_fuel_sales_2nd_shift =  CashiersReportModel_P1::where('shift','Second Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->whereIn('product_idx', $fuel_ids)
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p1.cashiers_report_id')
+			->sum('order_total_amount'); 
+			
+			$total_fuel_sales_3rd_shift =  CashiersReportModel_P1::where('shift','Third Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->whereIn('product_idx', $fuel_ids)
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p1.cashiers_report_id')
+			->sum('order_total_amount'); 
+			
+			$total_fuel_sales_4th_shift =  CashiersReportModel_P1::where('shift','Fourth Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->whereIn('product_idx', $fuel_ids)
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p1.cashiers_report_id')
+			->sum('order_total_amount');
+
+			$total_fuel_sales_5th_shift =  CashiersReportModel_P1::where('shift','Fifth Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->whereIn('product_idx', $fuel_ids)
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p1.cashiers_report_id')
+			->sum('order_total_amount'); 
+
+			$total_fuel_sales_6th_shift =  CashiersReportModel_P1::where('shift','Sixth Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->whereIn('product_idx', $fuel_ids)
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p1.cashiers_report_id')
+			->sum('order_total_amount'); 	
+					
+			$total_fuel_sales = $total_fuel_sales_1st_shift+$total_fuel_sales_2nd_shift+$total_fuel_sales_3rd_shift+$total_fuel_sales_4th_shift+$total_fuel_sales_5th_shift+$total_fuel_sales_6th_shift;
+			/*Start - Fuel Sales*/
+			
+			
+			/*Non Cash Payment*/
+			$total_non_cash_payment_1st_shift =  CashiersReportModel_P8::where('shift','1st Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
+			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
+			
+			$total_non_cash_payment_2nd_shift =  CashiersReportModel_P8::where('shift','2nd Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
+			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
+			
+			$total_non_cash_payment_3rd_shift =  CashiersReportModel_P8::where('shift','3rd Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
+			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
+			
+			$total_non_cash_payment_4th_shift =  CashiersReportModel_P8::where('shift','4th Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
+			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
+			
+			$total_non_cash_payment_5th_shift =  CashiersReportModel_P8::where('shift','5th Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
+			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
+			
+			$total_non_cash_payment_6th_shift =  CashiersReportModel_P8::where('shift','6th Shift')
+			->where('teves_branch',$company_header)
+			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
+			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));	
+		
+			$total_non_cash_payment = $total_non_cash_payment_1st_shift + $total_non_cash_payment_2nd_shift + $total_non_cash_payment_3rd_shift + $total_non_cash_payment_4th_shift + $total_non_cash_payment_5th_shift + $total_non_cash_payment_6th_shift;
+		
+			/*Non Cash Payment*/
+			
+			
+			/*Short/Over*/
+			$daily_fuel_sales = $total_fuel_sales;
+       		$daily_non_cash_payment = $total_non_cash_payment;
+			
+			$
+			// $theoretical_sales_total = ($daily_fuel_sales + $total_other_sales) - ($total_sales_credit+$total_discount+$total_others_msc);
+			
+			//$total_cash_tansaction = $shift_cash_tansaction_sum;
+			
+			//$total_short_over = ($total_cash_tansaction + $total_non_cash_payment) - $theoretical_sales_total;
+			
 					$result[] = array(
-					 'date' => $date_only,
-					 'first_shift_total'	=> 	$daily_data[0]->first_shift,
-					 'second_shift_total' 	=> 	$daily_data[0]->second_shift,
-					 'third_shift_total' 	=> 	$daily_data[0]->third_shift,
-					 'fourth_shift_total' 	=> 	$daily_data[0]->fourth_shift,
-					 'fifth_shift_total' 	=> 	$daily_data[0]->fifth_shift,
-					 'sixth_shift_total' 	=> 	$daily_data[0]->sixth_shift,
-					 'shift_total_sum' 		=> 	$shift_total_sum
+					 'date' 					=>  $date_only,
+					 'first_shift_total_sales'	=> 	$daily_sales_data[0]->first_shift_sales,
+					 'second_shift_total_sales' => 	$daily_sales_data[0]->second_shift_sales,
+					 'third_shift_total_sales' 	=> 	$daily_sales_data[0]->third_shift_sales,
+					 'fourth_shift_total_sales' => 	$daily_sales_data[0]->fourth_shift_sales,
+					 'fifth_shift_total_sales' 	=> 	$daily_sales_data[0]->fifth_shift_sales,
+					 'sixth_shift_total_sales' 	=> 	$daily_sales_data[0]->sixth_shift_sales,
+					 'shift_total_sales_sum' 	=> 	$shift_total_sales_sum
 					 );
 
 			}

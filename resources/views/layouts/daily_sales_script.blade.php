@@ -110,16 +110,16 @@
 						for(var i=0; i<len; i++){
 							
 							var date_shift 			= response['data'][i].date;
-							var first_shift_total 	= response['data'][i].first_shift_total;
-							var second_shift_total 		= response['data'][i].second_shift_total;
-							var third_shift_total 		= response['data'][i].third_shift_total;
-							var fourth_shift_total 		= response['data'][i].fourth_shift_total;
-							var fifth_shift_total 		= response['data'][i].fifth_shift_total;
-							var sixth_shift_total 		= response['data'][i].sixth_shift_total;
+							var first_shift_total_sales 	= response['data'][i].first_shift_total_sales;
+							var second_shift_total_sales 		= response['data'][i].second_shift_total_sales;
+							var third_shift_total_sales 		= response['data'][i].third_shift_total_sales;
+							var fourth_shift_total_sales 		= response['data'][i].fourth_shift_total_sales;
+							var fifth_shift_total_sales 		= response['data'][i].fifth_shift_total_sales;
+							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
 							
-							total_daily_sales = first_shift_total + second_shift_total + third_shift_total + fourth_shift_total + fifth_shift_total + sixth_shift_total;
+							total_daily_sales = first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
 							
-							total_sales += first_shift_total + second_shift_total + third_shift_total + fourth_shift_total + fifth_shift_total + sixth_shift_total;
+							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
 							
 							var data_count = i+1;
 							addData(date_shift,total_daily_sales,data_count);
@@ -283,13 +283,13 @@
 				"columns": [
 				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
 				/*1*/	{data: 'date', className: "text-center", orderable: false },
-				/*2*/	{data: 'first_shift_total', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*3*/	{data: 'second_shift_total', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*4*/	{data: 'third_shift_total', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
-				/*5*/	{data: 'fourth_shift_total', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
-				/*6*/	{data: 'fifth_shift_total', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*7*/	{data: 'sixth_shift_total', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*8*/	{data: 'shift_total_sum', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*2*/	{data: 'first_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*3*/	{data: 'second_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*4*/	{data: 'third_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				/*5*/	{data: 'fourth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				/*6*/	{data: 'fifth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*7*/	{data: 'sixth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*8*/	{data: 'shift_total_sales_sum', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				],
 				
 		} );

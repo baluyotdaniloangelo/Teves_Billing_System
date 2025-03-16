@@ -912,7 +912,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3 = new CashiersReportModel_P3();
 									
 									$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
-									$CashiersReportModel_P3->billing_idx 				= $billing_id;
+									$CashiersReportModel_P3->billing_idx 				= @$billing_id;
 									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->reference_no 				= $reference_no;
