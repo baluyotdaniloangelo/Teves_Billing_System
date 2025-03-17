@@ -1769,7 +1769,7 @@
 								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							}else{
-								alert('s');
+								
 								var total_amount = product_price * order_quantity;
 								$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							

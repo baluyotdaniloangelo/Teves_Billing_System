@@ -70,6 +70,7 @@
 													<th>5th Shift</th>
 													<th>6th Shift</th>
 													<th>Total Sales</th>
+													<th>Short/Over</th>
 												</tr>
 											</thead>				
 											
@@ -83,6 +84,7 @@
 												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
 												<td align="left" nowrap><b>TOTAL SALES:</b></td>
+												<td align="left" ></td>
 												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_payable" style="font-weight: normal;">0.00</span></td>
 											</tr>
 											
