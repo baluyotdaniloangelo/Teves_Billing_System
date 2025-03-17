@@ -875,17 +875,7 @@
             document.getElementById("quantity_label").innerHTML = "QUANTITY";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
 
-        }/*else if(miscellaneous_items_type == 'SALES_CREDIT'){
-			
-            document.getElementById("reference_no_PH3").disabled = false;
-            document.getElementById("product_manual_price_PH3").disabled = false;
-			document.getElementById("product_idx_PH3").disabled = true;
-			document.getElementById("order_quantity_PH3").disabled = true;
-			
-            document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
-            document.getElementById("manual_price_label").innerHTML = "AMOUNT";
-
-		}*/else{
+        }else{
 
             document.getElementById("reference_no_PH3").disabled = false;
             document.getElementById("product_manual_price_PH3").disabled = false;
@@ -967,7 +957,8 @@
 				},
 				success:function(response){						
 				  console.log(response);
-				  if(response!='') {			  
+				  if(response!='') {	
+
 						var len = response.length;
 						for(var i=0; i<len; i++){
 						
@@ -1045,6 +1036,9 @@
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						    LoadCashiersReportPH3_SALES_CREDIT();
+							
+							load_so_reference_no(0);
+							
 							LoadCashiersReportPH3_DISCOUNT();
 							LoadCashiersReportPH3_OTHERS();
 						$('#product_idx_PH3Error').text('');					
@@ -1145,7 +1139,8 @@
 				  CashiersReportId:CashiersReportId,
 				  _token: "{{ csrf_token() }}"
 				},
-				success:function(response){						
+				success:function(response){	
+				
 				  console.log(response);
 				  if(response!='') {			  
 						var len = response.length;
@@ -1417,6 +1412,7 @@
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						    LoadCashiersReportPH3_SALES_CREDIT();
+							load_so_reference_no(1);
 							LoadCashiersReportPH3_DISCOUNT();
 							LoadCashiersReportPH3_OTHERS();
 						$('#update_product_idx_PH3Error').text('');					

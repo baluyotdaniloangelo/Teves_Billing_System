@@ -13,7 +13,7 @@
 				<br>
 				<form class="g-3 needs-validation" id="SOBillingformUpdate">
 				
-												<?php echo $cashiers_report_idx = $so_data[0]['cashiers_report_idx']; ?>
+												<?php  $cashiers_report_idx = $so_data[0]['cashiers_report_idx']; ?>
 												
 												<div class="row mb-2">
 												  <label for="branch_id" class="col-sm-3 col-form-label">Branch</label>

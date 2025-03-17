@@ -73,10 +73,10 @@
         
 		<li>
 		<?php if($data->user_type!="Supervisor"){ ?>
-        <a class="nav-link navbar_bg sidebar_li_a" href="{{ route('create_so_billing') }}" title="Create Billing Transaction">
+        <!--<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('create_so_billing') }}" title="Create Billing Transaction">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
           <span title="Create SO/Billing">Create</span>
-        </a>
+        </a>-->
 		<?php } ?>
 		<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('so') }}" title="SO List">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
