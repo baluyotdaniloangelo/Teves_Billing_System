@@ -399,6 +399,9 @@
 			/*Client and Product Name*/
 			let product_name 				= $("input[name=product_name]").val();
 			
+			var _cashiers_report_update 				= $('.cashiers_report_update:checked').val() || 'off';
+			var cashiers_report_update 				= (_cashiers_report_update ==="on") ? "YES":"NO";
+			
 			  $.ajax({
 				url: "{{ route('SOUpdateProductPost') }}",
 				type:"POST",
@@ -409,6 +412,7 @@
 				  product_idx:product_idx,
 				  product_manual_price:product_manual_price,
 				  order_quantity:order_quantity,
+				  cashiers_report_update:cashiers_report_update,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

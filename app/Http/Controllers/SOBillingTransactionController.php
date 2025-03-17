@@ -71,8 +71,6 @@ class SOBillingTransactionController extends Controller
 		$current_user = Session::get('loginID');
 		
 		if ($request->ajax()) {
-
-	//if(Session::get('UserType')!="Admin"){
 		
     	$data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
 					->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
@@ -91,22 +89,6 @@ class SOBillingTransactionController extends Controller
 					'teves_billing_so_table.order_time',
 					'teves_billing_so_table.created_at',
 					'teves_billing_so_table.created_by_user_id']);
-					
-	//}else{
-		
-		// $data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
-              		// ->get([
-					// 'teves_billing_so_table.so_id',
-					// 'teves_billing_so_table.so_number',
-					// 'teves_billing_so_table.drivers_name',
-					// 'teves_billing_so_table.plate_no',
-					// 'teves_client_table.client_name',
-					// 'teves_billing_so_table.order_date',
-					// 'teves_billing_so_table.order_time',
-					// 'teves_billing_so_table.created_at',
-					// 'teves_billing_so_table.created_by_user_id']);
-					
-	//}
 		
 		return DataTables::of($data)
 				
@@ -520,6 +502,9 @@ class SOBillingTransactionController extends Controller
 					$result = $Billing->update();
 					
 					/*Update Cashiers Report Part 3*/
+					
+					if($request->cashiers_report_update=="YES"){
+					
 					$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
 					->update([
 						'product_idx' 			=> $request->product_idx,
@@ -528,6 +513,7 @@ class SOBillingTransactionController extends Controller
 						'order_total_amount' 	=> $order_total_amount
 						]);
 					
+					}
 					
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Updated!"), 200);

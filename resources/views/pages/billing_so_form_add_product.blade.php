@@ -279,7 +279,17 @@
 							 <span class="valid-feedback" id="edit_order_quantityError"></span>
 							 
 						</div>
-
+						
+						<div class="row mb-2">
+						 
+						  <div class="col-sm-12">
+							<div class="form-check form-switch">
+							  <input class="form-check-input cashiers_report_update" type="checkbox" id="cashiers_report_update" name="cashiers_report_update">
+							  <label class="form-check-label" for="flexSwitchCheckDefault">Update this Item to Cashier's Report?</label>
+							</div>
+						  </div>
+						</div>
+						
 						<div class="row mb-2">
 						  <div class="col-sm-3 col-form-label">Amount</div>
 						  <div class="col-sm-9">
@@ -287,6 +297,8 @@
 						  </div>
 						</div>
 						</div>
+						
+						
 						
                     <div class="modal-footer modal-footer_form">
 							<div id="loading_data_update_product" style="display:none;">
