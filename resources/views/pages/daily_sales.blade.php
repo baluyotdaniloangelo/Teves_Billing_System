@@ -62,15 +62,22 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Date</th>
+													<th class="all">Date</th>
 													<th>1st Shift</th>
 													<th>2nd Shift</th>
 													<th>3rd Shift</th>
 													<th>4th Shift</th>
 													<th>5th Shift</th>
 													<th>6th Shift</th>
-													<th>Total Sales</th>
-													<th>Short/Over</th>
+													<th>Fuel Sales</th>
+													<th>Other Sales</th>
+													<th class="all">MSC - Total Sales</th>
+													<th class="all">MSC - Discounts</th>
+													<th class="all">MSC - Others</th>
+													<th class="all">Theoretical</th>
+													<th class="all"title="Total Cash On Hand">Cash</th>
+													<th class="all"title="Total Non-cash">Non-Cash</th>
+													<th class="all">Short/Over</th>
 												</tr>
 											</thead>				
 											
@@ -80,12 +87,23 @@
 											<tfoot>
 											
 											<tr class="" >
-												<td align="left" colspan="5"></td>
-												<td align="left" colspan="1"></td>
 												<td align="left" ></td>
-												<td align="left" nowrap><b>TOTAL SALES:</b></td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_payable" style="font-weight: normal;">0.00</span></td>
+												<td align="left">TOTAL</td>
 												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_short_over" style="font-weight: normal;">0.00</span></td>
 												</tr>
 											
 											

@@ -105,6 +105,8 @@
 					$('#end_dateError').text('');	
 					
 						var total_sales = 0;
+						var total_short_over = 0;
+						
 						var len = response['data'].length;
 						
 						for(var i=0; i<len; i++){
@@ -117,9 +119,13 @@
 							var fifth_shift_total_sales 		= response['data'][i].fifth_shift_total_sales;
 							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
 							
+							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
+							
 							total_daily_sales = first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
 							
 							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
+							
+							total_short_over += response['data'][i].daily_short_over;
 							
 							var data_count = i+1;
 							addData(date_shift,total_daily_sales,data_count);
@@ -129,7 +135,8 @@
 						LoadBillingHistoryData.clear().draw();
 						LoadBillingHistoryData.rows.add(response.data).draw();	
 							
-							$('#total_payable').text(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_sales').text(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_short_over').text(total_short_over.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 									
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -149,7 +156,9 @@
 							/*Close Form*/
 							$('#CreateReportModal').modal('toggle');
 							/*No Result Found*/
-							$('#total_payable').text('');
+							$('#total_sales').text('');
+							$('#total_short_over').text('');
+
 							$('#branch_name_report').text('');
 							$('#date_range_info').text('');
 							
@@ -272,14 +281,14 @@
 				// processing: true,
 				//serverSide: true,
 				//stateSave: true,/*Remember Searches*/
-				responsive: false,
-				paging: true,
+				responsive: true,
+				paging: false,
 				searching: false,
 				info: false,
 				data: [],
 				scrollCollapse: true,
 				scrollY: '500px',
-				scrollx: false,
+				scrollx: true,
 				"columns": [
 				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
 				/*1*/	{data: 'date', className: "text-center", orderable: false },
@@ -289,8 +298,15 @@
 				/*5*/	{data: 'fourth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
 				/*6*/	{data: 'fifth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*7*/	{data: 'sixth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*8*/	{data: 'shift_total_sales_sum', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*8*/	{data: 'daily_short_over', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*8*/	{data: 'daily_fuel_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*9*/	{data: 'daily_other_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*10*/	{data: 'shift_total_sales_sum', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*11*/	{data: 'daily_discount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*12*/	{data: 'daily_cashout_other', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*13*/	{data: 'daily_theoretical_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*14*/	{data: 'daily_cash_tansaction', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*15*/	{data: 'daily_non_cash_payment', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*16*/	{data: 'daily_short_over', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				],
 				
 		} );
