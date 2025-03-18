@@ -835,23 +835,21 @@ class CashiersReportController extends Controller
 									
 						$so_id 		= $request->reference_no_id;
 						
-						/*UPDATE*/
-						/*Insert Product SO*/	
-						$Billing = new BillingTransactionModel();
-						$Billing = BillingTransactionModel::find($billing_id[0]['billing_idx']);
-						$Billing->so_idx 				= $so_id;
-						$Billing->order_date 			= $request->report_date;
-						//$Billing->order_time 			= '00:00';
-						$Billing->order_po_number 		= $reference_no;	
-						$Billing->client_idx 			= $request->client_idx;
-						//$Billing->plate_no 				= 'N/A';
-						//$Billing->drivers_name 			= 'N/A';
-						$Billing->product_idx 			= $request->product_idx;
-						$Billing->product_price 		= $product_price;
-						$Billing->order_quantity 		= $request->order_quantity;
-						$Billing->order_total_amount 	= $peso_sales;
-						//$result_Billing = $Billing->save();
-						$result = $Billing->update();
+						if($request->billing_update=="YES"){
+							/*UPDATE*/
+							/*Update Product SO*/	
+							$Billing = new BillingTransactionModel();
+							$Billing = BillingTransactionModel::find($billing_id[0]['billing_idx']);
+							$Billing->so_idx 				= $so_id;
+							$Billing->order_date 			= $request->report_date;
+							$Billing->order_po_number 		= $reference_no;	
+							$Billing->client_idx 			= $request->client_idx;
+							$Billing->product_idx 			= $request->product_idx;
+							$Billing->product_price 		= $product_price;
+							$Billing->order_quantity 		= $request->order_quantity;
+							$Billing->order_total_amount 	= $peso_sales;
+							$result = $Billing->update();
+						}
 						
 					}
 					

@@ -671,7 +671,9 @@ class DailySalesReportController extends Controller
 					 'fifth_shift_total_sales' 	=> 	$daily_sales_data[0]->fifth_shift_sales,
 					 'sixth_shift_total_sales' 	=> 	$daily_sales_data[0]->sixth_shift_sales,
 					 'shift_total_sales_sum' 	=> 	$shift_total_sales_sum,
-					 'daily_short_over' 		=> 	$daily_short_over
+					 'daily_short_over' 		=> 	$daily_short_over,
+					 'daily_other_sales' 		=> 	$daily_other_sales,
+					 'daily_cash_tansaction' 	=> 	$daily_cash_tansaction
 					 );
 
 			}

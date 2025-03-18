@@ -1371,8 +1371,6 @@
 			let CHPH3_ID 					= document.getElementById("update-CRPH3").value;
 			var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
 			
-			//var reference_no 				= $("input[name=update_reference_no_PH3]").val();
-			
 			var reference_no 			    = $("input[name=update_reference_no_PH3]").val();
 			var reference_no_id 			= $('#so_list_reference option[value="' + $('#update_reference_no_PH3').val() + '"]').attr('data-id');/*IF Available*/
 			
@@ -1385,6 +1383,9 @@
 			var product_manual_price 		= $("input[name=update_product_manual_price_PH3]").val();
 			var report_date 			    = $("input[name=report_date]").val();
 			document.getElementById('CRPH3_form_edit').className = "g-3 needs-validation was-validated";
+			
+			var _billing_update 			= $('.billing_update:checked').val() || 'off';
+			var billing_update 				= (_billing_update ==="on") ? "YES":"NO";
 			
 				/*Delete the Selected Item*/			
 				  $.ajax({
@@ -1402,6 +1403,7 @@
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
 					  report_date:report_date,
+					  billing_update:billing_update,
 					  _token: "{{ csrf_token() }}"
 					},
 					success:function(response){

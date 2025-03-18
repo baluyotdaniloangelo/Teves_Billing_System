@@ -282,6 +282,18 @@
 						</div>
 						
 						<div class="row mb-2">
+						 
+						  <div class="col-sm-4"></div>
+						  <div class="col-sm-8">
+							<div class="form-check form-switch">
+							  <input class="form-check-input billing_update" type="checkbox" id="billing_update" name="billing_update">
+							  <label class="form-check-label" for="flexSwitchCheckDefault">Update this Item to Billing?</label>
+							</div>
+						  </div>
+						  
+						</div>
+						
+						<div class="row mb-2">
 						  <label class="col-sm-4 col-form-label">TOTAL AMOUNT</label>
 						  <div class="col-sm-8">
 								<span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="UpdateTotalAmount_PH3">0.00</span>
