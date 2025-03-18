@@ -361,6 +361,7 @@
 					//document.getElementById("update-branch").value = branchID;
 					
 					$('#branch_name_report').text(response.branch_name);
+					$('#branch_code_report').text(response.branch_code);
 					$('#branch_address_report').text(response.branch_address);
 					$('#branch_tin_report').text(response.branch_tin);					
 							

@@ -36,6 +36,9 @@
 								<div class="fw-bold">BRANCH NAME: <span id="branch_name_report" style="font-weight: normal;"></span></div>
 							</div>
 							<div class="ms-2">
+								<div class="fw-bold">BRANCH CODE: <span id="branch_code_report" style="font-weight: normal;"></span></div>
+							</div>
+							<div class="ms-2">
 								<div class="fw-bold">TIN: <span id="branch_tin_report" style="font-weight: normal;"></span></div>			
 							</div>
 							<div class="ms-2">
