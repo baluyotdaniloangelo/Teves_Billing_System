@@ -620,7 +620,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_payment_type']);
 				
-				if($receivables_details==NULL){
+				if($receivables_details===NULL){
 					
 					$BranchInfo = TevesBranchModel::where('branch_id', '=', $sales_order_data[0]->company_header)->first();	
 					/*Get Last ID*/

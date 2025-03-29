@@ -4,18 +4,29 @@ ALTER TABLE `teves_billing_so_table`
 ALTER TABLE `teves_billing_table`
 	ADD COLUMN `cashiers_report_idx` INT(11) NOT NULL DEFAULT '0' AFTER `so_idx`;
 	
-	ALTER TABLE `teves_cashiers_report_p3`
+ALTER TABLE `teves_cashiers_report_p3`
 	ADD COLUMN `billing_idx` INT(11) NULL DEFAULT NULL COMMENT 'Billing ID conecteion' AFTER `user_idx`;
 
 ALTER TABLE `teves_cashiers_report`
 	ADD COLUMN `remarks` VARCHAR(50) NULL DEFAULT NULL AFTER `shift`;
 ALTER TABLE `teves_cashiers_report`
-	CHANGE COLUMN `remarks` `cashier_report_remarks` VARCHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `shift`;
+	CHANGE COLUMN `remarks` `cashier_report_remarks` VARCHAR(255) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `shift`;
 	
-update teves_cashiers_report set remarks=shift ;
-update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '1st';
-update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE 'First'
-update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE 'Second'
+update teves_cashiers_report set remarks=shift;
+/*Done*/update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '1st';
+update teves_cashiers_report set shift='1st Shift' WHERE shift = '1ST( 5:00AM-1:00PM)';
+update teves_cashiers_report set shift='1st Shift' WHERE shift = '1st(10:00-12:30pm)';
+update teves_cashiers_report set shift='1st Shift' WHERE shift = '1st (5:00AM-1:00PM)';
+update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '%1st%';
+update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '%FIRST%';
+update teves_cashiers_report set shift='1st Shift' WHERE shift = '8-5'
+
+update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE 'Second';
+update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE '%Scnd%';
+
+
+update teves_cashiers_report set shift='2nd Shift' WHERE shift = '2ND 1PM-9PM';
+
 update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE '2nd';
 update teves_cashiers_report set shift='2nd Shift' WHERE shift LIKE '%2nd%';
 update teves_cashiers_report set shift='1st Shift' WHERE shift LIKE '%1st%';	
