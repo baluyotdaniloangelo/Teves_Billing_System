@@ -545,13 +545,15 @@ class SalesOrderController extends Controller
 	/*Load Sales Order Form Interface*/
 	public function sales_order_form(Request $request){
 		
+		
+		if(Session::has('loginID')){
+
 		$SalesOrderID = $request->sales_order_id;
 		$tab = $request->tab;
 		
 		$title = 'Sales Order Form';
 		$data = array();
-		if(Session::has('loginID')){
-			
+		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
@@ -585,7 +587,6 @@ class SalesOrderController extends Controller
 			
 			$receivables_payment_suggestion = ReceivablesPaymentModel::select('receivable_mode_of_payment')->distinct()->get();
 			
-			$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();
 
 			$sales_order_data = SalesOrderModel::where('sales_order_id', $SalesOrderID)
 					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')	
@@ -619,6 +620,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_payment_type']);
+				
+			$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();
 				
 				if($receivables_details===NULL){
 					

@@ -368,7 +368,18 @@
 					<h6>
 						<div class="row mb-2">
 							<label class="col-sm-4 col-form-label">Control Number :</label>
-							<label class="col-sm-8 col-form-label" id='receivable_control_number_info'>{{ $receivables_details['control_number'] }}</label>
+							<label class="col-sm-8 col-form-label" id='receivable_control_number_info'>{{ @$receivables_details['control_number'] }}</label>
+							
+							<?php
+								if(@$receivables_details['control_number']===null){
+									?>
+									<script>
+										location.reload();
+									</script>
+									<?php
+								}
+							?>
+							
 						</div>
 					</h6>
 					
