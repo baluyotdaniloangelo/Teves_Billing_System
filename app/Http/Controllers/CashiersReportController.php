@@ -913,7 +913,8 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3->billing_idx 				= @$billing_id;
 									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
-                                    $CashiersReportModel_P3->reference_no 				= $reference_no;
+                                    $CashiersReportModel_P3->so_idx 					= $so_id;
+									$CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
 									$CashiersReportModel_P3->item_description 			= $request->item_description;
@@ -936,7 +937,8 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3 = new CashiersReportModel_P3();
 									$CashiersReportModel_P3 = CashiersReportModel_P3::find($CHPH3_ID);
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
-                                    $CashiersReportModel_P3->reference_no 				= $reference_no;
+                                    $CashiersReportModel_P3->so_idx 					= $so_id;
+									$CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
 									$CashiersReportModel_P3->item_description 			= $request->item_description;
@@ -1029,6 +1031,7 @@ class CashiersReportController extends Controller
 		
 		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
 		->where('miscellaneous_items_type','=','SALES_CREDIT')
+			->join('teves_billing_so_table', 'teves_billing_so_table.so_id', '=', 'teves_cashiers_report_p3.product_idx')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 			->leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->get([

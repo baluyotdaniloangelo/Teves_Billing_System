@@ -370,6 +370,15 @@ class SOBillingTransactionController extends Controller
 							'drivers_name' 		=> $request->drivers_name,
 							'updated_by_user_idx' 	=> Session::get('loginID')]
 						);
+						
+						$update_reference_number_cashiers_report_so = CashiersReportModel_P3::where('so_idx', $request->so_id)
+						->update(
+							[
+							'reference_no' 		=> $request->so_number
+							]
+						);
+						
+						/*Update SO Number to Sales Order Cashiers Report*/
 					
 					if($result){
 						return response()->json(array('success' => "SO Information Successfully Updated!", 'so_id' => $request->so_id), 200);
