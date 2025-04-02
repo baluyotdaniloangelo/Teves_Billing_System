@@ -873,6 +873,7 @@ class CashiersReportController extends Controller
 			
 			        }
 					$peso_sales = ($order_quantity * $product_price);
+					$so_id = 0;
 
             }else if($miscellaneous_items_type=='OTHERS' || $miscellaneous_items_type=='CASHOUT'){
 
@@ -882,7 +883,7 @@ class CashiersReportController extends Controller
 				
 			       
 					$peso_sales = ($order_quantity * $product_price);
-
+					$so_id = 0;
             }else{
 
 			        if($pump_price==0){
@@ -903,6 +904,7 @@ class CashiersReportController extends Controller
 			
 			        }
 					 $peso_sales = ($product_price);
+					 $so_id = 0;
              }
 			 	
 								if($CHPH3_ID=='' || $CHPH3_ID ==0){	
@@ -913,7 +915,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3->billing_idx 				= @$billing_id;
 									$CashiersReportModel_P3->cashiers_report_id 		= $CashiersReportId;
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
-                                    $CashiersReportModel_P3->so_idx 					= $so_id;
+                                    $CashiersReportModel_P3->so_idx 					= @$so_id;
 									$CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
@@ -937,7 +939,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3 = new CashiersReportModel_P3();
 									$CashiersReportModel_P3 = CashiersReportModel_P3::find($CHPH3_ID);
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
-                                    $CashiersReportModel_P3->so_idx 					= $so_id;
+                                    $CashiersReportModel_P3->so_idx 					= @$so_id;
 									$CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									$CashiersReportModel_P3->product_idx 				= $product_idx;
