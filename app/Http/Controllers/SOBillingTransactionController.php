@@ -168,11 +168,11 @@ class SOBillingTransactionController extends Controller
 			 teves_billing_table
 				right join teves_billing_so_table on `teves_billing_so_table`.`so_id` = `teves_billing_table`.`so_idx`
 				WHERE 
-			 `teves_billing_so_table`.`branch_idx` = ? 
-			 AND `teves_billing_so_table`.`client_idx` = ?
+			 /*`teves_billing_so_table`.`branch_idx` = ? 
+			 AND*/ `teves_billing_so_table`.`client_idx` = ?
 			 group by `teves_billing_so_table`.`so_id`";
 			
-			$data = DB::select("$raw_query", [$branch_idx,$request->client_idx]);			
+			$data = DB::select("$raw_query", [$request->client_idx]);			
 					
 			return response()->json($data);			
 	
