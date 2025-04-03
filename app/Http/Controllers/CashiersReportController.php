@@ -1099,11 +1099,20 @@ class CashiersReportController extends Controller
 	public function delete_cashiers_report_product_p3(Request $request){		
 			
 		$CHPH3_ID = $request->CHPH3_ID;
+		/*
 		
+		$regular_logs =  EmployeeLogsModel::where('employee_idx', $employee_id)
+					->whereBetween('attendance_date', ["$start_date", "$end_date"])
+					->where('log_type', 'Regular')
+					->selectRaw('ifnull(sum(basic_pay),0) as basic_pay, count(*) as days_count_regular')
+					->get();
+		
+		*/
 		/*Get Billing ID*/
 		$billing_id =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
 			->get([
 					'teves_cashiers_report_p3.billing_idx',
+					'teves_cashiers_report_p3.so_idx'
 				]);	
 		
 		/*Delete from Cashiers Report*/
@@ -1111,7 +1120,19 @@ class CashiersReportController extends Controller
 		
 		/*Delete from Billing*/
 		BillingTransactionModel::where('billing_id', $billing_id[0]['billing_idx'])->delete();
-	
+		
+		/*Re-count - if SO Number has no Product, Delete the SO*/
+		$product_under_so_count =  BillingTransactionModel::where('so_idx', $billing_id[0]['so_idx'])
+					->selectRaw('count(*) as product_under_so_count')
+					->get();
+		$product_under_so_count = $product_under_so_count[0]['product_under_so_count'];			
+		
+		if($product_under_so_count==0){
+			
+			SOBillingTransactionModel::where('so_id', $billing_id[0]['so_idx'])->delete();
+				
+		}
+					
 		return 'Deleted';
 		
 	}
