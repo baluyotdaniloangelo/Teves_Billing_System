@@ -80,6 +80,7 @@
 													<th class="all">Theoretical</th>
 													<th class="all"title="Total Cash On Hand">Cash</th>
 													<th class="all"title="Total Non-cash">Non-Cash</th>
+													<th class="all">Total Cash Sales</th>
 													<th class="all">Short/Over</th>
 												</tr>
 											</thead>				
@@ -92,7 +93,7 @@
 											<tr class="" >
 												<td align="left" ></td>
 												<td align="left">TOTAL</td>
-												<td align="left" ></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="first_shift_total" style="font-weight: normal;">0.00</span></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
@@ -101,6 +102,7 @@
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>

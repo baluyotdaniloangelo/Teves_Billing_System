@@ -577,7 +577,7 @@ class ReportController extends Controller
 							   $r->where('teves_billing_table.branch_idx', $company_header);
 							}
 						})*/
-						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
+						//->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
 						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
 						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
 						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')

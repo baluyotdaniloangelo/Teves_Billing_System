@@ -104,6 +104,7 @@
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
 					
+						var first_shift_total = 0;
 						var total_sales = 0;
 						var total_short_over = 0;
 						
@@ -123,6 +124,8 @@
 							
 							total_daily_sales = first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
 							
+							first_shift_total += first_shift_total_sales;
+							
 							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
 							
 							total_short_over += response['data'][i].daily_short_over;
@@ -135,7 +138,10 @@
 						LoadBillingHistoryData.clear().draw();
 						LoadBillingHistoryData.rows.add(response.data).draw();	
 							
+							$('#first_shift_total').text(first_shift_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							
 							$('#total_sales').text(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							
 							$('#total_short_over').text(total_short_over.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 									
 							var start_date_new  = new Date(start_date);
@@ -306,6 +312,7 @@
 				/*13*/	{data: 'daily_theoretical_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*14*/	{data: 'daily_cash_tansaction', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*15*/	{data: 'daily_non_cash_payment', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+						{data: 'total_cash_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*16*/	{data: 'daily_short_over', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				],
 				

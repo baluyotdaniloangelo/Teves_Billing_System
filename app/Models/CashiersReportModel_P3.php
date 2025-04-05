@@ -16,15 +16,21 @@ class CashiersReportModel_P3 extends Model
     $activity->causer_id = Session::get('loginID');
 	}
 	
-
 	protected $table = 'teves_cashiers_report_p3';
 
 	protected $fillable = [
 		'cashiers_report_p3_id',
-        'user_idx',
 		'cashiers_report_id',
+		'client_idx',
+		'user_idx',
+		'billing_idx',
+		'miscellaneous_items_type',
+		'so_idx',
+		'reference_no',
         'product_idx',
+		'item_description',
 		'order_quantity',
+		'cashiers_report_p1_id',
 		'pump_price',
 		'unit_price',
 		'discounted_price',
@@ -43,10 +49,17 @@ class CashiersReportModel_P3 extends Model
 	
 	protected static $logAttributes = [
 		'cashiers_report_p3_id',
-		'user_idx',
 		'cashiers_report_id',
+		'client_idx',
+		'user_idx',
+		'billing_idx',
+		'miscellaneous_items_type',
+		'so_idx',
+		'reference_no',
         'product_idx',
+		'item_description',
 		'order_quantity',
+		'cashiers_report_p1_id',
 		'pump_price',
 		'unit_price',
 		'discounted_price',

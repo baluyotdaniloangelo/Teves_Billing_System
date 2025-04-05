@@ -3,19 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-//use App\Models\BillingTransactionModel;
-//use App\Models\SOBillingTransactionModel;
-//use App\Models\ReceivablesModel;
-//use App\Models\ReceivablesPaymentModel;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
-//use App\Models\SalesOrderModel;
-//use App\Models\SalesOrderComponentModel;
-//use App\Models\SalesOrderPaymentModel;
-
-//use App\Models\PurchaseOrderModel;
-//use App\Models\PurchaseOrderComponentModel;
-//use App\Models\PurchaseOrderPaymentModel;
 
 use App\Models\CashiersReportModel;
 use App\Models\CashiersReportModel_P1;
@@ -667,6 +656,8 @@ class DailySalesReportController extends Controller
 			$daily_cash_tansaction = $shift_cash_tansaction_sum;
 			$daily_short_over = ($daily_cash_tansaction + $daily_non_cash_payment) - $daily_theoretical_sales;
 			
+			$total_cash_sales = $daily_non_cash_payment + $daily_cash_tansaction;
+			
 					$result[] = array(
 					 'date' 					=>  $date_only,
 					 'first_shift_total_sales'	=> 	$daily_sales_data[0]->first_shift_sales,
@@ -683,7 +674,8 @@ class DailySalesReportController extends Controller
 					 'daily_discount' 			=> 	$daily_discount,
 					 'daily_cashout_other' 		=> 	$daily_cashout_other,
 					 'daily_theoretical_sales' 	=>  $daily_theoretical_sales,
-					 'daily_non_cash_payment'	=> 	$daily_non_cash_payment
+					 'daily_non_cash_payment'	=> 	$daily_non_cash_payment,
+					 'total_cash_sales'			=>	$total_cash_sales
 					 );
 
 			}
