@@ -581,7 +581,7 @@ class ReportController extends Controller
 						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 						->orderBy('teves_billing_table.order_date', 'asc')
 						->get([
-						'teves_billing_table.billing_ivd',
+						'teves_billing_table.billing_id',
 						'teves_billing_table.receivable_idx',
 						'teves_billing_table.drivers_name',
 						'teves_billing_table.plate_no',
