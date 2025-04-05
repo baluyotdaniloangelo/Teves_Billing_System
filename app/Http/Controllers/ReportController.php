@@ -577,11 +577,11 @@ class ReportController extends Controller
 		
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
-						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
+						->leftjoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
 						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 						->orderBy('teves_billing_table.order_date', 'asc')
 						->get([
-						'teves_billing_table.billing_id',
+						'teves_billing_table.billing_ivd',
 						'teves_billing_table.receivable_idx',
 						'teves_billing_table.drivers_name',
 						'teves_billing_table.plate_no',

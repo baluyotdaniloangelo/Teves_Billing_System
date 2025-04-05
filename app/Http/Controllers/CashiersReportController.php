@@ -741,6 +741,8 @@ class CashiersReportController extends Controller
 			$order_quantity 			= $request->order_quantity;
 			$product_manual_price 		= $request->product_manual_price + 0;
 			
+			$branch_idx 		= $request->branch_idx;
+			
 			$CHPH3_ID 			= $request->CHPH3_ID;
 			$pump_price_data =  CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
 				->where('product_idx', $product_idx)
@@ -811,6 +813,7 @@ class CashiersReportController extends Controller
 						$Billing = new BillingTransactionModel();
 						$Billing->so_idx 				= $so_id;
 						$Billing->cashiers_report_idx 	= $CashiersReportId;
+						$Billing->branch_idx 			= $request->branch_idx;
 						$Billing->order_date 			= $request->report_date;
 						$Billing->order_time 			= '00:00';
 						$Billing->order_po_number 		= $reference_no;	
@@ -840,6 +843,7 @@ class CashiersReportController extends Controller
 							/*Update Product SO*/	
 							$Billing = new BillingTransactionModel();
 							$Billing = BillingTransactionModel::find($billing_id[0]['billing_idx']);
+							$Billing->branch_idx 			= $request->branch_idx;
 							$Billing->so_idx 				= $so_id;
 							$Billing->order_date 			= $request->report_date;
 							$Billing->order_po_number 		= $reference_no;	
