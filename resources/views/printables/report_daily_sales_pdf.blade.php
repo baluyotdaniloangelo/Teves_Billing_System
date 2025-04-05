@@ -104,13 +104,13 @@
 			<tr class="data_tr" >
 				<td align="center" nowrap style="border:1px solid #000;"><?=$no;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$date_of_sales;?></td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['first_shift_total']}}</td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['second_shift_total']}}</td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['third_shift_total']}}</td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['fourth_shift_total']}}</td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['fifth_shift_total']}}</td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['sixth_shift_total']}}</td>
-				<td align="right" nowrap style="border:1px solid #000;">{{$result_cols['shift_total_sum']}}</td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['first_shift_total'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['second_shift_total'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['third_shift_total'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['fourth_shift_total'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['fifth_shift_total'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['sixth_shift_total'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['shift_total_sum'],2);?></td>
 			</tr>
 			<?php 
 			$no++; 
