@@ -571,12 +571,11 @@ class ReportController extends Controller
 		/*Using Raw Query*/
 		//$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
 		//$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
-		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`, `teves_billing_table`.`created_at` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
-		$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
+		//$raw_query = "select `teves_branch_table`.`branch_initial`,`teves_billing_table`.`billing_id`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`, `teves_billing_table`.`created_at` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `client_idx` = ? and `teves_billing_table`.`order_date` BETWEEN ? and ? and `teves_billing_table`.`receivable_idx` = ? order by `teves_billing_table`.`order_date` asc";			
+		//$billing_data = DB::select("$raw_query", [$client_idx,$start_date,$end_date,$receivable_id]);
 		
-		/*
+		
 		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
-						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
 						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
 						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
 						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
@@ -598,7 +597,7 @@ class ReportController extends Controller
 						'teves_billing_table.created_by_user_idx',
 						'teves_branch_table.branch_initial']);
 		
-		*/
+		
 		/*Recievable Data*/
 				
 		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number','company_header','created_by_user_id']);
