@@ -93,21 +93,21 @@
 											<tr class="" >
 												<td align="left" ></td>
 												<td align="left">TOTAL</td>
-												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="first_shift_total" style="font-weight: normal;">0.00</span></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
 												<td align="left" ></td>
-												<td align="left" ></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_fuel_sales" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_other_sales" style="font-weight: normal;">0.00</span></td>
 												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;">0.00</span></td>
-												<td align="left" ></td>
-												<td align="left" ></td>
-												<td align="left" ></td>
-												<td align="left" ></td>
-												<td align="left" ></td>
-												<td align="left" ></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_discount" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cashout_other" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_theoretical_sales" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cash_tansaction" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_non_cash_payment" style="font-weight: normal;">0.00</span></td>
+												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cash_sales" style="font-weight: normal;">0.00</span></td>
 												<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_short_over" style="font-weight: normal;">0.00</span></td>
 												</tr>
 											

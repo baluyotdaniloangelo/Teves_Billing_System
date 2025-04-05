@@ -251,7 +251,7 @@ class DailySalesReportController extends Controller
 					`teves_cashiers_report`.`shift` = '6th Shift'
 					) AS sixth_shift_total_cash_tansaction";
 					
-				 $daily_cash_tansaction_data = DB::select("$raw_query_cash_tansaction", [$company_header,$hourly_start,$hourly_end,
+				 $daily_cash_transaction_data = DB::select("$raw_query_cash_tansaction", [$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end,
@@ -259,12 +259,12 @@ class DailySalesReportController extends Controller
 											$company_header,$hourly_start,$hourly_end]
 											);
 				
-				 $shift_cash_tansaction_sum = $daily_cash_tansaction_data[0]->first_shift_total_cash_tansaction + 
-				 $daily_cash_tansaction_data[0]->second_shift_total_cash_tansaction +
-				 $daily_cash_tansaction_data[0]->third_shift_total_cash_tansaction + 
-				 $daily_cash_tansaction_data[0]->fourth_shift_total_cash_tansaction + 
-				 $daily_cash_tansaction_data[0]->fifth_shift_total_cash_tansaction + 
-				 $daily_cash_tansaction_data[0]->sixth_shift_total_cash_tansaction;
+				 $shift_cash_tansaction_sum = $daily_cash_transaction_data[0]->first_shift_total_cash_tansaction + 
+				 $daily_cash_transaction_data[0]->second_shift_total_cash_tansaction +
+				 $daily_cash_transaction_data[0]->third_shift_total_cash_tansaction + 
+				 $daily_cash_transaction_data[0]->fourth_shift_total_cash_tansaction + 
+				 $daily_cash_transaction_data[0]->fifth_shift_total_cash_tansaction + 
+				 $daily_cash_transaction_data[0]->sixth_shift_total_cash_tansaction;
 				 /* End - Cash On Hand*/
 			
 				/*Start - Other Sales*/
@@ -653,10 +653,10 @@ class DailySalesReportController extends Controller
 			
 			$daily_theoretical_sales = ($daily_fuel_sales + $daily_other_sales) - ($daily_miscellaneous_items);
 			
-			$daily_cash_tansaction = $shift_cash_tansaction_sum;
-			$daily_short_over = ($daily_cash_tansaction + $daily_non_cash_payment) - $daily_theoretical_sales;
+			$daily_cash_transaction = $shift_cash_tansaction_sum;
+			$daily_short_over = ($daily_cash_transaction + $daily_non_cash_payment) - $daily_theoretical_sales;
 			
-			$total_cash_sales = $daily_non_cash_payment + $daily_cash_tansaction;
+			$daily_total_cash_sales = $daily_non_cash_payment + $daily_cash_transaction;
 			
 					$result[] = array(
 					 'date' 					=>  $date_only,
@@ -669,13 +669,13 @@ class DailySalesReportController extends Controller
 					 'shift_total_sales_sum' 	=> 	$shift_total_sales_sum,
 					 'daily_short_over' 		=> 	$daily_short_over,
 					 'daily_other_sales' 		=> 	$daily_other_sales,
-					 'daily_cash_tansaction' 	=> 	$daily_cash_tansaction,
+					 'daily_cash_transaction' 	=> 	$daily_cash_transaction,
 					 'daily_fuel_sales' 		=> 	$daily_fuel_sales,
 					 'daily_discount' 			=> 	$daily_discount,
 					 'daily_cashout_other' 		=> 	$daily_cashout_other,
 					 'daily_theoretical_sales' 	=>  $daily_theoretical_sales,
 					 'daily_non_cash_payment'	=> 	$daily_non_cash_payment,
-					 'total_cash_sales'			=>	$total_cash_sales
+					 'daily_total_cash_sales'	=>	$daily_total_cash_sales
 					 );
 
 			}

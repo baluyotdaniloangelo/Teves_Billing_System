@@ -103,8 +103,17 @@
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
-					
-						var first_shift_total = 0;
+				
+						var total_fuel_sales = 0;
+						var total_discount = 0;
+						var total_cashout_other = 0;
+						var total_other_sales = 0;
+						var total_theoretical_sales = 0;
+						
+						var total_cash_tansaction = 0;
+						var total_non_cash_payment = 0;
+						var total_cash_sales = 0;
+						
 						var total_sales = 0;
 						var total_short_over = 0;
 						
@@ -112,22 +121,27 @@
 						
 						for(var i=0; i<len; i++){
 							
-							var date_shift 			= response['data'][i].date;
-							var first_shift_total_sales 	= response['data'][i].first_shift_total_sales;
+							var date_shift 						= response['data'][i].date;
+							var first_shift_total_sales 		= response['data'][i].first_shift_total_sales;
 							var second_shift_total_sales 		= response['data'][i].second_shift_total_sales;
 							var third_shift_total_sales 		= response['data'][i].third_shift_total_sales;
 							var fourth_shift_total_sales 		= response['data'][i].fourth_shift_total_sales;
 							var fifth_shift_total_sales 		= response['data'][i].fifth_shift_total_sales;
 							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
 							
-							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
+							total_fuel_sales 					+= response['data'][i].daily_fuel_sales;
+							total_discount 						+= response['data'][i].daily_discount;
+							total_cashout_other 				+= response['data'][i].daily_cashout_other;
+							total_other_sales 					+= response['data'][i].daily_other_sales;
+							total_theoretical_sales 			+= response['data'][i].daily_theoretical_sales;
 							
+							total_cash_tansaction 				+= response['data'][i].daily_cash_transaction;
+							total_non_cash_payment 				+= response['data'][i].daily_non_cash_payment;
+							total_cash_sales 					+= response['data'][i].daily_total_cash_sales;
+	
 							total_daily_sales = first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
-							
-							first_shift_total += first_shift_total_sales;
-							
-							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
-							
+		
+							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;					
 							total_short_over += response['data'][i].daily_short_over;
 							
 							var data_count = i+1;
@@ -138,7 +152,14 @@
 						LoadBillingHistoryData.clear().draw();
 						LoadBillingHistoryData.rows.add(response.data).draw();	
 							
-							$('#first_shift_total').text(first_shift_total.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_fuel_sales').text(total_fuel_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_discount').text(total_discount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_cashout_other').text(total_cashout_other.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_other_sales').text(total_other_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_theoretical_sales').text(total_theoretical_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_cash_tansaction').text(total_cash_tansaction.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_non_cash_payment').text(total_non_cash_payment.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_cash_sales').text(total_cash_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							$('#total_sales').text(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
@@ -310,9 +331,9 @@
 				/*11*/	{data: 'daily_discount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*12*/	{data: 'daily_cashout_other', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*13*/	{data: 'daily_theoretical_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*14*/	{data: 'daily_cash_tansaction', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*14*/	{data: 'daily_cash_transaction', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*15*/	{data: 'daily_non_cash_payment', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-						{data: 'total_cash_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+						{data: 'daily_total_cash_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				/*16*/	{data: 'daily_short_over', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				],
 				
@@ -365,25 +386,10 @@
 				  console.log(response);
 				  if(response) {
 					
-					//document.getElementById("update-branch").value = branchID;
-					
 					$('#branch_name_report').text(response.branch_name);
 					$('#branch_code_report').text(response.branch_code);
 					$('#branch_address_report').text(response.branch_address);
-					$('#branch_tin_report').text(response.branch_tin);					
-							
-					/*Set Details*/
-					// document.getElementById("update_branch_code").value = response.branch_code;
-					// document.getElementById("update_branch_name").value = response.branch_name;
-					// document.getElementById("update_branch_address").value = response.branch_address;
-					// document.getElementById("update_branch_tin").value = response.branch_tin;
-					// document.getElementById("update_branch_initial").value = response.branch_initial;
-					// document.getElementById("update_branch_address").value = response.branch_address;
-					// document.getElementById("update_branch_contact_number").value = response.branch_contact_number;
-					// document.getElementById("update_branch_owner").value = response.branch_owner;
-					// document.getElementById("update_branch_owner_title").value = response.branch_owner_title;
-										
-					// $('#UpdateBranchModal').modal('toggle');					
+					$('#branch_tin_report').text(response.branch_tin);						
 				  
 				  }
 				},
