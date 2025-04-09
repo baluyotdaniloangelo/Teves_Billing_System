@@ -202,6 +202,8 @@
 			let sales_order_date 			= $("input[name=sales_order_date]").val();
 
 			let payment_term 				= $("input[name=payment_term]").val();
+			let sales_order_invoice 		= $("#sales_order_invoice").val();
+		
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 			
@@ -214,6 +216,7 @@
 				  sales_order_payment_type:sales_order_payment_type,
 				  sales_order_date:sales_order_date,
 				  payment_term:payment_term,
+				  sales_order_invoice:sales_order_invoice,
 				  sales_order_net_percentage:sales_order_net_percentage,
 				  sales_order_withholding_tax:sales_order_withholding_tax,
 				  _token: "{{ csrf_token() }}"
@@ -282,6 +285,18 @@
 				}
 			   });	
 	  });
+	
+	function check_withholding_tax(){
+		
+			let sales_order_invoice = $("#sales_order_invoice").val();
+			
+			if(sales_order_invoice==1){
+				ClientInfo();
+			}else{
+				document.getElementById("sales_order_withholding_tax").value = 0;
+			}
+			
+	}	
 	
 	<!--Product Deletion Confirmation-->
 	$('body').on('click','#deleteSalesOrder',function(){

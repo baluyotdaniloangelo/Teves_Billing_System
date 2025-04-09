@@ -125,7 +125,7 @@
       </li>
 	
 	  <li class="nav-item ">
-        <!--<a class="nav-link navbar_bg" href="#" title="Report">-->
+	  
 		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
           <i class="bi bi-graph-up navbar_icon"></i>
           <span title="Generate Billing History">Report</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -135,7 +135,11 @@
 			<a href="{{ route('report') }}" class="sidebar_li_a" title="Billing History">
               <i class="bi bi-file-earmark-text navbar_icon" title="Billing History"></i><span> Billing History</span>
             </a>
-			<!---->
+			
+			<a href="{{ route('salesordersummary') }}" class="sidebar_li_a" title="Daily Sales">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Sales Order</span>
+            </a>
+			
 			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">
               <i class="bi bi-file-earmark-text navbar_icon" title="SOA Summary"></i><span> SOA Summary</span>
             </a>
@@ -143,6 +147,8 @@
 			<a href="{{ route('daily_sales') }}" class="sidebar_li_a" title="Daily Sales">
               <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Daily Sales</span>
             </a>
+			
+			
 			
 		  </li>
 		</ul>

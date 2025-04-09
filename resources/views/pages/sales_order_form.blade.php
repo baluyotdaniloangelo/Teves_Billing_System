@@ -78,20 +78,25 @@
 
 												<hr>
 												
-												<div class="row">
-														
+												<div class="row mb-2">
 														<label for="sales_order_payment_type" class="col-sm-3 col-form-label">Payment Type</label>
 														<div class="col-md-9">
-														
 														<?php $sales_order_payment_type = $sales_order_data[0]->sales_order_payment_type; ?>
-														
 															<select class="form-select form-control" required="" name="sales_order_payment_type" id="sales_order_payment_type"> 
-															
 																<option value="Receivable" <?php if($sales_order_payment_type=='Receivable'){ echo "selected";} else{} ?>>Receivable</option>
 																<option value="PBD" <?php if($sales_order_payment_type=='PBD'){ echo "selected";} else{} ?>>Paid Before Delivery</option>
-															
 															</select>
-															
+														</div>
+												</div>
+												
+												<div class="row mb-2">
+														<label for="sales_order_invoice" class="col-sm-3 col-form-label">With Sales Invoice?</label>
+														<div class="col-md-9">
+														<?php $sales_order_invoice = $sales_order_data[0]->sales_order_invoice; ?>
+															<select class="form-select form-control" required="" name="sales_order_invoice" id="sales_order_invoice" onchange="check_withholding_tax()"> 
+																<option value="1" <?php if($sales_order_invoice=='1'){ echo "selected";} else{} ?>>Yes</option>
+																<option value="0" <?php if($sales_order_invoice=='0'){ echo "selected";} else{} ?>>No</option>
+															</select>
 														</div>
 												</div>
 

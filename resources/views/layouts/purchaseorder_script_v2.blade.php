@@ -90,11 +90,14 @@
 			let default_net_percentage 	= $("input[name=purchase_order_net_percentage]").val();
 			let default_less_percentage = $("input[name=purchase_order_less_percentage]").val();
 			
+			let purchase_order_invoice = $("#purchase_order_invoice").val();
+			
 			  $.ajax({
 				url: "{{ route('SavePurchaseOrder') }}",
 				type:"POST",
 				data:{
 					purchase_order_date:purchase_order_date,
+					purchase_order_invoice:purchase_order_invoice,
 					supplier_idx:supplier_idx,
 					company_header:company_header,
 					default_net_percentage:default_net_percentage,
@@ -345,7 +348,19 @@
 				}
 			   });
 			   
-	} 	  		
+	} 	  	
+
+	function check_withholding_tax(){
+		
+			let purchase_order_invoice = $("#purchase_order_invoice").val();
+			
+			if(purchase_order_invoice==1){
+				SupplierInfo();
+			}else{
+				document.getElementById("purchase_order_less_percentage").value = 0;
+			}
+			
+	}	
 
 	<!--Select supplier For Update-->
 	function SupplierInfo(){

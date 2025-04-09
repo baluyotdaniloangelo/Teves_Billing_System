@@ -57,6 +57,8 @@
 			document.getElementById("update-purchase-order").value = purchase_order_id;		
 			document.getElementById("update_company_header").value = response[0].company_header;	
 			
+			document.getElementById("update_purchase_order_invoice").value = response[0].purchase_order_invoice;	
+			
 				  }
 				},
 				error: function(error) {
@@ -288,6 +290,8 @@
 			let supplier_name 							= $("input[name=update_supplier_name]").val();
 			/*Added May 6, 2023*/
 			let company_header 							= $("#update_company_header").val();
+			let purchase_order_invoice 							= $("#update_purchase_order_invoice").val();
+			
 			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
 			let purchase_order_official_receipt_no 		= $("input[name=update_purchase_order_official_receipt_no]").val();
@@ -311,6 +315,7 @@
 					purchase_order_date:purchase_order_date,
 					supplier_idx:supplier_idx,
 					company_header:company_header,
+					purchase_order_invoice:purchase_order_invoice,
 					purchase_order_sales_order_number:purchase_order_sales_order_number,
 					purchase_order_collection_receipt_no:purchase_order_collection_receipt_no,
 					purchase_order_official_receipt_no:purchase_order_official_receipt_no,
@@ -383,6 +388,18 @@
 				}
 			   });	
 	});	
+	
+	function check_withholding_tax(){
+		
+			let purchase_order_invoice = $("#update_purchase_order_invoice").val();
+			
+			if(purchase_order_invoice==1){
+				SupplierInfo();
+			}else{
+				document.getElementById("update_purchase_order_less_percentage").value = 0;
+			}
+			
+	}
 	
 	/*Re-print*/
 	$('body').on('click','#PrintPurchaseOrder',function(){	  
@@ -1009,7 +1026,7 @@
 					
 					/*Set Details*/
 					
-					document.getElementById("update_purchase_order_less_percentage").value = response.default_less_percentage;
+					document.getElementById("update_purchase_order_less_percentage").value = response.default_withholding_tax_percentage;
 					document.getElementById("update_purchase_order_net_percentage").value = response.default_net_percentage;				
 				  
 				  }

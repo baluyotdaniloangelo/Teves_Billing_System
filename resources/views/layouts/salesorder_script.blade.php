@@ -37,8 +37,6 @@
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'sales_order_delivery_status'},  
 				{data: 'sales_order_payment_status'},  
-				//{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},
-				//{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},	
 				{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
@@ -275,7 +273,6 @@
 					var table = $("#getSalesOrderList").DataTable();
 				    table.ajax.reload(null, false);
 					/*Reload Page*/
-					//location.reload();
 					
 				  }
 				},
@@ -446,7 +443,6 @@
 					document.getElementById("amount_receivables").innerHTML = response[0].sales_order_total_due;
 					
 					document.getElementById("receivable_billing_date").value = response[0].sales_order_date;
-					//document.getElementById("receivable_or_number").value = response[0].sales_order_or_number;
 					document.getElementById("receivable_payment_term").value = response[0].sales_order_payment_term;
 					document.getElementById("receivable_description").textContent = response[0].sales_order_control_number;	
 					

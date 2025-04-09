@@ -239,7 +239,7 @@ class ReportController extends Controller
 			
 		$request->validate([
 			'client_idx'      		=> 'required',
-			'client_idx'      		=> 'required',
+			'company_header'      		=> 'required',
 			'start_date'      		=> 'required',
 			'end_date'      			=> 'required'
         ], 
@@ -1389,6 +1389,8 @@ class ReportController extends Controller
 		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER_DELIVERY_STATUS.pdf");
 	
 	}	
+	
+	
 	
 	public function generate_test_pdf(Request $request){
 	

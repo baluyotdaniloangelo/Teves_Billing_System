@@ -14,9 +14,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\SalesOrderDeliveryController;
-use App\Http\Controllers\PurchaseOrderController;
-use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\PurchaseOrderController_v2;
+use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
 use App\Http\Controllers\CashiersReport_Payment_Controller;
@@ -215,8 +214,6 @@ Route::post('/save_receivable_payment_post', [ReceivablesController::class,'save
 Route::post('/create_receivables_from_sale_order_post', [ReceivablesController::class,'create_receivables_from_sale_order_post'])->name('create_receivables_from_sale_order_post')->middleware('isLoggedIn');
 Route::post('/update_receivables_from_sale_order_post', [ReceivablesController::class,'update_receivables_from_sale_order_post'])->name('update_receivables_from_sale_order_post')->middleware('isLoggedIn');
 
-
-
 Route::get('/receivable_from_billing_form', [ReceivablesController::class, 'receivable_from_billing_form'])->name('receivable_from_billing_form')->middleware('isLoggedIn');
 Route::post('/billing_to_receivable_product', [ReceivablesController::class,'billing_to_receivable_product'])->name('billing_to_receivable_product')->middleware('isLoggedIn');
 
@@ -247,6 +244,12 @@ Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class,'generate_sales_order_delivery_status_pdf'])->name('generate_sales_order_delivery_status_pdf')->middleware('isLoggedIn');
 
+Route::get('/sales_order_summary', [SalesOrderController::class,'sales_order_summary'])->name('salesordersummary')->middleware('isLoggedIn');
+Route::post('/sales_order_summary_data', [SalesOrderController::class,'sales_order_summary_data'])->name('sales_order_summary_data')->middleware('isLoggedIn');
+/*Generate via Web Page View - For Sales Order Summary*/
+Route::get('/generate_sales_order_summary_report_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_pdf'])->name('generate_sales_order_summary_report_pdf')->middleware('isLoggedIn');
+
+
 /*New Version for Sales Order*/
 Route::get('/sales_order_form', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
 Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_order_component_info'])->name('sales_order_component_info')->middleware('isLoggedIn');
@@ -258,7 +261,6 @@ Route::post('/sales_order_component_delivery_compose', [SalesOrderDeliveryContro
 Route::post('/get_sales_order_product_list_delivery', [SalesOrderDeliveryController::class,'get_sales_order_product_list_delivery'])->name('ProductListDelivery')->middleware('isLoggedIn');
 Route::post('/sales_order_component_delivery_info', [SalesOrderDeliveryController::class,'sales_order_component_delivery_info'])->name('SalesOrderDeliveryInfo')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_product_delivery_confirmed', [SalesOrderDeliveryController::class,'delete_sales_order_product_delivery_confirmed'])->name('SalesOrderDeleteDelivery')->middleware('isLoggedIn');
-
 
 /*Get Receivable Payment Item*/
 Route::post('/receivable_payment_list', [ReceivablesController::class,'receivable_payment_list'])->name('receivable_payment_list')->middleware('isLoggedIn');
@@ -275,11 +277,6 @@ Route::post('/sales_order_receivable_delete_payment', [ReceivablesController::cl
 Route::post('/billing_receivable_payment_post',[ReceivablesController::class,'billing_receivable_payment_post'])->name('billing_receivable_payment_post')->middleware('isLoggedIn');
 /*Delete Billing Payment Item*/
 Route::post('/billing_receivable_delete_payment', [ReceivablesController::class,'billing_receivable_delete_payment'])->name('BillingDeletePayment')->middleware('isLoggedIn');
-
-/*Delete Purchase Order Payment Item*/
-Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
-/*Update Purchase Status*/
-Route::post('/update_purchase_status', [PurchaseOrderController::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
 
 /*Purchase Order Version 2*/
 /*January 25, 2023*/
@@ -459,8 +456,6 @@ Route::post('/delete_cash_payment_report', [CashiersReport_Payment_Controller::c
 
 Route::post('/cashiers_report_p8_info', [CashiersReport_Payment_Controller::class, 'cashiers_report_p8_info'])->name('CRP8_info')->middleware('isLoggedIn');
 
-
-
 /*Dev Date Nov 30 2022*/
 /*Load Branch List*/
 Route::get('/branch', [BranchController::class,'branch'])->name('branch')->middleware('isLoggedIn');
@@ -473,7 +468,6 @@ Route::post('/branch_info', [BranchController::class, 'branch_info'])->name('Bra
 Route::post('/update_branch_post', [BranchController::class,'update_branch_post'])->name('UpdateBranch')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_branch_confirmed', [BranchController::class, 'delete_branch_confirmed'])->name('DeleteBranch')->middleware('isLoggedIn');
-
 
 
 /* Sales Summary */

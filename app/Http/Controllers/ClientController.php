@@ -31,7 +31,7 @@ class ClientController extends Controller
 	/*Fetch client List using Datatable*/
 	public function getClientList(Request $request)
     {
-		$list = ClientModel::get();
+		//$list = ClientModel::get();
 		if ($request->ajax()) {
 			$data = ClientModel::select(
 			'client_id',

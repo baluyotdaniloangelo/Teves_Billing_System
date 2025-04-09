@@ -67,12 +67,20 @@
 							
 							<div class="row mb-2">
 										
-										<div class="col-md-6">
+										<div class="col-md-4">
 											  <label for="update_purchase_order_net_percentage" class="form-label">Net Value</label>
 											  <input type="number" class="form-control" id="update_purchase_order_net_percentage" name="update_purchase_order_net_percentage" step=".01">
 										</div>
-									
-										<div class="col-md-6">
+										
+										<div class="col-md-4">
+											<label for="update_purchase_order_invoice" class="form-label">With Sales Invoice?</label>
+											<select class="form-select form-control" required="" name="update_purchase_order_invoice" id="update_purchase_order_invoice" onchange="check_withholding_tax()">
+												<option value="1" selected>Yes</option>
+												<option value="0">No</option>
+											</select>
+										</div>
+											
+										<div class="col-md-4">
 										  <label for="update_purchase_order_less_percentage" class="form-label">Less Value</label>
 										  <input type="number" class="form-control" id="update_purchase_order_less_percentage" name="update_purchase_order_less_percentage" step=".01">
 										</div>

@@ -155,28 +155,28 @@
 								<hr>
 								<div class="row">
 										
-										<div class="col-md-12">
-										
+										<div class="col-md-6">
 											<label for="sales_order_payment_type" class="form-label">Payment Type</label>
 											<select class="form-select form-control" required="" name="sales_order_payment_type" id="sales_order_payment_type">
-											
 												<option value="Receivable">Receivable</option>
 												<option value="PBD">Paid Before Delivery</option>
-											
 											</select>
-											
+										</div>
+										<div class="col-md-6">
+											<label for="sales_order_invoice" class="form-label">With Sales Invoice?</label>
+											<select class="form-select form-control" required="" name="sales_order_invoice" id="sales_order_invoice" onchange="check_withholding_tax()">
+												<option value="1" selected>Yes</option>
+												<option value="0">No</option>
+											</select>
 										</div>
 								</div>
 								<hr>
 								<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-6">
 											<label for="sales_order_net_percentage" class="form-label">Net Value</label>
 											<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" disabled>
 										</div>
-								</div>
-								<hr>
-								<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-6">
 											<label for="sales_order_withholding_tax" class="form-label">Withholding Tax</label>
 											<input type="number" class="form-control" id="sales_order_withholding_tax" name="sales_order_withholding_tax" disabled>
 										</div>

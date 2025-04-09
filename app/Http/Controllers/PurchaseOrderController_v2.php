@@ -225,7 +225,8 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_destination',
 						'teves_purchase_order_table.purchase_order_instructions',
 						'teves_purchase_order_table.purchase_order_note',
-						'teves_purchase_order_table.company_header'
+						'teves_purchase_order_table.company_header',
+						'teves_purchase_order_table.purchase_order_invoice'
 				]);	
 															
 					return response()->json($data);	
@@ -299,70 +300,51 @@ class PurchaseOrderController_v2 extends Controller
 		);
 		
 					
-			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
-			
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();				
 			$control_number = $BranchInfo->branch_initial."-PO-".$request->purchase_order_id+1;
 		
-			$Purchaseorder = new PurchaseOrderModel();
-			$Purchaseorder = PurchaseOrderModel::find($request->purchase_order_id);
-			$Purchaseorder->purchase_order_control_number 			= $control_number;
-			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
-			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
-					
-			$Purchaseorder->purchase_order_sales_order_number		= $request->purchase_order_sales_order_number;
-			$Purchaseorder->purchase_order_collection_receipt_no	= $request->purchase_order_collection_receipt_no;
-			$Purchaseorder->purchase_order_official_receipt_no		= $request->purchase_order_official_receipt_no;
-			$Purchaseorder->purchase_order_delivery_receipt_no		= $request->purchase_order_delivery_receipt_no;
-				
-			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
-			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
-					
-			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
-			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
-			
-			$Purchaseorder->hauler_operator							= $request->hauler_operator;
-			$Purchaseorder->lorry_driver							= $request->lorry_driver;			
-			
-			$Purchaseorder->plate_number							= $request->plate_number;
-					
-			$Purchaseorder->purchase_destination					= $request->purchase_destination;
-									
-			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
-			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
-			$Purchaseorder->company_header							= $request->company_header;		
-			$Purchaseorder->updated_by_user_id 						= Session::get('loginID');
-			
-			$result = $Purchaseorder->update();
-			
-				$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
+			/*Get Gross Amount*/
+			$order_total_amount = PurchaseOrderComponentModel::where('purchase_order_idx', $request->purchase_order_id)
 						->sum('order_total_amount');
-					
-				$gross_amount = $order_total_amount;
-		
-				$PurchaseOrderInfo = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
-						->get([
-								'purchase_order_net_percentage', 
-								'purchase_order_less_percentage'
-						]);	
-				
-				$net_in_percentage 				= $PurchaseOrderInfo[0]->purchase_order_net_percentage;/*1.12*/
-				$less_in_percentage 			= $PurchaseOrderInfo[0]->purchase_order_less_percentage/100;
+			$gross_amount = $order_total_amount;
+			
+			$net_in_percentage 				= $request->purchase_order_net_percentage;/*1.12*/
+			$less_in_percentage 			= $request->purchase_order_less_percentage/100;
 							
-				if($PurchaseOrderInfo[0]->purchase_order_net_percentage==0){
+				if($request->purchase_order_net_percentage==0){
 							$purchase_order_net_amount 			= 0;
 							$purchase_order_total_due 			=  number_format($gross_amount,4,".","");
 				}else{
 							$purchase_order_net_amount 			=  number_format($gross_amount/$net_in_percentage,4,".","");
 							$purchase_order_total_due 			=  number_format($gross_amount - (($gross_amount/$net_in_percentage)*$less_in_percentage),4,".","");
 				}
-				
-				$PurchaseOrderUpdate = new PurchaseOrderModel();
-				$PurchaseOrderUpdate = PurchaseOrderModel::find($request->purchase_order_id);
-				$PurchaseOrderUpdate->purchase_order_gross_amount = number_format($gross_amount,4,".","");
-				$PurchaseOrderUpdate->purchase_order_net_amount = $purchase_order_net_amount;
-				$PurchaseOrderUpdate->purchase_order_total_payable = $purchase_order_total_due;
-				$PurchaseOrderUpdate->update();	
 			
+			$Purchaseorder = new PurchaseOrderModel();
+			$Purchaseorder = PurchaseOrderModel::find($request->purchase_order_id);
+			$Purchaseorder->purchase_order_control_number 			= $control_number;
+			$Purchaseorder->purchase_order_date 					= $request->purchase_order_date;
+			$Purchaseorder->purchase_order_supplier_idx				= $request->supplier_idx;
+			$Purchaseorder->purchase_order_sales_order_number		= $request->purchase_order_sales_order_number;
+			$Purchaseorder->purchase_order_collection_receipt_no	= $request->purchase_order_collection_receipt_no;
+			$Purchaseorder->purchase_order_official_receipt_no		= $request->purchase_order_official_receipt_no;
+			$Purchaseorder->purchase_order_delivery_receipt_no		= $request->purchase_order_delivery_receipt_no;
+			$Purchaseorder->purchase_order_delivery_method			= $request->purchase_order_delivery_method;
+			$Purchaseorder->purchase_loading_terminal				= $request->purchase_loading_terminal;
+			$Purchaseorder->purchase_order_net_percentage			= $request->purchase_order_net_percentage;
+			$Purchaseorder->purchase_order_less_percentage			= $request->purchase_order_less_percentage;
+			$Purchaseorder->hauler_operator							= $request->hauler_operator;
+			$Purchaseorder->lorry_driver							= $request->lorry_driver;			
+			$Purchaseorder->plate_number							= $request->plate_number;	
+			$Purchaseorder->purchase_destination					= $request->purchase_destination;			
+			$Purchaseorder->purchase_order_instructions				= $request->purchase_order_instructions;
+			$Purchaseorder->purchase_order_note						= $request->purchase_order_note;
+			$Purchaseorder->company_header							= $request->company_header;		
+			$Purchaseorder->purchase_order_invoice					= $request->purchase_order_invoice;			
+			$Purchaseorder->purchase_order_gross_amount				= number_format($gross_amount,4,".","");
+			$Purchaseorder->purchase_order_net_amount				= $purchase_order_net_amount;
+			$Purchaseorder->purchase_order_total_payable			= $purchase_order_total_due;			
+			$Purchaseorder->updated_by_user_id 						= Session::get('loginID');
+			$result = $Purchaseorder->update();
 			
 			/*Get Last ID*/
 			$last_transaction_id = $Purchaseorder->purchase_order_id;
@@ -378,7 +360,7 @@ class PurchaseOrderController_v2 extends Controller
 	
 	public function get_purchase_order_product_list(Request $request){		
 	
-					$raw_query_purchase_order_component = "SELECT `teves_purchase_order_component_table`.`purchase_order_component_id`,
+			$raw_query_purchase_order_component = "SELECT `teves_purchase_order_component_table`.`purchase_order_component_id`,
 					IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
 					IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
 					`teves_purchase_order_component_table`.`product_idx`, `teves_purchase_order_component_table`.`product_price`, `teves_purchase_order_component_table`.`order_quantity`,
@@ -396,6 +378,42 @@ class PurchaseOrderController_v2 extends Controller
 
 	}
 	
+	/*Datatable*/
+	public function get_purchase_order_product_list_datatable(Request $request)
+    {
+
+		if ($request->ajax()) {
+			
+			
+			$raw_query_purchase_order_component = "SELECT `teves_purchase_order_component_table`.`purchase_order_component_id`,
+					IFNULL(`teves_product_table`.`product_name`,`teves_purchase_order_component_table`.item_description) as product_name,
+					IFNULL(`teves_product_table`.`product_unit_measurement`,'PC') as product_unit_measurement,
+					`teves_purchase_order_component_table`.`product_idx`, `teves_purchase_order_component_table`.`product_price`, `teves_purchase_order_component_table`.`order_quantity`,
+					`teves_purchase_order_component_table`.`order_total_amount`
+					from `teves_purchase_order_component_table`  left join `teves_product_table` on	 
+					`teves_product_table`.`product_id` = `teves_purchase_order_component_table`.`product_idx` where `purchase_order_idx` = ?		  
+					order by `purchase_order_component_id` asc";	
+					
+			$data = DB::select("$raw_query_purchase_order_component", [ $request->purchase_order_id]);	
+			
+			$paymentlist = PurchaseOrderPaymentModel::where('purchase_order_idx', '=', $request->purchase_order_id)->get();
+			$paymentcount = $paymentlist->count();
+			
+			return DataTables::of($data)
+					->addIndexColumn()
+					->addColumn('action', function($row){
+						$actionBtn = '
+						<div align="center">
+						<a href="#" data-id="'.$row->purchase_order_component_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editclient"></a>
+						<a href="#" data-id="'.$row->purchase_order_component_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteclient"></a>
+						</div>';
+						return $actionBtn;
+					})
+					->rawColumns(['action'])
+					->make(true);
+		}
+    }
+
 	public function get_purchase_order_payment_list(Request $request){		
 	
 			$data =  PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $request->purchase_order_id)

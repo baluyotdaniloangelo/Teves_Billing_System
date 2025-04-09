@@ -38,6 +38,8 @@
 			let sales_order_collection_receipt 			= $("input[name=sales_order_collection_receipt]").val();
 			
 			let payment_term 				= $("input[name=payment_term]").val();
+			let sales_order_invoice 		= $("#sales_order_invoice").val();
+		
 			let delivery_method 			= $("input[name=delivery_method]").val();
 			let hauler 						= $("input[name=hauler]").val();
 			let required_date 				= $("input[name=required_date]").val();
@@ -65,6 +67,7 @@
 				  sales_order_collection_receipt:sales_order_collection_receipt,
 				  
 				  payment_term:payment_term,
+				  sales_order_invoice:sales_order_invoice,
 				  delivery_method:delivery_method,
 				  hauler:hauler,
 				  required_date:required_date,
@@ -689,6 +692,18 @@
 			   });	
 			 
 	}	 
+	
+	function check_withholding_tax(){
+		
+			let sales_order_invoice = $("#sales_order_invoice").val();
+			
+			if(sales_order_invoice==1){
+				ClientInfo();
+			}else{
+				document.getElementById("sales_order_withholding_tax").value = 0;
+			}
+			
+	}
 
 	<!--Bill Deletion Confirmation-->
 	$('body').on('click','#deleteSalesOrderComponentProduct',function(){

@@ -18,13 +18,13 @@ class SalesOrderModel extends Model
     $activity->causer_id = Session::get('loginID');
 	}
 	
-
 	protected $table = 'teves_sales_order_table';
 	
 	protected $fillable = [
         'sales_order_client_idx',
 		'sales_order_control_number',
 		'sales_order_date',
+		'sales_order_invoice',
 		'sales_order_dr_number',
 		'sales_order_or_number',
 		'sales_order_po_number',
@@ -54,39 +54,6 @@ class SalesOrderModel extends Model
 		'updated_by_user_id'	
     ];
 	
-	
-	
-	/*
-	
-	$Salesorder->sales_order_client_idx 				= $request->client_idx;
-				$Salesorder->sales_order_control_number 			= $control_number;
-				$Salesorder->company_header 						= $request->company_header;
-				$Salesorder->sales_order_date 						= $request->sales_order_date;
-				$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
-				$Salesorder->sales_order_delivered_to_address 		= $request->delivered_to_address;
-				$Salesorder->sales_order_dr_number 					= $request->dr_number;
-			
-				$Salesorder->sales_order_or_number 					= $request->sales_order_or_number;
-				$Salesorder->sales_order_po_number 					= $request->sales_order_po_number;
-				$Salesorder->sales_order_charge_invoice 			= $request->sales_order_charge_invoice;
-				$Salesorder->sales_order_collection_receipt 		= $request->sales_order_collection_receipt;
-				
-				$Salesorder->sales_order_payment_term 				= $request->payment_term;
-				$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
-				$Salesorder->sales_order_hauler 					= $request->hauler;
-				$Salesorder->sales_order_required_date 				= $request->required_date;
-				$Salesorder->sales_order_instructions 				= $request->instructions;
-				$Salesorder->sales_order_note 						= $request->note;
-				
-				$Salesorder->sales_order_net_percentage 			= $request->sales_order_net_percentage;
-				$Salesorder->sales_order_withholding_tax 			= $request->sales_order_withholding_tax;
-				
-				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
-	
-	
-	*/
-	
-	
 	protected $primaryKey = 'sales_order_id';
 	
 	protected static $logName = 'Sales Order';
@@ -97,6 +64,7 @@ class SalesOrderModel extends Model
 		'sales_order_client_idx',
 		'sales_order_control_number',
 		'sales_order_date',
+		'sales_order_invoice',
 		'sales_order_dr_number',
 		'sales_order_or_number',
 		'sales_order_po_number',

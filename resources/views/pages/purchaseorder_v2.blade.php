@@ -47,7 +47,7 @@
 
 	<!--Modal to Create Purchase Order-->
 	<div class="modal fade" id="CreatePurchaseOrderModal" tabindex="-1">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Create Purchase Order</h5>
@@ -102,16 +102,20 @@
 									<hr>
 									
 									<div class="row">
-											<div class="col-md-12">
+											<div class="col-md-4">
 												<label for="purchase_order_net_percentage" class="form-label">Net Value</label>
 												<input type="number" class="form-control" id="purchase_order_net_percentage" name="purchase_order_net_percentage">
 											</div>
-									</div>
 									
-									<hr>
+											<div class="col-md-4">
+											<label for="purchase_order_invoice" class="form-label">With Sales Invoice?</label>
+											<select class="form-select form-control" required="" name="purchase_order_invoice" id="purchase_order_invoice" onchange="check_withholding_tax()">
+												<option value="1" selected>Yes</option>
+												<option value="0">No</option>
+											</select>
+											</div>
 									
-									<div class="row">
-											<div class="col-md-12">
+											<div class="col-md-4">
 												<label for="purchase_order_less_percentage" class="form-label">Less Value</label>
 												<input type="number" class="form-control" id="purchase_order_less_percentage" name="purchase_order_less_percentage">
 											</div>

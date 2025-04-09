@@ -49,7 +49,8 @@
 							</div>
 						</div>
 						</div>
-						<div class="row mb-2">
+						
+						<!--<div class="row mb-2">
 						<div class="col-sm-12">
 						
 							<div id="chartarea">
@@ -58,37 +59,51 @@
 							
 						</div>
 						
+						
+						
+						
+						
+						
+						
+						
+						{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+				{data: 'sales_order_date'},
+				{data: 'sales_order_control_number'},
+				{data: 'client_name'},   
+				{data: 'sales_order_payment_term'},   
+				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
+				{data: ({sales_order_net_amount,sales_order_withholding_tax}) => (Number(sales_order_net_amount)*Number(sales_order_withholding_tax/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
+				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
+				{data: 'sales_order_delivery_status'},  
+				{data: 'sales_order_payment_status'}  
+						
+						-->
+						
 						</div>
 						
 									<div class="table-responsive">
-										<table class="table dataTable display nowrap cell-border"  id="billingstatementreport" width="100%" cellspacing="0">
+										<table class="table dataTable display nowrap cell-border"  id="sale_sorder_summary_table" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
+													<th class="all">No.</th>
 													<th class="all">Date</th>
-													<th>1st Shift</th>
-													<th>2nd Shift</th>
-													<th>3rd Shift</th>
-													<th>4th Shift</th>
-													<th>5th Shift</th>
-													<th>6th Shift</th>
-													<th>Fuel Sales</th>
-													<th>Other Sales</th>
-													<th class="all">MSC - Total Sales</th>
-													<th class="all">MSC - Discounts</th>
-													<th class="all">MSC - Others</th>
-													<th class="all">Theoretical</th>
-													<th class="all"title="Total Cash On Hand">Cash</th>
-													<th class="all"title="Total Non-cash">Non-Cash</th>
-													<th class="all">Total Cash Sales</th>
-													<th class="all">Short/Over</th>
+													<th class="all">S.O. No.</th>
+													<th class="all">Account Name</th>
+													<th class="">Payment Term</th>
+													<th class="all">Gross Amount</th>
+													<th class="all">Withholding Tax</th>
+													<th class="all">Net Amount</th>
+													<th class="all">Total Due</th>
+													<th class="">Delivery Status</th>
+													<th class="">Payment Status</th>
 												</tr>
 											</thead>				
 											
 											<tbody>
 												
 											</tbody>
-											<tfoot>
+										<!--	<tfoot>
 											
 												<tr>
 													<td align="left" ></td>
@@ -112,7 +127,7 @@
 												</tr>
 											
 											
-											</tfoot>
+											</tfoot>-->
 										</table>
 									</div>		
 				</div>									

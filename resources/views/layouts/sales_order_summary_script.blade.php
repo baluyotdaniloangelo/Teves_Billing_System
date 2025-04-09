@@ -58,20 +58,17 @@
 	}
 
 	<!--Load Table-->
-	var branch_description_chart = [];
 	$("#generate_report").click(function(event){
 		
 			event.preventDefault();
-			branch_description_chart.pop();	
-			document.querySelector("#chartarea").innerHTML = '<canvas id="KWhChart" style="max-height: 400px; display: block; box-sizing: border-box; height: 393px; width: 787px;" width="787" height="393"></canvas>';
-
+			
 					/*Reset Warnings*/
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');		
 					
 					/*Reset Table Upon Resubmit form*/					
-					$("#billingstatementreport tbody").html("");					
+					$("#sale_sorder_summary_table tbody").html("");					
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
@@ -82,7 +79,7 @@
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
 			  $.ajax({
-				url: "/generate_daily_sales",
+				url: "/sales_order_summary_data",
 				type:"POST",
 				data:{
 				  start_date:start_date,
@@ -104,6 +101,7 @@
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
 				
+						/*
 						var total_fuel_sales = 0;
 						var total_discount = 0;
 						var total_cashout_other = 0;
@@ -147,11 +145,13 @@
 							var data_count = i+1;
 							addData(date_shift,total_daily_sales,data_count);
 							
-						}			
+						}	
+						*/						
 						
-						LoadBillingHistoryData.clear().draw();
-						LoadBillingHistoryData.rows.add(response.data).draw();	
+						LoadSalesOrderSummaryData.clear().draw();
+						LoadSalesOrderSummaryData.rows.add(response.data).draw();	
 							
+							/*
 							$('#total_fuel_sales').text(total_fuel_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							$('#total_discount').text(total_discount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							$('#total_cashout_other').text(total_cashout_other.toLocaleString("en-PH", {maximumFractionDigits: 2}));
@@ -164,7 +164,8 @@
 							$('#total_sales').text(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							$('#total_short_over').text(total_short_over.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-									
+							*/
+							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 							
@@ -173,7 +174,7 @@
 
 							$('#date_range_info').text(start_date_new_format + ' - ' +end_date_new_format);	
 						
-							branch_description_chart.push('Daily Sales');
+							//branch_description_chart.push('Daily Sales');
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_daily_sales_report_pdf()"> PDF</button>'+
@@ -189,7 +190,7 @@
 							$('#branch_name_report').text('');
 							$('#date_range_info').text('');
 							
-							$("#billingstatementreport tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
+							$("#sale_sorder_summary_table tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
 							$("#download_options").html(''); 
 				
 					}
@@ -224,83 +225,13 @@
 				  
 				}
 			   });
-		
-		/*chart Setup*/		
-		var canvas = document.getElementById("KWhChart");
-		var ctx = canvas.getContext('2d');
-		var chartType = 'bar';
-		var myBarChart;
-			  
-		var data = {
-		  labels: [],
-		  datasets: [{
-			label: branch_description_chart,
-			fill: false,
-			lineTension: 0.1,
-			backgroundColor: "#ffab11",
-			borderColor: "#ffab11", // The main line color
-			borderCapStyle: 'square',
-			pointBorderColor: "white",
-			pointBackgroundColor: "#ffab11",
-			pointBorderWidth: 1,
-			pointHoverRadius: 4,
-			pointHoverBackgroundColor: "green",
-			pointHoverBorderColor: "rgba(33, 124, 83, 0.8)",
-			pointHoverBorderWidth: 9,
-			pointRadius: 2,
-			pointHitRadius: 5,
-			data: [],
-			spanGaps: true,
-		  }]
-		};
-				
-		var options = {
-		  /*scales: {
-			yAxes: [{
-			  ticks: {
-				beginAtZero: true
-			  }
-			}]
-		  },*/
-		  title: {
-			fontSize: 18,
-			display: true,
-			text: '',
-			position: 'bottom'
-		  }
-		};
 
-		init();
-
-		function init() {
-		  // Chart declaration:
-		  myBarChart = new Chart(ctx, {
-			type: chartType,
-			data: data,
-			options: options
-		  });
-		}
-
-		function removeData(myBarChart) {
-			myBarChart.data.labels.pop();
-			myBarChart.data.datasets.forEach((dataset) => {
-				dataset.data.pop();
-			});
-			myBarChart.update();
-		}
-
-		function addData(datetime,kwh_total,data_count) {
-			  myBarChart.data.labels[data_count] =datetime;
-			  myBarChart.data.datasets[0].data[data_count] = kwh_total;
-			  myBarChart.update();
-		}
-	
 	});
 
 		  
 
 		/*Load to Datatables*/	
-		let LoadBillingHistoryData = $('#billingstatementreport').DataTable({
+		let LoadSalesOrderSummaryData = $('#sale_sorder_summary_table').DataTable({
 				"language": {
 						"emptyTable": "No Result Found",
 						"infoEmpty": "No entries to show"
@@ -317,29 +248,22 @@
 				scrollY: '500px',
 				scrollx: true,
 				"columns": [
-				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
-				/*1*/	{data: 'date', className: "text-center", orderable: false },
-				/*2*/	{data: 'first_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*3*/	{data: 'second_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*4*/	{data: 'third_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
-				/*5*/	{data: 'fourth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
-				/*6*/	{data: 'fifth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*7*/	{data: 'sixth_shift_total_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*8*/	{data: 'daily_fuel_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*9*/	{data: 'daily_other_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*10*/	{data: 'shift_total_sales_sum', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*11*/	{data: 'daily_discount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*12*/	{data: 'daily_cashout_other', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*13*/	{data: 'daily_theoretical_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*14*/	{data: 'daily_cash_transaction', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*15*/	{data: 'daily_non_cash_payment', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*16*/	{data: 'daily_total_cash_sales', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*17*/	{data: 'daily_short_over', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+				{data: 'sales_order_date'},
+				{data: 'sales_order_control_number'},
+				{data: 'client_name'},   
+				{data: 'sales_order_payment_term'},   
+				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
+				{data: ({sales_order_net_amount,sales_order_withholding_tax}) => (Number(sales_order_net_amount)*Number(sales_order_withholding_tax/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
+				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
+				{data: 'sales_order_delivery_status'},  
+				{data: 'sales_order_payment_status'}  
 				],
 				
 		});
 		
-	autoAdjustColumns(LoadBillingHistoryData);
+	autoAdjustColumns(LoadSalesOrderSummaryData);
 
 		 /*Adjust Table Column*/
 		 function autoAdjustColumns(table) {
@@ -363,7 +287,7 @@
 			_token: "{{ csrf_token() }}"
 		}
 
-		var url = "{{URL::to('generate_daily_sales_report_pdf')}}?" + $.param(query)
+		var url = "{{URL::to('generate_sales_order_summary_report_pdf')}}?" + $.param(query)
 		window.open(url);
 	  
 	}
