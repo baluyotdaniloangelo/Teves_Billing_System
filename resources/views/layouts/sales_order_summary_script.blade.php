@@ -75,6 +75,7 @@
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let company_header 		= $("#company_header").val();	
+			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
@@ -85,6 +86,7 @@
 				  start_date:start_date,
 				  end_date:end_date,
 				  company_header:company_header,
+				  client_idx:client_idx,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -101,70 +103,35 @@
 					$('#start_dateError').text('');
 					$('#end_dateError').text('');	
 				
-						/*
-						var total_fuel_sales = 0;
-						var total_discount = 0;
-						var total_cashout_other = 0;
-						var total_other_sales = 0;
-						var total_theoretical_sales = 0;
 						
-						var total_cash_tansaction = 0;
-						var total_non_cash_payment = 0;
-						var total_cash_sales = 0;
-						
-						var total_sales = 0;
-						var total_short_over = 0;
+						var total_gross_amount = 0;
+						var total_withholding_tax = 0;
+						var total_net_amount = 0;
+						var total_amount_due  = 0;
 						
 						var len = response['data'].length;
 						
 						for(var i=0; i<len; i++){
 							
-							var date_shift 						= response['data'][i].date;
-							var first_shift_total_sales 		= response['data'][i].first_shift_total_sales;
-							var second_shift_total_sales 		= response['data'][i].second_shift_total_sales;
-							var third_shift_total_sales 		= response['data'][i].third_shift_total_sales;
-							var fourth_shift_total_sales 		= response['data'][i].fourth_shift_total_sales;
-							var fifth_shift_total_sales 		= response['data'][i].fifth_shift_total_sales;
-							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
-							
-							total_fuel_sales 					+= response['data'][i].daily_fuel_sales;
-							total_discount 						+= response['data'][i].daily_discount;
-							total_cashout_other 				+= response['data'][i].daily_cashout_other;
-							total_other_sales 					+= response['data'][i].daily_other_sales;
-							total_theoretical_sales 			+= response['data'][i].daily_theoretical_sales;
-							
-							total_cash_tansaction 				+= response['data'][i].daily_cash_transaction;
-							total_non_cash_payment 				+= response['data'][i].daily_non_cash_payment;
-							total_cash_sales 					+= response['data'][i].daily_total_cash_sales;
+							total_gross_amount 		+= response['data'][i].sales_order_gross_amount;
+							total_withholding_tax 	+= response['data'][i].sales_order_net_amount*response['data'][i].sales_order_withholding_tax/100;
+							total_net_amount 		+= response['data'][i].sales_order_net_amount;
+							total_amount_due 		+= response['data'][i].sales_order_total_due;
 	
-							total_daily_sales = first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
-		
-							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;					
-							total_short_over += response['data'][i].daily_short_over;
-							
-							var data_count = i+1;
-							addData(date_shift,total_daily_sales,data_count);
+							//var data_count = i+1;
+							//addData(date_shift,total_daily_sales,data_count);
 							
 						}	
-						*/						
+												
 						
 						LoadSalesOrderSummaryData.clear().draw();
 						LoadSalesOrderSummaryData.rows.add(response.data).draw();	
 							
-							/*
-							$('#total_fuel_sales').text(total_fuel_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_discount').text(total_discount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_cashout_other').text(total_cashout_other.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_other_sales').text(total_other_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_theoretical_sales').text(total_theoretical_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_cash_tansaction').text(total_cash_tansaction.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_non_cash_payment').text(total_non_cash_payment.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							$('#total_cash_sales').text(total_cash_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							
-							$('#total_sales').text(total_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							
-							$('#total_short_over').text(total_short_over.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-							*/
+							/**/
+							$('#total_gross_amount').text(total_gross_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_withholding_tax').text(total_withholding_tax.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_net_amount').text(total_net_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_amount_due').text(total_amount_due.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -236,9 +203,6 @@
 						"emptyTable": "No Result Found",
 						"infoEmpty": "No entries to show"
 			    }, 
-				// processing: true,
-				//serverSide: true,
-				//stateSave: true,/*Remember Searches*/
 				responsive: true,
 				paging: false,
 				searching: false,
@@ -257,8 +221,8 @@
 				{data: ({sales_order_net_amount,sales_order_withholding_tax}) => (Number(sales_order_net_amount)*Number(sales_order_withholding_tax/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
 				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
-				{data: 'sales_order_delivery_status'},  
-				{data: 'sales_order_payment_status'}  
+				{data: 'sales_order_delivery_status', className: "text-center",},  
+				{data: 'sales_order_payment_status',  className: "text-center",}  
 				],
 				
 		});
@@ -279,15 +243,22 @@
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let company_header 		= $("#company_header").val();
+			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			
 		var query = {
 			start_date:start_date,
 			end_date:end_date,
 			company_header:company_header,
+			client_idx:client_idx,
 			_token: "{{ csrf_token() }}"
 		}
 
-		var url = "{{URL::to('generate_sales_order_summary_report_pdf')}}?" + $.param(query)
+		if(client_idx!='All'){
+			var url = "{{URL::to('generate_sales_order_summary_report_per_client_pdf')}}?" + $.param(query)
+		}else{
+			var url = "{{URL::to('generate_sales_order_summary_report_pdf')}}?" + $.param(query)
+		}
+		
 		window.open(url);
 	  
 	}

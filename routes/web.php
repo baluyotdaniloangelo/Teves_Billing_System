@@ -248,6 +248,7 @@ Route::get('/sales_order_summary', [SalesOrderController::class,'sales_order_sum
 Route::post('/sales_order_summary_data', [SalesOrderController::class,'sales_order_summary_data'])->name('sales_order_summary_data')->middleware('isLoggedIn');
 /*Generate via Web Page View - For Sales Order Summary*/
 Route::get('/generate_sales_order_summary_report_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_pdf'])->name('generate_sales_order_summary_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_sales_order_summary_report_per_client_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_per_client_pdf'])->name('generate_sales_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
 
 
 /*New Version for Sales Order*/

@@ -922,6 +922,7 @@ class SalesOrderController extends Controller
 			);
 
 			$company_header = $request->company_header;
+			$client_idx = $request->client_idx;
 			$start_date = $request->start_date;
 			$end_date = $request->end_date;
 			
@@ -934,7 +935,13 @@ class SalesOrderController extends Controller
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
 							}
-						})	
+						})
+					->WHERE(function ($r) use($client_idx) {
+							if ($client_idx!='All') {
+									
+									$r->where('sales_order_client_idx',$client_idx);
+							}
+						})
               		->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
@@ -957,9 +964,6 @@ class SalesOrderController extends Controller
 		}
     }
 
-public function generate_sales_order_summary_report_pdfm(Request $request){
-		return 'AAA';
-}
 	public function generate_sales_order_summary_report_pdf(Request $request){
 
 		if(Session::has('loginID')){
@@ -975,7 +979,7 @@ public function generate_sales_order_summary_report_pdfm(Request $request){
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
 							}
-						})	
+						})
               		->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
@@ -998,13 +1002,67 @@ public function generate_sales_order_summary_report_pdfm(Request $request){
 		
 		$title = 'Sales Order - Summary';
 		 // sleep(60);
-        $pdf = PDF::loadView('printables.report_sales_order_summary_soa_pdf', compact('title', 'sales_order_data', 'user_data','receivable_header','start_date','end_date'));
+        $pdf = PDF::loadView('printables.report_sales_order_summary_pdf', compact('title', 'sales_order_data', 'user_data','receivable_header','start_date','end_date'));
 		//return view("printables.report_sales_order_summary_soa_pdf", compact('title', 'sales_order_data', 'user_data','receivable_header','start_date','end_date'));
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_header['branch_code']."_Sales_Order_Summary.pdf");
+		
+		}
+	}		
+	
+		public function generate_sales_order_summary_report_per_client_pdf(Request $request){
+
+		if(Session::has('loginID')){
+		$current_user = Session::get('loginID');
+		$company_header = $request->company_header;
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+	    $sales_order_data = SalesOrderModel::where('company_header',$company_header)
+					->whereBetween('teves_sales_order_table.sales_order_date', ["$start_date", "$end_date"])
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})
+					->WHERE(function ($r) use($client_idx) {
+							if ($client_idx!='All') {
+									$r->where('sales_order_client_idx',$client_idx);
+							}
+						})
+              		->get([
+					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.sales_order_date',
+					'teves_sales_order_table.sales_order_payment_term',	
+					'teves_sales_order_table.sales_order_gross_amount',	
+					'teves_sales_order_table.sales_order_net_amount',	
+					'teves_sales_order_table.sales_order_withholding_tax',
+					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_payment_term',
+					'teves_sales_order_table.sales_order_total_due',
+					'teves_sales_order_table.sales_order_payment_status',
+					'teves_sales_order_table.sales_order_delivery_status',
+					'teves_sales_order_table.created_at']);			
+					
+		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);			
+		
+		$title = 'Sales Order - Summary';
+		
+        $pdf = PDF::loadView('printables.report_sales_order_summary_per_client_pdf', compact('title', 'sales_order_data', 'user_data', 'receivable_header', 'client_data', 'start_date','end_date'));
+		/*Download Directly*/
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($client_data['client_name']."_Sales_Order_Summary.pdf");
 		
 		}
 	}		

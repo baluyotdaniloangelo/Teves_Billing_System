@@ -58,26 +58,6 @@
 							</div>
 							
 						</div>
-						
-						
-						
-						
-						
-						
-						
-						
-						{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-				{data: 'sales_order_date'},
-				{data: 'sales_order_control_number'},
-				{data: 'client_name'},   
-				{data: 'sales_order_payment_term'},   
-				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
-				{data: ({sales_order_net_amount,sales_order_withholding_tax}) => (Number(sales_order_net_amount)*Number(sales_order_withholding_tax/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
-				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
-				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
-				{data: 'sales_order_delivery_status'},  
-				{data: 'sales_order_payment_status'}  
-						
 						-->
 						
 						</div>
@@ -103,31 +83,21 @@
 											<tbody>
 												
 											</tbody>
-										<!--	<tfoot>
 											
+											<tfoot>
 												<tr>
 													<td align="left" ></td>
-													<td align="left">TOTAL</td>
+													<td align="left"></td>
 													<td align="left" ></td>
 													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_fuel_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_other_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_discount" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cashout_other" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_theoretical_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cash_tansaction" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_non_cash_payment" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cash_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_short_over" style="font-weight: normal;">0.00</span></td>
+													<td align="left" >TOTAL:</td>
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_gross_amount" style="font-weight: normal;">0.00</span></td>
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_withholding_tax" style="font-weight: normal;">0.00</span></td>
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_net_amount" style="font-weight: normal;">0.00</span></td>
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_amount_due" style="font-weight: normal;">0.00</span></td>
+													<td align="left" colspan="2"></td>
 												</tr>
-											
-											
-											</tfoot>-->
+											</tfoot>
 										</table>
 									</div>		
 				</div>									
@@ -138,10 +108,10 @@
 
 	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateReportModal" tabindex="-1">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Daily Sales Report</h5>
+                      <h5 class="modal-title">Sales Order</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -156,6 +126,7 @@
 						  <div class="col-sm-8">
 						  
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
+							
 							@foreach ($teves_branch as $teves_branch_cols)
 								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 							@endforeach
@@ -164,6 +135,19 @@
 						  </div>
 						</div>
 					  
+					  <div class="row mb-2">
+						  <label for="client_idx" class="col-sm-4 col-form-label">Client</label>
+						  <div class="col-sm-8">
+							<input class="form-control" list="client_name" name="client_name" id="client_id"  autocomplete="off">
+								<datalist id="client_name">
+									<option label="All" data-id="All" value="All">
+									@foreach ($client_data as $client_data_cols)
+										<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+									@endforeach
+								</datalist>
+							<span class="valid-feedback" id="client_idxError"></span>
+						  </div>
+						</div>
 					  
 						<div class="row mb-2">
 						  <label for="start_date" class="col-sm-4 col-form-label">Start Date</label>

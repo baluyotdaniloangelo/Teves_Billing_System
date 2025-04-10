@@ -131,16 +131,23 @@
 		</tr>
 		<?php 
 			$no = 1;
-			$total_payment = 0;
-			$current_balance = 0;
+			$total_gross_amount = 0;
+			$total_withholding_tax = 0;
+			$total_net_amount = 0;
+			$total_amount_due = 0;
 			?>
 		@foreach ($sales_order_data as $sales_order_data_data_cols)
 			<?php
 				$_sales_order_date=date_create("$sales_order_data_data_cols->sales_order_date");
 				$sales_order_date = strtoupper(date_format($_sales_order_date,"M/d/Y"));
 				
-				$current_balance += $sales_order_data_data_cols->receivable_remaining_balance;			
-				$sales_order_withholding_tax = $sales_order_data_data_cols['sales_order_gross_amount'] * $sales_order_data_data_cols['sales_order_withholding_tax']/100
+				//$current_balance += $sales_order_data_data_cols->receivable_remaining_balance;			
+				$sales_order_withholding_tax = $sales_order_data_data_cols['sales_order_gross_amount'] * $sales_order_data_data_cols['sales_order_withholding_tax']/100;
+				
+				$total_gross_amount 	+= $sales_order_data_data_cols['sales_order_gross_amount'];
+				$total_withholding_tax 	+= $sales_order_withholding_tax;
+				$total_net_amount 		+= $sales_order_data_data_cols['sales_order_net_amount'];
+				$total_amount_due 		+= $sales_order_data_data_cols['sales_order_total_due'];
 			?>
 		<tr style="font-size:12px;">
 			
@@ -163,7 +170,19 @@
 			?>
 			
 		@endforeach
-		
+		<tr style="font-size:12px;">
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
+			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
+			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
+			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
+			<td colspan="1" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">Total:</td>	
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount,2);?></td>			
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_withholding_tax);?></td>			
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount,2);?></td>			
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due,2);?></td>			
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>			
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>			
+		</tr>
 		<tr>
 			<td colspan="11" style="height:5.66px !important;"></td>
 		</tr>
