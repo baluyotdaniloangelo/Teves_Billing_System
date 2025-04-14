@@ -136,8 +136,12 @@
               <i class="bi bi-file-earmark-text navbar_icon" title="Billing History"></i><span> Billing History</span>
             </a>
 			
-			<a href="{{ route('salesordersummary') }}" class="sidebar_li_a" title="Daily Sales">
-              <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Sales Order</span>
+			<a href="{{ route('salesordersummary') }}" class="sidebar_li_a" title="Sales Summary">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Sales Order Summary"></i><span> Sales Order</span>
+            </a>		
+			
+			<a href="{{ route('purchaseordersummary') }}" class="sidebar_li_a" title="Purchase Order Summary">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Purchase Order Summary"></i><span> Purchase Order</span>
             </a>
 			
 			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">

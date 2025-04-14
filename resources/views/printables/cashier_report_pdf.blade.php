@@ -497,7 +497,11 @@
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_non_cash_payment,2,".",",");?></td>
 								</tr>
 								
-
+								<tr>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>TOTAL SALES</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_cash_tansaction + $total_non_cash_payment,2,".",",");?></td>
+								</tr>
+								
 								<tr>
 								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;" colspan=2>CASH(SHORT/OVER)</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($short_over,2,".",",");?></td>

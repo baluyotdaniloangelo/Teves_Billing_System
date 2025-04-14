@@ -192,6 +192,7 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->cashier_report_remarks 	= $request->cashier_report_remarks;
 			$CashiersReportCreate->shift 					= $request->shift;
+			$CashiersReportCreate->created_by_user_idx 		= Session::get('loginID');
 			$result = $CashiersReportCreate->save();
 			
 			/*Get Last ID*/
@@ -246,6 +247,7 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->shift 					= $request->shift;
 			$CashiersReportCreate->cashier_report_remarks 	= $request->cashier_report_remarks;
+			$CashiersReportCreate->updated_by_user_idx 		= Session::get('loginID');
 			$result = $CashiersReportCreate->update();
 			
 			if($result){
@@ -301,9 +303,7 @@ class CashiersReportController extends Controller
 		CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportID)->delete();
 		
 		/*Delete SO and Billing ITEM*/
-		
 		SOBillingTransactionModel::where('cashiers_report_idx', $CashiersReportID)->delete();
-		
 		BillingTransactionModel::where('cashiers_report_idx', $CashiersReportID)->delete();
 		
 		return 'Deleted';
@@ -798,7 +798,7 @@ class CashiersReportController extends Controller
 							$SOBilling->client_idx 			= $request->client_idx;
 							$SOBilling->plate_no 			= 'N/A';
 							$SOBilling->drivers_name 		= 'N/A';
-							$SOBilling->created_by_user_id 	= Session::get('loginID');
+							$SOBilling->created_by_user_idx 	= Session::get('loginID');
 							$result_so = $SOBilling->save();
 							
 							$so_id 		= $SOBilling->so_id;
@@ -824,6 +824,7 @@ class CashiersReportController extends Controller
 						$Billing->product_price 		= $product_price;
 						$Billing->order_quantity 		= $request->order_quantity;
 						$Billing->order_total_amount 	= $peso_sales;
+						$Billing->created_by_user_idx 	= Session::get('loginID');
 						$result_Billing = $Billing->save();
 						
 						$billing_id 		= $Billing->billing_id;
@@ -852,6 +853,8 @@ class CashiersReportController extends Controller
 							$Billing->product_price 		= $product_price;
 							$Billing->order_quantity 		= $request->order_quantity;
 							$Billing->order_total_amount 	= $peso_sales;
+							$Billing->updated_by_user_idx 	= Session::get('loginID');
+							
 							$result = $Billing->update();
 						}
 						

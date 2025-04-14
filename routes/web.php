@@ -244,9 +244,9 @@ Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class,'generate_sales_order_delivery_status_pdf'])->name('generate_sales_order_delivery_status_pdf')->middleware('isLoggedIn');
 
+/*Generate via Web Page View - For Sales Order Summary - April 7, 2025*/
 Route::get('/sales_order_summary', [SalesOrderController::class,'sales_order_summary'])->name('salesordersummary')->middleware('isLoggedIn');
 Route::post('/sales_order_summary_data', [SalesOrderController::class,'sales_order_summary_data'])->name('sales_order_summary_data')->middleware('isLoggedIn');
-/*Generate via Web Page View - For Sales Order Summary*/
 Route::get('/generate_sales_order_summary_report_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_pdf'])->name('generate_sales_order_summary_report_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_summary_report_per_client_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_per_client_pdf'])->name('generate_sales_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
 
@@ -295,8 +295,12 @@ Route::post('/update_purchase_order_post', [PurchaseOrderController_v2::class,'u
 Route::post('/create_purchase_order_product_item', [PurchaseOrderController_v2::class,'create_purchase_order_product_item'])->name('PurchaseOrderProduct')->middleware('isLoggedIn');
 /*Create Product for Purchase Order*/
 Route::post('/create_purchase_order_post_v2', [PurchaseOrderController_v2::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
-
 Route::post('/purchase_order_product_info', [PurchaseOrderController_v2::class,'purchase_order_product_info'])->name('purchase_order_product_info')->middleware('isLoggedIn');
+/*Generate via Web Page View - For Purchase Order Summary - April 12, 2025*/
+Route::get('/purchase_order_summary', [PurchaseOrderController_v2::class,'purchase_order_summary'])->name('purchaseordersummary')->middleware('isLoggedIn');
+Route::post('/purchase_order_summary_data', [PurchaseOrderController_v2::class,'purchase_order_summary_data'])->name('purchase_order_summary_data')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_pdf'])->name('generate_purchase_order_summary_report_pdf')->middleware('isLoggedIn');
+//Route::get('/generate_sales_order_summary_report_per_client_pdf', [PurchaseOrderController_v2::class,'generate_sales_order_summary_report_per_client_pdf'])->name('generate_sales_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
 
 /*Get Purchase Order Product Item*/
 Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');

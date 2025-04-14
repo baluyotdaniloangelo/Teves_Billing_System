@@ -33,7 +33,7 @@
 				<hr>
 				<div class="row mb-2">
 				
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 							
 					<div class="row mb-2">
 					<div class="col-sm-12">
@@ -156,7 +156,7 @@
 						
 					</div>
 				
-					<div class="col-sm-7">
+					<div class="col-sm-8">
 					 <!-- Default Tabs -->
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <!-- nav-link active -->
@@ -184,10 +184,14 @@
 							<th style="text-align:center !important;" class="action_column_class">Action</th>
 							<th style="text-align:center !important;">Item #</th>
 							<th style="text-align:center !important;">Description</th>
+							<th style="text-align:center !important;">SO Number</th>
 							<th style="text-align:center !important;">Price</th>
 							<th style="text-align:center !important;">Quantity</th>
 							<th style="text-align:center !important;">Unit</th>
 							<th style="text-align:center !important;">Amount</th>	
+							<th style="text-align:center !important;">Date Encoded</th>	
+							<th style="text-align:center !important;">Date Updated</th>	
+							<?php if(Session::get('UserType')=="Admin"){ ?> <th style="text-align:center !important;">Cashiers ID Ref.</th>	<?php } ?>
 						</tr>
 						</thead>
 							<tbody id="table_sales_order_product_body_data">

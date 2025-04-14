@@ -49,7 +49,8 @@
 							</div>
 						</div>
 						</div>
-						<div class="row mb-2">
+						
+						<!--<div class="row mb-2">
 						<div class="col-sm-12">
 						
 							<div id="chartarea">
@@ -57,61 +58,49 @@
 							</div>
 							
 						</div>
+						-->
 						
 						</div>
 						
 									<div class="table-responsive">
-										<table class="table dataTable display nowrap cell-border"  id="billingstatementreport" width="100%" cellspacing="0">
+										<table class="table dataTable display nowrap cell-border"  id="sale_sorder_summary_table" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
+													<th class="all">No.</th>
 													<th class="all">Date</th>
-													<th>1st Shift</th>
-													<th>2nd Shift</th>
-													<th>3rd Shift</th>
-													<th>4th Shift</th>
-													<th>5th Shift</th>
-													<th>6th Shift</th>
-													<th>Fuel Sales</th>
-													<th>Other Sales</th>
-													<th class="all">MSC - SO</th>
-													<th class="all">MSC - Discounts</th>
-													<th class="all">MSC - Others</th>
-													<th class="all">Theoretical</th>
-													<th class="all"title="Total Cash On Hand">Cash</th>
-													<th class="all"title="Total Non-cash">Non-Cash</th>
-													<th class="all">Total Cash Sales</th>
-													<th class="all">Short/Over</th>
+													<th class="all">Control Number</th>
+													<th class="all">Supplier</th>
+													<th class="none">Sales Order #</th>
+													<th class="none">Sales Invoice #</th>
+													<th class="all">Total Sale</th>
+													<th class="all">VATable Sales</th>
+													<th class="all">Withholding Tax</th>
+													<th class="all">Total Payable</th>
+													<th class="all">Withdrawal Status</th>
+													<th class="all">Payment Status</th>
 												</tr>
 											</thead>				
 											
 											<tbody>
 												
 											</tbody>
-											<tfoot>
 											
+											<tfoot>
 												<tr>
 													<td align="left" ></td>
-													<td align="left">TOTAL</td>
+													<td align="left"></td>
 													<td align="left" ></td>
 													<td align="left" ></td>
 													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_fuel_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_other_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_discount" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cashout_other" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_theoretical_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cash_tansaction" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_non_cash_payment" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_cash_sales" style="font-weight: normal;">0.00</span></td>
-													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_short_over" style="font-weight: normal;">0.00</span></td>
+													<td align="left" >TOTAL:</td>
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_gross_amount" style="font-weight: normal;">0.00</span></td>
+													
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_net_amount" style="font-weight: normal;">0.00</span></td>
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_withholding_tax" style="font-weight: normal;">0.00</span></td>
+													
+													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_amount_due" style="font-weight: normal;">0.00</span></td>
+													<td align="left" colspan="2"></td>
 												</tr>
-											
-											
 											</tfoot>
 										</table>
 									</div>		
@@ -123,10 +112,10 @@
 
 	<!--Modal to Create Client-->
 	<div class="modal fade" id="CreateReportModal" tabindex="-1">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Daily Sales Report</h5>
+                      <h5 class="modal-title">Purchase Order</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -141,6 +130,7 @@
 						  <div class="col-sm-8">
 						  
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
+							
 							@foreach ($teves_branch as $teves_branch_cols)
 								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 							@endforeach
@@ -149,7 +139,20 @@
 						  </div>
 						</div>
 					  
-					  
+					  <div class="row mb-2">
+						  <label for="supplier_idx" class="col-sm-4 col-form-label">Supplier's Name</label>
+						  <div class="col-sm-8">
+							<input class="form-control" list="supplier_name" name="supplier_name" id="supplier_idx"  autocomplete="off">
+								<datalist id="supplier_name">
+									<option label="All" data-id="All" value="All">
+									 @foreach ($supplier_data as $supplier_data_cols)
+											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">
+											  @endforeach
+								</datalist>
+							<span class="valid-feedback" id="supplier_idxError"></span>
+						  </div>
+						</div>
+									
 						<div class="row mb-2">
 						  <label for="start_date" class="col-sm-4 col-form-label">Start Date</label>
 						  <div class="col-sm-8">
