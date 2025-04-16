@@ -798,7 +798,7 @@ class CashiersReportController extends Controller
 							$SOBilling->client_idx 			= $request->client_idx;
 							$SOBilling->plate_no 			= 'N/A';
 							$SOBilling->drivers_name 		= 'N/A';
-							$SOBilling->created_by_user_idx 	= Session::get('loginID');
+							$SOBilling->created_by_user_id 	= Session::get('loginID');
 							$result_so = $SOBilling->save();
 							
 							$so_id 		= $SOBilling->so_id;
