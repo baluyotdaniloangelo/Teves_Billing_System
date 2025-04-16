@@ -192,7 +192,7 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->cashier_report_remarks 	= $request->cashier_report_remarks;
 			$CashiersReportCreate->shift 					= $request->shift;
-			$CashiersReportCreate->created_by_user_idx 		= Session::get('loginID');
+			$CashiersReportCreate->created_by_user_id 		= Session::get('loginID');
 			$result = $CashiersReportCreate->save();
 			
 			/*Get Last ID*/
@@ -247,7 +247,7 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->shift 					= $request->shift;
 			$CashiersReportCreate->cashier_report_remarks 	= $request->cashier_report_remarks;
-			$CashiersReportCreate->updated_by_user_idx 		= Session::get('loginID');
+			$CashiersReportCreate->updated_by_user_id 		= Session::get('loginID');
 			$result = $CashiersReportCreate->update();
 			
 			if($result){
