@@ -1030,4 +1030,62 @@ class PurchaseOrderController_v2 extends Controller
 		
 		}
 	}	
+	
+	public function generate_purchase_order_summary_report_per_client_pdf(Request $request){
+
+		if(Session::has('loginID')){
+		$current_user = Session::get('loginID');
+		
+		$company_header = $request->company_header;
+		$supplier_idx = $request->supplier_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+
+		$supplier_data = SupplierModel::find($supplier_idx, ['supplier_name','supplier_address','supplier_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
+		
+	    $purchase_order_data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+						->whereBetween('teves_purchase_order_table.purchase_order_date', ["$start_date", "$end_date"])
+						->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_purchase_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})
+						->WHERE(function ($r) use($supplier_idx) {
+							if ($supplier_idx!='All') {
+									
+									$r->where('purchase_order_supplier_idx',$supplier_idx);
+							}
+						})	
+              	->get([
+						'teves_purchase_order_table.purchase_order_id',
+						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_control_number',
+						'teves_purchase_order_table.purchase_order_sales_order_number',
+						'teves_purchase_order_table.purchase_order_official_receipt_no',
+						'teves_supplier_table.supplier_name',
+						'teves_purchase_order_table.purchase_order_gross_amount',
+						'teves_purchase_order_table.purchase_order_net_amount',
+						'teves_purchase_order_table.purchase_order_less_percentage',
+						'teves_purchase_order_table.purchase_order_total_payable',
+						'teves_purchase_order_table.purchase_status',
+						'teves_purchase_order_table.purchase_order_delivery_status',
+						'teves_purchase_order_table.created_at'
+				]);			
+					
+		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'Purchase Order - Summary';
+        $pdf = PDF::loadView('printables.report_purchase_order_summary_per_client_pdf', compact('title', 'purchase_order_data', 'user_data','receivable_header','start_date','end_date','supplier_data'));
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($receivable_header['branch_code']."_Sales_Order_Summary.pdf");
+		
+		}
+	}	
 }

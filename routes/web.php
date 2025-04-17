@@ -300,7 +300,7 @@ Route::post('/purchase_order_product_info', [PurchaseOrderController_v2::class,'
 Route::get('/purchase_order_summary', [PurchaseOrderController_v2::class,'purchase_order_summary'])->name('purchaseordersummary')->middleware('isLoggedIn');
 Route::post('/purchase_order_summary_data', [PurchaseOrderController_v2::class,'purchase_order_summary_data'])->name('purchase_order_summary_data')->middleware('isLoggedIn');
 Route::get('/generate_purchase_order_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_pdf'])->name('generate_purchase_order_summary_report_pdf')->middleware('isLoggedIn');
-//Route::get('/generate_sales_order_summary_report_per_client_pdf', [PurchaseOrderController_v2::class,'generate_sales_order_summary_report_per_client_pdf'])->name('generate_sales_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_per_client_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_per_client_pdf'])->name('generate_purchase_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
 
 /*Get Purchase Order Product Item*/
 Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
