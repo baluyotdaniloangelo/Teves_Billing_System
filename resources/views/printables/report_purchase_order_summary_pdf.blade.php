@@ -111,20 +111,7 @@
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>
-		<!--
-		<th class="all">No.</th>
-													<th class="all">Date</th>
-													<th class="all">Control Number</th>
-													<th class="all">Supplier</th>
-													<th class="none">Sales Order #</th>
-													<th class="none">Sales Invoice #</th>
-													<th class="all">Total Sale</th>
-													<th class="all">VATable Sales</th>
-													<th class="all">Withholding Tax</th>
-													<th class="all">Total Payable</th>
-													<th class="all">Withdrawal Status</th>
-													<th class="all">Payment Status</th>
-		-->
+		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td align="center" style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="2%">#</td>
 			<th style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Date</th>
@@ -154,10 +141,7 @@
 			<?php
 				$_purchase_order_date=date_create("$purchase_order_data_data_cols->purchase_order_date");
 				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
-				
-				//$current_balance += $purchase_order_data_data_cols->receivable_remaining_balance;		
-//{data: ({purchase_order_net_amount,purchase_order_less_percentage}) => (Number(purchase_order_net_amount)*Number(purchase_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },	
-								
+									
 				$purchase_order_less_percentage = $purchase_order_data_data_cols['purchase_order_net_amount'] * $purchase_order_data_data_cols['purchase_order_less_percentage']/100;
 				
 				$total_gross_amount 	+= $purchase_order_data_data_cols['purchase_order_gross_amount'];
@@ -256,35 +240,7 @@
 		<tr>
 			<td colspan="11" style="height:5.66px !important;"></td>
 		</tr>
-		<!--<tr style="font-size:12px;border:0px solid #000;font-style: italic;">
-			<td colspan="14" align="left"style="border:0px solid #000; height:25px !important;">
-			PLEASE ADVISE OUR OFFICE FOR ANY DISCREPANCIES WITHIN 7 DAYS, IF NONE, WE WILL CONSIDER STATED ABOVE IS TRUE AND CORRECT.</br>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="14" style="height:5.66px !important;"></td>
-		</tr>
-		
-		<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="3">RECEIVED AND ACKNOWLEDGE BY:</td>
-				<td align="center" colspan="3" style=""></td>
-				<td align="left" colspan="8"></td>
-		</tr>
-		
-		<tr>
-			<td colspan="14" style="height:5.66px !important;"></td>
-		</tr>
-		
-		<tr>
-			<td colspan="14" style="height:5.66px !important;"></td>
-		</tr>		
-		
-		<tr class="data_tr" style="font-size:12px;">
-				
-				<td align="center" colspan="3" style="border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-				<td align="left" colspan="6"></td>
-				<td align="left" colspan="5"></td>
-		</tr>-->
+	
 		
 		</table>
 		
