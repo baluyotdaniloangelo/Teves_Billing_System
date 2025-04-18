@@ -244,7 +244,7 @@
 			let end_date 			= $("input[name=end_date]").val();
 			let company_header 		= $("#company_header").val();
 			let supplier_idx 		= $('#supplier_name option[value="' + $('#supplier_idx').val() + '"]').attr('data-id');
-			alert(supplier_idx);
+			
 		var query = {
 			start_date:start_date,
 			end_date:end_date,
