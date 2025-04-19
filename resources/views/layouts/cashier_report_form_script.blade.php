@@ -2731,11 +2731,10 @@
 					
 					total_non_cash_payment = response.total_limitless_payment_amount + response.total_credit_debit_payment_amount + response.total_gcash_payment_amount + response.total_online_payment_amount;
 					
-					//$theoretical_sales_total = ($total_fuel_sales + $other_sales_total) - ($total_sales_credit+$total_discount+$total_others_msc);
-					
 					cash_on_hand = response.cash_on_hand;
 					total_sales = cash_on_hand + total_non_cash_payment;
-					theoretical_sales = total_sales - miscellaneous_total;
+					
+					theoretical_sales = (fuel_sales_total + other_sales_total) - miscellaneous_total;
 					
 					cash_short_or_over = (cash_on_hand + total_non_cash_payment) - theoretical_sales;				
 					
