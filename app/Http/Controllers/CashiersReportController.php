@@ -785,9 +785,9 @@ class CashiersReportController extends Controller
 					/*Save to SO and Billing ITEM*/
 					/*insert SO*/
 						
-						$reference_no_id = $request->reference_no_id;
+						$reference_no_id = $request->reference_no_id + 0;
 						
-						if($reference_no_id==''){
+						if($reference_no_id==0){
 					
 							$SOBilling = new SOBillingTransactionModel();
 							$SOBilling->cashiers_report_idx	= $CashiersReportId;
@@ -837,9 +837,31 @@ class CashiersReportController extends Controller
 									'teves_cashiers_report_p3.billing_idx',
 									]);	
 									
-						$so_id 		= $request->reference_no_id;
+						$reference_no_id 		= $request->reference_no_id + 0;
 						
-						if($request->billing_update=="YES"){
+						if($reference_no_id==0){
+					
+							$SOBilling = new SOBillingTransactionModel();
+							$SOBilling->cashiers_report_idx	= $CashiersReportId;
+							$SOBilling->branch_idx 			= $request->branch_idx;
+							$SOBilling->order_date 			= $request->report_date;
+							$SOBilling->order_time 			= '00:00';
+							$SOBilling->so_number 			= $reference_no;	
+							$SOBilling->client_idx 			= $request->client_idx;
+							$SOBilling->plate_no 			= 'N/A';
+							$SOBilling->drivers_name 		= 'N/A';
+							$SOBilling->created_by_user_id 	= Session::get('loginID');
+							$result_so = $SOBilling->save();
+							
+							$so_id 		= $SOBilling->so_id;
+							
+						}else{
+							
+							$so_id 		= $request->reference_no_id;
+							
+						}
+						
+						
 							/*UPDATE*/
 							/*Update Product SO*/	
 							$Billing = new BillingTransactionModel();
@@ -849,14 +871,18 @@ class CashiersReportController extends Controller
 							$Billing->order_date 			= $request->report_date;
 							$Billing->order_po_number 		= $reference_no;	
 							$Billing->client_idx 			= $request->client_idx;
-							$Billing->product_idx 			= $request->product_idx;
-							$Billing->product_price 		= $product_price;
-							$Billing->order_quantity 		= $request->order_quantity;
-							$Billing->order_total_amount 	= $peso_sales;
+						
+							if($request->billing_update=="YES"){	
+								$Billing->product_idx 			= $request->product_idx;
+								$Billing->product_price 		= $product_price;
+								$Billing->order_quantity 		= $request->order_quantity;
+								$Billing->order_total_amount 	= $peso_sales;
+							}	
+							
 							$Billing->updated_by_user_idx 	= Session::get('loginID');
 							
 							$result = $Billing->update();
-						}
+						
 						
 					}
 					
@@ -1004,6 +1030,7 @@ class CashiersReportController extends Controller
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
 					'teves_client_table.client_name',
+					'teves_cashiers_report_p3.reference_no',
 					'teves_cashiers_report_p3.pump_price',
 					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.discounted_price',

@@ -993,7 +993,6 @@
 			
             var reference_no 			    = $("input[name=reference_no_PH3]").val();
 			var reference_no_id 			= $('#so_list_reference option[value="' + $('#reference_no_PH3').val() + '"]').attr('data-id');/*IF Available*/
-			
 			var client_idx 			   		= $('#sold_to_client_name_list option[value="' + $('#sold_to_client_id').val() + '"]').attr('data-id');
 			
 			/*Product ID*/
@@ -1151,6 +1150,7 @@
 							var unit_price = response[i].unit_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var client_name = response[i].client_name;
+							var reference_no = response[i].reference_no;
 							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
@@ -1158,6 +1158,7 @@
 							$('#table_product_data_msc_SALES_CREDIT tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
 							"<td align='left'>"+client_name+"</td>"+
+							"<td align='left'>"+reference_no+"</td>"+
 							"<td align='left'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
@@ -1387,6 +1388,8 @@
 			var _billing_update 			= $('.billing_update:checked').val() || 'off';
 			var billing_update 				= (_billing_update ==="on") ? "YES":"NO";
 			
+			let teves_branch 				= $("#teves_branch").val();
+			
 				/*Delete the Selected Item*/			
 				  $.ajax({
 					url: "{{ route('SAVE_CHR_PH3') }}",
@@ -1398,6 +1401,7 @@
 					  reference_no:reference_no, 
 					  reference_no_id:reference_no_id,
 					  client_idx:client_idx,
+					  branch_idx:teves_branch,
 					  product_idx:product_idx,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 

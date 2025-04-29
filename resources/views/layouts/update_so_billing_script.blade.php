@@ -310,12 +310,13 @@
 				  if(response!='') {			  
 						var len = response.length;
 						for(var i=0; i<len; i++){
-						
-							var billing_id = response[i].billing_id;						
-							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							var product_name = response[i].product_name;
-							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							
+							var cashiers_report_idx	= response[i].cashiers_report_idx
+							var billing_id 			= response[i].billing_id;						
+							var product_price 		= response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var product_name 		= response[i].product_name;
+							var order_quantity 		= response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var order_total_amount 	= response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							$('#table_so_product_body_data tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
