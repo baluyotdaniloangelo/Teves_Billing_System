@@ -200,6 +200,7 @@
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
 								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
+								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='product_td' align='left'>"+order_po_number+"</td>"+
 								"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
 								"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
@@ -274,8 +275,8 @@
 													"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
 													"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
 													"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-								"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
-								"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
+													"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
+													"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
 													"</tr>");
 													
 												}else{
@@ -290,8 +291,8 @@
 													"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
 													"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
 													"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-								"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
-								"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
+													"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
+													"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
 													"</tr>");
 													
 													
