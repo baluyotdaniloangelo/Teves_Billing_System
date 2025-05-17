@@ -337,7 +337,7 @@
 						<div class="row mb-2">
 						  <label for="net_value_percentage" class="col-sm-4 col-form-label" title="Net Value">Net Value</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="1.12" disabled>
+							<input type="text" class="form-control " name="net_value_percentage" id="net_value_percentage" value="" disabled>
 							<span class="valid-feedback" id="net_value_percentage_taxError"></span>
 						  </div>
 						</div>
@@ -345,7 +345,7 @@
 						<div class="row mb-2">
 						  <label for="vat_value_percentage" class="col-sm-4 col-form-label" title="Net Value">VAT Value</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="12" disabled>
+							<input type="text" class="form-control " name="vat_value_percentage" id="vat_value_percentage" value="" disabled>
 							<span class="valid-feedback" id="vat_value_percentageError"></span>
 						  </div>
 						</div>
@@ -353,7 +353,7 @@
 						<div class="row mb-2">
 						  <label for="withholding_tax_percentage" class="col-sm-4 col-form-label" title="Withholding Tax">Withholding Tax</label>
 						  <div class="col-sm-8">
-							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="1" disabled>
+							<input type="text" class="form-control " name="withholding_tax_percentage" id="withholding_tax_percentage" value="" disabled>
 							<span class="valid-feedback" id="withholding_taxError"></span>
 						  </div>
 						</div>

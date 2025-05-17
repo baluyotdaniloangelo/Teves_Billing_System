@@ -555,7 +555,7 @@
 	    
 	function get_client_details(){
 		  
-			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
 			
 			  $.ajax({
 				url: "/client_info",
@@ -596,7 +596,7 @@
 			
 			let receivable_idx = receivable_id;
 
-			let client_idx 			= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 			let less_per_liter 	= $("input[name=less_per_liter]").val();
