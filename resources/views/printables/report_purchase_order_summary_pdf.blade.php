@@ -102,14 +102,13 @@
 
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
-	
-		
+
 		<tr>
-			<td colspan="12" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
+			<td colspan="10" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
@@ -123,12 +122,12 @@
 			<th align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
 			<th align="right" style="border-right1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
 			<th align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
-			<th style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Delivery Status</th>
-			<th style="  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Payment Status</th>
+			<!--<th style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Delivery Status</th>
+			<th style="  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Payment Status</th>-->
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>
 		<?php 
 			$no = 1;
@@ -158,12 +157,11 @@
 			<td colspan="1" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_sales_order_number'];?></td>
 			<td colspan="1" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_official_receipt_no'];?></td>	
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_gross_amount'],4);?></td>		
-
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>	
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>				
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>					
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_total_payable'],4);?></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_delivery_status'];?></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_status'];?></td>			
+			<!--<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_delivery_status'];?></td>			
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_status'];?></td>			-->
 			
 		</tr>
 		
@@ -183,62 +181,62 @@
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount,2);?></td>			
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_withholding_tax);?></td>		
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due,2);?></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>		
+			<!--<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>			
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>		-->
 	
 		</tr>
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>	
 		
 		
 		<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="2">PREPARED BY:</td>
-				<td align="center" colspan="3" style=""></td>
-				<td align="left" colspan="7"></td>
+				<td align="left" colspan="3">PREPARED BY:</td>
+				<td align="center" colspan="2" style=""></td>
+				<td align="left" colspan="5"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr class="data_tr" style="font-size:12px;">
 				
 				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
-				<td align="left" colspan="6"></td>
 				<td align="left" colspan="2"></td>
+				<td align="left" colspan="5"></td>
 		</tr>
 		
 		<tr class="data_tr" style="font-size:12px;">
 				
 				<td align="center" colspan="3" style=" ">{{$user_data->user_job_title}}</td>
-				<td align="left" colspan="6"></td>
 				<td align="left" colspan="2"></td>
+				<td align="left" colspan="5"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="11" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>	
 	
 		<tr>
-			<td colspan="11" style="height:5.66px !important;"></td>
+			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 	
 		
