@@ -197,7 +197,7 @@
 					/*Reset Warnings*/
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
-					$('#end_dateError').text('');		
+					$('#end_dateError').text('');		 
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
  
@@ -650,16 +650,10 @@
 					$('#receivable_descriptionError').text('');
 
 			document.getElementById('ReceivableformNew').className = "g-3 needs-validation was-validated";
-<<<<<<< HEAD
-
-			//let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
-let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
-=======
 			
 			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
 			
 			//let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
->>>>>>> cb9363f2ced606418243981fc6b8f234f9edfdbe
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 						
