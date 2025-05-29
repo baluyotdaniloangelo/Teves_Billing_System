@@ -16,7 +16,8 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
+			//let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
+			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
@@ -200,7 +201,8 @@
 					
 			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
 
-			let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id');
+			//let client_idx 			= $("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id')ccc;
+			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let less_per_liter 		= $("input[name=less_per_liter]").val();
@@ -640,7 +642,7 @@
 	
 	<!--Save New receivables->
 	$("#save-receivables").click(function(event){
-			
+			alert('s');
 			event.preventDefault();
 			
 					/*Reset Warnings*/
@@ -649,9 +651,16 @@
 					$('#receivable_descriptionError').text('');
 
 			document.getElementById('ReceivableformNew').className = "g-3 needs-validation was-validated";
+<<<<<<< HEAD
 
 			//let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
+=======
+			
+			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
+			
+			//let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+>>>>>>> cb9363f2ced606418243981fc6b8f234f9edfdbe
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 						
