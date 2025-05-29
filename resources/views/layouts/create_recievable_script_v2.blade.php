@@ -640,7 +640,7 @@
 	
 	<!--Save New receivables->
 	$("#save-receivables").click(function(event){
-			
+			alert();
 			event.preventDefault();
 			
 					/*Reset Warnings*/
