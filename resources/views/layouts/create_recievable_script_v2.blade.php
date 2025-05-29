@@ -649,8 +649,10 @@
 					$('#receivable_descriptionError').text('');
 
 			document.getElementById('ReceivableformNew').className = "g-3 needs-validation was-validated";
-
-			let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
+			
+			let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
+			
+			//let client_idx 				= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));
 			let start_date 				= $("input[name=start_date]").val();
 			let end_date 				= $("input[name=end_date]").val();
 						
