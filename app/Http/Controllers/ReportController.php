@@ -806,8 +806,9 @@ class ReportController extends Controller
 					'billing_period_end',
 					'company_header'
 				]);
-		
+				
 		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
+				->where('teves_receivable_payment.receivable_mode_of_payment', '<>', 'Post-Dated Check')
 				->orderBy('receivable_payment_id', 'asc')
               	->get([
 					'teves_receivable_payment.receivable_payment_id',
@@ -815,6 +816,7 @@ class ReportController extends Controller
 					'teves_receivable_payment.receivable_mode_of_payment',
 					'teves_receivable_payment.receivable_reference',
 					'teves_receivable_payment.receivable_payment_amount',
+					'teves_receivable_payment.receivable_payment_remarks'
 					]);
 		
 		$receivable_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);

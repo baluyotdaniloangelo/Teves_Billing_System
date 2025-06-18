@@ -91,11 +91,16 @@
 					<div class="col-sm-9">
 					
 					    <ul class="nav nav-tabs" id="myTab" role="tablist">
+							
 							<!-- nav-link active -->
 							<li class="nav-item" role="presentation">
 								<button class="nav-link <?php if($tab=='branchprice') { echo 'active'; } ?>" id="branchprice-tab" data-bs-toggle="tab" data-bs-target="#branchprice" type="button" role="tab" aria-controls="branchprice" aria-selected="true" onclick="loadPricingListPerBranch()" title='Product Prices per branch'>Price per Branch</button>
 							</li>
-									
+							
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?php if($tab=='seller') { echo 'active'; } ?>" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button" role="tab" aria-controls="seller" aria-selected="false" tabindex="-1" onclick="loadPricingListPerSeller()" title='Product Prices per Seller'>Seller Price</button>
+							</li>
+							
 							<li class="nav-item" role="presentation">
 								<button class="nav-link <?php if($tab=='tank') { echo 'active'; } ?>" id="tank-tab" data-bs-toggle="tab" data-bs-target="#tank" type="button" role="tab" aria-controls="tank" aria-selected="false" tabindex="-1" onclick="LoadProductTank()" title='Tank Information'>Tank</button>
 							</li>
@@ -136,17 +141,53 @@
 							</div>
 					
 						</div>
+						<div class="tab-content pt-2" id="myTabContent">
+						<div class="tab-pane fade  <?php if($tab=='seller') { echo ' show active'; } ?>"" id="seller" role="tabpanel" aria-labelledby="sellerprice-tab">
+									
+									<div class="d-flex justify-content-end" id="">
+									<div class="btn-group" role="group" aria-label="Basic outlined example">
+										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductTankModal" id="AddProductTankBTN"></button>
+									</div>											
+									</div>
+									<br>
+									
+									<table class="table dataTable display nowrap cell-border" id="product_price_per_seller" width="100%" cellspacing="0" >
+									<thead>
+									<tr class='report'>
+										<th class="all">Item #</th>
+										<th class="all">Supplier</th>
+										<th class="none">Seller Price</th>
+										<th class="all">Action</th>
+									</tr>
+									</thead>
+										<tbody>
+										</tbody>
+									</table>
+									<div class="row mb-3">
+									<div class="col-sm-6" align='right'>
+								<div id="loading_data_update_so" style="display:none;">
+									<div class="spinner-border text-success" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								</div>
+							</div>
+							
+							</div>
 
+							</div>
+					
+						</div>
+						
 						<div class="tab-content pt-2" id="myTabContent">
 						
 							<div class="tab-pane fade  <?php if($tab=='tank') { echo ' show active'; } ?>"" id="tank" role="tabpanel" aria-labelledby="tank-tab">
 									
 									<div class="d-flex justify-content-end" id="">
-									<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
+									<div class="btn-group" role="group" aria-label="Basic outlined example" style="">
 										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductTankModal" id="AddProductTankBTN"></button>
 									</div>											
 									</div>
-									
+									<br>
 									<table class="table dataTable display nowrap cell-border" id="ProductTankListTable" width="100%">
 									<thead>
 									<tr class='report'>

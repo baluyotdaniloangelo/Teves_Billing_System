@@ -960,6 +960,7 @@
 							var receivable_date_of_payment 		= response[i].receivable_date_of_payment;
 							var receivable_reference			= response[i].receivable_reference;
 							var image_reference 				= response[i].image_reference;
+							var receivable_payment_remarks 		= response[i].receivable_payment_remarks;
 							
 							var receivable_payment_amount = response[i].receivable_payment_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
@@ -997,6 +998,7 @@
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_payment_remarks+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='right'><span >&#8369; "+receivable_payment_amount+"</span></td>");
 								
 							}else{
@@ -1007,6 +1009,7 @@
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_payment_remarks+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='right'><span >&#8369; "+receivable_payment_amount+"</span></td>");
 							
 							}	
@@ -1054,6 +1057,7 @@
 							'<td>'+receivable_mode_of_payment+'</td>'+
 							'<td>'+receivable_date_of_payment+'</td>'+
 							'<td>'+receivable_reference+'</td>'+
+							'<td>'+receivable_payment_remarks+'</td>'+
 							'<td>'+receivable_payment_amount+'</td>'+
 							'</tr>'+
 							'</tbody>'+
@@ -1092,14 +1096,15 @@
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("receivable_idx_payment").value 	= response[0].receivable_idx;
-					document.getElementById("receivable_payment_id").value 		= response[0].receivable_payment_id;
+					document.getElementById("receivable_idx_payment").value 		= response[0].receivable_idx;
+					document.getElementById("receivable_payment_id").value 			= response[0].receivable_payment_id;
 					
 					/*Set Details*/
-					document.getElementById("receivable_mode_of_payment").value = response[0].receivable_mode_of_payment;
-					document.getElementById("receivable_date_of_payment").value = response[0].receivable_date_of_payment;
-					document.getElementById("receivable_reference").value 		= response[0].receivable_reference;
-					document.getElementById("receivable_payment_amount").value 	= response[0].receivable_payment_amount;
+					document.getElementById("receivable_mode_of_payment").value 	= response[0].receivable_mode_of_payment;
+					document.getElementById("receivable_date_of_payment").value 	= response[0].receivable_date_of_payment;
+					document.getElementById("receivable_reference").value 			= response[0].receivable_reference;
+					document.getElementById("receivable_payment_amount").value 		= response[0].receivable_payment_amount;
+					document.getElementById("receivable_payment_remarks").value 	= response[0].receivable_payment_remarks;
 					
 					/*Display Image*/
 					if(response[0].image_reference != null){

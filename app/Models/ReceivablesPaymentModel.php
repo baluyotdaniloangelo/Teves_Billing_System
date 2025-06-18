@@ -17,6 +17,7 @@ class ReceivablesPaymentModel extends Model
 		'receivable_mode_of_payment',
         'receivable_reference',
 		'receivable_payment_amount',
+		'receivable_payment_remarks',
         'created_at',
 		'updated_at'
     ];

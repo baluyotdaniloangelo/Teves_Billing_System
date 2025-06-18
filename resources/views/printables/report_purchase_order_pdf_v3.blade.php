@@ -42,8 +42,32 @@
 				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
 				
 				$logo = $branch_header['branch_logo'];
-			?>
 			
+			$_purchase_order_official_receipt_no = $purchase_order_data[0]['purchase_order_official_receipt_no'];
+			
+			if($_purchase_order_official_receipt_no==''){
+				
+				$purchase_order_official_receipt_no = 'NO SI';
+				
+				 $VATable_Sales = 0.00;
+				 $Less_VAT = 0.00;
+				 $Total = 0.00;
+				 $VAT_12_percent = 0.00;
+				 $Less_Withholding_Tax = 0.00;
+				
+			}else{
+				
+				$purchase_order_official_receipt_no = $purchase_order_data[0]['purchase_order_official_receipt_no'];
+				
+				 $VATable_Sales = number_format($purchase_order_data[0]['purchase_order_net_amount'],4);
+				 $Less_VAT = number_format($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount'],4);
+				 $Total = number_format($purchase_order_data[0]['purchase_order_gross_amount'],4);
+				 $VAT_12_percent = number_format($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount'],4);
+				 $Less_Withholding_Tax = number_format($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100,4);
+			}
+			
+		
+		?>
 		<tr>
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
 				<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
@@ -85,7 +109,7 @@
 		<tr>
 			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
 			<td colspan="3" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>SALES INVOICE NO.</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $purchase_order_data[0]['purchase_order_official_receipt_no'] }}</td>
+			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon"><?=$purchase_order_official_receipt_no;?></td>
 		</tr>
 
 		<tr>
@@ -165,7 +189,7 @@
 			<td colspan="1"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VATable Sales </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_net_amount'],4);?>
+			<?=number_format($VATable_Sales,4);?>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Sales </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
@@ -179,7 +203,7 @@
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : VAT </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount'],4);?></td>
+			<?=number_format($Less_VAT,4);?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -189,13 +213,13 @@
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_net_amount'],4);?></td>
+			<?=number_format($Total,4);?></td>
 		</tr>		
 		
 		<tr style="font-size:12px;">			
 			<td colspan="1"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT 12% </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"><?=number_format($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount'],4);?></td>
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"><?=number_format($VAT_12_percent,4);?></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">less : Discount </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000;"></td>
@@ -205,7 +229,7 @@
 			<td colspan="5"></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : Withholding Tax(<?=$purchase_order_data[0]['purchase_order_less_percentage'];?>%) </td>
-			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100,4);?></td>
+			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($Less_Withholding_Tax,4);?></td>
 		</tr>
 
 		

@@ -30,229 +30,18 @@
 				
 				<hr>
 				<div class="row mb-2">
-					<div class="col-sm-5">
-						
-						<form class="g-3 needs-validation" id="UpdateSalesOrderformUpdate">
-							<div class="row mb-2">
-												  <div class="col-sm-12">
-												  <label for="sales_order_date" class="form-label">Date</label>
-													<input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="{{ $sales_order_data[0]['sales_order_date'] }}" required max="9999-12-31" >
-													<span class="valid-feedback" id="sales_order_dateError"></span>
-												  </div>
-												</div>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-												   <label for="company_header" class="form-label">Branch</label>
-												 	<select class="form-select form-control" required="" name="company_header" id="company_header" onchange="UpdateBranch()">
-													<?php $branch_idx = $sales_order_data[0]['company_header']; ?>
-										
-													@foreach ($teves_branch as $teves_branch_cols)
-													<?php 
-													$branch_id = $teves_branch_cols->branch_id;
-													
-													?>
-													<option value="{{$teves_branch_cols->branch_id}}" <?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
-														{{$teves_branch_cols->branch_code}}
-													</option>
-													
-													@endforeach
-													
-									
-													</select>
-												  </div>
-												</div>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-												   <label for="client_id" class="form-label">Sold To</label>
-													<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off" value="{{ $sales_order_data[0]['client_name'] }}" onchange="ClientInfo()">
-														<datalist id="client_name">
-														  @foreach ($client_data as $client_data_cols)
-														  <option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
-														  @endforeach
-														</datalist>							
-													<span class="valid-feedback" id="client_idxError"></span>
-												  </div>
-												</div>
-
-												<hr>
-												
-												<div class="row mb-2">
-														<label for="sales_order_payment_type" class="col-sm-3 col-form-label">Payment Type</label>
-														<div class="col-md-9">
-														<?php $sales_order_payment_type = $sales_order_data[0]->sales_order_payment_type; ?>
-															<select class="form-select form-control" required="" name="sales_order_payment_type" id="sales_order_payment_type"> 
-																<option value="Receivable" <?php if($sales_order_payment_type=='Receivable'){ echo "selected";} else{} ?>>Receivable</option>
-																<option value="PBD" <?php if($sales_order_payment_type=='PBD'){ echo "selected";} else{} ?>>Paid Before Delivery</option>
-															</select>
-														</div>
-												</div>
-												
-												<div class="row mb-2">
-														<label for="sales_order_invoice" class="col-sm-3 col-form-label">With Sales Invoice?</label>
-														<div class="col-md-9">
-														<?php $sales_order_invoice = $sales_order_data[0]->sales_order_invoice; ?>
-															<select class="form-select form-control" required="" name="sales_order_invoice" id="sales_order_invoice" onchange="check_withholding_tax()"> 
-																<option value="1" <?php if($sales_order_invoice=='1'){ echo "selected";} else{} ?>>Yes</option>
-																<option value="0" <?php if($sales_order_invoice=='0'){ echo "selected";} else{} ?>>No</option>
-															</select>
-														</div>
-												</div>
-
-												<hr>
-												<div class="row mb-2">
-									  
-														<label for="sales_order_net_percentage" class="col-sm-3 col-form-label">Net Value</label>
-														<div class="col-sm-9">			  
-															<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" value="{{ $sales_order_data[0]['sales_order_net_percentage'] }}" disabled>
-														</div>
-												
-												</div>
-												<div class="row mb-2">
-									  
-														<label for="sales_order_withholding_tax" class="col-sm-3 col-form-label">Withholding Tax</label>
-														<div class="col-sm-9">			  
-															<input type="number" class="form-control" id="sales_order_withholding_tax" name="sales_order_withholding_tax" value="{{ $sales_order_data[0]['sales_order_withholding_tax'] }}" disabled>
-														</div>
-												
-												</div>
-												
-												<hr>
-												<div class="row mb-2">
-												  <label for="dr_number" class="col-sm-3 col-form-label">D.R Number</label>
-												  <div class="col-sm-9">			  
-													<input type="text" class="form-control" id="dr_number" name="dr_number" value="{{ $sales_order_data[0]['sales_order_dr_number'] }}" >
-												  </div>
-												</div>
-												
-												<div class="row mb-2">
-													<label for="sales_order_po_number" class="col-sm-3 col-form-label">P.O Number</label>
-													<div class="col-sm-9">
-														<input type="text" class="form-control" id="sales_order_po_number" name="sales_order_po_number" value="{{ $sales_order_data[0]['sales_order_po_number'] }}" >
-													</div>
-												</div>
-												
-												<div class="row mb-2">
-													<label for="sales_order_or_number" class="col-sm-3 col-form-label">Sales Invoice</label>
-													<div class="col-sm-9">
-														<input type="text" class="form-control" id="sales_order_or_number" name="sales_order_or_number" value="{{ $sales_order_data[0]['sales_order_or_number'] }}" title="OR Number">
-													</div>
-												</div>
-												
-												<div class="row mb-2">
-													<label for="sales_order_charge_invoice" class="col-sm-3 col-form-label">Charge Invoice</label>
-													<div class="col-sm-9">
-														<input type="text" class="form-control" id="sales_order_charge_invoice" name="sales_order_charge_invoice" value="{{ $sales_order_data[0]['sales_order_charge_invoice'] }}" >
-													</div>
-												</div>
-												
-												<div class="row mb-2">
-													<label for="sales_order_collection_receipt" class="col-sm-3 col-form-label">Collection Receipt</label>
-													<div class="col-sm-9">
-														<input type="text" class="form-control" id="sales_order_collection_receipt" name="sales_order_collection_receipt" value="{{ $sales_order_data[0]['sales_order_collection_receipt'] }}" >
-													</div>
-												</div>
-												
-												<div class="row mb-2">
-													<label for="payment_term" class="col-sm-3 col-form-label">Payment Term</label>
-													<div class="col-sm-9">
-														<input type="text" class="form-control" id="payment_term" name="payment_term" value="{{ $sales_order_data[0]['sales_order_payment_term'] }}" >
-													</div>
-												</div>
-												<hr>
-												<div class="row mb-2">
-													
-													<div class="col-sm-12">
-													<label for="delivered_to" class="form-label">Delivered To</label>
-													<input type="text" class="form-control" id="delivered_to" name="delivered_to" list="sales_order_delivered_to_list" value="{{ $sales_order_data[0]['sales_order_delivered_to'] }}">
-														<datalist id="sales_order_delivered_to_list">
-															@foreach ($sales_order_delivered_to as $sales_order_delivered_to_cols)
-																<option value="{{$sales_order_delivered_to_cols->sales_order_delivered_to}}">
-															@endforeach
-														  </datalist>
-													<span class="valid-feedback" id="delivered_toError"></span>
-													</div>
-												</div>
-												
-												<div class="row mb-2">
-												  
-												  <div class="col-sm-12">
-												  <label for="delivered_to_address" class="form-label">Delivered To Address</label>
-												  <input type="text" class="form-control" id="delivered_to_address" name="delivered_to_address" list="delivered_to_address_list" value="{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}">
-														<datalist id="delivered_to_address_list">
-															@foreach ($sales_order_delivered_to_address as $sales_order_delivered_to_address_cols)
-																<option value="{{$sales_order_delivered_to_address_cols->sales_order_delivered_to_address}}">
-															@endforeach
-														  </datalist>
-												  <span class="valid-feedback" id="delivered_to_addressError"></span>
-												  </div>
-												</div>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-												  <label for="sales_order_date" class="form-label">Delivery Method</label>
-													<input type="text" class="form-control" id="delivery_method" name="delivery_method" value="{{ $sales_order_data[0]['sales_order_delivery_method'] }}">
-												  </div>
-												</div>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-												  <label for="hauler" class="form-label">Hauler</label>
-												  <input type="text" class="form-control" id="hauler" name="hauler" value="{{ $sales_order_data[0]['sales_order_hauler'] }}">
-												  </div>
-												</div>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-												  <label for="required_date" class="form-label">Required Date</label>
-												  <input type="date" class="form-control" id="required_date" name="required_date" value="{{ $sales_order_data[0]['sales_order_required_date'] }}">
-												  </div>
-												</div>
-												
-												<hr>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-													<label for="instructions" class="form-label">Instructions</label>
-													<textarea class="form-control" id="instructions" name="instructions" style="height: 38px;">{{ $sales_order_data[0]['sales_order_instructions'] }}</textarea>
-												  </div>
-												  
-												  
-												</div>
-												
-												<div class="row mb-2">
-												  <div class="col-sm-12">
-													<label for="note" class="form-label">Notes</label>
-													<textarea class="form-control" id="note" name="note" style="height: 38px;">{{ $sales_order_data[0]['sales_order_note'] }}</textarea>
-												  </div>
-												</div>
-												
-												
-												<div class="card-footer">
-												<div class="row mb-3">
-												<div class="col-sm-6" align=''>
-												<div id="loading_data_update_so" style="display:none;">
-													<div class="spinner-border text-success" role="status">
-														<span class="visually-hidden">Loading...</span>
-													</div>
-												</div>
-												</div>
-												<div class="col-sm-6" align='right'>
-												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('salesorder') }}" title="Back">  
-												  <span title="Back to Sales Order List">Back</span>
-												</a>
-												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-sales-order" title='Update Sales Order information'> Update</button>
-												</div>
-												</div>	
-						</div>
-						
-						</form>
-					</div>
-					<div class="col-sm-7">
+			<?php $sales_order_invoice = $sales_order_data[0]->sales_order_invoice; ?>
+			
+			@include('pages.sales_order_form_update_modal')
+			
+			<div class="col-sm-12">
 					 <!-- Default Tabs -->
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <!-- nav-link active -->
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link <?php if($tab=='sales_order_information') { echo 'active'; } ?>" id="sales_order_information-tab" data-bs-toggle="tab" data-bs-target="#sales_order_information" type="button" role="tab" aria-controls="sales_order_information" aria-selected="true" title='View Sales Order Information'>Sales Order Information</button>
+                </li>
+				
 				<li class="nav-item" role="presentation">
                   <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onclick="LoadProduct()" title='Product List, Create, Update and Delete Product'>Product</button>
                 </li>
@@ -273,6 +62,42 @@
 			  
               <div class="tab-content pt-2" id="myTabContent">
                
+			   	<div class="tab-pane fade  <?php if($tab=='sales_order_information') { echo ' show active'; } ?>"" id="sales_order_information" role="tabpanel" aria-labelledby="sales_order_information-tab">
+				<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-success new_item bi bi-pencil-fill form_button_icon " data-bs-toggle="modal" data-bs-target="#UpdateSalesOrderModal" id="UpdateSalesOrderBTN"></button>
+						
+					</div>	
+					
+					</div>
+					<!--Information Here-->
+					<ul class="list-group list-group-flush">
+							<li class="list-group-item"><b>Date:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_date'] }}</span></li>
+							<li class="list-group-item"><b>Branch:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['branch_code'] }} - {{ $sales_order_data[0]['branch_name'] }}</span></li>
+							<li class="list-group-item"><b>Sold To:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['client_name'] }}</span></li>
+							<li class="list-group-item"><b>Payment Type:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_payment_type'] }}</span></li>
+							<li class="list-group-item"><b>With Sales Invoice:</b><span id="" style="font-weight: normal;">&nbsp;<?php if($sales_order_invoice=='1'){ echo "YES";} else{ echo "NO";} ?></span></li>
+							<li class="list-group-item"><b>Net Value:</b><span id="" style="font-weight: normal;"></span>&nbsp;&nbsp;{{ $sales_order_data[0]['sales_order_net_percentage'] }}</li>
+							<li class="list-group-item"><b>Withholding Tax:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_withholding_tax'] }}</span></li>
+							<li class="list-group-item"><b>D.R Number:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_dr_number'] }}</span></li>
+							<li class="list-group-item"><b>P.O Number:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_po_number'] }}</span></li>
+							<li class="list-group-item"><b>Sales Invoice:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_or_number'] }}</span></li>
+							<li class="list-group-item"><b>Charge Invoice:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_charge_invoice'] }}</span></li>
+							<li class="list-group-item"><b>Collection Receipt:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_collection_receipt'] }}</span></li>
+							<li class="list-group-item"><b>Payment Term:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_payment_term'] }}</span></li>
+							<li class="list-group-item"><b>Delivered To:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_delivered_to'] }}</span></li>
+							<li class="list-group-item"><b>Delivered To Address:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</span></li>
+							<li class="list-group-item"><b>Delivery Method:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_delivery_method'] }}</span></li>
+							<li class="list-group-item"><b>Hauler:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_hauler'] }}</span></li>
+							<li class="list-group-item"><b>Required Date:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_required_date'] }}</span></li>
+							<li class="list-group-item"><b>Instructions:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_instructions'] }}</span></li>
+							<li class="list-group-item"><b>Notes:</b><span id="" style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_note'] }}</span></li>
+							<li class="list-group-item"></li>
+					</ul>
+						
+						
+                </div>
+			   
 			   <div class="tab-pane fade  <?php if($tab=='product') { echo ' show active'; } ?>"" id="product" role="tabpanel" aria-labelledby="product-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
@@ -343,6 +168,7 @@
 							<th style="text-align:center !important;">Mode of Payment</th>
 							<th style="text-align:center !important;">Date of Payment</th>
 							<th style="text-align:center !important;">Reference No.</th>
+							<th style="text-align:center !important;">Remarks</th>
 							<th style="text-align:center !important;">Amount</th>	
 						</tr>
 						</thead>
@@ -452,7 +278,9 @@
 				</div>
 			</div>
 		</div>
-        
+ 
+
+ 
 	<!--Modal to Create SO Product-->
 	<div class="modal fade" id="AddProductModal" tabindex="-1">
               <div class="modal-dialog modal-lg">
@@ -655,21 +483,22 @@
 					
 					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('sales_order_receivable_payment')}}"  method="post" >
 						@csrf
+						
 						<div class="col-sm-12">
-						
 						<div class="form-floating mb-3">
-						
-						<input type='text' class='form-control' id='receivable_mode_of_payment' name='receivable_mode_of_payment' list='receivable_mode_of_payment' autocomplete='off' placeholder="Bank">
-							<datalist id='sales_order_bank_list'>
-								<?php foreach ($receivables_payment_suggestion as $receivables_payment_suggestion_cols) {?>
-									<option value='<?=$receivables_payment_suggestion_cols->receivable_mode_of_payment;?>'>
-								<?php } ?>
-							</datalist>
+							<select class="form-select" required name="receivable_mode_of_payment" id="receivable_mode_of_payment">
+								<option value="Cash" selected>Cash</option>
+								<option value="Bank Transfer">Bank Transfer</option>
+								<option value="Credit Card">Credit Card</option>
+								<option value="Debit Card">Debit Card</option>
+								<option value="E-Wallet/Mobile Payments">E-Wallet/Mobile Payments</option>
+								<option value="Dated Check">Dated Check</option>
+								<option value="Post-Dated Check">Post-Dated Check</option>
+								<option value="Post-Dated Check - Cleared">Post-Dated Check - Cleared</option>
+								<option value="Overpayment">Overpayment</option>
+							</select>
 							<label for="receivable_mode_of_payment">Mode of Payment</label>
-							<span class="valid-feedback" id="receivable_mode_of_paymentError"></span>
-						 </div>
-						
-						
+						</div>
 						</div>
 						
 						<div class="col-sm-12">
@@ -696,6 +525,15 @@
 								<input type="number" class="form-control" aria-describedby="basic-addon1" name="receivable_payment_amount" id="receivable_payment_amount" required step=".01" placeholder="Amount">
 								<label for="receivable_payment_amount">Amount</label>
 								<span class="valid-feedback" id="receivable_payment_amountError"></span>
+							</div>
+							 
+						</div>
+						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" aria-describedby="basic-addon1" name="receivable_payment_remarks" id="receivable_payment_remarks" placeholder="Remarks/Comments">
+								<label for="receivable_reference">Remarks</label>
+								<span class="valid-feedback" id="receivable_payment_remarksError"></span>
 							</div>
 							 
 						</div>
@@ -786,12 +624,10 @@
 				<div class="row mb-2">
 				<div class="col-sm-4">
 				<div align="left"style="margin: 10px;">
-				
-				Mode of Payment: <span id="delete_receivable_mode_of_payment"></span><br>
-				Date Of Payment: <span id="delete_receivable_date_of_payment"></span><br>	
-				Reference No.: <span id="delete_receivable_reference"></span><br>
-				Amount: <span id="delete_receivable_payment_amount"></span><br>
-				
+					Mode of Payment: <span id="delete_receivable_mode_of_payment"></span><br>
+					Date Of Payment: <span id="delete_receivable_date_of_payment"></span><br>	
+					Reference No.: <span id="delete_receivable_reference"></span><br>
+					Amount: <span id="delete_receivable_payment_amount"></span><br>
 				</div>
 				</div>
 				<div class="col-sm-8">
@@ -931,29 +767,6 @@
 							 <span class="valid-feedback" id="sales_order_delivery_remarksError"></span>
 							 
 						</div>
-						
-						<!--<div class="col-sm-12">
-						
-							<div class="form-floating mb-3">
-								<select class="form-select form-control" required="" name="sales_order_branch_delivery" id="sales_order_branch_delivery">
-									<//?php $branch_idx = $sales_order_data[0]['company_header']; ?>
-										
-										@foreach ($teves_branch as $teves_branch_cols)
-											<//?php 
-												$branch_id = $teves_branch_cols->branch_id;
-													
-											//?>
-												<option value="{{$teves_branch_cols->branch_id}}" <//?php if($branch_id==$branch_idx){ echo "selected";} else{} ?>>
-													{{$teves_branch_cols->branch_code}}
-												</option>
-										@endforeach
-
-								</select>
-								<label for="sales_order_branch_delivery">Branch Delivery</label>
-							</div>
-							<span class="valid-feedback" id="sales_order_branch_deliveryError"></span>
-							 
-						</div>-->
 						
 						</div>
 						

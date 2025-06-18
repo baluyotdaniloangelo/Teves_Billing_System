@@ -343,6 +343,8 @@ class ReceivablesController extends Controller
 						'teves_receivable_payment.receivable_mode_of_payment',
 						'teves_receivable_payment.receivable_reference',
 						'teves_receivable_payment.receivable_payment_amount',
+						'teves_receivable_payment.receivable_payment_amount',
+						'teves_receivable_payment.receivable_payment_remarks',
 						'teves_receivable_payment.image_reference',
 						]);
 			
@@ -1011,7 +1013,7 @@ class ReceivablesController extends Controller
 					  $Receivables_ACTION = new ReceivablesModel();
 					  $Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
 					  $Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
-					  $Receivables_ACTION->receivable_status 		= $Receivablestatus;		
+					  $Receivables_ACTION->receivable_status 				= $Receivablestatus;		
 					  $Receivables_ACTION->update();
 			  
 					  if($result){
@@ -1085,8 +1087,9 @@ class ReceivablesController extends Controller
 				  'receivable_mode_of_payment',
 				  'receivable_reference',
 				  'receivable_payment_amount',
-				  'created_at',
+				  'receivable_payment_remarks',
 				  'image_reference',
+				  'created_at',
 				  'created_at'
 				  ]);
 	  
@@ -1104,7 +1107,8 @@ class ReceivablesController extends Controller
 				  'receivable_mode_of_payment',
 				  'receivable_reference',
 				  'receivable_payment_amount',
-				  'image_reference'
+				  'image_reference',
+				  'receivable_payment_remarks'
 				  ]);
 				  return response()->json($data);
 	  
@@ -1152,9 +1156,10 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_idx 				= $receivable_idx;
 						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-						  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
-						  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
+						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->image_reference 				= $image_blob;
+						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
 						  $result = $PaymentComponent->save();
 						  $result_type = 'Saved';
 					  
@@ -1166,9 +1171,10 @@ class ReceivablesController extends Controller
 						  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
 						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-						  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
-						  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
+						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->image_reference 				= $image_blob;
+						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
 						  $result = $PaymentComponent->update();
 						  $result_type = 'Updated';
 
@@ -1181,28 +1187,29 @@ class ReceivablesController extends Controller
 					  
 					  if($receivable_payment_id==0){
 						  
-						  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
+						  $PaymentComponent = new ReceivablesPaymentModel();
 						  
-						  $PurchaseOrderPaymentComponent->receivable_idx 				= $receivable_idx;
-						  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
-						  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-						  $PurchaseOrderPaymentComponent->receivable_reference 			= $request->receivable_reference;
-						  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
-						  
-						  $result = $PurchaseOrderPaymentComponent->save();
+						  $PaymentComponent->receivable_idx 				= $receivable_idx;
+						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
+						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
+						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+						  $result = $PaymentComponent->save();
 						  $result_type = 'Saved';
 					  
 					  }
 					  else{
 					  
-						  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
-						  $PurchaseOrderPaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
-						  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
-						  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-						  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
-						  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+						  $PaymentComponent = new ReceivablesPaymentModel();
+						  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
+						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
+						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
 						  
-						  $result = $PurchaseOrderPaymentComponent->update();
+						  $result = $PaymentComponent->update();
 						  $result_type = 'Updated';
 
 					  }
@@ -1217,9 +1224,16 @@ class ReceivablesController extends Controller
 		  $receivable_amount = $receivable_details->receivable_amount;
 		  
 		  /*Get Payment Details*/
-		  $receivable_total_payment_amount =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
-			  ->sum('receivable_payment_amount');
-		  
+			$receivable_total_payment_amount_result =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
+			  /*->sum('receivable_payment_amount')*/
+			  ->selectRaw('receivable_idx,
+				SUM(CASE WHEN receivable_mode_of_payment = "Post-Dated Check" THEN 0 ELSE receivable_payment_amount END)
+				AS receivable_payment_amount')
+				->groupBy('receivable_idx')
+				->get();
+				
+			$receivable_total_payment_amount = $receivable_total_payment_amount_result[0]->receivable_payment_amount;
+			
 		  /*Compute Balance and Status Creation*/
 					  $remaining_balance = number_format($receivable_amount - $receivable_total_payment_amount+0,2, '.', '');
 					  $_paid_percentage = ($receivable_total_payment_amount / $receivable_amount) * 100;
@@ -1243,18 +1257,18 @@ class ReceivablesController extends Controller
 						  
 					  }
 					  
-		  		  /*Update Sales Order to Delivered*/
-				  $salesOrderUpdate_status = new SalesOrderModel();
-				  $salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
-				  $salesOrderUpdate_status->sales_order_payment_status = $Receivablestatus;
-				  $salesOrderUpdate_status->update();
+		  		/*Update Sales Order to Delivered*/
+				$salesOrderUpdate_status = new SalesOrderModel();
+				$salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
+				$salesOrderUpdate_status->sales_order_payment_status = $Receivablestatus;
+				$salesOrderUpdate_status->update();
 		  
-				  /*Update Receivable Status and Remaining Balance*/
-				  $Receivables_ACTION = new ReceivablesModel();
-				  $Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
-				  $Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
-				  $Receivables_ACTION->receivable_status 		= $Receivablestatus;		
-				  $Receivables_ACTION->update();
+				/*Update Receivable Status and Remaining Balance*/
+				$Receivables_ACTION = new ReceivablesModel();
+				$Receivables_ACTION = ReceivablesModel::find($receivable_idx);		
+				$Receivables_ACTION->receivable_remaining_balance 	= number_format($remaining_balance,2, '.', '');
+				$Receivables_ACTION->receivable_status 		= $Receivablestatus;		
+				$Receivables_ACTION->update();
 		  
 				  if($result){
 					  return response()->json(array('success' => "Payment Information Successfully $result_type!"), 200);
@@ -1271,16 +1285,23 @@ class ReceivablesController extends Controller
 	  
 	  ReceivablesPaymentModel::find($receivable_payment_id)->delete();
 	  
-			  /*Get Sales Order ID from Receivable*/
-			  $sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
-			  
-			  /*Get Recivable Details [receivable_amount]*/
-			  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
-			  $receivable_amount = $receivable_details->receivable_amount;
-			  
-			  /*Get Payment Details*/
-			  $receivable_total_payment_amount =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
-				  ->sum('receivable_payment_amount');
+			 /*Get Sales Order ID from Receivable*/
+		  $sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
+		  
+		  /*Get Recivable Details [receivable_amount]*/
+		  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
+		  $receivable_amount = $receivable_details->receivable_amount;
+		  
+		  /*Get Payment Details*/
+			$receivable_total_payment_amount_result =  ReceivablesPaymentModel::where('receivable_idx', $receivable_idx)
+			  /*->sum('receivable_payment_amount')*/
+			  ->selectRaw('receivable_idx,
+				SUM(CASE WHEN receivable_mode_of_payment = "Post-Dated Check" THEN 0 ELSE receivable_payment_amount END)
+				AS receivable_payment_amount')
+				->groupBy('receivable_idx')
+				->get();
+				
+			$receivable_total_payment_amount = $receivable_total_payment_amount_result[0]->receivable_payment_amount;
 			  
 			  
 						/*Compute Balance and Status Creation*/

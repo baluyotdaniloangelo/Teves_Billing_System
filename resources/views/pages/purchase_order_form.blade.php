@@ -180,16 +180,6 @@
 												@endforeach
 											  </datalist>
 									</div>
-									<!--
-									<div class="col-md-6">
-									  <label for="update_contact_number" class="form-label">Contact Number</label>
-									  <input type="text" class="form-control" id="update_contact_number" name="update_contact_number" list="contact_number_list">
-											<datalist id="contact_number_list">
-												@foreach ($purchase_data_suggestion as $contact_number_cols)
-													<option value="{{$contact_number_cols->contact_number}}">
-												@endforeach
-											  </datalist>
-									</div>-->
 								
 							</div>
 							
@@ -204,31 +194,9 @@
 												@endforeach
 											  </datalist>
 									</div>
-									<!--
-									<div class="col-md-6">
-									  <label for="update_purchase_destination_address" class="form-label">Address</label>
-									  <input type="text" class="form-control" id="update_purchase_destination_address" name="update_purchase_destination_address" value=""list="purchase_destination_address_list">
-											<datalist id="purchase_destination_address_list">
-												@foreach ($purchase_data_suggestion as $purchase_destination_address_cols)
-													<option value="{{$purchase_destination_address_cols->purchase_destination_address}}">
-												@endforeach
-											  </datalist>
-									</div>-->
-								</div>	
-								<!--
-								<div class="row mb-2">
-									<div class="col-md-6">
-									  <label for="update_purchase_date_of_departure" class="form-label">Date of Departure</label>
-									  <input type="date" class="form-control" id="update_purchase_date_of_departure" name="update_purchase_date_of_departure">
-									</div>
 									
-									<div class="col-md-6">
-									  <label for="update_purchase_date_of_arrival" class="form-label">Date of Arrival</label>
-									  <input type="date" class="form-control" id="update_purchase_date_of_arrival" name="update_purchase_date_of_arrival">
-									</div>
+								</div>	
 								
-								</div>
-								-->
 								<div class="row mb-2">
 								
 									<div class="col-md-6">

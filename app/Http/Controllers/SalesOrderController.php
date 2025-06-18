@@ -114,7 +114,7 @@ class SalesOrderController extends Controller
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
 						
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=sales_order_information" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
@@ -365,7 +365,7 @@ class SalesOrderController extends Controller
 		);
 		
 			$sales_order_data = SalesOrderModel::where('sales_order_id', $request->sales_order_id)
-				->get(['created_at']);
+				->get(['created_at','sales_order_control_number']);
 			
 			$startTimeStamp = strtotime($sales_order_data[0]['created_at']);
 			$endTimeStamp = strtotime(date('y-m-d'));
@@ -376,9 +376,17 @@ class SalesOrderController extends Controller
 
 			if(Session::get('UserType')=="Admin"){
 				
+			$sales_order_control_number = $sales_order_data[0]['sales_order_control_number'];
+			$split_sales_order_control_number = explode("-", $sales_order_control_number);
+				
+			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();			
+			$control_number = $BranchInfo->branch_initial."-SO-".($split_sales_order_control_number[2]);
+				
 				$Salesorder = new SalesOrderModel();
 				$Salesorder = SalesOrderModel::find($request->sales_order_id);
 				$Salesorder->sales_order_client_idx 				= $request->client_idx;
+				$Salesorder->sales_order_control_number 			= $control_number;
+														
 				$Salesorder->company_header 						= $request->company_header;
 				$Salesorder->sales_order_date 						= $request->sales_order_date;
 				$Salesorder->sales_order_delivered_to 				= $request->delivered_to;
@@ -441,14 +449,19 @@ class SalesOrderController extends Controller
 				/*Get Receivable ID*/
 					
 				$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
-					->get(['receivable_id']);
-						
+					->get(['receivable_id','control_number']);
+				$receivable_control_number = $receivable_data[0]->control_number;
+				
+				$split_receivable_control_number = explode("-", $receivable_control_number);
+
+				$receivable_control_number = $BranchInfo->branch_initial."-AR-".($split_receivable_control_number[2]);		
 				$receivable_id = $receivable_data[0]->receivable_id;
 				$receivable_withholding_tax = $sales_order_net_amount*$request->sales_order_withholding_tax/100;
 				
 				$Receivables = new ReceivablesModel();
 				$Receivables = ReceivablesModel::find($receivable_id);
 				$Receivables->company_header 				= $request->company_header;
+				$Receivables->control_number 				= $receivable_control_number;
 				$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
 				$Receivables->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
 				$Receivables->receivable_amount 			= number_format($sales_order_total_due,2, '.', '');
@@ -594,9 +607,12 @@ class SalesOrderController extends Controller
 
 			$sales_order_data = SalesOrderModel::where('sales_order_id', $SalesOrderID)
 					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')	
+					->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_sales_order_table.company_header')	
 					->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.company_header',
+					'teves_branch_table.branch_code',
+					'teves_branch_table.branch_name',
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
 					'teves_client_table.client_name',

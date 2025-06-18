@@ -122,15 +122,15 @@
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 				
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="13" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="3" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:25px !important;">Billing Date</td>	
-			<td colspan="4" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Description</td>
-			<td colspan="3" nowrap align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">Amount</td>
+			<td colspan="6" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Description</td>
+			<td colspan="4" nowrap align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">Amount</td>
 		</tr>
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="13" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>		
 		<?php
 			$_po_start_date=date_create($receivable_data[0]['billing_period_start']);
@@ -145,44 +145,45 @@
 			<?php
 			if($receivable_data[0]['sales_order_idx']==0){
 				?>
-				<td colspan="4" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
+				<td colspan="6" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
 				<?php
 			}else{
 				?>
-				<td colspan="4" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">Sales Order:<?=$receivable_data[0]['receivable_name'];?><br/>{{ $receivable_data[0]['receivable_description'] }}</td>
+				<td colspan="6" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">Sales Order:<?=$receivable_data[0]['receivable_name'];?><br/>{{ $receivable_data[0]['receivable_description'] }}</td>
 				<?php
 			}
 			?>
-			<td colspan="3" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
+			<td colspan="4" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		
 		<tr style="font-size:12px;">
 			
 			<td colspan="3" align="right" style="border-left: 0px solid #000;"></td>
-			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
+			<td colspan="6" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
 			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($receivable_data[0]['receivable_amount'],2);?>
 		
 		</tr>		
 		
 		<tr>
-			<td colspan="10" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
+			<td colspan="13" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
 		</tr>
 		<tr>
-			<td colspan="10" style="font-size:12px; border:0px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important; text-align: center;">PAYMENT</td>
+			<td colspan="13" style="font-size:12px; border:0px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important; text-align: center;">PAYMENT</td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="1" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">#</td>		
 			<td colspan="2" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date of Payment</td>		
 			<td colspan="2" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Reference No.</td>		
-			<td colspan="3" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>
+			<td colspan="3" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>	
+			<td colspan="3" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Remarks</td>
 			<td colspan="2" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold;">Amount</td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td colspan="13" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
 		</tr>
 		<?php 
 			$no = 1;
@@ -199,6 +200,7 @@
 			<td colspan="2" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$paymnent_date;?></td>
 			<td colspan="2" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
 			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
+			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_payment_remarks'] }}</td>
 			<td colspan="2" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
 		
 		</tr>
@@ -212,18 +214,18 @@
 		<tr style="font-size:12px;">
 			
 			<td colspan="3" align="right" style="border-left: 0px solid #000; border-bottom: 0px solid #000;"></td>
-			<td colspan="3" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important; border-bottom: 0px solid #000;">REMAINING BALANCE </td>
+			<td colspan="6" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important; border-bottom: 0px solid #000;">REMAINING BALANCE </td>
 			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 0px solid #000;border-bottom: 1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($receivable_data[0]['receivable_amount']-$total_payment,2);?>
 		
 		</tr>		
 		
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="13" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr style="font-size:12px;border:0px solid #000;font-style: italic;">
-			<td colspan="10" align="left"style="border:0px solid #000; height:25px !important;">
+			<td colspan="13" align="left"style="border:0px solid #000; height:25px !important;">
 			By Affixing your signature below, you hereby acknowledge to have a current pending payable as stated and do acknowledge that you received the original purchase order copy for re-checking purposes.</br>
 			</td>
 		</tr>
