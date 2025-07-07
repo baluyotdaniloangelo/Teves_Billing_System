@@ -14,7 +14,7 @@
 		let start_date 			= $("input[name=start_date]").val();
 		
 		var myDate = new Date(start_date);
-		var result1 = myDate.setMonth(myDate.getMonth()+1);
+		var result1 = myDate.setMonth(myDate.getMonth()+12);
 		
 		const date_new = new Date(result1);
 		

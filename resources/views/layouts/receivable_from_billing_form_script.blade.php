@@ -45,6 +45,7 @@
 					document.getElementById("client_name_receivables").innerHTML = response[0].client_name;
 					
 					document.getElementById("billing_date").value = response[0].billing_date;
+					document.getElementById("billing_time").value = response[0].billing_time;
 					document.getElementById("payment_term").value = response[0].payment_term;
 					document.getElementById("receivable_description").textContent = response[0].receivable_description;						
 					document.getElementById("start_date").value = response[0].billing_period_start;
@@ -78,7 +79,8 @@
 			
 			let ReceivableID 			= {{ @$receivables_details['receivable_id'] }};
 
-			let billing_date 			= $("input[name=billing_date]").val();			
+			let billing_date 			= $("input[name=billing_date]").val();		
+			let billing_time 			= $("input[name=billing_time]").val();			
 			let payment_term 			= $("input[name=payment_term]").val();
 			let receivable_description 	= $("#receivable_description").val();
 			let receivable_status 		= $("#receivable_status").val();
@@ -99,6 +101,7 @@
 				data:{
 				  ReceivableID:ReceivableID,
 				  billing_date:billing_date,
+				  billing_time:billing_time,
 				  payment_term:payment_term,
 				  receivable_description:receivable_description,
 				  receivable_status:receivable_status,
@@ -197,6 +200,8 @@
 								var created_at = response['productlist'][i].created_at;
 								var updated_at = response['productlist'][i].updated_at;
 								
+								var cashiers_report_idx = response['productlist'][i].cashiers_report_idx;
+								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
 								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
@@ -208,6 +213,7 @@
 								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
 								"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
 								"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
+								"<td class='manual_price_td' align='right'>"+cashiers_report_idx+"</td>"+
 								"</tr>");
 								
 								}
@@ -277,6 +283,7 @@
 													"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
 													"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
 													"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
+													"<td class='manual_price_td' align='right'>"+cashiers_report_idx+"</td>"+
 													"</tr>");
 													
 												}else{
@@ -293,6 +300,7 @@
 													"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
 													"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
 													"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
+													"<td class='manual_price_td' align='right'>"+cashiers_report_idx+"</td>"+
 													"</tr>");
 													
 													
@@ -587,6 +595,8 @@
 				  if(response) {
 					
 					/*Set Details*/
+					var order_total_amount = response[0].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+					
 					$('#bill_view_order_date').text(response[0].order_date);
 					$('#bill_view_order_time').text(response[0].order_time);
 					$('#bill_view_order_po_number').text(response[0].order_po_number);
@@ -595,7 +605,7 @@
 					$('#bill_view_product_name').text(response[0].product_name);
 					$('#bill_view_drivers_name').text(response[0].drivers_name);
 					$('#bill_view_order_quantity').text(response[0].order_quantity);					
-					$('#bill_view_order_total_amount').text(response[0].order_total_amount);
+					$('#bill_view_order_total_amount').text(order_total_amount);
 
 					$('#BillViewModal').modal('toggle');									  
 				  }
@@ -753,9 +763,14 @@
 							
 							var receivable_mode_of_payment 		= response[i].receivable_mode_of_payment;
 							var receivable_date_of_payment 		= response[i].receivable_date_of_payment;
+							var receivable_time_of_payment 		= response[i].receivable_time_of_payment;
 							var receivable_reference			= response[i].receivable_reference;
-							var receivable_payment_amount 		= response[i].receivable_payment_amount;
+							//var receivable_payment_amount 		= response[i].receivable_payment_amount;
+							
+							var receivable_payment_amount 		= response[0].receivable_payment_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var receivable_payment_remarks 		= response[i].receivable_payment_remarks;
 							var image_reference 				= response[i].image_reference;
+							
 							
 							
 								var created_at = response[i].created_at;
@@ -789,9 +804,11 @@
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td><div align='center' class='action_table_menu_Product' >" + action_controls +" </div></td>"+	
-								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
+								"<td class='update_date_of_payment_td' align='center'>"+receivable_time_of_payment+"</td>"+
+								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_payment_remarks+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='center'>"+receivable_payment_amount+"</td>");
 								
 							}else{
@@ -801,9 +818,11 @@
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td><div align='center' class='action_table_menu_Product' >" + action_controls +" " + payment_btn_view + " </div></td>"+	
-								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
+								"<td class='update_date_of_payment_td' align='center'>"+receivable_time_of_payment+"</td>"+
+								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_payment_remarks+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='center'>"+receivable_payment_amount+"</td>");
 							
 							}	
@@ -840,17 +859,23 @@
 							'<div class="carousel-caption d-none d-md-block" style="background-color:#000000de; border-top:solid orange 2px; border-bottom:solid orange 2px; position: fixed !important; bottom: 30px !important; transition: all 0.3s;">'+
 						    '<table width="100%"><thead>'+
 							'<tr>'+
-							'<th style="text-align:center !important;">Bank</th>'+
-							'<th style="text-align:center !important;">Date of Payment</th>'+
+							
+							'<th style="text-align:center !important;">Date</th>'+
+							'<th style="text-align:center !important;">Time</th>'+
+							'<th style="text-align:center !important;">Mode of Payment</th>'+
 							'<th style="text-align:center !important;">Reference No.</th>'+
+							'<th style="text-align:center !important;">Remarks</th>'+
 							'<th style="text-align:center !important;">Amount</th>'+
 							'</tr>'+
 							'</thead>'+
 							'<tbody>'+
 							'<tr>'+
-							'<td>'+receivable_mode_of_payment+'</td>'+
+							
 							'<td>'+receivable_date_of_payment+'</td>'+
+							'<td>'+receivable_time_of_payment+'</td>'+
+							'<td>'+receivable_mode_of_payment+'</td>'+
 							'<td>'+receivable_reference+'</td>'+
+							'<td>'+receivable_payment_remarks+'</td>'+
 							'<td>'+receivable_payment_amount+'</td>'+
 							'</tr>'+
 							'</tbody>'+
@@ -894,7 +919,9 @@
 					/*Set Details*/
 					document.getElementById("receivable_mode_of_payment").value = response[0].receivable_mode_of_payment;
 					document.getElementById("receivable_date_of_payment").value = response[0].receivable_date_of_payment;
+					document.getElementById("receivable_time_of_payment").value = response[0].receivable_time_of_payment;
 					document.getElementById("receivable_reference").value 		= response[0].receivable_reference;
+					document.getElementById("receivable_payment_remarks").value = response[0].receivable_payment_remarks;
 					document.getElementById("receivable_payment_amount").value 	= response[0].receivable_payment_amount;
 					
 					/*Display Image*/
@@ -939,10 +966,14 @@
 				  if(response) {
 					
 					/*Set Details*/
+					var receivable_payment_amount 		= response[0].receivable_payment_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							
+							
 					$('#view_receivable_mode_of_payment').text(response[0].receivable_mode_of_payment);
 					$('#view_receivable_date_of_payment').text(response[0].receivable_date_of_payment);
+					$('#view_receivable_time_of_payment').text(response[0].receivable_time_of_payment);
 					$('#view_receivable_reference').text(response[0].receivable_reference);
-					$('#view_receivable_payment_amount').text(response[0].receivable_payment_amount);
+					$('#view_receivable_payment_amount').text(receivable_payment_amount);
 					
 					if(response[0].image_reference != null){
 					

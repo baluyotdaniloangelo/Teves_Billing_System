@@ -6,27 +6,27 @@ use Spatie\Activitylog\Contracts\Activity;
 
 use Session;
 
-class ProductPricePerSellerModel extends Model
+class ProductSellingPriceModel extends Model
 {
 	
 	use LogsActivity;
 		
-	protected $table = 'teves_product_seller_price_table';
+	protected $table = 'teves_product_selling_price_table';
 	
 	protected $fillable = [
 		'product_idx',
 		'supplier_idx',
 		'branch_idx',
-        'seller_price',
+        'selling_price',
         'created_at',
 		'created_by_user_idx',
 		'updated_at',
 		'modified_by_user_idx'
     ];
 	
-	protected $primaryKey = 'seller_price_id';
+	protected $primaryKey = 'selling_price_id';
     
-	protected static $logName = 'Product Price per Seller';
+	protected static $logName = 'Product Price per selling';
 	
 	protected static $logOnlyDirty = true;
 	
@@ -34,7 +34,7 @@ class ProductPricePerSellerModel extends Model
 		'product_idx',
 		'supplier_idx',
 		'branch_idx',
-        'seller_price',
+        'selling_price',
         'created_at',
 		'created_by_user_idx',
 		'updated_at',

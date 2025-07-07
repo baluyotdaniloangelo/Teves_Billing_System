@@ -23,6 +23,11 @@ use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
 
+/*June 19, 2025*/
+use App\Http\Controllers\ProductPricePerSellerController;
+/*June 29, 2025*/
+use App\Http\Controllers\ProductSellingPriceController;
+
 
 /*Daily Sales - March 6, 2025*/
 use App\Http\Controllers\DailySalesReportController;
@@ -147,8 +152,11 @@ Route::get('/soa_summary_history', [ReportController::class,'soa_summary_history
 Route::post('/generate_soa_summary', [ReportController::class,'generate_soa_summary'])->name('generate_soa_summary')->middleware('isLoggedIn');
 /*Generate via Web Page View - For receivable*/
 Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_soa_summary_pdf')->middleware('isLoggedIn');
-//Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_receivable_soa_pdf')->middleware('isLoggedIn');
-//Route::post('/generate_report_recievable_after_saved', [ReportController::class,'generate_report_recievable_after_saved'])->name('generate_report_recievable_after_saved')->middleware('isLoggedIn');
+
+Route::get('/generate_soa_summary_pdf_v_762025', [ReportController::class,'generate_soa_summary_pdf_v_762025'])->name('generate_soa_summary_pdf_v_762025')->middleware('isLoggedIn');
+
+
+
 
 /*Daily Sales Reports*/
 Route::get('/daily_sales', [DailySalesReportController::class,'daily_sales_page'])->name('daily_sales')->middleware('isLoggedIn');
@@ -257,6 +265,10 @@ Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_o
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');
 
+/*Get Product Selling Price of Client July 1, 2025*/
+Route::post('/get_product_list_selling_price', [SalesOrderController::class, 'get_product_list_selling_price'])->name('get_product_list_selling_price')->middleware('isLoggedIn');
+
+
 /*Sales Order Delivery*/
 Route::post('/sales_order_component_delivery_compose', [SalesOrderDeliveryController::class,'sales_order_component_delivery_compose'])->name('SalesOrderDeliveryCompose')->middleware('isLoggedIn');
 Route::post('/get_sales_order_product_list_delivery', [SalesOrderDeliveryController::class,'get_sales_order_product_list_delivery'])->name('ProductListDelivery')->middleware('isLoggedIn');
@@ -312,8 +324,10 @@ Route::post('/get_purchase_order_payment_list', [PurchaseOrderController_v2::cla
 Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController_v2::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
 /*Update Purchase Status*/
 Route::post('/update_purchase_status', [PurchaseOrderController_v2::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
-
+/*Update Purchase - Add/Edit/Delete Product,Withdrawal,Payment*/
 Route::get('/purchase_order_form/{id}', [PurchaseOrderController_v2::class, 'purchase_order_form'])->name('purchase_order_forms')->middleware('isLoggedIn');
+/*Get Product Selleing Price of Supplier*/
+Route::post('/get_product_list_suppliers_price', [PurchaseOrderController_v2::class, 'get_product_list_suppliers_price'])->name('get_product_list_suppliers_price')->middleware('isLoggedIn');
 
 /*Create Payment for Purchase Order*/
 Route::post('/create_purchase_order_payment_item', [PurchaseOrderController_v2::class,'create_purchase_order_payment_item'])->name('PurchaseOrderPayment')->middleware('isLoggedIn');
@@ -473,6 +487,18 @@ Route::post('/branch_info', [BranchController::class, 'branch_info'])->name('Bra
 Route::post('/update_branch_post', [BranchController::class,'update_branch_post'])->name('UpdateBranch')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_branch_confirmed', [BranchController::class, 'delete_branch_confirmed'])->name('DeleteBranch')->middleware('isLoggedIn');
+
+/*June 19, 2025 - Seller's Price*/
+Route::post('sellers_price/list', [ProductPricePerSellerController::class, 'get_product_price_per_seller'])->name('ProductPricePerSellerList')->middleware('isLoggedIn');
+Route::post('/create_product_seller_price_post', [ProductPricePerSellerController::class,'create_product_seller_price_post'])->name('create_product_seller_price_post')->middleware('isLoggedIn');
+Route::post('/product_price_per_seller_info', [ProductPricePerSellerController::class, 'product_price_per_seller_info'])->name('product_price_per_seller_info')->middleware('isLoggedIn');
+Route::post('/delete_product_price_per_seller_info_confirmed', [ProductPricePerSellerController::class,'delete_product_price_per_seller_info_confirmed'])->name('delete_product_price_per_seller_info_confirmed')->middleware('isLoggedIn');
+
+/*June 29, 2025 - Client's Price*/
+Route::post('selling_price/list', [ProductSellingPriceController::class, 'get_selling_price_list'])->name('ProductSellingPriceList')->middleware('isLoggedIn');
+Route::post('/create_product_selling_price_post', [ProductSellingPriceController::class,'create_product_selling_price_post'])->name('create_product_selling_price_post')->middleware('isLoggedIn');
+Route::post('/product_selling_price_info', [ProductSellingPriceController::class, 'product_selling_price_info'])->name('product_selling_price_info')->middleware('isLoggedIn');
+Route::post('/delete_selling_price_info_confirmed', [ProductSellingPriceController::class,'delete_selling_price_info_confirmed'])->name('delete_selling_price_info_confirmed')->middleware('isLoggedIn');
 
 
 /* Sales Summary */

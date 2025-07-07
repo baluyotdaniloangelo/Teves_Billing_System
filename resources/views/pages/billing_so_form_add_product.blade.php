@@ -352,14 +352,11 @@
         </div>
     </div>	
 			
-	<!--Data List for Product-->
+	<!--Data List for Product-->	
 	<datalist id="product_list">
-		@foreach ($product_data as $product_data_cols)
-			<span style="font-family: DejaVu Sans; sans-serif;">
-				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-			</span>
-		@endforeach
+			<span >	</span>
 	</datalist>	
+	
 </div></div>
     </section>
 </main>

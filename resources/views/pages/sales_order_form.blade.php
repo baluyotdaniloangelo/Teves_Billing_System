@@ -43,7 +43,7 @@
                 </li>
 				
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" onclick="LoadProduct()" title='Product List, Create, Update and Delete Product'>Product</button>
+                  <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product" aria-selected="true" title='Product List, Create, Update and Delete Product'>Product</button>
                 </li>
 				
 				<li class="nav-item" role="presentation">
@@ -51,7 +51,7 @@
                 </li>
 				
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false" tabindex="-1" onclick="LoadPayment()" title='Payment List, Create, Update and Delete Payment'>Payment</button>
+                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false" tabindex="-1" title='Payment List, Create, Update and Delete Payment'>Payment</button>
                 </li>
 				
 				<li class="nav-item" role="presentation">
@@ -165,8 +165,9 @@
 						<tr class='report'>
 							<th style="text-align:center !important;">#</th>
 							<th style="text-align:center !important;">Action</th>
+							<th style="text-align:center !important;">Date</th>
+							<th style="text-align:center !important;">Time</th>
 							<th style="text-align:center !important;">Mode of Payment</th>
-							<th style="text-align:center !important;">Date of Payment</th>
 							<th style="text-align:center !important;">Reference No.</th>
 							<th style="text-align:center !important;">Remarks</th>
 							<th style="text-align:center !important;">Amount</th>	
@@ -241,7 +242,7 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="" class="col-sm-4 col-form-label">Amount : </label>
+						  <label class="col-sm-4 col-form-label">Amount : </label>
 						  <label class="col-sm-8 col-form-label" id="receivable_amount_info"></label>
 						</div>
 					<div class="card-footer">
@@ -278,8 +279,6 @@
 				</div>
 			</div>
 		</div>
- 
-
  
 	<!--Modal to Create SO Product-->
 	<div class="modal fade" id="AddProductModal" tabindex="-1">
@@ -459,12 +458,8 @@
 
 	<!--Data List for Product-->
 	<datalist id="product_list">
-		@foreach ($product_data as $product_data_cols)
-			<span style="font-family: DejaVu Sans; sans-serif;">
-				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-			</span>
-		@endforeach
-	</datalist>		
+			<span >	</span>
+	</datalist>	
     </section>
 	
 	
@@ -489,6 +484,7 @@
 							<select class="form-select" required name="receivable_mode_of_payment" id="receivable_mode_of_payment">
 								<option value="Cash" selected>Cash</option>
 								<option value="Bank Transfer">Bank Transfer</option>
+								<option value="Cash Deposit">Cash Transfer</option>
 								<option value="Credit Card">Credit Card</option>
 								<option value="Debit Card">Debit Card</option>
 								<option value="E-Wallet/Mobile Payments">E-Wallet/Mobile Payments</option>
@@ -505,12 +501,20 @@
 						
 							<div class="form-floating mb-3">
 								<input type='date' class='form-control' id='receivable_date_of_payment' name='receivable_date_of_payment' value='<?=date('Y-m-d');?>' max="9999-12-31" >
-								<label for="receivable_date_of_payment">Date of Payment</label>
+								<label for="receivable_date_of_payment">Date</label>
 								<span class="valid-feedback" id="receivable_date_of_paymentError"></span>
 							</div>
 						 
 						</div>
+						<div class="col-sm-12">
 						
+							<div class="form-floating mb-3">
+								<input type='time' class='form-control' id='receivable_time_of_payment' name='receivable_time_of_payment' value='<?=date('H:i');?>'>
+								<label for="receivable_time_of_payment">Time of Payment</label>
+								<span class="valid-feedback" id="receivable_time_of_paymentError"></span>
+							</div>
+						 
+						</div>						
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" aria-describedby="basic-addon1" name="receivable_reference" id="receivable_reference" required placeholder="Reference No.">
@@ -532,7 +536,7 @@
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" aria-describedby="basic-addon1" name="receivable_payment_remarks" id="receivable_payment_remarks" placeholder="Remarks/Comments">
-								<label for="receivable_reference">Remarks</label>
+								<label for="receivable_payment_remarks">Remarks</label>
 								<span class="valid-feedback" id="receivable_payment_remarksError"></span>
 							</div>
 							 
@@ -625,7 +629,7 @@
 				<div class="col-sm-4">
 				<div align="left"style="margin: 10px;">
 					Mode of Payment: <span id="delete_receivable_mode_of_payment"></span><br>
-					Date Of Payment: <span id="delete_receivable_date_of_payment"></span><br>	
+					Date: <span id="delete_receivable_date_of_payment"></span><br>	
 					Reference No.: <span id="delete_receivable_reference"></span><br>
 					Amount: <span id="delete_receivable_payment_amount"></span><br>
 				</div>
@@ -658,9 +662,11 @@
 				<div class="col-sm-4">
 				<div align="left"style="margin: 10px;">
 				
+				Date: <span id="view_receivable_date_of_payment"></span><br>	
+				Time: <span id="view_receivable_time_of_payment"></span><br>	
 				Mode of Payment: <span id="view_receivable_mode_of_payment"></span><br>
-				Date Of Payment: <span id="view_receivable_date_of_payment"></span><br>	
 				Reference No.: <span id="view_receivable_reference"></span><br>
+				Remarks: <span id="view_receivable_payment_remarks"></span><br>
 				Amount: <span id="view_receivable_payment_amount"></span><br>
 				
 				</div>
@@ -720,7 +726,7 @@
 							<span >	</span>
 							
 							</datalist>								
-							<label for="product_delivery_idx">Product</label>
+							<label for="sales_order_component_product_idx">Product</label>
 							<span class="valid-feedback" id="sales_order_component_product_idxError"></span>
 						 </div>
 						

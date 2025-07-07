@@ -59,6 +59,30 @@
 			
 			document.getElementById("update_purchase_order_invoice").value = response[0].purchase_order_invoice;	
 			
+			if(response[0].purchase_order_invoice == 1){ var purchase_order_invoice_value = 'Yes'; }else{ var purchase_order_invoice_value = 'No'; }
+			
+			$('#po_info_date').html(response[0].purchase_order_date);
+			$('#po_info_branch_name').html(response[0].branch_code);
+			$('#po_info_suppliers_name').html(response[0].supplier_name);
+			$('#po_info_net_value').html(response[0].purchase_order_net_percentage);
+			$('#po_info_with_sales_invoice').html(purchase_order_invoice_value);
+			$('#po_info_less_value').html(response[0].purchase_order_less_percentage);
+			$('#po_info_sales_order').html(response[0].purchase_order_sales_order_number);
+			
+			$('#po_info_collection_receipt').html(response[0].purchase_order_collection_receipt_no);
+			$('#po_info_sales_invoice').html(response[0].purchase_order_official_receipt_no);
+			$('#po_info_delivery_receipt').html(response[0].purchase_order_delivery_receipt_no);
+			
+			$('#po_info_delivery_method').html(response[0].purchase_order_delivery_method);
+			$('#po_info_loading_terminal').html(response[0].purchase_loading_terminal);
+			$('#po_info_haulers_name').html(response[0].hauler_operator);
+			$('#po_info_drivers_name').html(response[0].lorry_driver);
+			$('#po_info_plate_number').html(response[0].plate_number);
+			$('#po_info_destination').html(response[0].purchase_destination);
+			$('#po_info_instructions').html(response[0].purchase_order_instructions);
+			$('#po_info_notes').html(response[0].purchase_order_note);
+
+			
 				  }
 				},
 				error: function(error) {
@@ -275,8 +299,55 @@
 				}
 			   });
 	}  	  
+
+	function LoadSuppliersPriceList() {	
+		
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+		let supplier_idx 	= $('#update_supplier_name_list option[value="' + $('#update_supplier_idx').val() + '"]').attr('data-id');
+		let branch_idx 		= $("#update_company_header").val();
+		//alert(supplier_idx);
+			  $.ajax({
+				url: "/get_product_list_suppliers_price",
+				type:"POST",
+				data:{
+					supplier_idx:supplier_idx,
+					branch_idx:branch_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response['suppliers_price_list']);
+				  if(response['suppliers_price_list']!='') {			  
+				  
+						var len = response['suppliers_price_list'].length;
+
+						
+							for(var i=0; i<len; i++){
+								
+								var product_idx = response['suppliers_price_list'][i].product_idx;
+								var product_name = response['suppliers_price_list'][i].product_name;
+								var product_unit_measurement = response['suppliers_price_list'][i].product_unit_measurement;
+								var product_price = response['suppliers_price_list'][i].product_price;
+								
+								$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='&#8369; "+product_price +" | "+product_name +"' data-price='"+product_price+"' data-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
+								
+							}							
+					
+						
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	} 
 	
-	<!--Save New Sales Order-->
+	<!--Save New Purchase Order-->
 	$("#update-purchase-order").click(function(event){
 
 			event.preventDefault();
@@ -286,11 +357,12 @@
 			let purchase_order_id						= document.getElementById("update-purchase-order").value;
 			let purchase_order_date 					= $("input[name=update_purchase_order_date]").val();
 			let supplier_idx 							= $('#update_supplier_name_list option[value="' + $('#update_supplier_idx').val() + '"]').attr('data-id');
+			
 			/*Supplier's Name and Product Name*/
 			let supplier_name 							= $("input[name=update_supplier_name]").val();
 			/*Added May 6, 2023*/
 			let company_header 							= $("#update_company_header").val();
-			let purchase_order_invoice 							= $("#update_purchase_order_invoice").val();
+			let purchase_order_invoice 					= $("#update_purchase_order_invoice").val();
 			
 			let purchase_order_sales_order_number 		= $("input[name=update_purchase_order_sales_order_number]").val();
 			let purchase_order_collection_receipt_no 	= $("input[name=update_purchase_order_collection_receipt_no]").val();
@@ -341,7 +413,7 @@
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#update_purchase_supplier_nameError').text('');	
-					LoadProductList(company_header);
+					LoadSuppliersPriceList();
 					document.getElementById("AddPurchaseOrderProductBTN").disabled = false;
 				  }
 				},
@@ -415,8 +487,7 @@
 	  
 	});
 	  
-	  
-		/*Saler Order Status*/
+	/*Saler Order Status*/
 	$('body').on('click','#PrintPurchaseOrderDeliveyStatus',function(){	  
 	  
 			let purchaseOrderID = {{ $PurchaseOrderID }};
@@ -459,6 +530,7 @@
 	
 	}	
 
+	/*Not In Used*/
 	function LoadProductList(branch_id) {		
 	
 		$("#product_list span").remove();
@@ -495,7 +567,8 @@
 				}
 			   });
 	}
-	  
+	/*Not In Used*/
+	
 	<!--Product-->
 	$("#save-product").click(function(event){
 		
@@ -520,11 +593,14 @@
 			let purchase_order_net_percentage 	= $("input[name=purchase_order_net_percentage]").val();
 			let purchase_order_less_percentage 	= $("input[name=purchase_order_less_percentage]").val();
 			
+			let supplier_idx 							= $('#update_supplier_name_list option[value="' + $('#update_supplier_idx').val() + '"]').attr('data-id');
+			
 			  $.ajax({
 				url: "{{ route('PurchaseOrderProduct') }}",
 				type:"POST",
 				data:{
 				  branch_idx:company_header,	
+				  supplier_idx:supplier_idx,	
 				  purchase_order_id:purchase_order_id,
 				  purchase_order_component_id:purchase_order_component_id,
 				  product_idx:product_idx,

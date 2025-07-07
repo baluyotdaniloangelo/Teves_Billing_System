@@ -1,7 +1,7 @@
    <script type="text/javascript">		 
 	<!--Update Sales Order-->
 	//ClientInfo();
-	LoadProduct();
+	LoadProduct_under_sales_order();
 	LoadPayment();
 	LoadReceivables();
 	
@@ -81,8 +81,7 @@
 				  console.log(response);
 				  if(response) {
 					  
-					LoadProduct(sales_order_id);
-					LoadProductList(company_header);
+					LoadProduct_under_sales_order(sales_order_id);
 					document.getElementById("AddSalesOrderProductBTN").disabled = false;
 					
 					$('#switch_notice_on').show();
@@ -176,7 +175,8 @@
 				}
 			   });	
 	}
-
+	
+	/*Not In used*/
 	function LoadProductList(branch_id) {		
 	
 		$("#product_list span").remove();
@@ -213,6 +213,7 @@
 				}
 			   });
 	}
+	/*Not In used*/
 	
 	$("#save-product").click(function(event){
 		
@@ -226,27 +227,25 @@
 
 			document.getElementById('AddProduct').className = "g-3 needs-validation was-validated";
 			
-			let company_header 			= $("#company_header").val();
-		
+			let company_header 			= $("#company_header").val();		
 			let product_idx 			= $("#product_list option[value='" + $('#product_idx').val() + "']").attr('data-id');
-
 			let product_manual_price 	= $("#product_manual_price").val();
 			let order_quantity 			= $("input[name=order_quantity]").val();
-
 			/*Product Name*/
-			let product_name 			= $("input[name=product_name]").val();
-			
+			let product_name 			= $("input[name=product_name]").val();		
 			let sales_order_id 			= {{ $SalesOrderID }};
-			let receivable_id 			= {{ @$receivables_details['receivable_id'] }};
-			
+			let receivable_id 			= {{ @$receivables_details['receivable_id'] }};		
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
-			
+			let client_idx 	= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));			
+			let branch_idx 	= $("#company_header").val();
+		
 			  $.ajax({
 				url: "{{ route('SalesOrderComponentCompose') }}",
 				type:"POST",
 				data:{
 				  sales_order_component_id:0,
+				  client_idx:client_idx,
 				  branch_idx:company_header,
 				  sales_order_id:sales_order_id,
 				  receivable_id:receivable_id,
@@ -281,8 +280,7 @@
 						document.getElementById("save-product").value = 0;
 						
 						/*Reload Table*/
-						LoadProduct();
-						
+						LoadProduct_under_sales_order();
 				  
 				},
 				beforeSend:function()
@@ -329,7 +327,56 @@
 			   });	
 	  });	
 
-	function LoadProduct() {
+	LoadSellingPriceList();
+	function LoadSellingPriceList() {	
+		
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+		let client_idx 	= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));				
+		let branch_idx 	= $("#company_header").val();		
+
+			  $.ajax({
+				url: "/get_product_list_selling_price",
+				type:"POST",
+				data:{
+					client_idx:client_idx,
+					branch_idx:branch_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response['clients_price_list']);
+				  if(response['clients_price_list']!='') {			  
+				  
+						var len = response['clients_price_list'].length;
+
+						
+							for(var i=0; i<len; i++){
+								
+								var product_idx = response['clients_price_list'][i].product_idx;
+								var product_name = response['clients_price_list'][i].product_name;
+								var product_unit_measurement = response['clients_price_list'][i].product_unit_measurement;
+								var product_price = response['clients_price_list'][i].product_price;
+								
+								$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='&#8369; "+product_price +" | "+product_name +"' data-price='"+product_price+"' data-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
+								
+							}							
+					
+						
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	} 
+
+	/*Load Product Under Sales Order*/
+	function LoadProduct_under_sales_order() {
 		
 		$("#table_sales_order_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_sales_order_product_body_data');
@@ -504,27 +551,26 @@
 
 			document.getElementById('EditSalesOrderComponentProduct').className = "g-3 needs-validation was-validated";
 			
-			let company_header 			= $("#company_header").val();
-			
-			let sales_order_id 			= {{ $SalesOrderID }};
-			let receivable_id 			= {{ @$receivables_details['receivable_id'] }};
-			
+			let company_header 				= $("#company_header").val();
+			let sales_order_id 				= {{ $SalesOrderID }};
+			let receivable_id 				= {{ @$receivables_details['receivable_id'] }};
 			let sales_order_component_id 	= document.getElementById("update-product").value;
 			let product_idx 				= $("#product_list option[value='" + $('#edit_product_idx').val() + "']").attr('data-id');
 			let product_manual_price 		= $("#edit_product_manual_price").val();
 			let order_quantity 				= $("input[name=edit_order_quantity]").val();
-
 			/*Product Name*/
-			let product_name 				= $("input[name=edit_product_name]").val();
-			
+			let product_name 				= $("input[name=edit_product_name]").val();		
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
-			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
-
+			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();		
+			let client_idx 					= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));				
+			let branch_idx 					= $("#company_header").val();
+			
 			  $.ajax({
 				url: "{{ route('SalesOrderComponentCompose') }}",
 				type:"POST",
 				data:{
-				  branch_idx:company_header,	
+				  branch_idx:company_header,
+				  client_idx:client_idx,				  
 				  sales_order_id:sales_order_id,
 				  receivable_id:receivable_id,
 				  sales_order_component_id:sales_order_component_id,
@@ -559,7 +605,7 @@
 						document.getElementById("update-product").value = 0;
 						
 						/*Reload Table*/
-						LoadProduct();
+						LoadProduct_under_sales_order();
 						LoadReceivables();
 									  
 				},
@@ -771,7 +817,7 @@
 					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
 
 					/*Reload Table*/
-					LoadProduct();
+					LoadProduct_under_sales_order();
 					
 				  }
 				},
@@ -862,7 +908,6 @@
 						ResetPaymentForm();
 						/*Reload Table*/
 						LoadPayment();
-						LoadProduct();
 					
                     },error: function(error) {
 					
@@ -958,6 +1003,7 @@
 							
 							var receivable_mode_of_payment 		= response[i].receivable_mode_of_payment;
 							var receivable_date_of_payment 		= response[i].receivable_date_of_payment;
+							var receivable_time_of_payment 		= response[i].receivable_time_of_payment;
 							var receivable_reference			= response[i].receivable_reference;
 							var image_reference 				= response[i].image_reference;
 							var receivable_payment_remarks 		= response[i].receivable_payment_remarks;
@@ -995,8 +1041,9 @@
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td><div align='center' class='action_table_menu_Product' >"+action_controls+"</div></td>"+	
-								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
+								"<td class='update_time_of_payment_td' align='center'>"+receivable_time_of_payment+"</td>"+
+								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_payment_remarks+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='right'><span >&#8369; "+receivable_payment_amount+"</span></td>");
@@ -1006,8 +1053,9 @@
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td><div align='center' class='action_table_menu_Product' >"+action_controls+" <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
-								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
+								"<td class='update_time_of_payment_td' align='center'>"+receivable_time_of_payment+"</td>"+
+								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_reference+"</td>"+
 								"<td class='update_purchase_order_reference_no_td' align='center'>"+receivable_payment_remarks+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='right'><span >&#8369; "+receivable_payment_amount+"</span></td>");
@@ -1046,16 +1094,19 @@
 							'<div class="carousel-caption d-none d-md-block" style="background-color:#000000de; border-top:solid orange 2px; border-bottom:solid orange 2px; position: fixed !important; bottom: 30px !important; transition: all 0.3s;">'+
 						    '<table width="100%"><thead>'+
 							'<tr>'+
-							'<th style="text-align:center !important;">Bank</th>'+
-							'<th style="text-align:center !important;">Date of Payment</th>'+
+							'<th style="text-align:center !important;">Date</th>'+
+							'<th style="text-align:center !important;">Time</th>'+
+							'<th style="text-align:center !important;">Mode of Payment</th>'+
 							'<th style="text-align:center !important;">Reference No.</th>'+
+							'<th style="text-align:center !important;">Remarks</th>'+
 							'<th style="text-align:center !important;">Amount</th>'+
 							'</tr>'+
 							'</thead>'+
 							'<tbody>'+
 							'<tr>'+
-							'<td>'+receivable_mode_of_payment+'</td>'+
 							'<td>'+receivable_date_of_payment+'</td>'+
+							'<td>'+receivable_time_of_payment+'</td>'+
+							'<td>'+receivable_mode_of_payment+'</td>'+
 							'<td>'+receivable_reference+'</td>'+
 							'<td>'+receivable_payment_remarks+'</td>'+
 							'<td>'+receivable_payment_amount+'</td>'+
@@ -1102,6 +1153,7 @@
 					/*Set Details*/
 					document.getElementById("receivable_mode_of_payment").value 	= response[0].receivable_mode_of_payment;
 					document.getElementById("receivable_date_of_payment").value 	= response[0].receivable_date_of_payment;
+					document.getElementById("receivable_time_of_payment").value 	= response[0].receivable_time_of_payment;
 					document.getElementById("receivable_reference").value 			= response[0].receivable_reference;
 					document.getElementById("receivable_payment_amount").value 		= response[0].receivable_payment_amount;
 					document.getElementById("receivable_payment_remarks").value 	= response[0].receivable_payment_remarks;
@@ -1150,7 +1202,9 @@
 					/*Set Details*/
 					$('#view_receivable_mode_of_payment').text(response[0].receivable_mode_of_payment);
 					$('#view_receivable_date_of_payment').text(response[0].receivable_date_of_payment);
+					$('#view_receivable_time_of_payment').text(response[0].receivable_time_of_payment);
 					$('#view_receivable_reference').text(response[0].receivable_reference);
+					$('#view_receivable_payment_remarks').text(response[0].receivable_payment_remarks);
 					$('#view_receivable_payment_amount').text(response[0].receivable_payment_amount);
 					
 					if(response[0].image_reference != null){
@@ -1228,8 +1282,8 @@
 			   });	
 	  });	
 
-	  <!-- Confirmed For Deletion-->
-	  $('body').on('click','#deleteSalesOrderPaymentConfirmed',function(){
+	<!-- Confirmed For Deletion-->
+	$('body').on('click','#deleteSalesOrderPaymentConfirmed',function(){
 			
 			event.preventDefault();
 			
@@ -1338,5 +1392,4 @@
 	  });	
 
 
-	
  </script>

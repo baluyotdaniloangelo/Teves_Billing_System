@@ -108,8 +108,8 @@
 		$("#product_name_PH2 span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_name_PH2');
 
-		$("#product_list_PH3 span").remove();
-		$('<span style="display: none;"></span>').appendTo('#product_list_PH3');
+		/**///$("#product_list_PH3 span").remove();
+		/**///$('<span style="display: none;"></span>').appendTo('#product_list_PH3');
 
 		$("#product_list_inventory span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_list_inventory');
@@ -138,9 +138,9 @@
 							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
 							"</span>");	
 							
-							$('#product_list_PH3 span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
-							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
-							"</span>");	
+							//$('#product_list_PH3 span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+							//"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
+							//"</span>");	
 							
 							$('#product_list_inventory span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
 							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
@@ -156,6 +156,54 @@
 				}
 			   });
 	}
+	
+	/*for MSC Items*/
+	function LoadSellingPriceList(client_idx){	
+		
+		$("#product_list_PH3 span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list_PH3');
+
+		let branch_idx 			= $("#teves_branch").val();
+		//let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
+			
+			$.ajax({
+				url: "/get_product_list_selling_price",
+				type:"POST",
+				data:{
+					client_idx:client_idx,
+					branch_idx:branch_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response['clients_price_list']);
+				  if(response['clients_price_list']!='') {			  
+				  
+						var len = response['clients_price_list'].length;
+
+						
+							for(var i=0; i<len; i++){
+								
+								var product_idx = response['clients_price_list'][i].product_idx;
+								var product_name = response['clients_price_list'][i].product_name;
+								var product_unit_measurement = response['clients_price_list'][i].product_unit_measurement;
+								var product_price = response['clients_price_list'][i].product_price;
+								
+								$('#product_list_PH3 span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='&#8369; "+product_price +" | "+product_name +"' data-price='"+product_price+"' data-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
+								
+							}							
+					
+						
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	} 
 	
 	function UpdateBranch(){ 
 	
@@ -941,6 +989,8 @@
 			var client_idx = $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			
 		}
+		alert(client_idx);
+		LoadSellingPriceList(client_idx);
 		
 		let teves_branch 				= $("#teves_branch").val();
 		

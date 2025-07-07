@@ -256,6 +256,11 @@ class ReportController extends Controller
 		$start_date = $request->start_date;
 		$end_date = $request->end_date;
 
+		/*Remainiong Balance*/
+		$receivable_remaining_balance_total = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+				->where('teves_receivable_table.billing_date', '<', $start_date)
+				->sum('receivable_remaining_balance');
+
 	   /*SOA Data*/
 	   $receivable_data = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
 					->where('teves_receivable_table.billing_date', '>=', $start_date)
@@ -282,8 +287,8 @@ class ReportController extends Controller
 		
 		$title = 'STATEMENT OF ACCOUNT - Summary';
 		  
-        $pdf = PDF::loadView('printables.report_receivables_summary_soa_pdf', compact('title', 'receivable_data', 'user_data','receivable_header', 'client_data','start_date','end_date'));
-		
+        $pdf = PDF::loadView('printables.report_receivables_summary_soa_pdf', compact('title', 'receivable_data', 'user_data','receivable_header', 'client_data', 'start_date', 'end_date', 'receivable_remaining_balance_total'));
+		 
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
@@ -293,6 +298,78 @@ class ReportController extends Controller
 		}
 	}		
 	
+	public function generate_soa_summary_pdf_v_762025(Request $request){
+
+		if(Session::has('loginID')){
+			
+		$request->validate([
+			'client_idx'      		=> 'required',
+			'company_header'      		=> 'required',
+			'start_date'      		=> 'required',
+			'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'company_header.required' 	=> 'Please select a Branch',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$company_header = $request->company_header;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+		/*Remainiong Balance*/
+		$receivable_remaining_balance_total = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+				->where('teves_receivable_table.billing_date', '<', $start_date)
+				->sum('receivable_remaining_balance');
+
+	   /*SOA Data*/
+	   $receivable_data = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+					->where('teves_receivable_table.billing_date', '>=', $start_date)
+                    ->where('teves_receivable_table.billing_date', '<=', $end_date)
+              	->get([
+					'teves_receivable_table.receivable_name',
+					'teves_receivable_table.billing_date',
+					'teves_receivable_table.billing_time',
+					'teves_receivable_table.control_number',
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_gross_amount',
+					'teves_receivable_table.receivable_vatable_sales',
+					'teves_receivable_table.receivable_vat_amount',
+					'teves_receivable_table.receivable_net_value_percentage',
+					'teves_receivable_table.receivable_vat_value_percentage',
+					'teves_receivable_table.receivable_withholding_tax_percentage',
+					'teves_receivable_table.receivable_withholding_tax',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.receivable_remaining_balance'
+				]);	
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);			
+					
+		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'STATEMENT OF ACCOUNT - Summary';
+		  
+        $pdf = PDF::loadView('printables.report_receivables_summary_soa_pdf_v_762025', compact('title', 'receivable_data', 'user_data','receivable_header', 'client_data', 'start_date', 'end_date', 'receivable_remaining_balance_total'));
+		 
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($client_data['client_name']."_RECEIVABLE_SOA.pdf");
+		
+		}
+	}
 	
 	/*Generated for receivable but not save*/
 	public function generate_report_recievable (Request $request){
@@ -808,11 +885,12 @@ class ReportController extends Controller
 				]);
 				
 		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
-				->where('teves_receivable_payment.receivable_mode_of_payment', '<>', 'Post-Dated Check')
+				//->where('teves_receivable_payment.receivable_mode_of_payment', '<>', 'Post-Dated Check')
 				->orderBy('receivable_payment_id', 'asc')
               	->get([
 					'teves_receivable_payment.receivable_payment_id',
 					'teves_receivable_payment.receivable_date_of_payment',
+					'teves_receivable_payment.receivable_time_of_payment',
 					'teves_receivable_payment.receivable_mode_of_payment',
 					'teves_receivable_payment.receivable_reference',
 					'teves_receivable_payment.receivable_payment_amount',
@@ -841,7 +919,7 @@ class ReportController extends Controller
 		
 		$title = 'STATEMENT OF ACCOUNT';
 		  
-        $pdf = PDF::loadView('printables.report_receivables_soa_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','receivable_header'));
+        $pdf = PDF::loadView('printables.report_receivables_soa_pdf_v_732025', compact('title', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','receivable_header'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

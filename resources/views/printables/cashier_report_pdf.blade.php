@@ -621,6 +621,16 @@
 					</tr>
 					<?php
 					$PH6_inventory_count = 1;
+					
+							$total_tank_capacity 		= 0;
+							$total_beginning_inventory 	= 0;
+							$total_sales_in_liters 		= 0;
+							$total_ugt_pumping 			= 0;
+							$total_delivery 			= 0;
+							$total_ending_inventory 	= 0;
+							$total_book_stock 			= 0;
+							$total_variance 			= 0;
+							
 					?>
 					@foreach ($data_PH6_inventory as $data_PH6_inventory_cols)
 					<tr class="data_tr" style="text-align: center; font-size:11px;">
@@ -637,12 +647,35 @@
 						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['book_stock'],2,".",",");?></td>
 						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($data_PH6_inventory_cols['variance'],2,".",",");?></td>
 						
+						<?php
+							$total_tank_capacity 		+= $data_PH6_inventory_cols->tank_capacity;
+							$total_beginning_inventory 	+= $data_PH6_inventory_cols->beginning_inventory;
+							$total_sales_in_liters 		+= $data_PH6_inventory_cols->sales_in_liters;
+							$total_ugt_pumping 			+= $data_PH6_inventory_cols->ugt_pumping;
+							$total_delivery 			+= $data_PH6_inventory_cols->delivery;
+							$total_ending_inventory 	+= $data_PH6_inventory_cols->ending_inventory;
+							$total_book_stock 			+= $data_PH6_inventory_cols->book_stock;
+							$total_variance 			+= $data_PH6_inventory_cols->variance;
+						?>
+						
 					</tr>
 					<?php
 					$PH6_inventory_count++;
 					?>
 					@endforeach
-					
+					<tr class="data_tr" style="text-align: center; font-size:11px;">
+						
+						<td nowrap style="border:1px solid #000;" width="10%" colspan="3">Total (Liters)</td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=$total_tank_capacity;?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_beginning_inventory,2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_sales_in_liters,2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_ugt_pumping,2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_delivery,2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_ending_inventory,2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_book_stock,2,".",",");?></td>
+						<td nowrap style="border:1px solid #000; text-align:right;"><?=number_format($total_variance ,2,".",",");?></td>
+						
+					</tr>
 		</table>
 </body>
 </html>

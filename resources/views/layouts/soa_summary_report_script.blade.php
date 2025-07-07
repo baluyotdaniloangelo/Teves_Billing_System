@@ -59,7 +59,8 @@
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf()"> PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(1)"> PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(2)"> PDF v2</button>'+
 							'</div>');
 							
 				  }else{
@@ -179,13 +180,13 @@
 	  
 	}
 
-	function download_soa_summary_report_pdf(receivable_id){
+	function download_soa_summary_report_pdf(version){
 			
 			let client_idx 		= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			let start_date 		= $("input[name=start_date]").val();
 			let end_date 		= $("input[name=end_date]").val();
 
-			let company_header 					= $("#company_header").val();	  
+			let company_header 	= $("#company_header").val();	  
 			
 		var query = {
 			company_header:company_header,
@@ -194,8 +195,13 @@
 			end_date:end_date,
 			_token: "{{ csrf_token() }}"
 		}
-
-		var url = "{{URL::to('generate_soa_summary_pdf')}}?" + $.param(query)
+		
+		if(version==1){
+			var url = "{{URL::to('generate_soa_summary_pdf')}}?" + $.param(query)
+		}else if(version==2){
+			var url = "{{URL::to('generate_soa_summary_pdf_v_762025')}}?" + $.param(query)
+		}
+		
 		window.open(url);
 	  
 	}

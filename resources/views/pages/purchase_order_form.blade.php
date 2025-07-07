@@ -29,213 +29,20 @@
 				</div>
 				
 				<hr>
-				<div class="row mb-2">
-					<div class="col-sm-5">
-						<form class="g-2 needs-validation" id="PurchaseOrderformUpdate">
-								
-							<div class="row mb-2">
-								<div class="col-md-6">
-									<label for="update_purchase_order_date" class="form-label">Date</label>
-									<input type="date" class="form-control" id="update_purchase_order_date" name="update_purchase_order_date" value="<?=date('Y-m-d');?>">
-								</div>
+			<div class="row mb-2">
+			
+		@include('pages.purchase_order_form_update_modal')
 
-								<div class="col-md-6">
-									<label for="update_company_header" class="form-label">Branch</label>
-										<select class="form-select form-control" required="" name="update_company_header" id="update_company_header" onchange="UpdateBranch()">
-											@foreach ($teves_branch as $teves_branch_cols)
-												<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
-											@endforeach
-										</select>
-								</div>
-							</div>
-							<hr>
-							<div class="row mb-2">
-								
-								<div class="col-md-12">
-								<label for="update_supplier_name" class="form-label">Supplier's Name</label>
-									<input class="form-control" list="update_supplier_name_list" name="update_supplier_name" id="update_supplier_idx" required autocomplete="off" onChange="SupplierInfo()">
-										<datalist id="update_supplier_name_list">
-											@foreach ($supplier_data as $supplier_data_cols)
-											  <option label="{{$supplier_data_cols->supplier_name}}" data-id="{{$supplier_data_cols->supplier_id}}" value="{{$supplier_data_cols->supplier_name}}">
-											@endforeach
-										</datalist>
-										<span class="valid-feedback" id="update_supplier_idxError"></span>
-								</div>
-							</div>
-							
-							<hr>	
-							
-							<div class="row mb-2">
-										
-										<div class="col-md-4">
-											  <label for="update_purchase_order_net_percentage" class="form-label">Net Value</label>
-											  <input type="number" class="form-control" id="update_purchase_order_net_percentage" name="update_purchase_order_net_percentage" step=".01">
-										</div>
-										
-										<div class="col-md-4">
-											<label for="update_purchase_order_invoice" class="form-label">With Sales Invoice?</label>
-											<select class="form-select form-control" required="" name="update_purchase_order_invoice" id="update_purchase_order_invoice" onchange="check_withholding_tax()">
-												<option value="1" selected>Yes</option>
-												<option value="0">No</option>
-											</select>
-										</div>
-											
-										<div class="col-md-4">
-										  <label for="update_purchase_order_less_percentage" class="form-label">Less Value</label>
-										  <input type="number" class="form-control" id="update_purchase_order_less_percentage" name="update_purchase_order_less_percentage" step=".01">
-										</div>
-										
-							</div>
-							<hr>
-							<div class="row mb-2">
-									<div class="col-md-6">
-										<label for="update_purchase_order_sales_order_number" class="form-label">Sales Order #</label>
-										<input type="text" class="form-control" id="update_purchase_order_sales_order_number" name="update_purchase_order_sales_order_number">
-										<span class="valid-feedback" id="update_purchase_order_sales_order_numberError"></span>
-									</div>
-									
-									<div class="col-md-6"> 
-									<label for="update_purchase_order_collection_receipt_no" class="form-label">Collection Receipt #</label>
-									  <input type="text" class="form-control" id="update_purchase_order_collection_receipt_no" name="update_purchase_order_collection_receipt_no">
-									  <span class="valid-feedback" id="update_purchase_order_collection_receipt_noError"></span>
-									</div>
-							</div>
-							
-							<div class="row mb-2">	
-								
-									<div class="col-md-6">
-										<label for="update_purchase_order_official_receipt_no" class="form-label">Sales Invoice #</label>
-										<input type="text" class="form-control" id="update_purchase_order_official_receipt_no" name="update_purchase_order_official_receipt_no">
-										<span class="valid-feedback" id="update_purchase_order_official_receipt_nooError"></span>
-									</div>
-									
-									
-									<div class="col-md-6">
-										<label for="update_purchase_order_delivery_receipt_no" class="form-label">Delivery Receipt #</label>									
-										<input type="text" class="form-control" id="update_purchase_order_delivery_receipt_no" name="update_purchase_order_delivery_receipt_no">
-										<span class="valid-feedback" id="update_purchase_order_delivery_receipt_noError"></span>
-									</div>
-									
-							</div>
-							
-							<hr>
-								
-							<div class="row mb-2">
-								
-									<div class="col-md-12">
-									<label for="update_purchase_order_delivery_method" class="form-label">Delivery Method</label>
-									  <input type="text" class="form-control" id="update_purchase_order_delivery_method" name="update_purchase_order_delivery_method">
-									</div>
-							</div>
-								
-							<div class="row mb-2">	
-								
-									<div class="col-md-12">
-									<label for="update_purchase_loading_terminal" class="form-label">Loading Terminal</label>
-									  <input type="text" class="form-control" id="update_purchase_loading_terminal" name="update_purchase_loading_terminal" list="purchase_loading_terminal_list">
-										<datalist id="purchase_loading_terminal_list">
-											@foreach ($purchase_data_suggestion as $purchase_loading_terminal_cols)
-												<option value="{{$purchase_loading_terminal_cols->purchase_loading_terminal}}">
-											@endforeach
-										</datalist>
-									</div>
-							</div>
-								
-							<hr>	
-							
-							<div class="row mb-2">
-								
-									<div class="col-md-12">
-									  <label for="update_hauler_operator" class="form-label">Hauler's Name</label>
-									  <input type="text" class="form-control" id="update_hauler_operator" name="update_hauler_operator">
-									</div>
-								
-									
-							</div>
-							
-							<div class="row mb-2">
-								
-								
-									<div class="col-md-12">
-									  <label for="update_lorry_driver" class="form-label">Driver's Name</label>
-									  <input type="text" class="form-control" id="update_lorry_driver" name="update_lorry_driver" list="lorry_driver_list">
-											<datalist id="lorry_driver_list">
-												@foreach ($purchase_data_suggestion as $lorry_driver_cols)
-													<option value="{{$lorry_driver_cols->lorry_driver}}">
-												@endforeach
-											  </datalist>
-									</div>
-									
-							</div>
-							
-							
-							<div class="row mb-2">
-							
-									<div class="col-md-12">
-									  <label for="update_plate_number" class="form-label">Plate Number</label>
-									  <input type="text" class="form-control" id="update_plate_number" name="update_plate_number" list="plate_number_list">
-											<datalist id="plate_number_list">
-												@foreach ($purchase_data_suggestion as $plate_number_cols)
-													<option value="{{$plate_number_cols->plate_number}}">
-												@endforeach
-											  </datalist>
-									</div>
-								
-							</div>
-							
-							<div class="row mb-2">
-								
-									<div class="col-md-12">
-									  <label for="update_purchase_destination" class="form-label">Destination</label>
-									  <input type="text" class="form-control" id="update_purchase_destination" name="update_purchase_destination" list="purchase_destination_list">
-											<datalist id="purchase_destination_list">
-												@foreach ($purchase_data_suggestion as $purchase_destination_cols)
-													<option value="{{$purchase_destination_cols->purchase_destination}}">
-												@endforeach
-											  </datalist>
-									</div>
-									
-								</div>	
-								
-								<div class="row mb-2">
-								
-									<div class="col-md-6">
-									  <label for="update_purchase_order_instructions" class="form-label">Instructions</label>
-									  <textarea class="form-control" id="update_purchase_order_instructions" name="update_purchase_order_instructions" style="height: 38px;"></textarea>
-									</div>
-									
-									<div class="col-md-6">
-									  <label for="update_purchase_order_note" class="form-label">Notes</label>
-									  <textarea class="form-control" id="update_purchase_order_note" name="update_purchase_order_note" style="height: 38px;"></textarea>
-									</div>
-					
-								</div>
-								
-								<div class="card-footer">
-												<div class="row mb-2">
-												<div class="col-sm-6" align=''>
-												<div id="loading_data_update_so" style="display:none;">
-													<div class="spinner-border text-success" role="status">
-														<span class="visually-hidden">Loading...</span>
-													</div>
-												</div>
-												</div>
-												<div class="col-sm-6" align='right'>
-												<a class="btn btn-secondary btn-sm new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder_v2') }}" title="Back">  
-												  <span title="Back to Sales Order List">Back</span>
-												</a>
-												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-purchase-order" title='Update Sales Order information'> Update</button>
-												</div>
-												</div>	
-								</div>
-						</form>
-					</div>
-					<div class="col-sm-7">
+					<div class="col-sm-12">
 					 <!-- Default Tabs -->
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" onclick="LoadProduct()">Product</button>
+                  <button class="nav-link active" id="purchase_order_info-tab" data-bs-toggle="tab" data-bs-target="#purchase_order_info" type="button" role="tab" aria-controls="purchase_order_info" aria-selected="true">Purchase Order Information</button>
+                </li>
+				
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link" id="purchase_order_product_list-tab" data-bs-toggle="tab" data-bs-target="#purchase_order_product_list" type="button" role="tab" aria-controls="purchase_order_product_list" aria-selected="true" onclick="LoadProduct()">Product</button>
                 </li>
 				
 				<li class="nav-item" role="presentation">
@@ -248,11 +55,42 @@
                
               </ul>
 			  
-              <div class="tab-content pt-2" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+			  <div class="tab-content pt-2" id="myTabContent">
+                <div class="tab-pane fade show active" id="purchase_order_info" role="tabpanel" aria-labelledby="purchase_order_info-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddPurchaseOrderProductBTN"></button>
+						<button type="button" class="btn btn-success new_item bi bi-pencil-fill form_button_icon" data-bs-toggle="modal" data-bs-target="#UpdatePurchaseOrderModal" id="UpdatePurchaseOrderBTN"></button>
+					</div>					
+					</div>
+
+					<!--Information Here-->
+					<ul class="list-group list-group-flush">
+							<li class="list-group-item"><b>Date:&nbsp;</b><span style="font-weight: normal;" id="po_info_date">&nbsp;</span></li>
+							<li class="list-group-item"><b>Branch:&nbsp;</b><span style="font-weight: normal;" id="po_info_branch_name">&nbsp;</span></li>
+							<li class="list-group-item"><b>Supplier's Name:&nbsp;</b><span style="font-weight: normal;" id="po_info_suppliers_name">&nbsp;</span></li>
+							<li class="list-group-item"><b>Net Value:&nbsp;</b><span style="font-weight: normal;" id="po_info_net_value"></span>&nbsp;</li>
+							<li class="list-group-item"><b>With Sales Invoice:&nbsp;</b><span style="font-weight: normal;" id="po_info_with_sales_invoice">&nbsp;</span></li>
+							<li class="list-group-item"><b>Less Value:&nbsp;</b><span style="font-weight: normal;" id="po_info_less_value">&nbsp;</span></li>
+							<li class="list-group-item"><b>Sales Order #:&nbsp;</b><span style="font-weight: normal;" id="po_info_sales_order">&nbsp;</span></li>
+							<li class="list-group-item"><b>Collection Receipt #:&nbsp;</b><span style="font-weight: normal;" id="po_info_collection_receipt">&nbsp;</span></li>
+							<li class="list-group-item"><b>Sales Invoice #:&nbsp;</b><span style="font-weight: normal;" id="po_info_sales_invoice">&nbsp;</span></li>
+							<li class="list-group-item"><b>Delivery Receipt #:&nbsp;</b><span style="font-weight: normal;" id="po_info_delivery_receipt">&nbsp;</span></li>
+							<li class="list-group-item"><b>Delivery Method:&nbsp;</b><span style="font-weight: normal;" id="po_info_delivery_method">&nbsp;</span></li>
+							<li class="list-group-item"><b>Loading Terminal:&nbsp;</b><span style="font-weight: normal;" id="po_info_loading_terminal">&nbsp;</span></li>
+							<li class="list-group-item"><b>Hauler's Name:&nbsp;</b><span style="font-weight: normal;" id="po_info_haulers_name">&nbsp;</span></li>
+							<li class="list-group-item"><b>Driver's Name:&nbsp;</b><span style="font-weight: normal;" id="po_info_drivers_name">&nbsp;</span></li>
+							<li class="list-group-item"><b>Plate Number:&nbsp;</b><span style="font-weight: normal;" id="po_info_plate_number">&nbsp;</span></li>
+							<li class="list-group-item"><b>Destination:&nbsp;</b><span style="font-weight: normal;" id="po_info_destination">&nbsp;</span></li>
+							<li class="list-group-item"><b>Instructions:&nbsp;</b><span style="font-weight: normal;" id="po_info_instructions">&nbsp;</span></li>
+							<li class="list-group-item"><b>Notes:&nbsp;</b><span style="font-weight: normal;" id="po_info_notes">&nbsp;</span></li>
+					</ul>
+						
+                </div>
+			  
+                <div class="tab-pane fade" id="purchase_order_product_list" role="tabpanel" aria-labelledby="purchase_order_product_list-tab">
+				<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddPurchaseOrderProductBTN" onclick="LoadSuppliersPriceList()"></button>
 					</div>					
 					</div>
 
@@ -439,11 +277,7 @@
 
 	<!--Data List for Product-->
 	<datalist id="product_list">
-		@foreach ($product_data as $product_data_cols)
-			<span style="font-family: DejaVu Sans; sans-serif;">
-				<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-			</span>
-		@endforeach
+			<span >	</span>
 	</datalist>	
 	
 	<!--Modal to Product-->
@@ -829,5 +663,9 @@
             </div>
         </div>
     </div>
+	
+	
+
+	
 @endsection
 

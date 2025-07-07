@@ -10,6 +10,7 @@ use App\Models\TevesBranchModel;
 use App\Models\ProductPricePerBranchModel;
 use App\Models\ProductPricePerBranchHistoryModel;
 use App\Models\SupplierModel;/*June 9, 2025*/
+use App\Models\ClientModel;
 use Session;
 use Validator;
 use DataTables;
@@ -389,8 +390,9 @@ class ProductController extends Controller
 			
 			$teves_branch = TevesBranchModel::all();
 			$supplier_data = SupplierModel::all();/*June 9, 2025*/
+			$client_data = ClientModel::all();/*June 29, 2025*/
 			
-			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID', 'supplier_data'));
+			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID', 'supplier_data', 'client_data'));
 		
 		}
 		

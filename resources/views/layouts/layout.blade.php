@@ -48,6 +48,8 @@ else if (Request::path()==('update_product_information')){
 <body class="">
 @include('layouts.footer')
 @include('layouts.update_product_info_script')
+@include('layouts.update_product_info_suppiers_price_script')
+@include('layouts.update_product_info_selling_price_script')
 <?php
 }
 else if (Request::is('client')){

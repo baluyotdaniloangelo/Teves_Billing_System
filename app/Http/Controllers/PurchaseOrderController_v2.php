@@ -157,7 +157,8 @@ class PurchaseOrderController_v2 extends Controller
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
 			$supplier_data = SupplierModel::all();
-			$product_data = ProductModel::all();
+			
+			//$product_data = ProductModel::all();
 			
 			if($data->user_branch_access_type=='ALL'){
 				
@@ -186,16 +187,39 @@ class PurchaseOrderController_v2 extends Controller
 			$purchase_data_suggestion = PurchaseOrderModel::select('purchase_loading_terminal','hauler_operator','lorry_driver','plate_number','contact_number','purchase_destination','purchase_destination_address')->distinct()->get();			
 			$purchase_payment_suggestion = PurchaseOrderPaymentModel::select('purchase_order_bank')->distinct()->get();
 				
-		return view("pages.purchase_order_form", compact('data','title','product_data','supplier_data','teves_branch', 'purchase_data_suggestion','purchase_payment_suggestion', 'PurchaseOrderID'));
+		return view("pages.purchase_order_form", compact('data','title','supplier_data','teves_branch', 'purchase_data_suggestion','purchase_payment_suggestion', 'PurchaseOrderID'));
 		}
 		
 	}  	
+	
+	public function get_product_list_suppliers_price(Request $request){
+
+		$suppliers_price_list = DB::table('teves_product_table as pt')
+		->select([
+			'pt.product_id as product_idx',
+			'pt.product_name',
+			'pt.product_unit_measurement',
+			DB::raw('COALESCE(spt.seller_price, pt.product_price) AS product_price')
+		])
+		->leftJoin('teves_product_seller_price_table as spt', function($join) use ($request) {
+			$join->on('pt.product_id', '=', 'spt.product_idx')
+				 ->where('spt.branch_idx', '=', $request->branch_idx)
+				 ->where('spt.supplier_idx', '=', $request->supplier_idx);
+		})
+		//->leftJoin('teves_branch_table as bt', 'bt.branch_id', '=', 'spt.branch_idx')
+		//->leftJoin('teves_supplier_table as st', 'st.supplier_id', '=', 'spt.supplier_idx')
+		->get();
+	
+		return response()->json(array('suppliers_price_list'=>$suppliers_price_list));
+			
+	}
 	
 	/*Fetch Product Information*/
 	public function purchase_order_info(Request $request){
 		
 				$data = PurchaseOrderModel::where('teves_purchase_order_table.purchase_order_id', $request->purchase_order_id)
 				->leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+				->leftJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_purchase_order_table.company_header')
               	->get([
 						'teves_supplier_table.supplier_name',
 						'teves_supplier_table.supplier_tin',
@@ -227,7 +251,8 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_order_instructions',
 						'teves_purchase_order_table.purchase_order_note',
 						'teves_purchase_order_table.company_header',
-						'teves_purchase_order_table.purchase_order_invoice'
+						'teves_purchase_order_table.purchase_order_invoice',
+						'teves_branch_table.branch_code'
 				]);	
 															
 					return response()->json($data);	
@@ -553,10 +578,20 @@ class PurchaseOrderController_v2 extends Controller
 					}else{
 		
 						/*Product Details*/
-						$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
-						LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
-						WHERE b.branch_idx = ? and b.product_idx = ?";			
-						$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);		
+						$product_info = DB::table('teves_product_table as pt')
+						->select([
+							'pt.product_id as product_idx',
+							'pt.product_name',
+							'pt.product_unit_measurement',
+							DB::raw('COALESCE(spt.seller_price, pt.product_price) AS product_price')
+						])
+						->leftJoin('teves_product_seller_price_table as spt', function($join) use ($request) {
+							$join->on('pt.product_id', '=', 'spt.product_idx')
+								 ->where('spt.branch_idx', '=', $request->branch_idx)
+								 ->where('spt.supplier_idx', '=', $request->supplier_idx)
+								 ->where('spt.product_idx', '=', $request->product_idx);
+						})
+						->get();				
 						
 						$product_price = $product_info[0]->product_price;
 						
@@ -720,7 +755,6 @@ class PurchaseOrderController_v2 extends Controller
 	public function save_purchase_order_payment(Request $request){
 
 			 $request->validate([
-			//$validator = \Validator::make($request->all(),[
 				'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
 				'purchase_order_bank'      			=> 'required',
 				'purchase_order_date_of_payment'    => 'required',
@@ -869,11 +903,8 @@ class PurchaseOrderController_v2 extends Controller
 						else{
 							return response()->json(['success'=>'Error on Payment Information']);
 						}	
-
-              // }
            }
      
-	 
 	/*Summary*/
 	public function purchase_order_summary(){
 		
@@ -914,7 +945,7 @@ class PurchaseOrderController_v2 extends Controller
 		
 	}   
 	
-		/*Fetch Product List using Datatable*/
+	/*Fetch Product List using Datatable*/
 	public function purchase_order_summary_data(Request $request){
 		
 		if(Session::has('loginID')){

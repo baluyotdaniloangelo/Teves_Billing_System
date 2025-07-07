@@ -65,6 +65,14 @@
 							<span class="valid-feedback" id="billing_dateError"></span>
 						  </div>
 						</div>
+						
+						<div class="row mb-2">
+						  <label for="billing_date" class="col-sm-3 col-form-label">Billing Time : </label>
+						  <div class="col-sm-9">
+							<input type="time" class="form-control " name="billing_time" id="billing_time" value="" required>
+							<span class="valid-feedback" id="billing_dateError"></span>
+						  </div>
+						</div>
 
 						<div class="row mb-2">
 						  <label for="start_date" class="col-sm-3 col-form-label">Period:</label>
@@ -215,9 +223,11 @@
 						<tr class='report'>
 							<th style="text-align:center !important;">#</th>
 							<th style="text-align:center !important;">Action</th>
+							<th style="text-align:center !important;">Date</th>
+							<th style="text-align:center !important;">Time</th>
 							<th style="text-align:center !important;">Mode of Payment</th>
-							<th style="text-align:center !important;">Date of Payment</th>
 							<th style="text-align:center !important;">Reference No.</th>
+							<th style="text-align:center !important;">Remarks</th>
 							<th style="text-align:center !important;">Amount</th>	
 						</tr>
 						</thead>
@@ -466,14 +476,26 @@
 						
 						<div class="form-floating mb-3">
 						
-						<input type='text' class='form-control' id='receivable_mode_of_payment' name='receivable_mode_of_payment' list='receivable_mode_of_payment' autocomplete='off' placeholder="Bank">
-							<datalist id='sales_order_bank_list'>
-								<?php foreach ($receivables_payment_suggestion as $receivables_payment_suggestion_cols) {?>
-									<option value='<?=$receivables_payment_suggestion_cols->receivable_mode_of_payment;?>'>
-								<?php } ?>
-							</datalist>
+						
+						<div class="col-sm-12">
+						<div class="form-floating mb-3">
+							<select class="form-select" required name="receivable_mode_of_payment" id="receivable_mode_of_payment">
+								<option value="Cash" selected>Cash</option>
+								<option value="Bank Transfer">Bank Transfer</option>
+								<option value="Cash Deposit">Cash Transfer</option>
+								<option value="Credit Card">Credit Card</option>
+								<option value="Debit Card">Debit Card</option>
+								<option value="E-Wallet/Mobile Payments">E-Wallet/Mobile Payments</option>
+								<option value="Dated Check">Dated Check</option>
+								<option value="Post-Dated Check">Post-Dated Check</option>
+								<option value="Post-Dated Check - Cleared">Post-Dated Check - Cleared</option>
+								<option value="Overpayment">Overpayment</option>
+							</select>
 							<label for="receivable_mode_of_payment">Mode of Payment</label>
-							<span class="valid-feedback" id="receivable_mode_of_paymentError"></span>
+						</div>
+						</div>
+						
+						
 						 </div>
 						
 						
@@ -488,7 +510,15 @@
 							</div>
 						 
 						</div>
+						<div class="col-sm-12">
 						
+							<div class="form-floating mb-3">
+								<input type='time' class='form-control' id='receivable_time_of_payment' name='receivable_time_of_payment' value='<?=date('H:i');?>'>
+								<label for="receivable_time_of_payment">Time of Payment</label>
+								<span class="valid-feedback" id="receivable_time_of_paymentError"></span>
+							</div>
+						 
+						</div>
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" aria-describedby="basic-addon1" name="receivable_reference" id="receivable_reference" required placeholder="Reference No.">
@@ -506,6 +536,16 @@
 							</div>
 							 
 						</div>
+						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type='text' class='form-control' id='receivable_payment_remarks' name='receivable_payment_remarks' autocomplete='off' placeholder="Remarks">
+								<label for="receivable_payment_remarks">Remarks</label>
+								<span class="valid-feedback" id="receivable_payment_remarks"></span>
+							</div>
+							 
+						</div>
+						
 						
 						<div class="row mb-3">
 							<div class="col-sm-12">
@@ -632,6 +672,7 @@
 				
 				Mode of Payment: <span id="view_receivable_mode_of_payment"></span><br>
 				Date Of Payment: <span id="view_receivable_date_of_payment"></span><br>	
+				Time Of Payment: <span id="view_receivable_time_of_payment"></span><br>	
 				Reference No.: <span id="view_receivable_reference"></span><br>
 				Amount: <span id="view_receivable_payment_amount"></span><br>
 				

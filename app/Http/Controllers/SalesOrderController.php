@@ -707,20 +707,31 @@ class SalesOrderController extends Controller
         ]
 		);
 				
-					/*Check if Price is From Manual Price*/
+					/*"Check if the price is from the manual price.*/
 					if($request->product_manual_price!=0){
 						
 						$product_price = $request->product_manual_price;
 						
 					}else{
-	
-						/*Product Details*/
-						$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
-						LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
-						WHERE b.branch_idx = ? and b.product_idx = ?";			
-						$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);		
 						
+						/*Product Details*/
+						$product_info = DB::table('teves_product_table as pt')
+						->select([
+							'pt.product_id as product_idx',
+							'pt.product_name',
+							'pt.product_unit_measurement',
+							DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+						])
+						->leftJoin('teves_product_selling_price_table as spt', function($join) use ($request) {
+							$join->on('pt.product_id', '=', 'spt.product_idx')
+								 ->where('spt.branch_idx', '=', $request->branch_idx)
+								 ->where('spt.client_idx', '=', $request->client_idx)
+								 ->where('spt.product_idx', '=', $request->product_idx);
+						})
+						->get();				
+				
 						$product_price = $product_info[0]->product_price;
+						
 					}
 					
 					$order_total_amount = $request->order_quantity * $product_price;	
@@ -1082,4 +1093,26 @@ class SalesOrderController extends Controller
 		
 		}
 	}		
+	
+	
+	public function get_product_list_selling_price(Request $request){
+
+		$clients_price_list = DB::table('teves_product_table as pt')
+		->select([
+			'pt.product_id as product_idx',
+			'pt.product_name',
+			'pt.product_unit_measurement',
+			DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+		])
+		->leftJoin('teves_product_selling_price_table as spt', function($join) use ($request) {
+			$join->on('pt.product_id', '=', 'spt.product_idx')
+				 ->where('spt.branch_idx', '=', $request->branch_idx)
+				 ->where('spt.client_idx', '=', $request->client_idx);
+		})
+		->get();
+	
+		return response()->json(array('clients_price_list'=>$clients_price_list));
+			
+	}
+	
 }

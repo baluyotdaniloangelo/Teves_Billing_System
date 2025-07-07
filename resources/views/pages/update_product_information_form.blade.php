@@ -94,15 +94,18 @@
 							
 							<!-- nav-link active -->
 							<li class="nav-item" role="presentation">
-								<button class="nav-link <?php if($tab=='branchprice') { echo 'active'; } ?>" id="branchprice-tab" data-bs-toggle="tab" data-bs-target="#branchprice" type="button" role="tab" aria-controls="branchprice" aria-selected="true" onclick="loadPricingListPerBranch()" title='Product Prices per branch'>Price per Branch</button>
+								<button class="nav-link <?php if($tab=='branchprice') { echo 'active'; } ?>" id="branchprice-tab" data-bs-toggle="tab" data-bs-target="#branchprice" type="button" role="tab" aria-controls="branchprice" aria-selected="true" title='Product Prices per branch'>Price per Branch</button>
+							</li>
+							<!---->
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?php if($tab=='seller') { echo 'active'; } ?>" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button" role="tab" aria-controls="seller" aria-selected="false" tabindex="-1" title='Product Prices per Seller'>Seller Price</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?php if($tab=='selling_price') { echo 'active'; } ?>" id="seller-tab" data-bs-toggle="tab" data-bs-target="#selling" type="button" role="tab" aria-controls="selling" aria-selected="false" tabindex="-1" title='Product Prices per Client'>Selling Price</button>
 							</li>
 							
 							<li class="nav-item" role="presentation">
-								<button class="nav-link <?php if($tab=='seller') { echo 'active'; } ?>" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button" role="tab" aria-controls="seller" aria-selected="false" tabindex="-1" onclick="loadPricingListPerSeller()" title='Product Prices per Seller'>Seller Price</button>
-							</li>
-							
-							<li class="nav-item" role="presentation">
-								<button class="nav-link <?php if($tab=='tank') { echo 'active'; } ?>" id="tank-tab" data-bs-toggle="tab" data-bs-target="#tank" type="button" role="tab" aria-controls="tank" aria-selected="false" tabindex="-1" onclick="LoadProductTank()" title='Tank Information'>Tank</button>
+								<button class="nav-link <?php if($tab=='tank') { echo 'active'; } ?>" id="tank-tab" data-bs-toggle="tab" data-bs-target="#tank" type="button" role="tab" aria-controls="tank" aria-selected="false" tabindex="-1" title='Tank Information'>Tank</button>
 							</li>
 									
 						</ul>
@@ -146,33 +149,56 @@
 									
 									<div class="d-flex justify-content-end" id="">
 									<div class="btn-group" role="group" aria-label="Basic outlined example">
-										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductTankModal" id="AddProductTankBTN"></button>
+										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#ProductPricePerSellerModal" id="IDProductPricePerSellerModal" onclick="reset_form_sellers_price()"></button>
 									</div>											
 									</div>
 									<br>
 									
-									<table class="table dataTable display nowrap cell-border" id="product_price_per_seller" width="100%" cellspacing="0" >
+									<table class="table dataTable display nowrap cell-border" id="ProductPricePerSellerListTable" width="100%" cellspacing="0" >
 									<thead>
 									<tr class='report'>
 										<th class="all">Item #</th>
+										<th class="all">Branch</th>
 										<th class="all">Supplier</th>
-										<th class="none">Seller Price</th>
+										<th class="all">Seller Price</th>
 										<th class="all">Action</th>
 									</tr>
 									</thead>
 										<tbody>
 										</tbody>
 									</table>
-									<div class="row mb-3">
-									<div class="col-sm-6" align='right'>
-								<div id="loading_data_update_so" style="display:none;">
-									<div class="spinner-border text-success" role="status">
-										<span class="visually-hidden">Loading...</span>
+									
+									
+
+							</div>
+					
+						</div>
+						
+						<div class="tab-content pt-2" id="myTabContent">
+						<div class="tab-pane fade  <?php if($tab=='selling_price') { echo ' show active'; } ?>"" id="selling" role="tabpanel" aria-labelledby="sellingprice-tab">
+									
+									<div class="d-flex justify-content-end" id="">
+									<div class="btn-group" role="group" aria-label="Basic outlined example">
+										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#ProductPricePerClientModal" id="IDProductPricePerClientModal" onclick="reset_form_selling_price()"></button>
+									</div>											
 									</div>
-								</div>
-							</div>
-							
-							</div>
+									<br>
+									
+									<table class="table dataTable display nowrap cell-border" id="ProductPricePerClientListTable" width="100%" cellspacing="0" >
+									<thead>
+									<tr class='report'>
+										<th class="all">Item #</th>
+										<th class="all">Branch</th>
+										<th class="all">Client</th>
+										<th class="all">Selling Price</th>
+										<th class="all">Action</th>
+									</tr>
+									</thead>
+										<tbody>
+										</tbody>
+									</table>
+									
+									
 
 							</div>
 					
@@ -510,7 +536,7 @@
                 </div>
              </div>	
 
-<div id="ProductHistoryChangesModal" class="modal custom-modal fade" data-bs-backdrop="static" role="dialog">
+	<div id="ProductHistoryChangesModal" class="modal custom-modal fade" data-bs-backdrop="static" role="dialog">
 <!--<div class="modal fade show" id="" tabindex="-1" aria-modal="true" role="dialog">-->
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
@@ -556,7 +582,8 @@
         </div>
     </div>
 
-
+	@include('pages.update_product_information_form_seller_price')
+	@include('pages.update_product_information_form_selling_price')
     </section>
 </main>
 

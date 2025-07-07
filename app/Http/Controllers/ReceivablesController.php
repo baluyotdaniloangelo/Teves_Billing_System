@@ -521,6 +521,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.billing_date',
+					'teves_receivable_table.billing_time',
 					'teves_client_table.client_address',
 					'teves_client_table.client_name',
 					'teves_client_table.client_id',
@@ -612,7 +613,7 @@ class ReceivablesController extends Controller
 			$total_amount_due = $receivable_amount - (($receivable_total_liter*$less_per_liter) + ($withholding_tax));
 					
 			$BranchInfo = TevesBranchModel::where('branch_id', '=', $request->company_header)->first();				
-			$control_number = $BranchInfo->branch_initial."-AR-".($last_id+1);					
+			$control_number = $BranchInfo->branch_initial."-AR-".($last_id+2);					
 					
 			$Receivables = new ReceivablesModel();
 			$Receivables->client_idx 				= $request->client_idx;
@@ -729,6 +730,7 @@ class ReceivablesController extends Controller
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->billing_date 					= $request->billing_date;
+			$Receivables->billing_time 					= $request->billing_time;
 			$Receivables->payment_term 					= $request->payment_term;
 			$Receivables->receivable_description 		= $request->receivable_description;
 			
@@ -872,7 +874,6 @@ class ReceivablesController extends Controller
 	public function billing_receivable_payment_post(Request $request){
         	 
 		$request->validate([
-		  //$validator = \Validator::make($request->all(),[
 			  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
 			  'receivable_mode_of_payment'      	=> 'required',
 			  'receivable_date_of_payment'      	=> 'required',
@@ -907,30 +908,37 @@ class ReceivablesController extends Controller
 						  
 						  if($receivable_payment_id==0){
 							  
-							  $PaymentComponent = new ReceivablesPaymentModel();
+							$PaymentComponent = new ReceivablesPaymentModel();
 							  
-							  $PaymentComponent->receivable_idx 				= $receivable_idx;
-							  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
-							  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-							  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
-							  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
-							  $PaymentComponent->image_reference 				= $image_blob;
-							  $result = $PaymentComponent->save();
-							  $result_type = 'Saved';
+							$PaymentComponent->receivable_idx 				= $receivable_idx;
+							$PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							$PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							$PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
+							$PaymentComponent->receivable_reference 		= $request->receivable_reference;
+							$PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+							$PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							$PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							$PaymentComponent->image_reference 				= $image_blob;
+							$PaymentComponent->created_by_user_id			= Session::get('loginID');
+							$result = $PaymentComponent->save();
+							$result_type = 'Saved';
 						  
 						  }
 						  else{
 						  
-							  $PaymentComponent = new ReceivablesPaymentModel();
+							$PaymentComponent = new ReceivablesPaymentModel();
 							  
-							  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
-							  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
-							  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-							  $PaymentComponent->receivable_reference 		= $request->receivable_reference;
-							  $PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
-							  $PaymentComponent->image_reference 				= $image_blob;
-							  $result = $PaymentComponent->update();
-							  $result_type = 'Updated';
+							$PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+							$PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							$PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							$PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
+							$PaymentComponent->receivable_reference 		= $request->receivable_reference;
+							$PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
+							$PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							$PaymentComponent->image_reference 				= $image_blob;
+							$PaymentComponent->updated_by_user_id			= Session::get('loginID');
+							$result = $PaymentComponent->update();
+							$result_type = 'Updated';
 
 						  }
 				  
@@ -941,42 +949,38 @@ class ReceivablesController extends Controller
 						  
 						  if($receivable_payment_id==0){
 							  
-							  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
+							  $PaymentComponent = new ReceivablesPaymentModel();
 							  
-							  $PurchaseOrderPaymentComponent->receivable_idx 				= $receivable_idx;
-							  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
-							  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-							  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
-							  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
-							  
-							  $result = $PurchaseOrderPaymentComponent->save();
+							  $PaymentComponent->receivable_idx 				= $receivable_idx;
+							  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							  $PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
+							  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
+							  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
+							  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							  $PaymentComponent->created_by_user_id				= Session::get('loginID');
+							  $result = $PaymentComponent->save();
 							  $result_type = 'Saved';
 						  
 						  }
 						  else{
 						  
-							  $PurchaseOrderPaymentComponent = new ReceivablesPaymentModel();
-							  $PurchaseOrderPaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
-							  $PurchaseOrderPaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
-							  $PurchaseOrderPaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
-							  $PurchaseOrderPaymentComponent->receivable_reference 		= $request->receivable_reference;
-							  $PurchaseOrderPaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
-							  
-							  $result = $PurchaseOrderPaymentComponent->update();
+							  $PaymentComponent = new ReceivablesPaymentModel();
+							  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
+							  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
+							  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+							  $PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
+							  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
+							  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
+							  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							  $PaymentComponent->updated_by_user_id				= Session::get('loginID');
+							  $result = $PaymentComponent->update();
 							  $result_type = 'Updated';
 
 						  }
 						  
 			 }
 
-			  /*Get Sales Order ID from Receivable*/
-			  #$sales_order_id =  ReceivablesModel::find($receivable_idx, ['sales_order_idx']);
-
-			  /*Update Sales Order to Delivered*/
-			  #$salesOrderUpdate_status = new SalesOrderModel();
-			  #$salesOrderUpdate_status = SalesOrderModel::find($sales_order_id->sales_order_idx);
-			  #$salesOrderUpdate_status->sales_order_status = 'Delivered';
-			  #$salesOrderUpdate_status->update();
 			  
 			  /*Get Recivable Details [receivable_amount]*/
 			  $receivable_details = ReceivablesModel::find($receivable_idx, ['receivable_amount']);							
@@ -1084,6 +1088,7 @@ class ReceivablesController extends Controller
 				->get([
 				  'receivable_payment_id',
 				  'receivable_date_of_payment',
+				  'receivable_time_of_payment',
 				  'receivable_mode_of_payment',
 				  'receivable_reference',
 				  'receivable_payment_amount',
@@ -1104,9 +1109,11 @@ class ReceivablesController extends Controller
 				  'receivable_payment_id',
 				  'receivable_idx',
 				  'receivable_date_of_payment',
+				  'receivable_time_of_payment',
 				  'receivable_mode_of_payment',
 				  'receivable_reference',
 				  'receivable_payment_amount',
+				  'receivable_payment_remarks',
 				  'image_reference',
 				  'receivable_payment_remarks'
 				  ]);
@@ -1156,6 +1163,7 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_idx 				= $receivable_idx;
 						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
 						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->image_reference 				= $image_blob;
@@ -1171,6 +1179,7 @@ class ReceivablesController extends Controller
 						  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
 						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
 						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->image_reference 				= $image_blob;
@@ -1192,6 +1201,7 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_idx 				= $receivable_idx;
 						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
 						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
@@ -1205,6 +1215,7 @@ class ReceivablesController extends Controller
 						  $PaymentComponent = ReceivablesPaymentModel::find($receivable_payment_id);
 						  $PaymentComponent->receivable_mode_of_payment 	= $request->receivable_mode_of_payment;
 						  $PaymentComponent->receivable_date_of_payment 	= $request->receivable_date_of_payment;
+						  $PaymentComponent->receivable_time_of_payment 	= $request->receivable_time_of_payment;
 						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;

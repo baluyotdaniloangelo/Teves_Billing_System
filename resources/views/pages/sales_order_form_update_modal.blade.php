@@ -16,14 +16,14 @@
 					<div class="row mb-2">
 					
 						<div class="col-sm-3">
-						<div class="form-floating mb-3">
+						<div class="form-floating mb-1">
 							<input type="date" class="form-control" id="sales_order_date" name="sales_order_date" value="{{ $sales_order_data[0]['sales_order_date'] }}" required max="9999-12-31" >
 							<label for="sales_order_date">Date</label>
 						</div>
 						</div>
 						
 						<div class="col-sm-3">
-						<div class="form-floating mb-3">
+						<div class="form-floating mb-1">
 							<select class="form-select form-control" required="" name="company_header" id="company_header" onchange="UpdateBranch()">
 									<?php $branch_idx = $sales_order_data[0]['company_header']; ?>
 									@foreach ($teves_branch as $teves_branch_cols)
@@ -40,7 +40,7 @@
 						</div>
 						
 						<div class="col-sm-6">
-							<div class="form-floating mb-3">
+							<div class="form-floating mb-1">
 								<input class="form-control" list="client_name" name="client_name" id="client_id" required autocomplete="off" value="{{ $sales_order_data[0]['client_name'] }}" onchange="ClientInfo()">
 									<datalist id="client_name">
 										@foreach ($client_data as $client_data_cols)
@@ -57,7 +57,7 @@
 					<div class="row mb-2">
 						
 						<div class="col-sm-3">
-						<div class="form-floating mb-3">
+						<div class="form-floating mb-1">
 								<?php $sales_order_payment_type = $sales_order_data[0]->sales_order_payment_type; ?>
 								<select class="form-select form-control" required="" name="sales_order_payment_type" id="sales_order_payment_type"> 
 									<option value="Receivable" <?php if($sales_order_payment_type=='Receivable'){ echo "selected";} else{} ?>>Receivable</option>
@@ -68,7 +68,7 @@
 						</div>
 						
 						<div class="col-sm-3">
-							<div class="form-floating mb-3">
+							<div class="form-floating mb-1">
 									
 										<select class="form-select form-control" required="" name="sales_order_invoice" id="sales_order_invoice" onchange="check_withholding_tax()"> 
 											<option value="1" <?php if($sales_order_invoice=='1'){ echo "selected";} else{} ?>>Yes</option>
@@ -79,14 +79,14 @@
 						</div>
 						
 						<div class="col-sm-3">
-							<div class="form-floating mb-3">
+							<div class="form-floating mb-1">
 									<input type="number" class="form-control" id="sales_order_net_percentage" name="sales_order_net_percentage" value="{{ $sales_order_data[0]['sales_order_net_percentage'] }}" disabled>
 									<label for="sales_order_net_percentage">Net Value</label>
 							</div>
 						</div>
 						
 						<div class="col-sm-3">
-							<div class="form-floating mb-3">
+							<div class="form-floating mb-1">
 									<input type="number" class="form-control" id="sales_order_withholding_tax" name="sales_order_withholding_tax" value="{{ $sales_order_data[0]['sales_order_withholding_tax'] }}" disabled>
 									<label for="sales_order_withholding_tax">Withholding Tax</label>
 							</div>
@@ -112,7 +112,7 @@
 						
 						<div class="col-sm-4">
 							<div class="form-floating mb-1">
-									<input type="text" class="form-control" id="sales_order_po_number" name="sales_order_po_number" value="{{ $sales_order_data[0]['sales_order_po_number'] }}" >
+									<input type="text" class="form-control" id="sales_order_or_number" name="sales_order_or_number" value="{{ $sales_order_data[0]['sales_order_or_number'] }}" >
 									<label for="sales_order_or_number">Sales Invoice</label>
 							</div>
 						</div>
@@ -195,14 +195,14 @@
 
 						<div class="col-sm-6">
 							<div class="form-floating mb-1">
-									<textarea class="form-control" id="instructions" name="instructions" style="height: 38px;">{{ $sales_order_data[0]['sales_order_instructions'] }}</textarea>
+									<textarea class="form-control" id="instructions" name="instructions" style="height: 50px;" placeholder="Instructions">{{ $sales_order_data[0]['sales_order_instructions'] }}</textarea>
 									<label for="instructions" class="form-label">Instructions</label>
 							</div>
 						</div>
 						
 						<div class="col-sm-6">
 							<div class="form-floating mb-1">
-									<textarea class="form-control" id="note" name="note" style="height: 38px;">{{ $sales_order_data[0]['sales_order_note'] }}</textarea>
+									<textarea class="form-control" id="note" name="note" style="height: 50px;" placeholder="Notes">{{ $sales_order_data[0]['sales_order_note'] }}</textarea>
 									<label for="note" class="form-label">Notes</label>
 							</div>
 						</div>
@@ -217,7 +217,7 @@
 							</div>
 							</div>
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-sales-order"> Save</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-so-save-product"> Reset</button>					  
+						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-sales-order"> Reset</button>					  
 					</div>
 					</form>
                 </div>

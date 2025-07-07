@@ -114,7 +114,8 @@
 		document.getElementById("deleteSOProduct").disabled = true;
 	
 	}
-
+	
+	/*Not In USe*/
 	function LoadProductList(branch_id) {		
 	
 		$("#product_list span").remove();
@@ -151,6 +152,7 @@
 				}
 			   });
 	}
+	/*Not In USe*/
 	
 	function TotalAmount(){
 		
@@ -209,13 +211,15 @@
 			/*Client and Product Name*/
 			let product_name 			= $("input[name=product_name]").val();
 			
-			let SOId 			= {{ $SOId }};
+			let SOId 					= {{ $SOId }};
+			let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
 			
 			  $.ajax({
 				url: "{{ route('SOAddProductPost') }}",
 				type:"POST",
 				data:{
 				  branch_idx:branch_id,
+				  client_idx:client_idx,
 				  so_id:SOId,
 				  product_idx:product_idx,
 				  product_manual_price:product_manual_price,
@@ -364,7 +368,8 @@
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount').html(total_amount.toLocaleString("en-PH", {minimumFractionDigits: 2}));
 					
-					LoadProductList(response[0].branch_id);
+					//LoadProductList(response[0].branch_id);
+					LoadSellingPriceList();
 					
 					$('#EditProductModal').modal('toggle');					
 				  
@@ -402,12 +407,14 @@
 			
 			var _cashiers_report_update 				= $('.cashiers_report_update:checked').val() || 'off';
 			var cashiers_report_update 				= (_cashiers_report_update ==="on") ? "YES":"NO";
+			let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
 			
 			  $.ajax({
 				url: "{{ route('SOUpdateProductPost') }}",
 				type:"POST",
 				data:{
 				  branch_idx:branch_id,
+				  client_idx:client_idx,
 				  so_id:SOId,
 				  billing_id:billID,
 				  product_idx:product_idx,
@@ -524,8 +531,8 @@
 			   });		
 	  });
 
-	  <!-- Confirmed For Deletion-->
-	  $('body').on('click','#deleteBillConfirmed',function(){
+	<!-- Confirmed For Deletion-->
+	$('body').on('click','#deleteBillConfirmed',function(){
 			
 			event.preventDefault();
 
@@ -561,5 +568,53 @@
 					//alert(error);
 				}
 			   });		
-	  });	  
+	  });
+	
+	LoadSellingPriceList();
+	function LoadSellingPriceList() {	
+		
+		$("#product_list span").remove();
+		$('<span style="display: none;"></span>').appendTo('#product_list');
+
+		let branch_idx 				= $("#branch_id").val();
+		let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
+			
+			$.ajax({
+				url: "/get_product_list_selling_price",
+				type:"POST",
+				data:{
+					client_idx:client_idx,
+					branch_idx:branch_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){						
+				  console.log(response['clients_price_list']);
+				  if(response['clients_price_list']!='') {			  
+				  
+						var len = response['clients_price_list'].length;
+
+						
+							for(var i=0; i<len; i++){
+								
+								var product_idx = response['clients_price_list'][i].product_idx;
+								var product_name = response['clients_price_list'][i].product_name;
+								var product_unit_measurement = response['clients_price_list'][i].product_unit_measurement;
+								var product_price = response['clients_price_list'][i].product_price;
+								
+								$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
+								"<option label='&#8369; "+product_price +" | "+product_name +"' data-price='"+product_price+"' data-id='"+product_idx+"' value='"+product_name+"'>" +
+								"</span>");
+								
+							}							
+					
+						
+				  }else{
+							/*No Result Found or Error*/	
+				  }
+				},
+				error: function(error) {
+				 console.log(error);	 
+				}
+			   });
+	} 
 	</script>

@@ -480,6 +480,24 @@ class SOBillingTransactionController extends Controller
 					WHERE b.branch_idx = ? and b.product_idx = ?";			
 					$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);				
 					
+					
+					/*Product Details*/
+						$product_info = DB::table('teves_product_table as pt')
+						->select([
+							'pt.product_id as product_idx',
+							'pt.product_name',
+							'pt.product_unit_measurement',
+							DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+						])
+						->leftJoin('teves_product_selling_price_table as spt', function($join) use ($request) {
+							$join->on('pt.product_id', '=', 'spt.product_idx')
+								 ->where('spt.branch_idx', '=', $request->branch_idx)
+								 ->where('spt.client_idx', '=', $request->client_idx)
+								 ->where('spt.product_idx', '=', $request->product_idx);
+						})
+						->get();
+					
+					
 					/*SO Details*/
 					$so_info = SOBillingTransactionModel::find($request->so_id, ['branch_idx','so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
 					
