@@ -252,6 +252,10 @@ Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class,'generate_sales_order_delivery_status_pdf'])->name('generate_sales_order_delivery_status_pdf')->middleware('isLoggedIn');
 
+Route::get('/generate_sales_order_receivable_soa_pdf', [ReportController::class,'generate_sales_order_receivable_soa_pdf'])->name('generate_sales_order_receivable_soa_pdf')->middleware('isLoggedIn');
+
+
+
 /*Generate via Web Page View - For Sales Order Summary - April 7, 2025*/
 Route::get('/sales_order_summary', [SalesOrderController::class,'sales_order_summary'])->name('salesordersummary')->middleware('isLoggedIn');
 Route::post('/sales_order_summary_data', [SalesOrderController::class,'sales_order_summary_data'])->name('sales_order_summary_data')->middleware('isLoggedIn');

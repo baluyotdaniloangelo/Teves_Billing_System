@@ -4,7 +4,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{ $title }}</title>
+    <title>{{ $title_soa }}</title>
 	<style>
 		body {
 			font-family: "Open Sans", sans-serif;
@@ -38,20 +38,20 @@
 				$_billing_date=date_create($receivable_data[0]['billing_date']);
 				
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
-				$logo = $receivable_header['branch_logo'];
+				$logo = $branch_header['branch_logo'];
 			?>
 			
 		<tr>
 			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
 				<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
 			</td>
-			<td colspan="6" width="30%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;"><?=$receivable_header['branch_name'];?></b></td>
-			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: purple; text-align:center; font-weight:bold; color:#fff; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title }}</b></td>
+			<td colspan="6" width="30%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;"><?=$branch_header['branch_name'];?></b></td>
+			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: purple; text-align:center; font-weight:bold; color:#fff; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title_soa }}</b></td>
 		</tr>
 		
 		<tr>
 			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:10px;"><?=$receivable_header['branch_address'];?></div>
+			<div style="font-size:10px;"><?=$branch_header['branch_address'];?></div>
 			</td>
 			<td colspan="3" align="left" width="20%" style="font-size:11px; font-weight:bold;;"><b>BILLING DATE</b></td>
 			<td colspan="3" align="left" width="30%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$billing_date;?></td>
@@ -62,7 +62,7 @@
 		?>
 		<tr>
 			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:10px;">VAT REG. TIN : <?=$receivable_header['branch_tin'];?></div>
+			<div style="font-size:10px;">VAT REG. TIN : <?=$branch_header['branch_tin'];?></div>
 			</td>
 			<td colspan="3" align="left" width="25%" style="font-size:11px; font-weight:bold;"><b>DATE PRINTED</b></td>
 			<td colspan="3" align="left" width="25%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon"><?=$print_date;?></td>
@@ -70,7 +70,7 @@
 		
 		<tr>
 			<td colspan="3"  width="40%" style="horizontal-align:center;text-align:left;">
-			<div style="font-size:10px;"><?=$receivable_header['branch_owner'];?> - <?=$receivable_header['branch_owner_title'];?></div>
+			<div style="font-size:10px;"><?=$branch_header['branch_owner'];?> - <?=$branch_header['branch_owner_title'];?></div>
 			</td>
 			<td colspan="3" align="left" width="25%" style="font-size:11px; font-weight:bold;"><b>AR REFERENCE</b></td>
 			<td colspan="3" align="left" width="25%" style="font-size:11px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['control_number'] }}</td>

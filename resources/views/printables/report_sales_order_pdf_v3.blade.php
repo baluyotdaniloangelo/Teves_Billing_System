@@ -4,7 +4,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{ $title }}</title>
+    <title>{{ $title_sales_order }}</title>
 	
 	<style>
 		body {
@@ -50,7 +50,7 @@
 			<td colspan="5" width="50%" style="horizontal-align:center;text-align:left;">
 				<b style="font-size:16px;"><?=$branch_header['branch_name'];?></b><br>
 			</td>
-			<td colspan="4" align="left" width="40%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title }}</b></td> 
+			<td colspan="4" align="left" width="40%" style="font-size:12px; background-color: orange; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px;"><b>{{ $title_sales_order }}</b></td> 
 		</tr>
 		
 		<tr>

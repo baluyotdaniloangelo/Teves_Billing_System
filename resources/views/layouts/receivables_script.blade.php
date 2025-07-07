@@ -757,6 +757,9 @@
 				if(to_print=='PrintStatement'){
 					print_soa(id);
 				}
+				if(to_print=='PrintAll'){
+					print_all(id);
+				}
 				else if(to_print=='PrintBilling'){
 					print_billing(id);
 				}
@@ -976,7 +979,44 @@
 				}
 			   });
 	  }	  
+	
+	function print_all(id){
 	  
+			event.preventDefault();
+			
+			let ReceivableID = id;
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					/*Open Receivable Print Page*/
+					let sales_order_idx 		= response[0].sales_order_idx;
+					var query_receivable = {
+								sales_order_id:sales_order_idx,
+								_token: "{{ csrf_token() }}"
+							}
+
+					var url_receivable = "{{URL::to('generate_sales_order_receivable_soa_pdf')}}?" + $.param(query_receivable)
+					window.open(url_receivable);
+			
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });
+	  }	  
+	
 	function ViewGalery(receivable_id){
 		
 			  $.ajax({

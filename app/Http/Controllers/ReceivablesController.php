@@ -315,6 +315,7 @@ class ReceivablesController extends Controller
 						<div align="center" class="action_table_menu_Product">
 						<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
 							<option disabled="" selected value="">Choose...</option>
+							<option value="PrintAll" title="All">All</option>
 							<option value="PrintStatement" title="Statement of Account">SOA</option>
 							'.$print_sales_or_billing.'
 							<option value="PrintReceivables">Receivable</option>
