@@ -202,13 +202,6 @@
 				$payment_date = strtoupper(date_format($_payment_date,"M/d/Y"));
 				
 				$_payment_time=date_create("$receivable_payment_data_cols->receivable_time_of_payment");
-				
-				if($_payment_time==''){
-					$payment_time = '00:00';
-				}else{
-					$payment_time = strtoupper(date_format($_payment_time,"H:i"));
-				}
-				
 				$payment_time = strtoupper(date_format($_payment_time,"H:i"));
 				
 				$receivable_mode_of_payment = $receivable_payment_data_cols['receivable_mode_of_payment'];
