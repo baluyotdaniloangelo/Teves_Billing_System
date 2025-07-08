@@ -102,10 +102,10 @@
 				$sales_order_or_number = $sales_order_data[0]['sales_order_or_number'];
 				
 				$VATable_Sales = $sales_order_data[0]['sales_order_net_amount'];
-				$Less_VAT = number_format($sales_order_data[0]['sales_order_gross_amount'] - $sales_order_data[0]['sales_order_net_amount'],2);
-				$Total = number_format($sales_order_data[0]['sales_order_net_amount'],2);
-				$VAT_12_percent = number_format($sales_order_data[0]['sales_order_gross_amount'] - $sales_order_data[0]['sales_order_net_amount'],2);
-				$Less_Withholding_Tax = number_format($sales_order_data[0]['sales_order_net_amount']*$sales_order_data[0]['sales_order_withholding_tax']/100,2);
+				$Less_VAT = $sales_order_data[0]['sales_order_gross_amount'] - $sales_order_data[0]['sales_order_net_amount'];
+				$Total = $sales_order_data[0]['sales_order_net_amount'];
+				$VAT_12_percent = $sales_order_data[0]['sales_order_gross_amount'] - $sales_order_data[0]['sales_order_net_amount'];
+				$Less_Withholding_Tax = $sales_order_data[0]['sales_order_net_amount']*$sales_order_data[0]['sales_order_withholding_tax']/100;
 			}
 			
 		
