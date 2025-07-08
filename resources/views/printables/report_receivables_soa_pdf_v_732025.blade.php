@@ -202,7 +202,7 @@
 				$paymnent_date = strtoupper(date_format($_paymnent_date,"M/d/Y"));
 				
 				$_paymnent_time=date_create("$receivable_payment_data_cols->receivable_time_of_payment");
-				$paymnent_time = strtoupper(date_format($_paymnent_time,"h:i a"));
+				$paymnent_time = strtoupper(date_format($_paymnent_time,"H:i"));
 				
 				$receivable_mode_of_payment = $receivable_payment_data_cols['receivable_mode_of_payment'];
 				
