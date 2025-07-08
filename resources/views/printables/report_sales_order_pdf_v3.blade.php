@@ -101,7 +101,7 @@
 				
 				$sales_order_or_number = $sales_order_data[0]['sales_order_or_number'];
 				
-				$VATable_Sales = number_format($sales_order_data[0]['sales_order_net_amount'],2);
+				$VATable_Sales = $sales_order_data[0]['sales_order_net_amount'];
 				$Less_VAT = number_format($sales_order_data[0]['sales_order_gross_amount'] - $sales_order_data[0]['sales_order_net_amount'],2);
 				$Total = number_format($sales_order_data[0]['sales_order_net_amount'],2);
 				$VAT_12_percent = number_format($sales_order_data[0]['sales_order_gross_amount'] - $sales_order_data[0]['sales_order_net_amount'],2);
@@ -109,7 +109,6 @@
 			}
 			
 		
-		?>
 		?>
 		<tr>
 			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
