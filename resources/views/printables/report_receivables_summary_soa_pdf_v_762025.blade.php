@@ -180,7 +180,7 @@
 			<td colspan="1" width="7%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:5px;"><?=$no;?></td>
 			<td colspan="1" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_date;?></td>
 			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_time;?></td>
-			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_data_data_cols['receivable_description'] }}</td>
+			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_data_data_cols['control_number'] }} | {{ $receivable_data_data_cols['receivable_description'] }}</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_gross_amount'],2);?>&nbsp;</td>	
 			
 			<td colspan="1" width="3%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_vat_value_percentage'],0);?>%</td>			
