@@ -85,8 +85,9 @@
 		<?php
 		
 			$_sales_order_or_number = $sales_order_data[0]['sales_order_or_number'];
+			$_sales_order_invoice = $sales_order_data[0]['sales_order_invoice'];
 			
-			if($_sales_order_or_number==''){
+			if($_sales_order_invoice==''){
 				
 				$sales_order_or_number = 'NO SI';
 				
