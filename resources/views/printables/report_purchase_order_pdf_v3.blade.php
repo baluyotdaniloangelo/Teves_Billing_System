@@ -49,21 +49,21 @@
 				
 				$purchase_order_official_receipt_no = 'NO SI';
 				
-				 $VATable_Sales = 0.00;
-				 $Less_VAT = 0.00;
-				 $Total = 0.00;
-				 $VAT_12_percent = 0.00;
-				 $Less_Withholding_Tax = 0.00;
+				 $VATable_Sales = 0;
+				 $Less_VAT = 0;
+				 $Total = 0;
+				 $VAT_12_percent = 0;
+				 $Less_Withholding_Tax = 0;
 				
 			}else{
 				
 				$purchase_order_official_receipt_no = $purchase_order_data[0]['purchase_order_official_receipt_no'];
 				
-				 $VATable_Sales = number_format($purchase_order_data[0]['purchase_order_net_amount'],4);
-				 $Less_VAT = number_format($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount'],4);
-				 $Total = number_format($purchase_order_data[0]['purchase_order_gross_amount'],4);
-				 $VAT_12_percent = number_format($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount'],4);
-				 $Less_Withholding_Tax = number_format($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100,4);
+				 $VATable_Sales = ($purchase_order_data[0]['purchase_order_net_amount']);
+				 $Less_VAT = ($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount']);
+				 $Total = ($purchase_order_data[0]['purchase_order_gross_amount']);
+				 $VAT_12_percent = ($purchase_order_data[0]['purchase_order_gross_amount'] - $purchase_order_data[0]['purchase_order_net_amount']);
+				 $Less_Withholding_Tax = ($purchase_order_data[0]['purchase_order_net_amount']*$purchase_order_data[0]['purchase_order_less_percentage']/100);
 			}
 			
 		
