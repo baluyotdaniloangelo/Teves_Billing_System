@@ -198,11 +198,18 @@
 			?>
 		@foreach ($receivable_payment_data as $receivable_payment_data_cols)
 			<?php
-				$_paymnent_date=date_create("$receivable_payment_data_cols->receivable_date_of_payment");
-				$paymnent_date = strtoupper(date_format($_paymnent_date,"M/d/Y"));
+				$_payment_date=date_create("$receivable_payment_data_cols->receivable_date_of_payment");
+				$payment_date = strtoupper(date_format($_payment_date,"M/d/Y"));
 				
-				$_paymnent_time=date_create("$receivable_payment_data_cols->receivable_time_of_payment");
-				$paymnent_time = strtoupper(date_format($_paymnent_time,"H:i"));
+				$_payment_time=date_create("$receivable_payment_data_cols->receivable_time_of_payment");
+				
+				if($_payment_time==''){
+					$payment_time = '00:00';
+				}else{
+					$payment_time = strtoupper(date_format($_payment_time,"H:i"));
+				}
+				
+				$payment_time = strtoupper(date_format($_payment_time,"H:i"));
 				
 				$receivable_mode_of_payment = $receivable_payment_data_cols['receivable_mode_of_payment'];
 				
@@ -226,7 +233,7 @@
 		<tr style="font-size:12px;">
 			
 			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$no;?></td>
-			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$paymnent_date;?>&nbsp;<?=$paymnent_time;?></td>
+			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$payment_date;?>&nbsp;<?=$payment_time;?></td>
 			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
 			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
 			<td colspan="3" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray; color:<?=$post_dated_font?>;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
