@@ -91,11 +91,11 @@
 				
 				$sales_order_or_number = 'NO SI';
 				
-				$VATable_Sales = 0.00;
-				$Less_VAT = 0.00;
-				$Total = 0.00;
-				$VAT_12_percent = 0.00;
-				$Less_Withholding_Tax = 0.00;
+				$VATable_Sales = 0;
+				$Less_VAT = 0;
+				$Total = 0;
+				$VAT_12_percent = 0;
+				$Less_Withholding_Tax = 0;
 				
 			}else{
 				
@@ -109,6 +109,7 @@
 			}
 			
 		
+		?>
 		?>
 		<tr>
 			<td colspan="4"  width="50%" style="horizontal-align:center;text-align:left;"></td>
