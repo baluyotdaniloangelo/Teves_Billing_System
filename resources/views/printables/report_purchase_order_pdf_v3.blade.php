@@ -44,8 +44,9 @@
 				$logo = $branch_header['branch_logo'];
 			
 			$_purchase_order_official_receipt_no = $purchase_order_data[0]['purchase_order_official_receipt_no'];
+			$_purchase_order_invoice = $purchase_order_data[0]['purchase_order_invoice'];
 			
-			if($_purchase_order_official_receipt_no==''){
+			if($_purchase_order_invoice==0){
 				
 				$purchase_order_official_receipt_no = 'NO SI';
 				

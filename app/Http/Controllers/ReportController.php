@@ -1250,6 +1250,7 @@ class ReportController extends Controller
 						'teves_supplier_table.supplier_address',
 						'teves_purchase_order_table.purchase_order_control_number',
 						'teves_purchase_order_table.purchase_order_date',
+						'teves_purchase_order_table.purchase_order_invoice',
 						'teves_purchase_order_table.purchase_order_sales_order_number',
 						'teves_purchase_order_table.purchase_order_collection_receipt_no',
 						'teves_purchase_order_table.purchase_order_official_receipt_no',
