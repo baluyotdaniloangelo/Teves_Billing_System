@@ -225,6 +225,10 @@ Route::post('/update_receivables_from_sale_order_post', [ReceivablesController::
 Route::get('/receivable_from_billing_form', [ReceivablesController::class, 'receivable_from_billing_form'])->name('receivable_from_billing_form')->middleware('isLoggedIn');
 Route::post('/billing_to_receivable_product', [ReceivablesController::class,'billing_to_receivable_product'])->name('billing_to_receivable_product')->middleware('isLoggedIn');
 
+Route::post('/billing_receivables_lock_post', [ReceivablesController::class,'billing_receivables_lock_post'])->name('billing_receivables_lock_post')->middleware('isLoggedIn');
+
+
+
 /*Sales Order*/
 /*January 04, 2023*/
 Route::get('/salesorder', [SalesOrderController::class,'salesorder'])->name('salesorder')->middleware('isLoggedIn');

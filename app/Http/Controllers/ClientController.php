@@ -15,7 +15,7 @@ class ClientController extends Controller
 	public function client(){
 		
 
-		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 		
 			$title = 'Client';
 			$data = array();
@@ -31,7 +31,7 @@ class ClientController extends Controller
 	/*Fetch client List using Datatable*/
 	public function getClientList(Request $request)
     {
-		//$list = ClientModel::get();
+		
 		if ($request->ajax()) {
 			$data = ClientModel::select(
 			'client_id',
@@ -99,6 +99,7 @@ class ClientController extends Controller
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
+			$client->created_by_user_idx 				= Session::has('loginID');
 			
 			$result = $client->save();
 			if($result){
@@ -134,6 +135,7 @@ class ClientController extends Controller
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
+			$client->updated_by_user_idx 				= Session::has('loginID');
 			
 			$result = $client->update();
 			if($result){

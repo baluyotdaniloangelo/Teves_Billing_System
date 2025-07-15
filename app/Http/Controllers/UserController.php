@@ -23,7 +23,7 @@ class UserController extends Controller
 	public function user(){
 		
 			
-			if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+			if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 			
 				$title = 'User List';
 				$data = array();
@@ -38,21 +38,38 @@ class UserController extends Controller
 	public function getUserList(Request $request)
     {
 
-		$user = UserAccountModel::get();
 		if ($request->ajax()) {
 		
-		$data= UserAccountModel::select(
-		'user_id',
-		'user_job_title',
-		'user_real_name',
-		'user_name',
-		'user_type',
-		'user_email_address',
-		'user_branch_access_type',
-        'created_at',
-        'updated_at'
-		);		
+			if(Session::has('loginID') && (Session::get('UserType')=="Admin")){
+			
+				$data = UserAccountModel::WHERE('user_type', '<>', 'SUAdmin')	
+				->get([
+				'user_id',
+				'user_job_title',
+				'user_real_name',
+				'user_name',
+				'user_type',
+				'user_email_address',
+				'user_branch_access_type',
+				'created_at',
+				'updated_at'
+				]);
 
+			}else{
+			
+				$data = UserAccountModel::select(
+				'user_id',
+				'user_job_title',
+				'user_real_name',
+				'user_name',
+				'user_type',
+				'user_email_address',
+				'user_branch_access_type',
+				'created_at',
+				'updated_at'
+				);		
+				
+			}
 		return DataTables::of($data)
 				->addIndexColumn()
 				->addColumn('action', function($row){	
@@ -150,6 +167,7 @@ class UserController extends Controller
 			$UserList->user_password 			= hash::make($request->user_password);
 			$UserList->user_type 				= $request->user_type;
 			$UserList->user_branch_access_type 	= $request->user_access;
+			$UserList->created_by_user_idx 		= Session::has('loginID');
 			
 			$result = $UserList->save();
 			
@@ -235,7 +253,7 @@ class UserController extends Controller
 			$UserList->user_type 						= $request->user_type;
 			$UserList->user_email_address 				= $request->user_email_address;
 			$UserList->user_branch_access_type 			= $request->user_access;
-			$UserList->updated_by_user_id 				= Session::get('loginID');
+			$UserList->updated_by_user_idx 				= Session::get('loginID');
 			
 			$result = $UserList->update();
 			
@@ -270,31 +288,6 @@ class UserController extends Controller
 	}
 
 	public function user_account_post(Request $request){
-		
-			// if($request->user_password!=''){		
-					// $request->validate([
-					  // 'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  // 'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  // 'user_password'   => 'required|min:6|max:20'
-					// ], 
-					// [
-						// 'user_real_name.required' => 'Name is required',
-						// 'user_name.required' => 'User Name is Required',
-						// 'user_password.required' => 'Password is Required'
-					// ]
-					// );
-			// }
-			// else{
-					// $request->validate([
-					  // 'user_real_name'  => 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  // 'user_name'      	=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					// ], 
-					// [
-						// 'user_real_name.required' => 'Name is required',
-						// 'user_name.required' => 'User Name is Required'
-					// ]
-					// );
-			// }
 
 			if($request->user_password!=''){		
 					$request->validate([
@@ -325,19 +318,7 @@ class UserController extends Controller
 						'user_name.required' => 'User Name is Required'
 					]
 					);
-			}
-	
-	
-	
-	
-			// $UserList = new UserAccountModel();
-			// $UserList = UserAccountModel::find($request->userID);
-			// $UserList->user_real_name 	= $request->user_real_name;
-			// $UserList->user_name 		= $request->user_name;
-			// if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
-			
-			// $result = $UserList->update();
-			
+			}		
 				
 			$UserList = new UserAccountModel();
 			$UserList = UserAccountModel::find($request->userID);
@@ -369,8 +350,6 @@ class UserController extends Controller
 			
 			$UserList->updated_by_user_id 	= Session::get('loginID');
 			$result = $UserList->update();
-			
-			
 			
 			if($result){
 				return response()->json(['success'=>'Account Information Successfully Updated!']);

@@ -1,3 +1,5 @@
+
+
    <script type="text/javascript">
    
 	LoadProduct();
@@ -182,9 +184,7 @@
 					  if(response['productlist']!='') {			  
 							
 							if(response['paymentcount']!=0){
-							
-								//$(".action_column_class").hide();
-								
+				
 								for(var i=0; i<len; i++){
 							
 								var id = response['productlist'][i].billing_id;
@@ -220,8 +220,6 @@
 								
 							}else{
 								
-								//$(".action_column_class").show();
-								
 								for(var i=0; i<len; i++){
 							
 								var id = response['productlist'][i].billing_id;
@@ -245,12 +243,22 @@
 								
 								<?php
 								
-									if(Session::get('UserType')=="Admin"){
-										?>
-										
+								if($lock_billing_item==1){ 
+								?>
+								var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>";
+								<?php	
+								}
+								else{
+								?>
+								var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
+								<?php
+								}
+								
+									if(Session::get('UserType')=="SUAdmin"){
+										?>	
 										
 										$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-										"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
+										action_btn+
 										"<td align='center'>" + (i+1) + "</td>" +
 										"<td class='product_td' align='left'>"+order_po_number+"</td>"+
 										"<td class='product_td' align='left'>"+product_name+"</td>"+
@@ -263,6 +271,24 @@
 										"<td class='manual_price_td' align='right'>"+cashiers_report_idx+"</td>"+
 										"</tr>");
 										
+										<?php
+									}
+									if(Session::get('UserType')=="Admin"){
+										?>	
+										
+										$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+										action_btn+
+										"<td align='center'>" + (i+1) + "</td>" +
+										"<td class='product_td' align='left'>"+order_po_number+"</td>"+
+										"<td class='product_td' align='left'>"+product_name+"</td>"+
+										"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
+										"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
+										"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
+										"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
+										"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
+										"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
+										"<td class='manual_price_td' align='right'>"+cashiers_report_idx+"</td>"+
+										"</tr>");
 										
 										<?php
 									}else{
@@ -765,7 +791,6 @@
 							var receivable_date_of_payment 		= response[i].receivable_date_of_payment;
 							var receivable_time_of_payment 		= response[i].receivable_time_of_payment;
 							var receivable_reference			= response[i].receivable_reference;
-							//var receivable_payment_amount 		= response[i].receivable_payment_amount;
 							
 							var receivable_payment_amount 		= response[0].receivable_payment_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var receivable_payment_remarks 		= response[i].receivable_payment_remarks;
@@ -780,12 +805,24 @@
 								const secondDate = new Date();	/*Now*/
 
 								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+				
+				
+								
 								
 									<?php
-									if(Session::get('UserType')=="Admin"){
-									?>
-										action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";		
-									<?php
+									if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
+									
+											if($lock_billing_payment_item==0 || Session::get('UserType')=="SUAdmin"){ 
+											?>
+											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";	
+											<?php	
+											}
+											else{
+											?>
+											var action_controls = "";
+											<?php
+											}
+									
 									}
 									else{
 									?>
@@ -1097,7 +1134,6 @@
 				type:"POST",
 				data:{
 				  receivable_id:ReceivableID,
-				  
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

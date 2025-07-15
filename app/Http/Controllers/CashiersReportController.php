@@ -1133,15 +1133,7 @@ class CashiersReportController extends Controller
 	public function delete_cashiers_report_product_p3(Request $request){		
 			
 		$CHPH3_ID = $request->CHPH3_ID;
-		/*
-		
-		$regular_logs =  EmployeeLogsModel::where('employee_idx', $employee_id)
-					->whereBetween('attendance_date', ["$start_date", "$end_date"])
-					->where('log_type', 'Regular')
-					->selectRaw('ifnull(sum(basic_pay),0) as basic_pay, count(*) as days_count_regular')
-					->get();
-		
-		*/
+
 		/*Get Billing ID*/
 		$billing_id =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
 			->get([

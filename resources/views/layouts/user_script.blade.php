@@ -150,7 +150,7 @@
 					
 					document.getElementById("CreateUserform").reset();
 				
-					if(user_access=='BYSITE'){
+					if(user_access=='BYBRANCH'){
 						UpdateUserAccess(response.user_id);
 					}
 				
@@ -269,6 +269,7 @@
 					document.getElementById("update_user_type").value = response.user_type;
 					document.getElementById("update_user_email_address_management").value = response.user_email_address;
 					document.getElementById("update_user_job_title").value = response.user_job_title;
+					document.getElementById("update_user_access").value = response.user_branch_access_type;
 					$('#UpdateUserModal').modal('toggle');					
 				  
 				  }
@@ -406,6 +407,11 @@
 					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					$('#UpdateUserModal').modal('toggle');
+					
+					/*Open Form to Assign Branch*/
+					if(user_access=='BYBRANCH'){
+						UpdateUserAccess(userID);
+					}
 					
 					var table = $("#userList").DataTable();
 				    table.ajax.reload(null, false);

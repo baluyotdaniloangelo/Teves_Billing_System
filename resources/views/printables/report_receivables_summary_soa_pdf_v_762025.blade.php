@@ -46,7 +46,7 @@
 			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
 			</td>
 			<td colspan="6" width="30%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;"><?=$receivable_header['branch_name'];?></b></td>
-			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: skyblue; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title }}</b></td>
+			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: skyblue; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px; width:60px"><b>{{ $title }}</b></td>
 		</tr>
 		
 		<tr>
@@ -146,18 +146,18 @@
 			<td colspan="2" nowrap align="right" style="border:0px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Current Balance</td>
 		</tr>
 		-->
-		<tr style="font-size:12px;border:1 solid #000;">
+		<tr style="font-size:10px;border:1 solid #000;">
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">#</td>		
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">Date</td>	
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">Time</td>			
-			<td colspan="3" nowrap align="left" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Description</td>				
-			<td colspan="1" nowrap align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Gross Amount</td>		
+			<td colspan="3"  align="left" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Description</td>				
+			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Gross Amount</td>		
 			
-			<td colspan="2" nowrap align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">VATable</td>
-			<td colspan="2" nowrap align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
+			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">VATable</td>
+			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
 			
-			<td colspan="1" nowrap align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Net Amount</td>
-			<td colspan="1" nowrap align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000; border-right:1px solid #000;">Current Balance</td>
+			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Net Amount</td>
+			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000; border-right:1px solid #000;">Current Balance</td>
 		</tr>
 		
 		<?php 
@@ -170,23 +170,23 @@
 			
 			
 				$_billing_date=date_create("$receivable_data_data_cols->billing_date");
-				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
+				$billing_date = strtoupper(date_format($_billing_date,"m/d/Y"));
 				
 				$current_balance += $receivable_data_data_cols->receivable_remaining_balance;	
 				
 			?>
-		<tr style="font-size:12px;">
+		<tr style="font-size:10px;border:1 solid #000;">
 			
-			<td colspan="1" width="7%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:5px;"><?=$no;?></td>
-			<td colspan="1" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_date;?></td>
+			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:5px;"><?=$no;?></td>
+			<td colspan="1" width="8%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_date;?></td>
 			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_time;?></td>
-			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_data_data_cols['control_number'] }} | {{ $receivable_data_data_cols['receivable_description'] }}</td>
+			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_data_data_cols['control_number'] }} <br>{{ $receivable_data_data_cols['receivable_description'] }}</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_gross_amount'],2);?>&nbsp;</td>	
 			
-			<td colspan="1" width="3%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_vat_value_percentage'],0);?>%</td>			
+			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_vat_value_percentage'],0);?>%</td>			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_vatable_sales'],2);?>&nbsp;</td>
 			
-			<td colspan="1" width="3%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_withholding_tax_percentage'],0);?>%</td>
+			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_withholding_tax_percentage'],0);?>%</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_withholding_tax'],2);?>&nbsp;</td>			
 			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_amount'],2);?>&nbsp;</td>			

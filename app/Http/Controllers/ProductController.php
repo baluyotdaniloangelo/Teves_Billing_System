@@ -21,7 +21,7 @@ class ProductController extends Controller
 	/*Load Product Interface*/
 	public function product(){
 		
-		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 			
 			$title = 'Product';
 			$data = array();
@@ -38,8 +38,7 @@ class ProductController extends Controller
 	/*Fetch Product List using Datatable*/
 	public function getProductList(Request $request)
     {
-
-		//$list = ProductModel::get();
+		
 		if ($request->ajax()) {
 
     	$data = ProductModel::select(
@@ -101,6 +100,7 @@ class ProductController extends Controller
 			$Product->product_name 						= $request->product_name;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
+			$Product->created_by_user_idx 				= Session::has('loginID');
 			
 			$result = $Product->save();
 			
@@ -141,6 +141,7 @@ class ProductController extends Controller
 			$Product->product_name 						= $request->product_name;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
+			$Product->updated_by_user_idx 				= Session::has('loginID');
 						
 			$result = $Product->update();
 			

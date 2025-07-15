@@ -122,17 +122,13 @@
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 				
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="13" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:25px !important;">Billing Date</td>	
-			<td colspan="6" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Description</td>
-			<td colspan="4" nowrap align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">Amount</td>
+		
+		<tr style="font-size:12px;border:1 solid #afadad;">
+			<td colspan="3" align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold; height:25px !important;">Billing Date</td>	
+			<td colspan="6" nowrap align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Description</td>
+			<td colspan="4" nowrap align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Amount</td>
 		</tr>
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="13" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>		
+			
 		<?php
 			$_po_start_date=date_create($receivable_data[0]['billing_period_start']);
 			$po_start_date = strtoupper(date_format($_po_start_date,"M/d/Y"));
@@ -140,57 +136,53 @@
 			$_po_end_date=date_create($receivable_data[0]['billing_period_end']);
 			$po_end_date = strtoupper(date_format($_po_end_date,"M/d/Y"));
 			?>
-		<tr style="font-size:12px;">
+		<tr style="font-size:12px;border:1 solid #afadad;">
 			
-			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; height: 20px; padding:10px;"><?=$billing_date;?></td>
+			<td colspan="3" align="center" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; height: 20px; padding:10px;"><?=$billing_date;?></td>
 			<?php
 			if($receivable_data[0]['sales_order_idx']==0){
 				?>
-				<td colspan="6" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
+				<td colspan="6" align="center" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;"><?=$po_start_date;?> - <?=$po_end_date;?></td>
 				<?php
 			}else{
 				?>
-				<td colspan="6" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">Sales Order:<?=$receivable_data[0]['receivable_name'];?><br/>{{ $receivable_data[0]['receivable_description'] }}</td>
+				<td colspan="6" align="left" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;">Sales Order:<?=$receivable_data[0]['receivable_name'];?><br/>{{ $receivable_data[0]['receivable_description'] }}</td>
 				<?php
 			}
 			?>
-			<td colspan="4" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
+			<td colspan="4" align="right" style="border-left:1px solid #afadad; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		
 		<tr style="font-size:12px;">
-			
-			<td colspan="3" align="right" style="border-left: 0px solid #000;"></td>
-			<td colspan="6" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
-			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<td colspan="3" align="right" style="border-left: 0px solid #c6c6c6;"></td>
+			<td colspan="6" align="center" style="background-color: #e8e8e8; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
+			<td colspan="4" align="right" style="background-color: #e8e8e8; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($receivable_data[0]['receivable_amount'],2);?>
 		
 		</tr>		
 		
 		<tr>
-			<td colspan="15" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
+			<td colspan="13" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
 		</tr>
 		
 		</table>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
-		
 		<tr>
-			<td colspan="16" style="font-size:12px; border:0px solid #000;  background-color: #c6e0b4; font-weight:bold; height:25px !important; text-align: center;">PAYMENT</td>
+			<td colspan="16" style="font-size:12px; border:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important; text-align: center;">PAYMENT</td>
 		</tr>
 		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="1" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">#</td>		
-			<td colspan="3" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Date and Time</td>		
-			<td colspan="3" align="center" style="border-right:1px solid gray;  background-color: #c6e0b4; font-weight:bold; height:25px !important;">Description</td>		
-			<td colspan="3" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Mode of Payment</td>	
-			<td colspan="3" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">Amount</td>	
-			<td colspan="3" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold;">Outstanding Balance</td>
+		<tr style="font-size:12px;border:1 solid #afadad;">
+			<td colspan="1" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">#</td>		
+			<td colspan="2" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Transaction Date</td>		
+			<td colspan="1" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Time</td>		
+			<td colspan="3" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Description</td>		
+			<td colspan="3" nowrap align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Mode of Payment</td>	
+			<td colspan="3" nowrap align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Amount</td>	
+			<td colspan="3" nowrap align="center" style="border:0px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Current Balance</td>
 		</tr>
-		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="16" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>
-		<?php 
+	
+	<?php 
 			$no = 1;
 			$total_payment = 0;
 			//$outstanding_balance = 0;
@@ -225,12 +217,13 @@
 			?>
 		<tr style="font-size:12px;">
 			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$no;?></td>
-			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$payment_date;?>&nbsp;<?=$payment_time;?></td>
-			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
-			<td colspan="3" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
-			<td colspan="3" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray; color:<?=$post_dated_font?>;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
-			<td colspan="3" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($outstanding_balance,2);?></td>			
+			<td colspan="1" align="center" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;"><?=$no;?></td>
+			<td colspan="2" align="center" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;"><?=$payment_date;?></td>
+			<td colspan="1" align="center" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;"><?=$payment_time;?></td>
+			<td colspan="3" align="left" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_reference'] }}</td>
+			<td colspan="3" align="center" style="border-left:1px solid #afadad; border-bottom:solid 1px gray; padding:10px;">{{ $receivable_payment_data_cols['receivable_mode_of_payment'] }}</td>
+			<td colspan="3" align="right" style="border-left:1px solid #afadad; border-right:0px solid #000; border-bottom:solid 1px gray; color:<?=$post_dated_font?>;"><?=number_format($receivable_payment_data_cols['receivable_payment_amount'],2);?></td>			
+			<td colspan="3" align="right" style="border-left:1px solid #afadad; border-right:1px solid #afadad; border-bottom:solid 1px gray;"><?=number_format($outstanding_balance,2);?></td>			
 		
 		</tr>
 			<?php
@@ -242,16 +235,16 @@
 			?>
 			
 		@endforeach
-		
+		<!--aS REQUESTED July 11 2025
 		<tr style="font-size:12px;">
 			
 			<td colspan="5" align="right" style="border-left: 0px solid #000; border-bottom: 0px solid #000;"></td>
-			<td colspan="7" align="center" style="background-color: #c6e0b4; font-weight:bold; height:25px !important; border-bottom: 0px solid #000;">REMAINING BALANCE </td>
-			<td colspan="4" align="right" style="background-color: #c6e0b4; border-right: 0px solid #000;border-bottom: 1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($receivable_data[0]['receivable_amount']-$total_payment,2);?>
+			<td colspan="7" align="center" style="background-color: #e8e8e8; font-weight:bold; height:25px !important; border-bottom: 0px solid #000;">REMAINING BALANCE </td>
+			<td colspan="4" align="right" style="background-color: #e8e8e8; border-right: 0px solid #000;border-bottom: 1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<//?=number_format($receivable_data[0]['receivable_amount']-$total_payment,2);?>
 		
 		</tr>		
-		
+		-->
 		<tr>
 			<td colspan="16" style="height:5.66px !important;"></td>
 		</tr>

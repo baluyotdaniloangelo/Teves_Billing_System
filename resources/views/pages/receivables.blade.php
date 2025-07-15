@@ -61,7 +61,7 @@
 				
                 <div class="tab-pane fade" id="bordered-salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
 											<div class="table-responsive" style="">
-												<table class="table dataTable display nowrap cell-border" id="getReceivablesListSales" width="100%" cellspacing="0">
+												<table class="table dataTable display  cell-border" id="getReceivablesListSales" width="100%" cellspacing="0">
 												<thead>
 													<tr>
 														<th class="all">No.</th>
@@ -569,7 +569,77 @@
                   </div>
                 </div>
              </div>			
-    </section>
+    
+	<!--Lock Receivable-->
+			<div class="modal fade show" id="BillingReceivableLockModal" tabindex="-1" aria-modal="true" role="dialog">
+				<div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Lock Status</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">				
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal" fdprocessedid="3l5ch"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-3 needs-validation" id="BillingReceivableLockStatusForm">
+					  
+						<ul class="list-group list-group-flush">
+						
+							<li class="list-group-item"><b>Date:</b>&nbsp;<span id="lock_receivable_billing_date" style="font-weight: normal;"></span></li>
+							<li class="list-group-item"><b>Control Number:</b>&nbsp;<span id="lock_receivable_confirm_control_number" style="font-weight: normal;"></span></li>
+							<li class="list-group-item"><b>Client:</b>&nbsp;<span id="lock_receivable_client_info" style="font-weight: normal;"></span></li>
+							<li class="list-group-item"><b>Amount:</b>&nbsp;<span id="lock_receivable_amount" style="font-weight: normal;"></span></li>
+						
+						</ul>
+						<br>
+						<div class="row mb-2">
+						  <div class="col-sm-12">
+							<div class="form-check form-switch">
+							  <input class="form-check-input lock_billing_information" type="checkbox" id="lock_billing_information" name="lock_billing_information">
+							  <label class="form-check-label" for="flexSwitchCheckDefault">Receivable Information</label>
+							</div>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <div class="col-sm-12">
+							<div class="form-check form-switch">
+							  <input class="form-check-input lock_billing_item" type="checkbox" id="lock_billing_item" name="lock_billing_item">
+							  <label class="form-check-label" for="flexSwitchCheckDefault">Billing</label>
+							</div>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <div class="col-sm-12">
+							<div class="form-check form-switch">
+							  <input class="form-check-input lock_billing_payment_item" type="checkbox" id="lock_billing_payment_item" name="lock_billing_payment_item">
+							  <label class="form-check-label" for="flexSwitchCheckDefault">Payment</label>
+							</div>
+						  </div>
+						</div>
+						
+						
+						</form>
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+							<div id="loading_data_update_product" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+							<b>Take Note:Upon selecting the above setting, this may prevent the user from editing or deleting those items.</b>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="LockConfirmed" value=""> Confirm</button>					  
+					</div>
+					<!-- End Multi Columns Form -->
+                  </div>
+				  
+                </div>
+            </div>	
+	
+	</section>
 </main>
 @endsection
 

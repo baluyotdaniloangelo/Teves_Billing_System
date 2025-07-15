@@ -17,7 +17,7 @@ class BranchController extends Controller
 	public function branch(){
 
 		
-		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 			
 			$title = 'Branch';
 			$data = array();
@@ -158,7 +158,7 @@ class BranchController extends Controller
 			$branch->branch_contact_number 	= $request->branch_contact_number;
 			$branch->branch_owner 			= $request->branch_owner;
 			$branch->branch_owner_title 	= $request->branch_owner_title;
-			$branch->modified_by_user_idx 	= Session::get('loginID');
+			$branch->updated_by_user_idx 	= Session::get('loginID');
 			
 			$result = $branch->update();
 			if($result){

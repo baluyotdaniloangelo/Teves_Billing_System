@@ -122,7 +122,7 @@ class BillingTransactionController extends Controller
 						// and you might want to convert to integer
 						$numberHours = intval($numberHours);
 						
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 							$actionBtn = '
 							<div align="center" class="action_table_menu_site">
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
@@ -247,7 +247,7 @@ class BillingTransactionController extends Controller
 						
 					if($row->receivable_idx==0){
 						
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 							$actionBtn = '
 							<div align="center" class="action_table_menu_site">
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>

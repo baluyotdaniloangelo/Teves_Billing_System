@@ -303,16 +303,16 @@ class ReportController extends Controller
 		if(Session::has('loginID')){
 			
 		$request->validate([
-			'client_idx'      		=> 'required',
+			'client_idx'      			=> 'required',
 			'company_header'      		=> 'required',
-			'start_date'      		=> 'required',
+			'start_date'      			=> 'required',
 			'end_date'      			=> 'required'
         ], 
         [
-			'client_idx.required' 	=> 'Please select a Client',
+			'client_idx.required' 		=> 'Please select a Client',
 			'company_header.required' 	=> 'Please select a Branch',
-			'start_date.required' 	=> 'Please select a Start Date',
-			'end_date.required' 	=> 'Please select a End Date'
+			'start_date.required' 		=> 'Please select a Start Date',
+			'end_date.required' 		=> 'Please select a End Date'
         ]
 		);
 
@@ -358,14 +358,14 @@ class ReportController extends Controller
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
-		$title = 'STATEMENT OF ACCOUNT - Summary';
+		$title = 'SOA - Summary';
 		  
         $pdf = PDF::loadView('printables.report_receivables_summary_soa_pdf_v_762025', compact('title', 'receivable_data', 'user_data','receivable_header', 'client_data', 'start_date', 'end_date', 'receivable_remaining_balance_total'));
 		 
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
-		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		$pdf->setPaper('legal', 'portrait');/*Set to Landscape*/
 		return $pdf->stream($client_data['client_name']."_RECEIVABLE_SOA.pdf");
 		
 		}
@@ -439,7 +439,7 @@ class ReportController extends Controller
 						// and you might want to convert to integer
 						$numberHours = intval($numberHours);
 						
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin"){
 							$actionBtn = '
 							<div align="center" class="action_table_menu_site">
 							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>

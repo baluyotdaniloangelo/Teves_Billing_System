@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Contracts\Activity;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Session;
 
 class BranchModel extends Model
@@ -15,6 +17,18 @@ class BranchModel extends Model
     $activity->causer_id = Session::get('loginID');
 	}
 
+	use SoftDeletes;
+    protected $dates = ['deleted_at'];
+	
+	/*Delete*/
+	public function delete()
+	{
+		$this->deleted_by_user_id = Session::get('loginID'); // or session()->get('user_id')
+		$this->save();
+
+		parent::delete();
+	}
+	
 	protected $table = 'teves_branch_table';
 	
 	protected $fillable = [
@@ -29,7 +43,9 @@ class BranchModel extends Model
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
-		'modified_by_user_idx'
+		'updated_by_user_idx',
+		'deleted_at',
+		'deleted_by_user_id'
     ];
 	
 	protected $primaryKey = 'branch_id';
@@ -50,6 +66,8 @@ class BranchModel extends Model
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
-		'modified_by_user_idx'
+		'updated_by_user_idx',
+		'deleted_at',
+		'deleted_by_user_id'
     ];
 }

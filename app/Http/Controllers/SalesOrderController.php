@@ -123,7 +123,7 @@ class SalesOrderController extends Controller
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						</div>';
 					
-							if(Session::get('UserType')=="Admin"){
+							if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 										return $actionBtn;
 							}
 							else if(Session::get('UserType')=="Supervisor"){

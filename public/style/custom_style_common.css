@@ -177,7 +177,11 @@ form.user .form-control-user {
 	color: black;
 	
 }
-
+.btn_icon_table_lock{
+    background-color: #000;
+	color: white;
+	
+}
 .btn_icon_table_send{
     background-color: #FFFBC1;
 	color: black;

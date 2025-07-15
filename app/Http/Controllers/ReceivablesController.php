@@ -141,6 +141,7 @@ class ReceivablesController extends Controller
 						'teves_receivable_table.receivable_amount',
 						'teves_receivable_table.receivable_remaining_balance',
 						'teves_receivable_table.receivable_status',
+						'teves_receivable_table.receivable_lock_status',
 						'teves_receivable_table.created_at']);
 											
 					return DataTables::of($data)
@@ -159,19 +160,48 @@ class ReceivablesController extends Controller
 						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
-							
+						
+						$receivable_lock_status = $row->receivable_lock_status;
+						
+						$receivable_lock_items = str_split((string)$receivable_lock_status);
+						
+						$lock_billing_information 		= $receivable_lock_items[0];
+						
+						
+						$actionBtn_SUadmin = '<div align="center" class="action_table_menu_Product">
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-lock btn_icon_table btn_icon_table_lock" title="Lock Settings" id="LockReceivables" onclick="LockReceivable('.$row->receivable_id.')"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
+									</div>';
+						
+						if($lock_billing_information!=1){
+						//allow to delete
 							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
-							
+									
 							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
 										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										</div>';
+						}else{
+						//disallowed		
+							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+								</div>';
+									
+							$actionBtn_user = '';
+						
+						}
 							
-							if(Session::get('UserType')=="Admin"){
+							if(Session::get('UserType')=="SUAdmin"){
+										return $actionBtn_SUadmin;
+							}
+							else if(Session::get('UserType')=="Admin"){
 										return $actionBtn_admin;
 							}
 							else if(Session::get('UserType')=="Supervisor"){
@@ -281,7 +311,7 @@ class ReceivablesController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						
-							if(Session::get('UserType')=="Admin"){
+							if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 										return $actionBtn_admin;
 							}
 							else if(Session::get('UserType')=="Supervisor"){
@@ -540,6 +570,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_vat_value_percentage',
 					'teves_receivable_table.receivable_withholding_tax_percentage',
 					'teves_receivable_table.company_header',
+					'teves_receivable_table.receivable_lock_status',
 					'teves_receivable_table.created_at']);
 					return response()->json($data);
 		
@@ -753,21 +784,24 @@ class ReceivablesController extends Controller
 			$Receivables->less_per_liter 				= $request->less_per_liter;
 			$Receivables->company_header 				= $request->company_header;
 			
-			/*Update Billing List Affected by the Receivable*/
-			/*Included branch_idx February 25, 2024*/
 			
-			$billing_update = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
-				->where('order_date', '>=', $start_date)
-                ->where('order_date', '<=', $end_date)
-				->where('receivable_idx', '=', $request->ReceivableID)
-				->update([
-					'receivable_idx' => $request->ReceivableID,
-					'branch_idx'=>$request->company_header
-					]);
 			
-			if(Session::get('UserType')=="Admin"){
+			
+			
+			if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 				
 					$result = $Receivables->update();
+					
+					/*Update Billing List Affected by the Receivable*/
+					/*Included branch_idx February 25, 2024*/
+					$billing_update = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
+					->where('order_date', '>=', $start_date)
+					->where('order_date', '<=', $end_date)
+					->where('receivable_idx', '=', $request->ReceivableID)
+					->update([
+						'receivable_idx' => $request->ReceivableID,
+						'branch_idx'=>$request->company_header
+						]);
 					
 					if($result){
 						return response()->json(['success'=>'Receivables Information Successfully Updated!']);
@@ -779,7 +813,31 @@ class ReceivablesController extends Controller
 			}else{
 			
 				if($numberDays>=3){
+				
 					return response()->json(['success'=>'You can no longer Edit this Receivable item.']);
+				
+				}else{
+				
+					$result = $Receivables->update();
+					
+					/*Update Billing List Affected by the Receivable*/
+					/*Included branch_idx February 25, 2024*/
+					$billing_update = BillingTransactionModel::where('client_idx', $client_idx[0]['client_idx'])
+					->where('order_date', '>=', $start_date)
+					->where('order_date', '<=', $end_date)
+					->where('receivable_idx', '=', $request->ReceivableID)
+					->update([
+						'receivable_idx' => $request->ReceivableID,
+						'branch_idx'=>$request->company_header
+						]);
+						
+						if($result){
+							return response()->json(['success'=>'Receivables Information Successfully Updated!']);
+						}
+						else{
+							return response()->json(['success'=>'Error on Update Receivables Information']);
+						}	
+				
 				}
 			
 			}
@@ -1081,7 +1139,6 @@ class ReceivablesController extends Controller
 			
 	}
 			   
-
 	public function receivable_payment_list(Request $request){		
   
 		  $data =  ReceivablesPaymentModel::where('receivable_idx', $request->receivable_idx)
@@ -1122,7 +1179,7 @@ class ReceivablesController extends Controller
 	  
   }
 
-  public function sales_order_receivable_payment(Request $request){
+	public function sales_order_receivable_payment(Request $request){
         	 
 	$request->validate([
 		  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
@@ -1290,7 +1347,7 @@ class ReceivablesController extends Controller
 				  }	
 	 }	
 
-  public function sales_order_receivable_delete_payment(Request $request){		
+	public function sales_order_receivable_delete_payment(Request $request){		
 		  
 	  $receivable_payment_id = $request->paymentitemID;
 	  $receivable_idx = $request->receivable_idx;
@@ -1374,6 +1431,36 @@ class ReceivablesController extends Controller
 	  
   }
 
-
+	/*Lock Receivable - Biling*/
+	public function billing_receivables_lock_post(Request $request){		
 	
+			
+			$lock_billing_information 	= $request->lock_billing_information;
+			$lock_billing_item 			= $request->lock_billing_item;
+			$lock_billing_payment_item	= $request->lock_billing_payment_item;
+
+			/*Receivable Infomation,Billing/Product Item Under Sales Order,Payment Item,Sales Order Information,Delivery*/
+			$receivable_lock_status = "$lock_billing_information$lock_billing_item$lock_billing_payment_item"."00";
+		
+			$Receivables = new ReceivablesModel();
+			$Receivables = ReceivablesModel::find($request->ReceivableID);
+			$Receivables->receivable_lock_status 				= $receivable_lock_status;
+			
+			/*Update Billing List Affected by the Receivable*/
+			/*Included branch_idx February 25, 2024*/
+			
+			if(Session::get('UserType')=="SUAdmin"){
+				
+					$result = $Receivables->update();
+					
+					if($result){
+						return response()->json(['success'=>'Receivables Information Successfully Updated!']);
+					}
+					else{
+						return response()->json(['success'=>'Error on Update Receivables Information']);
+					}
+					
+			}
+	}
+		
 }

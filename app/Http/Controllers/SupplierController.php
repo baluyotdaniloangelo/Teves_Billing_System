@@ -14,9 +14,7 @@ class SupplierController extends Controller
 	/*Load supplier Interface*/
 	public function supplier(){
 		
-		
-		
-		if(Session::has('loginID') && Session::get('UserType')=="Admin"){
+		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 			
 			$title = 'Supplier';
 			$data = array();
@@ -33,7 +31,7 @@ class SupplierController extends Controller
 	/*Fetch supplier List using Datatable*/
 	public function getSupplierList(Request $request)
     {
-		$list = SupplierModel::get();
+		
 		if ($request->ajax()) {
 			$data = SupplierModel::select(
 			'supplier_id',
@@ -87,18 +85,20 @@ class SupplierController extends Controller
 			'supplier_tin.required' => 'TIN is Required'
         ]
 		);
+		
 			$supplier = new SupplierModel();
-			$supplier->supplier_name 			= $request->supplier_name;
-			$supplier->supplier_address 		= $request->supplier_address;
-			$supplier->supplier_tin 			= $request->supplier_tin;
+			$supplier->supplier_name 						= $request->supplier_name;
+			$supplier->supplier_address 					= $request->supplier_address;
+			$supplier->supplier_tin 						= $request->supplier_tin;
 			
-			$supplier->default_less_percentage 			= $request->default_less_percentage;
-			$supplier->default_net_percentage 			= $request->default_net_percentage;
-			$supplier->default_vat_percentage 			= $request->default_vat_percentage;
-			$supplier->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
+			$supplier->default_less_percentage 				= $request->default_less_percentage;
+			$supplier->default_net_percentage 				= $request->default_net_percentage;
+			$supplier->default_vat_percentage 				= $request->default_vat_percentage;
+			$supplier->default_withholding_tax_percentage 	= $request->default_withholding_tax_percentage;
 			$supplier->default_payment_terms 				= $request->default_payment_terms;
-			
+			$supplier->created_by_user_idx 					= Session::has('loginID');
 			$result = $supplier->save();
+			
 			if($result){
 				return response()->json(['success'=>'Supplier Information Successfully Created!']);
 			}
@@ -123,18 +123,17 @@ class SupplierController extends Controller
 		
 			$supplier = new SupplierModel();
 			$supplier = SupplierModel::find($request->supplierID);
-			$supplier->supplier_name 			= $request->supplier_name;
-			$supplier->supplier_address 		= $request->supplier_address;
-			$supplier->supplier_tin 			= $request->supplier_tin;
-			
-			$supplier->default_less_percentage 			= $request->default_less_percentage;
-			$supplier->default_net_percentage 			= $request->default_net_percentage;
-			$supplier->default_vat_percentage 			= $request->default_vat_percentage;
-			$supplier->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
+			$supplier->supplier_name 						= $request->supplier_name;
+			$supplier->supplier_address 					= $request->supplier_address;
+			$supplier->supplier_tin 						= $request->supplier_tin;
+			$supplier->default_less_percentage 				= $request->default_less_percentage;
+			$supplier->default_net_percentage 				= $request->default_net_percentage;
+			$supplier->default_vat_percentage 				= $request->default_vat_percentage;
+			$supplier->default_withholding_tax_percentage 	= $request->default_withholding_tax_percentage;
 			$supplier->default_payment_terms 				= $request->default_payment_terms;
-			
-			
+			$supplier->updated_by_user_idx 					= Session::has('loginID');
 			$result = $supplier->update();
+			
 			if($result){
 				return response()->json(['success'=>'supplier Information Successfully Updated!']);
 			}

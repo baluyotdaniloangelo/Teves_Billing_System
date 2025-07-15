@@ -1,6 +1,22 @@
 @extends('layouts.layout')  
 @section('content')  
 
+<?php
+
+	$receivable_lock_status = $receivables_details['receivable_lock_status'];
+	$receivable_lock_items = str_split((string)$receivable_lock_status);
+	
+	$lock_billing_information 		= $receivable_lock_items[0];
+	$lock_billing_item			 	= $receivable_lock_items[1];
+	$lock_billing_payment_item 		= $receivable_lock_items[2];
+	
+	if($lock_billing_information==1){
+		$disable_receivable_update = 'disabled';
+	}else{
+		$disable_receivable_update = '';
+	}
+
+?>
 <main id="main" class="main">	
 
     <section class="section">
@@ -50,7 +66,7 @@
 						<div class="row mb-2">
 						  <label for="billing_date" class="col-sm-3 col-form-label">Branch : </label>
 						  <div class="col-sm-9">
-							<select class="form-select form-control" required="" name="company_header" id="company_header">
+							<select class="form-select form-control" required="" name="company_header" id="company_header" <?=$disable_receivable_update;?>>
 							@foreach ($teves_branch as $teves_branch_cols)
 								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 							@endforeach		
@@ -61,7 +77,7 @@
 						<div class="row mb-2">
 						  <label for="billing_date" class="col-sm-3 col-form-label">Billing Date : </label>
 						  <div class="col-sm-9">
-							<input type="date" class="form-control " name="billing_date" id="billing_date" value="" required>
+							<input type="date" class="form-control " name="billing_date" id="billing_date" value="" required <?=$disable_receivable_update;?>  <?=$disable_receivable_update;?>>
 							<span class="valid-feedback" id="billing_dateError"></span>
 						  </div>
 						</div>
@@ -69,7 +85,7 @@
 						<div class="row mb-2">
 						  <label for="billing_date" class="col-sm-3 col-form-label">Billing Time : </label>
 						  <div class="col-sm-9">
-							<input type="time" class="form-control " name="billing_time" id="billing_time" value="" required>
+							<input type="time" class="form-control " name="billing_time" id="billing_time" value="" required <?=$disable_receivable_update;?>  <?=$disable_receivable_update;?>>
 							<span class="valid-feedback" id="billing_dateError"></span>
 						  </div>
 						</div>
@@ -79,8 +95,8 @@
 						  <div class="col-sm-9">
 						  
 						  <div class="input-group">
-									<input type="date" class="form-control" name="start_date" id="start_date" required readonly>
-									<input type="date" class="form-control" name="end_date" id="end_date" required readonly>
+									<input type="date" class="form-control" name="start_date" id="start_date" required readonly  <?=$disable_receivable_update;?>>
+									<input type="date" class="form-control" name="end_date" id="end_date" required readonly  <?=$disable_receivable_update;?>>
 							<span class="valid-feedback" id="end_dateError"></span>
 							<span class="valid-feedback" id="start_dateError"></span>		
 							</div>
@@ -123,7 +139,7 @@
 						<div class="row mb-2">
 						  <label for="payment_term" class="col-sm-3 col-form-label">Payment Term : </label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="payment_term" id="payment_term" value="">
+							<input type="text" class="form-control " name="payment_term" id="payment_term" value="" <?=$disable_receivable_update;?>>
 							<span class="valid-feedback" id="payment_termError"></span>
 						  </div>
 						</div>							
@@ -131,7 +147,7 @@
 						<div class="row mb-2">
 						  <label for="receivable_description" class="col-sm-3 col-form-label">Description : </label>
 						  <div class="col-sm-9">
-							<textarea class="form-control" id="receivable_description" style="height: 50px;" required></textarea>
+							<textarea class="form-control" id="receivable_description" style="height: 50px;" required <?=$disable_receivable_update;?>></textarea>
 							<span class="valid-feedback" id="receivable_descriptionError"></span>
 						  </div>
 						</div>
@@ -151,7 +167,7 @@
 												</div>
 												<div class="col-sm-6" align="right">
 												
-												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="SO-update-receivables" title="Update Receivable Information"> Update</button>
+												<button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="SO-update-receivables" title="Update Receivable Information" <?=$disable_receivable_update;?>> Update</button>
 												</div>
 												</div>	
 					</div>	
@@ -179,12 +195,6 @@
               </ul>
               <div class="tab-content pt-2" id="myTabContent">
                 <div class="tab-pane fade  <?php if($tab=='product') { echo ' show active'; } ?>"" id="product" role="tabpanel" aria-labelledby="product-tab">
-					<!--<div class="d-flex justify-content-end" id="">
-					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductModal" id="AddSalesOrderProductBTN"></button>
-
-					</div>											
-					</div>-->
 					
 						<table class="table table-striped" id="">
 						<thead>
@@ -199,7 +209,7 @@
 							<th style="text-align:center !important;">Amount</th>	
 							<th style="text-align:center !important;">Date Encoded</th>	
 							<th style="text-align:center !important;">Date Updated</th>	
-							<?php if(Session::get('UserType')=="Admin"){ ?> <th style="text-align:center !important;">Cashiers ID Ref.</th>	<?php } ?>
+							<?php if(Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin"){ ?> <th style="text-align:center !important;">Cashiers ID Ref.</th>	<?php } ?>
 						</tr>
 						</thead>
 							<tbody id="table_sales_order_product_body_data">
@@ -213,7 +223,12 @@
                 <div class="tab-pane fade <?php if($tab=='payment') { echo 'show active'; } ?>" id="payment" role="tabpanel" aria-labelledby="payment-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
+					<?php
+					if($lock_billing_payment_item==0||Session::get('UserType')=="SUAdmin"){ 
+					?>
 						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
+					<?php } ?>					
+						
 						<button type="button" class="btn new_item bi bi-images" data-bs-toggle="modal" data-bs-target="#ViewPaymentGalery" style="background-color: magenta;"></button>
 					</div>					
 					</div>
@@ -383,26 +398,18 @@
 				</div>
 				<div align="left"style="margin: 10px;">
 				Date: <span id="bill_delete_order_date"></span><br>
-				Time: <span id="bill_delete_order_time"></span><br>
-				
+				Time: <span id="bill_delete_order_time"></span><br>	
 				PO #: <span id="bill_delete_order_po_number"></span><br>
 				Client: <span id="bill_delete_client_name"></span><br>
-				
 				Plate #: <span id="bill_delete_plate_no"></span><br>
 				Driver: <span id="bill_delete_drivers_name"></span><br>
-				
 				Product: <span id="bill_delete_product_name"></span><br>
 				Quantity: <span id="bill_delete_order_quantity"></span><br>
-				
 				Total Amount: <span id="bill_delete_order_total_amount"></span><br>
-				
-				
 				</div>
                 <div class="modal-footer footer_modal_bg">
-                    
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteBillConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
-                  
                 </div>
             </div>
         </div>
@@ -416,7 +423,6 @@
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
  					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
                 </div>
-				
 				
                 <div class="modal-body warning_modal_bg" id="modal-body">
 				Details<br>
@@ -435,7 +441,6 @@
 				Quantity: <span id="bill_view_order_quantity"></span><br>
 				
 				Total Amount: <span id="bill_view_order_total_amount"></span><br>
-				
 				
 				</div>
                 <div class="modal-footer footer_modal_bg">
@@ -546,7 +551,6 @@
 							 
 						</div>
 						
-						
 						<div class="row mb-3">
 							<div class="col-sm-12">
 							<label for="payment_image_reference" class="form-label">Upload</label>
@@ -600,7 +604,6 @@
 					<div class="carousel-inner" style="height: 700px;">
 					 
 					</div>
-					
 					
 					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
 					  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>

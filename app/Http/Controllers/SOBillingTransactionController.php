@@ -95,7 +95,7 @@ class SOBillingTransactionController extends Controller
 				->addIndexColumn()				
                 ->addColumn('action', function($row){
 							
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 							$actionBtn = '
 							<div align="center" class="action_table_menu_site">
 								<a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>

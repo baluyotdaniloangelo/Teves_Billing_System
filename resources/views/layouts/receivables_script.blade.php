@@ -47,7 +47,7 @@
 			]
 		});
 		
-		<?php if($data->user_type=="Admin" || $data->user_type=="Accounting_Staff" || $data->user_type=="Encoder"){ ?>
+		<?php if($data->user_type=="Admin" ||$data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff" || $data->user_type=="Encoder"){ ?>
 		
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
@@ -362,7 +362,7 @@
 							var receivable_reference				= response[i].receivable_reference;
 							var receivable_payment_amount 			= response[i].receivable_payment_amount;
 							
-							<?php if($data->user_type=="Admin"){ ?>
+							<?php if($data->user_type=="Admin"||$data->user_type=="SUAdmin"){ ?>
 							$('#receivable_payment_table_body_data tr:last').after("<tr>"+
 							"<td class='date_of_payment_td' align='center'><input type='date' class='form-control date_of_payment' id='date_of_payment' name='date_of_payment' value='"+receivable_date_of_payment+"'></td>"+
 							"<td class='bank_td' align='center'><input type='text' class='form-control mode_of_payment' id='mode_of_payment' name=' mode_of_payment' list='mode_of_payment_list' autocomplete='off' value='"+receivable_mode_of_payment+"'></td>"+
@@ -1110,5 +1110,138 @@
 				}
 			   });
 			   
-	} 	  			  
+	}
+	
+	
+	function LockReceivable(ReceivableID){
+		
+			document.getElementById("lock_billing_information").checked = false;
+			document.getElementById("lock_billing_item").checked = false;
+			document.getElementById("lock_billing_payment_item").checked = false;
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("LockConfirmed").value = ReceivableID;
+					
+					const number = response[0].receivable_lock_status;
+					const digitsArray = number.toString().split('').map(Number);
+					
+					const [digit1, digit2, digit3, digit4] = digitsArray;
+					
+					var _lock_billing_information 		= digit1;
+					
+						if(_lock_billing_information==1){
+							document.getElementById("lock_billing_information").checked = true;
+						}else{
+							document.getElementById("lock_billing_information").checked = false;
+						}
+					
+					var _lock_billing_item 				= digit2;
+					
+						if(_lock_billing_item==1){
+							document.getElementById("lock_billing_item").checked = true;
+						}else{
+							document.getElementById("lock_billing_item").checked = false;
+						}
+						
+					var _lock_billing_payment_item		= digit3;
+					
+						if(_lock_billing_payment_item==1){
+							document.getElementById("lock_billing_payment_item").checked = true;
+						}else{
+							document.getElementById("lock_billing_payment_item").checked = false;
+						}
+						
+					document.getElementById("lock_receivable_billing_date").value = response[0].billing_date;
+					document.getElementById("lock_receivable_confirm_control_number").innerHTML = response[0].control_number;
+					document.getElementById("lock_receivable_client_info").innerHTML = response[0].client_name;
+					document.getElementById("lock_receivable_amount").innerHTML = response[0].receivable_amount;
+
+					$('#BillingReceivableLockModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+		
+	}
+	
+	$("#LockConfirmed").click(function(event){			
+			event.preventDefault();
+			
+					/*Reset Warnings*/
+					$('#update_Receivable_nameError').text('');
+					$('#update_Receivable_priceError').text('');
+
+			document.getElementById('BillingReceivableLockStatusForm').className = "g-3 needs-validation was-validated";
+			
+			let ReceivableID 			= document.getElementById("LockConfirmed").value;
+			
+			var _lock_billing_information 		= $('.lock_billing_information:checked').val() || 'off';
+			var lock_billing_information 		= (_lock_billing_information ==="on") ? "1":"0";
+
+			var _lock_billing_item 				= $('.lock_billing_item:checked').val() || 'off';
+			var lock_billing_item 				= (_lock_billing_item ==="on") ? "1":"0";
+			
+			var _lock_billing_payment_item 		= $('.lock_billing_payment_item:checked').val() || 'off';
+			var lock_billing_payment_item 		= (_lock_billing_payment_item ==="on") ? "1":"0";
+			 
+			 $.ajax({
+				url: "/billing_receivables_lock_post",
+				type:"POST",
+				data:{
+				  ReceivableID:ReceivableID,
+				  lock_billing_information:lock_billing_information,
+				  lock_billing_item:lock_billing_item,
+				  lock_billing_payment_item:lock_billing_payment_item,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					
+					$('#switch_notice_on').show();
+					$('#sw_on').html(response.success);
+					setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
+					
+					/*Close form*/
+					$('#BillingReceivableLockModal').modal('toggle');
+					
+					/*Refresh Table*/
+					var table = $("#getReceivablesList").DataTable();
+				    table.ajax.reload(null, false);			
+				  
+				  }
+				},
+				beforeSend:function()
+				{
+					$('#update_loading_data').show();
+				},
+				complete: function(){
+					$('#update_loading_data').hide();
+				},
+				error: function(error) {
+				 console.log(error);					
+				
+				$('#switch_notice_off').show();
+				$('#sw_off').html("Invalid Input");
+				setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);				  	  
+				  
+				}
+			   });
+		
+	});
 </script>

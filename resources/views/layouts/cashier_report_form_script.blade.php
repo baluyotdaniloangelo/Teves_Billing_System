@@ -989,7 +989,7 @@
 			var client_idx = $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			
 		}
-		alert(client_idx);
+		
 		LoadSellingPriceList(client_idx);
 		
 		let teves_branch 				= $("#teves_branch").val();
