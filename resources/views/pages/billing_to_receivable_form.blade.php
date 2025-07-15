@@ -10,7 +10,7 @@
 	$lock_billing_item			 	= $receivable_lock_items[1];
 	$lock_billing_payment_item 		= $receivable_lock_items[2];
 	
-	if($lock_billing_information==1){
+	if($lock_billing_information==1 && Session::get('UserType')!="SUAdmin"){
 		$disable_receivable_update = 'disabled';
 	}else{
 		$disable_receivable_update = '';
