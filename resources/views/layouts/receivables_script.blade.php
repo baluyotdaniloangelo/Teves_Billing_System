@@ -415,7 +415,7 @@
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("update-receivables").value = ReceivableID;
+					//document.getElementById("update-receivables").value = ReceivableID;
 					
 					/*Set Details*/
 							
@@ -787,14 +787,13 @@
 				type:"POST",
 				data:{
 				  receivable_id:ReceivableID,
-				  
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("update-receivables").value = ReceivableID;
+					//document.getElementById("update-receivables").value = ReceivableID;
 					
 					/*Set Details*/
 					let client_idx 		= response[0].client_id;
@@ -852,7 +851,7 @@
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("update-receivables").value = ReceivableID;
+					//document.getElementById("update-receivables").value = ReceivableID;
 					
 					/*Set Details*/
 					let client_idx 		= response[0].client_id;
@@ -907,7 +906,7 @@
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("update-receivables").value = ReceivableID;
+					//document.getElementById("update-receivables").value = ReceivableID;
 					
 					/*Set Details*/
 					let client_idx 		= response[0].client_id;
