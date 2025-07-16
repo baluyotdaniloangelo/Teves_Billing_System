@@ -1446,12 +1446,20 @@ class ReceivablesController extends Controller
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
 			$Receivables->receivable_lock_status 				= $receivable_lock_status;
 			
-			/*Update Billing List Affected by the Receivable*/
-			/*Included branch_idx February 25, 2024*/
+			
+			
 			
 			if(Session::get('UserType')=="SUAdmin"){
 				
 					$result = $Receivables->update();
+					
+					/*Update Billing List Affected by the Receivable*/
+					/*Lock to Prevent Editing on SO*/
+			
+					$billing_update = BillingTransactionModel::where('receivable_idx', $request->ReceivableID)
+							->update([
+								'lock_billing_item' => $lock_billing_item
+								]);
 					
 					if($result){
 						return response()->json(['success'=>'Receivables Information Successfully Updated!']);

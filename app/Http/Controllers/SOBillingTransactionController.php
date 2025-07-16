@@ -95,22 +95,38 @@ class SOBillingTransactionController extends Controller
 				->addIndexColumn()				
                 ->addColumn('action', function($row){
 							
-						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);	
+							
+						if(Session::get('UserType')=="SUAdmin"){
 							$actionBtn = '
 							<div align="center" class="action_table_menu_site">
 								<a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
 								<a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
 							</div>';
 						}
+						else if(Session::get('UserType')=="Admin"){
+							
+							if($numberDays>=3){
+							$actionBtn = '
+							<div align="center" class="action_table_menu_site">
+								<a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
+							</div>';	
+							}
+							else{
+							$actionBtn = '
+							<div align="center" class="action_table_menu_site">
+								<a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
+								<a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
+							</div>';
+							}
+						}
 						else{
 						
-						$startTimeStamp = strtotime($row->created_at);
-						$endTimeStamp = strtotime(date('y-m-d'));
-						$timeDiff = abs($endTimeStamp - $startTimeStamp);
-						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
-						// and you might want to convert to integer
-						$numberDays = intval($numberDays);
-							
 							if($numberDays>=3 || Session::get('loginID')!=$row->created_by_user_id){
 								/*$actionBtn = '
 								<div align="center" class="action_table_menu_site">
@@ -449,6 +465,7 @@ class SOBillingTransactionController extends Controller
 	
 			$data =  BillingTransactionModel::where('so_idx', $request->so_id)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+			->join('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
 				->orderBy('billing_id', 'asc')
               	->get([
 					'cashiers_report_idx',
@@ -456,7 +473,9 @@ class SOBillingTransactionController extends Controller
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',
 					'teves_billing_table.order_total_amount',
-					'teves_billing_table.billing_id'
+					'teves_billing_table.billing_id',
+					'teves_billing_table.lock_billing_item',
+					'teves_receivable_table.control_number'
 					]);
 		
 			return response()->json($data);

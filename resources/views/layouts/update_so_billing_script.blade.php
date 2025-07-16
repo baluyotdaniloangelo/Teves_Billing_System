@@ -322,13 +322,39 @@
 							var order_quantity 		= response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var order_total_amount 	= response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
+							lock_billing_item 	= response[i].lock_billing_item;
+							var control_number 	= response[i].control_number;
+							
+									
+								
+											
+											<?php
+											if(Session::get('UserType')=="SUAdmin"){ 
+											?>
+											action_btn = "<div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SOBilling_Edit' data-id='"+billing_id+"' ></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSOProduct'  data-id='"+billing_id+"'></a></div>";
+											<?php	
+											}
+											else{
+											?>
+											if(lock_billing_item!=1){
+												action_btn = "<div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SOBilling_Edit' data-id='"+billing_id+"' ></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSOProduct'  data-id='"+billing_id+"'></a></div>";
+											}else{
+												action_btn = "<div align='center' style='font-weight: bold;' title='This item is locked for editing and deletion.'>"+control_number+"</div>";
+											}
+											<?php
+											}
+											?>
+							
+									
+								
+							
 							$('#table_so_product_body_data tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
 							"<td class='product_td' align='left'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+product_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
-							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SOBilling_Edit' data-id='"+billing_id+"' ></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSOProduct'  data-id='"+billing_id+"'></a></div></td>"+
+							"<td>"+action_btn+"</td>"+
 							"</tr>");				
 					}			
 				  }else{
