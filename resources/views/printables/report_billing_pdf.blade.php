@@ -99,7 +99,7 @@
 				<th class="data_th" nowrap style="border:1px solid #000;">Product</th>
 				<th class="data_th" nowrap style="border:1px solid #000;">Quantity</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Price</th>
-				<th class="data_th" nowrap style="border:1px solid #000;" width="15%">Amount</th>
+				<th align="right" class="data_th" nowrap style="border:1px solid #000;" width="15%">Amount</th>
 			</tr>
 											
 		<tbody>
@@ -124,7 +124,7 @@
 				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->product_name}}</td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_quantity,2)?> {{$billing_data_cols->product_unit_measurement}}</td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->product_price,2);?></td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_total_amount,2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_total_amount,2);?></td>
 			</tr>
 			<?php 
 			$no++; 

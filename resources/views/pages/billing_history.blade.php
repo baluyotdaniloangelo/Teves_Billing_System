@@ -169,7 +169,15 @@
 							
 						  </div>
 						</div>
-					  
+						<div class="row">
+						  <label for="all_branches" class="col-sm-4 col-form-label">&nbsp;</label>
+						  <div class="col-sm-8">
+							<div class="form-check form-switch">
+							  <input class="form-check-input all_branches" type="checkbox" id="all_branches" name="all_branches">
+							  <label class="form-check-label" for="flexSwitchCheckDefault">Include Billing from the other Branch?</label>
+							</div>
+						  </div>
+						</div>
 						<div class="row mb-2">
 						  <label for="client_idx" class="col-sm-4 col-form-label">Client</label>
 						  <div class="col-sm-8">

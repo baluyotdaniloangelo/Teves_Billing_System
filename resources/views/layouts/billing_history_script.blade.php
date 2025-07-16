@@ -32,6 +32,10 @@
 			let company_header 					= $("#company_header").val();	  
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
+			/*Added January 9, 2025*/
+			var _all_branches 				= $('.all_branches:checked').val() || 'off';
+			var all_branches 				= (_all_branches ==="on") ? "YES":"NO";
+			
 			  $.ajax({
 				url: "/generate_report",
 				type:"POST",
@@ -40,6 +44,7 @@
 				  start_date:start_date,
 				  end_date:end_date,
 				  company_header:company_header,
+				  all_branches:all_branches,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -434,24 +439,6 @@
 	  
 	}
 	
-	function download_billing_report_excel(){
-		  
-			let client_idx 		= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
-			let start_date 		= $("input[name=start_date]").val();
-			let end_date 		= $("input[name=end_date]").val();
-		 		  
-		var query = {
-			client_idx:client_idx,
-			start_date:start_date,
-			end_date:end_date,
-			_token: "{{ csrf_token() }}"
-		}
-
-		var url = "{{URL::to('generate_report_excel')}}?" + $.param(query)
-		window.open(url);
-	  
-	}
-	
 	function download_billing_report_pdf(receivable_id){
 			
 			let client_idx 		= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
@@ -464,6 +451,9 @@
 			let vat_value_percentage 		= $("input[name=vat_value_percentage]").val()/100;
 		 	/*Added May 6, 2023*/
 			let company_header 					= $("#company_header").val();	  
+			/*Added January 9, 2025*/
+			var _all_branches 				= $('.all_branches:checked').val() || 'off';
+			var all_branches 				= (_all_branches ==="on") ? "YES":"NO";
 		var query = {
 			receivable_id:receivable_id,
 			client_idx:client_idx,
@@ -474,6 +464,7 @@
 			withholding_tax_percentage:withholding_tax_percentage,
 			net_value_percentage:net_value_percentage,
 			vat_value_percentage:vat_value_percentage,
+			all_branches:all_branches,
 			_token: "{{ csrf_token() }}"
 		}
 
