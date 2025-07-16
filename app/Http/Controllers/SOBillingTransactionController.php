@@ -463,9 +463,9 @@ class SOBillingTransactionController extends Controller
 
 	public function get_so_product(Request $request){		
 	
-			$data =  BillingTransactionModel::where('so_idx', $request->so_id)
+			/*$data =  BillingTransactionModel::where('so_idx', $request->so_id)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-			->join('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
+			->join('teves_receivable_table', 'teves_receivable_table.receivable_isd', '=', 'teves_billing_table.receivable_idx')
 				->orderBy('billing_id', 'asc')
               	->get([
 					'cashiers_report_idx',
@@ -476,8 +476,29 @@ class SOBillingTransactionController extends Controller
 					'teves_billing_table.billing_id',
 					'teves_billing_table.lock_billing_item',
 					'teves_receivable_table.control_number'
-					]);
-		
+					]);*/
+					
+				$data = BillingTransactionModel::where('so_idx', $request->so_id)
+				->whereNull('teves_billing_table.deleted_at') // Ensure main model isn't soft-deleted
+				->join('teves_product_table', function ($join) {
+					$join->on('teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+						 ->whereNull('teves_product_table.deleted_at'); // Filter soft-deleted products
+				})
+				->leftjoin('teves_receivable_table', function ($join) {
+					$join->on('teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
+						 ->whereNull('teves_receivable_table.deleted_at'); // Filter soft-deleted receivables
+				})
+				->orderBy('billing_id', 'asc')
+				->get([
+					'cashiers_report_idx',
+					'teves_product_table.product_name',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.billing_id',
+					'teves_billing_table.lock_billing_item'
+				]);
+	
 			return response()->json($data);
 	}
 

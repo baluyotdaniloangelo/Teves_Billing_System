@@ -325,9 +325,6 @@
 							lock_billing_item 	= response[i].lock_billing_item;
 							var control_number 	= response[i].control_number;
 							
-									
-								
-											
 											<?php
 											if(Session::get('UserType')=="SUAdmin"){ 
 											?>
@@ -344,9 +341,6 @@
 											<?php
 											}
 											?>
-							
-									
-								
 							
 							$('#table_so_product_body_data tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
