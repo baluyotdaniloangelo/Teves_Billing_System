@@ -4,6 +4,8 @@
 <?php
 
 	$receivable_lock_status = $receivables_details['receivable_lock_status'];
+	$receivable_unlock_expiration = $receivables_details['receivable_unlock_expiration'];
+	
 	$receivable_lock_items = str_split((string)$receivable_lock_status);
 	
 	$lock_billing_information 		= $receivable_lock_items[0];
@@ -17,6 +19,7 @@
 	}
 
 ?>
+
 <main id="main" class="main">	
 
     <section class="section">

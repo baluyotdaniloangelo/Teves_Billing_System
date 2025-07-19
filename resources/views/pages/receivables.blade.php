@@ -224,11 +224,19 @@
 						</div>
 						
 						
+						<div class="col-sm-12">
 						
+							<div class="form-floating mb-3">
+								<input type="datetime-local" class="form-control" id="receivable_unlock_expiration" name="receivable_unlock_expiration" value="" required>
+								<label for="receivable_unlock_expiration">Auto Lock at</label>
+								<span class="valid-feedback" id="receivable_unlock_expirationError"></span>
+							</div>
+						 
+						</div>
 						
                     <div class="modal-footer modal-footer_form">
 						
-						  <b>Take Note:Upon selecting the above setting, this may prevent the user from editing or deleting those items.</b>
+						  <b>Take Note:Upon unlocking the above setting, this may prevent the user from editing or deleting those items.</b>
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="LockConfirmed" value=""> Confirm</button>	
 						  
 					</div>

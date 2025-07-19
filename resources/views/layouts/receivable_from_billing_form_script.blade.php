@@ -1,6 +1,66 @@
 
-
    <script type="text/javascript">
+	<?php
+		if($receivable_unlock_expiration!=''){
+	?>
+	const targetTime = new Date("<?=$receivable_unlock_expiration;?>");
+	const timer = setInterval(() => {
+	  const now = new Date();
+	  if (now >= targetTime) {
+		  
+		/*Call Function to Lock*/
+		LockReceivable();
+		}
+	}, 1000); 
+	
+	<?php
+		}
+	?>
+   
+	function LockReceivable(){
+		
+			let ReceivableID = {{ @$receivables_details['receivable_id'] }};
+			
+			var lock_billing_information 		= 1;
+			var lock_billing_item 				= 1;
+			var lock_billing_payment_item 		= 1;
+			 
+			let receivable_unlock_expiration 	= '';
+			
+			 $.ajax({
+				url: "/billing_receivables_lock_post",
+				type:"POST",
+				data:{
+				  ReceivableID:ReceivableID,
+				  lock_billing_information:lock_billing_information,
+				  lock_billing_item:lock_billing_item,
+				  lock_billing_payment_item:lock_billing_payment_item,
+				  receivable_unlock_expiration:receivable_unlock_expiration,
+				  lock_page:'receivable_billing_page',
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+						
+						window.location.reload();
+				  
+				  }
+				},
+				beforeSend:function()
+				{
+					//$('#update_loading_data').show();
+				},
+				complete: function(){
+					//$('#update_loading_data').hide();
+				},
+				error: function(error) {
+				 console.log(error);					
+				
+				}
+			   });
+		
+	}
    
 	LoadProduct();
 	LoadPayment();
@@ -183,43 +243,6 @@
 				  
 					  if(response['productlist']!='') {			  
 							
-							if(response['paymentcount']!=0){
-				
-								for(var i=0; i<len; i++){
-							
-								var id = response['productlist'][i].billing_id;
-								var order_po_number = response['productlist'][i].order_po_number;
-								var product_name = response['productlist'][i].product_name;
-								var product_unit_measurement = response['productlist'][i].product_unit_measurement;
-								var product_price = response['productlist'][i].product_price;
-								var order_quantity = response['productlist'][i].order_quantity;
-								
-								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
-								
-								
-								var created_at = response['productlist'][i].created_at;
-								var updated_at = response['productlist'][i].updated_at;
-								
-								var cashiers_report_idx = response['productlist'][i].cashiers_report_idx;
-								
-								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
-								"<td align='center'>" + (i+1) + "</td>" +
-								"<td class='product_td' align='left'>"+product_name+"</td>"+
-								"<td class='product_td' align='left'>"+order_po_number+"</td>"+
-								"<td class='manual_price_td' align='right'>"+product_price+"</td>"+
-								"<td class='calibration_td' align='right'>"+order_quantity+"</td>"+
-								"<td class='calibration_td' align='center'>"+product_unit_measurement+"</td>"+
-								"<td class='manual_price_td' align='right'>"+order_total_amount+"</td>"+
-								"<td class='manual_price_td' align='right'>"+created_at+"</td>"+
-								"<td class='manual_price_td' align='right'>"+updated_at+"</td>"+
-								"<td class='manual_price_td' align='right'>"+cashiers_report_idx+"</td>"+
-								"</tr>");
-								
-								}
-								
-							}else{
-								
 								for(var i=0; i<len; i++){
 							
 								var id = response['productlist'][i].billing_id;
@@ -243,14 +266,19 @@
 								
 								<?php
 								
-								if($lock_billing_item==1){ 
+								if($lock_billing_item==1&&Session::get('UserType')!="SUAdmin"){ 
 								?>
-								var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>";
+									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' >a<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
 								<?php	
 								}
 								else{
 								?>
-								var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
+								if(response['paymentcount']==0){
+									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' >b<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>";
+								}else{
+									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' >c<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
+								}
+								
 								<?php
 								}
 								
@@ -295,11 +323,10 @@
 											
 											?>
 											
-												if(diffDays>=3){
+												if(diffDays>=3||response['paymentcount']!=0){
 									
-													//$(".action_column_class").hide();
 													$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
+													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' >d<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
 													"<td align='center'>" + (i+1) + "</td>" +
 													"<td class='product_td' align='left'>"+order_po_number+"</td>"+
 													"<td class='product_td' align='left'>"+product_name+"</td>"+
@@ -316,7 +343,7 @@
 													
 													
 													$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
+													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' >f<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
 													"<td align='center'>" + (i+1) + "</td>" +
 													"<td class='product_td' align='left'>"+order_po_number+"</td>"+
 													"<td class='product_td' align='left'>"+product_name+"</td>"+
@@ -338,11 +365,8 @@
 								
 								?>
 								
-								
-
 								}
 								
-							}
 					  }
 				  else{
 							/*No Result Found or Error*/	
@@ -796,8 +820,6 @@
 							var receivable_payment_remarks 		= response[i].receivable_payment_remarks;
 							var image_reference 				= response[i].image_reference;
 							
-							
-							
 								var created_at = response[i].created_at;
 								
 								const oneDay = 24 * 60 * 60 * 1000; 		// hours*minutes*seconds*milliseconds
@@ -806,9 +828,6 @@
 
 								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
 				
-				
-								
-								
 									<?php
 									if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 									
@@ -819,7 +838,7 @@
 											}
 											else{
 											?>
-											var action_controls = "";
+											var action_controls = "Locked";
 											<?php
 											}
 									
@@ -827,7 +846,7 @@
 									else{
 									?>
 										if(diffDays>=3){
-											action_controls = "";
+											action_controls = "Locked";
 											}else{
 											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";		
 										

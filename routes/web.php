@@ -257,6 +257,7 @@ Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales
 Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class,'generate_sales_order_delivery_status_pdf'])->name('generate_sales_order_delivery_status_pdf')->middleware('isLoggedIn');
 
 Route::get('/generate_sales_order_receivable_soa_pdf', [ReportController::class,'generate_sales_order_receivable_soa_pdf'])->name('generate_sales_order_receivable_soa_pdf')->middleware('isLoggedIn');
+Route::get('/generate_billing_soa_receivable_pdf', [ReportController::class,'generate_billing_soa_receivable_pdf'])->name('generate_billing_soa_receivable_pdf')->middleware('isLoggedIn');
 
 
 

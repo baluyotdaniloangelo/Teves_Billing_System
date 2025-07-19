@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ $title_receivable }}</title>
 	<style>
+	
 		body {
 			font-family: "Open Sans", sans-serif;
 		}
@@ -30,7 +31,7 @@
 		}
 </style>
 </head>
-<body>
+<body class="rt">
     
 	<table class="" width="100%" cellspacing="0" cellpadding="1">
 		

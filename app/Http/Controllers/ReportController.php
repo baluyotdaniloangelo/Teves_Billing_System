@@ -260,6 +260,7 @@ class ReportController extends Controller
 		
 	}	
 	
+	/*OLD*/
 	public function generate_soa_summary_pdf(Request $request){
 
 		if(Session::has('loginID')){
@@ -556,44 +557,10 @@ class ReportController extends Controller
 		$end_date = $request->end_date;
 		$company_header = $request->company_header;
 		$all_branches = $request->all_branches;			
-		
-		/*
-		$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
-						->where(function ($r) use($all_branches,$company_header) {
-							if ($all_branches=='NO') {
-							   $r->where('teves_billing_table.branch_idx', $company_header);
-							}
-						})
-						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
-						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
-						->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
-						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-						->orderBy('teves_billing_table.order_date', 'asc')
-						->get([
-						'teves_billing_table.billing_id',
-						'teves_billing_table.receivable_idx',
-						'teves_billing_table.drivers_name',
-						'teves_billing_table.plate_no',
-						'teves_product_table.product_name',
-						'teves_product_table.product_unit_measurement',
-						'teves_billing_table.product_price',
-						'teves_billing_table.order_quantity',					
-						'teves_billing_table.order_total_amount',
-						'teves_billing_table.order_po_number',
-						'teves_billing_table.order_date',
-						'teves_billing_table.order_time',
-						'teves_billing_table.created_at',
-						'teves_billing_table.created_by_user_idx',
-						'teves_branch_table.branch_initial']);*/
 				
 				$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
 						->whereNull('teves_billing_table.deleted_at') 
-						/*->where(function ($r) use($all_branches,$company_header) {
-							if ($all_branches=='NO') {
-							   $r->where('teves_billing_table.branch_idx', $company_header);
-							}
-						})*/
 						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
 						->leftjoin('teves_branch_table', function ($join) {
 							$join->on('teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
@@ -698,10 +665,19 @@ class ReportController extends Controller
 		
 		
 		/*Using Raw Query*/	
-		/*$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
+		
+					$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
-						->leftjoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
-						->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+						->whereNull('teves_billing_table.deleted_at') 
+						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
+						->leftjoin('teves_branch_table', function ($join) {
+							$join->on('teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
+								 ->whereNull('teves_branch_table.deleted_at'); // Filter soft-deleted products
+						})
+						->join('teves_product_table', function ($join) {
+							$join->on('teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+								 ->whereNull('teves_product_table.deleted_at'); // Filter soft-deleted products
+						})
 						->orderBy('teves_billing_table.order_date', 'asc')
 						->get([
 						'teves_billing_table.billing_id',
@@ -718,7 +694,74 @@ class ReportController extends Controller
 						'teves_billing_table.order_time',
 						'teves_billing_table.created_at',
 						'teves_billing_table.created_by_user_idx',
-						'teves_branch_table.branch_initial']);*/
+						'teves_branch_table.branch_initial']);
+		
+		/*Recievable Data*/
+		$receivable_data = ReceivablesModel::where('receivable_id', $receivable_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+              	->get([
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.sales_order_idx',
+					'teves_receivable_table.receivable_name',
+					'teves_receivable_table.billing_date',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_receivable_table.control_number',
+					'teves_client_table.client_tin',
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.created_by_user_id',
+					'billing_period_start',
+					'billing_period_end',
+					'company_header'
+				]);
+				
+		$branch_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', $receivable_data[0]['created_by_user_id'])->first();
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
+          
+		$title_billing_statement = 'BILLING STATEMENT';
+		  
+        $pdf = PDF::loadView('printables.report_billing_receivable_pdf', compact('title_billing_statement', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','branch_header'));
+		
+		/*Download Directly*/
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		$pdf->render();
+		return $pdf->stream($client_data['client_name'].".pdf");
+	}
+
+	public function generate_billing_soa_receivable_pdf(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+		
+		$receivable_id = $request->receivable_id;
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		$less_per_liter = $request->less_per_liter;
+		$company_header = $request->company_header;
+		
+		$withholding_tax_percentage = $request->withholding_tax_percentage;
+		$net_value_percentage = $request->net_value_percentage;
+		$vat_value_percentage = $request->vat_value_percentage;
 		
 					$billing_data = BillingTransactionModel::where('client_idx', $client_idx)
 						->where('teves_billing_table.receivable_idx', '=', $receivable_id)
@@ -757,19 +800,69 @@ class ReportController extends Controller
 		
 		/*Recievable Data*/
 				
-		$receivable_data = ReceivablesModel::find($receivable_id, ['payment_term','sales_order_idx','billing_date','ar_reference','or_number','control_number','company_header','created_by_user_id']);
+		$receivable_data = ReceivablesModel::where('receivable_id', $receivable_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+              	->get([
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.sales_order_idx',
+					'teves_receivable_table.receivable_name',
+					'teves_receivable_table.billing_date',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_receivable_table.control_number',
+					'teves_client_table.client_tin',
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.created_by_user_id',
+					'billing_period_start',
+					'billing_period_end',
+					'company_header'
+				]);
 		
-		$receivable_header = TevesBranchModel::find($receivable_data['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		@$amount_split_whole_to_decimal = explode('.',$receivable_data[0]['receivable_amount']);
+		
+		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
+		
+		if(@$amount_split_whole_to_decimal[1]==0){
+			$amount_in_word_decimal = "";
+		}else{
+			$amount_in_word_decimal = " and ".$this->numberToWord( $amount_split_whole_to_decimal[1] ) ." Centavos";
+		}
+		
+		$amount_in_words = $amount_in_word_whole."".$amount_in_word_decimal;
+		
+		$branch_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', $receivable_data['created_by_user_id'])->first();
+		$user_data = User::where('user_id', '=', $receivable_data[0]['created_by_user_id'])->first();
 		
 		/*Client Information*/
 		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
           
-		$title = 'BILLING STATEMENT';
+		$title_billing_statement = 'BILLING STATEMENT';
 		  
-        $pdf = PDF::loadView('printables.report_billing_receivable_pdf', compact('title', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','receivable_header'));
+		/*Receivable*/
+				
+		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $receivable_id)
+				//->where('teves_receivable_payment.receivable_mode_of_payment', '<>', 'Post-Dated Check')
+				->orderBy('receivable_payment_id', 'asc')
+              	->get([
+					'teves_receivable_payment.receivable_payment_id',
+					'teves_receivable_payment.receivable_date_of_payment',
+					'teves_receivable_payment.receivable_time_of_payment',
+					'teves_receivable_payment.receivable_mode_of_payment',
+					'teves_receivable_payment.receivable_reference',
+					'teves_receivable_payment.receivable_payment_amount',
+					'teves_receivable_payment.receivable_payment_remarks'
+					]);
+		  
+		$title_soa = 'STATEMENT OF ACCOUNT';
+		$title_receivable = 'RECEIVABLE';		  
+		  
+        $pdf = PDF::loadView('printables.report_billing_soa_receivable_pdf', compact('title_billing_statement','title_soa','title_receivable', 'client_data', 'user_data', 'billing_data', 'start_date', 'end_date', 'less_per_liter', 'company_header', 'receivable_data','withholding_tax_percentage','net_value_percentage','vat_value_percentage','branch_header','receivable_data','receivable_payment_data','amount_in_words'));
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
@@ -778,7 +871,6 @@ class ReportController extends Controller
 		return $pdf->stream($client_data['client_name'].".pdf");
 	}
 
-	
 	public function generate_report_pdf(Request $request){
 		
 		/*Set Memory Limit to Infinite*/
@@ -1107,7 +1199,7 @@ class ReportController extends Controller
 		
 	}
 	
-		public function generate_sales_order_receivable_soa_pdf(Request $request){
+	public function generate_sales_order_receivable_soa_pdf(Request $request){
 
 		$request->validate([
 			'sales_order_id'      		=> 'required'
@@ -1187,7 +1279,6 @@ class ReportController extends Controller
 		
 		
 		/*Receivable*/
-				//$receivable_id = $request->receivable_id;
 					
 				$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
 				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
@@ -1425,7 +1516,6 @@ class ReportController extends Controller
 	
 	}
 	
-	
 	public function generate_purchase_order_payment_pdf(Request $request){
 
 		$purchase_order_id = $request->purchase_order_id;
@@ -1520,8 +1610,7 @@ class ReportController extends Controller
 		return $pdf->stream($purchase_order_data[0]['supplier_name']."_PURCHASE_ORDER_PAYMENT.pdf");
 	
 	}	
-	
-	
+		
 	public function generate_purchase_order_delivery_status_pdf(Request $request){
 
 		$purchase_order_id = $request->purchase_order_id;
@@ -1692,8 +1781,6 @@ class ReportController extends Controller
 	
 	}	
 	
-	
-	
 	public function generate_test_pdf(Request $request){
 	
 		$SOId = 1;
@@ -1730,9 +1817,7 @@ class ReportController extends Controller
 		return $pdf->stream($so_data[0]['client_name']."_SO.pdf");
 	}
 
-	
-	public function numberToWord($num = '')
-    {
+	public function numberToWord($num = ''){
         $num    = ( string ) ( ( int ) $num );
         
         if( ( int ) ( $num ) && ctype_digit( $num ) )

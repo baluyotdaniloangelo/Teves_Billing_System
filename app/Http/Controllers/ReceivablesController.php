@@ -571,6 +571,7 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_withholding_tax_percentage',
 					'teves_receivable_table.company_header',
 					'teves_receivable_table.receivable_lock_status',
+					'teves_receivable_table.receivable_unlock_expiration',
 					'teves_receivable_table.created_at']);
 					return response()->json($data);
 		
@@ -1434,6 +1435,14 @@ class ReceivablesController extends Controller
 	/*Lock Receivable - Biling*/
 	public function billing_receivables_lock_post(Request $request){		
 	
+	if($request->lock_page=='receivable_page'){
+	
+		$request->validate([	 
+			  'receivable_unlock_expiration'      	=> 'required',	 
+		 ],[
+			  'receivable_unlock_expiration.required' 	=> 'Unlock Expiration is Required',
+		 ]);
+	}
 			
 			$lock_billing_information 	= $request->lock_billing_information;
 			$lock_billing_item 			= $request->lock_billing_item;
@@ -1444,12 +1453,10 @@ class ReceivablesController extends Controller
 		
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);
-			$Receivables->receivable_lock_status 				= $receivable_lock_status;
+			$Receivables->receivable_lock_status 		= $receivable_lock_status;
+			$Receivables->receivable_unlock_expiration 	= $request->receivable_unlock_expiration;
 			
-			
-			
-			
-			if(Session::get('UserType')=="SUAdmin"){
+			//if(Session::get('UserType')=="SUAdmin"){
 				
 					$result = $Receivables->update();
 					
@@ -1468,7 +1475,7 @@ class ReceivablesController extends Controller
 						return response()->json(['success'=>'Error on Update Receivables Information']);
 					}
 					
-			}
+			//}
 	}
 		
 }

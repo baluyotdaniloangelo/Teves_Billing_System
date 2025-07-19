@@ -1164,6 +1164,8 @@
 					document.getElementById("lock_receivable_confirm_control_number").innerHTML = response[0].control_number;
 					document.getElementById("lock_receivable_client_info").innerHTML = response[0].client_name;
 					document.getElementById("lock_receivable_amount").innerHTML = response[0].receivable_amount;
+					
+					document.getElementById("receivable_unlock_expiration").value = response[0].receivable_unlock_expiration;
 
 					$('#BillingReceivableLockModal').modal('toggle');					
 				  
@@ -1197,6 +1199,8 @@
 			var _lock_billing_payment_item 		= $('.lock_billing_payment_item:checked').val() || 'off';
 			var lock_billing_payment_item 		= (_lock_billing_payment_item ==="on") ? "1":"0";
 			 
+			let receivable_unlock_expiration 	= $("input[name=receivable_unlock_expiration]").val();
+			
 			 $.ajax({
 				url: "/billing_receivables_lock_post",
 				type:"POST",
@@ -1205,6 +1209,8 @@
 				  lock_billing_information:lock_billing_information,
 				  lock_billing_item:lock_billing_item,
 				  lock_billing_payment_item:lock_billing_payment_item,
+				  receivable_unlock_expiration:receivable_unlock_expiration,
+				  lock_page:'receivable_page',
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -1234,6 +1240,9 @@
 				},
 				error: function(error) {
 				 console.log(error);					
+				
+				$('#receivable_unlock_expirationError').text(error.responseJSON.errors.receivable_unlock_expiration);
+				document.getElementById('receivable_unlock_expirationError').className = "invalid-feedback";
 				
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");
