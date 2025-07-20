@@ -866,7 +866,7 @@ class ReportController extends Controller
 		
 		/*Download Directly*/
 		/*Stream for Saving/Printing*/
-		$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
+		$pdf->setPaper('A4', 'Portrait');/*Set to Landscape*/
 		$pdf->render();
 		return $pdf->stream($client_data['client_name'].".pdf");
 	}

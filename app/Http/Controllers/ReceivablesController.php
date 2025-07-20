@@ -234,6 +234,7 @@ class ReceivablesController extends Controller
 						<div align="center" class="action_table_menu_Product">
 						<select class="receivable_print_'.$row->receivable_id.'" name="receivable_print_'.$row->receivable_id.'" id="receivable_print_'.$row->receivable_id.'" onchange="receivable_print('.$row->receivable_id.')">	
 							<option disabled="" selected value="">Choose...</option>
+							<option value="PrintAll_Billing" title="All">All - Test in Portrait</option>
 							<option value="PrintStatement" title="Statement of Account">SOA</option>
 							'.$print_sales_or_billing.'
 							<option value="PrintReceivables">Receivable</option>
@@ -296,13 +297,6 @@ class ReceivablesController extends Controller
 							$receivable_lock_items = str_split((string)$receivable_lock_status);
 							
 							$lock_billing_information 		= $receivable_lock_items[0];
-
-							/*$actionBtn_SUadmin = '<div align="center" class="action_table_menu_Product">
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-lock btn_icon_table btn_icon_table_lock" title="Lock Settings" id="LockReceivables" onclick="LockReceivable('.$row->receivable_id.')"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
-									</div>';*/
 							
 							$actionBtn_SUadmin = '<div align="center" class="action_table_menu_Product">
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-lock btn_icon_table btn_icon_table_lock" title="Lock Settings" id="LockReceivables" onclick="LockReceivable('.$row->receivable_id.')"></a>

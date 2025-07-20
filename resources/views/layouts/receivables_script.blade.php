@@ -757,7 +757,10 @@
 				if(to_print=='PrintStatement'){
 					print_soa(id);
 				}
-				if(to_print=='PrintAll'){
+				else if(to_print=='PrintAll_Billing'){
+					print_all_billing(id);
+				}
+				else if(to_print=='PrintAll'){
 					print_all(id);
 				}
 				else if(to_print=='PrintBilling'){
@@ -776,6 +779,63 @@
 	}	    
 	  
 	/*Re-print*/
+	function print_all_billing(id){
+	  
+			event.preventDefault();
+			
+			let ReceivableID = id;
+			
+			  $.ajax({
+				url: "/receivable_info",
+				type:"POST",
+				data:{
+				  receivable_id:ReceivableID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					//document.getElementById("update-receivables").value = ReceivableID;
+					
+					/*Set Details*/
+					let client_idx 		= response[0].client_id;
+					let start_date 		= response[0].billing_period_start;
+					let end_date 		= response[0].billing_period_end;
+					let less_per_liter 	= response[0].less_per_liter;
+					let company_header 	= response[0].company_header;
+					
+					let withholding_tax_percentage 	= response[0].receivable_withholding_tax_percentage/100;
+					let net_value_percentage 		= response[0].receivable_net_value_percentage;
+					let vat_value_percentage 		= response[0].receivable_vat_value_percentage/100;
+					
+					/*Open Billing Print Page*/				
+					var query_billing = {
+						receivable_id:ReceivableID,
+						client_idx:client_idx,
+						start_date:start_date,
+						end_date:end_date,
+						company_header:company_header,
+						less_per_liter:less_per_liter,
+						withholding_tax_percentage:withholding_tax_percentage,
+						net_value_percentage:net_value_percentage,
+						vat_value_percentage:vat_value_percentage,
+						_token: "{{ csrf_token() }}"
+					}
+
+					var url_billing = "{{URL::to('generate_billing_soa_receivable_pdf')}}?" + $.param(query_billing)
+					window.open(url_billing);
+
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  
+	}
+	  
 	function print_billing(id){
 	  
 			event.preventDefault();
@@ -831,8 +891,8 @@
 				}
 			   });		
 	  
-	  }
-	  
+	}
+	
 	function print_receivable(id){
 	  
 			event.preventDefault();

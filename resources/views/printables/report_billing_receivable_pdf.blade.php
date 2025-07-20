@@ -168,12 +168,12 @@
 				<td align="center" nowrap style="border:1px solid #000;"><?=$order_date;?></td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_time}}</td>
 				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->branch_initial}}</td>
-				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->drivers_name}}</td>
-				<td align="center" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
-				<td align="center" style="border:1px solid #000;">{{$billing_data_cols->plate_no}}</td>
-				<td nowrap style="border:1px solid #000;">{{$billing_data_cols->product_name}}</td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_quantity,2)?> {{$billing_data_cols->product_unit_measurement}}</td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->product_price,2);?></td>
+				<td align="left" style="border:1px solid #000;">{{$billing_data_cols->drivers_name}}</td>
+				<td align="left" nowrap style="border:1px solid #000;">{{$billing_data_cols->order_po_number}}</td>
+				<td align="left" style="border:1px solid #000;">{{$billing_data_cols->plate_no}}</td>
+				<td align="left" style="border:1px solid #000;">{{$billing_data_cols->product_name}}</td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_quantity,2)?> {{$billing_data_cols->product_unit_measurement}}</td>
+				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->product_price,2);?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($billing_data_cols->order_total_amount,2);?></td>
 			</tr>
 			<?php 
