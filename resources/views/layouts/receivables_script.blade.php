@@ -1134,7 +1134,7 @@
 					const number = response[0].receivable_lock_status;
 					const digitsArray = number.toString().split('').map(Number);
 					
-					const [digit1, digit2, digit3, digit4] = digitsArray;
+					const [digit1, digit2, digit3, digit4, digit5] = digitsArray;
 					
 					var _lock_billing_information 		= digit1;
 					
@@ -1160,12 +1160,38 @@
 							document.getElementById("lock_billing_payment_item").checked = false;
 						}
 						
-					document.getElementById("lock_receivable_billing_date").value = response[0].billing_date;
+					var _lock_sales_order_information	= digit4;
+					
+						if(_lock_sales_order_information==1){
+							document.getElementById("lock_sales_order_information").checked = true;
+						}else{
+							document.getElementById("lock_sales_order_information").checked = false;
+						}
+						
+					var _lock_sales_order_delivery		= digit5;
+					
+						if(_lock_sales_order_delivery==1){
+							document.getElementById("lock_sales_order_delivery").checked = true;
+						}else{
+							document.getElementById("lock_sales_order_delivery").checked = false;
+						}
+						
+					document.getElementById("lock_receivable_billing_date").innerHTML = response[0].billing_date;
 					document.getElementById("lock_receivable_confirm_control_number").innerHTML = response[0].control_number;
 					document.getElementById("lock_receivable_client_info").innerHTML = response[0].client_name;
 					document.getElementById("lock_receivable_amount").innerHTML = response[0].receivable_amount;
 					
 					document.getElementById("receivable_unlock_expiration").value = response[0].receivable_unlock_expiration;
+					
+					sales_order_idx = response[0].sales_order_idx;
+					
+						if(sales_order_idx!=0){
+							document.getElementById("lock_sales_order_information").disabled = false;
+							document.getElementById("lock_sales_order_delivery").disabled = false;
+						}else{
+							document.getElementById("lock_sales_order_information").disabled = true;
+							document.getElementById("lock_sales_order_delivery").disabled = true;
+						}
 
 					$('#BillingReceivableLockModal').modal('toggle');					
 				  
@@ -1198,6 +1224,12 @@
 			
 			var _lock_billing_payment_item 		= $('.lock_billing_payment_item:checked').val() || 'off';
 			var lock_billing_payment_item 		= (_lock_billing_payment_item ==="on") ? "1":"0";
+			
+			var _lock_sales_order_information 		= $('.lock_sales_order_information:checked').val() || 'off';
+			var lock_sales_order_information 		= (_lock_sales_order_information ==="on") ? "1":"0";
+			
+			var _lock_sales_order_delivery 		= $('.lock_sales_order_delivery:checked').val() || 'off';
+			var lock_sales_order_delivery 		= (_lock_sales_order_delivery ==="on") ? "1":"0";
 			 
 			let receivable_unlock_expiration 	= $("input[name=receivable_unlock_expiration]").val();
 			
@@ -1209,6 +1241,8 @@
 				  lock_billing_information:lock_billing_information,
 				  lock_billing_item:lock_billing_item,
 				  lock_billing_payment_item:lock_billing_payment_item,
+				  lock_sales_order_information:lock_sales_order_information,
+				  lock_sales_order_delivery:lock_sales_order_delivery,
 				  receivable_unlock_expiration:receivable_unlock_expiration,
 				  lock_page:'receivable_page',
 				  _token: "{{ csrf_token() }}"

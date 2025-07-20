@@ -1,6 +1,8 @@
 @extends('layouts.layout')  
 @section('content')  
 
+
+
 <main id="main" class="main">	
 
     <section class="section">
@@ -129,7 +131,7 @@
                 <div class="tab-pane fade  <?php if($tab=='delivery') { echo ' show active'; } ?>" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductDeliveryModal" id="" onclick="ResetDeliveryForm()" title="Add Sales Order Delivery Items"></button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductDeliveryModal" id="addProductDeliveredBTN" onclick="ResetDeliveryForm()" title="Add Sales Order Delivery Items"></button>
 						<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintSalesOrderDeliveyStatus" title="Print Sales Order Delivered Item / Status"></button>
 					</div>											
 					</div>
@@ -155,7 +157,7 @@
                 <div class="tab-pane fade <?php if($tab=='payment') { echo 'show active'; } ?>" id="payment" role="tabpanel" aria-labelledby="payment-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-warning new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
+						<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#AddPaymentModal" id="AddPaymentOrderProductBTN" onclick="ResetPaymentForm()"></button>
 						<button type="button" class="btn new_item bi bi-images" data-bs-toggle="modal" data-bs-target="#ViewPaymentGalery" style="background-color: magenta;"></button>
 					</div>					
 					</div>

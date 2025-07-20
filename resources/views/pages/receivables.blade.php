@@ -170,10 +170,8 @@
             </div>
         </div>
     </div>	
-			
 
-
-<!--   fdfff -->	
+	<!-- Billing/Receivable Lock -->	
 	<div class="modal fade" id="BillingReceivableLockModal" tabindex="-1">
               <div class="modal-dialog">
                   <div class="modal-content">
@@ -200,7 +198,7 @@
 						  <div class="col-sm-12">
 							<div class="form-check form-switch">
 							  <input class="form-check-input lock_billing_information" type="checkbox" id="lock_billing_information" name="lock_billing_information">
-							  <label class="form-check-label" for="flexSwitchCheckDefault">Receivable Information</label>
+							  <label class="form-check-label" for="lock_billing_information">Receivable Information</label>
 							</div>
 						  </div>
 						</div>
@@ -209,7 +207,7 @@
 						  <div class="col-sm-12">
 							<div class="form-check form-switch">
 							  <input class="form-check-input lock_billing_item" type="checkbox" id="lock_billing_item" name="lock_billing_item">
-							  <label class="form-check-label" for="flexSwitchCheckDefault">Billing</label>
+							  <label class="form-check-label" for="lock_billing_item">Product</label>
 							</div>
 						  </div>
 						</div>
@@ -218,11 +216,28 @@
 						  <div class="col-sm-12">
 							<div class="form-check form-switch">
 							  <input class="form-check-input lock_billing_payment_item" type="checkbox" id="lock_billing_payment_item" name="lock_billing_payment_item">
-							  <label class="form-check-label" for="flexSwitchCheckDefault">Payment</label>
+							  <label class="form-check-label" for="lock_billing_payment_item">Payment</label>
 							</div>
 						  </div>
 						</div>
 						
+						<div class="row mb-2">
+						  <div class="col-sm-12">
+							<div class="form-check form-switch">
+							  <input class="form-check-input lock_sales_order_information" type="checkbox" id="lock_sales_order_information" name="lock_sales_order_information">
+							  <label class="form-check-label" for="lock_sales_order_information">Sales Order Information</label>
+							</div>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <div class="col-sm-12">
+							<div class="form-check form-switch">
+							  <input class="form-check-input lock_sales_order_delivery" type="checkbox" id="lock_sales_order_delivery" name="lock_sales_order_delivery">
+							  <label class="form-check-label" for="lock_sales_order_delivery">Delivery</label>
+							</div>
+						  </div>
+						</div>
 						
 						<div class="col-sm-12">
 						

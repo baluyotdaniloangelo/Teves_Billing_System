@@ -342,7 +342,7 @@
 									const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
 
 									<?php
-									if(Session::get('UserType')=="Admin"){
+									if(Session::get('UserType')=="SUAdmin"){
 									?>
 									
 											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='SalesOrderProductDelivery_View' data-id='"+id+"'></a>"+
@@ -351,6 +351,16 @@
 									
 									<?php
 									}
+									else if(Session::get('UserType')=="Admin"){
+									?>
+									
+											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='SalesOrderProductDelivery_View' data-id='"+id+"'></a>"+
+																"<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProductDelivery_Edit' data-id='"+id+"'></a>"+
+																"<a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='SalesOrderProductDelivery_Delete'  data-id='"+id+"'></a>";		
+									
+									<?php
+									}
+									
 									else{
 									?>
 									
@@ -371,7 +381,7 @@
 									?>
 
 									$('#product_list_delivery_data tr:last').after("<tr>"+
-									"<td class=''><div align='center' class='action_table_menu_Product' >"+action_controls+"</div></td>"+
+									"<td class=''><div align='center' class='action_table_menu_Delivery' >"+action_controls+"</div></td>"+
 									"<td align='center'>" + (i+1) + "</td>" +
 									"<td class='manual_price_td' align='center'>"+sales_order_delivery_date+"</td>"+
 									"<td class='product_td' align='left'>"+product_name+"</td>"+

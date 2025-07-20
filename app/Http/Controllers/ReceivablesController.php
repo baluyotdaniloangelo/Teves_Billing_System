@@ -270,7 +270,8 @@ class ReceivablesController extends Controller
 						'teves_receivable_table.sales_order_idx',
 						'teves_receivable_table.billing_date',
 						'teves_client_table.client_name',
-						'teves_receivable_table.control_number',		
+						'teves_receivable_table.control_number',
+						'teves_receivable_table.receivable_lock_status',
 						'teves_receivable_table.receivable_description',
 						'teves_receivable_table.receivable_gross_amount',
 						'teves_receivable_table.receivable_vatable_sales',
@@ -290,20 +291,61 @@ class ReceivablesController extends Controller
 				
 							$menu_for_update = 'editReceivablesFromSalesOrder';
 
-							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
-										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
-										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
-										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+							$receivable_lock_status = $row->receivable_lock_status;
+						
+							$receivable_lock_items = str_split((string)$receivable_lock_status);
+							
+							$lock_billing_information 		= $receivable_lock_items[0];
+
+							/*$actionBtn_SUadmin = '<div align="center" class="action_table_menu_Product">
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-lock btn_icon_table btn_icon_table_lock" title="Lock Settings" id="LockReceivables" onclick="LockReceivable('.$row->receivable_id.')"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
 										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
-									</div>';
-					
-							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
+									</div>';*/
+							
+							$actionBtn_SUadmin = '<div align="center" class="action_table_menu_Product">
+										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-lock btn_icon_table btn_icon_table_lock" title="Lock Settings" id="LockReceivables" onclick="LockReceivable('.$row->receivable_id.')"></a>
 										<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
-										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+											<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
 									</div>';
 							
+							if($lock_billing_information!=1){
+							//allow to delete	
+								$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
+											<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+											<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
+										</div>';
+						
+								$actionBtn_user = '<div align="center" class="action_table_menu_Product">
+											<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+										</div>';
+									
+							}else{
+								
+								$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
+											<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=receivable" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
+										</div>';
+						
+								$actionBtn_user = '<div align="center" class="action_table_menu_Product">
+											<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->receivable_id.')" id="viewPaymentGalery"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
+											<a href="sales_order_form?sales_order_id='.$row->sales_order_idx.'&tab=delivery" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle btn-sm bi bi-truck btn_icon_table btn_icon_table_delivery" title="Delivery"></a>
+										</div>';								
+								
+							}
+						
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
 						$timeDiff = abs($endTimeStamp - $startTimeStamp);
@@ -311,7 +353,10 @@ class ReceivablesController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						
-							if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
+							if(Session::get('UserType')=="SUAdmin"){
+										return $actionBtn_SUadmin;
+							}
+							else if(Session::get('UserType')=="Admin"){
 										return $actionBtn_admin;
 							}
 							else if(Session::get('UserType')=="Supervisor"){
@@ -432,8 +477,6 @@ class ReceivablesController extends Controller
 		}
 	}
 	
-
-
 	public function create_receivables_from_sale_order_post(Request $request){		
 
 		$request->validate([
@@ -930,7 +973,6 @@ class ReceivablesController extends Controller
 			return response()->json(array('productlist'=>$billing_data,'paymentcount'=>$paymentcount));		
 	}	
 	
-	
 	public function billing_receivable_payment_post(Request $request){
         	 
 		$request->validate([
@@ -1174,7 +1216,8 @@ class ReceivablesController extends Controller
 				  'receivable_payment_amount',
 				  'receivable_payment_remarks',
 				  'image_reference',
-				  'receivable_payment_remarks'
+				  'receivable_payment_remarks',
+				  'sales_order_idx'
 				  ]);
 				  return response()->json($data);
 	  
@@ -1447,9 +1490,11 @@ class ReceivablesController extends Controller
 			$lock_billing_information 	= $request->lock_billing_information;
 			$lock_billing_item 			= $request->lock_billing_item;
 			$lock_billing_payment_item	= $request->lock_billing_payment_item;
+			$lock_sales_order_information	= $request->lock_sales_order_information;
+			$lock_sales_order_delivery	= $request->lock_sales_order_delivery;
 
 			/*Receivable Infomation,Billing/Product Item Under Sales Order,Payment Item,Sales Order Information,Delivery*/
-			$receivable_lock_status = "$lock_billing_information$lock_billing_item$lock_billing_payment_item"."00";
+			$receivable_lock_status = "$lock_billing_information$lock_billing_item$lock_billing_payment_item$lock_sales_order_information$lock_sales_order_delivery";
 		
 			$Receivables = new ReceivablesModel();
 			$Receivables = ReceivablesModel::find($request->ReceivableID);

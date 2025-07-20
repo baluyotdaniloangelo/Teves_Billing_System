@@ -163,9 +163,129 @@
 					document.getElementById("receivable_billing_date_SO").value = response[0].billing_date;
 					document.getElementById("receivable_payment_term_SO").value = response[0].payment_term;
 					document.getElementById("receivable_description_SO").textContent = response[0].receivable_description;					
-							
 					
-					$('#UpdateReceivablesModal').modal('toggle');					
+					var receivable_unlock_expiration = response[0].receivable_unlock_expiration;
+					
+					if(receivable_unlock_expiration!==null){
+					
+						autolockTimer(receivable_unlock_expiration);
+					
+					}
+					
+					const number = response[0].receivable_lock_status;
+					const digitsArray = number.toString().split('').map(Number);
+					
+					const [digit1, digit2, digit3, digit4, digit5] = digitsArray;
+					
+					var _lock_billing_information 		= digit1;
+					
+						if(_lock_billing_information==1){
+							<?php
+							if(Session::get('UserType')=="SUAdmin"){
+								?>
+								document.getElementById("SO-update-receivables").disabled = false;
+								
+								document.getElementById("receivable_billing_date_SO").disabled = false;
+								document.getElementById("receivable_payment_term_SO").disabled = false;
+								document.getElementById("receivable_description_SO").disabled = false;
+								
+								<?php
+							}else{
+								?>
+								
+								document.getElementById("SO-update-receivables").disabled = true;
+								
+								document.getElementById("receivable_billing_date_SO").disabled = true;
+								document.getElementById("receivable_payment_term_SO").disabled = true;
+								document.getElementById("receivable_description_SO").disabled = true;
+						
+								<?php
+							}
+							?>
+						}else{
+							document.getElementById("SO-update-receivables").disabled = false;
+						}
+					
+					var _lock_billing_item 				= digit2;
+					
+						if(_lock_billing_item==1){
+							<?php
+							if(Session::get('UserType')=="SUAdmin"){
+								?>
+								document.getElementById("AddSalesOrderProductBTN").disabled = false;
+								<?php
+							}else{
+								?>
+								
+								document.querySelector('.action_table_menu_Product').innerHTML = 'Locked';
+								document.getElementById("AddSalesOrderProductBTN").disabled = true;
+								<?php
+							}
+							?>
+						}else{
+							document.getElementById("AddSalesOrderProductBTN").disabled = false;
+						}
+					
+					
+					var _lock_billing_payment_item		= digit3;
+					
+					if(_lock_billing_payment_item==1){
+						<?php
+							if(Session::get('UserType')=="SUAdmin"){
+								?>
+								document.getElementById("AddPaymentOrderProductBTN").disabled = false;
+								<?php
+							}else{
+								?>
+								document.querySelector('.action_table_menu_Payment').innerHTML = 'Locked';
+								document.getElementById("AddPaymentOrderProductBTN").disabled = true;
+								<?php
+							}
+							?>
+						}else{
+							document.getElementById("AddPaymentOrderProductBTN").disabled = false;
+						}
+					
+					
+					var _lock_sales_order_information	= digit4;
+					
+						if(_lock_sales_order_information==1){
+							<?php
+							if(Session::get('UserType')=="SUAdmin"){
+								?>
+								document.getElementById("UpdateSalesOrderBTN").disabled = false;
+								<?php
+							}else{
+								?>
+								document.getElementById("UpdateSalesOrderBTN").disabled = true;
+								<?php
+							}
+							?>
+						}else{
+							document.getElementById("UpdateSalesOrderBTN").disabled = false;
+						}
+						
+						
+					var _lock_sales_order_delivery		= digit5;
+					
+						if(_lock_sales_order_delivery==1){
+							<?php
+							if(Session::get('UserType')=="SUAdmin"){
+								?>
+								document.getElementById("addProductDeliveredBTN").disabled = false;
+								<?php
+							}else{
+								?>
+								document.querySelector('.action_table_menu_Delivery').innerHTML = 'Locked';
+								document.getElementById("addProductDeliveredBTN").disabled = true;
+								<?php
+							}
+							?>
+						}else{
+							document.getElementById("addProductDeliveredBTN").disabled = false;
+						}
+				
+				
 				  
 				  }
 				},
@@ -176,45 +296,72 @@
 			   });	
 	}
 	
-	/*Not In used*/
-	function LoadProductList(branch_id) {		
+	/*Timer for AutoLock*/
+	function autolockTimer(receivable_unlock_expiration){
 	
-		$("#product_list span").remove();
-		$('<span style="display: none;"></span>').appendTo('#product_list');
-
-			  $.ajax({
-				url: "{{ route('ProductListPricingPerBranch') }}",
+		const targetTime = new Date(receivable_unlock_expiration);
+		const timer = setInterval(() => {
+		  const now = new Date();
+		  if (now >= targetTime) {
+			  
+			/*Call Function to Lock*/
+			LockReceivable();
+			}
+		}, 1000); 
+	
+	}
+	
+	/*Lock*/
+	function LockReceivable(){
+		
+			let ReceivableID = {{ @$receivables_details['receivable_id'] }};
+			
+			var lock_billing_information 		= 1;
+			var lock_billing_item 				= 1;
+			var lock_billing_payment_item 		= 1;
+			
+			var lock_sales_order_information 	= 1;
+			var lock_sales_order_delivery 		= 1;
+			 
+			let receivable_unlock_expiration 	= '';
+			
+			 $.ajax({
+				url: "/billing_receivables_lock_post",
 				type:"POST",
 				data:{
-				  branch_idx:branch_id,
+				  ReceivableID:ReceivableID,
+				  lock_billing_information:lock_billing_information,
+				  lock_billing_item:lock_billing_item,
+				  lock_billing_payment_item:lock_billing_payment_item,
+				  receivable_unlock_expiration:receivable_unlock_expiration,
+				  lock_sales_order_information:lock_sales_order_information,
+				  lock_sales_order_delivery:lock_sales_order_delivery,
+				  lock_page:'receivable_billing_page',
 				  _token: "{{ csrf_token() }}"
 				},
-				success:function(response){						
+				success:function(response){
 				  console.log(response);
-				  if(response!='') {			  
-						var len = response.length;
-						for(var i=0; i<len; i++){
+				  if(response) {
 						
-							var product_id = response[i].product_id;						
-							var product_price = response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
-							var product_name = response[i].product_name;
-	
-							$('#product_list span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
-							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
-							"</span>");	
-							
-					}			
-				  }else{
-							/*No Result Found or Error*/	
+						window.location.reload();
+				  
 				  }
 				},
+				beforeSend:function()
+				{
+					//$('#update_loading_data').show();
+				},
+				complete: function(){
+					//$('#update_loading_data').hide();
+				},
 				error: function(error) {
-				 console.log(error);	 
+				 console.log(error);					
+				
 				}
 			   });
+		
 	}
-	/*Not In used*/
-	
+
 	$("#save-product").click(function(event){
 		
 			event.preventDefault();
@@ -403,8 +550,9 @@
 							
 							if(response['paymentcount']!=0){
 							
-								$(".action_column_class").hide();
+								//$(".action_column_class").hide();
 								document.getElementById("AddSalesOrderProductBTN").disabled = true;
+								action_controls = "";
 								
 								for(var i=0; i<len; i++){
 							
@@ -418,6 +566,7 @@
 								var order_total_amount = response['productlist'][i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
 								
 								$('#table_sales_order_product_body_data tr:last').after("<tr>"+
+								"<td class='action_column_class'><div align='center' class='action_table_menu_Product' >"+action_controls+"</div></td>"+
 								"<td align='center'>" + (i+1) + "</td>" +
 								"<td class='product_td' align='left'>"+product_name+"</td>"+
 								"<td class='manual_price_td' align='right'><span >&#8369; "+product_price+"</span></td>"+
@@ -456,6 +605,11 @@
 								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));						
 								
 									<?php
+									if(Session::get('UserType')=="SUAdmin"){
+									?>
+										action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a>";		
+									<?php
+									}
 									if(Session::get('UserType')=="Admin"){
 									?>
 										action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderProduct_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderComponentProduct'  data-id='"+id+"'></a>";		
@@ -1040,7 +1194,7 @@
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='center' class='action_table_menu_Product' >"+action_controls+"</div></td>"+	
+								"<td><div align='center' class='action_table_menu_Payment' >"+action_controls+"</div></td>"+	
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_time_of_payment_td' align='center'>"+receivable_time_of_payment+"</td>"+
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
@@ -1052,7 +1206,7 @@
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='center' class='action_table_menu_Product' >"+action_controls+" <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td><div align='center' class='action_table_menu_Payment' >"+action_controls+" <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewSalesOrderPayment'  data-id='"+id+"'></a></div></td>"+	
 								"<td class='update_date_of_payment_td' align='center'>"+receivable_date_of_payment+"</td>"+
 								"<td class='update_time_of_payment_td' align='center'>"+receivable_time_of_payment+"</td>"+
 								"<td class='bank_td' align='center'>"+receivable_mode_of_payment+"</td>"+
