@@ -666,6 +666,7 @@ class SalesOrderController extends Controller
 						$Receivables->payment_term 						= $sales_order_data[0]->sales_order_payment_term;
 						$Receivables->receivable_name 					= $receivable_control_number;
 						$Receivables->receivable_status 				= 'Pending';
+						$Receivables->receivable_unlock_expiration 		= null;
 						$Receivables->receivable_description 			= $sales_order_data[0]->sales_order_control_number;
 						$Receivables->company_header 					= $sales_order_data[0]->company_header;
 						$Receivables->created_by_user_id 				= Session::get('loginID');
