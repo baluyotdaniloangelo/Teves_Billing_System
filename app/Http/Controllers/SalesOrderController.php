@@ -340,6 +340,7 @@ class SalesOrderController extends Controller
 				$Receivables->payment_term 						= $request->payment_term;
 				$Receivables->receivable_name 					= $control_number;
 				$Receivables->receivable_amount 				= 0;
+				$Receivables->receivable_unlock_expiration 		= null;
 				$Receivables->receivable_status 				= 'Pending';
 				$Receivables->receivable_description 			= $receivable_control_number;
 				$Receivables->company_header 					= $request->company_header;
