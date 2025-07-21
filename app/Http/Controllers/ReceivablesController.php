@@ -699,7 +699,7 @@ class ReceivablesController extends Controller
 			$Receivables->receivable_withholding_tax 	= number_format($withholding_tax,2, '.', '');			
 			$Receivables->receivable_amount 			= number_format($total_amount_due,2, '.', '');
 			$Receivables->receivable_remaining_balance 	= number_format($total_amount_due,2, '.', '');
-			
+			$Receivables->receivable_unlock_expiration  = null;
 			$Receivables->receivable_net_value_percentage 			=  number_format($net_value_percentage,2, '.', '');
 			$Receivables->receivable_withholding_tax_percentage 	=  number_format($withholding_tax_percentage * 100,2, '.', '');
 			$Receivables->receivable_vat_value_percentage 			=  number_format($vat_value_percentage * 100,2, '.', '');
