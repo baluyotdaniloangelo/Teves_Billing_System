@@ -76,6 +76,7 @@ class SalesOrderController extends Controller
 		if ($request->ajax()) {
 			
 			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+					->join('teves_receivable_table', 'teves_receivable_table.sales_order_idx', '=', 'teves_sales_order_table.sales_order_id')
 					->where('sales_order_delivery_status', 'Pending')
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
@@ -86,6 +87,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
+					'teves_receivable_table.receivable_lock_status',
 					'teves_sales_order_table.sales_order_payment_term',	
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
@@ -108,11 +110,16 @@ class SalesOrderController extends Controller
 						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
-					
+						
+						$receivable_lock_status = $row->receivable_lock_status;
+						$receivable_lock_items = str_split((string)$receivable_lock_status);
+						$lock_billing_information 		= $receivable_lock_items[0];
+						
+						if($lock_billing_information!=1){
+							
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>	
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=sales_order_information" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
@@ -122,6 +129,22 @@ class SalesOrderController extends Controller
 						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						</div>';
+						
+						}else{
+							
+						$actionBtn = '
+						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>	
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=sales_order_information" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						</div>';
+					
+						$actionBtn_view_only = '
+						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						</div>';
+							
+						}
 					
 							if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 										return $actionBtn;
@@ -160,6 +183,7 @@ class SalesOrderController extends Controller
 		if ($request->ajax()) {
 			
 			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+					->join('teves_receivable_table', 'teves_receivable_table.sales_order_idx', '=', 'teves_sales_order_table.sales_order_id')
 					->where('sales_order_delivery_status','<>', 'Pending')
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
@@ -170,6 +194,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
+					'teves_receivable_table.receivable_lock_status',	
 					'teves_sales_order_table.sales_order_payment_term',	
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
@@ -193,10 +218,14 @@ class SalesOrderController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 					
+						$receivable_lock_status = $row->receivable_lock_status;
+						$receivable_lock_items = str_split((string)$receivable_lock_status);
+						$lock_billing_information 		= $receivable_lock_items[0];
+						
+						/*
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
@@ -206,12 +235,49 @@ class SalesOrderController extends Controller
 						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						</div>';
+						*/
+						
+						if($lock_billing_information!=1){
+							
+						$actionBtn = '
+						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
+						</div>';
 					
+						$actionBtn_view_only = '
+						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						</div>';
+						
+						
+						}else{
+							
+						$actionBtn = '
+						<div align="center" class="action_table_menu_Product">
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						</div>';
+					
+						$actionBtn_view_only = '
+						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
+						</div>';	
+							
+							
+						}
+						
+					
+							if(Session::get('UserType')=="SUAdmin"){
+										return $actionBtn;
+							}
 							if(Session::get('UserType')=="Admin"){
 										return $actionBtn;
 							}
 							else if(Session::get('UserType')=="Supervisor"){
-										return '';/*View and Print Only*/
+										return $actionBtn_view_only;/*View and Print Only*/
 							}
 							else if(Session::get('UserType')=="Accounting_Staff"){
 										

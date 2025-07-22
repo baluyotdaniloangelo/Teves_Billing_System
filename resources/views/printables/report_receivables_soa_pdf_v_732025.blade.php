@@ -156,7 +156,31 @@
 		
 		<tr style="font-size:12px;">
 			<td colspan="3" align="right" style="border-left: 0px solid #c6c6c6;"></td>
-			<td colspan="6" align="center" style="background-color: #e8e8e8; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
+			<td colspan="6" align="right" style="background-color: #fff; font-weight:bold; height:25px !important;">GROSS AMOUNT </td>
+			<td colspan="4" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:solid 1px;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<?=number_format($receivable_data[0]['receivable_gross_amount'],2);?>
+		
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="3" align="right" style="border-left: 0px solid #c6c6c6;"></td>
+			<td colspan="6" align="right" style="background-color: #fff; font-weight:bold; height:25px !important;">WTax </td>
+			<td colspan="4" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:solid 1px;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<?=number_format($receivable_data[0]['receivable_withholding_tax'],2);?>
+		
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="3" align="right" style="border-left: 0px solid #c6c6c6;"></td>
+			<td colspan="6" align="right" style="background-color: #fff; font-weight:bold; height:25px !important;">NET AMOUNT </td>
+			<td colspan="4" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:solid; 1px"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<?=number_format($receivable_data[0]['sales_order_net_amount'],2);?>
+		
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="3" align="right" style="border-left: 0px solid #c6c6c6;"></td>
+			<td colspan="6" align="right" style="background-color: #e8e8e8; font-weight:bold; height:25px !important;">TOTAL AMOUNT PAYABLE </td>
 			<td colspan="4" align="right" style="background-color: #e8e8e8; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($receivable_data[0]['receivable_amount'],2);?>
 		

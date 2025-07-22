@@ -1047,6 +1047,7 @@ class ReportController extends Controller
 					
 				$receivable_data = ReceivablesModel::where('receivable_id', $request->receivable_id)
 				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+				->join('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
               	->get([
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
@@ -1060,11 +1061,14 @@ class ReportController extends Controller
 					'teves_receivable_table.ar_reference',
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_gross_amount',
+					'teves_sales_order_table.sales_order_net_amount',
+					'teves_receivable_table.receivable_withholding_tax',
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.created_by_user_id',
 					'billing_period_start',
 					'billing_period_end',
-					'company_header'
+					'teves_receivable_table.company_header'
 				]);
 				
 		$receivable_payment_data =  ReceivablesPaymentModel::where('teves_receivable_payment.receivable_idx', $request->receivable_id)
