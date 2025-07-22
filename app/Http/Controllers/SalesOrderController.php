@@ -213,24 +213,13 @@ class SalesOrderController extends Controller
 			$current_user = Session::get('loginID');
 		
 		if ($request->ajax()) {
-			
-			/*
-			->whereNull('teves_billing_table.deleted_at') 
-						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
-						->leftjoin('teves_branch_table', function ($join) {
-							$join->on('teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
-								 ->whereNull('teves_branch_table.deleted_at'); // Filter soft-deleted products
-						})
-			*/
-			
+
 			$data = SalesOrderModel::where('sales_order_delivery_status', '=', 'Pending')
 					->whereNull('teves_sales_order_table.deleted_at') 
-					//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
 					->join('teves_client_table', function ($join) {
 							$join->on('teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
 								 ->whereNull('teves_client_table.deleted_at'); // Filter soft-deleted products
 						})
-					//->leftjoin('teves_receivable_table', 'teves_receivable_table.sales_order_idx', '=', 'teves_sales_order_table.sales_order_id')
 					->leftjoin('teves_receivable_table', function ($join) {
 							$join->on('teves_receivable_table.sales_order_idx', '=', 'teves_sales_order_table.sales_order_id')
 								 ->whereNull('teves_receivable_table.deleted_at'); // Filter soft-deleted products
@@ -255,8 +244,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_payment_status',
 					'teves_sales_order_table.sales_order_delivery_status',
 					'teves_sales_order_table.created_at']);
-	//var_dump($data);
-	//echo Session::get('user_branch_access_type');
+
 		return DataTables::of($data)
 				->addIndexColumn()
 				
@@ -272,21 +260,6 @@ class SalesOrderController extends Controller
 						$receivable_lock_status = $row->receivable_lock_status;
 						$receivable_lock_items = str_split((string)$receivable_lock_status);
 						$lock_billing_information 		= $receivable_lock_items[0];
-						
-						/*
-						$actionBtn = '
-						<div align="center" class="action_table_menu_Product">
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
-						</div>';
-					
-						$actionBtn_view_only = '
-						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						</div>';
-						*/
 						
 						if($lock_billing_information!=1){
 							
@@ -317,10 +290,8 @@ class SalesOrderController extends Controller
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
 						</div>';	
 							
-							
 						}
 						
-					
 							if(Session::get('UserType')=="SUAdmin"){
 										return $actionBtn;
 							}
@@ -360,23 +331,12 @@ class SalesOrderController extends Controller
 		
 		if ($request->ajax()) {
 			
-			/*
-			->whereNull('teves_billing_table.deleted_at') 
-						->whereBetween('teves_billing_table.order_date', ["$start_date", "$end_date"])
-						->leftjoin('teves_branch_table', function ($join) {
-							$join->on('teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
-								 ->whereNull('teves_branch_table.deleted_at'); // Filter soft-deleted products
-						})
-			*/
-			
 			$data = SalesOrderModel::where('sales_order_delivery_status','<>', 'Pending')
 					->whereNull('teves_sales_order_table.deleted_at') 
-					//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
 					->join('teves_client_table', function ($join) {
 							$join->on('teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
 								 ->whereNull('teves_client_table.deleted_at'); // Filter soft-deleted products
 						})
-					//->leftjoin('teves_receivable_table', 'teves_receivable_table.sales_order_idx', '=', 'teves_sales_order_table.sales_order_id')
 					->leftjoin('teves_receivable_table', function ($join) {
 							$join->on('teves_receivable_table.sales_order_idx', '=', 'teves_sales_order_table.sales_order_id')
 								 ->whereNull('teves_receivable_table.deleted_at'); // Filter soft-deleted products
@@ -390,7 +350,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
-					'teves_receivable_table.receivable_lock_status',	
+					DB::raw("IFNULL(teves_receivable_table.receivable_lock_status, '00000') AS receivable_lock_status"),	
 					'teves_sales_order_table.sales_order_payment_term',	
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
@@ -417,21 +377,6 @@ class SalesOrderController extends Controller
 						$receivable_lock_status = $row->receivable_lock_status;
 						$receivable_lock_items = str_split((string)$receivable_lock_status);
 						$lock_billing_information 		= $receivable_lock_items[0];
-						
-						/*
-						$actionBtn = '
-						<div align="center" class="action_table_menu_Product">
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
-						</div>';
-					
-						$actionBtn_view_only = '
-						<div align="center" class="action_table_menu_Product"><a href="#" data-id="'.$row->sales_order_id.'" class="btn-info btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						</div>';
-						*/
 						
 						if($lock_billing_information!=1){
 							
