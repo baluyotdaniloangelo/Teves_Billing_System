@@ -1210,8 +1210,7 @@ class ReceivablesController extends Controller
 				  'receivable_payment_amount',
 				  'receivable_payment_remarks',
 				  'image_reference',
-				  'receivable_payment_remarks',
-				  'sales_order_idx'
+				  'receivable_payment_remarks'
 				  ]);
 				  return response()->json($data);
 	  
