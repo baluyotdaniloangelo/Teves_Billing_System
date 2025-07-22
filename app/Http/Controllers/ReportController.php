@@ -1157,7 +1157,7 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.company_header',
-					'teves_sales_order_table.created_by_user_id'
+					'teves_sales_order_table.created_by_user_idx'
 				]);
 			
 		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
@@ -1188,7 +1188,7 @@ class ReportController extends Controller
 		$sales_order_component = DB::select("$raw_query_sales_order_component", [ $sales_order_id]);	
 		
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_id'])->first();
+		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_idx'])->first();
 		
 		$title_sales_order = 'SALES ORDER';
 		  
@@ -1245,7 +1245,7 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.company_header',
-					'teves_sales_order_table.created_by_user_id'
+					'teves_sales_order_table.created_by_user_idx'
 				]);
 			
 		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
@@ -1277,7 +1277,7 @@ class ReportController extends Controller
 		$sales_order_component = DB::select("$raw_query_sales_order_component", [ $sales_order_id]);	
 		
 		/*USER INFO*/
-		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_id'])->first();
+		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_idx'])->first();
 		
 		$title_sales_order = 'SALES ORDER';
 		
