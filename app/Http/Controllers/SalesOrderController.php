@@ -386,7 +386,7 @@ class SalesOrderController extends Controller
 			
 			$Salesorder->sales_order_payment_type 			= $request->sales_order_payment_type;
 			$Salesorder->sales_order_invoice 				= $request->sales_order_invoice;
-			$Salesorder->created_by_user_id 				= Session::get('loginID');
+			$Salesorder->created_by_user_idx 				= Session::get('loginID');
 			
 			$result = $Salesorder->save();
 			
@@ -482,7 +482,7 @@ class SalesOrderController extends Controller
 				
 				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
 				$Salesorder->sales_order_invoice 					= $request->sales_order_invoice;
-				$Salesorder->updated_by_user_id 					= Session::get('loginID');
+				$Salesorder->updated_by_user_idx 					= Session::get('loginID');
 				$result = $Salesorder->update();
 				
 				/*Get Last ID*/

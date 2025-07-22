@@ -4,6 +4,7 @@ namespace App\Models;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Contracts\Activity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Session;
 
@@ -17,6 +18,18 @@ class SalesOrderModel extends Model
 	{
     $activity->causer_id = Session::get('loginID');
 	}
+	
+	use SoftDeletes;
+    protected $dates = ['deleted_at'];
+	
+	/*Delete*/
+	public function delete()
+	{
+		$this->deleted_by_user_id = Session::get('loginID'); // or session()->get('user_id')
+		$this->save();
+
+		parent::delete();
+	}	
 	
 	protected $table = 'teves_sales_order_table';
 	
@@ -49,9 +62,11 @@ class SalesOrderModel extends Model
 		'sales_order_delivery_status',
 		'company_header',
 		'created_at',
-		'created_by_user_id',
+		'created_by_user_idx',
 		'updated_at',
-		'updated_by_user_id'	
+		'updated_by_user_idx',
+		'deleted_at',
+		'deleted_by_user_id'	
     ];
 	
 	protected $primaryKey = 'sales_order_id';
@@ -89,9 +104,11 @@ class SalesOrderModel extends Model
 		'sales_order_delivery_status',
 		'company_header',
 		'created_at',
-		'created_by_user_id',
+		'created_by_user_idx',
 		'updated_at',
-		'updated_by_user_id'
+		'updated_by_user_idx',
+		'deleted_at',
+		'deleted_by_user_id'
     ];
     
 }
