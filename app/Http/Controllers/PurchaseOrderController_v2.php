@@ -122,7 +122,7 @@ class PurchaseOrderController_v2 extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						
-							if(Session::get('UserType')=="Admin"){
+							if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 										return $actionBtn;
 							}
 							else if(Session::get('UserType')=="Supervisor"){
