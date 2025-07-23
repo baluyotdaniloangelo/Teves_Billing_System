@@ -78,13 +78,23 @@ class CashiersReportController extends Controller
 			
 		if ($request->ajax()) {
 			
-				$data = CashiersReportModel::join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-				 ->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')		
-				 ->WHERE(function ($r) use($current_user) {
+				$data = CashiersReportModel::WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
 							}
-						})	
+						})
+				->whereNull('teves_cashiers_report.deleted_at') 
+				// ->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+				->leftjoin('user_tb', function ($join) {
+							$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+								 ->whereNull('user_tb.deleted_at'); // Filter soft-deleted products
+						})
+				 
+				 //->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')		
+				->leftjoin('teves_branch_table', function ($join) {
+							$join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
+								 ->whereNull('teves_branch_table.deleted_at'); // Filter soft-deleted products
+						})
 				 ->get([				
 					'teves_cashiers_report.cashiers_report_id',
 					'teves_cashiers_report.user_idx',

@@ -118,12 +118,17 @@ class ReceivablesController extends Controller
 			$current_user = Session::get('loginID');
 			if ($request->ajax()) {
 
-			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-						->WHERE('teves_receivable_table.sales_order_idx', '=', '0')
+			$data = ReceivablesModel::WHERE('teves_receivable_table.sales_order_idx', '=', '0')
+						->whereNull('teves_receivable_table.deleted_at') 
+						//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+						->join('teves_client_table', function ($join) {
+							$join->on('teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+								 ->whereNull('teves_client_table.deleted_at'); // Filter soft-deleted products
+						})
 						->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_receivable_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
-							}
+						}
 						})	
 						->get([
 						'teves_receivable_table.receivable_id',
@@ -257,15 +262,25 @@ class ReceivablesController extends Controller
 			$current_user = Session::get('loginID');
 			if ($request->ajax()) {
 
-			$data = ReceivablesModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-						->join('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
-						->WHERE('teves_receivable_table.sales_order_idx', '<>', '0')
+			$data = ReceivablesModel::WHERE('teves_receivable_table.sales_order_idx', '<>', '0')
 						/*Query only from Assigned Branch*/
 						->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_receivable_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
 							}
-						})	
+						})
+						//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+						->join('teves_client_table', function ($join) {
+							$join->on('teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+								 ->whereNull('teves_client_table.deleted_at'); // Filter soft-deleted products
+						})
+						//->join('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
+						->leftjoin('teves_sales_order_table', function ($join) {
+							$join->on('teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
+								 ->whereNull('teves_sales_order_table.deleted_at'); // Filter soft-deleted products
+						})
+						
+							
 						->get([
 						'teves_receivable_table.receivable_id',
 						'teves_receivable_table.sales_order_idx',

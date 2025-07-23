@@ -72,8 +72,8 @@ class SOBillingTransactionController extends Controller
 		
 		if ($request->ajax()) {
 		
-    	$data = SOBillingTransactionModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
-					->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
+    	$data = SOBillingTransactionModel::leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+					//->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
@@ -462,21 +462,6 @@ class SOBillingTransactionController extends Controller
 	}
 
 	public function get_so_product(Request $request){		
-	
-			/*$data =  BillingTransactionModel::where('so_idx', $request->so_id)
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
-			->join('teves_receivable_table', 'teves_receivable_table.receivable_isd', '=', 'teves_billing_table.receivable_idx')
-				->orderBy('billing_id', 'asc')
-              	->get([
-					'cashiers_report_idx',
-					'teves_product_table.product_name',
-					'teves_billing_table.product_price',
-					'teves_billing_table.order_quantity',
-					'teves_billing_table.order_total_amount',
-					'teves_billing_table.billing_id',
-					'teves_billing_table.lock_billing_item',
-					'teves_receivable_table.control_number'
-					]);*/
 					
 				$data = BillingTransactionModel::where('so_idx', $request->so_id)
 				->whereNull('teves_billing_table.deleted_at') // Ensure main model isn't soft-deleted

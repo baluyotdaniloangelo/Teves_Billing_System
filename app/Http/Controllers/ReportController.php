@@ -802,7 +802,7 @@ class ReportController extends Controller
 				
 		$receivable_data = ReceivablesModel::where('receivable_id', $receivable_id)
 				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-              	->get([
+				->get([
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.receivable_name',
@@ -815,13 +815,15 @@ class ReportController extends Controller
 					'teves_receivable_table.ar_reference',
 					'teves_receivable_table.payment_term',
 					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_gross_amount',
+					'teves_receivable_table.receivable_withholding_tax',
 					'teves_receivable_table.receivable_amount',
 					'teves_receivable_table.created_by_user_id',
-					'billing_period_start',
-					'billing_period_end',
-					'company_header'
+					'teves_receivable_table.billing_period_start',
+					'teves_receivable_table.billing_period_end',
+					'teves_receivable_table.company_header'
 				]);
-		
+				
 		@$amount_split_whole_to_decimal = explode('.',$receivable_data[0]['receivable_amount']);
 		
 		$amount_in_word_whole = $this->numberToWord($amount_split_whole_to_decimal[0]) ." Pesos";
@@ -1284,7 +1286,7 @@ class ReportController extends Controller
 		
 		/*Receivable*/
 					
-				$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
+				/*$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
 				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               	->get([
 					'teves_receivable_table.receivable_id',
@@ -1304,6 +1306,33 @@ class ReportController extends Controller
 					'billing_period_start',
 					'billing_period_end',
 					'company_header'
+				]);*/
+				
+				
+				$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+				->leftjoin('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
+              	->get([
+					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.sales_order_idx',
+					'teves_receivable_table.receivable_name',
+					'teves_receivable_table.billing_date',
+					'teves_client_table.client_name',
+					'teves_client_table.client_address',
+					'teves_receivable_table.control_number',
+					'teves_client_table.client_tin',
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_gross_amount',
+					'teves_sales_order_table.sales_order_net_amount',
+					'teves_receivable_table.receivable_withholding_tax',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.created_by_user_id',
+					'teves_receivable_table.billing_period_start',
+					'teves_receivable_table.billing_period_end',
+					'teves_receivable_table.company_header'
 				]);
 				
 				$receivable_id = $receivable_data[0]['receivable_id'];
