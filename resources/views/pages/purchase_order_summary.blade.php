@@ -130,7 +130,7 @@
 						  <div class="col-sm-8">
 						  
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
-							
+							<!--<option label="All" data-id="All" value="All">-->
 							@foreach ($teves_branch as $teves_branch_cols)
 								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 							@endforeach

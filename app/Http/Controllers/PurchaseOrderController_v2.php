@@ -973,14 +973,13 @@ class PurchaseOrderController_v2 extends Controller
 
 		$data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
 						->whereBetween('teves_purchase_order_table.purchase_order_date', ["$start_date", "$end_date"])
-						->WHERE(function ($r) use($current_user) {
-							if (Session::get('user_branch_access_type')=="BYBRANCH") {
-									$r->whereRaw("teves_purchase_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
-							}
+						->WHERE(function ($r) use($company_header) {
+							if ($company_header!='All') {
+									$r->whereRaw("teves_purchase_order_table.company_header = ?", $company_header);
+								}
 						})
 						->WHERE(function ($r) use($supplier_idx) {
 							if ($supplier_idx!='All') {
-									
 									$r->where('purchase_order_supplier_idx',$supplier_idx);
 							}
 						})	
@@ -1019,14 +1018,13 @@ class PurchaseOrderController_v2 extends Controller
 
 	    $purchase_order_data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
 						->whereBetween('teves_purchase_order_table.purchase_order_date', ["$start_date", "$end_date"])
-						->WHERE(function ($r) use($current_user) {
-							if (Session::get('user_branch_access_type')=="BYBRANCH") {
-									$r->whereRaw("teves_purchase_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
-							}
+						->WHERE(function ($r) use($company_header) {
+							if ($company_header!='All') {
+									$r->whereRaw("teves_purchase_order_table.company_header = ?", $company_header);
+								}
 						})
 						->WHERE(function ($r) use($supplier_idx) {
 							if ($supplier_idx!='All') {
-									
 									$r->where('purchase_order_supplier_idx',$supplier_idx);
 							}
 						})	
@@ -1057,7 +1055,7 @@ class PurchaseOrderController_v2 extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_header['branch_code']."_Sales_Order_Summary.pdf");
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
 		
 		}
 	}	
@@ -1077,17 +1075,16 @@ class PurchaseOrderController_v2 extends Controller
 		
 	    $purchase_order_data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
 						->whereBetween('teves_purchase_order_table.purchase_order_date', ["$start_date", "$end_date"])
-						->WHERE(function ($r) use($current_user) {
-							if (Session::get('user_branch_access_type')=="BYBRANCH") {
-									$r->whereRaw("teves_purchase_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
-							}
+						->WHERE(function ($r) use($company_header) {
+							if ($company_header!='All') {
+									$r->whereRaw("teves_purchase_order_table.company_header = ?", $company_header);
+								}
 						})
 						->WHERE(function ($r) use($supplier_idx) {
 							if ($supplier_idx!='All') {
-									
 									$r->where('purchase_order_supplier_idx',$supplier_idx);
 							}
-						})	
+						})		
               	->get([
 						'teves_purchase_order_table.purchase_order_id',
 						'teves_purchase_order_table.purchase_order_date',
@@ -1115,7 +1112,7 @@ class PurchaseOrderController_v2 extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_header['branch_code']."_Sales_Order_Summary.pdf");
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
 		
 		}
 	}	
