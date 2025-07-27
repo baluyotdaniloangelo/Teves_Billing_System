@@ -1159,6 +1159,7 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.company_header',
+					'teves_sales_order_table.sales_order_quotation',
 					'teves_sales_order_table.created_by_user_idx'
 				]);
 			
@@ -1192,7 +1193,12 @@ class ReportController extends Controller
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_idx'])->first();
 		
-		$title_sales_order = 'SALES ORDER';
+		if($sales_order_data[0]['sales_order_quotation']==0){
+			$title_sales_order = 'SALES ORDER';
+		}
+		else{
+			$title_sales_order = 'QUOTATION';
+		}
 		  
         $pdf = PDF::loadView('printables.report_sales_order_pdf_v3', compact('title_sales_order', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
 		//return view('printables.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));

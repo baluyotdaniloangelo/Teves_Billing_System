@@ -527,6 +527,7 @@ class SalesOrderController extends Controller
 			
 			$Salesorder->sales_order_payment_type 			= $request->sales_order_payment_type;
 			$Salesorder->sales_order_invoice 				= $request->sales_order_invoice;
+			$Salesorder->sales_order_quotation				= $request->sales_order_quotation;/*7/26/2025*/
 			$Salesorder->created_by_user_idx 				= Session::get('loginID');
 			
 			$result = $Salesorder->save();
@@ -582,7 +583,7 @@ class SalesOrderController extends Controller
 			// and you might want to convert to integer
 			$numberDays = intval($numberDays);
 
-			if(Session::get('UserType')=="Admin"){
+			if(Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin"){
 				
 			$sales_order_control_number = $sales_order_data[0]['sales_order_control_number'];
 			$split_sales_order_control_number = explode("-", $sales_order_control_number);
@@ -623,6 +624,7 @@ class SalesOrderController extends Controller
 				
 				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
 				$Salesorder->sales_order_invoice 					= $request->sales_order_invoice;
+				$Salesorder->sales_order_quotation					= $request->sales_order_quotation;/*7/26/2025*/
 				$Salesorder->updated_by_user_idx 					= Session::get('loginID');
 				$result = $Salesorder->update();
 				
@@ -650,7 +652,7 @@ class SalesOrderController extends Controller
 				$SalesOrderUpdate->sales_order_gross_amount 			= number_format($gross_amount,2,".","");
 				$SalesOrderUpdate->sales_order_net_amount 				= $sales_order_net_amount;
 				$SalesOrderUpdate->sales_order_total_due 				= $sales_order_total_due;
-				$SalesOrderUpdate->updated_by_user_id 					= Session::get('loginID');
+				$SalesOrderUpdate->updated_by_user_idx 					= Session::get('loginID');
 				$SalesOrderUpdate->update();
 				
 				/*Update Control Number on Receivable*/
@@ -848,7 +850,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_net_percentage',
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_payment_type',
-					'teves_sales_order_table.sales_order_invoice']);
+					'teves_sales_order_table.sales_order_invoice',
+					'teves_sales_order_table.sales_order_quotation']);
 				
 			$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();
 				
@@ -904,7 +907,7 @@ class SalesOrderController extends Controller
 		
 	}
 
-	public function sales_order_component_compose(Request $request){
+	public function sales_order_component_compose(Request $request){		
 
 		$request->validate([
 		  'item_description'      	=> 'required',

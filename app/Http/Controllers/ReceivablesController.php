@@ -263,6 +263,7 @@ class ReceivablesController extends Controller
 			if ($request->ajax()) {
 
 			$data = ReceivablesModel::WHERE('teves_receivable_table.sales_order_idx', '<>', '0')
+						->WHERE('teves_sales_order_table.sales_order_quotation', '<>', '1')
 						/*Query only from Assigned Branch*/
 						->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {

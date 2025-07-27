@@ -61,11 +61,6 @@
 
 				    <div class="tab-pane fade" id="bordered-billed" role="tabpanel" aria-labelledby="billed-tab">
 					<div class="d-flex justify-content-end" id="">
-					<!--
-					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
-						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#BilledModal"> Options</button>
-					</div>
-					-->
 					</div>
 									    <div class="table-responsive">
 										
@@ -186,6 +181,15 @@
 										<div class="col-md-12">
 											<label for="payment_term" class="form-label">Payment Term</label>
 											 <input type="text" class="form-control" id="payment_term" name="payment_term">
+										</div>
+								</div>
+								<hr>
+								<div class="row mb-2">
+										<div class="col-md-12">
+											<div class="form-check form-switch">
+											  <input class="form-check-input sales_order_quotation" type="checkbox" id="sales_order_quotation" name="sales_order_quotation">
+											  <label class="form-check-label" for="flexSwitchCheckDefault">Quotation?</label>
+											</div>
 										</div>
 								</div>
 								

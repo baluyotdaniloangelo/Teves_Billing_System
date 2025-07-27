@@ -48,6 +48,9 @@
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
 			
+			var _sales_order_quotation 				= $('.sales_order_quotation:checked').val() || 'off';
+			var sales_order_quotation 				= (_sales_order_quotation ==="on") ? "1":"0";
+			
 			  $.ajax({
 				url: "/update_sales_order_post",
 				type:"POST",
@@ -60,12 +63,10 @@
 				  delivered_to:delivered_to,
 				  delivered_to_address:delivered_to_address,
 				  dr_number:dr_number,
-				  
 				  sales_order_or_number:sales_order_or_number,
 				  sales_order_po_number:sales_order_po_number,
 				  sales_order_charge_invoice:sales_order_charge_invoice,
 				  sales_order_collection_receipt:sales_order_collection_receipt,
-				  
 				  payment_term:payment_term,
 				  sales_order_invoice:sales_order_invoice,
 				  delivery_method:delivery_method,
@@ -75,13 +76,14 @@
 				  note:note,
 				  sales_order_net_percentage:sales_order_net_percentage,
 				  sales_order_withholding_tax:sales_order_withholding_tax,
+				  sales_order_quotation:sales_order_quotation,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				  console.log(response);
 				  if(response) {
 					  
-					LoadProduct_under_sales_order(sales_order_id);
+					//LoadProduct_under_sales_order(sales_order_id);
 					document.getElementById("AddSalesOrderProductBTN").disabled = false;
 					
 					$('#switch_notice_on').show();
@@ -95,6 +97,8 @@
 					
 					$('#update_plate_noError').text('');
 					$('#update_drivers_nameError').text('');
+					
+					window.location.reload();
 					
 				  }
 				},

@@ -206,6 +206,9 @@
 		
 			let sales_order_net_percentage 	= $("input[name=sales_order_net_percentage]").val();
 			let sales_order_withholding_tax = $("input[name=sales_order_withholding_tax]").val();
+
+			var _sales_order_quotation 				= $('.sales_order_quotation:checked').val() || 'off';
+			var sales_order_quotation 				= (_sales_order_quotation ==="on") ? "1":"0";
 			
 			  $.ajax({
 				url: "/create_sales_order_post",
@@ -219,6 +222,7 @@
 				  sales_order_invoice:sales_order_invoice,
 				  sales_order_net_percentage:sales_order_net_percentage,
 				  sales_order_withholding_tax:sales_order_withholding_tax,
+				  sales_order_quotation:sales_order_quotation,
 				  _token: "{{ csrf_token() }}"
 				},
 			
