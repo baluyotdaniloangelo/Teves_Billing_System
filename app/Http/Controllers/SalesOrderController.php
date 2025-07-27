@@ -1198,14 +1198,14 @@ class SalesOrderController extends Controller
 		if ($request->ajax()) {
 			
 			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
-					->where('company_header',$company_header)
-					->where('sales_order_quotation', '<>', '0')
+					->where('teves_sales_order_table.company_header',$company_header)
 					->whereBetween('teves_sales_order_table.sales_order_date', ["$start_date", "$end_date"])
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
 							}
 						})
+					->where('teves_sales_order_table.sales_order_quotation', '=', '0')
 					->WHERE(function ($r) use($client_idx) {
 							if ($client_idx!='All') {
 									
@@ -1244,7 +1244,7 @@ class SalesOrderController extends Controller
 
 	    $sales_order_data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
 					->where('company_header',$company_header)
-					->where('sales_order_quotation', '<>', '0')
+					->where('teves_sales_order_table.sales_order_quotation', '=', '0')
 					->whereBetween('teves_sales_order_table.sales_order_date', ["$start_date", "$end_date"])
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
@@ -1300,6 +1300,7 @@ class SalesOrderController extends Controller
 									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
 							}
 						})
+					->where('teves_sales_order_table.sales_order_quotation', '=', '0')
 					->WHERE(function ($r) use($client_idx) {
 							if ($client_idx!='All') {
 									$r->where('sales_order_client_idx',$client_idx);
