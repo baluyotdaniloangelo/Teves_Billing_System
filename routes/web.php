@@ -260,6 +260,8 @@ Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class
 Route::get('/generate_sales_order_receivable_soa_pdf', [ReportController::class,'generate_sales_order_receivable_soa_pdf'])->name('generate_sales_order_receivable_soa_pdf')->middleware('isLoggedIn');
 Route::get('/generate_billing_soa_receivable_pdf', [ReportController::class,'generate_billing_soa_receivable_pdf'])->name('generate_billing_soa_receivable_pdf')->middleware('isLoggedIn');
 
+Route::post('/quotation_approved', [SalesOrderController::class, 'quotation_approved'])->name('quotation_approved')->middleware('isLoggedIn');
+Route::post('/quotation_disapproved', [SalesOrderController::class, 'quotation_disapproved'])->name('quotation_disapproved')->middleware('isLoggedIn');
 
 
 /*Generate via Web Page View - For Sales Order Summary - April 7, 2025*/

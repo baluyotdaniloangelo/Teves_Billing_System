@@ -372,7 +372,166 @@
 			
 	}	
 	
-	<!--Product Deletion Confirmation-->
+	<!--Quotation Approval-->
+	$('body').on('click','#approveSalesOrder',function(){
+			
+			event.preventDefault();
+			let sales_order_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "/sales_order_info",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("approval_SalesOrderConfirmed").value = sales_order_id;
+											
+					/*Set Details*/
+					$('#confirm_approval_sales_order_date').text(response[0].sales_order_date);
+					$('#confirm_approval_sales_control_number').text(response[0].sales_order_control_number);
+					$('#confirm_approval_client_name').text(response[0].client_name);
+					$('#confirm_approval_dr_number').text(response[0].sales_order_dr_number);					
+					$('#confirm_approval_or_number').text(response[0].sales_order_or_number);
+					$('#confirm_approval_total_due').text(response[0].sales_order_total_due);
+					
+					$('#SalesOrderQuotationApprovalModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  });		
+	
+	<!--Quotation Confirmed Approved-->
+	$('body').on('click','#approval_SalesOrderConfirmed',function(){
+			
+			event.preventDefault();
+
+			let sales_order_id = document.getElementById("approval_SalesOrderConfirmed").value;
+			
+			  $.ajax({
+				url: "/quotation_approved",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Quotation Approved");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					
+					/*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					var table = $("#getSalesOrderList").DataTable();
+				    table.ajax.reload(null, false);
+					
+					var table = $("#getSalesOrderList_quotation").DataTable();
+				    table.ajax.reload(null, false);
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+				}
+			   });		
+	  });	
+
+	<!--Quotation Disapproval-->
+	$('body').on('click','#disapproveSalesOrder',function(){
+			
+			event.preventDefault();
+			let sales_order_id = $(this).data('id');
+			
+			  $.ajax({
+				url: "/sales_order_info",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("disapproval_SalesOrderConfirmed").value = sales_order_id;
+											
+					/*Set Details*/
+					$('#confirm_disapproval_sales_order_date').text(response[0].sales_order_date);
+					$('#confirm_disapproval_sales_control_number').text(response[0].sales_order_control_number);
+					$('#confirm_disapproval_client_name').text(response[0].client_name);
+					$('#confirm_disapproval_dr_number').text(response[0].sales_order_dr_number);					
+					$('#confirm_disapproval_or_number').text(response[0].sales_order_or_number);
+					$('#confirm_disapproval_total_due').text(response[0].sales_order_total_due);
+					
+					$('#SalesOrderQuotationDisapprovalModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	  });		
+	
+	<!--Quotation Confirmed Dispproved-->
+	$('body').on('click','#disapproval_SalesOrderConfirmed',function(){
+			
+			event.preventDefault();
+
+			let sales_order_id = document.getElementById("disapproval_SalesOrderConfirmed").value;
+			
+			  $.ajax({
+				url: "/quotation_disapproved",
+				type:"POST",
+				data:{
+				  sales_order_id:sales_order_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					$('#switch_notice_off').show();
+					$('#sw_off').html("Sales Order Disapproved");
+					setTimeout(function() { $('#switch_notice_off').fadeOut('slow'); },1000);	
+					
+					/*
+					If you are using server side datatable, then you can use ajax.reload() 
+					function to reload the datatable and pass the true or false as a parameter for refresh paging.
+					*/
+					
+					var table = $("#getSalesOrderList").DataTable();
+				    table.ajax.reload(null, false);
+					
+					var table = $("#getSalesOrderList_quotation").DataTable();
+				    table.ajax.reload(null, false);
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+				}
+			   });		
+	  });	
+
+	  
+	<!--Sales Order Deletion Confirmation-->
 	$('body').on('click','#deleteSalesOrder',function(){
 			
 			event.preventDefault();

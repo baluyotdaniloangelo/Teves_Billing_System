@@ -206,6 +206,12 @@ form.user .form-control-user {
 	
 }
 
+.btn_icon_table_approval_status{
+    background-color: navajowhite;
+	color: black;
+	
+}
+
 .warning_modal_bg{
 	background-color: #ffc42d;
 	border: none;

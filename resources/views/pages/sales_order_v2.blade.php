@@ -296,10 +296,7 @@
             </div>
         </div>
     </div>	
-
-
-
-
+	
 	<!-- Sales Order Delete Modal-->
     <div class="modal fade" id="SalesOrderDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -331,6 +328,72 @@
         </div>
     </div>
 
+    <div class="modal fade" id="SalesOrderQuotationApprovalModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Are you sure you want to Approve This Quotation?<br>
+				</div>
+				
+				<div align="left"style="margin: 10px;">
+				Date: <span id="confirm_approval_sales_order_date"></span><br>
+				S.O. No: <span id="confirm_approval_sales_control_number"></span><br>
+				Client: <span id="confirm_approval_client_name"></span><br>
+				DR Number: <span id="confirm_approval_dr_number"></span><br>
+				OR Number: <span id="confirm_approval_or_number"></span><br>
+				Total Due: <span id="confirm_approval_total_due"></span><br>
+				
+				
+				</div>
+				
+                <div class="modal-footer footer_modal_bg">
+                    <b style="color:#FFF;">Take note: After approval, this item will be moved to Pending and become visible on the Receivable List.</b>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="approval_SalesOrderConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Confirm</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="SalesOrderQuotationDisapprovalModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header_modal_bg">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+ 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
+                </div>
+
+                <div class="modal-body warning_modal_bg" id="modal-body">
+				Are you sure you want to Disapprove This Sales Order?<br>
+				</div>
+				
+				<div align="left"style="margin: 10px;">
+				Date: <span id="confirm_disapproval_sales_order_date"></span><br>
+				S.O. No: <span id="confirm_disapproval_sales_control_number"></span><br>
+				Client: <span id="confirm_disapproval_client_name"></span><br>
+				DR Number: <span id="confirm_disapproval_dr_number"></span><br>
+				OR Number: <span id="confirm_disapproval_or_number"></span><br>
+				Total Due: <span id="confirm_disapproval_total_due"></span><br>
+				
+				
+				</div>
+				
+                <div class="modal-footer footer_modal_bg">
+                    <b style="color:#FFF;">Take note: After disapproval, this item will be moved to Quotation List.</b>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="disapproval_SalesOrderConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Confirm</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+	
  	<!--Move Sales Order to  Receivables-->
 	<div class="modal fade" id="SalesOrderDeliveredModal" tabindex="-1">
 	
