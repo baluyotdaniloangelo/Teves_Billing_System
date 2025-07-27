@@ -209,15 +209,7 @@
 						
 						
 					</div>
-					<?php
-						
-						if($sales_order_data[0]['sales_order_quotation']==1){
-							$sales_order_quotation_check = 'checked="checked"';
-						}else{
-							$sales_order_quotation_check = "";
-						}
-						
-					?>
+					
 					<div class="row mb-2">
 						<div class="col-md-12">
 								<div class="form-check form-switch">

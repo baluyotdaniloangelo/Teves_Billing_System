@@ -17,19 +17,55 @@
 				<div class="p-d3">
 				
 				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+				
+				<li class="nav-item" role="presentation"  data-bs-toggle="modal">
+                  <button class="nav-link active" id="quotation-tab" data-bs-toggle="tab" data-bs-target="#bordered-quotation" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Order">Quotation</button>
+                </li>
+				
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="pending-salesorder-tab" data-bs-toggle="tab" data-bs-target="#bordered-salesorder-pending" type="button" role="tab" aria-controls="home" aria-selected="true" title="Pending Sales Order">Pending</button>
+                  <button class="nav-link " id="pending-salesorder-tab" data-bs-toggle="tab" data-bs-target="#bordered-salesorder-pending" type="button" role="tab" aria-controls="home" aria-selected="true" title="Pending Sales Order">Pending</button>
                 </li>
                 <li class="nav-item" role="presentation"  data-bs-toggle="modal">
-                  <button class="nav-link" id="billed-tab" data-bs-toggle="tab" data-bs-target="#bordered-billed" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Oder">Delivered</button>
+                  <button class="nav-link" id="billed-tab" data-bs-toggle="tab" data-bs-target="#bordered-billed" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Odrer">Delivered</button>
                 </li>
+				
               
 				</ul>		
 				
 				
 				<div class="tab-content pt-2" id="borderedTabContent">
 				
-                <div class="tab-pane fade show active" id="bordered-salesorder-pending" role="tabpanel" aria-labelledby="pending-salesorder-tab">				
+				<div class="tab-pane fade show active" id="bordered-quotation" role="tabpanel" aria-labelledby="billed-tab">
+				<div class="d-flex justify-content-end" id="">
+				</div>
+									<div class="table-responsive">
+										
+										<table class="table dataTable display nowrap cell-border" id="getSalesOrderList_quotation" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th class="all">No.</th>
+													<th class="all">Date</th>
+													<th class="all">S.O. No.</th>
+													<th class="all">Account Name</th>
+													<th class="none">Payment Term : </th>
+													<th class="none">Gross Amount : </th>
+													<th class="none">Withholding Tax : </th>
+													<th class="none">Net Amount : </th>
+													<th class="none">Total Due : </th>
+													<th class="all">Action</th>
+												</tr>
+											</thead>				
+											
+											<tbody>
+												
+											</tbody>
+												
+										</table>
+										
+									</div>
+				</div>
+				
+                <div class="tab-pane fade" id="bordered-salesorder-pending" role="tabpanel" aria-labelledby="pending-salesorder-tab">				
 				
 									<div class="table-responsive">
 										<table class="table dataTable display nowrap cell-border" id="getSalesOrderList" width="100%" cellspacing="0">
@@ -59,10 +95,10 @@
 				
 				</div>
 
-				    <div class="tab-pane fade" id="bordered-billed" role="tabpanel" aria-labelledby="billed-tab">
-					<div class="d-flex justify-content-end" id="">
-					</div>
-									    <div class="table-responsive">
+				<div class="tab-pane fade" id="bordered-billed" role="tabpanel" aria-labelledby="billed-tab">
+				<div class="d-flex justify-content-end" id="">
+				</div>
+									<div class="table-responsive">
 										
 										<table class="table dataTable display nowrap cell-border" id="getSalesOrderList_delivered" width="100%" cellspacing="0">
 											<thead>
@@ -87,9 +123,12 @@
 											</tbody>
 												
 										</table>
+										
 									</div>
 				</div>
-									
+		
+
+		
 				</div>									
                    
             </div>

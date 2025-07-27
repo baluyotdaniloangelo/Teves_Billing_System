@@ -153,7 +153,77 @@
 	
 	});	  
 	  
+	<!--Load Table-->
+	$(function () {
+		
+		/*Get List Of Undelivered Sales Order*/
+		var SalesOrderListTable_quotation = $('#getSalesOrderList_quotation').DataTable({
+			"language": {
+						"lengthMenu":'<select class="dt-input">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+		    },
+			/*processing: true,*/
+			serverSide: true,
+			stateSave: true,/*Remember Searches*/
+			responsive: true,
+			scrollCollapse: true,
+			scrollY: '500px',
+			ajax: "{{ route('getSalesOrderList_quotation') }}",
+			columns: [
+				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+				{data: 'sales_order_date'},
+				{data: 'sales_order_control_number'},
+				{data: 'client_name'},   
+				{data: 'sales_order_payment_term'},   
+				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
+				{data: ({sales_order_net_amount,sales_order_withholding_tax}) => (Number(sales_order_net_amount)*Number(sales_order_withholding_tax/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				{data: 'sales_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
+				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
+				{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
+			],
+			order: [[ 1, "desc" ]],
+			columnDefs: [
+					{ className: 'text-center', targets: [0, 1, 2, 9] },
+			]
+		});
+		
+				/*
+				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
+				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateSalesOrderModal"></button>'+
+				'</div>').appendTo('#sales_order_option');
+				*/
+				autoAdjustColumns(SalesOrderListTable_quotation);
+
+				 /*Adjust Table Column*/
+				 function autoAdjustColumns(table) {
+					 var container = table.table().container();
+					 var resizeObserver = new ResizeObserver(function () {
+						 table.columns.adjust();
+					 });
+					 resizeObserver.observe(container);
+				 }		
+				
+				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});				
+	
+	});	  
 	  
+		  
 	function ClientInfo() {
 		
 			let clientID = ($('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id'));

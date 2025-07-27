@@ -234,6 +234,7 @@ Route::post('/billing_receivables_lock_post', [ReceivablesController::class,'bil
 Route::get('/salesorder', [SalesOrderController::class,'salesorder'])->name('salesorder')->middleware('isLoggedIn');
 Route::get('salesorder/list', [SalesOrderController::class, 'getSalesOrderList'])->name('getSalesOrderList')->middleware('isLoggedIn');
 Route::get('salesorder/list_delivered', [SalesOrderController::class, 'getSalesOrderList_delivered'])->name('getSalesOrderList_delivered')->middleware('isLoggedIn');
+Route::get('salesorder/list_quotation', [SalesOrderController::class, 'getSalesOrderList_quotation'])->name('getSalesOrderList_quotation')->middleware('isLoggedIn');
 /*GET Sales Order Info*/
 Route::post('/sales_order_info', [SalesOrderController::class, 'sales_order_info'])->name('sales_order_info')->middleware('isLoggedIn');
 /*Confirm Delete Sales Order*/

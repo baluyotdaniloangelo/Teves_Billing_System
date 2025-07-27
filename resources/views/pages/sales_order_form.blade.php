@@ -33,7 +33,17 @@
 				<hr>
 				<div class="row mb-2">
 			<?php $sales_order_invoice = $sales_order_data[0]->sales_order_invoice; ?>
-			
+			<?php
+						
+						if($sales_order_data[0]['sales_order_quotation']==1){
+							$sales_order_quotation_check = 'checked="checked"';
+							$sales_order_disabled_tab = 'disabled="disabled"';
+						}else{
+							$sales_order_quotation_check = "";
+							$sales_order_disabled_tab = '';
+						}
+						
+			?>
 			@include('pages.sales_order_form_update_modal')
 			
 			<div class="col-sm-12">
@@ -49,15 +59,15 @@
                 </li>
 				
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='delivery') { echo 'active'; } ?>" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="true" onclick="" title='Product Delivery List, Create, Update and Delete Delivery'>Delivery</button>
+                  <button class="nav-link <?php if($tab=='delivery') { echo 'active'; } ?>" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="true" onclick="" title='Product Delivery List, Create, Update and Delete Delivery' <?=$sales_order_disabled_tab;?>>Delivery</button>
                 </li>
 				
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false" tabindex="-1" title='Payment List, Create, Update and Delete Payment'>Payment</button>
+                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false" tabindex="-1" title='Payment List, Create, Update and Delete Payment' <?=$sales_order_disabled_tab;?>>Payment</button>
                 </li>
 				
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='receivable') { echo 'active'; } ?>" id="receivable-tab" data-bs-toggle="tab" data-bs-target="#receivable" type="button" role="tab" aria-controls="receivable" aria-selected="false" tabindex="-1" title='Update Receivable Information'>Recievable Details</button>
+                  <button class="nav-link <?php if($tab=='receivable') { echo 'active'; } ?>" id="receivable-tab" data-bs-toggle="tab" data-bs-target="#receivable" type="button" role="tab" aria-controls="receivable" aria-selected="false" tabindex="-1" title='Update Receivable Information' <?=$sales_order_disabled_tab;?>>Recievable Details</button>
                 </li>
 				
               </ul>
