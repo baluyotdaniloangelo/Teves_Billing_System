@@ -91,13 +91,13 @@
 		<tr>
 			<td colspan="5"  width="50%" style="horizontal-align:center;text-align:left;"></td>
 			<td colspan="2" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>AR REFERENCE</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ @$receivable_data['control_number'] }}</td>
+			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['control_number'] }}</td>
 		</tr>
 		
 		<tr>
 			<td colspan="5"  width="50%" style="horizontal-align:center;text-align:left;"></td>
 			<td colspan="2" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>PAYMENT TERMS</b></td>
-			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ @$receivable_data['payment_term'] }}</td>
+			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ @$receivable_data[0]['payment_term'] }}</td>
 		</tr>
 		
 
