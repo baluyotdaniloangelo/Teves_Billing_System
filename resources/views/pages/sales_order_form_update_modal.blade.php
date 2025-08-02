@@ -218,6 +218,15 @@
 								</div>
 						</div>
 					</div>
+					
+					<div class="row mb-2">
+						<div class="col-md-12">
+								<div class="form-check form-switch">
+									<input class="form-check-input sales_order_quotation_hide_volume" type="checkbox" id="sales_order_quotation_hide_volume" name="sales_order_quotation_hide_volume" <?=$sales_order_quotation_hide_volume_check;?>>
+									<label class="form-check-label" for="flexSwitchCheckDefault">Hide Volume?</label>
+								</div>
+						</div>
+					</div>
 								
 					</div>
 					<div class="modal-footer modal-footer_form">

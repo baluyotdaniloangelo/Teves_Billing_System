@@ -57,7 +57,7 @@
 			<td colspan="3"  width="50%" style="horizontal-align:center;text-align:left;">
 			<div style="font-size:10px;"><?=$branch_header['branch_address'];?></div>
 			</td>
-			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>S.O. NO.</b></td>
+			<td colspan="2" align="left" width="17%" style="font-size:11px; font-weight:bold; color:red;"><b>QUOTATION NO.</b></td>
 			<td colspan="4" align="left" width="23%" style="font-size:11px; color:red; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['sales_order_control_number'] }}</td>
 
 		</tr>		
@@ -169,19 +169,21 @@
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
+			<td colspan="7" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr>
 		<tr style="font-size:12px;border:0 solid #000;">		
 
 			<td colspan="5" width="45%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold; height:15px !important;">DESCRIPTION</td>		
+			<!--
 			<td colspan="2" width="15%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">QUANTITY</td>
 			<td colspan="1" width="10%" align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT</td>		
+			-->
 			<td colspan="1" width="15%" nowrap align="center" style="border-right:1px solid gray; background-color: #c6e0b4; font-weight:bold;">UNIT PRICE</td>
 			<td colspan="1" width="15%" align="center" style="border:0px solid #000; background-color: #c6e0b4; font-weight:bold;">AMOUNT</td>		
 					
 		</tr>									
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
+			<td colspan="7" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr>	
 			<?php 
 			$no = 1;
@@ -201,8 +203,10 @@
 			?>
 			<tr class="data_tr" style="font-size:12px;">
 				<td colspan="5" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_component_cols->product_name"; ?></td>
-				<td colspan="2" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
-				<td colspan="1" align="center" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_unit_measurement}}</td>
+				<!--
+				<td colspan="2" align="right" nowrap style="height:<//?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><//?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
+				<td colspan="1" align="center" nowrap style="height:<//?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_unit_measurement}}</td>
+				-->
 				<td colspan="1" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
 				<td colspan="1" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
@@ -211,9 +215,10 @@
 			?>
 			
 			@endforeach
-
+		</table>
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		<tr style="font-size:12px;">
-			<td colspan="1"></td>
+			<td colspan="1" width="25%" ></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VATable Sales </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($VATable_Sales,2);?>
@@ -259,7 +264,6 @@
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($Less_Withholding_Tax,2);?></td>
 		</tr>
 
-		
 		<tr style="font-size:12px;">			
 			<td colspan="5"></td>
 			<td colspan="1"></td>
@@ -268,7 +272,6 @@
 			<?=number_format($sales_order_data[0]['sales_order_total_due'],2);?></td>
 		</tr>
 		
-		
 		<tr>
 			<td colspan="10" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;"></td>
 		</tr>
@@ -276,13 +279,6 @@
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
-		
-		
-		
-		
-		
-		 
-		
 		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:40px !important;font-style: italic;">In Words</td>

@@ -558,6 +558,7 @@ class SalesOrderController extends Controller
 			$Salesorder->sales_order_payment_type 			= $request->sales_order_payment_type;
 			$Salesorder->sales_order_invoice 				= $request->sales_order_invoice;
 			$Salesorder->sales_order_quotation				= $request->sales_order_quotation;/*7/26/2025*/
+			$Salesorder->sales_order_quotation_hide_volume	= $request->sales_order_quotation_hide_volume;/*8/2/2025*/
 			$Salesorder->created_by_user_idx 				= Session::get('loginID');
 			
 			$result = $Salesorder->save();
@@ -655,6 +656,7 @@ class SalesOrderController extends Controller
 				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
 				$Salesorder->sales_order_invoice 					= $request->sales_order_invoice;
 				$Salesorder->sales_order_quotation					= $request->sales_order_quotation;/*7/26/2025*/
+				$Salesorder->sales_order_quotation_hide_volume		= $request->sales_order_quotation_hide_volume;/*8/2/2025*/
 				$Salesorder->updated_by_user_idx 					= Session::get('loginID');
 				$result = $Salesorder->update();
 				
@@ -881,7 +883,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_withholding_tax',
 					'teves_sales_order_table.sales_order_payment_type',
 					'teves_sales_order_table.sales_order_invoice',
-					'teves_sales_order_table.sales_order_quotation']);
+					'teves_sales_order_table.sales_order_quotation',
+					'teves_sales_order_table.sales_order_quotation_hide_volume']);
 				
 			$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();
 				

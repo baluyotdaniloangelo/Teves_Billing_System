@@ -51,6 +51,9 @@
 			var _sales_order_quotation 				= $('.sales_order_quotation:checked').val() || 'off';
 			var sales_order_quotation 				= (_sales_order_quotation ==="on") ? "1":"0";
 			
+			var _sales_order_quotation_hide_volume	= $('.sales_order_quotation_hide_volume:checked').val() || 'off';
+			var sales_order_quotation_hide_volume 	= (_sales_order_quotation_hide_volume ==="on") ? "1":"0";
+			
 			  $.ajax({
 				url: "/update_sales_order_post",
 				type:"POST",
@@ -77,6 +80,7 @@
 				  sales_order_net_percentage:sales_order_net_percentage,
 				  sales_order_withholding_tax:sales_order_withholding_tax,
 				  sales_order_quotation:sales_order_quotation,
+				  sales_order_quotation_hide_volume:sales_order_quotation_hide_volume,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

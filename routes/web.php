@@ -227,8 +227,6 @@ Route::post('/billing_to_receivable_product', [ReceivablesController::class,'bil
 
 Route::post('/billing_receivables_lock_post', [ReceivablesController::class,'billing_receivables_lock_post'])->name('billing_receivables_lock_post')->middleware('isLoggedIn');
 
-
-
 /*Sales Order*/
 /*January 04, 2023*/
 Route::get('/salesorder', [SalesOrderController::class,'salesorder'])->name('salesorder')->middleware('isLoggedIn');
@@ -255,6 +253,7 @@ Route::post('/update_sales_status', [SalesOrderController::class,'update_sales_s
 Route::post('/update_sales_order_delivery_status', [SalesOrderController::class,'update_sales_order_delivery_status'])->name('update_sales_order_delivery_status')->middleware('isLoggedIn');
 /*Download Sales Order via PDF*/
 Route::get('/generate_sales_order_pdf', [ReportController::class,'generate_sales_order_pdf'])->name('generate_sales_order_pdf')->middleware('isLoggedIn');
+Route::get('/generate_sales_order_qoutation_no_volume_pdf', [ReportController::class,'generate_sales_order_qoutation_no_volume_pdf'])->name('generate_sales_order_qoutation_no_volume_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_delivery_status_pdf', [ReportController::class,'generate_sales_order_delivery_status_pdf'])->name('generate_sales_order_delivery_status_pdf')->middleware('isLoggedIn');
 
 Route::get('/generate_sales_order_receivable_soa_pdf', [ReportController::class,'generate_sales_order_receivable_soa_pdf'])->name('generate_sales_order_receivable_soa_pdf')->middleware('isLoggedIn');
