@@ -258,7 +258,7 @@ class ProductController extends Controller
 						$branch_price_id_item 		= $branch_price_id[$count];
 						$branch_price_item 			= number_format($branch_price[$count],2, '.', '');
 						
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 								
 							DB::table('teves_product_branch_price_table')
 							->where('branch_price_id', $branch_price_id_item)
@@ -323,7 +323,7 @@ class ProductController extends Controller
 			}
 
 
-						if(Session::get('UserType')=="Admin"){
+						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 									
 						$ProductBranchPrice = new ProductPricePerBranchModel();
 						$ProductBranchPrice = ProductPricePerBranchModel::find($branch_price_id);
