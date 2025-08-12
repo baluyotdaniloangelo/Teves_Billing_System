@@ -298,7 +298,7 @@
 		<table cellspacing="0" width="100%">
 		
         <tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="5">DISCOUNTS ( WHOLE SALE - FUEL)</td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="5">DISCOUNTS</td>
 		</tr>
 
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
