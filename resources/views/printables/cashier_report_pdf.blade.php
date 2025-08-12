@@ -120,12 +120,12 @@
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_premium_95_cols->product_name}}</td>
 				<td nowrap style="border:1px solid #000;"><?=$p1_no_premium;?></td>
-				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_premium_95_cols->beginning_reading}}</td>
-				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_premium_95_cols->closing_reading}}</td>
-				<td nowrap style="border:1px solid #000;">{{$data_P1_premium_95_cols->calibration}}</td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_premium_95_cols['order_quantity'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_premium_95_cols['product_price'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_premium_95_cols['order_total_amount'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_premium_95_cols->beginning_reading}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_premium_95_cols->closing_reading}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;">{{$data_P1_premium_95_cols->calibration}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_premium_95_cols['order_quantity'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_premium_95_cols['product_price'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_premium_95_cols['order_total_amount'],2,".",",");?></td>
 			</tr>
 			<?php 
 			
@@ -140,9 +140,9 @@
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="8">TOTAL </td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($order_quantity_P1_premium_95,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($product_price_P1_premium_95,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($order_total_amount_P1_premium_95,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_quantity_P1_premium_95,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($product_price_P1_premium_95,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_total_amount_P1_premium_95,2,".",",");?></td>
 		</tr>
 		
 		<tr>
@@ -159,12 +159,12 @@
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_super_regular_cols->product_name}}</td>
 				<td nowrap style="border:1px solid #000;"><?=$p1_no_super_regular;?></td>
-				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_super_regular_cols->beginning_reading}}</td>
-				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_super_regular_cols->closing_reading}}</td>
-				<td nowrap style="border:1px solid #000;">{{$data_P1_super_regular_cols->calibration}}</td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_super_regular_cols['order_quantity'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_super_regular_cols['product_price'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_super_regular_cols['order_total_amount'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_super_regular_cols->beginning_reading}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_super_regular_cols->closing_reading}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;">{{$data_P1_super_regular_cols->calibration}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_super_regular_cols['order_quantity'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_super_regular_cols['product_price'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_super_regular_cols['order_total_amount'],2,".",",");?></td>
 			</tr>
 			<?php 
 			
@@ -178,9 +178,9 @@
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="8">TOTAL </td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($order_quantity_P1_super_regular,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($product_price_P1_super_regular,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($order_total_amount_P1_super_regular,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_quantity_P1_super_regular,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($product_price_P1_super_regular,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_total_amount_P1_super_regular,2,".",",");?></td>
 		</tr>
 		
 		<tr>
@@ -197,12 +197,12 @@
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_diesel_cols->product_name}}</td>
 				<td nowrap style="border:1px solid #000;"><?=$p1_no_diesel;?></td>
-				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_diesel_cols->beginning_reading}}</td>
-				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_diesel_cols->closing_reading}}</td>
-				<td nowrap style="border:1px solid #000;">{{$data_P1_diesel_cols->calibration}}</td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_diesel_cols['order_quantity'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_diesel_cols['product_price'],2,".",",");?></td>
-				<td nowrap style="border:1px solid #000;"><?=number_format($data_P1_diesel_cols['order_total_amount'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_diesel_cols->beginning_reading}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_diesel_cols->closing_reading}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;">{{$data_P1_diesel_cols->calibration}}</td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_diesel_cols['order_quantity'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_diesel_cols['product_price'],2,".",",");?></td>
+				<td nowrap style="border:1px solid #000; text-align: right;"><?=number_format($data_P1_diesel_cols['order_total_amount'],2,".",",");?></td>
 			</tr>
 			<?php 
 			
@@ -216,9 +216,9 @@
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
 		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="8">TOTAL </td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($order_quantity_P1_diesel,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($product_price_P1_diesel,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000;"><?=number_format($order_total_amount_P1_diesel,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_quantity_P1_diesel,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($product_price_P1_diesel,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_total_amount_P1_diesel,2,".",",");?></td>
 		</tr>
 		
 		</table>
