@@ -447,7 +447,7 @@
 
 								<tr>
 								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">DISCOUNTS ( WHOLE SALE - FUEL)</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">DISCOUNTS</td>
 								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($total_discount,2,".",",");?></td>
 								</tr>
 
