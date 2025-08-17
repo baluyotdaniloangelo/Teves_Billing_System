@@ -26,6 +26,13 @@
 							<form class="g-2 needs-validation" id="CashierReportformNew">
 								
 								<div class="row mb-2">
+								  <label class="col-sm-4 col-form-label">Reference Number</label>
+								  <div class="col-sm-8">
+									<span><b><?php echo $CashiersReportData[0]['cashiers_report_no']; ?></b></span>
+								  </div>
+								</div>
+								
+								<div class="row mb-2">
 								  <label class="col-sm-4 col-form-label">Encoder's Name</label>
 								  <div class="col-sm-8">
 									<span><b><?php echo $CashiersReportData[0]['user_real_name']; ?></b></span>

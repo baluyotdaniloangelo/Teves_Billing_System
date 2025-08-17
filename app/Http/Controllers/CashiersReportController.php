@@ -194,8 +194,12 @@ class CashiersReportController extends Controller
         ]
 		);
 		
+			@$_cashiers_report_no = CashiersReportModel::latest()->first()->cashiers_report_id;
+			$cashiers_report_no = $_cashiers_report_no + 100;
+			
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate->user_idx 				= Session::get('loginID');
+			$CashiersReportCreate->cashiers_report_no 		= $cashiers_report_no;
 			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
 			$CashiersReportCreate->cashiers_name 			= $request->cashiers_name;
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
@@ -355,12 +359,13 @@ class CashiersReportController extends Controller
 				
 			}	
 			
-		$title = "Cashier' Report";
+		$title = "Cashier's Report";
 		$product_data = ProductModel::all();
 		$CashiersReportData = CashiersReportModel::where('cashiers_report_id', $CashiersReportId)
 			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
             ->get([				
 			'teves_cashiers_report.cashiers_report_id',
+			'teves_cashiers_report.cashiers_report_no',
 			'user_tb.user_real_name',
 			'teves_cashiers_report.teves_branch',
 			'teves_cashiers_report.cashiers_name',

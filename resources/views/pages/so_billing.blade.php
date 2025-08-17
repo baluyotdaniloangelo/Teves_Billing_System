@@ -23,6 +23,7 @@
 													<th class="all">Date</th>
 													<th class="all">Time</th>
 													<th class="all">S.O No.</th>
+													<th class="all">Branch</th>
 													<th class="all">Account Name</th>
 													<th class="none">Driver's Name</th>
 													<th class="none">Description</th>

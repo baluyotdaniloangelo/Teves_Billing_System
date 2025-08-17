@@ -203,6 +203,8 @@
 
 			document.getElementById('AddSOProduct').className = "g-3 needs-validation was-validated";
 			
+			let cashiers_report_no 	= $("#cashiers_report_no").val();
+			
 			let branch_id 				= $("#branch_id").val();
 			let product_idx 			= $('#product_list option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 	= $("#product_manual_price").val();
@@ -220,6 +222,7 @@
 				data:{
 				  branch_idx:branch_id,
 				  client_idx:client_idx,
+				  cashiers_report_no:cashiers_report_no,
 				  so_id:SOId,
 				  product_idx:product_idx,
 				  product_manual_price:product_manual_price,
@@ -301,7 +304,6 @@
 		$("#table_so_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#table_so_product_body_data');
 
-
 			  $.ajax({
 				url: "{{ route('GetSoProduct') }}",
 				type:"POST",
@@ -316,6 +318,7 @@
 						for(var i=0; i<len; i++){
 							
 							var cashiers_report_idx	= response[i].cashiers_report_idx
+							var cashiers_report_no	= response[i].cashiers_report_no
 							var billing_id 			= response[i].billing_id;						
 							var product_price 		= response[i].product_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var product_name 		= response[i].product_name;
@@ -344,6 +347,7 @@
 							
 							$('#table_so_product_body_data tr:last').after("<tr>"+
 							"<td align='center'>" + (i+1) + "</td>" +
+							"<td class='product_td' align='left'>"+cashiers_report_no+"</td>"+
 							"<td class='product_td' align='left'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+product_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_quantity+"</td>"+
@@ -381,6 +385,7 @@
 					document.getElementById("so-update-product").value = billID;
 					
 					/*Set Details*/
+					document.getElementById("edit_cashiers_report_no").value = response[0].cashiers_report_no;
 					document.getElementById("edit_product_idx").value = response[0].product_name;
 					document.getElementById("edit_product_manual_price").value = response[0].product_price;
 					document.getElementById("edit_order_quantity").value = response[0].order_quantity;
@@ -421,6 +426,8 @@
 			let product_idx 				= $('#product_list option[value="' + $('#edit_product_idx').val() + '"]').attr('data-id');
 			let product_manual_price 		= $("#edit_product_manual_price").val();
 			let order_quantity 				= $("input[name=edit_order_quantity]").val();
+			
+			let cashiers_report_no 				= $("input[name=edit_cashiers_report_no]").val();
 
 			/*Client and Product Name*/
 			let product_name 				= $("input[name=product_name]").val();
@@ -428,11 +435,12 @@
 			var _cashiers_report_update 				= $('.cashiers_report_update:checked').val() || 'off';
 			var cashiers_report_update 				= (_cashiers_report_update ==="on") ? "YES":"NO";
 			let client_idx 				= $('#so_client_name option[value="' + $('#so_client_idx').val() + '"]').attr('data-id');
-			
+
 			  $.ajax({
 				url: "{{ route('SOUpdateProductPost') }}",
 				type:"POST",
 				data:{
+				  cashiers_report_no:cashiers_report_no,
 				  branch_idx:branch_id,
 				  client_idx:client_idx,
 				  so_id:SOId,

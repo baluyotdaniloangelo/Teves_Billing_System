@@ -29,11 +29,13 @@ class CashiersReportModel extends Model
 
 		parent::delete();
 	}		
+	
     //use HasFactory;
 	protected $table = 'teves_cashiers_report';
 
 	protected $fillable = [
 		'cashiers_report_id',
+		'cashiers_report_no',
         'user_idx',
 		'teves_branch',
         'cashiers_name',
@@ -56,6 +58,7 @@ class CashiersReportModel extends Model
 	
 	protected static $logAttributes = [
 		'cashiers_report_id',
+		'cashiers_report_no',
         'user_idx',
 		'teves_branch',
         'cashiers_name',
@@ -68,6 +71,6 @@ class CashiersReportModel extends Model
 		'updated_by_user_id',
 		'deleted_at',
 		'deleted_by_user_id'
-		
     ];
+	
 }

@@ -137,6 +137,7 @@
 			<thead>
 					<tr class='report'>
 						<th style="text-align:center !important;">Item #</th>
+						<th style="text-align:center !important;">Cashier's Reference Number</th>
 						<th style="text-align:center !important;">Product</th>
 						<th style="text-align:center !important;">Price</th>
 						<th style="text-align:center !important;">Quantity</th>
@@ -176,6 +177,14 @@
 						
 						<div class="col-sm-12">
 						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-describedby="basic-addon1" name="cashiers_report_no" id="cashiers_report_no" required step=".01" placeholder="Cashier' Report #">
+								<label for="cashiers_report_no"> Cashier' Report #</label>
+							</div>
+							 <span class="valid-feedback" id="cashiers_report_noError"></span>
+						</div>
+						
 						<div class="form-floating mb-3">
 						  <input class="form-control" list="product_list" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()"placeholder="Date">
 						  <label for="product_idx">Product</label>
@@ -199,7 +208,6 @@
 						</div>
 						
 						<div class="col-sm-12">
-						
 							<div class="form-floating mb-3">
 								<input type="number" class="form-control" aria-describedby="basic-addon1" name="order_quantity" id="order_quantity" required step=".01" onchange="TotalAmount()" placeholder="Quantity">
 								<label for="order_quantity">Quantity</label>
@@ -214,6 +222,7 @@
 						  </div>
 						</div>
 						</div>
+						
 						
                     <div class="modal-footer modal-footer_form">
 							<div id="loading_data_add_product" style="display:none;">
@@ -247,6 +256,14 @@
 						<div class="row mb-2">
 						
 						<div class="col-sm-12">
+						
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+								<input type="number" class="form-control" aria-describedby="basic-addon1" name="edit_cashiers_report_no" id="edit_cashiers_report_no" required step=".01" placeholder="Cashier' Report #">
+								<label for="edit_cashiers_report_no"> Cashier' Report #</label>
+							</div>
+							 <span class="valid-feedback" id="edit_cashiers_report_noError"></span>
+						</div>
 						
 						<div class="form-floating mb-3">
 						  <input class="form-control" list="product_list" name="edit_product_name" id="edit_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()"placeholder="Date">

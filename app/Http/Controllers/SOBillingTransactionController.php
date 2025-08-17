@@ -9,6 +9,7 @@ use App\Models\BillingTransactionModel;
 use App\Models\ProductModel;
 use App\Models\ClientModel;
 use App\Models\TevesBranchModel;
+use App\Models\CashiersReportModel;
 use Session;
 use Validator;
 use DataTables;
@@ -73,6 +74,7 @@ class SOBillingTransactionController extends Controller
 		if ($request->ajax()) {
 		
     	$data = SOBillingTransactionModel::leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+					->leftjoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_so_table.branch_idx')
 					//->whereRaw("teves_billing_so_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", Session::get('loginID'))
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
@@ -80,6 +82,7 @@ class SOBillingTransactionController extends Controller
 							}
 						})
               		->get([
+					'teves_branch_table.branch_code',
 					'teves_billing_so_table.so_id',
 					'teves_billing_so_table.so_number',
 					'teves_billing_so_table.drivers_name',
@@ -184,8 +187,8 @@ class SOBillingTransactionController extends Controller
 			 teves_billing_table
 				right join teves_billing_so_table on `teves_billing_so_table`.`so_id` = `teves_billing_table`.`so_idx`
 				WHERE 
-			 `teves_billing_so_table`.`cashiers_report_idx` != '' 
-			 AND `teves_billing_so_table`.`client_idx` = ?
+			 /*`teves_billing_so_table`.`cashiers_report_idx` != '' 
+			 AND*/ `teves_billing_so_table`.`client_idx` = ?
 			 group by `teves_billing_so_table`.`so_id`";
 			
 			$data = DB::select("$raw_query", [$request->client_idx]);			
@@ -322,6 +325,7 @@ class SOBillingTransactionController extends Controller
 			'teves_billing_so_table.drivers_name',
 			'teves_billing_so_table.plate_no']);	
 			
+			
 			$raw_query_product = "SELECT a.product_id,a.product_name,ifnull(b.branch_price,a.product_price) AS product_price ,c.branch_code FROM teves_product_table AS a
 			LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
 			WHERE c.branch_id = ?";			
@@ -424,6 +428,7 @@ class SOBillingTransactionController extends Controller
 					$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);
 									
 					/*SO Details*/
+					$so_id = $request->so_id;
 					$so_info = SOBillingTransactionModel::find($request->so_id, ['branch_idx','so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
 					
 					/*Check if Price is From Manual Price*/
@@ -435,23 +440,78 @@ class SOBillingTransactionController extends Controller
 					
 					$order_total_amount = $request->order_quantity * $product_price;	
 					
-					/*insert*/
-					$Billing = new BillingTransactionModel();
-					$Billing->so_idx 				= $request->so_id;
-					$Billing->branch_idx			= $request->branch_idx;
-					$Billing->order_date 			= $so_info->order_date;
-					$Billing->order_time 			= $so_info->order_time;
-					$Billing->order_po_number 		= $so_info->so_number                                                                                                                                                                     ;	
-					$Billing->client_idx 			= $so_info->client_idx;
-					$Billing->plate_no 				= $so_info->plate_no;
-					$Billing->drivers_name 			= $so_info->drivers_name;
-					$Billing->product_idx 			= $request->product_idx;
-					$Billing->product_price 		= $product_price;
-					$Billing->order_quantity 		= $request->order_quantity;
-					$Billing->order_total_amount 	= $order_total_amount;
+					/*Get Cashiers Report ID*/
+					$cashiers_report_no = $request->cashiers_report_no;
 					
-					$result = $Billing->save();
-			
+					if($cashiers_report_no==''){
+						
+						/*insert*/
+						$Billing = new BillingTransactionModel();
+						$Billing->so_idx 				= $request->so_id;
+						$Billing->branch_idx			= $request->branch_idx;
+						//$Billing->cashiers_report_idx	= $cashiers_report_id;
+						$Billing->order_date 			= $so_info->order_date;
+						$Billing->order_time 			= $so_info->order_time;
+						$Billing->order_po_number 		= $so_info->so_number;                                                                                                                                                                     ;	
+						$Billing->client_idx 			= $so_info->client_idx;
+						$Billing->plate_no 				= $so_info->plate_no;
+						$Billing->drivers_name 			= $so_info->drivers_name;
+						$Billing->product_idx 			= $request->product_idx;
+						$Billing->product_price 		= $product_price;
+						$Billing->order_quantity 		= $request->order_quantity;
+						$Billing->order_total_amount 	= $order_total_amount;
+						
+						$result = $Billing->save();
+						
+						$billing_id = $Billing->billing_id;
+						
+					}
+					else{
+						
+						$CashiersReportData = CashiersReportModel::where('cashiers_report_no', $cashiers_report_no)
+						->get([				
+						'teves_cashiers_report.cashiers_report_id']);
+						
+						$cashiers_report_id = $CashiersReportData[0]->cashiers_report_id;
+						
+						/*insert*/
+						$Billing = new BillingTransactionModel();
+						$Billing->so_idx 				= $request->so_id;
+						$Billing->branch_idx			= $request->branch_idx;
+						$Billing->cashiers_report_idx	= $cashiers_report_id;
+						$Billing->order_date 			= $so_info->order_date;
+						$Billing->order_time 			= $so_info->order_time;
+						$Billing->order_po_number 		= $so_info->so_number;                                                                                                                                                                     ;	
+						$Billing->client_idx 			= $so_info->client_idx;
+						$Billing->plate_no 				= $so_info->plate_no;
+						$Billing->drivers_name 			= $so_info->drivers_name;
+						$Billing->product_idx 			= $request->product_idx;
+						$Billing->product_price 		= $product_price;
+						$Billing->order_quantity 		= $request->order_quantity;
+						$Billing->order_total_amount 	= $order_total_amount;
+						
+						$result = $Billing->save();
+						
+						$billing_id = $Billing->billing_id;
+						
+						/*Save to Sales Order - Cahsiers Report*/
+						$CashiersReportModel_P3 = new CashiersReportModel_P3();
+										
+						$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
+						$CashiersReportModel_P3->billing_idx 				= @$billing_id;
+						$CashiersReportModel_P3->cashiers_report_id 		= $cashiers_report_id;
+						$CashiersReportModel_P3->miscellaneous_items_type 	= 'SALES_CREDIT';
+						$CashiersReportModel_P3->so_idx 					= @$so_id;
+						$CashiersReportModel_P3->reference_no 				= $so_info->so_number;
+						$CashiersReportModel_P3->client_idx		 			= $so_info->client_idx;
+						$CashiersReportModel_P3->product_idx 				= $request->product_idx;
+						$CashiersReportModel_P3->order_quantity 			= $request->order_quantity;
+						$CashiersReportModel_P3->pump_price 				= $product_price;
+						$CashiersReportModel_P3->order_total_amount 		= $order_total_amount;
+						$CashiersReportModel_P3->created_by_user_id 		= Session::get('loginID');
+						$result = $CashiersReportModel_P3->save();
+					
+					}
 					if($result){
 						return response()->json(array('success' => "Bill Information Successfully Created!"), 200);
 					}
@@ -473,9 +533,11 @@ class SOBillingTransactionController extends Controller
 					$join->on('teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
 						 ->whereNull('teves_receivable_table.deleted_at'); // Filter soft-deleted receivables
 				})
+				->leftJoin('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_billing_table.cashiers_report_idx')
 				->orderBy('billing_id', 'asc')
 				->get([
-					'cashiers_report_idx',
+					'teves_cashiers_report.cashiers_report_no',
+					'teves_billing_table.cashiers_report_idx',
 					'teves_product_table.product_name',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',
@@ -505,7 +567,6 @@ class SOBillingTransactionController extends Controller
 					WHERE b.branch_idx = ? and b.product_idx = ?";			
 					$product_info = DB::select("$raw_query_product", [$request->branch_idx,$request->product_idx]);				
 					
-					
 					/*Product Details*/
 						$product_info = DB::table('teves_product_table as pt')
 						->select([
@@ -522,7 +583,6 @@ class SOBillingTransactionController extends Controller
 						})
 						->get();
 					
-					
 					/*SO Details*/
 					$so_info = SOBillingTransactionModel::find($request->so_id, ['branch_idx','so_number','order_date','order_time','client_idx','drivers_name','plate_no','plate_no']);	
 					
@@ -537,43 +597,143 @@ class SOBillingTransactionController extends Controller
 					
 					$billID = $request->billing_id;
 					
-					/*insert*/
-					$Billing = new BillingTransactionModel();
-					$Billing = BillingTransactionModel::find($billID);
-					$Billing->branch_idx			= $request->branch_idx;
-					$Billing->order_date 			= $so_info->order_date;
-					$Billing->order_time 			= $so_info->order_time;
-					$Billing->order_po_number 		= $so_info->so_number                                                                                                                                                                     ;	
-					$Billing->client_idx 			= $so_info->client_idx;
-					$Billing->plate_no 				= $so_info->plate_no;
-					$Billing->drivers_name 			= $so_info->drivers_name;
-					$Billing->product_idx 			= $request->product_idx;
-					$Billing->product_price 		= $product_price;
-					$Billing->order_quantity 		= $request->order_quantity;
-					$Billing->order_total_amount 	= $order_total_amount;
-					
-					$result = $Billing->update();
-					
 					/*Update Cashiers Report Part 3*/
 					
-					if($request->cashiers_report_update=="YES"){
+					/*Get Cashiers Report ID*/
+					$cashiers_report_no = $request->cashiers_report_no;
 					
-					$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
-					->update([
-						'product_idx' 			=> $request->product_idx,
-						'order_quantity' 		=> $request->order_quantity,
-						'pump_price' 			=> $product_price,
-						'order_total_amount' 	=> $order_total_amount
-						]);
+					if($cashiers_report_no==''){
 					
-					}
+							/*update*/
+							$Billing = new BillingTransactionModel();
+							$Billing = BillingTransactionModel::find($billID);
+							$Billing->cashiers_report_idx   = 0;
+							$Billing->branch_idx			= $request->branch_idx;
+							$Billing->order_date 			= $so_info->order_date;
+							$Billing->order_time 			= $so_info->order_time;
+							$Billing->order_po_number 		= $so_info->so_number;                                                                                                                                                                     ;	
+							$Billing->client_idx 			= $so_info->client_idx;
+							$Billing->plate_no 				= $so_info->plate_no;
+							$Billing->drivers_name 			= $so_info->drivers_name;
+							$Billing->product_idx 			= $request->product_idx;
+							$Billing->product_price 		= $product_price;
+							$Billing->order_quantity 		= $request->order_quantity;
+							$Billing->order_total_amount 	= $order_total_amount;
+							
+							$result = $Billing->update();
 					
-					if($result){
-						return response()->json(array('success' => "Bill Information Successfully Updated!"), 200);
+							/*Delete from Cashiers Report*/
+							CashiersReportModel_P3::where('billing_idx', $billID)->delete();
+
 					}
 					else{
-						return response()->json(['success'=>'Error on Insert Bill Information']);
-					}				
+					
+					$exists = CashiersReportModel_P3::where('billing_idx', $billID)->exists();
+
+						if ($exists) {
+							
+								// Row exists
+								if($request->cashiers_report_update=="YES"){
+									
+									$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
+									->update([
+										'reference_no'			=> $so_info->so_number,
+										'client_idx'			=> $so_info->client_idx,
+										'product_idx' 			=> $request->product_idx,
+										'order_quantity' 		=> $request->order_quantity,
+										'pump_price' 			=> $product_price,
+										'order_total_amount' 	=> $order_total_amount,
+										'cashiers_report_id' 	=> $cashiers_report_id,
+										'updated_by_user_id' 	=> Session::get('loginID')
+										]);
+										
+								}else{
+									
+									if($cashiers_report_no!=''){
+										
+										$CashiersReportData = CashiersReportModel::where('cashiers_report_no', $cashiers_report_no)
+										->get([				
+										'teves_cashiers_report.cashiers_report_id']);
+										
+										$cashiers_report_id = $CashiersReportData[0]->cashiers_report_id;
+										
+										$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
+										->update([
+											'so_idx'			=> $request->so_id,
+											'client_idx'			=> $so_info->client_idx,
+											'reference_no'			=> $so_info->so_number,
+											'cashiers_report_id' 	=> $cashiers_report_id,
+											'updated_by_user_id' 	=> Session::get('loginID')
+											]);
+									}else{
+										
+										$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
+										->update([
+											'so_idx'			=> $request->so_id,
+											'client_idx'			=> $so_info->client_idx,
+											'reference_no'			=> $so_info->so_number,
+											'updated_by_user_id' 	=> Session::get('loginID')
+											]);
+										
+									}
+										
+								}
+							
+						}
+						else {
+							
+							$CashiersReportData = CashiersReportModel::where('cashiers_report_no', $cashiers_report_no)
+										->get([				
+										'teves_cashiers_report.cashiers_report_id']);
+										
+										 $cashiers_report_id = $CashiersReportData[0]->cashiers_report_id;
+						
+							/*Create*/
+							/*Save to Sales Order - Cahsiers Report*/
+							$CashiersReportModel_P3 = new CashiersReportModel_P3();
+											
+							$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
+							$CashiersReportModel_P3->billing_idx 				= $request->billing_id;
+							$CashiersReportModel_P3->cashiers_report_id 		= $cashiers_report_id;
+							$CashiersReportModel_P3->miscellaneous_items_type 	= 'SALES_CREDIT';
+							$CashiersReportModel_P3->so_idx 					= $request->so_id;
+							$CashiersReportModel_P3->reference_no 				= $so_info->so_number;
+							$CashiersReportModel_P3->client_idx		 			= $so_info->client_idx;
+							$CashiersReportModel_P3->product_idx 				= $request->product_idx;
+							$CashiersReportModel_P3->order_quantity 			= $request->order_quantity;
+							$CashiersReportModel_P3->pump_price 				= $product_price;
+							$CashiersReportModel_P3->order_total_amount 		= $order_total_amount;
+							$CashiersReportModel_P3->created_by_user_id 		= Session::get('loginID');
+							$result_1 = $CashiersReportModel_P3->save();
+						
+						}
+						
+							/*update*/
+							$Billing = new BillingTransactionModel();
+							$Billing = BillingTransactionModel::find($request->billing_id);
+							$Billing->cashiers_report_idx   = $cashiers_report_id;
+							$Billing->branch_idx			= $request->branch_idx;
+							$Billing->order_date 			= $so_info->order_date;
+							$Billing->order_time 			= $so_info->order_time;
+							$Billing->order_po_number 		= $so_info->so_number;                                                                                                                                                                     ;	
+							$Billing->client_idx 			= $so_info->client_idx;
+							$Billing->plate_no 				= $so_info->plate_no;
+							$Billing->drivers_name 			= $so_info->drivers_name;
+							$Billing->product_idx 			= $request->product_idx;
+							$Billing->product_price 		= $product_price;
+							$Billing->order_quantity 		= $request->order_quantity;
+							$Billing->order_total_amount 	= $order_total_amount;
+							
+							$result = $Billing->update();	
+					}
+					
+					
+					//if($result){
+						return response()->json(array('success' => "Bill Information Successfully Updated!"), 200);
+					//}
+					//else{
+					//	return response()->json(['success'=>'Error on Insert Bill Information']);
+					//}				
 	}		
 	
 	
@@ -585,8 +745,10 @@ class SOBillingTransactionController extends Controller
 		$data = BillingTransactionModel::where('billing_id', $request->billID)
 					->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
 					->LeftJoin('teves_billing_so_table', 'teves_billing_so_table.so_id', '=', 'teves_billing_table.so_idx')
+					->leftJoin('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_billing_table.cashiers_report_idx')
               		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')	
               		->get([
+					'teves_cashiers_report.cashiers_report_no',
 					'teves_billing_so_table.branch_idx as branch_id',
 					'teves_billing_table.drivers_name',
 					'teves_billing_table.plate_no',
