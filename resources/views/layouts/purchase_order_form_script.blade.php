@@ -3,6 +3,7 @@
 	LoadPurchaseOrderInfo();  
 	LoadProduct();
 	LoadPayment();
+	LoadSuppliersPriceList();
 	
 	function ResetPaymentForm(){
 		/*Reset Form*/
