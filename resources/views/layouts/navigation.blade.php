@@ -149,7 +149,9 @@
               <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Daily Sales</span>
             </a>
 			
-			
+			<a href="{{ route('sales_report') }}" class="sidebar_li_a" title="Sales Report">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Sales Report"></i><span> Sales Report</span>
+            </a>
 			
 		  </li>
 		</ul>

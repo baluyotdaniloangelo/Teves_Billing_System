@@ -513,7 +513,7 @@ Route::post('/delete_selling_price_info_confirmed', [ProductSellingPriceControll
 
 /*Sales Report - 8/21/2025*/
 /*Daily Sales Reports*/
-Route::get('/sales_report', [SalesReportController::class,'sales_report_page'])->name('sales_report_page')->middleware('isLoggedIn');
+Route::get('/sales_report', [SalesReportController::class,'sales_report_page'])->name('sales_report')->middleware('isLoggedIn');
 Route::post('/generate_sales_report', [SalesReportController::class,'generate_sales_report'])->name('generate_sales_report')->middleware('isLoggedIn');
 Route::get('/generate_sales_report_pdf', [SalesReportController::class,'generate_sales_report_pdf'])->name('generate_sales_report_pdf')->middleware('isLoggedIn');
 

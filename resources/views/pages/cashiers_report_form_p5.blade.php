@@ -29,6 +29,7 @@
                     <th scope="row">500</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="five_hundred_deno" id="five_hundred_deno" required step="1" onchange="five_hundred_deno_total()" >
+						<span class="valid-feedback" id="five_hundred_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="five_hundred_deno_total_amt">0.00</span></td>
                   </tr>
@@ -36,6 +37,7 @@
                     <th scope="row">200</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="two_hundred_deno" id="two_hundred_deno" required step="1" onchange="two_hundred_deno_total()" >
+						<span class="valid-feedback" id="two_hundred_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="two_hundred_deno_total_amt">0.00</span></td>
                   </tr>
