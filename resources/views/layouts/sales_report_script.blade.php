@@ -106,6 +106,9 @@
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_sales_report_pdf()"> Sales Report</button>'+
 							'<!--<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_cumulative_report_pdf()"> Cumulative Report</button>-->'+
 							'</div>');
+							
+							/*Close Form*/
+							$('#CreateReportModal').modal('toggle');
 
 					} 
 					else{

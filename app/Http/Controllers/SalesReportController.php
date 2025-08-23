@@ -282,7 +282,7 @@ class SalesReportController extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('Legal', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_header['branch_code']."_DAILY_SALES.pdf");
+		return $pdf->stream($receivable_header['branch_code']."_SALES_REPORT.pdf");
 		
 		
 	}		
