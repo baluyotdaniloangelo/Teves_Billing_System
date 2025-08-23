@@ -100,6 +100,13 @@ else if (Request::is('sales_order_summary')){
 @include('layouts.sales_order_summary_script')
 <?php
 }
+else if (Request::is('sales_report')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.sales_report_script')
+<?php
+}
 else if (Request::is('purchase_order_summary')){
 ?>
 <body class="">

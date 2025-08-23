@@ -85,8 +85,8 @@
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">2nd Shift</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">3rd Shift</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">4th Shift</th>
-				<th class="data_th" nowrap style="border:1px solid #000;" align="right">5th Shift</th>
-				<th class="data_th" nowrap style="border:1px solid #000;" align="right">6th Shift</th>
+				<!--<th class="data_th" nowrap style="border:1px solid #000;" align="right">5th Shift</th>
+				<th class="data_th" nowrap style="border:1px solid #000;" align="right">6th Shift</th>-->
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">Fuel Sales</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">Other Sales</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">MSC - Total Sales</th>
@@ -149,8 +149,8 @@
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['second_shift_total_sales'],2);?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['third_shift_total_sales'],2);?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['fourth_shift_total_sales'],2);?></td>
-				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['fifth_shift_total_sales'],2);?></td>
-				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['sixth_shift_total_sales'],2);?></td>
+				<!--<td align="right" nowrap style="border:1px solid #000;"><//?=number_format($result_cols['fifth_shift_total_sales'],2);?></td>
+				<td align="right" nowrap style="border:1px solid #000;"><//?=number_format($result_cols['sixth_shift_total_sales'],2);?></td>-->
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['daily_fuel_sales'],2);?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['daily_other_sales'],2);?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($result_cols['shift_total_sales_sum'],2);?></td>
@@ -175,8 +175,8 @@
 				<td align="left" ></td>
 				<td align="left" ></td>
 				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="left" ></td>
+				<!--<td align="left" ></td>
+				<td align="left" ></td>-->
 				<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_fuel_sales" style="font-weight: normal;"><?=number_format(($total_fuel_sales),2);?></span></td>
 				<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_other_sales" style="font-weight: normal;"><?=number_format(($total_other_sales),2);?></span></td>
 				<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;"><?=number_format(($total_sales),2);?></span></td>

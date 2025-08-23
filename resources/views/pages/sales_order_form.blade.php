@@ -513,6 +513,7 @@
 								<option value="Post-Dated Check">Post-Dated Check</option>
 								<option value="Post-Dated Check - Cleared">Post-Dated Check - Cleared</option>
 								<option value="Overpayment">Overpayment</option>
+								<option value="Payroll Deduction">Payroll Deduction</option>
 							</select>
 							<label for="receivable_mode_of_payment">Mode of Payment</label>
 						</div>

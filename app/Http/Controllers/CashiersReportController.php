@@ -138,6 +138,8 @@ class CashiersReportController extends Controller
 						}
 						else{
 							
+							/*If Older that or equal to 1 Day the Available Menu is View Only*/
+							/*This is Compared to the Date Created*/
 							if($numberDays>=1){
 								$actionBtn = '
 								<div align="center" class="action_table_menu_client">
@@ -146,6 +148,7 @@ class CashiersReportController extends Controller
 							}
 							else{
 								
+								/*Only the Encoder of the Report is allowed to Edit*/
 								if(Session::get('loginID')==$row->user_idx){
 								
 									$actionBtn = '
@@ -169,7 +172,6 @@ class CashiersReportController extends Controller
 						}
 						
 						return $actionBtn;
-						
 						
 					})
 					->rawColumns(['action'])
@@ -1301,9 +1303,28 @@ class CashiersReportController extends Controller
 	public function save_cashiers_report_PH5(Request $request){
 		
 		$request->validate([
-			'cash_drop'   => 'required'
+			'one_thousand_deno'   		=> 'required',
+			'five_hundred_deno'   		=> 'required',
+			'two_hundred_deno'   		=> 'required',
+			'one_hundred_deno'   		=> 'required',
+			'fifty_deno'   				=> 'required',
+			'twenty_deno'   			=> 'required',
+			'ten_deno'   				=> 'required',
+			'five_deno'   				=> 'required',
+			'one_deno'   				=> 'required',
+			'twenty_five_cent_deno'   	=> 'required',
+			'cash_drop'   				=> 'required'
         ], 
-        [
+        [	'one_thousand_deno'   		=> 'One Thousand peso denomination is required',
+			'five_hundred_deno'   		=> 'Five hundred peso denomination is  required',
+			'two_hundred_deno'   		=> 'Two hundred peso denomination is required',
+			'one_hundred_deno'   		=> 'One hundred peso denomination is required',
+			'fifty_deno'   				=> 'Fifty peso denomination is required',
+			'twenty_deno'   			=> 'Twenty peso denomination is required',
+			'ten_deno'   				=> 'Ten peso denomination is required',
+			'five_deno'   				=> 'Five peso denomination is required',
+			'one_deno'   				=> 'One peso denomination is required',
+			'twenty_five_cent_deno'   	=> 'Twenty is required',
 			'cash_drop.required' => 'Cash Drop is required'
         ]
 		);

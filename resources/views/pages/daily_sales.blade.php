@@ -70,8 +70,8 @@
 													<th>2nd Shift</th>
 													<th>3rd Shift</th>
 													<th>4th Shift</th>
-													<th>5th Shift</th>
-													<th>6th Shift</th>
+													<!--<th>5th Shift</th>
+													<th>6th Shift</th>-->
 													<th>Fuel Sales</th>
 													<th>Other Sales</th>
 													<th class="all">MSC - SO</th>
@@ -97,8 +97,8 @@
 													<td align="left" ></td>
 													<td align="left" ></td>
 													<td align="left" ></td>
-													<td align="left" ></td>
-													<td align="left" ></td>
+													<!--<td align="left" ></td>
+													<td align="left" ></td>-->
 													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_fuel_sales" style="font-weight: normal;">0.00</span></td>
 													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_other_sales" style="font-weight: normal;">0.00</span></td>
 													<td align="left" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_sales" style="font-weight: normal;">0.00</span></td>

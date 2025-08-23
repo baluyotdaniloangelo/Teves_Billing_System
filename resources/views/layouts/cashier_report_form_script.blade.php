@@ -2744,12 +2744,17 @@
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 						LoadCashiersReportPH5();
 						LoadCashiersReportSummary();
+						
 						$('#cash_dropError').text('');
+						$('#one_thousand_denoError').text('');
 						
 					  }
 					},
 					error: function(error) {
 					 console.log(error);
+						
+						$('#one_thousand_denoError').text(error.responseJSON.errors.one_thousand_deno);
+						document.getElementById('one_thousand_denoError').className = "invalid-feedback";
 						
 						$('#cash_dropError').text(error.responseJSON.errors.cash_drop);
 						document.getElementById('cash_dropError').className = "invalid-feedback";			

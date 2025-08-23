@@ -31,6 +31,8 @@ use App\Http\Controllers\ProductSellingPriceController;
 
 /*Daily Sales - March 6, 2025*/
 use App\Http\Controllers\DailySalesReportController;
+/*Sales Report - August 21, 2025*/
+use App\Http\Controllers\SalesReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -155,14 +157,10 @@ Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_s
 
 Route::get('/generate_soa_summary_pdf_v_762025', [ReportController::class,'generate_soa_summary_pdf_v_762025'])->name('generate_soa_summary_pdf_v_762025')->middleware('isLoggedIn');
 
-
-
-
 /*Daily Sales Reports*/
 Route::get('/daily_sales', [DailySalesReportController::class,'daily_sales_page'])->name('daily_sales')->middleware('isLoggedIn');
 Route::post('/generate_daily_sales', [DailySalesReportController::class,'generate_daily_sales'])->name('generate_daily_sales')->middleware('isLoggedIn');
 Route::get('/generate_daily_sales_report_pdf', [DailySalesReportController::class,'generate_daily_sales_report_pdf'])->name('generate_daily_sales_report_pdf')->middleware('isLoggedIn');
-
 
 /*Generate via Web Page View*/
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
@@ -510,6 +508,14 @@ Route::post('selling_price/list', [ProductSellingPriceController::class, 'get_se
 Route::post('/create_product_selling_price_post', [ProductSellingPriceController::class,'create_product_selling_price_post'])->name('create_product_selling_price_post')->middleware('isLoggedIn');
 Route::post('/product_selling_price_info', [ProductSellingPriceController::class, 'product_selling_price_info'])->name('product_selling_price_info')->middleware('isLoggedIn');
 Route::post('/delete_selling_price_info_confirmed', [ProductSellingPriceController::class,'delete_selling_price_info_confirmed'])->name('delete_selling_price_info_confirmed')->middleware('isLoggedIn');
+
+
+
+/*Sales Report - 8/21/2025*/
+/*Daily Sales Reports*/
+Route::get('/sales_report', [SalesReportController::class,'sales_report_page'])->name('sales_report_page')->middleware('isLoggedIn');
+Route::post('/generate_sales_report', [SalesReportController::class,'generate_sales_report'])->name('generate_sales_report')->middleware('isLoggedIn');
+Route::get('/generate_sales_report_pdf', [SalesReportController::class,'generate_sales_report_pdf'])->name('generate_sales_report_pdf')->middleware('isLoggedIn');
 
 
 /* Sales Summary */

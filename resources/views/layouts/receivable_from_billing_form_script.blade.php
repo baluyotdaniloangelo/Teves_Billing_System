@@ -274,9 +274,9 @@
 								else{
 								?>
 								if(response['paymentcount']==0){
-									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' >b<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>";
+									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>";
 								}else{
-									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' >c<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
+									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
 								}
 								
 								<?php
@@ -326,7 +326,7 @@
 												if(diffDays>=3||response['paymentcount']!=0){
 									
 													$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' >d<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
+													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>"+
 													"<td align='center'>" + (i+1) + "</td>" +
 													"<td class='product_td' align='left'>"+order_po_number+"</td>"+
 													"<td class='product_td' align='left'>"+product_name+"</td>"+
@@ -343,7 +343,7 @@
 													
 													
 													$('#table_sales_order_product_body_data tr:last').after("<tr>"+
-													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' >f<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
+													"<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='editBill' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteBill'  data-id='"+id+"'></a></div></td>"+
 													"<td align='center'>" + (i+1) + "</td>" +
 													"<td class='product_td' align='left'>"+order_po_number+"</td>"+
 													"<td class='product_td' align='left'>"+product_name+"</td>"+

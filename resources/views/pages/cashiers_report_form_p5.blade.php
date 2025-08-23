@@ -21,6 +21,7 @@
                     <th scope="row">1000</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="one_thousand_deno" id="one_thousand_deno" required step="1" onchange="one_thousand_deno_total()" >
+						<span class="valid-feedback" id="one_thousand_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="one_thousand_deno_total_amt">0.00</span></td>
                   </tr>

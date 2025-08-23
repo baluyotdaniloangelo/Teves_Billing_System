@@ -1182,7 +1182,7 @@
 								const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
 									
 									<?php
-									if(Session::get('UserType')=="Admin"){
+									if(Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin"){
 									?>
 											action_controls = "<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SalesOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSalesOrderPayment'  data-id='"+id+"'></a>";		
 									<?php
