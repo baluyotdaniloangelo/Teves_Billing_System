@@ -100,7 +100,12 @@
 				  
 				    if (response && response.data && response.data.length > 0) {
 						
-		renderSalesTable(response.data);
+						renderSalesTable(response.data);
+
+						$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_sales_report_pdf()"> Sales Report</button>'+
+							'<!--<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_cumulative_report_pdf()"> Cumulative Report</button>-->'+
+							'</div>');
 
 					} 
 					else{
@@ -161,116 +166,110 @@ function renderSalesTable(data) {
         $(tableId + ' tbody').empty();
     }
 
-    // ✅ Extract dynamic keys (exclude DT_RowIndex and report_date)
-    let keys = Object.keys(data[0]).filter(k => k !== 'DT_RowIndex' && k !== 'report_date');
+		// ✅ Extract dynamic keys (exclude DT_RowIndex and report_date)
+		let keys = Object.keys(data[0]).filter(k => k !== 'DT_RowIndex' && k !== 'report_date');
 
-    // ✅ Start with fixed columns
-    let cols = [
-        { data: 'DT_RowIndex', title: '#' },
-        { 
-            data: 'report_date', 
-            title: 'Report Date',
-            render: function(data, type, row) {
-                if (!data) return '';
-                let d = new Date(data);
-                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            }
-        }
-    ];
+		// ✅ Start with fixed columns
+		let cols = [
+			{ data: 'DT_RowIndex', title: '#' },
+			{ 
+				data: 'report_date', 
+				title: 'Report Date',
+				render: function(data, type, row) {
+					if (!data) return '';
+					let d = new Date(data);
+					return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+				}
+			}
+		];
 
-    // ✅ Add dynamic tank/product columns with 3 decimal places
-    keys.forEach(k => {
-        cols.push({
-            data: k,
-            title: k.replace(/_/g, ' '),
-			orderable: false, //
-            render: function(data, type, row) {
-                if (data == null || data === '') return '';
-                let num = parseFloat(data);
-                return isNaN(num) ? data : num.toFixed(2);
-            },
-            className: "dt-right" // align numbers to the right
-        });
-    });
+		// ✅ Add dynamic tank/product columns with 3 decimal places
+		keys.forEach(k => {
+			cols.push({
+				data: k,
+				title: k.replace(/_/g, ' '),
+				orderable: false, //
+				render: function(data, type, row) {
+					if (data == null || data === '') return '';
+					let num = parseFloat(data);
+					return isNaN(num) ? data : num.toFixed(2);
+				},
+				className: "dt-right" // align numbers to the right
+			});
+		});
 
-    // ✅ Build <thead>
-    let theadHtml = '<tr>';
-    cols.forEach(c => {
-        theadHtml += `<th>${c.title}&nbsp;</th>`;
-    });
-    theadHtml += '</tr>';
-    $(tableId + ' thead').append(theadHtml);
+		// ✅ Build <thead>
+		let theadHtml = '<tr>';
+		cols.forEach(c => {
+			theadHtml += `<th>${c.title}&nbsp;</th>`;
+		});
+		theadHtml += '</tr>';
+		$(tableId + ' thead').append(theadHtml);
 
-    // ✅ Initialize DataTable
-    $(tableId).DataTable({
-        data: data,
-        columns: cols,
-        scrollX: true,
-        autoWidth: false,
-        destroy: true,
-		searching: false,
-    });
-}
+		// ✅ Initialize DataTable
+		$(tableId).DataTable({
+			data: data,
+			columns: cols,
+			scrollX: true,
+			autoWidth: false,
+			destroy: true,
+			searching: false,
+		});
+	}
 
-function renderSalesTable_old(data) {
-    const tableId = '#sale_sorder_summary_table';
+	function renderSalesTable_old(data) {
+		const tableId = '#sale_sorder_summary_table';
 
-    // ✅ Destroy old table if it exists
-    if ($.fn.DataTable.isDataTable(tableId)) {
-        $(tableId).DataTable().clear().destroy();
-        $(tableId + ' thead').empty();
-        $(tableId + ' tbody').empty();
-    }
+		// ✅ Destroy old table if it exists
+		if ($.fn.DataTable.isDataTable(tableId)) {
+			$(tableId).DataTable().clear().destroy();
+			$(tableId + ' thead').empty();
+			$(tableId + ' tbody').empty();
+		}
 
-    // ✅ Dynamically extract keys from the first object
-    let keys = Object.keys(data[0]);
+		// ✅ Dynamically extract keys from the first object
+		let keys = Object.keys(data[0]);
 
-    // ✅ Build DataTables "columns" config
-    let cols = keys.map(k => ({
-        data: k,
-        title: k.replace(/_/g, ' ') // nicer titles
-    }));
+		// ✅ Build DataTables "columns" config
+		let cols = keys.map(k => ({
+			data: k,
+			title: k.replace(/_/g, ' ') // nicer titles
+		}));
 
-    // ✅ Build <thead>
-    let theadHtml = '<tr>';
-    cols.forEach(c => {
-        theadHtml += `<th>${c.title}</th>`;
-    });
-    theadHtml += '</tr>';
-    $(tableId + ' thead').append(theadHtml);
+		// ✅ Build <thead>
+		let theadHtml = '<tr>';
+		cols.forEach(c => {
+			theadHtml += `<th>${c.title}</th>`;
+		});
+		theadHtml += '</tr>';
+		$(tableId + ' thead').append(theadHtml);
 
-    // ✅ Initialize DataTable
-    $(tableId).DataTable({
-        data: data,
-        columns: cols,
-        scrollX: true,
-        autoWidth: false,
-        destroy: true,
-    });
-}
+		// ✅ Initialize DataTable
+		$(tableId).DataTable({
+			data: data,
+			columns: cols,
+			scrollX: true,
+			autoWidth: false,
+			destroy: true,
+		});
+	}
 
-	function download_daily_sales_report_pdf(receivable_id){
+	function download_sales_report_pdf(){
 			
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let company_header 		= $("#company_header").val();
-			let client_idx 			= $('#client_name option[value="' + $('#client_id').val() + '"]').attr('data-id');
 			
-		var query = {
-			start_date:start_date,
-			end_date:end_date,
-			company_header:company_header,
-			client_idx:client_idx,
-			_token: "{{ csrf_token() }}"
-		}
+			var query = {
+				start_date:start_date,
+				end_date:end_date,
+				company_header:company_header,
+				_token: "{{ csrf_token() }}"
+			}
 
-		if(client_idx!='All'){
-			var url = "{{URL::to('generate_sales_order_summary_report_per_client_pdf')}}?" + $.param(query)
-		}else{
-			var url = "{{URL::to('generate_sales_order_summary_report_pdf')}}?" + $.param(query)
-		}
-		
-		window.open(url);
+			var url = "{{URL::to('generate_sales_report_pdf')}}?" + $.param(query)
+
+			window.open(url);
 	  
 	}
 

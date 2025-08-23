@@ -2747,6 +2747,15 @@
 						
 						$('#cash_dropError').text('');
 						$('#one_thousand_denoError').text('');
+						$('#five_hundred_denoError').text('');
+						$('#two_hundred_denoError').text('');
+						$('#one_hundred_denoError').text('');
+						$('#fifty_denoError').text('');
+						$('#twenty_denoError').text('');
+						$('#ten_denoError').text('');
+						$('#five_denoError').text('');
+						$('#one_denoError').text('');
+						$('#twenty_five_cent_denoError').text('');
 						
 					  }
 					},
@@ -2755,6 +2764,33 @@
 						
 						$('#one_thousand_denoError').text(error.responseJSON.errors.one_thousand_deno);
 						document.getElementById('one_thousand_denoError').className = "invalid-feedback";
+						
+						$('#five_hundred_denoError').text(error.responseJSON.errors.five_hundred_deno);
+						document.getElementById('five_hundred_denoError').className = "invalid-feedback";
+						
+						$('#two_hundred_denoError').text(error.responseJSON.errors.two_hundred_deno);
+						document.getElementById('two_hundred_denoError').className = "invalid-feedback";
+						
+						$('#one_hundred_denoError').text(error.responseJSON.errors.one_hundred_deno);
+						document.getElementById('one_hundred_denoError').className = "invalid-feedback";
+						
+						$('#fifty_denoError').text(error.responseJSON.errors.fifty_deno);
+						document.getElementById('fifty_denoError').className = "invalid-feedback";
+						
+						$('#twenty_denoError').text(error.responseJSON.errors.twenty_deno);
+						document.getElementById('twenty_denoError').className = "invalid-feedback";
+						
+						$('#ten_denoError').text(error.responseJSON.errors.ten_deno);
+						document.getElementById('ten_denoError').className = "invalid-feedback";
+						
+						$('#five_denoError').text(error.responseJSON.errors.five_deno);
+						document.getElementById('five_denoError').className = "invalid-feedback";
+						
+						$('#one_denoError').text(error.responseJSON.errors.one_deno);
+						document.getElementById('one_denoError').className = "invalid-feedback";
+						
+						$('#twenty_five_cent_denoError').text(error.responseJSON.errors.twenty_five_cent_deno);
+						document.getElementById('twenty_five_cent_denoError').className = "invalid-feedback";
 						
 						$('#cash_dropError').text(error.responseJSON.errors.cash_drop);
 						document.getElementById('cash_dropError').className = "invalid-feedback";			

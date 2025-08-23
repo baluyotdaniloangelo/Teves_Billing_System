@@ -45,6 +45,7 @@
                     <th scope="row">100</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="one_hundred_deno" id="one_hundred_deno" required step="1" onchange="one_hundred_deno_total()" >
+						<span class="valid-feedback" id="one_hundred_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="one_hundred_deno_total_amt">0.00</span></td>
                   </tr>
@@ -52,6 +53,7 @@
                     <th scope="row">50</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="fifty_deno" id="fifty_deno" required step="1" onchange="fifty_deno_total()" >
+						<span class="valid-feedback" id="fifty_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="fifty_deno_total_amt">0.00</span></td>
                   </tr>
@@ -59,6 +61,7 @@
                     <th scope="row">20</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="twenty_deno" id="twenty_deno" required step="1" onchange="twenty_deno_total()" >
+						<span class="valid-feedback" id="twenty_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="twenty_deno_total_amt">0.00</span></td>
                   </tr>
@@ -66,6 +69,7 @@
                     <th scope="row">10</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="ten_deno" id="ten_deno" required step="1" onchange="ten_deno_total()" >
+						<span class="valid-feedback" id="ten_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="ten_deno_total_amt">0.00</span></td>
                   </tr>
@@ -73,6 +77,7 @@
                     <th scope="row">5</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="five_deno" id="five_deno" required step="1" onchange="five_deno_total()" >
+						<span class="valid-feedback" id="five_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="five_deno_total_amt">0.00</span></td>
                   </tr>
@@ -80,6 +85,7 @@
                     <th scope="row">1</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="one_deno" id="one_deno" required step="1" onchange="one_deno_total()" >
+						<span class="valid-feedback" id="one_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="one_deno_total_amt">0.00</span></td>
                   </tr>
@@ -87,6 +93,7 @@
                     <th scope="row">.25</th>
                     <td style="text-align: center !important;">
 						<input type="number" class="" placeholder=""  name="twenty_five_cent_deno" id="twenty_five_cent_deno" required step="1" onchange="twenty_five_cent_deno_total()" >
+						<span class="valid-feedback" id="twenty_five_cent_denoError"></span>
 					</td>
                     <td style="text-align: right !important;"><span id="twenty_five_cent_deno_total_amt">0.00</span></td>
                   </tr>
