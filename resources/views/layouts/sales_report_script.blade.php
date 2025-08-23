@@ -91,9 +91,6 @@
 				},
 				success:function(response){
 				
-				/*Close Form*/
-				$('#CreateReportModal').modal('toggle');
-				
 				get_branch_details();
 							
 				  console.log(response);
@@ -108,12 +105,12 @@
 							'</div>');
 							
 							/*Close Form*/
-							$('#CreateReportModal').modal('toggle');
+							$('#CreateSalesReportFuelModal').modal('toggle');
 
 					} 
 					else{
 							/*Close Form*/
-							$('#CreateReportModal').modal('toggle');
+							$('#CreateSalesReportFuelModal').modal('toggle');
 							/*No Result Found*/
 							$('#total_sales').text('');
 							$('#total_short_over').text('');
