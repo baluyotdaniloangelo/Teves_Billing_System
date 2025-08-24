@@ -84,9 +84,9 @@
 			$firstItem = $data[0];
 			$headers = array_keys(get_object_vars($firstItem));
 		}
-		
-		
-		// Calculate sums
+
+		// Calculate column sums
+		$sums = [];
 		foreach ($data as $row) {
 			foreach ($headers as $header) {
 				if ($header !== 'Report Date' && is_numeric($row->$header)) {
@@ -98,58 +98,64 @@
 			}
 		}
 		?>
-			<table class="" width="100%" cellspacing="0" cellpadding="1" border="1" >
-
+		<table width="100%" cellspacing="0" cellpadding="1" border="1">
 			<thead>
 				<tr>
 					<th>No.</th>
 					<?php foreach ($headers as $header): ?>
-					<th>
-						<?php
-						// Keep 'Report Date' as is, transform others
-						echo $header === 'Report Date' 
-							? 'Report Date' 
-							: htmlspecialchars(str_replace('_', '-', $header));
-						?>
-					</th>
+						<th>
+							<?php
+							echo $header === 'Report Date'
+								? 'Report Date'
+								: htmlspecialchars(str_replace('_', '-', $header));
+							?>
+						</th>
 					<?php endforeach; ?>
+					<th>Total</th> <!-- ✅ Row total column -->
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ($data as $index => $row): ?>
 					<tr>
 						<td><?php echo $index + 1; ?></td>
-						<?php foreach ($headers as $header): ?>
+						<?php 
+						$rowTotal = 0; // ✅ keep running total for this row
+						foreach ($headers as $header): ?>
 							<td style="<?php echo $header === 'Report Date' ? 'text-align: center;' : 'text-align: right;'; ?>">
-							<?php
-							if (isset($row->$header)) {
-								$value = $row->$header;
-								echo is_numeric($value)
-									? number_format($value, 2)
-									: htmlspecialchars($value);
-							} else {
-								echo '';
-							}
-							?>
+								<?php
+								if (isset($row->$header)) {
+									$value = $row->$header;
+									if (is_numeric($value)) {
+										echo number_format($value, 2);
+										$rowTotal += $value; // ✅ add to row total
+									} else {
+										echo htmlspecialchars($value);
+									}
+								}
+								?>
 							</td>
 						<?php endforeach; ?>
+						<td style="text-align: right; font-weight: bold;"><?php echo number_format($rowTotal, 2); ?></td> <!-- ✅ Row total -->
 					</tr>
 				<?php endforeach; ?>
-				
-			<!-- Summary Row -->
-			<tr style="font-weight: bold; background-color: #f0f0f0;">
-				<td style="text-align: right;" colspan='2'>Total</td>
-				<?php foreach ($headers as $header): ?>
-					<?php if ($header === 'Report Date'): ?>
-						
-					<?php else: ?>
-						<td style="text-align: right;"><?php echo number_format($sums[$header] ?? 0, 2); ?></td>
-					<?php endif; ?>
-				<?php endforeach; ?>
-			</tr>
-				
-				
-				
+
+				<!-- Summary Row -->
+				<tr style="font-weight: bold; background-color: #f0f0f0;">
+					<td style="text-align: right;" colspan="2">Grand Total</td>
+					<?php 
+					$grandTotal = 0;
+					foreach ($headers as $header): 
+						if ($header === 'Report Date') continue; ?>
+						<td style="text-align: right;">
+							<?php 
+							$colSum = $sums[$header] ?? 0;
+							echo number_format($colSum, 2); 
+							$grandTotal += $colSum; // ✅ Add column sum to grand total
+							?>
+						</td>
+					<?php endforeach; ?>
+					<td style="text-align: right;"><?php echo number_format($grandTotal, 2); ?></td> <!-- ✅ Grand total of totals -->
+				</tr>
 			</tbody>
 		</table>
 

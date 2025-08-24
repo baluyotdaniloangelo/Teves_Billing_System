@@ -57,6 +57,7 @@
 							<table id="sale_sorder_summary_table" class="table dataTable display nowrap cell-border" style="width:100%">
 								<thead></thead>
 								<tbody></tbody>
+								
 							</table>
 						</div>
 						
