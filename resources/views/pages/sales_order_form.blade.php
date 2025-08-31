@@ -1,8 +1,6 @@
 @extends('layouts.layout')  
 @section('content')  
 
-
-
 <main id="main" class="main">	
 
     <section class="section">
@@ -32,27 +30,26 @@
 				
 				<hr>
 				<div class="row mb-2">
-			<?php  ?>
-			<?php
-						$sales_order_invoice = $sales_order_data[0]->sales_order_invoice;
-						
-						if($sales_order_data[0]['sales_order_quotation']==1){
-							$sales_order_quotation_check = 'checked="checked"';
-							$sales_order_disabled_tab = 'disabled="disabled"';
-						}else{
-							$sales_order_quotation_check = "";
-							$sales_order_disabled_tab = '';
-						}
-						
-						if($sales_order_data[0]['sales_order_quotation_hide_volume']==1){
-							$sales_order_quotation_hide_volume_check = 'checked="checked"';
-							//$sales_order_disabled_tab = 'disabled="disabled"';
-						}else{
-							$sales_order_quotation_hide_volume_check = "";
-							//$sales_order_disabled_tab = '';
-						}
-						
-			?>
+				<?php
+							$sales_order_invoice = $sales_order_data[0]->sales_order_invoice;
+							
+							if($sales_order_data[0]['sales_order_quotation']==1){
+								$sales_order_quotation_check = 'checked="checked"';
+								$sales_order_disabled_tab = 'disabled="disabled"';
+							}else{
+								$sales_order_quotation_check = "";
+								$sales_order_disabled_tab = '';
+							}
+							
+							if($sales_order_data[0]['sales_order_quotation_hide_volume']==1){
+								$sales_order_quotation_hide_volume_check = 'checked="checked"';
+								//$sales_order_disabled_tab = 'disabled="disabled"';
+							}else{
+								$sales_order_quotation_hide_volume_check = "";
+								//$sales_order_disabled_tab = '';
+							}
+							
+				?>
 			@include('pages.sales_order_form_update_modal')
 			
 			<div class="col-sm-12">

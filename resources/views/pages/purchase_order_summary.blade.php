@@ -72,7 +72,7 @@
 													<th class="all">Supplier</th>
 													<th class="none">Sales Order #</th>
 													<th class="none">Sales Invoice #</th>
-													<th class="all">Total Sale</th>
+													<th class="all">Total Sales</th>
 													<th class="all">VATable Sales</th>
 													<th class="all">Withholding Tax</th>
 													<th class="all">Total Payable</th>
@@ -130,7 +130,8 @@
 						  <div class="col-sm-8">
 						  
 							<select class="form-select form-control" required="" name="company_header" id="company_header">
-							<!--<option label="All" data-id="All" value="All">-->
+							<!---->
+							<option label="All" data-id="All" value="All">
 							@foreach ($teves_branch as $teves_branch_cols)
 								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
 							@endforeach

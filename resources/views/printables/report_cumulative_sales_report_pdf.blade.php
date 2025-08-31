@@ -14,14 +14,14 @@
 			color: #fff;
 		}
 		.data_th {
-			padding: 5px;
-			font-size: 10px;
+			padding: 1px;
+			font-size: 12px;
 			color:#000;
 			background-color:#c6e0b4;
 		}
 		.data_tr {
-			padding: 5px;
-			font-size: 10px;
+			padding: 1px;
+			font-size: 13px;
 		}
 	</style>
 	
@@ -83,10 +83,10 @@
 				<th class="data_th" nowrap style="border:1px solid #000;" align="left">DAY</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="center">TANK</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="left">PRODUCT</th>
-				<th class=""  style="border:1px solid #000;" align="right">OPENING STOCK</th>
-				<th class=""  style="border:1px solid #000;" align="right">STOCK DELIVERIES</th>
+				<th class="data_th"  style="border:1px solid #000;" align="right">OPENING STOCK</th>
+				<th class="data_th"  style="border:1px solid #000;" align="right">STOCK DELIVERIES</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">SALES</th>
-				<th class=""  style="border:1px solid #000;" align="right">BOOK STOCK</th>
+				<th class="data_th"  style="border:1px solid #000;" align="right">BOOK STOCK</th>
 				<th class="data_th"  style="border:1px solid #000;" align="right">CLOSING STOCK</th>
 				<th class="data_th" nowrap style="border:1px solid #000;" align="right">VARIANCE</th>
 				<th class="data_th"  style="border:1px solid #000;" align="right">CUMULATIVE VARIANCE</th>

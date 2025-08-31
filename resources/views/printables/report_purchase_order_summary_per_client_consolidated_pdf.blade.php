@@ -98,35 +98,48 @@
 		
 
 		</table>
-		<br>
+				<br>
+		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
+		
+		<tr style="font-size:12px;">
+			<td colspan="1" align="left" width="10%"><b>SUPPLIER</b></td>	
+			<td colspan="11" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $supplier_data['supplier_name'] }}</td>		
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="1" align="left" width="10%"><b>TIN</b></td>	
+			<td colspan="11" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $supplier_data['supplier_tin'] }}</td>
+		</tr>
+		
+		<tr style="font-size:12px;">		
+			<td colspan="1" align="left" width="20%"><b>ADDRESS</b></td>	
+			<td colspan="11" align="left" width="80%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $supplier_data['supplier_address'] }}</td>			
+		</tr>
+
+		<tr style="font-size:12px;">
+			<td colspan="12" style="height:5.66px !important;"></td>
+		</tr>
+		
+		</table>
 
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
-
+	
+		
 		<tr>
-			<td colspan="10" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
+			<td colspan="7" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
 		</tr>
-		<!--
+		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>
-		-->
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td align="center" style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="2%">#</td>
-			<th style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="8%">Date</th>
-			<th style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Control Number</th>
-			<th style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px; "width="20%">Supplier</th>
-			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Order #</th>
-			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Invoice #</th>
+			<td align="center" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="2%">#</td>
+			<th style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="15%">Year - Month</th>
+			<th style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Branch</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Sales</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
 		</tr>
-		<!--
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>-->
+		
 		<?php 
 			$no = 1;
 			$total_gross_amount = 0;
@@ -136,31 +149,25 @@
 			?>
 		@foreach ($purchase_order_data as $purchase_order_data_data_cols)
 			<?php
-				$_purchase_order_date=date_create("$purchase_order_data_data_cols->purchase_order_date");
-				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"M/d/Y"));
-									
-				$purchase_order_less_percentage = $purchase_order_data_data_cols['purchase_order_net_amount'] * $purchase_order_data_data_cols['purchase_order_less_percentage']/100;
+				$_purchase_order_date=date_create("$purchase_order_data_data_cols->order_month");
+				$purchase_order_date = strtoupper(date_format($_purchase_order_date,"Y - F"));
+				//$purchase_order_less_percentage = $purchase_order_data_data_cols['total_net_amount'] * $purchase_order_data_data_cols['total_less_percentage']/100;
 				
-				$total_gross_amount 	+= $purchase_order_data_data_cols['purchase_order_gross_amount'];
-				$total_withholding_tax 	+= $purchase_order_less_percentage;
-				$total_net_amount 		+= $purchase_order_data_data_cols['purchase_order_net_amount'];
-				$total_amount_due 		+= $purchase_order_data_data_cols['purchase_order_total_payable'];
+				$total_gross_amount 	+= $purchase_order_data_data_cols['total_gross_amount'];
+				$total_withholding_tax 	+= $purchase_order_data_data_cols['total_withholding_tax'];
+				$total_net_amount 		+= $purchase_order_data_data_cols['total_net_amount'];
+				$total_amount_due 		+= $purchase_order_data_data_cols['total_payable'];
 			?>
 		<tr style="font-size:12px;">
 			
 			<td colspan="1" align="center" style="border:1px solid gray;"><?=$no;?></td>
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_date;?></td>
-			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['purchase_order_control_number'] }}</td>
-			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['supplier_name'] }}</td>
-			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_sales_order_number'];?></td>
-			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_official_receipt_no'];?></td>	
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_gross_amount'],4);?></td>		
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>	
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>				
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_total_payable'],4);?></td>			
-			<!--<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_delivery_status'];?></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_status'];?></td>			-->
-			
+			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['branch_code'] }}</td>
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_gross_amount'],4);?></td>			
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_withholding_tax'],4);?></td>	
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_net_amount'],4);?></td>							
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_payable'],4);?></td>					
+
 		</tr>
 		
 			<?php
@@ -171,72 +178,67 @@
 		<tr style="font-size:12px;">
 			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
 			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
 			<td colspan="1" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">Total:</td>	
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount,4);?></td>				
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount,4);?></td>			
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_withholding_tax,4);?></td>		
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due,4);?></td>			
-			<!--<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>		-->
-	
+			
 		</tr>
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>	
 		
 		
 		<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="3">PREPARED BY:</td>
-				<td align="center" colspan="2" style=""></td>
-				<td align="left" colspan="5"></td>
+				<td align="left" colspan="2">PREPARED BY:</td>
+				<td align="center" colspan="3" style=""></td>
+				<td align="left" colspan="2"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>
 		
 		<tr class="data_tr" style="font-size:12px;">
 				
 				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
 				<td align="left" colspan="2"></td>
-				<td align="left" colspan="5"></td>
+				<td align="left" colspan="2"></td>
 		</tr>
 		
 		<tr class="data_tr" style="font-size:12px;">
 				
 				<td align="center" colspan="3" style=" ">{{$user_data->user_job_title}}</td>
 				<td align="left" colspan="2"></td>
-				<td align="left" colspan="5"></td>
+				<td align="left" colspan="2"></td>
 		</tr>
 		
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>	
 	
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="7" style="height:5.66px !important;"></td>
 		</tr>
-	
+		
 		
 		</table>
 		

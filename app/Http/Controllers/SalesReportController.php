@@ -287,7 +287,7 @@ class SalesReportController extends Controller
 		
 	}		
 	
-	public function generate_comulative_sales_report_pdf(Request $request){
+	public function generate_cumulative_sales_report_pdf(Request $request){
 
 		$request->validate([
 		  'start_date'      		=> 'required',
@@ -369,7 +369,7 @@ class SalesReportController extends Controller
 		
 		$title = 'Cumulative Report';
 		  
-        $pdf = PDF::loadView('printables.report_comulative_sales_report_pdf', compact('title', 'data', 'user_data','receivable_header','start_date','end_date'));
+        $pdf = PDF::loadView('printables.report_cumulative_sales_report_pdf', compact('title', 'data', 'user_data','receivable_header','start_date','end_date'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");

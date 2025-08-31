@@ -1042,10 +1042,15 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_status',
 						'teves_purchase_order_table.purchase_order_delivery_status',
 						'teves_purchase_order_table.created_at'
-				]);			
-					
-		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
-
+				]);
+				
+		if ($company_header=='All') {
+			$receivable_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}else{
+			$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}
+		
+		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
@@ -1100,9 +1105,12 @@ class PurchaseOrderController_v2 extends Controller
 						'teves_purchase_order_table.purchase_order_delivery_status',
 						'teves_purchase_order_table.created_at'
 				]);			
-					
-		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
-
+		
+		if ($company_header=='All') {
+			$receivable_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}else{
+			$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
@@ -1116,4 +1124,115 @@ class PurchaseOrderController_v2 extends Controller
 		
 		}
 	}	
+	
+	public function generate_purchase_order_summary_report_consolidated_pdf(Request $request){
+
+		if(Session::has('loginID')){
+		$current_user = Session::get('loginID');
+		
+		$company_header = $request->company_header;
+		$supplier_idx = $request->supplier_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+
+		$supplier_data = SupplierModel::find($supplier_idx, ['supplier_name','supplier_address','supplier_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
+		
+		$purchase_order_data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+		->leftJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_purchase_order_table.company_header')
+		->whereBetween('teves_purchase_order_table.purchase_order_date', [$start_date, $end_date])
+		->when($company_header != 'All', function ($q) use ($company_header) {
+			$q->where('teves_purchase_order_table.company_header', $company_header);
+		})
+		->when($supplier_idx != 'All', function ($q) use ($supplier_idx) {
+			$q->where('purchase_order_supplier_idx', $supplier_idx);
+		})
+		->selectRaw("
+			DATE_FORMAT(teves_purchase_order_table.purchase_order_date, '%Y-%m') as order_month,
+			teves_supplier_table.supplier_name,
+			teves_purchase_order_table.company_header,
+			teves_branch_table.branch_code,
+			(SUM(teves_purchase_order_table.purchase_order_net_amount) * teves_purchase_order_table.purchase_order_less_percentage) / 100 as total_withholding_tax,
+			SUM(teves_purchase_order_table.purchase_order_gross_amount) as total_gross_amount,
+			SUM(teves_purchase_order_table.purchase_order_net_amount) as total_net_amount,
+			SUM(teves_purchase_order_table.purchase_order_total_payable) as total_payable
+		")
+		->groupBy('order_month', 'teves_purchase_order_table.purchase_order_less_percentage', 'teves_supplier_table.supplier_name', 'teves_branch_table.branch_code', 'teves_purchase_order_table.company_header')
+		->orderBy('order_month')
+		->get();
+	
+		if ($company_header=='All') {
+			$receivable_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}else{
+			$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'Purchase Order - Summary';
+        $pdf = PDF::loadView('printables.report_purchase_order_summary_consolidated_pdf', compact('title', 'purchase_order_data', 'user_data','receivable_header','start_date','end_date','supplier_data'));
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
+		
+		}
+	}	
+	
+	public function generate_purchase_order_summary_report_per_client_consolidated_pdf(Request $request){
+
+		if(Session::has('loginID')){
+		$current_user = Session::get('loginID');
+		
+		$company_header = $request->company_header;
+		$supplier_idx = $request->supplier_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+
+		$supplier_data = SupplierModel::find($supplier_idx, ['supplier_name','supplier_address','supplier_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
+		
+		$purchase_order_data = PurchaseOrderModel::leftJoin('teves_supplier_table', 'teves_supplier_table.supplier_id', '=', 'teves_purchase_order_table.purchase_order_supplier_idx')
+		->leftJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_purchase_order_table.company_header')
+		->whereBetween('teves_purchase_order_table.purchase_order_date', [$start_date, $end_date])
+		->when($company_header != 'All', function ($q) use ($company_header) {
+			$q->where('teves_purchase_order_table.company_header', $company_header);
+		})
+		->when($supplier_idx != 'All', function ($q) use ($supplier_idx) {
+			$q->where('purchase_order_supplier_idx', $supplier_idx);
+		})
+		->selectRaw("
+			DATE_FORMAT(teves_purchase_order_table.purchase_order_date, '%Y-%m') as order_month,
+			teves_supplier_table.supplier_name,
+			teves_purchase_order_table.company_header,
+			teves_branch_table.branch_code,
+			(SUM(teves_purchase_order_table.purchase_order_net_amount) * teves_purchase_order_table.purchase_order_less_percentage) / 100 as total_withholding_tax,
+			SUM(teves_purchase_order_table.purchase_order_gross_amount) as total_gross_amount,
+			SUM(teves_purchase_order_table.purchase_order_net_amount) as total_net_amount,
+			SUM(teves_purchase_order_table.purchase_order_total_payable) as total_payable
+		")
+		->groupBy('order_month', 'teves_purchase_order_table.purchase_order_less_percentage', 'teves_supplier_table.supplier_name', 'teves_branch_table.branch_code', 'teves_purchase_order_table.company_header')
+		->orderBy('order_month')
+		->get();
+	
+		if ($company_header=='All') {
+			$receivable_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}else{
+			$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'Purchase Order - Summary';
+        $pdf = PDF::loadView('printables.report_purchase_order_summary_per_client_consolidated_pdf', compact('title', 'purchase_order_data', 'user_data','receivable_header','start_date','end_date','supplier_data'));
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
+		
+		}
+	}	
+	
 }

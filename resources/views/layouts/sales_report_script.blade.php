@@ -281,7 +281,7 @@
 				_token: "{{ csrf_token() }}"
 			}
 
-			var url = "{{URL::to('generate_comulative_sales_report_pdf')}}?" + $.param(query)
+			var url = "{{URL::to('generate_cumulative_sales_report_pdf')}}?" + $.param(query)
 
 			window.open(url);
 	  

@@ -322,6 +322,10 @@ Route::get('/purchase_order_summary', [PurchaseOrderController_v2::class,'purcha
 Route::post('/purchase_order_summary_data', [PurchaseOrderController_v2::class,'purchase_order_summary_data'])->name('purchase_order_summary_data')->middleware('isLoggedIn');
 Route::get('/generate_purchase_order_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_pdf'])->name('generate_purchase_order_summary_report_pdf')->middleware('isLoggedIn');
 Route::get('/generate_purchase_order_summary_report_per_client_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_per_client_pdf'])->name('generate_purchase_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
+/*8/31/2025*/
+Route::get('/generate_purchase_order_summary_report_per_client_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_per_client_consolidated_pdf'])->name('generate_purchase_order_summary_report_per_client_consolidated_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_consolidated_pdf'])->name('generate_purchase_order_summary_report_consolidated_pdf')->middleware('isLoggedIn');
+
 
 /*Get Purchase Order Product Item*/
 Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
@@ -516,7 +520,7 @@ Route::post('/delete_selling_price_info_confirmed', [ProductSellingPriceControll
 Route::get('/sales_report', [SalesReportController::class,'sales_report_page'])->name('sales_report')->middleware('isLoggedIn');
 Route::post('/generate_sales_report', [SalesReportController::class,'generate_sales_report'])->name('generate_sales_report')->middleware('isLoggedIn');
 Route::get('/generate_sales_report_pdf', [SalesReportController::class,'generate_sales_report_pdf'])->name('generate_sales_report_pdf')->middleware('isLoggedIn');
-Route::get('/generate_comulative_sales_report_pdf', [SalesReportController::class,'generate_comulative_sales_report_pdf'])->name('generate_comulative_sales_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_cumulative_sales_report_pdf', [SalesReportController::class,'generate_cumulative_sales_report_pdf'])->name('generate_cumulative_sales_report_pdf')->middleware('isLoggedIn');
 
 
 /* Sales Summary */

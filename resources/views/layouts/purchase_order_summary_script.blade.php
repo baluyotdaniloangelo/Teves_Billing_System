@@ -75,7 +75,7 @@
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
 			let company_header 		= $("#company_header").val();	
-			let supplier_idx 			= $('#supplier_name option[value="' + $('#supplier_idx').val() + '"]').attr('data-id');
+			let supplier_idx 		= $('#supplier_name option[value="' + $('#supplier_idx').val() + '"]').attr('data-id');
 			
 			/*Call Function to Get the Grand Total Ammount, PO Range*/  
 			
@@ -94,7 +94,15 @@
 				/*Close Form*/
 				$('#CreateReportModal').modal('toggle');
 				
-				get_branch_details();
+					if(company_header!='All'){
+					
+						get_branch_details(company_header);
+						
+					}else{
+						
+						get_branch_details(1);
+						
+					}
 							
 				  console.log(response);
 				  if(response!='') {
@@ -118,13 +126,10 @@
 							total_withholding_tax 	+= response['data'][i].purchase_order_net_amount*response['data'][i].purchase_order_less_percentage/100;
 							total_net_amount 		+= response['data'][i].purchase_order_net_amount;
 							total_amount_due 		+= response['data'][i].purchase_order_total_payable;
-	
-							//var data_count = i+1;
-							//addData(date_shift,total_daily_sales,data_count);
+
 							
 						}	
-												
-						
+							
 						LoadPurchaseOrderSummaryData.clear().draw();
 						LoadPurchaseOrderSummaryData.rows.add(response.data).draw();	
 							
@@ -141,11 +146,10 @@
 							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 
 							$('#date_range_info').text(start_date_new_format + ' - ' +end_date_new_format);	
-						
-							//branch_description_chart.push('Daily Sales');
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_daily_purchase_report_pdf()"> PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_daily_purchase_report_pdf()"> Summary</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_daily_purchase_report_pdf_consolidated()"> Consolidated</button>'+
 							'</div>');
 							
 				  }else{
@@ -238,7 +242,7 @@
 			 resizeObserver.observe(container);
 		 }
 
-	function download_daily_purchase_report_pdf(receivable_id){
+	function download_daily_purchase_report_pdf(){
 			
 			let start_date 			= $("input[name=start_date]").val();
 			let end_date 			= $("input[name=end_date]").val();
@@ -263,12 +267,36 @@
 	  
 	}
 
+	function download_daily_purchase_report_pdf_consolidated(){
+			
+			let start_date 			= $("input[name=start_date]").val();
+			let end_date 			= $("input[name=end_date]").val();
+			let company_header 		= $("#company_header").val();
+			let supplier_idx 		= $('#supplier_name option[value="' + $('#supplier_idx').val() + '"]').attr('data-id');
+			
+		var query = {
+			start_date:start_date,
+			end_date:end_date,
+			company_header:company_header,
+			supplier_idx:supplier_idx,
+			_token: "{{ csrf_token() }}"
+		}
 
+		if(supplier_idx!='All'){
+			var url = "{{URL::to('generate_purchase_order_summary_report_per_client_consolidated_pdf')}}?" + $.param(query)
+		}else{
+			var url = "{{URL::to('generate_purchase_order_summary_report_consolidated_pdf')}}?" + $.param(query)
+		}
+		
+		window.open(url);
+	  
+	}
+	
 	<!--Select Branch For Update-->
-	function get_branch_details(){
+	function get_branch_details(company_header){
 			
 			event.preventDefault();
-			let branchID 		= $("#company_header").val();
+			let branchID 		= company_header;
 			
 			  $.ajax({
 				url: "{{ route('BranchInfo') }}",

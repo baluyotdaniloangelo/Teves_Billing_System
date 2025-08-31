@@ -131,24 +131,17 @@
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="9" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
+			<td align="center" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="2%">#</td>
+			<th style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="8%">Date</th>
+			<th style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Control Number</th>
+			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Order #</th>
+			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Invoice #</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Sale</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
 		</tr>
 		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td align="center" style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="2%">#</td>
-			<th style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Date</th>
-			<th style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Control Number</th>
-			<th align="left" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Order #</th>
-			<th align="left" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Invoice #</th>
-			<th align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Sale</th>
-			<th align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
-			<th align="right" style="border-right1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
-			<th align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
-		</tr>
-		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="9" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>
 		<?php 
 			$no = 1;
 			$total_gross_amount = 0;
@@ -169,16 +162,15 @@
 			?>
 		<tr style="font-size:12px;">
 			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$no;?></td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$purchase_order_date;?></td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{ $purchase_order_data_data_cols['purchase_order_control_number'] }}</td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_sales_order_number'];?></td>
-			<td colspan="1" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_official_receipt_no'];?></td>	
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_gross_amount'],4);?></td>		
-
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>		
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>							
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_total_payable'],4);?></td>			
+			<td colspan="1" align="center" style="border:1px solid gray;"><?=$no;?></td>
+			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_date;?></td>
+			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['purchase_order_control_number'] }}</td>
+			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_sales_order_number'];?></td>
+			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_official_receipt_no'];?></td>	
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_gross_amount'],4);?></td>		
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>		
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>							
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_total_payable'],4);?></td>			
 
 		</tr>
 		
