@@ -1175,7 +1175,7 @@ class PurchaseOrderController_v2 extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Consolidated.pdf");
 		
 		}
 	}	
@@ -1230,7 +1230,7 @@ class PurchaseOrderController_v2 extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Consolidated.pdf");
 		
 		}
 	}	
