@@ -137,8 +137,8 @@
 			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Order #</th>
 			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Invoice #</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Sale</th>
-			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
 		</tr>
 		
@@ -168,8 +168,8 @@
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_sales_order_number'];?></td>
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_official_receipt_no'];?></td>	
 			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_gross_amount'],4);?></td>		
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>		
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>							
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format(($purchase_order_data_data_cols['purchase_order_net_amount']),4);?></td>		
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_less_percentage,4);?></td>							
 			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_total_payable'],4);?></td>			
 
 		</tr>

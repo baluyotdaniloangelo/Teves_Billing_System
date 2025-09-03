@@ -119,14 +119,11 @@
 			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Order #</th>
 			<th align="left" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Sales Invoice #</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Sales</th>
-			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Withholding Tax</th>
 			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
 		</tr>
-		<!--
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:10px !important; "></td>
-		</tr>-->
+		
 		<?php 
 			$no = 1;
 			$total_gross_amount = 0;
@@ -155,12 +152,9 @@
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_sales_order_number'];?></td>
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['purchase_order_official_receipt_no'];?></td>	
 			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_gross_amount'],4);?></td>		
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>	
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>				
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_net_amount'],4);?></td>	
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format(($purchase_order_less_percentage),4);?></td>				
 			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['purchase_order_total_payable'],4);?></td>			
-			<!--<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_order_delivery_status'];?></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$purchase_order_data_data_cols['purchase_status'];?></td>			-->
-			
 		</tr>
 		
 			<?php
@@ -179,9 +173,7 @@
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount,4);?></td>			
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_withholding_tax,4);?></td>		
 			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due,4);?></td>			
-			<!--<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>			
-			<td colspan="1" align="center" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"></td>		-->
-	
+
 		</tr>
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>
