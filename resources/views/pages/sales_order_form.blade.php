@@ -143,7 +143,6 @@
 						</table>
                 </div>
 				
-				
                 <div class="tab-pane fade  <?php if($tab=='delivery') { echo ' show active'; } ?>" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
@@ -287,12 +286,8 @@
 					</div>
                 </div>
                 
-			  
-			  
-			  
 			  </div>
 			  
-	                
 					</div>
 				</div>
 			</div>

@@ -98,8 +98,6 @@
 		
 
 		</table>
-		<br>
-
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 
@@ -179,6 +177,86 @@
 			<td colspan="8" style="height:5.66px !important;"></td>
 		</tr>	
 		
+		</table>
+		
+		<!--Without Withholding-->
+		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
+
+		<tr>
+			<td colspan="7" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;">&nbsp;</td>
+		</tr>
+		
+		
+		<tr style="font-size:12px;border:0 solid #000;">
+			<td align="center" style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="2%">#</td>
+			<th style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;" width="10%">Date</th>
+			<th style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Branch</th>
+			<th style="border:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px; "width="20%">Supplier</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Sales</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Net Amount</th>
+			<th align="right" style="border:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Total Payable</th>
+		</tr>
+		
+		<?php 
+			$no = 1;
+			$total_gross_amount_without_withholding = 0;
+			$total_withholding_tax_without_withholding = 0;
+			$total_net_amount_without_withholding = 0;
+			$total_amount_due_without_withholding = 0;
+			?>
+		@foreach ($purchase_order_without_withholding_tax_data as $purchase_order_without_withholding_data_cols)
+			<?php
+				$_purchase_order_date_without_withholding=date_create("$purchase_order_without_withholding_data_cols->order_month");
+				$purchase_order_date_without_withholding = strtoupper(date_format($_purchase_order_date,"Y - F"));
+				
+				$total_gross_amount_without_withholding 	+= $purchase_order_without_withholding_data_cols['total_gross_amount'];
+				$total_withholding_tax_without_withholding 	+= $purchase_order_without_withholding_data_cols['total_withholding_tax'];
+				$total_net_amount_without_withholding 		+= $purchase_order_without_withholding_data_cols['total_net_amount'];
+				$total_amount_due_without_withholding 		+= $purchase_order_without_withholding_data_cols['total_payable'];
+			?>
+			
+		<tr style="font-size:12px;">
+			
+			<td colspan="1" align="center" style="border:1px solid gray;"><?=$no;?></td>
+			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_date_without_withholding;?></td>
+			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_without_withholding_data_cols['branch_code'] }}</td>
+			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_without_withholding_data_cols['supplier_name'] }}</td>
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_gross_amount'],4);?></td>			
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_net_amount'],4);?></td>								
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_payable'],4);?></td>		
+			
+		</tr>
+		
+			<?php
+				$no++; 
+			?>
+			
+		@endforeach
+		<tr style="font-size:12px;">
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
+			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
+			<td colspan="2" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">Total:</td>	
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount_without_withholding,4);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount_without_withholding,4);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due_without_withholding,4);?></td>				
+		</tr>
+		
+		<tr>
+			<td colspan="7" style="height:5.66px !important;"></td>
+		</tr>
+		
+		<tr>
+			<td colspan="7" style="height:5.66px !important;"></td>
+		</tr>	
+		<tr>
+			<td colspan="7" style="height:5.66px !important;"></td>
+		</tr>	
+		<tr>
+			<td colspan="7" style="height:5.66px !important;"></td>
+		</tr>	
+		</table>
+		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 		
 		<tr class="data_tr" style="font-size:12px;">
 				<td align="left" colspan="3">PREPARED BY:</td>

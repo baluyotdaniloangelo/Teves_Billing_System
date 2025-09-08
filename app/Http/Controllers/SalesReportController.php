@@ -211,10 +211,6 @@ class SalesReportController extends Controller
 			$date2=date_create($dt_to_w_time);
 			date_add($date2,date_interval_create_from_date_string("1435 minutes"));
 			$hourly_end = date_format($date2,"Y-m-d H:i:s");
-		
-		
-		/*Disable SQL Violation*/
-			\DB::statement("SET SQL_MODE=''");
 			
 		/*Disable SQL Violation*/
 			\DB::statement("SET SQL_MODE=''");
