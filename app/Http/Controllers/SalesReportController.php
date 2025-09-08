@@ -125,7 +125,7 @@ class SalesReportController extends Controller
 					->join('teves_product_table as p', 'p.product_id', '=', 'r.product_idx')
 					->join('teves_cashiers_report as m', 'm.cashiers_report_id', '=', 'r.cashiers_report_idx')
 					->whereBetween('m.report_date', ["$start_date", "$end_date"])
-					->where('m.teves_branch', $company_header)
+					->where('t.branch_idx', $company_header)
 					->selectRaw("
 						GROUP_CONCAT(
 							DISTINCT CONCAT(
@@ -157,7 +157,7 @@ class SalesReportController extends Controller
 						";
 
 						// You can now execute this query using DB::select or a query builder
-						$data = DB::select($sql, [$start_date, $end_date, $company_header]);
+						$data = DB::select(preg_replace('/\s+/', ' ', $sql), [$start_date, $end_date, $company_header]);
 					} else {
 						// Optionally handle the case where no columns were found
 						$data = [];
@@ -227,7 +227,7 @@ class SalesReportController extends Controller
 					->join('teves_product_table as p', 'p.product_id', '=', 'r.product_idx')
 					->join('teves_cashiers_report as m', 'm.cashiers_report_id', '=', 'r.cashiers_report_idx')
 					->whereBetween('m.report_date', ["$start_date", "$end_date"])
-					->where('m.teves_branch', $company_header)
+					->where('t.teves_branch', $company_header)
 					->selectRaw("
 						GROUP_CONCAT(
 							DISTINCT CONCAT(
