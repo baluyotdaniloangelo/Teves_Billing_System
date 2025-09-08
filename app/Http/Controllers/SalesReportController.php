@@ -227,7 +227,7 @@ class SalesReportController extends Controller
 					->join('teves_product_table as p', 'p.product_id', '=', 'r.product_idx')
 					->join('teves_cashiers_report as m', 'm.cashiers_report_id', '=', 'r.cashiers_report_idx')
 					->whereBetween('m.report_date', ["$start_date", "$end_date"])
-					->where('t.teves_branch', $company_header)
+					->where('t.branch_idx', $company_header)
 					->selectRaw("
 						GROUP_CONCAT(
 							DISTINCT CONCAT(
