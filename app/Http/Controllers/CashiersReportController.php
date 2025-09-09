@@ -118,7 +118,7 @@ class CashiersReportController extends Controller
 						// and you might want to convert to integer
 						$numberDays = intval($numberDays);
 						
-						if(Session::get('UserType')=="SUAdmin" || Session::get('UserType')=="Admin" || Session::get('UserType')=="Supervisor"){
+						if(Session::get('UserType')=="SUAdmin" || Session::get('UserType')=="Admin"){
 							
 							$actionBtn = '
 							<div align="center" class="action_table_menu_client">
@@ -128,7 +128,7 @@ class CashiersReportController extends Controller
 							</div>';
 							
 						}
-						elseif(Session::get('UserType')=="Accounting_Staff"){
+						elseif(Session::get('UserType')=="Accounting_Staff" || Session::get('UserType')=="Supervisor"){
 							
 							$actionBtn = '
 							<div align="center" class="action_table_menu_client">
