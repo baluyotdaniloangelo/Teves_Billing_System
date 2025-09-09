@@ -21,6 +21,7 @@
 												<tr>
 													<th>#</th>
 													<th class="all">Client Name</th>
+													<th class="all">Account Number</th>
 													<th>Address</th>
 													<th>TIN</th>
 													<th title='Default Value' class="none">Discount(Less)</th>
@@ -91,6 +92,14 @@
 						  <div class="col-sm-9">
 							<input type="text" class="form-control" name="client_name" id="client_name" value="" required>
 							<span class="valid-feedback" id="client_nameError" title="Required"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="client_account_number" class="col-sm-3 col-form-label">Account Number</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="client_account_number" id="client_account_number" value="">
+							<span class="valid-feedback" id="client_account_numberError" title="Required"></span>
 						  </div>
 						</div>
 						
@@ -181,6 +190,14 @@
 						  <div class="col-sm-9">
 							<input type="text" class="form-control" name="update_client_name" id="update_client_name" value="" required>
 							<span class="valid-feedback" id="update_client_nameError" title="Required"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="update_client_account_number" class="col-sm-3 col-form-label">Account Number</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="update_client_account_number" id="update_client_account_number" value="">
+							<span class="valid-feedback" id="update_client_account_numberError" title="Required"></span>
 						  </div>
 						</div>
 						

@@ -27,6 +27,9 @@
 			color:black;
 			position:relative;
 			left:-30px;
+		}		
+		.page-break {
+			page-break-before: always;
 		}
 </style>
 </head>
@@ -179,7 +182,108 @@
 		
 		</table>
 		
+		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
+		
+		<tr class="data_tr" style="font-size:12px;">
+				<td align="left" colspan="3">PREPARED BY:</td>
+				<td align="center" colspan="2" style=""></td>
+				<td align="left" colspan="3"></td>
+		</tr>
+		
+		<tr>
+			<td colspan="8" style="height:5.66px !important;"></td>
+		</tr>	
+		<tr>
+			<td colspan="8" style="height:5.66px !important;"></td>
+		</tr>
+		
+		<tr>
+			<td colspan="8" style="height:5.66px !important;"></td>
+		</tr>
+		
+		<tr class="data_tr" style="font-size:12px;">
+				
+				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
+				<td align="left" colspan="2"></td>
+				<td align="left" colspan="3"></td>
+		</tr>
+		
+		<tr class="data_tr" style="font-size:12px;">
+				
+				<td align="center" colspan="3" style=" ">{{$user_data->user_job_title}}</td>
+				<td align="left" colspan="2"></td>
+				<td align="left" colspan="3"></td>
+		</tr>
+		
+		<tr>
+			<td colspan="8" style="height:5.66px !important;"></td>
+		</tr>	
+	
+		<tr>
+			<td colspan="8" style="height:5.66px !important;"></td>
+		</tr>
+	
+		
+		</table>
+		
+		<?php if(count($purchase_order_without_withholding_tax_data)!=0){ ?>
+		<div class="page-break"></div> <!-- 👈 Force next page -->		
+		
 		<!--Without Withholding-->
+	<table class="" width="100%" cellspacing="0" cellpadding="1">
+
+		<tr>
+			<td nowrap style="horizontal-align:top;text-align:left;" align="center" colspan="1" rowspan="4" width="10%">
+			<img src="{{public_path('client_logo/')}}<?=$logo;?>" style="width:112px;">
+			</td>
+			<td colspan="6" width="30%" style="horizontal-align:center;text-align:left;"><b style="font-size:18px;"><?=$receivable_header['branch_name'];?></b></td>
+			<td colspan="3" nowrap align="center" width="60%" style="font-size:12px; background-color: skyblue; text-align:center; font-weight:bold; color:#000; border-top-left-radius:30px;border-bottom-left-radius:30px; width:50px"><b>{{ $title }}</b></td>
+		</tr>
+		
+		<tr>
+			<td colspan="4"  width="40%" style="horizontal-align:center;text-align:left;">
+			<div style="font-size:12px;"><?=$receivable_header['branch_address'];?></div>
+			</td>		
+			<td colspan="2" align="left" width="20%" style="font-size:12px; font-weight:bold;;"><b>DATE</b></td>
+			<td colspan="3" align="left" width="30%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon"><?=$billing_date;?></td>
+		</tr>		
+		
+		<tr>
+			<td colspan="4"  width="40%" style="horizontal-align:center;text-align:left;">
+			<div style="font-size:12px;">VAT REG. TIN : <?=$receivable_header['branch_tin'];?></div>
+			</td>
+			<td colspan="2" align="left" width="25%" style="font-size:12px; font-weight:bold;"><b>PERIOD</b></td>
+			<td colspan="3" align="left" width="25%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon"><?php echo "$po_start_date - $po_end_date"; ?></td>
+		</tr>
+
+		<tr>
+			<td colspan="4"  width="40%" style="horizontal-align:center;text-align:left;">
+			<div style="font-size:12px;"><?=$receivable_header['branch_owner'];?> - <?=$receivable_header['branch_owner_title'];?></div>
+			</td>
+			<td colspan="2" align="left" width="25%" style=""><b></b></td>
+			<td colspan="3" align="left" width="25%" style="" class=""></td>
+		</tr>
+		
+		<tr>
+			<td colspan="5"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="25%" style=""></td>
+			<td colspan="3" align="left" width="25%" style=""></td>
+		</tr>
+		
+		<tr>
+			<td colspan="5"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+			<td colspan="2" align="left" width="25%" style=""></td>
+			<td colspan="3" align="left" width="25%" style=""></td>
+		</tr>
+		
+
+		<tr>
+			<td colspan="10"  width="50%" style="horizontal-align:center;text-align:left;"></td>
+		</tr>
+		
+
+		</table>		
+		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
 
 		<tr>
@@ -299,6 +403,8 @@
 	
 		
 		</table>
+		
+		<?php } ?>
 		
 </body>
 </html>

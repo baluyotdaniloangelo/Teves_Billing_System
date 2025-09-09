@@ -103,7 +103,7 @@
 						<div class="row mb-2">
 						  <label for="branch_name" class="col-sm-3 col-form-label">Branch Initial</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="branch_initial" id="branch_initial" value="" required>
+							<input type="text" class="form-control no-dash" name="branch_initial" id="branch_initial" value="" required>
 							<span class="valid-feedback" id="branch_initialError"></span>
 						  </div>
 						</div>
@@ -193,7 +193,7 @@
 						<div class="row mb-2">
 						  <label for="branch_name" class="col-sm-3 col-form-label">Branch Initial</label>
 						  <div class="col-sm-9">
-							<input type="text" class="form-control " name="update_branch_initial" id="update_branch_initial" value="" required>
+							<input type="text" class="form-control no-dash" name="update_branch_initial" id="update_branch_initial" value="" required>
 							<span class="valid-feedback" id="update_branch_initialError"></span>
 						  </div>
 						</div>

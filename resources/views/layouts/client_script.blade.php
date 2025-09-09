@@ -27,6 +27,7 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'client_name', className: "text-left"},   
+					{data: 'client_account_number', className: "text-left"},   
 					{data: 'client_address', className: "text-left"},
 					{data: 'client_tin', className: "text-left"},
 					{data: 'default_less_percentage', className: "text-left"},
@@ -79,9 +80,10 @@
 
 			document.getElementById('ClientformNew').className = "g-3 needs-validation was-validated";
 
-			let client_name 		= $("input[name=client_name]").val();
-			let client_address 		= $("input[name=client_address]").val();
-			let client_tin 			= $("input[name=client_tin]").val();
+			let client_name 						= $("input[name=client_name]").val();
+			let client_account_number 				= $("input[name=client_account_number]").val();
+			let client_address 						= $("input[name=client_address]").val();
+			let client_tin 							= $("input[name=client_tin]").val();
 			
 			let default_less_percentage 			= $("input[name=default_less_percentage]").val();
 			let default_net_percentage 				= $("input[name=default_net_percentage]").val();
@@ -94,6 +96,7 @@
 				type:"POST",
 				data:{
 				  client_name:client_name,
+				  client_account_number:client_account_number,
 				  client_address:client_address,
 				  client_tin:client_tin,
 				  default_less_percentage:default_less_percentage,
@@ -174,15 +177,16 @@
 					document.getElementById("update-client").value = clientID;
 					
 					/*Set Details*/
-					document.getElementById("update_client_name").value = response.client_name;
-					document.getElementById("update_client_address").value = response.client_address;
-					document.getElementById("update_client_tin").value = response.client_tin;
+					document.getElementById("update_client_name").value 						= response.client_name;
+					document.getElementById("update_client_account_number").value 				= response.client_account_number;
+					document.getElementById("update_client_address").value 						= response.client_address;
+					document.getElementById("update_client_tin").value 							= response.client_tin;
 					
-					document.getElementById("update_default_less_percentage").value = response.default_less_percentage;
-					document.getElementById("update_default_net_percentage").value = response.default_net_percentage;
-					document.getElementById("update_default_vat_percentage").value = response.default_vat_percentage;
-					document.getElementById("update_default_withholding_tax_percentage").value = response.default_withholding_tax_percentage;
-					document.getElementById("update_default_payment_terms").value = response.default_payment_terms;
+					document.getElementById("update_default_less_percentage").value 			= response.default_less_percentage;
+					document.getElementById("update_default_net_percentage").value 				= response.default_net_percentage;
+					document.getElementById("update_default_vat_percentage").value 				= response.default_vat_percentage;
+					document.getElementById("update_default_withholding_tax_percentage").value 	= response.default_withholding_tax_percentage;
+					document.getElementById("update_default_payment_terms").value 				= response.default_payment_terms;
 										
 					$('#UpdateClientModal').modal('toggle');					
 				  
@@ -205,10 +209,11 @@
 
 			document.getElementById('ClientformEdit').className = "g-3 needs-validation was-validated";
 			
-			let clientID 			= document.getElementById("update-client").value;
-			let client_name 		= $("input[name=update_client_name]").val();
-			let client_address 		= $("input[name=update_client_address]").val();
-			let client_tin 			= $("input[name=update_client_tin]").val();
+			let clientID 							= document.getElementById("update-client").value;
+			let client_name 						= $("input[name=update_client_name]").val();
+			let client_account_number 				= $("input[name=update_client_account_number]").val();
+			let client_address 						= $("input[name=update_client_address]").val();
+			let client_tin 							= $("input[name=update_client_tin]").val();
 			
 			let default_less_percentage 			= $("input[name=update_default_less_percentage]").val();
 			let default_net_percentage 				= $("input[name=update_default_net_percentage]").val();
@@ -222,6 +227,7 @@
 				data:{
 				  clientID:clientID,
 				  client_name:client_name,
+				  client_account_number:client_account_number,
 				  client_address:client_address,
 				  client_tin:client_tin,
 				  default_less_percentage:default_less_percentage,

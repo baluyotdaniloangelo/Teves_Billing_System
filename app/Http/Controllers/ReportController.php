@@ -1889,7 +1889,8 @@ class ReportController extends Controller
 			 ('PO') AS source_tb,
 			 purchase_order_date AS transaction_date,
 			 purchase_order_control_number AS item_description,
-			 (purchase_order_net_amount*(purchase_order_less_percentage/100)) AS amount,
+			 /*(purchase_order_net_amount*(purchase_order_less_percentage/100)) AS amount,*/
+			 purchase_order_gross_amount AS amount,
 			 created_at
 			FROM teves_purchase_order_table
 			where `teves_purchase_order_table`.`purchase_order_id` = ?

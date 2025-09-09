@@ -3,6 +3,23 @@
    <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
    <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
 <script type="text/javascript">
+	/*Block Dash*/
+	document.querySelectorAll(".no-dash").forEach(input => {
+	  // Block typing "-"
+	  input.addEventListener("keydown", function (e) {
+		if (e.key === "-") {
+		  e.preventDefault();
+		}
+	  });
+
+	  // Remove "-" if pasted
+	  input.addEventListener("input", function () {
+		this.value = this.value.replace(/-/g, " ");
+	  });
+	});
+
+
+
 	<!--Load Table-->
 	$(function () {
 

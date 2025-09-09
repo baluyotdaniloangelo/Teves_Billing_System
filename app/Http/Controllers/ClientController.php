@@ -36,6 +36,7 @@ class ClientController extends Controller
 			$data = ClientModel::select(
 			'client_id',
 			'client_name',
+			'client_account_number',
 			'client_address',
 			'client_tin',
 			'default_less_percentage',
@@ -62,7 +63,7 @@ class ClientController extends Controller
 	public function client_info(Request $request){
 		
 		$clientID = $request->clientID;
-		$data = ClientModel::find($clientID, ['client_name','client_address','client_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
+		$data = ClientModel::find($clientID, ['client_name', 'client_account_number', 'client_address','client_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
 		return response()->json($data);
 
 	}
@@ -90,9 +91,10 @@ class ClientController extends Controller
         ]
 		);
 			$client = new ClientModel();
-			$client->client_name 		= $request->client_name;
-			$client->client_address 	= $request->client_address;
-			$client->client_tin 		= $request->client_tin;
+			$client->client_name 						= $request->client_name;
+			$client->client_account_number 				= $request->client_account_number;
+			$client->client_address 					= $request->client_address;
+			$client->client_tin 						= $request->client_tin;
 		
 			$client->default_less_percentage 			= $request->default_less_percentage;
 			$client->default_net_percentage 			= $request->default_net_percentage;
@@ -126,9 +128,10 @@ class ClientController extends Controller
 			
 			$client = new ClientModel();
 			$client = ClientModel::find($request->clientID);
-			$client->client_name 		= $request->client_name;
-			$client->client_address 	= $request->client_address;
-			$client->client_tin 		= $request->client_tin;
+			$client->client_name 						= $request->client_name;
+			$client->client_account_number 				= $request->client_account_number;
+			$client->client_address 					= $request->client_address;
+			$client->client_tin 						= $request->client_tin;
 			
 			$client->default_less_percentage 			= $request->default_less_percentage;
 			$client->default_net_percentage 			= $request->default_net_percentage;
