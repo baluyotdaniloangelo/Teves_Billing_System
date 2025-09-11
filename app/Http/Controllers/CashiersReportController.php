@@ -128,7 +128,45 @@ class CashiersReportController extends Controller
 							</div>';
 							
 						}
-						elseif(Session::get('UserType')=="Accounting_Staff" || Session::get('UserType')=="Supervisor"){
+						else if( Session::get('UserType')=="Supervisor"){
+							
+							if($numberDays>=1){
+								$actionBtn = '
+								<div align="center" class="action_table_menu_client">
+								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+								</div>';
+							}
+							else{
+								/*$actionBtn = '
+								<div align="center" class="action_table_menu_client">
+								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+								<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
+								<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
+								</div>';*/
+								/*Only the Encoder of the Report is allowed to Edit*/
+								if(Session::get('loginID')==$row->user_idx){
+								
+									$actionBtn = '
+									<div align="center" class="action_table_menu_client">
+									<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+									<a href="cashiers_report_form/'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
+									<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersReport"></a>
+									</div>';
+								
+								}else{
+									
+									$actionBtn = '
+									<div align="center" class="action_table_menu_client">
+									<a href="#" data-id="'.$row->cashiers_report_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" onclick="printCashierReportPDF('.$row->cashiers_report_id.')"></a>
+									</div>';
+								
+								}
+								
+								
+							}
+							
+						}
+						elseif(Session::get('UserType')=="Accounting_Staff"){
 							
 							$actionBtn = '
 							<div align="center" class="action_table_menu_client">

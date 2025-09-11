@@ -27,11 +27,12 @@
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'report_date', className: "text-center"},
-					<?php if($data->user_type=="Admin"){ ?>
-					{data: 'user_real_name'},
+					{data: 'branch_code', orderable: false},
+					<?php if($data->user_type=="SUAdmin"||$data->user_type=="Admin"||$data->user_type=="Supervisor"||$data->user_type=="Accounting_Staff"){ ?>
+					{data: 'user_real_name', orderable: false},
 					<?php } ?>			
 					{data: 'cashiers_name', orderable: false},		
-					{data: 'branch_code', orderable: false},		
+							
 					{data: 'forecourt_attendant', orderable: false},
 					{data: 'shift', orderable: false},
 					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
