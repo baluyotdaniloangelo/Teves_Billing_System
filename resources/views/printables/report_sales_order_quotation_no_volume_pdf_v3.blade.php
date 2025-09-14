@@ -142,15 +142,19 @@
 		</tr>
 		<tr style="font-size:11px;">
 			<td colspan="2" align="left" width="5%"><b>SOLD TO</b></td>
-			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_name'] }}</td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>
+		</tr>
+		<tr style="font-size:11px;">
+			<td colspan="2" align="left" width="5%"><b>ACCOUNT NUMBER</b></td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_account_number'] }}</td>
 		</tr>
 		<tr style="font-size:11px;">
 			<td colspan="2" align="left" width="5%"><b>TIN NO.</b></td>
-			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_tin'] }}</td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_tin'] }}</td>
 		</tr>	
 		<tr style="font-size:11px;">
 			<td colspan="2" align="left" width="5%"><b>ADDRESS</b></td>
-			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_address'] }}</td>
+			<td colspan="8" align="left" width="95%" style="border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_address'] }}</td>
 		</tr>
 		
 		<tr style="font-size:11px;">

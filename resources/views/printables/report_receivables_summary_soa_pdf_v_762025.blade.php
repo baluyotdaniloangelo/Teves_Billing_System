@@ -26,7 +26,7 @@
 			text-align:center;
 			color:black;
 			position:relative;
-			left:-30px;
+			left:-20px;
 		}
 </style>
 </head>
@@ -109,6 +109,10 @@
 				$billing_time = strtoupper(date_format($_billing_time,"H:i"));
 				
 		?>
+		<tr style="font-size:12px;">
+			<td colspan="1" align="left" width="10%"><b>ACCOUNT NUMBER</b></td>	
+			<td colspan="11" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_account_number'] }}</td>		
+		</tr>
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left" width="10%"><b>ACCOUNT NAME</b></td>	
 			<td colspan="11" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>		

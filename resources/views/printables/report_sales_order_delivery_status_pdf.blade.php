@@ -97,11 +97,15 @@
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
 		
 		<tr style="font-size:12px;">
+			<td colspan="1" align="left" width="15%"><b>ACCOUNT NUMBER</b></td>
+			<td colspan="9" align="left" width="85%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_account_number'] }}</td>
+			
+		</tr>
+		<tr style="font-size:12px;">
 			<td colspan="1" align="left" width="15%"><b>ACCOUNT NAME</b></td>
 			<td colspan="9" align="left" width="85%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $sales_order_data[0]['client_name'] }}</td>
 			
 		</tr>
-		
 		<tr style="font-size:12px;">
 		
 			<td colspan="1" align="left" width="15%"><b>TIN</b></td>

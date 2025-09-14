@@ -26,7 +26,7 @@
 			text-align:center;
 			color:black;
 			position:relative;
-			left:-30px;
+			left:-20px;
 		}
 </style>
 </head>
@@ -97,8 +97,12 @@
 				$billing_date = strtoupper(date_format($_billing_date,"M/d/Y"));
 		?>
 		<tr style="font-size:12px;">
+			<td colspan="1" align="left" width="10%"><b>ACCOUNT NUMBER</b></td>	
+			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_account_number'] }}</td>		
+		</tr>
+		<tr style="font-size:12px;">
 			<td colspan="1" align="left" width="10%"><b>ACCOUNT NAME</b></td>	
-			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_name'] }}</td>		
+			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>		
 		</tr>
 		<?php
 				$_print_date=date_create(date('Y-m-d'));
@@ -106,12 +110,12 @@
 		?>
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left" width="10%"><b>TIN</b></td>	
-			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_tin'] }}</td>
+			<td colspan="9" align="left" width="90%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_tin'] }}</td>
 		</tr>
 		
 		<tr style="font-size:12px;">		
 			<td colspan="1" align="left" width="20%"><b>ADDRESS</b></td>	
-			<td colspan="9" align="left" width="80%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_address'] }}</td>			
+			<td colspan="9" align="left" width="80%" style="font-size:12px; border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_address'] }}</td>			
 		</tr>
 
 		<tr style="font-size:12px;">

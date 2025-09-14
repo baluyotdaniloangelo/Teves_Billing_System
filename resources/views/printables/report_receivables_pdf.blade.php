@@ -92,18 +92,23 @@
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		
 		<tr style="font-size:12px;">
-			<td colspan="1" align="left" width="20%"><b>ACCOUNT NAME</b></td>	
-			<td colspan="9" align="left" width="80%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_name'] }}</td>	
+			<td colspan="1" align="left" width="25%"><b>ACCOUNT NUMBER</b></td>	
+			<td colspan="9" align="left" width="75%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_account_number'] }}</td>	
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="1" align="left" width="20%"><b>TIN</b></td>	
-			<td colspan="9" align="left" width="80%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_tin'] }}</td>	
+			<td colspan="1" align="left" width="25%"><b>ACCOUNT NAME</b></td>	
+			<td colspan="9" align="left" width="75%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_name'] }}</td>	
+		</tr>
+		
+		<tr style="font-size:12px;">
+			<td colspan="1" align="left" width="25%"><b>TIN</b></td>	
+			<td colspan="9" align="left" width="75%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_tin'] }}</td>	
 		</tr>
 		
 		<tr style="font-size:12px;">		
-			<td colspan="1" align="left" width="20%"><b>ADDRESS</b></td>	
-			<td colspan="9" align="left" width="80%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $receivable_data[0]['client_address'] }}</td>			
+			<td colspan="1" align="left" width="25%"><b>ADDRESS</b></td>	
+			<td colspan="9" align="left" width="75%" style=" border-bottom:solid 1px gray;" class="td_colon">{{ $client_data['client_address'] }}</td>			
 		</tr>
 
 		<tr style="font-size:12px;">

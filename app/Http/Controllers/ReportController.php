@@ -379,7 +379,7 @@ class ReportController extends Controller
 				]);	
 		
 		/*Client Information*/
-		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);			
+		$client_data = ClientModel::find($client_idx, ['client_name','client_account_number','client_address','client_tin']);			
 					
 		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 
@@ -698,16 +698,13 @@ class ReportController extends Controller
 		
 		/*Recievable Data*/
 		$receivable_data = ReceivablesModel::where('receivable_id', $receivable_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               	->get([
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.receivable_name',
 					'teves_receivable_table.billing_date',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
 					'teves_receivable_table.control_number',
-					'teves_client_table.client_tin',
 					'teves_receivable_table.or_number',
 					'teves_receivable_table.ar_reference',
 					'teves_receivable_table.payment_term',
@@ -725,7 +722,7 @@ class ReportController extends Controller
 		$user_data = User::where('user_id', '=', $receivable_data[0]['created_by_user_id'])->first();
 		
 		/*Client Information*/
-		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
+		$client_data = ClientModel::find($client_idx, ['client_account_number','client_name','client_address','client_tin']);
           
 		$title_billing_statement = 'BILLING STATEMENT';
 		  
@@ -801,16 +798,13 @@ class ReportController extends Controller
 		/*Recievable Data*/
 				
 		$receivable_data = ReceivablesModel::where('receivable_id', $receivable_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
 				->get([
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.receivable_name',
 					'teves_receivable_table.billing_date',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
 					'teves_receivable_table.control_number',
-					'teves_client_table.client_tin',
 					'teves_receivable_table.or_number',
 					'teves_receivable_table.ar_reference',
 					'teves_receivable_table.payment_term',
@@ -842,7 +836,7 @@ class ReportController extends Controller
 		$user_data = User::where('user_id', '=', $receivable_data[0]['created_by_user_id'])->first();
 		
 		/*Client Information*/
-		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);
+		$client_data = ClientModel::find($client_idx, ['client_account_number','client_name','client_address','client_tin']);
           
 		$title_billing_statement = 'BILLING STATEMENT';
 		  
@@ -983,14 +977,12 @@ class ReportController extends Controller
 		$receivable_id = $request->receivable_id;
 					
 				$receivable_data = ReceivablesModel::where('receivable_id', $request->receivable_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
               	->get([
+					'teves_receivable_table.client_idx',
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.billing_date',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
 					'teves_receivable_table.control_number',
-					'teves_client_table.client_tin',
 					'teves_receivable_table.or_number',
 					'teves_receivable_table.ar_reference',					
 					'teves_receivable_table.payment_term',
@@ -1001,6 +993,10 @@ class ReportController extends Controller
 					'billing_period_start',
 					'billing_period_end'
 				]);
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($receivable_data[0]['client_idx'], ['client_account_number','client_name','client_address','client_tin']);
+      
 		
 		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
 		
@@ -1023,7 +1019,7 @@ class ReportController extends Controller
 		
 		$title_receivable = 'RECEIVABLE';
 		  
-        $pdf = PDF::loadView('printables.report_receivables_pdf', compact('title_receivable', 'receivable_data', 'user_data', 'amount_in_words', 'branch_header'));
+        $pdf = PDF::loadView('printables.report_receivables_pdf', compact('title_receivable', 'receivable_data', 'user_data', 'amount_in_words', 'branch_header', 'client_data'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -1048,17 +1044,15 @@ class ReportController extends Controller
 		$receivable_id = $request->receivable_id;
 					
 				$receivable_data = ReceivablesModel::where('receivable_id', $request->receivable_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
 				->leftjoin('teves_sales_order_table', 'teves_sales_order_table.sales_order_id', '=', 'teves_receivable_table.sales_order_idx')
               	->get([
 					'teves_receivable_table.receivable_id',
+					'teves_receivable_table.client_idx',
 					'teves_receivable_table.sales_order_idx',
 					'teves_receivable_table.receivable_name',
 					'teves_receivable_table.billing_date',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
 					'teves_receivable_table.control_number',
-					'teves_client_table.client_tin',
 					'teves_receivable_table.or_number',
 					'teves_receivable_table.ar_reference',
 					'teves_receivable_table.payment_term',
@@ -1086,6 +1080,9 @@ class ReportController extends Controller
 					'teves_receivable_payment.receivable_payment_remarks'
 					]);
 		
+		/*Client Information*/
+		$client_data = ClientModel::find($receivable_data[0]['client_idx'], ['client_account_number','client_name','client_address','client_tin']);
+      
 		$branch_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
 		$receivable_amount_amt =  number_format($receivable_data[0]['receivable_amount'],2,".","");
@@ -1108,7 +1105,7 @@ class ReportController extends Controller
 		
 		$title_soa = 'STATEMENT OF ACCOUNT';
 		  
-        $pdf = PDF::loadView('printables.report_receivables_soa_pdf_v_732025', compact('title_soa', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','branch_header'));
+        $pdf = PDF::loadView('printables.report_receivables_soa_pdf_v_732025', compact('title_soa', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','branch_header','client_data'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
@@ -1130,15 +1127,12 @@ class ReportController extends Controller
 		$sales_order_id = $request->sales_order_id;
 					
 				$sales_order_data = SalesOrderModel::where('teves_sales_order_table.sales_order_id', $sales_order_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
               	->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
 					'teves_sales_order_table.sales_order_invoice',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
-					'teves_client_table.client_tin',
 					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_dr_number',
 					'teves_sales_order_table.sales_order_or_number',		
@@ -1163,7 +1157,10 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_quotation_hide_volume',
 					'teves_sales_order_table.created_by_user_idx'
 				]);
-			
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($sales_order_data[0]['sales_order_client_idx'], ['client_account_number','client_name','client_address','client_tin']);
+      	
 		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		
 		$sales_order_amt =  number_format($sales_order_data[0]['sales_order_total_due'],2,".","");
@@ -1214,7 +1211,7 @@ class ReportController extends Controller
 		}
 		
 		
-        $pdf = PDF::loadView("$page", compact('title_sales_order', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header'));
+        $pdf = PDF::loadView("$page", compact('title_sales_order', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header','client_data'));
 		
 		//return view('printables.report_sales_order_pdf', compact('title', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component'));
 		
@@ -1337,15 +1334,12 @@ class ReportController extends Controller
 		$sales_order_id = $request->sales_order_id;
 					
 				$sales_order_data = SalesOrderModel::where('teves_sales_order_table.sales_order_id', $sales_order_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
+				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
               	->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
 					'teves_sales_order_table.sales_order_invoice',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
-					'teves_client_table.client_tin',
 					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_dr_number',
 					'teves_sales_order_table.sales_order_or_number',		
@@ -1368,6 +1362,10 @@ class ReportController extends Controller
 					'teves_sales_order_table.company_header',
 					'teves_sales_order_table.created_by_user_idx'
 				]);
+				
+		/*Client Information*/
+		$client_data = ClientModel::find($sales_order_data[0]['sales_order_client_idx'], ['client_account_number','client_name','client_address','client_tin']);
+      		
 			
 		$branch_header = TevesBranchModel::find($sales_order_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		//$receivable_header = TevesBranchModel::find($receivable_data[0]['company_header'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
@@ -1401,32 +1399,7 @@ class ReportController extends Controller
 		$user_data = User::where('user_id', '=', $sales_order_data[0]['created_by_user_idx'])->first();
 		
 		$title_sales_order = 'SALES ORDER';
-		
-		
-		/*Receivable*/
-					
-				/*$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
-				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-              	->get([
-					'teves_receivable_table.receivable_id',
-					'teves_receivable_table.sales_order_idx',
-					'teves_receivable_table.receivable_name',
-					'teves_receivable_table.billing_date',
-					'teves_client_table.client_name',
-					'teves_client_table.client_address',
-					'teves_receivable_table.control_number',
-					'teves_client_table.client_tin',
-					'teves_receivable_table.or_number',
-					'teves_receivable_table.ar_reference',
-					'teves_receivable_table.payment_term',
-					'teves_receivable_table.receivable_description',
-					'teves_receivable_table.receivable_amount',
-					'teves_receivable_table.created_by_user_id',
-					'billing_period_start',
-					'billing_period_end',
-					'company_header'
-				]);*/
-				
+	
 				
 				$receivable_data = ReceivablesModel::where('sales_order_idx', $request->sales_order_id)
 				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
@@ -1472,7 +1445,7 @@ class ReportController extends Controller
 		$title_soa = 'STATEMENT OF ACCOUNT';
 		$title_receivable = 'RECEIVABLE';
 		
-        $pdf = PDF::loadView('printables.report_sales_order_soa_receivable_pdf', compact('title_soa', 'title_sales_order', 'title_receivable', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header','receivable_data','receivable_payment_data'));
+        $pdf = PDF::loadView('printables.report_sales_order_soa_receivable_pdf', compact('title_soa', 'title_sales_order', 'title_receivable', 'sales_order_data', 'user_data', 'amount_in_words', 'sales_order_component','branch_header','receivable_data','receivable_payment_data','client_data'));
 
 
 		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER.pdf");
@@ -1497,6 +1470,7 @@ class ReportController extends Controller
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
+					'teves_client_table.client_account_number',
 					'teves_client_table.client_name',
 					'teves_client_table.client_address',
 					'teves_client_table.client_tin',
