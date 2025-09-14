@@ -22,7 +22,6 @@
 													<th>Branch</th>
 													<?php if($data->user_type=="Admin"||$data->user_type=="Supervisor"||$data->user_type=="Accounting_Staff"||$data->user_type=="SUAdmin"){ ?><th>Encoder's Name</th><?php } ?>
 													<th>Cashier's Name</th>
-													
 													<th>Employee's On-Duty</th>
 													<th>Shift</th>
 													<th>Action</th>

@@ -96,14 +96,6 @@
 						</div>
 						
 						<div class="row mb-2">
-						  <label for="client_account_number" class="col-sm-3 col-form-label">Account Number</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="client_account_number" id="client_account_number" value="">
-							<span class="valid-feedback" id="client_account_numberError" title="Required"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
 						  <label for="client_address" class="col-sm-3 col-form-label">Address</label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control " name="client_address" id="client_address" value="" required>
@@ -184,20 +176,17 @@
                     <div class="modal-body">
 					
 					  <form class="g-2 needs-validation" id="ClientformEdit">
-					  
+						
+						<div class="row mb-2">
+							<div class="col-lg-3 col-md-4 label ">Account Number</div>
+							<div class="col-lg-9 col-md-8" id="update_client_account_number">Kevin Anderson</div>
+						</div>
+				  
 						<div class="row mb-2">
 						  <label for="update_client_name" class="col-sm-3 col-form-label">Client Name</label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control" name="update_client_name" id="update_client_name" value="" required>
 							<span class="valid-feedback" id="update_client_nameError" title="Required"></span>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <label for="update_client_account_number" class="col-sm-3 col-form-label">Account Number</label>
-						  <div class="col-sm-9">
-							<input type="text" class="form-control" name="update_client_account_number" id="update_client_account_number" value="">
-							<span class="valid-feedback" id="update_client_account_numberError" title="Required"></span>
 						  </div>
 						</div>
 						

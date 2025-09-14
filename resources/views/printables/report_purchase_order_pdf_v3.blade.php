@@ -178,7 +178,7 @@
 				<td colspan="2" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_unit_measurement}}</td>
 				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->product_price,2,".",",");?></td>
-				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,4,".",",");?></td>
+				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -190,11 +190,11 @@
 			<td colspan="1"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VATable Sales </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($VATable_Sales,4);?>
+			<?=number_format($VATable_Sales,2);?>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Sales </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($purchase_order_data[0]['purchase_order_gross_amount'],4);?></td>
+			<?=number_format($purchase_order_data[0]['purchase_order_gross_amount'],2);?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -204,7 +204,7 @@
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : VAT </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($Less_VAT,4);?></td>
+			<?=number_format($Less_VAT,2);?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
@@ -214,13 +214,13 @@
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
-			<?=number_format($Total,4);?></td>
+			<?=number_format($Total,2);?></td>
 		</tr>		
 		
 		<tr style="font-size:12px;">			
 			<td colspan="1"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT 12% </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"><?=number_format($VAT_12_percent,4);?></td>
+			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"><?=number_format($VAT_12_percent,2);?></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">less : Discount </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000;"></td>
@@ -230,16 +230,15 @@
 			<td colspan="5"></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : Withholding Tax(<?=$purchase_order_data[0]['purchase_order_less_percentage'];?>%) </td>
-			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($Less_Withholding_Tax,4);?></td>
+			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($Less_Withholding_Tax,2);?></td>
 		</tr>
 
-		
 		<tr style="font-size:12px;">			
 			<td colspan="5"></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Amount Due </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($purchase_order_data[0]['purchase_order_total_payable'],4);?></td>
+			<?=number_format($purchase_order_data[0]['purchase_order_total_payable'],2);?></td>
 		</tr>
 		
 		

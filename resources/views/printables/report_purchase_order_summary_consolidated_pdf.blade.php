@@ -144,10 +144,10 @@
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_date;?></td>
 			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['branch_code'] }}</td>
 			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['supplier_name'] }}</td>
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_gross_amount'],4);?></td>			
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_net_amount'],4);?></td>	
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_withholding_tax'],4);?></td>							
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_payable'],4);?></td>		
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_gross_amount'],2);?></td>			
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_net_amount'],2);?></td>	
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_withholding_tax'],2);?></td>							
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['total_payable'],2);?></td>		
 			
 		</tr>
 		
@@ -160,10 +160,10 @@
 			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
 			<td colspan="1" align="left" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
 			<td colspan="2" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">Total:</td>	
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount,4);?></td>				
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount,4);?></td>			
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_withholding_tax,4);?></td>		
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due,4);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount,2);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount,2);?></td>			
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_withholding_tax,2);?></td>		
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due,2);?></td>				
 		</tr>
 		
 		<tr>
@@ -325,9 +325,9 @@
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_date_without_withholding;?></td>
 			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_without_withholding_data_cols['branch_code'] }}</td>
 			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_without_withholding_data_cols['supplier_name'] }}</td>
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_gross_amount'],4);?></td>			
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_net_amount'],4);?></td>								
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_payable'],4);?></td>		
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_gross_amount'],2);?></td>			
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_net_amount'],2);?></td>								
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_without_withholding_data_cols['total_payable'],2);?></td>		
 			
 		</tr>
 		
@@ -340,9 +340,9 @@
 			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
 			<td colspan="1" align="center" style="border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"></td>
 			<td colspan="2" align="left" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">Total:</td>	
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount_without_withholding,4);?></td>				
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount_without_withholding,4);?></td>				
-			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due_without_withholding,4);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_gross_amount_without_withholding,2);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_net_amount_without_withholding,2);?></td>				
+			<td colspan="1" align="right" style="border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <?=number_format($total_amount_due_without_withholding,2);?></td>				
 		</tr>
 		
 		<tr>

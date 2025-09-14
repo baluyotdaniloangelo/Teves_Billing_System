@@ -43,7 +43,40 @@ class ClientController extends Controller
 			'default_net_percentage',
 			'default_vat_percentage',
 			'default_withholding_tax_percentage',
-			'default_payment_terms');
+			'default_payment_terms')
+			->get()/*Remove After Update*/
+			;
+			/*Remove After Update*/
+			foreach ($data as $teves_branch_cols){
+				
+				// Get client_id value (not model object)
+				$last_id = ClientModel::find($teves_branch_cols->client_id, ['client_id'])->client_id;
+
+				// Add 2345 first, then reverse
+				$_computed = $last_id + 1 + 1135;
+				
+				//echo "$_computed = $last_id + 2135;\n";
+				$_reversed = strrev((string) $_computed);
+				
+				if($_reversed<1000){
+					$reversed = $_reversed + 999;
+				}else{
+					$reversed = $_reversed;
+				}
+
+				// Ensure exactly 8 digits with leading zeros
+				$client_account_number = str_pad($reversed, 8, "0", STR_PAD_LEFT);
+
+				 $client_account_number . PHP_EOL;
+
+				// Update client record
+				$client = ClientModel::find($teves_branch_cols->client_id);
+				$client->client_account_number = $client_account_number;
+				$result_up = $client->update();		
+				
+			}
+			/*Remove After Update*/
+			
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row){
@@ -53,6 +86,10 @@ class ClientController extends Controller
 						<a href="#" data-id="'.$row->client_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteclient"></a>
 						</div>';
 						return $actionBtn;
+						
+						
+						
+						
 					})
 					->rawColumns(['action'])
 					->make(true);
@@ -90,9 +127,25 @@ class ClientController extends Controller
 			'client_tin.required' => 'TIN is Required'
         ]
 		);
+		
+			@$last_id = ClientModel::latest()->first()->client_id;
+
+			// Add 2345 first, then reverse
+			$_computed = $last_id + 1 + 1135;
+			$_reversed = strrev((string) $_computed);
+				
+				if($_reversed<1000){
+					$reversed = $_reversed + 999;
+				}else{
+					$reversed = $_reversed;
+				}
+
+			// Ensure exactly 8 digits with leading zeros
+			$client_account_number = str_pad($reversed, 8, "0", STR_PAD_LEFT);
+
 			$client = new ClientModel();
 			$client->client_name 						= $request->client_name;
-			$client->client_account_number 				= $request->client_account_number;
+			$client->client_account_number 				= $client_account_number;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
 		
@@ -129,7 +182,6 @@ class ClientController extends Controller
 			$client = new ClientModel();
 			$client = ClientModel::find($request->clientID);
 			$client->client_name 						= $request->client_name;
-			$client->client_account_number 				= $request->client_account_number;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
 			

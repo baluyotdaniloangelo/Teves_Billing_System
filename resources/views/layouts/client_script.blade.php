@@ -81,7 +81,7 @@
 			document.getElementById('ClientformNew').className = "g-3 needs-validation was-validated";
 
 			let client_name 						= $("input[name=client_name]").val();
-			let client_account_number 				= $("input[name=client_account_number]").val();
+			//let client_account_number 				= $("input[name=client_account_number]").val();
 			let client_address 						= $("input[name=client_address]").val();
 			let client_tin 							= $("input[name=client_tin]").val();
 			
@@ -96,7 +96,7 @@
 				type:"POST",
 				data:{
 				  client_name:client_name,
-				  client_account_number:client_account_number,
+				  //client_account_number:client_account_number,
 				  client_address:client_address,
 				  client_tin:client_tin,
 				  default_less_percentage:default_less_percentage,
@@ -178,7 +178,7 @@
 					
 					/*Set Details*/
 					document.getElementById("update_client_name").value 						= response.client_name;
-					document.getElementById("update_client_account_number").value 				= response.client_account_number;
+					$('#update_client_account_number').html(response.client_account_number);
 					document.getElementById("update_client_address").value 						= response.client_address;
 					document.getElementById("update_client_tin").value 							= response.client_tin;
 					
@@ -211,7 +211,7 @@
 			
 			let clientID 							= document.getElementById("update-client").value;
 			let client_name 						= $("input[name=update_client_name]").val();
-			let client_account_number 				= $("input[name=update_client_account_number]").val();
+			//let client_account_number 				= $("input[name=update_client_account_number]").val();
 			let client_address 						= $("input[name=update_client_address]").val();
 			let client_tin 							= $("input[name=update_client_tin]").val();
 			
@@ -227,7 +227,7 @@
 				data:{
 				  clientID:clientID,
 				  client_name:client_name,
-				  client_account_number:client_account_number,
+				  //client_account_number:client_account_number,
 				  client_address:client_address,
 				  client_tin:client_tin,
 				  default_less_percentage:default_less_percentage,

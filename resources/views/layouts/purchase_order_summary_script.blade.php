@@ -134,10 +134,10 @@
 						LoadPurchaseOrderSummaryData.rows.add(response.data).draw();	
 							
 							/**/
-							$('#total_gross_amount').text(total_gross_amount.toLocaleString("en-PH", {maximumFractionDigits: 4}));
-							$('#total_withholding_tax').text(total_withholding_tax.toLocaleString("en-PH", {maximumFractionDigits: 4}));
-							$('#total_net_amount').text(total_net_amount.toLocaleString("en-PH", {maximumFractionDigits: 4}));
-							$('#total_amount_due').text(total_amount_due.toLocaleString("en-PH", {maximumFractionDigits: 4}));
+							$('#total_gross_amount').text(total_gross_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_withholding_tax').text(total_withholding_tax.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_net_amount').text(total_net_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#total_amount_due').text(total_amount_due.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 							var start_date_new  = new Date(start_date);
 							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -221,10 +221,10 @@
 				{data: 'supplier_name'},
 				{data: 'purchase_order_sales_order_number'},
 				{data: 'purchase_order_official_receipt_no'},
-				{data: 'purchase_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 4, '' )},  
-				{data: 'purchase_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 4, '' )},
-				{data: ({purchase_order_net_amount,purchase_order_less_percentage}) => (Number(purchase_order_net_amount)*Number(purchase_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },	
-				{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 4, '' ) },		
+				{data: 'purchase_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
+				{data: 'purchase_order_net_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},
+				{data: ({purchase_order_net_amount,purchase_order_less_percentage}) => (Number(purchase_order_net_amount)*Number(purchase_order_less_percentage/100)), render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },	
+				{data: 'purchase_order_total_payable', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'purchase_order_delivery_status', className: "text-center",},  
 				{data: 'purchase_status',  className: "text-center",}  
 				],

@@ -208,10 +208,10 @@
 
 			   $component_height = 15;
 			   
-			   $ordered_price 						= @$purchase_order_delivery_component_cols->ordered_price;
+			   $ordered_price 						= number_format(@$purchase_order_delivery_component_cols->ordered_price,2,".",",");
 			   $purchase_order_delivery_quantity 	= @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity;
 
-			   $withdrawal_amount = number_format($purchase_order_delivery_quantity * $ordered_price,4,".",",");
+			   $withdrawal_amount = number_format($purchase_order_delivery_quantity * $ordered_price,2,".",",");
 
 			?>
 			<tr class="data_tr" style="font-size:12px;">
