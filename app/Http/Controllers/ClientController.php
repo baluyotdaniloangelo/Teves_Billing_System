@@ -46,36 +46,8 @@ class ClientController extends Controller
 			'default_payment_terms')
 			->get()/*Remove After Update*/
 			;
-			/*Remove After Update*/
-			foreach ($data as $teves_branch_cols){
-				
-				// Get client_id value (not model object)
-				$last_id = ClientModel::find($teves_branch_cols->client_id, ['client_id'])->client_id;
-
-				// Add 2345 first, then reverse
-				$_computed = $last_id + 1 + 1135;
-				
-				//echo "$_computed = $last_id + 2135;\n";
-				$_reversed = strrev((string) $_computed);
-				
-				if($_reversed<1000){
-					$reversed = $_reversed + 999;
-				}else{
-					$reversed = $_reversed;
-				}
-
-				// Ensure exactly 8 digits with leading zeros
-				$client_account_number = str_pad($reversed, 8, "0", STR_PAD_LEFT);
-
-				 $client_account_number . PHP_EOL;
-
-				// Update client record
-				$client = ClientModel::find($teves_branch_cols->client_id);
-				$client->client_account_number = $client_account_number;
-				$result_up = $client->update();		
-				
-			}
-			/*Remove After Update*/
+			
+			
 			
 			return DataTables::of($data)
 					->addIndexColumn()
