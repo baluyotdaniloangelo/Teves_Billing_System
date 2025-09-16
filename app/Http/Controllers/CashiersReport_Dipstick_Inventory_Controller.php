@@ -50,9 +50,8 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 			$delivery_inventory 		= $request->delivery_inventory;
 			$ending_inventory 			= $request->ending_inventory;
 			
-			
 			$book_stock = ($beginning_inventory - $sales_in_liters_inventory - $ugt_pumping_inventory) + $delivery_inventory;
-			$variance = $book_stock - $ending_inventory;
+			$variance = $ending_inventory - $book_stock;
 			
 			$CRPH6_ID 				= $request->CRPH6_ID;
 								

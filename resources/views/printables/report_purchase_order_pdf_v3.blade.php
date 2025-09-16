@@ -418,27 +418,26 @@
 		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILS</td>			
+			<td colspan="12" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILS</td>			
 		</tr>		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
+			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr> 
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; height:25px !important; background-color: #c6e0b4;">BANK</td>
 			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">DATE OF PAYMENT</td>
 			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">REFERENCE NO.</td>
 			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">AMOUNT</td>			
+			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">REMAINING BALANCE</td>			
 		</tr> 
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
+			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr>
 			<?php 
+			
 			$no_p = 1;
 			$total_payment = 0;
 			
-			
-		
-		//number_format($purchase_order_data[0]['purchase_order_total_payable'],4);
 			?>
 			
 			@foreach ($purchase_payment_component as $purchase_payment_component_cols)
@@ -449,12 +448,17 @@
 				$_purchase_order_date_of_payment=date_create($purchase_payment_component_cols['purchase_order_date_of_payment']);
 				$purchase_order_date_of_payment = strtoupper(date_format($_purchase_order_date_of_payment,"M/d/Y"));
 				
-				$total_payment += $purchase_payment_component_cols->purchase_order_payment_amount;
+				$total_payment 				+= $purchase_payment_component_cols->purchase_order_payment_amount;
+				$total_remaining_balance 	= $purchase_order_data[0]['purchase_order_total_payable'] - $total_payment;
+				
 				?>
 			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;"><?=$purchase_order_date_of_payment;?></td>
 			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">{{$purchase_payment_component_cols->purchase_order_reference_no}}</td>
 			<td colspan="2" align="right" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">	
-			<?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],4);?>
+			<?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],2);?>
+			</td>
+			<td colspan="2" align="right" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">	
+			<?=number_format($total_remaining_balance,2);?>
 			</td>			
 			</tr>
 			<?php 
@@ -467,11 +471,10 @@
 			<td colspan="5"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Payment </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($total_payment,4);?></td>
+			<?=number_format($total_payment,2);?></td>
 		</tr>
 		<?php
 		
-		//$payment_grand_total 			= number_format(str_replace( ',', '',$total_payment),4);
 		$payment_grand_total 			= str_replace(',', '',$total_payment);
 		$payment_purchase_order_total_payable  = str_replace(',', '',$purchase_order_data[0]['purchase_order_total_payable']);
 		
@@ -483,7 +486,7 @@
 			<td colspan="5"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Over Payment </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<?=number_format($overpayment,4);?></td>
+			<?=number_format($overpayment,2);?></td>
 		</tr>	
 		<?php
 		}

@@ -347,12 +347,15 @@
 			   $item_description 	= @$purchase_order_transaction_item_cols->item_description;
 			   $amount 				= @$purchase_order_transaction_item_cols->amount;
 
-				if($source_tb=='PO'||$source_tb=='Payment'){
+				if($source_tb=='PO'){
 					$debit = $amount;
 					$credit = 0;
-				}else{
+				}else if($source_tb=='Payment'){
 					$debit = 0;
 					$credit = $amount;
+				}else if($source_tb=='Delivery'){
+					$debit = $amount;
+					$credit = 0;
 				}
 				
 			   
