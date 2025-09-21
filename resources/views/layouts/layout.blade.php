@@ -50,6 +50,7 @@ else if (Request::path()==('update_product_information')){
 @include('layouts.update_product_info_script')
 @include('layouts.update_product_info_suppiers_price_script')
 @include('layouts.update_product_info_selling_price_script')
+@include('layouts.update_product_info_pump_script')
 <?php
 }
 else if (Request::is('client')){
@@ -196,6 +197,7 @@ else if (Request::is('cashiers_report_form/*')){
 <body class="">
 @include('layouts.footer')
 @include('layouts.cashier_report_form_script')
+@include('layouts.cashier_report_form_script_p1')
 @include('layouts.cashier_report_form_script_p7')
 @include('layouts.cashier_report_form_script_p8')
 <?php

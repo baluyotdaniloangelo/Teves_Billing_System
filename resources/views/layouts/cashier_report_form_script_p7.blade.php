@@ -208,6 +208,12 @@
 		
 		if(inventory_mode=='dipstick'){
 			var product_id 			= $('#product_list_inventory option[value="' + $('#product_idx_dipstick_inventory').val() + '"]').attr('data-id');
+		}
+		else if(inventory_mode=='fuelsales_edit'){
+			var product_id 			= $('#product_name option[value="' + $('#update_product_idx').val() + '"]').attr('data-id');
+		}
+		else if(inventory_mode=='fuelsales'){
+			var product_id 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 		}else{
 			var product_id 			= $('#product_list_inventory option[value="' + $('#product_idx_inventory').val() + '"]').attr('data-id');
 		}

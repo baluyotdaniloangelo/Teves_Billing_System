@@ -107,6 +107,10 @@
 							<li class="nav-item" role="presentation">
 								<button class="nav-link <?php if($tab=='tank') { echo 'active'; } ?>" id="tank-tab" data-bs-toggle="tab" data-bs-target="#tank" type="button" role="tab" aria-controls="tank" aria-selected="false" tabindex="-1" title='Tank Information'>Tank</button>
 							</li>
+							
+							<li class="nav-item" role="presentation">
+								<button class="nav-link <?php if($tab=='pump') { echo 'active'; } ?>" id="pump-tab" data-bs-toggle="tab" data-bs-target="#pump" type="button" role="tab" aria-controls="pump" aria-selected="false" tabindex="-1" title='Pump Information'>Pump</button>
+							</li>
 									
 						</ul>
 					
@@ -221,6 +225,35 @@
 										<th >Branch</th>
 										<th >Name</th>
 										<th >Capacity</th>
+										<th >Unit</th>
+										<th >Action</th>
+									</tr>
+									</thead>
+										<tbody>
+										</tbody>
+									</table>
+								
+							</div>
+					
+						</div>
+						
+						<div class="tab-content pt-2" id="myTabContent">
+						
+							<div class="tab-pane fade  <?php if($tab=='pump') { echo ' show active'; } ?>"" id="pump" role="tabpanel" aria-labelledby="pump-tab">
+									
+									<div class="d-flex justify-content-end" id="">
+									<div class="btn-group" role="group" aria-label="Basic outlined example" style="">
+										<button type="button" class="btn btn-success new_item bi bi-plus-circle form_button_icon" data-bs-toggle="modal" data-bs-target="#AddProductPumpModal" id="AddProductPumpBTN"></button>
+									</div>											
+									</div>
+									<br>
+									<table class="table dataTable display nowrap cell-border" id="ProductPumpListTable" width="100%">
+									<thead>
+									<tr class='report'>
+										<th >Item #</th>
+										<th >Branch</th>
+										<th >Name</th>
+										<th >Initial Reading</th>
 										<th >Unit</th>
 										<th >Action</th>
 									</tr>
@@ -584,6 +617,7 @@
 
 	@include('pages.update_product_information_form_seller_price')
 	@include('pages.update_product_information_form_selling_price')
+	@include('pages.update_product_information_form_pump')
     </section>
 </main>
 

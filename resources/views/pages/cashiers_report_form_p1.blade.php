@@ -4,17 +4,22 @@
 			<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH1_Modal" id="CRPH1_Modal_add"></button>
 	</div>
 	<br>
-		<table class="table" id="table_product_data">
+		<table  class="table dataTable display nowrap cell-border" id="FuelSales">
 			<thead>
 					<tr class='report'>
-						<th style="text-align:center !important;">PRODUCT</th>
-						<th style="text-align:center !important;">BEGINNING</th>
-						<th style="text-align:center !important;">CLOSING</th>
-						<th style="text-align:center !important;">CALIBRATION</th>
-						<th style="text-align:center !important;">SALES IN LITERS</th>
-						<th style="text-align:center !important;">PUMP PRICE</th>
-						<th style="text-align:center !important;">PESO SALES</th>
-						<th style="text-align:center !important;" colspan="2">ACTION</th>
+						<th>Item</th>
+						<th>Product</th>
+						<th>Tank</th>
+						<th>Pump</th>
+						<th>Beginning</th>
+						<th>Closing</th>
+						<th>Calibration</th>
+						<th>Sales in Liters</th>
+						<th>Pump Price</th>
+						<th>Peso Sales</th>
+						<th>Action</th>
+						<th class="none">Created At:</th>
+						<th class="none">Updated At:</th>
 					</tr>
 			</thead>
 			<tbody id="table_product_body_data">
@@ -41,7 +46,7 @@
 					  <div class="row mb-2">
 						  <label for="product_idx" class="col-sm-3 col-form-label">PRODUCT</label>
 						  <div class="col-sm-9">
-									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off" onchange="TotalAmount()">
+									<input class="form-control" list="product_name" name="product_name" id="product_idx" required autocomplete="off">
 									<datalist id="product_name">
 										@foreach ($product_data as $product_data_cols)
 											<span style="font-family: DejaVu Sans; sans-serif;">
@@ -52,6 +57,25 @@
 									<span class="valid-feedback" id="product_idxError"></span>
 							</div>	
 						</div>	
+						
+						<div class="row mb-2">
+							  <label for="product_tank_name_fuel_sales" class="col-sm-3 col-form-label">TANK</label>
+							  <div class="col-sm-9">
+										<input class="form-control" list="product_tank_list" name="product_tank_name_fuel_sales" id="product_tank_idx_fuel_sales" required autocomplete="off">
+										<span class="valid-feedback" id="product_tank_name_fuel_salesError"></span>
+								</div>	
+						</div>
+						
+						<div class="row mb-2">
+							  <label for="product_pump_idx_fuel_sales" class="col-sm-3 col-form-label">PUMP</label>
+							  <div class="col-sm-9">
+										<input class="form-control" list="product_pump_list" name="product_pump_name_fuel_sales" id="product_pump_idx_fuel_sales" required autocomplete="off">
+										<span class="valid-feedback" id="product_pump_idx_fuel_salesError"></span>
+								</div>	
+						</div>
+						
+						
+						
 						
 						<div class="row mb-2">
 						  <label for="beginning_reading" class="col-sm-3 col-form-label">BEGINNING</label>
@@ -121,7 +145,7 @@
 					  <div class="row mb-2">
 						  <label for="update_product_idx" class="col-sm-3 col-form-label">PRODUCT</label>
 						  <div class="col-sm-9">
-									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off" onchange="UpdateTotalAmount()">
+									<input class="form-control" list="update_product_name" name="update_product_name" id="update_product_idx" required autocomplete="off">
 									<datalist id="update_product_name">
 										@foreach ($product_data as $product_data_cols)
 											<span style="font-family: DejaVu Sans; sans-serif;">
@@ -132,6 +156,22 @@
 									<span class="valid-feedback" id="update_product_idxError"></span>
 							</div>	
 						</div>	
+						
+						<div class="row mb-2">
+							  <label for="update_product_tank_name_fuel_sales" class="col-sm-3 col-form-label">TANK</label>
+							  <div class="col-sm-9">
+										<input class="form-control" list="product_tank_list" name="update_product_tank_name_fuel_sales" id="update_product_tank_idx_fuel_sales" required autocomplete="off">
+										<span class="valid-feedback" id="update_product_tank_name_fuel_salesError"></span>
+								</div>	
+						</div>
+						
+						<div class="row mb-2">
+							  <label for="update_product_pump_idx_fuel_sales" class="col-sm-3 col-form-label">PUMP</label>
+							  <div class="col-sm-9">
+										<input class="form-control" list="product_pump_list" name="update_product_pump_name_fuel_sales" id="update_product_pump_idx_fuel_sales" required autocomplete="off">
+										<span class="valid-feedback" id="update_product_pump_idx_fuel_salesError"></span>
+								</div>	
+						</div>
 						
 						<div class="row mb-2">
 						  <label for="update_beginning_reading" class="col-sm-3 col-form-label">BEGINNING</label>
@@ -181,6 +221,9 @@
                 </div>
              </div>
 	</div>
+
+		<datalist id="product_pump_list">
+		</datalist>
 	
 		<!-- CRP1 Delete Modal-->
     <div class="modal fade" id="CRPH1DeleteModal" tabindex="-1" role="dialog" aria-hidden="true">

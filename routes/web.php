@@ -33,6 +33,9 @@ use App\Http\Controllers\ProductSellingPriceController;
 use App\Http\Controllers\DailySalesReportController;
 /*Sales Report - August 21, 2025*/
 use App\Http\Controllers\SalesReportController;
+
+/*September 20 2025*/
+use App\Http\Controllers\ProductPumpController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -521,6 +524,20 @@ Route::get('/sales_report', [SalesReportController::class,'sales_report_page'])-
 Route::post('/generate_sales_report', [SalesReportController::class,'generate_sales_report'])->name('generate_sales_report')->middleware('isLoggedIn');
 Route::get('/generate_sales_report_pdf', [SalesReportController::class,'generate_sales_report_pdf'])->name('generate_sales_report_pdf')->middleware('isLoggedIn');
 Route::get('/generate_cumulative_sales_report_pdf', [SalesReportController::class,'generate_cumulative_sales_report_pdf'])->name('generate_cumulative_sales_report_pdf')->middleware('isLoggedIn');
+
+
+/* Product Pump 9/20/2025 */
+Route::post('/get_product_pump', [ProductPumpController::class,'get_product_pump'])->name('ProductPump')->middleware('isLoggedIn');
+/*Product Tank per Product - Branch*/
+Route::post('/get_product_pump_per_branch', [ProductPumpController::class,'get_product_pump_per_branch'])->name('ProductPumpPerBranch')->middleware('isLoggedIn');
+/*Create Product Pump*/
+Route::post('/create_pump_post', [ProductPumpController::class,'create_pump_post'])->name('create_pump_post')->middleware('isLoggedIn');
+/* Product Pump Info*/
+Route::post('/product_pump_info', [ProductPumpController::class, 'product_pump_info'])->name('product_pump_info')->middleware('isLoggedIn');
+/*Update Product Pump*/
+Route::post('/update_pump_post', [ProductPumpController::class,'update_pump_post'])->name('update_pump_post')->middleware('isLoggedIn');
+Route::post('/delete_product_pump_confirmed', [ProductPumpController::class, 'delete_product_pump_confirmed'])->name('delete_product_pump_confirmed')->middleware('isLoggedIn');
+/*Product Tank per Product - Branch*/
 
 
 /* Sales Summary */

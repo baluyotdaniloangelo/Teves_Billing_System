@@ -445,9 +445,13 @@ class CashiersReportController extends Controller
 			
 			$data =  CashiersReportModel_P1::where('cashiers_report_p1_id', $CHPH1_ID)
 				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+				->leftjoin('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p1.tank_idx')
+				->leftjoin('teves_product_pump_table', 'teves_product_pump_table.pump_id', '=', 'teves_cashiers_report_p1.pump_idx')
 					->get([
 						'teves_product_table.product_name',
 						'teves_product_table.product_id',
+						DB::raw('IFNULL(teves_product_tank_table.tank_name, "Please Select a Tank") as tank_name'),
+						DB::raw('IFNULL(teves_product_pump_table.pump_name, "Please Select a Pump") as pump_name'),
 						'teves_cashiers_report_p1.cashiers_report_p1_id',
 						'teves_cashiers_report_p1.beginning_reading',
 						'teves_cashiers_report_p1.closing_reading',
@@ -502,6 +506,8 @@ class CashiersReportController extends Controller
 			$CashiersReportId = $request->CashiersReportId;
 			
 			$product_idx				= $request->product_idx;
+			$tank_idx					= $request->tank_idx;
+			$pump_idx					= $request->pump_idx;
 			$beginning_reading 			= $request->beginning_reading;
 			$closing_reading 			= $request->closing_reading;
 			$calibration 				= $request->calibration;
@@ -534,6 +540,8 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P1->user_idx 					= Session::get('loginID');
 									$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
+									$CashiersReportModel_P1->tank_idx 					= $tank_idx;
+									$CashiersReportModel_P1->pump_idx 					= $pump_idx;
 									$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
 									$CashiersReportModel_P1->closing_reading 			= $closing_reading;
 									$CashiersReportModel_P1->calibration 				= $calibration+0;
@@ -557,6 +565,8 @@ class CashiersReportController extends Controller
 									
 									$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
+									$CashiersReportModel_P1->tank_idx 					= $tank_idx;
+									$CashiersReportModel_P1->pump_idx 					= $pump_idx;
 									$CashiersReportModel_P1->beginning_reading 			= $beginning_reading;
 									$CashiersReportModel_P1->closing_reading 			= $closing_reading;
 									$CashiersReportModel_P1->calibration 				= $calibration+0;
@@ -579,12 +589,18 @@ class CashiersReportController extends Controller
 	
 	public function get_cashiers_report_product_p1(Request $request){		
 	
-			$data =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+		if ($request->ajax()) {
+
+    	$data =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
+				->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+				->leftjoin('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p1.tank_idx')
+				->leftjoin('teves_product_pump_table', 'teves_product_pump_table.pump_id', '=', 'teves_cashiers_report_p1.pump_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					DB::raw('IFNULL(teves_product_tank_table.tank_name, "No Tank selected") as tank_name'),
+					DB::raw('IFNULL(teves_product_pump_table.pump_name, "No Pump Selected") as pump_name'),
 					'teves_cashiers_report_p1.product_price',
 					'teves_cashiers_report_p1.cashiers_report_p1_id',
 					'teves_cashiers_report_p1.cashiers_report_id',
@@ -592,10 +608,25 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p1.closing_reading',
 					'teves_cashiers_report_p1.calibration',
 					'teves_cashiers_report_p1.order_quantity',
-					'teves_cashiers_report_p1.order_total_amount'
+					'teves_cashiers_report_p1.order_total_amount',
+					'teves_cashiers_report_p1.created_at',
+					'teves_cashiers_report_p1.updated_at'
 					]);
 		
-			return response()->json($data);
+		return DataTables::of($data)
+				->addIndexColumn()
+                ->addColumn('action', function($row){
+					$actionBtn = '<div align="center" class="action_table_menu_Product">
+					<a href="#" data-id="'.$row->cashiers_report_p1_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="CHPH1_Edit" title="Edit Fuel Sales"></a>
+					<a href="#" data-id="'.$row->cashiers_report_p1_id.'" class="btn-warning btn-circle btn-sm bi bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteCashiersProductP1" title="Delete Fuel Sales"></a>
+					</div>';
+                    return $actionBtn;
+                })
+				
+				->rawColumns(['action'])
+                ->make(true);
+		}	
+		
 	}
 	
 	public function delete_cashiers_report_product_p1(Request $request){		
