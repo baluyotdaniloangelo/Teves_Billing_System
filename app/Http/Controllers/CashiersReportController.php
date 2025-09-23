@@ -1688,12 +1688,16 @@ class CashiersReportController extends Controller
 		$title = 'Cashier Report';
 		  
 		$data_P1_premium_95 =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
-			->where('product_idx', 13)
+			->where('teves_cashiers_report_p1.product_idx', 13)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+			->leftjoin('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p1.tank_idx')
+			->leftjoin('teves_product_pump_table', 'teves_product_pump_table.pump_id', '=', 'teves_cashiers_report_p1.pump_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					DB::raw('IFNULL(teves_product_tank_table.tank_name, "No Tank selected") as tank_name'),
+					DB::raw('IFNULL(teves_product_pump_table.pump_name, "No Pump Selected") as pump_name'),
 					'teves_cashiers_report_p1.product_price',
 					'teves_cashiers_report_p1.cashiers_report_p1_id',
 					'teves_cashiers_report_p1.cashiers_report_id',
@@ -1705,12 +1709,16 @@ class CashiersReportController extends Controller
 					]); 
 					
 		$data_P1_super_regular =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
-			->where('product_idx', 11)
+			->where('teves_cashiers_report_p1.product_idx', 11)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+			->leftjoin('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p1.tank_idx')
+			->leftjoin('teves_product_pump_table', 'teves_product_pump_table.pump_id', '=', 'teves_cashiers_report_p1.pump_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					DB::raw('IFNULL(teves_product_tank_table.tank_name, "No Tank selected") as tank_name'),
+					DB::raw('IFNULL(teves_product_pump_table.pump_name, "No Pump Selected") as pump_name'),
 					'teves_cashiers_report_p1.product_price',
 					'teves_cashiers_report_p1.cashiers_report_p1_id',
 					'teves_cashiers_report_p1.cashiers_report_id',
@@ -1722,12 +1730,16 @@ class CashiersReportController extends Controller
 					]); 		
 
 		$data_P1_diesel =  CashiersReportModel_P1::where('cashiers_report_id', $request->CashiersReportId)
-			->where('product_idx', 12)
+			->where('teves_cashiers_report_p1.product_idx', 12)
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p1.product_idx')
+			->leftjoin('teves_product_tank_table', 'teves_product_tank_table.tank_id', '=', 'teves_cashiers_report_p1.tank_idx')
+			->leftjoin('teves_product_pump_table', 'teves_product_pump_table.pump_id', '=', 'teves_cashiers_report_p1.pump_idx')
 				->orderBy('cashiers_report_p1_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					DB::raw('IFNULL(teves_product_tank_table.tank_name, "No Tank selected") as tank_name'),
+					DB::raw('IFNULL(teves_product_pump_table.pump_name, "No Pump Selected") as pump_name'),
 					'teves_cashiers_report_p1.product_price',
 					'teves_cashiers_report_p1.cashiers_report_p1_id',
 					'teves_cashiers_report_p1.cashiers_report_id',
