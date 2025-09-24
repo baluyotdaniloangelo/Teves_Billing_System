@@ -336,7 +336,9 @@
 			$total_debit_amount = 0;
 			$total_credit_amount = 0;
 			
-			$total_delivery_amount = 0
+			$total_delivery_amount = 0;
+			
+			$total_po_amount = 0;
 			
 			?>
 			@foreach ($purchase_order_transaction_item as $purchase_order_transaction_item_cols)
@@ -353,14 +355,17 @@
 					$debit = $amount;
 					$credit = 0;
 					$delivery = 0;
+					$po_amount = $amount;
 				}else if($source_tb=='Payment'){
 					$debit = 0;
 					$credit = $amount;
 					$delivery = 0;
+					$po_amount = 0;
 				}else if($source_tb=='Delivery'){
 					$debit = $amount;
 					$credit = 0;
 					$delivery = $amount;
+					$po_amount = 0;
 				}
 				
 			   
@@ -371,7 +376,18 @@
 			   $total_credit_amount += $credit_amount;
 			   $total_delivery_amount += $delivery;
 			   
-			   $variance = $total_debit_amount - $total_credit_amount - $total_delivery_amount;
+			   $total_po_amount += $po_amount;
+			   
+			   $variance = $total_debit_amount - $total_credit_amount;
+			   
+			   
+			  // if($total_po_amount==$total_credit_amount){
+				//   $variance = 0;
+			  // }
+			 //  else{
+			//	   $variance = $total_debit_amount - $total_credit_amount;
+			 //  }
+				   
 
 			?>
 			<tr class="data_tr" style="font-size:12px;">
