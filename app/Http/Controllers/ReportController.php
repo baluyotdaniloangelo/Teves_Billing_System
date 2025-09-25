@@ -1859,17 +1859,17 @@ class ReportController extends Controller
 		/*Transaction Item*/
 		
 		$raw_query_purchase_order_transaction = "select * from (
-			SELECT 
+			/*SELECT 
 			 ('PO') AS source_tb,
 			 purchase_order_date AS transaction_date,
-			 purchase_order_control_number AS item_description,
+			 purchase_order_control_number AS item_description,*/
 			 /*(purchase_order_net_amount*(purchase_order_less_percentage/100)) AS amount,*/
-			 purchase_order_gross_amount AS amount,
+			/* purchase_order_gross_amount AS amount,
 			 created_at
 			FROM teves_purchase_order_table
 			where `teves_purchase_order_table`.`purchase_order_id` = ?
 
-		union
+		union*/
 		   SELECT 
 				('Delivery') AS source_tb,
 				`teves_purchase_order_delivery_details`.`purchase_order_delivery_date` AS transaction_date,
@@ -1892,7 +1892,7 @@ class ReportController extends Controller
 		) as t
 		order by created_at asc;";	
 						
-		$purchase_order_transaction_item = DB::select("$raw_query_purchase_order_transaction", [ $purchase_order_id, $purchase_order_id, $purchase_order_id]);
+		$purchase_order_transaction_item = DB::select("$raw_query_purchase_order_transaction", [  $purchase_order_id, $purchase_order_id]);
 		
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
