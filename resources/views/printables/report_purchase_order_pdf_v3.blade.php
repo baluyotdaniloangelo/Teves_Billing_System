@@ -170,7 +170,7 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 170 / count($purchase_order_component);
+			$component_height = 160 / count($purchase_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
