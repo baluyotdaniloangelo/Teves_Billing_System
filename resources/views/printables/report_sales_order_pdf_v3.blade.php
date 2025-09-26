@@ -281,13 +281,6 @@
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
 		
-		
-		
-		
-		
-		 
-		
-		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:40px !important;font-style: italic;">In Words</td>
 			<td colspan="8" style="border-top:1px solid gray; border-bottom:1px solid gray; text-align:center;">&nbsp;<?php echo strtoupper($amount_in_words); ?></td>
@@ -332,8 +325,12 @@
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:120px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
-			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:100px !important;">{{$sales_order_data[0]->sales_order_note}}</td>
+			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:120px !important; text-align: justify;">
+			<?php echo nl2br($sales_order_data[0]['sales_order_instructions']); ?>
+			</td>
+			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:100px !important;">
+			<?php echo nl2br($sales_order_data[0]['sales_order_note']); ?>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>

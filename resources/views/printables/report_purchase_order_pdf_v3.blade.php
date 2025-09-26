@@ -170,7 +170,7 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 180 / count($purchase_order_component);
+			$component_height = 170 / count($purchase_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
@@ -312,13 +312,17 @@
 		<table class="" width="100%" cellspacing="0" cellpadding="1" > 	  	
 
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="6" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
-			<td colspan="4" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:0px solid #000; font-weight:bold;">NOTE</td>	
+			<td colspan="6" width="50%" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-style: italic; height:25px !important;">Instructions;</td>
+			<td colspan="4" width="50%" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:0px solid #000; font-weight:bold;">NOTE</td>	
 		</tr>
 	    
 		<tr style="font-size:12px;border:0 solid #000;" rowspan="3">
-			<td colspan="6" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray; height:85px !important; text-align: justify;">{{$purchase_order_data[0]['purchase_order_instructions']}}</td>
-			<td colspan="4" align="left" style="border-top:0px solid #000; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:85px !important;">{{$purchase_order_data[0]['purchase_order_note']}}</td>
+			<td colspan="6"  width="50%" align="left" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:1px solid gray; height:85px !important; text-align: left; word-wrap: break-word; word-break: break-word;">
+			<?php echo nl2br($purchase_order_data[0]['purchase_order_instructions']); ?>
+			</td>
+			<td colspan="4"  width="50%" align="left" style="border-top:0px solid #000; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:85px !important;">
+			<?php echo nl2br($purchase_order_data[0]['purchase_order_note']); ?>
+			</td>
 		</tr>
 		
 		<tr style="font-size:12px;">
