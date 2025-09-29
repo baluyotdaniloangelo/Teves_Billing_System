@@ -118,26 +118,47 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				 if(error.responseJSON.errors.teves_branch=="The client name has already been taken."){
+				if(error.responseJSON.errors.teves_branch=="The teves branch has already been taken."){
 							  
-				  $('#teves_branchError').html("<b>"+ teves_branch +"</b> has already been taken.");
+				  $('#teves_branchError').html("Report has already been created for the selected branch<!--<b>"+ teves_branch +"</b>-->");
 				  document.getElementById('teves_branchError').className = "invalid-feedback";
 				  document.getElementById('teves_branch').className = "form-control is-invalid";
-				  $('#teves_branch').val("");
+				  
 				  
 				}else{
 				  $('#teves_branchError').text(error.responseJSON.errors.teves_branch);
 				  document.getElementById('teves_branchError').className = "invalid-feedback";
 				}
 				
+				if(error.responseJSON.errors.report_date=="The report date has already been taken."){
+							  
+				  $('#report_dateError').html("Report has already been created for the selected date");
+				  document.getElementById('report_dateError').className = "invalid-feedback";
+				  document.getElementById('report_date').className = "form-control is-invalid";
+				 
+				  
+				}else{
+				  $('#report_dateError').text(error.responseJSON.errors.report_date);
+				  document.getElementById('report_dateError').className = "invalid-feedback";
+				}
+				
+				if(error.responseJSON.errors.shift=="The shift has already been taken."){
+							  
+				  $('#shiftError').html("Report has already been created for the selected shift");
+				  document.getElementById('shiftError').className = "invalid-feedback";
+				  document.getElementById('shift').className = "form-control is-invalid";
+				 
+				  
+				}else{
+				  $('#shiftError').text(error.responseJSON.errors.shift);
+				  document.getElementById('shiftError').className = "invalid-feedback";
+				}
+				
 				  $('#cashiers_nameError').text(error.responseJSON.errors.cashiers_name);
 				  document.getElementById('cashiers_nameError').className = "invalid-feedback";
 				  
 				  $('#forecourt_attendantError').text(error.responseJSON.errors.forecourt_attendant);
-				  document.getElementById('forecourt_attendantError').className = "invalid-feedback";	
-				  
-				  $('#report_dateError').text(error.responseJSON.errors.report_date);
-				  document.getElementById('report_dateError').className = "invalid-feedback";			
+				  document.getElementById('forecourt_attendantError').className = "invalid-feedback";			
 
 				$('#switch_notice_off').show();
 				$('#sw_off').html("Invalid Input");

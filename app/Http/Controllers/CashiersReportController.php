@@ -219,14 +219,31 @@ class CashiersReportController extends Controller
     }
 
 	public function create_cashier_report_post(Request $request){
-		
+
 		$request->validate([
-			'report_date'   => 'required',
+			'report_date'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
+										fn ($query) =>$query
+											->where('report_date', $request->report_date)
+											->where('teves_branch', $request->teves_branch)
+											->where('shift', $request->shift) 
+										)],
+			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
+										fn ($query) =>$query
+											->where('report_date', $request->report_date)
+											->where('teves_branch', $request->teves_branch)
+											->where('shift', $request->shift) 
+										)],
 			'forecourt_attendant'   => 'required',
-			'cashiers_name'   => 'required',
-			'shift'   => 'required'
+			'cashiers_name'   		=> 'required',
+			'shift'   				=> ['required',Rule::unique('teves_cashiers_report')->where( 
+										fn ($query) =>$query
+											->where('report_date', $request->report_date)
+											->where('teves_branch', $request->teves_branch)
+											->where('shift', $request->shift) 
+										)]
         ], 
         [
+			'teves_branch.required' => 'Branch is required',
 			'report_date.required' => 'Report Date is required',
 			'forecourt_attendant.required' => "Empoyee's on Duty is required",
 			'cashiers_name.required' => "Cashier's Name is required",
@@ -281,19 +298,39 @@ class CashiersReportController extends Controller
 	public function update_cashier_report_post(Request $request){
 		
 		$request->validate([
-			'report_date'   => 'required',
+			'report_date'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
+										fn ($query) =>$query
+											->where('report_date', $request->report_date)
+											->where('teves_branch', $request->teves_branch)
+											->where('shift', $request->shift)
+											->where('cashiers_report_id', '<>',  $request->CashiersReportId )											
+										)],
+			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
+										fn ($query) =>$query
+											->where('report_date', $request->report_date)
+											->where('teves_branch', $request->teves_branch)
+											->where('shift', $request->shift)
+											->where('cashiers_report_id', '<>',  $request->CashiersReportId )	
+										)],
 			'forecourt_attendant'   => 'required',
-			'cashiers_name'   => 'required',
-			'shift'   => 'required'
+			'cashiers_name'   		=> 'required',
+			'shift'   				=> ['required',Rule::unique('teves_cashiers_report')->where( 
+										fn ($query) =>$query
+											->where('report_date', $request->report_date)
+											->where('teves_branch', $request->teves_branch)
+											->where('shift', $request->shift)
+											->where('cashiers_report_id', '<>',  $request->CashiersReportId )	
+										)]
         ], 
         [
+			'teves_branch.required' => 'Branch is required',
 			'report_date.required' => 'Report Date is required',
 			'forecourt_attendant.required' => "Empoyee's on Duty is required",
 			'cashiers_name.required' => "Cashier's Name is required",
 			'shift.required' => "Shift is required"
         ]
 		);
-		
+
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate = CashiersReportModel::find($request->CashiersReportId);
 			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
@@ -476,6 +513,8 @@ class CashiersReportController extends Controller
 									fn ($query) =>$query
 										->where('cashiers_report_id', $request->CashiersReportId)
 										->where('product_idx', $request->product_idx) 
+										->where('tank_idx', $request->tank_idx) 
+										->where('pump_idx', $request->pump_idx) 
 										->where('beginning_reading', $request->beginning_reading)
 										->where(function ($r) use($CHPH1_ID) {
 													if ($CHPH1_ID) {
@@ -486,7 +525,9 @@ class CashiersReportController extends Controller
 			'closing_reading'  		=> ['required',Rule::unique('teves_cashiers_report_p1')->where( 
 									fn ($query) =>$query
 										->where('cashiers_report_id', $request->CashiersReportId)
-										->where('product_idx', $request->product_idx) 
+										->where('product_idx', $request->product_idx)
+										->where('tank_idx', $request->tank_idx) 
+										->where('pump_idx', $request->pump_idx)										
 										->where('closing_reading', $request->closing_reading) 
 										->where(function ($r) use($CHPH1_ID) {
 													if ($CHPH1_ID) {

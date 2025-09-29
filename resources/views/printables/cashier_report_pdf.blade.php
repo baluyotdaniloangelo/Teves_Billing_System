@@ -95,7 +95,7 @@
 		
 		<table cellspacing="0" width="100%">
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000;" colspan="3" rowspan="2">PRODUCT </td>
+		  <td style="font-size:11px; border:1px solid #000;" colspan="2" rowspan="2">PRODUCT </td>
 		  <td style="font-size:11px; border:1px solid #000;" colspan="1" rowspan="2">TANK </td>
 		  <td style="font-size:11px; border:1px solid #000;" colspan="1" rowspan="2">PUMP </td>
 		  <td style="font-size:11px; border:1px solid #000;" colspan="4">TOTALIZER READING</td>
@@ -121,7 +121,7 @@
 			@foreach ($data_P1_premium_95 as $data_P1_premium_95_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_premium_95_cols->product_name}}</td>
-				<td nowrap style="border:1px solid #000;"><?=$p1_no_premium;?></td>
+				<!--<td nowrap style="border:1px solid #000;"><?=$p1_no_premium;?></td>-->
 				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->tank_name}}</td>
 				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->pump_name}}</td>
 				
@@ -145,9 +145,9 @@
 			@endforeach
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="10">TOTAL </td>
+		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="9">TOTAL </td>
 		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_quantity_P1_premium_95,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($product_price_P1_premium_95,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><!--<?=number_format($product_price_P1_premium_95,2,".",",");?>--></td>
 		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_total_amount_P1_premium_95,2,".",",");?></td>
 		</tr>
 		
@@ -164,7 +164,7 @@
 			@foreach ($data_P1_super_regular as $data_P1_super_regular_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_super_regular_cols->product_name}}</td>
-				<td nowrap style="border:1px solid #000;"><?=$p1_no_super_regular;?></td>
+				<!--<td nowrap style="border:1px solid #000;"><?=$p1_no_super_regular;?></td>-->
 				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->tank_name}}</td>
 				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->pump_name}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_super_regular_cols->beginning_reading}}</td>
@@ -185,9 +185,9 @@
 			@endforeach
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="10">TOTAL </td>
+		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="9">TOTAL </td>
 		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_quantity_P1_super_regular,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($product_price_P1_super_regular,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><!--<?=number_format($product_price_P1_super_regular,2,".",",");?>--></td>
 		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_total_amount_P1_super_regular,2,".",",");?></td>
 		</tr>
 		
@@ -204,7 +204,7 @@
 			@foreach ($data_P1_diesel as $data_P1_diesel_cols)
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_diesel_cols->product_name}}</td>
-				<td nowrap style="border:1px solid #000;"><?=$p1_no_diesel;?></td>
+				<!--<td nowrap style="border:1px solid #000;"><?=$p1_no_diesel;?></td>-->
 				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->tank_name}}</td>
 				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->pump_name}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_diesel_cols->beginning_reading}}</td>
@@ -225,9 +225,9 @@
 			@endforeach
 		
 		<tr style="text-align:center; font-size:11px; border:1px solid #000; background-color: #c6e0b4;" >
-		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="10">TOTAL </td>
+		  <td style="font-size:11px; border:1px solid #000; text-align:right; " colspan="9">TOTAL </td>
 		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_quantity_P1_diesel,2,".",",");?></td>
-		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($product_price_P1_diesel,2,".",",");?></td>
+		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><!--<?=number_format($product_price_P1_diesel,2,".",",");?>--></td>
 		  <td style="font-size:11px; border:1px solid #000; text-align: right;"><?=number_format($order_total_amount_P1_diesel,2,".",",");?></td>
 		</tr>
 		
