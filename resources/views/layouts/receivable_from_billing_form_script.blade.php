@@ -301,7 +301,7 @@
 										
 										<?php
 									}
-									if(Session::get('UserType')=="Admin"){
+									else if(Session::get('UserType')=="Admin"){
 										?>	
 										
 										$('#table_sales_order_product_body_data tr:last').after("<tr>"+
