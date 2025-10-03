@@ -302,41 +302,45 @@ class CashiersReportController extends Controller
 	public function update_cashier_report_post(Request $request){
 		
 		$request->validate([
-			'report_date'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
-										fn ($query) =>$query
-											->where('report_date', $request->report_date)
-											->where('teves_branch', $request->teves_branch)
-											->where('shift', $request->shift)
-											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
-											->withoutGlobalScopes();											
-										)],
-			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
-										fn ($query) =>$query
-											->where('report_date', $request->report_date)
-											->where('teves_branch', $request->teves_branch)
-											->where('shift', $request->shift)
-											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
-											->withoutGlobalScopes();	
-										)],
-			'forecourt_attendant'   => 'required',
-			'cashiers_name'   		=> 'required',
-			'shift'   				=> ['required',Rule::unique('teves_cashiers_report')->where( 
-										fn ($query) =>$query
-											->where('report_date', $request->report_date)
-											->where('teves_branch', $request->teves_branch)
-											->where('shift', $request->shift)
-											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
-											->withoutGlobalScopes();	
-										)]
-        ], 
-        [
-			'teves_branch.required' => 'Branch is required',
-			'report_date.required' => 'Report Date is required',
-			'forecourt_attendant.required' => "Empoyee's on Duty is required",
-			'cashiers_name.required' => "Cashier's Name is required",
-			'shift.required' => "Shift is required"
-        ]
-		);
+    'report_date' => [
+        'required',
+        Rule::unique('teves_cashiers_report')->where(function ($query) use ($request) {
+            return $query
+                ->where('report_date', $request->report_date)
+                ->where('teves_branch', $request->teves_branch)
+                ->where('shift', $request->shift)
+                ->withoutGlobalScopes(); // <--- removes SoftDeletes global scope
+        }),
+    ],
+    'teves_branch' => [
+        'required',
+        Rule::unique('teves_cashiers_report')->where(function ($query) use ($request) {
+            return $query
+                ->where('report_date', $request->report_date)
+                ->where('teves_branch', $request->teves_branch)
+                ->where('shift', $request->shift)
+                ->withoutGlobalScopes(); // ignore deleted_at filter
+        }),
+    ],
+    'forecourt_attendant' => 'required',
+    'cashiers_name' => 'required',
+    'shift' => [
+        'required',
+        Rule::unique('teves_cashiers_report')->where(function ($query) use ($request) {
+            return $query
+                ->where('report_date', $request->report_date)
+                ->where('teves_branch', $request->teves_branch)
+                ->where('shift', $request->shift)
+                ->withoutGlobalScopes(); // ignore soft deletes
+        }),
+    ],
+], [
+    'teves_branch.required' => 'Branch is required',
+    'report_date.required' => 'Report Date is required',
+    'forecourt_attendant.required' => "Employee's on Duty is required",
+    'cashiers_name.required' => "Cashier's Name is required",
+    'shift.required' => "Shift is required",
+]);
 
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate = CashiersReportModel::find($request->CashiersReportId);
