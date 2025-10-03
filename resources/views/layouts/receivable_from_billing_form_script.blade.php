@@ -268,7 +268,7 @@
 								
 								if($lock_billing_item==1&&Session::get('UserType')!="SUAdmin"){ 
 								?>
-									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' >a<a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
+									var action_btn = "<td class='action_column_class'><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='viewBill'  data-id='"+id+"'></a></div></td>";
 								<?php	
 								}
 								else{

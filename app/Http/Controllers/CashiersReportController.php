@@ -225,13 +225,16 @@ class CashiersReportController extends Controller
 										fn ($query) =>$query
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
-											->where('shift', $request->shift) 
+											->where('shift', $request->shift)
+											->where('shift', $request->shift)
+											->withoutGlobalScopes();
 										)],
 			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
 										fn ($query) =>$query
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift) 
+											->withoutGlobalScopes();
 										)],
 			'forecourt_attendant'   => 'required',
 			'cashiers_name'   		=> 'required',
@@ -239,7 +242,8 @@ class CashiersReportController extends Controller
 										fn ($query) =>$query
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
-											->where('shift', $request->shift) 
+											->where('shift', $request->shift)
+											->withoutGlobalScopes(); 
 										)]
         ], 
         [
@@ -303,14 +307,16 @@ class CashiersReportController extends Controller
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
-											->where('cashiers_report_id', '<>',  $request->CashiersReportId )											
+											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
+											->withoutGlobalScopes();											
 										)],
 			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
 										fn ($query) =>$query
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
-											->where('cashiers_report_id', '<>',  $request->CashiersReportId )	
+											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
+											->withoutGlobalScopes();	
 										)],
 			'forecourt_attendant'   => 'required',
 			'cashiers_name'   		=> 'required',
@@ -319,7 +325,8 @@ class CashiersReportController extends Controller
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
-											->where('cashiers_report_id', '<>',  $request->CashiersReportId )	
+											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
+											->withoutGlobalScopes();	
 										)]
         ], 
         [
@@ -509,6 +516,8 @@ class CashiersReportController extends Controller
 		
 		$request->validate([
 			'product_idx'  			=> 'required',
+			'tank_idx'  			=> 'required',
+			'pump_idx'  			=> 'required',
 			'beginning_reading'  	=> ['required',Rule::unique('teves_cashiers_report_p1')->where( 
 									fn ($query) =>$query
 										->where('cashiers_report_id', $request->CashiersReportId)
@@ -538,6 +547,8 @@ class CashiersReportController extends Controller
         ], 
         [
 			'product_idx.required' 	=> 'Product is Required',
+			'tank_idx.required' 	=> 'Tank is Required',
+			'pump_idx.required' 	=> 'Pump is Required',
 			'beginning_reading.required' 	=> 'Beginning Reading is Required',
 			'closing_reading.required' 	=> 'Closing Reading is Required',
         ]

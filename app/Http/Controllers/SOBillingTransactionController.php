@@ -619,7 +619,7 @@ class SOBillingTransactionController extends Controller
 							$Billing->product_price 		= $product_price;
 							$Billing->order_quantity 		= $request->order_quantity;
 							$Billing->order_total_amount 	= $order_total_amount;
-							
+							$Billing->updated_by_user_idx 	= Session::get('loginID');
 							$result = $Billing->update();
 					
 							/*Delete from Cashiers Report*/
@@ -723,7 +723,7 @@ class SOBillingTransactionController extends Controller
 							$Billing->product_price 		= $product_price;
 							$Billing->order_quantity 		= $request->order_quantity;
 							$Billing->order_total_amount 	= $order_total_amount;
-							
+							$Billing->updated_by_user_idx 	= Session::get('loginID');
 							$result = $Billing->update();	
 					}
 					

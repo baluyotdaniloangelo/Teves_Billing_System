@@ -49,9 +49,9 @@ class BillingTransactionModel extends Model
         'order_po_number',
 		'sales_order_idx',
 		'created_at',
-		'created_by_user_id',
+		'created_by_user_idx',
 		'updated_at',
-		'updated_by_user_id',
+		'updated_by_user_idx',
 		'deleted_at',
 		'deleted_by_user_id'
     ];
@@ -80,9 +80,9 @@ class BillingTransactionModel extends Model
         'order_po_number',
 		'sales_order_idx',
 		'created_at',
-		'created_by_user_id',
+		'created_by_user_idx',
 		'updated_at',
-		'updated_by_user_id',
+		'updated_by_user_idx',
 		'deleted_at',
 		'deleted_by_user_id'
     ];

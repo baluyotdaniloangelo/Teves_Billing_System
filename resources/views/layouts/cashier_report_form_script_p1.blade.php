@@ -159,7 +159,11 @@
 								
 							}
 							
+							$('#product_tank_name_fuel_salesError').text(error.responseJSON.errors.tank_idx);
+							document.getElementById('product_tank_name_fuel_salesError').className = "invalid-feedback";	
 							
+							$('#product_pump_idx_fuel_salesError').text(error.responseJSON.errors.pump_idx);
+							document.getElementById('product_pump_idx_fuel_salesError').className = "invalid-feedback";	
 							
 					}
 				   });		
@@ -445,7 +449,12 @@
 								document.getElementById('update_closing_readingError').className = "invalid-feedback";		
 								
 							}
+					
+							$('#update_product_tank_name_fuel_salesError').text(error.responseJSON.errors.tank_idx);
+							document.getElementById('update_product_tank_name_fuel_salesError').className = "invalid-feedback";	
 							
+							$('#update_product_pump_idx_fuel_salesError').text(error.responseJSON.errors.pump_idx);
+							document.getElementById('update_product_pump_idx_fuel_salesError').className = "invalid-feedback";	
 					}
 				   });		
 	});
