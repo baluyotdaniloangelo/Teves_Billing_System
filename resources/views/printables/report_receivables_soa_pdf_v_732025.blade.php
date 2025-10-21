@@ -176,7 +176,7 @@
 			<td colspan="1" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">#</td>		
 			<td colspan="2" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Transaction Date</td>		
 			<td colspan="1" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Time</td>		
-			<td colspan="3" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Description</td>		
+			<td colspan="3" align="center" style="border-right:1px solid #afadad;  background-color: #e8e8e8; font-weight:bold; height:25px !important;">Transaction Reference No.</td>		
 			<td colspan="3" nowrap align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Mode of Payment</td>	
 			<td colspan="3" nowrap align="center" style="border-right:1px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Amount</td>	
 			<td colspan="3" nowrap align="center" style="border:0px solid #afadad; background-color: #e8e8e8; font-weight:bold;">Current Balance</td>

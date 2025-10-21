@@ -478,7 +478,7 @@ class SOBillingTransactionController extends Controller
 						$Billing = new BillingTransactionModel();
 						$Billing->so_idx 				= $request->so_id;
 						$Billing->branch_idx			= $request->branch_idx;
-						$Billing->cashiers_report_idx	= $cashiers_report_id;
+						//$Billing->cashiers_report_idx	= $cashiers_report_id;
 						$Billing->order_date 			= $so_info->order_date;
 						$Billing->order_time 			= $so_info->order_time;
 						$Billing->order_po_number 		= $so_info->so_number;                                                                                                                                                                     ;	
@@ -643,9 +643,22 @@ class SOBillingTransactionController extends Controller
 										'order_quantity' 		=> $request->order_quantity,
 										'pump_price' 			=> $product_price,
 										'order_total_amount' 	=> $order_total_amount,
+										'updated_by_user_id' 	=> Session::get('loginID')
+										]);
+										
+									/*
+									$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
+									->update([
+										'reference_no'			=> $so_info->so_number,
+										'client_idx'			=> $so_info->client_idx,
+										'product_idx' 			=> $request->product_idx,
+										'order_quantity' 		=> $request->order_quantity,
+										'pump_price' 			=> $product_price,
+										'order_total_amount' 	=> $order_total_amount,
 										'cashiers_report_id' 	=> $cashiers_report_id,
 										'updated_by_user_id' 	=> Session::get('loginID')
 										]);
+									*/
 										
 								}else{
 									
@@ -662,9 +675,19 @@ class SOBillingTransactionController extends Controller
 											'so_idx'			=> $request->so_id,
 											'client_idx'			=> $so_info->client_idx,
 											'reference_no'			=> $so_info->so_number,
+											'updated_by_user_id' 	=> Session::get('loginID')
+											]);
+											
+										/*$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
+										->update([
+											'so_idx'			=> $request->so_id,
+											'client_idx'			=> $so_info->client_idx,
+											'reference_no'			=> $so_info->so_number,
 											'cashiers_report_id' 	=> $cashiers_report_id,
 											'updated_by_user_id' 	=> Session::get('loginID')
 											]);
+										*/
+										
 									}else{
 										
 										$billing_update = CashiersReportModel_P3::where('billing_idx', $billID)
@@ -694,7 +717,7 @@ class SOBillingTransactionController extends Controller
 											
 							$CashiersReportModel_P3->user_idx 					= Session::get('loginID');
 							$CashiersReportModel_P3->billing_idx 				= $request->billing_id;
-							$CashiersReportModel_P3->cashiers_report_id 		= $cashiers_report_id;
+							//$CashiersReportModel_P3->cashiers_report_id 		= $cashiers_report_id;
 							$CashiersReportModel_P3->miscellaneous_items_type 	= 'SALES_CREDIT';
 							$CashiersReportModel_P3->so_idx 					= $request->so_id;
 							$CashiersReportModel_P3->reference_no 				= $so_info->so_number;
@@ -711,7 +734,7 @@ class SOBillingTransactionController extends Controller
 							/*update*/
 							$Billing = new BillingTransactionModel();
 							$Billing = BillingTransactionModel::find($request->billing_id);
-							$Billing->cashiers_report_idx   = $cashiers_report_id;
+							//$Billing->cashiers_report_idx   = $cashiers_report_id;
 							$Billing->branch_idx			= $request->branch_idx;
 							$Billing->order_date 			= $so_info->order_date;
 							$Billing->order_time 			= $so_info->order_time;

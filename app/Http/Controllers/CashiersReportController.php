@@ -1139,7 +1139,8 @@ class CashiersReportController extends Controller
 	
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
             ->where('miscellaneous_items_type','DISCOUNTS')
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+            ->whereNull('teves_cashiers_report_p3.deleted_at')
+			->leftjoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
@@ -1161,6 +1162,7 @@ class CashiersReportController extends Controller
 	
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
             ->where('miscellaneous_items_type','SALES_CREDIT')
+            ->whereNull('teves_cashiers_report_p3.deleted_at')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 			->leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->orderBy('cashiers_report_p3_id', 'asc')
@@ -1185,6 +1187,7 @@ class CashiersReportController extends Controller
 	
 			$data =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
 				->whereIn('miscellaneous_items_type', array('CASHOUT', 'OTHERS'))
+            ->whereNull('teves_cashiers_report_p3.deleted_at')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_cashiers_report_p3.reference_no',
@@ -1636,6 +1639,7 @@ class CashiersReportController extends Controller
         ->sum('order_total_amount');
 		
 		$PH3_SUM =  CashiersReportModel_P3::where('teves_cashiers_report_p3.cashiers_report_id', $CashiersReportId)
+		->whereNull('teves_cashiers_report_p3.deleted_at')
         ->sum('order_total_amount');
 		
 		$PH4_SUM =  CashiersReportModel_P4::where('teves_cashiers_report_p4.cashiers_report_id', $CashiersReportId)
@@ -1818,6 +1822,7 @@ class CashiersReportController extends Controller
 		$data_SALES_CREDIT =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
 			->where('miscellaneous_items_type','=','SALES_CREDIT')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+			->whereNull('teves_cashiers_report_p3.deleted_at')
 			->leftjoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_p3.client_idx')
 				->get([
 					'teves_product_table.product_name',
@@ -1835,6 +1840,7 @@ class CashiersReportController extends Controller
 		$data_DISCOUNTS =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
             ->where('miscellaneous_items_type','DISCOUNTS')
 			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+			->whereNull('teves_cashiers_report_p3.deleted_at')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
@@ -1851,6 +1857,7 @@ class CashiersReportController extends Controller
 		
 		$data_OTHERS =  CashiersReportModel_P3::where('cashiers_report_id', $request->CashiersReportId)
 				->whereIn('miscellaneous_items_type', array('CASHOUT', 'OTHERS'))
+				->whereNull('teves_cashiers_report_p3.deleted_at')
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_cashiers_report_p3.reference_no',

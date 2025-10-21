@@ -49,6 +49,7 @@ class UserController extends Controller
 				'user_real_name',
 				'user_name',
 				'user_type',
+				'user_status',
 				'user_email_address',
 				'user_branch_access_type',
 				'created_at',
@@ -63,6 +64,7 @@ class UserController extends Controller
 				'user_real_name',
 				'user_name',
 				'user_type',
+				'user_status',
 				'user_email_address',
 				'user_branch_access_type',
 				'created_at',
@@ -123,7 +125,7 @@ class UserController extends Controller
 	public function user_info(Request $request){
 
 		$UserID = $request->UserID;
-		$data = UserAccountModel::find($UserID, ['user_name','user_real_name','user_type', 'user_job_title', 'user_email_address', 'user_branch_access_type']);
+		$data = UserAccountModel::find($UserID, ['user_name', 'user_real_name', 'user_type', 'user_status', 'user_job_title', 'user_email_address', 'user_branch_access_type']);
 		return response()->json($data);
 		
 	}
@@ -166,6 +168,7 @@ class UserController extends Controller
 			$UserList->user_email_address 		= $request->user_email_address;
 			$UserList->user_password 			= hash::make($request->user_password);
 			$UserList->user_type 				= $request->user_type;
+			$UserList->user_status 				= $request->user_status;
 			$UserList->user_branch_access_type 	= $request->user_access;
 			$UserList->created_by_user_idx 		= Session::has('loginID');
 			
@@ -251,6 +254,7 @@ class UserController extends Controller
 			$UserList->user_name 						= $request->user_name;
 			if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
 			$UserList->user_type 						= $request->user_type;
+			$UserList->user_status 						= $request->user_status;
 			$UserList->user_email_address 				= $request->user_email_address;
 			$UserList->user_branch_access_type 			= $request->user_access;
 			$UserList->updated_by_user_idx 				= Session::get('loginID');

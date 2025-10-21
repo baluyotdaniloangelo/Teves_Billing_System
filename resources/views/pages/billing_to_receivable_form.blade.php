@@ -379,7 +379,7 @@
                     <div class="modal-footer modal-footer_form">
 						
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-billing-transaction"> Submit</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-billing-update"> Reset</button>
+						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-billing-update"> Reset</button>-->
 						  
 					</div>
 					</form><!-- End Multi Columns Form -->
