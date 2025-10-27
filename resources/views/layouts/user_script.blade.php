@@ -34,7 +34,8 @@
 					{data: 'user_real_name', className: "text-left"},   
 					{data: 'user_job_title', className: "text-left"},	
 					{data: 'user_name', className: "text-left"}, 					
-					{data: 'user_type', className: "text-left"},
+					{data: 'user_type', className: "text-left"},			
+					{data: 'user_status', className: "text-left"},
 					{data: 'user_email_address', className: "text-left"},					
 					{data: 'created_at_dt_format', name: 'switch_status', orderable: true, searchable: false, className: "text-left"},
 					{data: 'updated_at_dt_format', name: 'switch_status', orderable: true, searchable: false, className: "text-left"},
@@ -116,6 +117,8 @@
 			let user_access 		= $("#user_access").val();
 			let user_job_title 		= $("input[name=user_job_title]").val();
 			
+			let user_status 		= $("#user_status").val();
+			
 			  $.ajax({
 				url: "/create_user_post",
 				type:"POST",
@@ -127,6 +130,7 @@
 				  user_email_address:user_email_address,
 				  user_access:user_access,
 				  user_job_title:user_job_title,
+				  user_status:user_status,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -267,6 +271,7 @@
 					document.getElementById("update_user_real_name").value = response.user_real_name;
 					document.getElementById("update_user_name").value = response.user_name;
 					document.getElementById("update_user_type").value = response.user_type;
+					document.getElementById("update_user_status").value = response.user_status;
 					document.getElementById("update_user_email_address_management").value = response.user_email_address;
 					document.getElementById("update_user_job_title").value = response.user_job_title;
 					document.getElementById("update_user_access").value = response.user_branch_access_type;
@@ -287,6 +292,7 @@
 
 	document.getElementById("update_user_password").addEventListener('change', doThing_account_management);
 	document.getElementById("update_user_type").addEventListener('change', doThing_account_management);
+	document.getElementById("update_user_status").addEventListener('change', doThing_account_management);
 	document.getElementById("update_user_access").addEventListener('change', doThing_account_management);
 	document.getElementById("update_user_job_title").addEventListener('change', doThing_account_management);
 	
@@ -297,7 +303,7 @@
 			let user_real_name 		= $("input[name=update_user_real_name]").val();
 			let user_name 			= $("input[name=update_user_name]").val();
 			let user_email_address 	= $("input[name=update_user_email_address_management]").val();
-			let user_password 		= $("input[name=update_user_password]").val();
+			let user_status 		= $("input[name=update_user_status]").val();
 			let user_type 			= $("#update_user_type").val();	
 			let user_access 		= $("#update_user_access").val();
 			let user_job_title 		= $("input[name=update_user_job_title]").val();
@@ -317,7 +323,7 @@
 				  if(user_password!==''){
 						
 						 //alert('S1');
-						if(response.user_real_name===user_real_name && response.user_name===user_name && response.user_email_address===user_email_address && response.user_type===user_type && response.user_branch_access_type===user_access && response.user_job_title===user_job_title){
+						if(response.user_real_name===user_real_name && response.user_name===user_name && response.user_email_address===user_email_address && response.user_type===user_type && response.user_branch_access_type===user_access && response.user_job_title===user_job_title && response.user_status===user_status){
 							
 							document.getElementById("update-user").disabled = false;
 							//alert('b');
@@ -331,7 +337,7 @@
 				  }else{
 					  
 					  // alert('S2');
-					  if(response.user_real_name===user_real_name && response.user_name===user_name && response.user_email_address===user_email_address && response.user_type===user_type && response.user_branch_access_type===user_access && response.user_job_title===user_job_title){
+					  if(response.user_real_name===user_real_name && response.user_name===user_name && response.user_email_address===user_email_address && response.user_type===user_type && response.user_branch_access_type===user_access && response.user_job_title===user_job_title && response.user_status===user_status){
 							
 							document.getElementById("update-user").disabled = true;
 							//alert('d')
@@ -374,6 +380,7 @@
 			let user_name 			= $("input[name=update_user_name]").val();
 			let user_password 		= $("input[name=update_user_password]").val();
 			let user_type 			= $("#update_user_type").val();		
+			let user_status 			= $("#update_user_status").val();		
 			let user_email_address 	= $("input[name=update_user_email_address_management]").val();
 			let user_access 		= $("#update_user_access").val();
 			let user_job_title 		= $("input[name=update_user_job_title]").val();
@@ -388,6 +395,7 @@
 				  user_email_address:user_email_address,
 				  user_password:user_password,
 				  user_type:user_type,
+				  user_status:user_status,
 				  user_access:user_access,
 				  user_job_title:user_job_title,
 				  _token: "{{ csrf_token() }}"

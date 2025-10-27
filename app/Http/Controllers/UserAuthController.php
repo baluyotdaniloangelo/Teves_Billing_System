@@ -26,7 +26,7 @@ class UserAuthController extends Controller
             'user_name'=>'required|min:1|max:12', 
             'InputPassword'=>'required|min:6|max:20'
         ]);
-		
+		/*
         $user = User::where('user_name', '=', $request->user_name)->first();
 		if ($user){
 			if(Hash::check($request->InputPassword,$user->user_password)){
@@ -43,6 +43,31 @@ class UserAuthController extends Controller
 		}else{
 			return back()->with('fail', 'This Username is not Registered.');
 		}
+		*/
+		$user = User::where('user_name', '=', $request->user_name)->first();
+
+		if ($user) {
+			// Check if account is active
+			if ($user->user_status !== 'Active') {
+				return back()->with('fail', 'Your account is inactive. Please contact the administrator.');
+			}
+
+			// Check password
+			if (Hash::check($request->InputPassword, $user->user_password)) {
+
+				$request->session()->put('loginID', $user->user_id);
+				$request->session()->put('UserType', $user->user_type);
+				$request->session()->put('user_branch_access_type', $user->user_branch_access_type);
+
+				return redirect('billing');
+
+			} else {
+				return back()->with('fail', 'Incorrect Password');
+			}
+		} else {
+			return back()->with('fail', 'This Username is not Registered.');
+		}
+
     }
 
     public function logout(){

@@ -70,6 +70,7 @@ Route::get('billing/list', [BillingTransactionController::class, 'getBillingTran
 
 /*Billed Item to MAnually Generated*/
 Route::get('billing/billed_list', [BillingTransactionController::class, 'getBillingTransactionList_Billed'])->name('getBillingTransactionList_Billed')->middleware('isLoggedIn');
+Route::post('/update_bill_post', [BillingTransactionController::class,'update_bill_post'])->name('update_bill_post')->middleware('isLoggedIn');
 
 /*FOR SO Billing*/
 Route::get('/create_so_billing', [SOBillingTransactionController::class,'create_so_billing'])->name('create_so_billing')->middleware('isLoggedIn');

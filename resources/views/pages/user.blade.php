@@ -38,6 +38,7 @@
 													<th class="">Job Title</th>
 													<th  class="all">User Name</th>
 													<th>User Type</th>
+													<th>Status</th>
 													<th>Email Address</th>
 													<th class="none">Date Created:</th>
 													<th class="none">Date Updated:</th>	
@@ -149,6 +150,17 @@
 						</div>	
 						
 						<div class="row mb-2">
+						  <label for="user_status" class="col-sm-3 col-form-label">User Status:</label>
+						  <div class="col-sm-9">
+								<select class="form-select form-control" required="" name="user_status" id="user_status">
+								<option value="Active">Active</option>
+								<option value="Inactive">Inactive</option>
+								</select>
+							<span class="valid-feedback" id="user_statusError"></span>
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
 						  <label for="user_access" class="col-sm-3 col-form-label">User Access:</label>
 						  <div class="col-sm-9">
 								<select class="form-select form-control" required="" name="user_access" id="user_access">
@@ -237,6 +249,17 @@
 								<option value="Encoder">Encoder</option>
 								</select>
 							<span class="valid-feedback" id="update_user_typeError"></span>
+						  </div>
+						</div>	
+						
+						<div class="row mb-2">
+						  <label for="update_user_status" class="col-sm-3 col-form-label">User Status:</label>
+						  <div class="col-sm-9">
+								<select class="form-select form-control" required="" name="update_user_status" id="update_user_status">
+								<option value="Active">Active</option>
+								<option value="Inactive">Inactive</option>
+								</select>
+							<span class="valid-feedback" id="update_user_statusError"></span>
 						  </div>
 						</div>	
 						
