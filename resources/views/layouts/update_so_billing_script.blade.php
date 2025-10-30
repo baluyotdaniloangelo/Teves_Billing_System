@@ -328,6 +328,8 @@
 							lock_billing_item 	= response[i].lock_billing_item;
 							var control_number 	= response[i].control_number;
 							
+							var receivable_idx = Number(response[i].receivable_idx);
+							
 											<?php
 											if(Session::get('UserType')=="SUAdmin"){ 
 											?>
@@ -336,7 +338,7 @@
 											}
 											else{
 											?>
-											if(lock_billing_item!=1){
+											if(lock_billing_item!=1 && receivable_idx == 0 ){
 												action_btn = "<div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SOBilling_Edit' data-id='"+billing_id+"' ></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteSOProduct'  data-id='"+billing_id+"'></a></div>";
 											}else{
 												action_btn = "<div align='center' style='font-weight: bold;' title='This item is locked for editing and deletion.'>"+control_number+"</div>";

@@ -536,8 +536,9 @@ class SOBillingTransactionController extends Controller
 				->leftJoin('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_billing_table.cashiers_report_idx')
 				->orderBy('billing_id', 'asc')
 				->get([
-					'teves_cashiers_report.cashiers_report_no',
+					'teves_receivable_table.control_number',
 					'teves_billing_table.cashiers_report_idx',
+					'teves_billing_table.receivable_idx',
 					'teves_product_table.product_name',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',

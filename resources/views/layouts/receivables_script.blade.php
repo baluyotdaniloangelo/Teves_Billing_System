@@ -47,7 +47,7 @@
 			]
 		});
 		
-		<?php if($data->user_type=="Admin" ||$data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff" || $data->user_type=="Encoder"){ ?>
+		<?php if($data->user_type=="Admin" ||$data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 		
 				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
 				'<a class="btn btn-success new_item bi bi-plus-circle"" href="{{ route('create_recievable') }}"></a>'+
