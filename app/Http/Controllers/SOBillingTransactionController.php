@@ -798,8 +798,12 @@ class SOBillingTransactionController extends Controller
 		BillingTransactionModel::find($billID)->delete();	
 		
 		/*Delete from Cashiers Report*/
-		CashiersReportModel_P3::where('billing_idx', $billID)->delete();
-		
+		$records_P3 = CashiersReportModel_P3::where('billing_idx', $billID)->get();
+
+			foreach ($records_P3 as $record) {
+				$record->delete(); // this triggers your custom delete() method
+			}
+
 		return 'Deleted';
 		
 	} 
