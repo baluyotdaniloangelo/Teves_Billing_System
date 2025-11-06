@@ -165,8 +165,8 @@
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_super_regular_cols->product_name}}</td>
 				<!--<td nowrap style="border:1px solid #000;"><?=$p1_no_super_regular;?></td>-->
-				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->tank_name}}</td>
-				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->pump_name}}</td>
+				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_super_regular_cols->tank_name}}</td>
+				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_super_regular_cols->pump_name}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_super_regular_cols->beginning_reading}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_super_regular_cols->closing_reading}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;">{{$data_P1_super_regular_cols->calibration}}</td>
@@ -205,8 +205,8 @@
 			<tr class="data_tr" style="text-align: center; font-size:11px;">
 				<td nowrap style="border:1px solid #000;" colspan="2">{{$data_P1_diesel_cols->product_name}}</td>
 				<!--<td nowrap style="border:1px solid #000;"><?=$p1_no_diesel;?></td>-->
-				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->tank_name}}</td>
-				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_premium_95_cols->pump_name}}</td>
+				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_diesel_cols->tank_name}}</td>
+				<td nowrap style="border:1px solid #000;" colspan="1">{{$data_P1_diesel_cols->pump_name}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_diesel_cols->beginning_reading}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;" colspan="2">{{$data_P1_diesel_cols->closing_reading}}</td>
 				<td nowrap style="border:1px solid #000; text-align: right;">{{$data_P1_diesel_cols->calibration}}</td>

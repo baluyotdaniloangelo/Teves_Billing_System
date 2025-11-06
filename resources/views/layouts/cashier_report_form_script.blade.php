@@ -132,9 +132,6 @@
 		$("#product_name_PH2 span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_name_PH2');
 
-		/**///$("#product_list_PH3 span").remove();
-		/**///$('<span style="display: none;"></span>').appendTo('#product_list_PH3');
-
 		$("#product_list_inventory span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_list_inventory');
 			  $.ajax({
@@ -162,10 +159,6 @@
 							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
 							"</span>");	
 							
-							//$('#product_list_PH3 span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
-							//"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
-							//"</span>");	
-							
 							$('#product_list_inventory span:last').after("<span style='font-family: DejaVu Sans; sans-serif;'>"+
 							"<option label='&#8369; "+product_price+" | "+product_name+"' data-id='"+product_id+"' value='"+product_name+"' data-price='"+product_price+"' >" +
 							"</span>");	
@@ -182,7 +175,7 @@
 	}
 	
 	/*for MSC Items*/
-	function LoadSellingPriceList(client_idx){	
+	function LoadSellingPriceListlll(client_idx){	
 		
 		$("#product_list_PH3 span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_list_PH3');
@@ -229,6 +222,44 @@
 			   });
 	} 
 	
+function LoadSellingPriceList(client_idx) {
+    let branch_idx = $("#teves_branch").val();
+    $("#product_list_PH3").empty(); // clear before loading
+
+    $.ajax({
+        url: "/get_product_list_selling_price",
+        type: "POST",
+        data: {
+            client_idx: client_idx,
+            branch_idx: branch_idx,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function (response) {
+            const list = response.clients_price_list || [];
+
+            if (list.length === 0) {
+                console.warn("⚠ No products returned");
+                return;
+            }
+
+            list.forEach((item) => {
+                $("#product_list_PH3").append(`
+                    <option 
+                        value="${item.product_name}"
+                        data-id="${item.product_idx}"
+                        data-price="${item.product_price}"
+                        label="₱ ${item.product_price} | ${item.product_name}">
+                    </option>
+                `);
+            });
+        },
+        error: function (err) {
+            console.error("Error loading product list:", err);
+        }
+    });
+}
+
+
 	function UpdateBranch(){ 
 	
 		$('#switch_notice_off').show();
@@ -249,9 +280,6 @@
 		}else if(inventory_mode=='fuelsales'){
 			var product_id 			= $('#product_name option[value="' + $('#product_idx').val() + '"]').attr('data-id');
 		}
-		//else{
-		//	var product_id 			= $('#product_list_inventory option[value="' + $('#product_idx_inventory').val() + '"]').attr('data-id');
-		//}
 		
 		$("#product_pump_list span").remove();
 		$('<span style="display: none;"></span>').appendTo('#product_pump_list');
@@ -679,7 +707,7 @@
 			
 		}
 		
-		LoadSellingPriceList(client_idx);
+	LoadSellingPriceList(client_idx);
 		
 		let teves_branch 				= $("#teves_branch").val();
 		
@@ -773,12 +801,19 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						    LoadCashiersReportPH3_SALES_CREDIT();
-							
-							load_so_reference_no(0);
-							
+						
+						load_so_reference_no(0);
+						
+						if(miscellaneous_items_type=='SALES_CREDIT'){
+							LoadCashiersReportPH3_SALES_CREDIT();
+						}
+						else if(miscellaneous_items_type=='DISCOUNTS'){
 							LoadCashiersReportPH3_DISCOUNT();
-							LoadCashiersReportPH3_OTHERS();
+						}
+						else{
+							LoadCashiersReportPH3_OTHERS();	
+						}
+						
 						$('#product_idx_PH3Error').text('');					
 						$('#order_quantity_PH3Error').text('');		
 						$('#product_manual_price_PH3Error').text('');
@@ -886,7 +921,7 @@
 						
 							var cashiers_report_p3_id = response[i].cashiers_report_p3_id;						
 							var product_idx = response[i].product_idx;						
-							var unit_price = response[i].unit_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
+							var pump_price = response[i].pump_price.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							var product_name = response[i].product_name;
 							var client_name = response[i].client_name;
 							var reference_no = response[i].reference_no;
@@ -900,7 +935,7 @@
 							"<td align='left'>"+reference_no+"</td>"+
 							"<td align='left'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
-							"<td class='manual_price_td' align='center'>"+unit_price+"</td>"+
+							"<td class='manual_price_td' align='center'>"+pump_price+"</td>"+
 							"<td class='manual_price_td' align='center'>"+order_total_amount+"</td>"+
 							"<td><div align='center' class='action_table_menu_Product' style='margin-top: 6px;'><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='CHPH3_Edit_SALES_CREDIT' data-id='"+cashiers_report_p3_id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deleteCashiersProductP3_SALES_CREDIT'  data-id='"+cashiers_report_p3_id+"'></a></div></td>"+
 							"</tr>");				
@@ -980,24 +1015,28 @@
 					/*Set Details*/					
 					
 					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
-					document.getElementById("update_product_idx_PH3").value 			= response[0].product_name;
-					document.getElementById("update_sold_to_client_id").value 			= response[0].client_name;
-					document.getElementById("update_order_quantity_PH3").value 			= response[0].order_quantity;
-					document.getElementById("update_product_manual_price_PH3").value 	= response[0].unit_price;
+					document.getElementById("update_product_idx_PH3").value 				= response[0].product_name;
+					document.getElementById("update_sold_to_client_id").value 				= response[0].client_name;
+					document.getElementById("update_order_quantity_PH3").value 				= response[0].order_quantity;
+					document.getElementById("update_product_manual_price_PH3").value 		= response[0].unit_price;
+
+					document.getElementById("update_reference_no_PH3").value 				= response[0].reference_no;
 					
-					
-					document.getElementById("update_reference_no_PH3").value 	= response[0].reference_no;
-					
-					let client_idx = response[0].client_idx;	
+					let client_idx = response[0].client_idx;
 					load_so_reference_no(client_idx);
 					
 					update_input_settings_create_PH3();
 					
+					var pump_price = response[0].pump_price;
+					$('#pump_price_txt_update').html(pump_price.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
+					
+					var discounted_price = response[0].discounted_price;
+					$('#discounted_price_txt').html(discounted_price.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
+					
 					var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));		
 
-					UpdateTotalAmount_PH3();
-					LoadCashiersReportSummary();
+					//UpdateTotalAmount_PH3();
 					
 					$('#Update_CRPH3_Modal').modal('toggle');							  
 				  }
@@ -1087,7 +1126,6 @@
 					$('#UpdateTotalAmount_PH3').html('0');		
 
 					UpdateTotalAmount_PH3();
-					LoadCashiersReportSummary();
 					$('#Update_CRPH3_Modal').modal('toggle');		
 					
 				  }
@@ -1116,12 +1154,14 @@
 			
 			var client_idx 			    	= $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			var product_idx 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
+			alert(product_idx);
 			/*Product Name*/
 			let product_name 				= $("input[name=update_product_name_PH3]").val();
 			
 			var order_quantity 				= $("input[name=update_order_quantity_PH3]").val();
 			var product_manual_price 		= $("input[name=update_product_manual_price_PH3]").val();
 			var report_date 			    = $("input[name=report_date]").val();
+			
 			document.getElementById('CRPH3_form_edit').className = "g-3 needs-validation was-validated";
 			
 			var _billing_update 			= $('.billing_update:checked').val() || 'off';
@@ -1156,10 +1196,19 @@
 						$('#switch_notice_on').show();
 						$('#sw_on').html(response.success);
 						setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
-						    LoadCashiersReportPH3_SALES_CREDIT();
-							load_so_reference_no(1);
+						
+						load_so_reference_no(1);
+							
+						if(miscellaneous_items_type=='SALES_CREDIT'){
+							LoadCashiersReportPH3_SALES_CREDIT();
+						}
+						else if(miscellaneous_items_type=='DISCOUNTS'){
 							LoadCashiersReportPH3_DISCOUNT();
-							LoadCashiersReportPH3_OTHERS();
+						}
+						else{
+							LoadCashiersReportPH3_OTHERS();	
+						}	
+							
 						$('#update_product_idx_PH3Error').text('');					
 						$('#update_order_quantity_PH3Error').text('');		
 						$('#update_product_manual_price_PH3Error').text('');
@@ -1214,6 +1263,7 @@
 				}
 			   });	
 	  });
+	  
 	$('body').on('click','#deleteCashiersProductP3_DISCOUNT',function(){
 			event.preventDefault();
 			let CHPH3_ID = $(this).data('id');			
@@ -1246,6 +1296,7 @@
 				}
 			   });	
 	  });
+	  
 	<!--CRPH1 Deletion Confirmation-->	
 	$('body').on('click','#deleteCashiersProductP3_OTHERS',function(){
 			event.preventDefault();
@@ -1388,7 +1439,8 @@
 		    /*GET PUMP PRICE*/
 		    event.preventDefault();
 			
-			    let CHPH1_ID = $(this).data('id');			
+			    let CHPH1_ID = $(this).data('id');		
+				
 			    $.ajax({
 				    url: "{{ route('CRP1_info') }}",
 				    type:"POST",
@@ -1464,26 +1516,46 @@
 	}
 
 	function UpdateTotalAmount_PH3(){
-		
-		var miscellaneous_items_type 	= $("#update_miscellaneous_items_type_PH3").val();
-		
-		let CashiersReportId 		= {{ $CashiersReportId }};
-		let product_price 			= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-price');
-		let product_id 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');	
-		let product_manual_price 	= $("#update_product_manual_price_PH3").val();		
-		let order_quantity 			= $("input[name=update_order_quantity_PH3]").val();
-		
-		
-		/*GET PUMP PRICE*/
-		event.preventDefault();
-			
-			let CHPH1_ID = $(this).data('id');			
+	
+	event.preventDefault();
+	
+    let selectedValue = $('#update_product_idx_PH3').val().trim();
+    console.log("🧩 Selected input value:", selectedValue);
+
+    // Find matching option from datalist (case-insensitive match just in case)
+    let matchedOption = $('#product_list_PH3 option').filter(function () {
+        return $(this).val().toLowerCase() === selectedValue.toLowerCase();
+    });
+
+    // Log what we found
+    console.log("🧩 Matched option:", matchedOption[0]);
+
+    let product_price = matchedOption.attr('data-price');
+    let product_id = matchedOption.attr('data-id');
+
+	let product_id2 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');		
+	let product_price2 			= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-price');
+
+    console.log("✅ product_id:", product_id);
+    console.log("✅ product_price:", product_price);
+
+    // If still undefined, show a helpful alert
+    if (!product_id || !product_price) {
+        alert("⚠ Please select a valid product from the list."+product_id2);
+        return;
+    }
+
+    // Continue your logic safely now that product_id and price are defined
+    let product_manual_price = $("#update_product_manual_price_PH3").val();
+    let order_quantity = $("input[name=update_order_quantity_PH3]").val();
+    let miscellaneous_items_type = $("#update_miscellaneous_items_type_PH3").val();
+    let CashiersReportId = {{ $CashiersReportId }};
 			$.ajax({
 				url: "{{ route('CRP1_info') }}",
 				type:"POST",
 				data:{
 				  CashiersReportId:CashiersReportId,
-				  CHPH1_ID:CHPH1_ID,
+				 // CHPH1_ID:CHPH1_ID,
 				  miscellaneous_items_type:miscellaneous_items_type,
 				  product_id:product_id,
 				  _token: "{{ csrf_token() }}"

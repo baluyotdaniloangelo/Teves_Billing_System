@@ -1,2 +1,0 @@
-ALTER TABLE `teves_receivable_table`
-	ADD COLUMN `all_branches` VARCHAR(10) NULL DEFAULT NULL AFTER `payment_term`;

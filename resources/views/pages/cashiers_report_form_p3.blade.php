@@ -317,9 +317,9 @@
 	<!--Product List-->
 	<datalist id="product_list_PH3">
 		@foreach ($product_data as $product_data_cols)
-			<span style="font-family: DejaVu Sans; sans-serif;">
+			
 			<option label="&#8369; {{$product_data_cols->product_price}} | {{$product_data_cols->product_name}}" data-id="{{$product_data_cols->product_id}}" data-price="{{$product_data_cols->product_price}}" value="{{$product_data_cols->product_name}}">
-			</span>
+			
 		@endforeach
 	</datalist>
 	

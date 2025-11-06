@@ -480,7 +480,7 @@ class CashiersReportController extends Controller
 					->get([
 						'teves_cashiers_report_p1.product_price'
 						]);			
-						
+				//echo 'fff';	
 			return response()->json($data);
 			
 		}else{
@@ -1096,6 +1096,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3->unit_price 				= $product_manual_price;
 									$CashiersReportModel_P3->discounted_price 			= $discounted_price;
 									$CashiersReportModel_P3->order_total_amount 		= $peso_sales;
+									$CashiersReportModel_P3->created_by_user_id 		= Session::get('loginID');
 									$result = $CashiersReportModel_P3->save();
 									
 									if($result){
@@ -1120,8 +1121,7 @@ class CashiersReportController extends Controller
 									$CashiersReportModel_P3->unit_price 				= $product_manual_price;
 									$CashiersReportModel_P3->discounted_price 			= $discounted_price;
 									$CashiersReportModel_P3->order_total_amount 		= $peso_sales;
-									$CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
-									
+									$CashiersReportModel_P3->updated_by_user_id 		= Session::get('loginID');
 									$result = $CashiersReportModel_P3->update();
 									
 									if($result){
