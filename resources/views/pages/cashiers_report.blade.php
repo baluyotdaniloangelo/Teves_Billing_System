@@ -14,17 +14,20 @@
             <div class="card-body">			
 				<div class="p-d3">
 									<div class="table-responsive">
+									
 									<table class="table dataTable display nowrap cell-border" id="getCashierReport" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#</th>
-													<th>Date</th>
-													<th>Branch</th>
-													<?php if($data->user_type=="Admin"||$data->user_type=="Supervisor"||$data->user_type=="Accounting_Staff"||$data->user_type=="SUAdmin"){ ?><th>Encoder's Name</th><?php } ?>
-													<th>Cashier's Name</th>
-													<th>Employee's On-Duty</th>
-													<th>Shift</th>
-													<th>Action</th>
+													<th class="all">#</th>
+													<th class="all">Date</th>
+													<th class="all">Branch</th>
+													<?php if($data->user_type=="Admin"||$data->user_type=="Supervisor"||$data->user_type=="Accounting_Staff"||$data->user_type=="SUAdmin"){ ?><th class="all">Encoder's Name</th><?php } ?>
+													<th class="all">Cashier's Name</th>
+													<th class="all">Employee's On-Duty</th>
+													<th class="all">Shift</th>
+													<th class="all" title="Date Encoded">Date Created</th>
+													<th class="none">Date Updated</th>
+													<th class="all">Action</th>
 												</tr>
 											</thead>				
 											

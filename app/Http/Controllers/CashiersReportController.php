@@ -212,6 +212,18 @@ class CashiersReportController extends Controller
 						return $actionBtn;
 						
 					})
+					->addColumn('created_at_dt_format', function($row){						
+						return $row->created_at;
+					})
+					
+					->addColumn('updated_at_dt_format', function($row){		
+					
+						if($row->updated_at=="0000-00-00 00:00:00"){
+							return "$row->updated_at";
+						}else{
+							return "0000-00-00 00:00:00";
+						}
+					})
 					->rawColumns(['action'])
 					->make(true);
 		}

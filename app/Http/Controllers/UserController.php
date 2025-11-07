@@ -111,7 +111,6 @@ class UserController extends Controller
 					}else{
 						return "0000-00-00 00:00:00";
 					}
-
 				})
 				
 				->rawColumns(['action','created_at_dt_format','updated_at_dt_format'])

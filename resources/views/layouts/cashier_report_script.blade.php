@@ -19,11 +19,13 @@
 			             '</select> '
 		    },
 			/*processing: true,*/
+			responsive: true,
 			serverSide: true,
 			stateSave: true,/*Remember Searches*/
-			ajax: "{{ route('getCashierReport') }}",
+			scrollCollapse: true,
 			scrollCollapse: true,
 			scrollY: '500px',
+			ajax: "{{ route('getCashierReport') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'report_date', className: "text-center"},
@@ -35,6 +37,8 @@
 							
 					{data: 'forecourt_attendant', orderable: false},
 					{data: 'shift', orderable: false},
+					{data: 'created_at_dt_format', name: 'switch_status', orderable: true, searchable: false, className: "text-left"},
+					{data: 'updated_at_dt_format', name: 'switch_status', orderable: true, searchable: false, className: "text-left"},
 					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
