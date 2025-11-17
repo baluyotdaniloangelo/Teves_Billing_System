@@ -161,6 +161,9 @@
 			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
 			
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Net Amount</td>
+			
+			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Total Payment</td>
+			
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000; border-right:1px solid #000;">Current Balance</td>
 		</tr>
 		
@@ -175,6 +178,8 @@
 			
 				$_billing_date=date_create("$receivable_data_data_cols->billing_date");
 				$billing_date = strtoupper(date_format($_billing_date,"m/d/Y"));
+				
+				$current_total_payment = $receivable_data_data_cols->receivable_amount - $receivable_data_data_cols->receivable_remaining_balance;
 				
 				$current_balance += $receivable_data_data_cols->receivable_remaining_balance;	
 				
@@ -193,6 +198,7 @@
 			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_withholding_tax_percentage'],0);?>%</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_withholding_tax'],2);?>&nbsp;</td>			
 			
+			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($current_total_payment,2);?>&nbsp;</td>			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_data_data_cols['receivable_amount'],2);?>&nbsp;</td>			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px gray;"><?=number_format($current_balance,2);?>&nbsp;</td>			
 		
@@ -205,13 +211,13 @@
 		@endforeach
 
 		<tr>
-			<td colspan="13" style="height:5.66px !important;"></td>
+			<td colspan="14" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="13" style="height:5.66px !important;"></td>
+			<td colspan="14" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="13" style="height:5.66px !important;"></td>
+			<td colspan="14" style="height:5.66px !important;"></td>
 		</tr>	
 		
 		</table>

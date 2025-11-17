@@ -35,7 +35,8 @@
 												<div class="row mb-2">
 												  <label for="so_order_date" class="col-sm-3 col-form-label">Date</label>
 												  <div class="col-sm-9">
-													<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="{{ $so_data[0]['order_date'] }}" required <?php if($cashiers_report_idx!=0){ echo "disabled"; } ?> >
+													<input type="date" class="form-control" name="so_order_date" id="so_order_date" value="{{ $so_data[0]['order_date'] }}" required 
+													<?= (!in_array($data->user_type, ['Admin', 'SUAdmin'])) ? 'disabled' : '' ?> >
 													<span class="valid-feedback" id="so_order_dateError" title="Required"></span>
 												  </div>
 												</div>
