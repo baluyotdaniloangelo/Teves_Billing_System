@@ -160,6 +160,7 @@ Route::post('/generate_soa_summary', [ReportController::class,'generate_soa_summ
 Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_soa_summary_pdf')->middleware('isLoggedIn');
 
 Route::get('/generate_soa_summary_pdf_v_762025', [ReportController::class,'generate_soa_summary_pdf_v_762025'])->name('generate_soa_summary_pdf_v_762025')->middleware('isLoggedIn');
+Route::get('/generate_soa_summary_pdf_v_11192025', [ReportController::class,'generate_soa_summary_pdf_v_11192025'])->name('generate_soa_summary_pdf_v_11192025')->middleware('isLoggedIn');
 
 /*Daily Sales Reports*/
 Route::get('/daily_sales', [DailySalesReportController::class,'daily_sales_page'])->name('daily_sales')->middleware('isLoggedIn');

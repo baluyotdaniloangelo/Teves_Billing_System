@@ -399,6 +399,154 @@ class ReportController extends Controller
 		}
 	}
 	
+	public function generate_soa_summary_pdf_v_11192025(Request $request){
+
+		if(Session::has('loginID')){
+			
+		$request->validate([
+			'client_idx'      			=> 'required',
+			'company_header'      		=> 'required',
+			'start_date'      			=> 'required',
+			'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 		=> 'Please select a Client',
+			'company_header.required' 	=> 'Please select a Branch',
+			'start_date.required' 		=> 'Please select a Start Date',
+			'end_date.required' 		=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$company_header = $request->company_header;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+		/*Remainiong Balance*/
+		$receivable_remaining_balance_total = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+				->where('teves_receivable_table.billing_date', '<', $start_date)
+				->sum('receivable_remaining_balance');
+
+	   /*SOA Data*/
+	   $receivable_data_OLD = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+					->where('teves_receivable_table.billing_date', '>=', $start_date)
+                    ->where('teves_receivable_table.billing_date', '<=', $end_date)
+              	->get([
+					'teves_receivable_table.receivable_name',
+					'teves_receivable_table.billing_date',
+					'teves_receivable_table.billing_time',
+					'teves_receivable_table.control_number',
+					'teves_receivable_table.or_number',
+					'teves_receivable_table.ar_reference',
+					'teves_receivable_table.payment_term',
+					'teves_receivable_table.receivable_description',
+					'teves_receivable_table.receivable_gross_amount',
+					'teves_receivable_table.receivable_vatable_sales',
+					'teves_receivable_table.receivable_vat_amount',
+					'teves_receivable_table.receivable_net_value_percentage',
+					'teves_receivable_table.receivable_vat_value_percentage',
+					'teves_receivable_table.receivable_withholding_tax_percentage',
+					'teves_receivable_table.receivable_withholding_tax',
+					'teves_receivable_table.receivable_amount',
+					'teves_receivable_table.receivable_remaining_balance'
+				]);	
+
+
+//$client = 24;
+//$start  = '2024-01-01';
+//$end    = '2024-12-31';
+
+				$receivable_data = DB::select("
+					SELECT *
+					FROM (
+						-- RECEIVABLE ROW
+						SELECT 
+							'receivable' AS row_type,
+							r.receivable_id AS id,
+							r.billing_date AS date_info,
+							'00:00' as time_info,
+							CONCAT(IFNULL(r.control_number,''), ' <br> ', IFNULL(r.receivable_description,'')) AS description,
+							r.receivable_amount AS amount,
+							r.client_idx,
+							r.receivable_remaining_balance,
+							r.receivable_gross_amount,
+							r.receivable_vat_value_percentage,
+							r.receivable_vatable_sales,
+							r.receivable_withholding_tax_percentage,
+							r.receivable_withholding_tax,
+							r.billing_date AS sort_date,
+							r.receivable_id AS group_id,
+							1 AS sort_order
+						FROM teves_receivable_table r
+						WHERE r.client_idx = ?
+						  AND r.billing_date >= ?
+						  AND r.billing_date <= ?
+						  AND r.deleted_at IS NULL
+
+						UNION ALL
+
+						-- PAYMENT ROW
+						SELECT 
+							'payment' AS row_type,
+							p.receivable_payment_id AS id,
+							p.receivable_date_of_payment AS date_info,
+							IFNULL(p.receivable_time_of_payment,'00:00') as time_info,
+							CONCAT(
+								IFNULL(p.receivable_mode_of_payment,''),
+								' <br> ',
+								IFNULL(p.receivable_reference,'')
+							) AS description,
+							p.receivable_payment_amount AS amount,
+							p.client_idx,
+							NULL AS receivable_remaining_balance,
+							NULL AS receivable_gross_amount,
+							NULL AS receivable_vat_value_percentage,
+							NULL AS receivable_vatable_sales,
+							NULL AS receivable_withholding_tax_percentage,
+							NULL AS receivable_withholding_tax,
+							p.receivable_date_of_payment AS sort_date,
+							p.receivable_idx AS group_id,
+							2 AS sort_order
+						FROM teves_receivable_payment p
+						INNER JOIN teves_receivable_table r2 
+							ON r2.receivable_id = p.receivable_idx
+						WHERE r2.client_idx = ?
+						  AND r2.billing_date >= ?
+						  AND r2.billing_date <= ?
+						  AND r2.deleted_at IS NULL
+						  AND p.deleted_at IS NULL
+					) AS x
+					ORDER BY 
+						group_id ASC,
+						sort_date ASC,
+						sort_order ASC
+				", [
+					$client_idx, $start_date, $end_date,
+					$client_idx, $start_date, $end_date
+				]);
+
+		
+		/*Client Information*/
+		$client_data = ClientModel::find($client_idx, ['client_name','client_account_number','client_address','client_tin']);			
+					
+		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'SOA - Summary';
+		  
+        $pdf = PDF::loadView('printables.report_receivables_summary_soa_pdf_v_11192025', compact('title', 'receivable_data', 'user_data','receivable_header', 'client_data', 'start_date', 'end_date', 'receivable_remaining_balance_total'));
+		 
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'portrait');/*Set to Landscape*/
+		return $pdf->stream($client_data['client_name']."_RECEIVABLE_SOA.pdf");
+		
+		}
+	}
+
 	
 	/*Generated for receivable but not save*/
 	public function generate_report_recievable (Request $request){

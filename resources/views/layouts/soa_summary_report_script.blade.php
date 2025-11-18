@@ -59,8 +59,8 @@
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<!--<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(1)"> PDF</button>-->'+
 							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(2)"> PDF</button>'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(3)"> PDF V3</button>'+
 							'</div>');
 							
 				  }else{
@@ -200,6 +200,8 @@
 			var url = "{{URL::to('generate_soa_summary_pdf')}}?" + $.param(query)
 		}else if(version==2){
 			var url = "{{URL::to('generate_soa_summary_pdf_v_762025')}}?" + $.param(query)
+		}else if(version==3){
+			var url = "{{URL::to('generate_soa_summary_pdf_v_11192025')}}?" + $.param(query)
 		}
 		
 		window.open(url);
