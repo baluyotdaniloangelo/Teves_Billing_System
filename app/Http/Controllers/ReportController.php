@@ -428,34 +428,6 @@ class ReportController extends Controller
 				->sum('receivable_remaining_balance');
 
 	   /*SOA Data*/
-	   $receivable_data_OLD = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
-					->where('teves_receivable_table.billing_date', '>=', $start_date)
-                    ->where('teves_receivable_table.billing_date', '<=', $end_date)
-              	->get([
-					'teves_receivable_table.receivable_name',
-					'teves_receivable_table.billing_date',
-					'teves_receivable_table.billing_time',
-					'teves_receivable_table.control_number',
-					'teves_receivable_table.or_number',
-					'teves_receivable_table.ar_reference',
-					'teves_receivable_table.payment_term',
-					'teves_receivable_table.receivable_description',
-					'teves_receivable_table.receivable_gross_amount',
-					'teves_receivable_table.receivable_vatable_sales',
-					'teves_receivable_table.receivable_vat_amount',
-					'teves_receivable_table.receivable_net_value_percentage',
-					'teves_receivable_table.receivable_vat_value_percentage',
-					'teves_receivable_table.receivable_withholding_tax_percentage',
-					'teves_receivable_table.receivable_withholding_tax',
-					'teves_receivable_table.receivable_amount',
-					'teves_receivable_table.receivable_remaining_balance'
-				]);	
-
-
-//$client = 24;
-//$start  = '2024-01-01';
-//$end    = '2024-12-31';
-
 				$receivable_data = DB::select("
 					SELECT *
 					FROM (
