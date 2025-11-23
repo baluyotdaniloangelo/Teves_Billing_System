@@ -132,40 +132,23 @@
 		</table>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" style="table-layout:fixed;">
-	
-		<!--
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="1" align="center" style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">#</td>		
-			<td colspan="2" align="left" style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Transaction Date</td>		
-			<td colspan="2" align="left" style="border-right:1px solid skyblue;  background-color: #c6e0b4; font-weight:bold; height:25px !important; padding:10px;">Reference No.</td>		
-			<td colspan="3" nowrap align="left" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Description</td>
-			<td colspan="2" nowrap align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Amount</td>
-			<td colspan="2" nowrap align="right" style="border-right:1px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Remaining Balance</td>
-			<td colspan="2" nowrap align="right" style="border:0px solid skyblue; background-color: #c6e0b4; font-weight:bold; padding:10px;">Current Balance</td>
-		</tr>
-		-->
 		<tr style="font-size:10px;border:1 solid #000;">
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">#</td>		
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">Date</td>	
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">Time</td>			
 			<td colspan="3"  align="left" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Description</td>				
-			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Gross Amount</td>		
-			
+			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Gross Amount</td>	
 			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">VATable</td>
 			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
-			
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Net Amount</td>
-			
-			<!--<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Total Payment</td>-->
-			
+			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Payment</td>
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000; border-right:1px solid #000;">Current Balance</td>
 		</tr>
-		
 		<?php 
 			$no = 1;
 			$total_payment = 0;
 			$current_balance = 0;
-			?>
+		?>
 		@foreach ($receivable_data as $receivable_data_data_cols)
 			<?php
 			
@@ -183,36 +166,67 @@
 				$receivable_vat_value_percentage = $receivable_data_data_cols->receivable_vat_value_percentage;
 				
 				$receivable_vatable_sales = $receivable_data_data_cols->receivable_vatable_sales;
-				
 				$receivable_withholding_tax_percentage = $receivable_data_data_cols->receivable_withholding_tax_percentage;
-				
 				$receivable_withholding_tax = $receivable_data_data_cols->receivable_withholding_tax;
 				
-				$receivable_amount = $receivable_data_data_cols->amount;
+				$row_type = $receivable_data_data_cols->row_type;
 				
-				$current_balance += $receivable_data_data_cols->receivable_remaining_balance;	
+				if($row_type=='payment'){
+					$current_balance += $receivable_data_data_cols->receivable_remaining_balance - $receivable_data_data_cols->amount;
+					$payment_amount = $receivable_data_data_cols->amount;
+					$receivable_amount = 0;
+				}else{
+					$current_balance += $receivable_data_data_cols->receivable_gross_amount;	
+					$payment_amount = 0;
+					$receivable_amount = $receivable_data_data_cols->amount;
+				}
+				
+				// PAYMENT DISPLAY
+				if($row_type == 'payment'){
+					$payment_display = '<span style="color:red;">(' . number_format($payment_amount, 2) . ')</span>';
+				} else {
+					$payment_display = number_format($payment_amount, 2);
+				}
+
+				// CURRENT BALANCE DISPLAY
+				if($row_type == 'payment'){
+					$abs_balance = abs($current_balance);
+
+					if($abs_balance == 0){
+						// zero balance (no formatting)
+						$current_balance_display = number_format($abs_balance, 2);
+					} else {
+						// non-zero payment balance (red + parentheses)
+						$current_balance_display = '<span style="color:red;">(' . number_format($abs_balance, 2) . ')</span>';
+					}
+				} else {
+					// normal receivable row
+					$current_balance_display = number_format($current_balance, 2);
+				}
+				
 				
 			?>
 		<tr style="font-size:10px;border:1 solid #000;">
-			
 			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:5px;"><?=$no;?></td>
 			<td colspan="1" width="8%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_date;?></td>
 			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_time;?></td>
 			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:1px;"><?=$receivable_description;?></td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$receivable_gross_amount;?>&nbsp;</td>	
-			
 			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_vat_value_percentage,0);?>%</td>			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_vatable_sales,2);?>&nbsp;</td>
-			
 			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax_percentage,0);?>%</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax,2);?>&nbsp;</td>			
-			
-			<!--<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><//?=number_format($current_total_payment,2);?>&nbsp;</td>	-->		
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_amount,2);?>&nbsp;</td>			
-			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px gray;"><?=number_format($current_balance,2);?>&nbsp;</td>			
-		
-		</tr>
-		
+			<td colspan="1" align="right"
+				style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">
+				<?= $payment_display ?>&nbsp;
+			</td>
+			<td colspan="1" align="right"
+    style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px gray;">
+    <?= $current_balance_display ?>&nbsp;
+</td>
+
+			</tr>
 			<?php
 				$no++; 
 			?>
@@ -220,13 +234,13 @@
 		@endforeach
 
 		<tr>
-			<td colspan="13" style="height:5.66px !important;"></td>
+			<td colspan="14" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="13" style="height:5.66px !important;"></td>
+			<td colspan="14" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="13" style="height:5.66px !important;"></td>
+			<td colspan="14" style="height:5.66px !important;"></td>
 		</tr>	
 		
 		</table>
