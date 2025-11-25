@@ -139,7 +139,7 @@
 			<td colspan="3"  align="left" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Description</td>				
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Gross Amount</td>	
 			<td colspan="1"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">VATable</td>
-			<td colspan="1"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
+			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Net Amount</td>
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Payment</td>
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000; border-right:1px solid #000;">Current Balance</td>
@@ -212,7 +212,7 @@
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$receivable_gross_amount;?>&nbsp;</td>	
 			<!--<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><//?=number_format($receivable_vat_value_percentage,0);?>%</td>-->			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_vatable_sales,2);?>&nbsp;</td>
-			<!--<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax_percentage,0);?>%</td>-->
+			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax_percentage,0);?>%</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax,2);?>&nbsp;</td>			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_amount,2);?>&nbsp;</td>			
 			<td colspan="1" align="right"
@@ -232,13 +232,13 @@
 		@endforeach
 
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="13" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="13" style="height:5.66px !important;"></td>
 		</tr>	
 		<tr>
-			<td colspan="12" style="height:5.66px !important;"></td>
+			<td colspan="13" style="height:5.66px !important;"></td>
 		</tr>	
 		
 		</table>
