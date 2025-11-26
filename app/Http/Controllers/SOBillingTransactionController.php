@@ -624,7 +624,7 @@ class SOBillingTransactionController extends Controller
 							$result = $Billing->update();
 					
 							/*Delete from Cashiers Report*/
-							CashiersReportModel_P3::where('billing_idx', $billID)->delete();
+							//CashiersReportModel_P3::where('billing_idx', $billID)->delete();
 
 					}
 					else{
