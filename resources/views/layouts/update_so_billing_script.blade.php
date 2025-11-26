@@ -348,7 +348,7 @@
 											else{
 											?>
 											if(lock_billing_item!=1 && receivable_idx == 0 ){
-												action_btn = "<div align='center' class='action_table_menu_Product' style='margin-top: 6px;'>
+												action_btn = "<div align='center' class='action_table_menu_Product' style='margin-top: 6px;'>"+
 												"<a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='SOBilling_Edit' data-id='"+billing_id+"' ></a> "+
 												delete_btn+
 												"</div>";
