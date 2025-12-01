@@ -263,22 +263,49 @@
 			<td colspan="4" style="border-right:1px solid gray;">&nbsp;</td>	
 		</tr>
 		
-		<tr>
-			<td colspan="3" style="border-left:1px solid gray; border-right:1px solid gray;">&nbsp;</td>	
-			<td colspan="3" style="border-right:1px solid gray;">&nbsp;</td>			
-			<td colspan="4" style="border-right:1px solid gray;">&nbsp;</td>	
-		</tr>
-		
 		<tr style="font-size:12px;">
-			<td colspan="3" align="center" style="border-left:1px solid gray; border-right:1px solid gray; text-decoration:underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>	
-			<td colspan="3" align="center" style="border-left:0px solid #000; border-right:1px solid gray; text-decoration:underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>				
-			<td colspan="4" align="center" style="border-left:0px solid #000; border-right:1px solid gray; text-decoration:underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>	
+			<td colspan="3" align="center" style="border-left:1px solid gray;border-right:1px solid gray; position: relative; height: 70px; ">
+			<!-- Signature as floating background inside this cell -->
+				<div style="
+				position: absolute;
+				bottom: 30px;              /* adjust vertical position inside the yellow box */
+				left: 50%;
+				transform: translateX(-50%);
+				width: 100px;             /* adjust width */
+				height: 70px;             /* adjust height */
+				background-image: url('data:image/jpeg;base64,{{$user_data->user_signature}}');
+				background-repeat: no-repeat;
+				background-size: contain;
+				z-index: 1;
+				/* opacity: 0.9;             optional: watermark effect */
+				pointer-events: none;
+				"></div>
+				<div style="position: relative; z-index: 2; text-decoration:underline;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<br>
+				{{$user_data->user_job_title}}
+			</td>	
+			<td colspan="3" align="center" style="border-right:1px solid gray; position: relative; height: 50px;">
+				<div style="position: relative; z-index: 2; text-decoration:underline;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<br>
+				Office Staff
+			</td>				
+			<td colspan="4" align="center" style="border-right:1px solid gray; position: relative; height: 50px;">
+				<div style="position: relative; z-index: 2; text-decoration:underline;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<br>
+				Signature over Printed Name
+			</td>	
 		</tr>
 	
 		<tr style="font-size:12px;">
-			<td colspan="3" align="center" style="border-left:1px solid gray; border-right:1px solid gray;">{{$user_data->user_job_title}}</td>	
-			<td colspan="3" align="center" style="border-right:1px solid gray;">Office Staff</td>			
-			<td colspan="4" align="center" style="border-right:1px solid gray;">Signature over Printed Name</td>	
+			<td colspan="3" align="center" style="border-left:1px solid gray; border-right:1px solid gray;"></td>	
+			<td colspan="3" align="center" style="border-right:1px solid gray;"></td>			
+			<td colspan="4" align="center" style="border-right:1px solid gray;"></td>	
 		</tr>
 	
 		<tr style="font-size:12px;">
