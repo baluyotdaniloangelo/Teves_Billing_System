@@ -59,8 +59,8 @@
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(2)"> PDF</button>'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(3)"> PDF V3</button>'+
+							'<!--<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(2)"> PDF</button>-->'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(3)"> PDF</button>'+
 							'</div>');
 							
 				  }else{
@@ -126,11 +126,69 @@
 				"columns": [
 				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
 				/*1*/	{data: 'billing_date', className: "text-left", orderable: false },
-				/*2*/	{data: 'control_number', className: "text-left", orderable: false },
-				/*3*/	{data: 'receivable_description', className: "text-left", orderable: false },	
-				/*4*/	{data: 'receivable_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*5*/	{data: 'receivable_remaining_balance', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				/*6*/	{data: 'current_balance', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*1*/	{data: 'billing_time', className: "text-left", orderable: false },
+				/*2*/	{
+						    data: 'receivable_description',
+							className: "text-left",
+							orderable: false,
+						    render: function (data) {
+								// Convert &lt;br&gt; to <br>
+								return data
+									.replace(/&lt;br&gt;/g, "<br>")
+									.replace(/&amp;/g, "&");
+							}
+						},
+				/*4*/	{data: 'receivable_gross_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*4*/	{data: 'receivable_withholding_tax_percentage', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*5*/	{data: 'receivable_withholding_tax', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*6*/	{data: 'net_amount', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*6*/	{data: 'receivable_remaining_balance', className: "text-right", orderable: false, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
+				/*6*/	/* payment_amount */
+						{
+							data: 'payment_amount',
+							className: "text-right",
+							orderable: false,
+							render: function (data, type, row) {
+
+								// Format number first
+								let formatted = $.fn.dataTable.render
+									.number(',', '.', 2, '')
+									.display(data);
+
+								// If row is PAYMENT
+								if (row.row_type === 'payment') {
+									// absolute value, wrap in ( ), red color
+									return '<span style="color:red;">(' + formatted.replace('-', '') + ')</span>';
+								}
+
+								return formatted;
+							}
+						},
+				/*6*/	/* current_balance */
+						{
+							data: 'current_balance',
+							className: "text-right",
+							orderable: false,
+							render: function (data, type, row) {
+
+								// Format number
+								let formatted = $.fn.dataTable.render
+									.number(',', '.', 2, '')
+									.display(data);
+
+								// For payment row_type: red, absolute value, parentheses
+								if (row.row_type === 'payment') {
+									// If zero => NO red, NO parentheses
+									if (parseFloat(data) == 0) {
+										return formatted; 
+									}
+
+									return '<span style="color:red;">(' + formatted.replace('-', '') + ')</span>';
+								}
+
+								return formatted;
+							}
+						},
 				],
 				
 		} );

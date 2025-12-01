@@ -155,7 +155,7 @@ Route::post('/generate_report_recievable_after_saved', [ReportController::class,
 /*Load SOA Summary Report History Interface*/
 Route::get('/soa_summary_history', [ReportController::class,'soa_summary_history'])->name('soa_summary_history')->middleware('isLoggedIn');
 /*Generate via Web Page View - For receivable*/
-Route::post('/generate_soa_summary', [ReportController::class,'generate_soa_summary'])->name('generate_soa_summary')->middleware('isLoggedIn');
+Route::post('/generate_soa_summary', [ReportController::class,'generate_soa_summary_12012025'])->name('generate_soa_summary')->middleware('isLoggedIn');
 /*Generate via Web Page View - For receivable*/
 Route::get('/generate_soa_summary_pdf', [ReportController::class,'generate_soa_summary_pdf'])->name('generate_soa_summary_pdf')->middleware('isLoggedIn');
 

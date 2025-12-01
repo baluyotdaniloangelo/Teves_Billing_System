@@ -138,7 +138,6 @@
 			<td colspan="1" align="center" style="font-weight:bold; height:25px !important; padding:10px;border-left:1px solid #000;">Time</td>			
 			<td colspan="3"  align="left" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Description</td>				
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Gross Amount</td>	
-			<!--<td colspan="1"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">VATable</td>-->
 			<td colspan="2"  align="center" style="font-weight:bold; padding:10px;border-left:1px solid #000;">WTax</td>
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Net Amount</td>
 			<td colspan="1"  align="right" style="font-weight:bold; padding:10px;border-left:1px solid #000;">Payment</td>
@@ -152,7 +151,6 @@
 		@foreach ($receivable_data as $receivable_data_data_cols)
 			<?php
 			
-			
 				$_billing_date=date_create("$receivable_data_data_cols->date_info");
 				$billing_date = strtoupper(date_format($_billing_date,"m/d/Y"));
 				$_billing_time=date_create("$receivable_data_data_cols->time_info");
@@ -160,8 +158,6 @@
 				
 				$receivable_description = $receivable_data_data_cols->description;
 				
-				
-				$receivable_description = $receivable_data_data_cols->description;
 				$receivable_gross_amount = number_format($receivable_data_data_cols->receivable_gross_amount,2);
 				$receivable_vat_value_percentage = $receivable_data_data_cols->receivable_vat_value_percentage;
 				
@@ -173,7 +169,6 @@
 				
 				// CURRENT BALANCE DISPLAY
 				if($row_type == 'payment'){
-					
 					
 					$current_balance += $receivable_data_data_cols->receivable_remaining_balance - $receivable_data_data_cols->amount;
 					$payment_amount = $receivable_data_data_cols->amount;
@@ -202,7 +197,6 @@
 					$current_balance_display = number_format($current_balance, 2);
 				}
 				
-				
 			?>
 		<tr style="font-size:10px;border:1 solid #000;">
 			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:5px;"><?=$no;?></td>
@@ -210,19 +204,17 @@
 			<td colspan="1" width="4%" align="center" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=$billing_time;?></td>
 			<td colspan="3" align="left" style="border-left:1px solid #000; border-bottom:solid 1px gray; padding:1px;"><?=$receivable_description;?></td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=$receivable_gross_amount;?>&nbsp;</td>	
-			<!--<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><//?=number_format($receivable_vat_value_percentage,0);?>%</td>-->			
-			<!--<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_vatable_sales,2);?>&nbsp;</td>-->
 			<td colspan="1" width="4%"  align="center" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax_percentage,0);?>%</td>
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_withholding_tax,2);?>&nbsp;</td>			
 			<td colspan="1" align="right" style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($receivable_amount,2);?>&nbsp;</td>			
 			<td colspan="1" align="right"
 				style="border-left:1px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;">
-				<?= $payment_display ?>&nbsp;
+				<?=$payment_display ?>&nbsp;
 			</td>
 			<td colspan="1" align="right"
-    style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px gray;">
-    <?= $current_balance_display ?>&nbsp;
-</td>
+				style="border-left:1px solid #000; border-right:1px solid #000; border-bottom:solid 1px gray;">
+				<?=$current_balance_display ?>&nbsp;
+			</td>
 
 			</tr>
 			<?php

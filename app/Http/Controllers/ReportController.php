@@ -260,6 +260,179 @@ class ReportController extends Controller
 		
 	}	
 	
+	public function generate_soa_summary_12012025(Request $request){
+
+		$request->validate([
+          'client_idx'      		=> 'required',
+		  'start_date'      		=> 'required',
+		  'end_date'      			=> 'required'
+        ], 
+        [
+			'client_idx.required' 	=> 'Please select a Client',
+			'start_date.required' 	=> 'Please select a Start Date',
+			'end_date.required' 	=> 'Please select a End Date'
+        ]
+		);
+
+		$client_idx = $request->client_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+		/*Remainiong Balance*/
+		$receivable_remaining_balance_total = ReceivablesModel::where('teves_receivable_table.client_idx', $client_idx)
+				->where('teves_receivable_table.billing_date', '<', $start_date)
+				->sum('receivable_remaining_balance');
+
+	   /*SOA Data*/
+		$receivable_data = DB::select("
+					SELECT *
+					FROM (
+						-- RECEIVABLE ROW
+						SELECT 
+							'receivable' AS row_type,
+							r.receivable_id AS id,
+							r.billing_date AS date_info,
+							'00:00' as time_info,
+							CONCAT(IFNULL(r.control_number,''), ' <br> ', IFNULL(r.receivable_description,'')) AS description,
+							r.receivable_amount AS amount,
+							r.client_idx,
+							r.receivable_remaining_balance,
+							r.receivable_gross_amount,
+							r.receivable_vat_value_percentage,
+							r.receivable_vatable_sales,
+							r.receivable_withholding_tax_percentage,
+							r.receivable_withholding_tax,
+							r.billing_date AS sort_date,
+							r.receivable_id AS group_id,
+							1 AS sort_order
+						FROM teves_receivable_table r
+						WHERE r.client_idx = ?
+						  AND r.billing_date >= ?
+						  AND r.billing_date <= ?
+						  AND r.deleted_at IS NULL
+
+						UNION ALL
+
+						-- PAYMENT ROW
+						SELECT 
+							'payment' AS row_type,
+							p.receivable_payment_id AS id,
+							p.receivable_date_of_payment AS date_info,
+							IFNULL(p.receivable_time_of_payment,'00:00') as time_info,
+							CONCAT(
+								IFNULL(p.receivable_mode_of_payment,''),
+								' <br> ',
+								IFNULL(p.receivable_reference,'')
+							) AS description,
+							p.receivable_payment_amount AS amount,
+							p.client_idx,
+							NULL AS receivable_remaining_balance,
+							NULL AS receivable_gross_amount,
+							NULL AS receivable_vat_value_percentage,
+							NULL AS receivable_vatable_sales,
+							NULL AS receivable_withholding_tax_percentage,
+							NULL AS receivable_withholding_tax,
+							p.receivable_date_of_payment AS sort_date,
+							p.receivable_idx AS group_id,
+							2 AS sort_order
+						FROM teves_receivable_payment p
+						INNER JOIN teves_receivable_table r2 
+							ON r2.receivable_id = p.receivable_idx
+						WHERE r2.client_idx = ?
+						  AND r2.billing_date >= ?
+						  AND r2.billing_date <= ?
+						  AND r2.deleted_at IS NULL
+						  AND p.deleted_at IS NULL
+					) AS x
+					ORDER BY 
+						group_id ASC,
+						sort_date ASC,
+						sort_order ASC
+				", [
+					$client_idx, $start_date, $end_date,
+					$client_idx, $start_date, $end_date
+				]);
+
+		$result = array();
+		
+		$total_payment = 0;
+		$current_balance = 0;
+		
+		foreach ($receivable_data as $receivable_data_data_cols){
+	   
+			
+				$_billing_date=date_create("$receivable_data_data_cols->date_info");
+				$billing_date = strtoupper(date_format($_billing_date,"m/d/Y"));
+				$_billing_time=date_create("$receivable_data_data_cols->time_info");
+				$billing_time = strtoupper(date_format($_billing_time,"H:i"));
+				
+				$receivable_description = $receivable_data_data_cols->description;
+				
+				$receivable_gross_amount = number_format($receivable_data_data_cols->receivable_gross_amount,2);
+				$receivable_vat_value_percentage = $receivable_data_data_cols->receivable_vat_value_percentage;
+				
+				$receivable_vatable_sales = $receivable_data_data_cols->receivable_vatable_sales;
+				$receivable_withholding_tax_percentage = $receivable_data_data_cols->receivable_withholding_tax_percentage;
+				$receivable_withholding_tax = $receivable_data_data_cols->receivable_withholding_tax;
+				
+				$row_type = $receivable_data_data_cols->row_type;
+				
+				// CURRENT BALANCE DISPLAY
+				if($row_type == 'payment'){
+					
+					$current_balance += $receivable_data_data_cols->receivable_remaining_balance - $receivable_data_data_cols->amount;
+					$payment_amount = $receivable_data_data_cols->amount;
+					$receivable_amount = 0;
+					
+					$payment_display = '<span style="color:red;">(' . number_format($payment_amount, 2) . ')</span>';
+					//$payment_amount = number_format($payment_amount, 2);
+					
+					$abs_balance = abs($current_balance);
+
+					if($abs_balance == 0){
+						// zero balance (no formatting)
+						$current_balance_display = number_format($abs_balance, 2);
+					} else {
+						// non-zero payment balance (red + parentheses)
+						$current_balance_display = '<span style="color:red;">(' . number_format($abs_balance, 2) . ')</span>';
+					}
+				} else {
+					
+					$current_balance += $receivable_data_data_cols->receivable_gross_amount;	
+					$payment_amount = 0;
+					$receivable_amount = $receivable_data_data_cols->amount;
+					
+					$payment_display = number_format($payment_amount, 2);
+					//$payment_amount = 0;
+					//$payment_amount = 0;
+					
+					// normal receivable row
+					$current_balance_display = number_format($current_balance, 2);
+				}
+				
+					$result[] = array(
+					'row_type' 					=> $row_type,
+					'billing_date' 				=> $billing_date,
+					'billing_time' 				=> $billing_time,
+					'receivable_description' 	=> $receivable_description,
+					'receivable_gross_amount' 	=> $receivable_gross_amount,
+					'receivable_withholding_tax_percentage' 	=> $receivable_withholding_tax_percentage,
+					'receivable_withholding_tax' 				=> $receivable_withholding_tax,
+					'net_amount' 								=> $receivable_amount,
+					'payment_amount'							=> $payment_amount,
+					'receivable_remaining_balance' 				=> $current_balance,
+					'current_balance' 							=> @$current_balance
+					);
+					  
+		}	
+		
+		return DataTables::of($result)
+				->addIndexColumn()
+                ->make(true);	
+		
+		
+	}	
+	
 	/*OLD*/
 	public function generate_soa_summary_pdf(Request $request){
 
@@ -1147,7 +1320,7 @@ class ReportController extends Controller
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
 		return $pdf->stream($receivable_data[0]['client_name']."_RECEIVABLE.pdf");
 		
-		//return view('printables.report_receivables_pdf', compact('title', 'receivable_data', 'user_data', 'amount_in_words','receivable_header'));
+		//return view('printables.report_receivables_pdf', compact('title_receivable', 'receivable_data', 'user_data', 'amount_in_words', 'branch_header', 'client_data'));
 		
 	}
 	

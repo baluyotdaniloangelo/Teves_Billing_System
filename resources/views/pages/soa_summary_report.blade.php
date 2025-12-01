@@ -62,11 +62,15 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Transaction Date</th>
-													<th>Reference No.</th>
+													<th>Date</th>
+													<th>Time</th>
 													<th>Description</th>
-													<th>Amount</th>
-													<th>Remaining Balance&nbsp;</th>
+													<th>Gross Amount</th>
+													<th class="none">WTax %</th>
+													<th>WTax Amount</th>
+													<th>Net Amount</th>
+													<th>Net Amount</th>
+													<th>Payment</th>
 													<th>Current Balance&nbsp;</th>
 												</tr>
 											</thead>				
@@ -148,6 +152,7 @@
 								<span class="visually-hidden">Loading...</span>
 							</div>
 							</div>
+						  <button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_soa_summary_report_pdf(3)"> PDF</button>
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_report"> Submit</button>
 					</div>
 					</form><!-- End Multi Columns Form -->
