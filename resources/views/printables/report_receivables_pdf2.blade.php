@@ -285,7 +285,7 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
 				<br>
-				{{$user_data->user_job_title}}<?php echo $user_data->user_signature; ?>
+				{{$user_data->user_job_title}}
 			</td>	
 			<td colspan="3" align="center" style="border-right:1px solid gray; position: relative; height: 50px;">
 				<div style="position: relative; z-index: 2; text-decoration:underline;">

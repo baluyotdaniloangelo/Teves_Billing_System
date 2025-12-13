@@ -353,6 +353,7 @@ class CashiersReportController extends Controller
 			$CashiersReportCreate = new CashiersReportModel();
 			$CashiersReportCreate = CashiersReportModel::find($request->CashiersReportId);
 			$CashiersReportCreate->teves_branch 			= $request->teves_branch;
+			$CashiersReportCreate->cashiers_name 			= $request->cashiers_name;
 			$CashiersReportCreate->forecourt_attendant 		= $request->forecourt_attendant;
 			$CashiersReportCreate->report_date 				= $request->report_date;
 			$CashiersReportCreate->shift 					= $request->shift;
