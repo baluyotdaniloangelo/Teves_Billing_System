@@ -374,6 +374,7 @@ Route::get('/generate_purchase_order_payment_pdf', [ReportController::class,'gen
 
 /*Download via PDF*/
 Route::get('/generate_receivable_pdf', [ReportController::class,'generate_receivable_pdf'])->name('generate_receivable_pdf')->middleware('isLoggedIn');
+Route::get('/generate_receivable_pdf_test', [ReportController::class,'generate_receivable_pdf_test'])->name('generate_receivable_pdf_test')->middleware('isLoggedIn');
 Route::get('/generate_receivable_soa_pdf', [ReportController::class,'generate_receivable_soa_pdf'])->name('generate_receivable_soa_pdf')->middleware('isLoggedIn');
 Route::get('/generate_test_pdf', [ReportController::class,'generate_test_pdf'])->name('generate_test_pdf')->middleware('isLoggedIn');
 
