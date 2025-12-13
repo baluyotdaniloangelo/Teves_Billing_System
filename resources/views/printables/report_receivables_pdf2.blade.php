@@ -262,7 +262,7 @@
 			<td colspan="3" style="border-right:1px solid gray;">&nbsp;</td>			
 			<td colspan="4" style="border-right:1px solid gray;">&nbsp;</td>	
 		</tr>
-		<?php echo $user_data->user_signature; ?>
+		
 		
 		<tr style="font-size:12px;">
 			<td colspan="3" align="center" style="border-left:1px solid gray;border-right:1px solid gray; position: relative; height: 70px; ">
@@ -285,7 +285,7 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
 				<br>
-				{{$user_data->user_job_title}}
+				{{$user_data->user_job_title}}<?php echo $user_data->user_signature; ?>
 			</td>	
 			<td colspan="3" align="center" style="border-right:1px solid gray; position: relative; height: 50px;">
 				<div style="position: relative; z-index: 2; text-decoration:underline;">
