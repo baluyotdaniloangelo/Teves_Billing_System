@@ -202,15 +202,11 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 160 / count($sales_order_component);
+			$component_height = 125 / count($sales_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
 				<td colspan="5" align="left"  style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?php echo "$sales_order_component_cols->product_name"; ?></td>
-				<!--
-				<td colspan="2" align="right" nowrap style="height:<//?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><//?=number_format($sales_order_component_cols->order_quantity,2,".",",");?></td>
-				<td colspan="1" align="center" nowrap style="height:<//?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;">{{$sales_order_component_cols->product_unit_measurement}}</td>
-				-->
 				<td colspan="1" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-bottom:solid 1px gray; padding:10px;"><?=number_format($sales_order_component_cols->product_price,2,".",",");?></td>
 				<td colspan="1" align="right" nowrap style="height:<?=$component_height;?>px !important;border-left:0px solid #000; border-right:0px solid #000; border-bottom:solid 1px gray;"><?=number_format($sales_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
@@ -328,7 +324,7 @@
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:120px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
+			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:100px !important; text-align: justify;">{{$sales_order_data[0]->sales_order_instructions}}</td>
 			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:100px !important;">{{$sales_order_data[0]->sales_order_note}}</td>
 		</tr>
 		<tr>
@@ -340,7 +336,29 @@
 				
 		</tr>
 		<tr style="font-size:10px;">
-			<td colspan="10" align="center" style="border-bottom:1px solid gray;border-right:1px solid gray;  border-left:1px solid gray;">&nbsp;{{$user_data->user_real_name}}<br></td>	
+			<td colspan="10" align="center" style="border-bottom:1px solid gray;border-right:1px solid gray;  border-left:1px solid gray;z-index: 2;height:80px;">
+			
+			<div style="
+				position: absolute;
+				bottom: 50px;              /* adjust vertical position inside the yellow box */
+				left: 50%;
+				transform: translateX(-50%);
+				width: 100px;             /* adjust width */
+				height: 70px;             /* adjust height */
+				background-image: url('data:image/jpeg;base64,{{$user_data->user_signature}}');
+				background-repeat: no-repeat;
+				background-size: contain;
+				z-index: 1;
+				opacity: 1;             optional: watermark effect 
+				pointer-events: none;
+				"></div>
+				<div style="position: relative; z-index: 2; text-decoration:underline;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<br>
+				{{$user_data->user_job_title}}
+			
+			</td>	
 				
 		</tr>
 		<tr style="font-size:10px;font-style: italic;">

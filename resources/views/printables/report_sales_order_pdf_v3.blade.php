@@ -200,7 +200,7 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 160 / count($sales_order_component);
+			$component_height = 130 / count($sales_order_component);
 			
 			?>
 			<tr class="data_tr" style="font-size:12px;">
@@ -325,7 +325,7 @@
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:120px !important; text-align: justify;">
+			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:110px !important; text-align: justify;">
 			<?php echo nl2br($sales_order_data[0]['sales_order_instructions']); ?>
 			</td>
 			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:100px !important;">
@@ -341,7 +341,29 @@
 				
 		</tr>
 		<tr style="font-size:10px;">
-			<td colspan="10" align="center" style="border-bottom:1px solid gray;border-right:1px solid gray;  border-left:1px solid gray;">&nbsp;{{$user_data->user_real_name}}<br></td>	
+			<td colspan="10" align="center" style="border-bottom:1px solid gray;border-right:1px solid gray;  border-left:1px solid gray;z-index: 2;height:80px">
+			<div style="
+				position: absolute;
+				bottom: 60px;              /* adjust vertical position inside the yellow box */
+				left: 50%;
+				transform: translateX(-50%);
+				width: 100px;             /* adjust width */
+				height: 70px;             /* adjust height */
+				background-image: url('data:image/jpeg;base64,{{$user_data->user_signature}}');
+				background-repeat: no-repeat;
+				background-size: contain;
+				z-index: 1;
+				opacity: 1;             optional: watermark effect 
+				pointer-events: none;
+				"></div>
+				<div style="position: relative; z-index: 2; text-decoration:underline;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<br>
+				{{$user_data->user_job_title}}
+			
+			
+			</td>	
 				
 		</tr>
 		<tr style="font-size:10px;font-style: italic;">

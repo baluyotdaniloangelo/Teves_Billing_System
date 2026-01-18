@@ -1488,7 +1488,6 @@ class ReportController extends Controller
 		$sales_order_id = $request->sales_order_id;
 					
 				$sales_order_data = SalesOrderModel::where('teves_sales_order_table.sales_order_id', $sales_order_id)
-				//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
               	->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
@@ -1580,7 +1579,7 @@ class ReportController extends Controller
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
 		//$pdf->setPaper('A4', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($sales_order_data[0]['client_name']."_SALES_ORDER.pdf");
+		return $pdf->stream($client_data['client_name']."_SALES_ORDER.pdf");
 		
 	}
 

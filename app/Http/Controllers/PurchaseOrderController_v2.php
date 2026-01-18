@@ -945,7 +945,7 @@ class PurchaseOrderController_v2 extends Controller
 		
 	}   
 	
-	/*Fetch Product List using Datatable*/
+	/*Fetch Purchase Order List using Datatable*/
 	public function purchase_order_summary_data(Request $request){
 		
 		if(Session::has('loginID')){
@@ -1005,6 +1005,132 @@ class PurchaseOrderController_v2 extends Controller
 		}		
 		}
     }
+
+	public function purchase_order_product_summary_data(Request $request){
+		
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+			
+			$request->validate([
+				'company_header'      		=> 'required',
+				'start_date'      			=> 'required',
+				'end_date'      			=> 'required'
+			], 
+			[
+				'company_header.required' 	=> 'Please select a Branch',
+				'start_date.required' 	=> 'Please select a Start Date',
+				'end_date.required' 	=> 'Please select a End Date'
+			]
+			);
+
+			$company_header 	= $request->company_header;
+			$supplier_idx 		= $request->supplier_idx;
+			$start_date 		= $request->start_date;
+			$end_date 			= $request->end_date;
+			$product_idx 		= $request->product_idx;
+			
+		if ($request->ajax()) {
+
+		$data = PurchaseOrderModel::leftJoin(
+            'teves_supplier_table',
+            'teves_supplier_table.supplier_id',
+            '=',
+            'teves_purchase_order_table.purchase_order_supplier_idx'
+        )
+        ->leftJoin(
+            'teves_purchase_order_component_table',
+            'teves_purchase_order_component_table.purchase_order_idx',
+            '=',
+            'teves_purchase_order_table.purchase_order_id'
+        )
+        ->leftJoin(
+            'teves_product_table',
+            'teves_product_table.product_id',
+            '=',
+            'teves_purchase_order_component_table.product_idx'
+        )
+        ->whereBetween(
+            'teves_purchase_order_table.purchase_order_date',
+            [$start_date, $end_date]
+        )
+        ->where(function ($r) use ($company_header) {
+            if ($company_header !== 'All') {
+                $r->where(
+                    'teves_purchase_order_table.company_header',
+                    $company_header
+                );
+            }
+        })
+		->where(function ($r) use ($product_idx) {
+            if ($product_idx !== 'All') {
+                $r->where(
+                    'teves_purchase_order_component_table.product_idx',
+                    $product_idx
+                );
+            }
+        })
+        ->where(function ($r) use ($supplier_idx) {
+            if ($supplier_idx !== 'All') {
+                $r->where(
+                    'teves_purchase_order_table.purchase_order_supplier_idx',
+                    $supplier_idx
+                );
+            }
+        })
+        ->orderBy(
+            'teves_purchase_order_component_table.purchase_order_component_id',
+            'asc'
+        )
+        ->get([
+            // ===== PURCHASE ORDER HEADER =====
+            'teves_purchase_order_table.purchase_order_id',
+            'teves_purchase_order_table.purchase_order_date',
+            'teves_purchase_order_table.purchase_order_control_number',
+            'teves_purchase_order_table.purchase_order_sales_order_number',
+            'teves_purchase_order_table.purchase_order_official_receipt_no',
+            'teves_supplier_table.supplier_name',
+            'teves_purchase_order_table.purchase_order_gross_amount',
+            'teves_purchase_order_table.purchase_order_net_amount',
+            'teves_purchase_order_table.purchase_order_less_percentage',
+            'teves_purchase_order_table.purchase_order_total_payable',
+            'teves_purchase_order_table.purchase_status',
+            'teves_purchase_order_table.purchase_order_delivery_status',
+            'teves_purchase_order_table.created_at',
+
+            // ===== COMPONENT / ITEM =====
+            'teves_purchase_order_component_table.purchase_order_component_id',
+            DB::raw("
+                IFNULL(
+                    teves_product_table.product_name,
+                    teves_purchase_order_component_table.item_description
+                ) AS product_name
+            "),
+            DB::raw("
+                IFNULL(
+                    teves_product_table.product_unit_measurement,
+                    'PC'
+                ) AS product_unit_measurement
+            "),
+            'teves_purchase_order_component_table.product_idx',
+            'teves_purchase_order_component_table.product_price',
+            'teves_purchase_order_component_table.order_quantity',
+            'teves_purchase_order_component_table.order_total_amount',
+        ]);
+	
+		return DataTables::of($data)
+				
+				->addIndexColumn()
+                ->addColumn('quantity_measurement', function ($row) {
+					return number_format((float)$row->order_quantity, 2, '.', ',')
+						   . ' ' .
+						   $row->product_unit_measurement;
+				})
+				->make(true);
+		}		
+		}
+    }
+
 	
 	public function generate_purchase_order_summary_report_pdf(Request $request){
 
@@ -1284,5 +1410,135 @@ class PurchaseOrderController_v2 extends Controller
 		
 		}
 	}	
-	
+
+
+	/*January 18, 2026*/
+	public function generate_purchase_order_product_summary_report_pdf(Request $request){
+
+		if(Session::has('loginID')){
+		$current_user = Session::get('loginID');
+		
+		$company_header = $request->company_header;
+		$supplier_idx = $request->supplier_idx;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		$product_idx 		= $request->product_idx;
+
+		
+	    $purchase_order_data = PurchaseOrderModel::leftJoin(
+            'teves_supplier_table',
+            'teves_supplier_table.supplier_id',
+            '=',
+            'teves_purchase_order_table.purchase_order_supplier_idx'
+        )
+        ->leftJoin(
+            'teves_purchase_order_component_table',
+            'teves_purchase_order_component_table.purchase_order_idx',
+            '=',
+            'teves_purchase_order_table.purchase_order_id'
+        )
+        ->leftJoin(
+            'teves_product_table',
+            'teves_product_table.product_id',
+            '=',
+            'teves_purchase_order_component_table.product_idx'
+        )
+        ->whereBetween(
+            'teves_purchase_order_table.purchase_order_date',
+            [$start_date, $end_date]
+        )
+        ->where(function ($r) use ($company_header) {
+            if ($company_header !== 'All') {
+                $r->where(
+                    'teves_purchase_order_table.company_header',
+                    $company_header
+                );
+            }
+        })
+		->where(function ($r) use ($product_idx) {
+            if ($product_idx !== 'All') {
+                $r->where(
+                    'teves_purchase_order_component_table.product_idx',
+                    $product_idx
+                );
+            }
+        })
+        ->where(function ($r) use ($supplier_idx) {
+            if ($supplier_idx !== 'All') {
+                $r->where(
+                    'teves_purchase_order_table.purchase_order_supplier_idx',
+                    $supplier_idx
+                );
+            }
+        })
+        ->orderBy(
+            'teves_purchase_order_component_table.purchase_order_component_id',
+            'asc'
+        )
+        ->get([
+            // ===== PURCHASE ORDER HEADER =====
+            'teves_purchase_order_table.purchase_order_id',
+            'teves_purchase_order_table.purchase_order_date',
+            'teves_purchase_order_table.purchase_order_control_number',
+            'teves_purchase_order_table.purchase_order_sales_order_number',
+            'teves_purchase_order_table.purchase_order_official_receipt_no',
+            'teves_supplier_table.supplier_name',
+            'teves_purchase_order_table.purchase_order_gross_amount',
+            'teves_purchase_order_table.purchase_order_net_amount',
+            'teves_purchase_order_table.purchase_order_less_percentage',
+            'teves_purchase_order_table.purchase_order_total_payable',
+            'teves_purchase_order_table.purchase_status',
+            'teves_purchase_order_table.purchase_order_delivery_status',
+            'teves_purchase_order_table.created_at',
+
+            // ===== COMPONENT / ITEM =====
+            'teves_purchase_order_component_table.purchase_order_component_id',
+            DB::raw("
+                IFNULL(
+                    teves_product_table.product_name,
+                    teves_purchase_order_component_table.item_description
+                ) AS product_name
+            "),
+            DB::raw("
+                IFNULL(
+                    teves_product_table.product_unit_measurement,
+                    'PC'
+                ) AS product_unit_measurement
+            "),
+            'teves_purchase_order_component_table.product_idx',
+            'teves_purchase_order_component_table.product_price',
+            'teves_purchase_order_component_table.order_quantity',
+            'teves_purchase_order_component_table.order_total_amount',
+        ]);
+		
+		if ($company_header=='All') {
+			$receivable_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}else{
+			$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'Purchase Order - Product Summary';
+		if ($supplier_idx !== 'All') {
+			$supplier_data = SupplierModel::find($supplier_idx, ['supplier_name','supplier_address','supplier_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
+		
+			$pdf = PDF::loadView('printables.report_purchase_order_product_summary_per_client_pdf', compact('title', 'purchase_order_data', 'user_data','receivable_header','start_date','end_date','supplier_data'));
+		
+		}
+		else{
+			
+			
+			$pdf = PDF::loadView('printables.report_purchase_order_product_summary_pdf', compact('title', 'purchase_order_data', 'user_data','receivable_header','start_date','end_date'));
+		
+		}
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('legal', 'landscape');/*Set to Landscape*/
+		return $pdf->stream($receivable_header['branch_code']."_Purchase_Order_Summary.pdf");
+		
+		}
+	}	
+
 }

@@ -330,7 +330,12 @@ Route::get('/generate_purchase_order_summary_report_per_client_pdf', [PurchaseOr
 /*8/31/2025*/
 Route::get('/generate_purchase_order_summary_report_per_client_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_per_client_consolidated_pdf'])->name('generate_purchase_order_summary_report_per_client_consolidated_pdf')->middleware('isLoggedIn');
 Route::get('/generate_purchase_order_summary_report_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_consolidated_pdf'])->name('generate_purchase_order_summary_report_consolidated_pdf')->middleware('isLoggedIn');
+/*1/18/2026*/
+Route::get('/generate_purchase_order_product_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_product_summary_report_pdf'])->name('generate_purchase_order_product_summary_report_pdf')->middleware('isLoggedIn');
 
+
+/*01/14/2026*/
+Route::post('/purchase_order_product_summary_data', [PurchaseOrderController_v2::class,'purchase_order_product_summary_data'])->name('purchase_order_product_summary_data')->middleware('isLoggedIn');
 
 /*Get Purchase Order Product Item*/
 Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');

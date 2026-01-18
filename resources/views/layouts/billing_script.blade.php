@@ -16,7 +16,7 @@
 			             '<option value="30">30</option>'+
 			             '<option value="40">40</option>'+
 			             '<option value="50">50</option>'+
-			             '<option value="-1">All</option>'+
+			             '<option value="100">100</option>'+
 			             '</select> '
 		    },
 			processing: true,
@@ -121,20 +121,7 @@
 				searching: true,
 				info: true,
 				data: [],
-				"columns": [
-					// {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-					// {data: 'order_date', className: "text-center"},
-					// {data: 'order_time', orderable: false},
-					// {data: 'control_number'},  					
-					// {data: 'drivers_name'},     
-					// {data: 'order_po_number'},     
-					// {data: 'plate_no'},     
-					// {data: 'product_name'}, 
-					// {data: 'product_price', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) }, 					
-					// {data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
-					// {data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-					// {data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
-					
+				"columns": [	
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date', className: "text-center"},
 					{data: 'order_time',orderable: false, className: "text-center"},

@@ -492,8 +492,8 @@ class CashiersReportController extends Controller
 				->take(1)
 					->get([
 						'teves_cashiers_report_p1.product_price'
-						]);			
-				//echo 'fff';	
+						]);		
+						
 			return response()->json($data);
 			
 		}else{

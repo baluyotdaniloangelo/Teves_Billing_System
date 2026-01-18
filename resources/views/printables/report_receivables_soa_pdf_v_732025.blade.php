@@ -235,16 +235,7 @@
 			?>
 			
 		@endforeach
-		<!--aS REQUESTED July 11 2025
-		<tr style="font-size:12px;">
-			
-			<td colspan="5" align="right" style="border-left: 0px solid #000; border-bottom: 0px solid #000;"></td>
-			<td colspan="7" align="center" style="background-color: #e8e8e8; font-weight:bold; height:25px !important; border-bottom: 0px solid #000;">REMAINING BALANCE </td>
-			<td colspan="4" align="right" style="background-color: #e8e8e8; border-right: 0px solid #000;border-bottom: 1px solid #000;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
-			<//?=number_format($receivable_data[0]['receivable_amount']-$total_payment,2);?>
 		
-		</tr>		
-		-->
 		<tr>
 			<td colspan="16" style="height:5.66px !important;"></td>
 		</tr>
@@ -295,18 +286,67 @@
 		
 		<tr class="data_tr" style="font-size:12px;">
 				
-				<td align="center" colspan="5" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
+<td colspan="5" style="border:0px solid gray; padding-top:45px; text-align:center;">
+
+
+    <div style="
+        position: relative;
+        display: inline-block;
+        min-width: 600px;   /* 🔑 para di mag-wrap vertically */
+        text-align: center;
+        white-space: nowrap;
+    ">
+
+        <!-- SIGNATURE -->
+        <div style="
+            position: absolute;
+            top: -45px;
+            left: 53%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 60px;
+            background-image: url('data:image/jpeg;base64,{{$user_data->user_signature}}');
+            background-repeat: no-repeat;
+            background-size: contain;
+			opacity: 0.91;  
+			z-index: 1;
+            pointer-events: none;
+        "></div>
+
+        <!-- NAME -->
+        <div style="
+			position: relative;
+            text-decoration: underline;
+            font-weight: bold;
+			z-index: 2; 
+        ">
+            &nbsp;&nbsp;&nbsp;{{$user_data->user_real_name}}&nbsp;&nbsp;&nbsp;
+        </div>
+
+    </div>
+
+    <div style="
+        margin-top: 5px;
+        font-size: 12px;
+        white-space: nowrap;
+    ">
+        {{$user_data->user_job_title}}
+    </div>
+
+</td>
+
+
 				<td align="left" colspan="5"></td>
 				<td align="left" colspan="6"></td>
 		</tr>
-		
+		<!--
 		<tr class="data_tr" style="font-size:12px;">
 				
 				<td align="center" colspan="5" style=" ">{{$user_data->user_job_title}}</td>
 				<td align="left" colspan="5"></td>
 				<td align="left" colspan="6"></td>
 		</tr>
-		
+		-->
 		<tr>
 			<td colspan="16" style="height:5.66px !important;"></td>
 		</tr>	
