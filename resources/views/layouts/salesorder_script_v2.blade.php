@@ -16,7 +16,6 @@
 			             '<option value="30">30</option>'+
 			             '<option value="40">40</option>'+
 			             '<option value="50">50</option>'+
-			             '<option value="100">100</option>'+
 			             '</select> '
 		    },
 			/*processing: true,*/
@@ -38,8 +37,6 @@
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'sales_order_delivery_status'},  
 				{data: 'sales_order_payment_status'},  
-				//{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},
-				//{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},	
 				{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
@@ -91,7 +88,6 @@
 			             '<option value="30">30</option>'+
 			             '<option value="40">40</option>'+
 			             '<option value="50">50</option>'+
-			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
 			/*processing: true,*/
@@ -113,8 +109,6 @@
 				{data: 'sales_order_total_due', render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },		
 				{data: 'sales_order_delivery_status'},  
 				{data: 'sales_order_payment_status'},  
-				//{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},
-				//{data: 'sales_order_payment_status', name: 'sales_order_payment_status', orderable: true, searchable: true},	
 				{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 			],
 			order: [[ 1, "desc" ]],
@@ -165,7 +159,6 @@
 			             '<option value="30">30</option>'+
 			             '<option value="40">40</option>'+
 			             '<option value="50">50</option>'+
-			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
 			/*processing: true,*/
