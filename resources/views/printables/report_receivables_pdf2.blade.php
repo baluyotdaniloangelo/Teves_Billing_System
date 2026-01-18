@@ -130,8 +130,8 @@
 		</tr>
 		<tr style="font-size:12px;">
 			
-			<td colspan="6" align="left" style="border-left:0px solid #000;height: 130px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
-			<td colspan="4" align="center" style="border-right:0px solid #000;height: 130px;border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
+			<td colspan="6" align="left" style="border-left:0px solid #000;height: 120px; padding:10px;">{{ $receivable_data[0]['receivable_description'] }}</td>
+			<td colspan="4" align="center" style="border-right:0px solid #000;height: 120px;border-bottom:solid 1px gray;"><?=number_format($receivable_data[0]['receivable_amount'],2);?></td>			
 		
 		</tr>
 		
