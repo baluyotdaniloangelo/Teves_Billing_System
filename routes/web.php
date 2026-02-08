@@ -34,6 +34,9 @@ use App\Http\Controllers\DailySalesReportController;
 /*Sales Report - August 21, 2025*/
 use App\Http\Controllers\SalesReportController;
 
+/*Non Cash Report - January 25, 2025*/
+use App\Http\Controllers\NonCashReportController;
+
 /*September 20 2025*/
 use App\Http\Controllers\ProductPumpController;
 /*
@@ -546,6 +549,12 @@ Route::post('/product_pump_info', [ProductPumpController::class, 'product_pump_i
 Route::post('/update_pump_post', [ProductPumpController::class,'update_pump_post'])->name('update_pump_post')->middleware('isLoggedIn');
 Route::post('/delete_product_pump_confirmed', [ProductPumpController::class, 'delete_product_pump_confirmed'])->name('delete_product_pump_confirmed')->middleware('isLoggedIn');
 /*Product Tank per Product - Branch*/
+
+
+/*01/24/2026*/
+Route::get('/non_cash_report_page', [NonCashReportController::class,'non_cash_report_page'])->name('non_cash_report_page')->middleware('isLoggedIn');
+Route::post('/generate_non_cash_payment', [NonCashReportController::class,'generate_non_cash_payment'])->name('generate_non_cash_payment')->middleware('isLoggedIn');
+Route::get('/generate_non_cash_payment_report_pdf', [NonCashReportController::class,'generate_non_cash_payment_report_pdf'])->name('generate_non_cash_payment_report_pdf')->middleware('isLoggedIn');
 
 
 /* Sales Summary */

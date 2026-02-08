@@ -94,6 +94,13 @@ else if (Request::is('billing_history')){
 @include('layouts.daily_sales_script')
 <?php
 }
+else if (Request::is('non_cash_report_page')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.non-cash_report_script')
+<?php
+}
 else if (Request::is('sales_order_summary')){
 ?>
 <body class="">
@@ -199,7 +206,7 @@ else if (Request::is('cashiers_report_form/*')){
 @include('layouts.cashier_report_form_script')
 @include('layouts.cashier_report_form_script_p1')
 @include('layouts.cashier_report_form_script_p7')
-@include('layouts.cashier_report_form_script_p8')
+@include('layouts.cashier_report_form_script_p8_v01212026')
 <?php
 }
 else if (Request::is('monthly_sales')){

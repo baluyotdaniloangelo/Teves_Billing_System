@@ -18,36 +18,40 @@ class CashiersReportModel_P8 extends Model
 	protected $table = 'teves_cashiers_report_p8';
 
 	protected $fillable = [
-        'cashiers_report_p8_id',
-        'user_idx',
-		'cashiers_report_id',
-		'online_payment_amount',
-		'limitless_payment_amount',
-		'credit_debit_payment_amount',
-		'gcash_payment_amount',
+		'cashiers_report_p8_id',
+		'user_idx',
+		'cashiers_report_idx',
+
+		'payment_type',
+		'payment_amount',
+
 		'created_at',
 		'created_by_user_id',
 		'updated_at',
 		'updated_by_user_id'
-    ];
-    protected $primaryKey = 'cashiers_report_p8_id';
-	
-	protected static $logName = 'Cashiers Report Table Part 8 - For Cash Payments';
-	
+	];
+
+	protected $primaryKey = 'cashiers_report_p8_id';
+
+	/* ================= ACTIVITY LOG ================= */
+
+	protected static $logName = 'Cashiers Report Table Part 8 - Payments';
+
 	protected static $logOnlyDirty = true;
-	
+
 	protected static $logAttributes = [
 		'cashiers_report_p8_id',
-        'user_idx',
-		'cashiers_report_id',
-		'online_payment_amount',
-		'limitless_payment_amount',
-		'credit_debit_payment_amount',
-		'gcash_payment_amount',
+		'user_idx',
+		'cashiers_report_idx',
+
+		'payment_type',
+		'payment_amount',
+
 		'created_at',
 		'created_by_user_id',
 		'updated_at',
 		'updated_by_user_id'
-    ];
+	];
+
 	
 }

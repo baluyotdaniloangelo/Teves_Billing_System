@@ -1674,17 +1674,22 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report_p5.cash_drop'
 			]);
 			
-		$PH8_SUM_online_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
-        ->sum('online_payment_amount');	
-		
-		$PH8_SUM_limitless_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
-        ->sum('limitless_payment_amount');	
-		
-		$PH8_SUM_credit_debit_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
-		->sum('credit_debit_payment_amount');	
-		
-		$PH8_SUM_gcash_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
-		->sum('gcash_payment_amount');	
+		$PH8_SUM_online_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'online')
+			->sum('payment_amount');
+
+		$PH8_SUM_limitless_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'limitless')
+			->sum('payment_amount');
+
+		$PH8_SUM_credit_debit_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'credit_debit')
+			->sum('payment_amount');
+
+		$PH8_SUM_gcash_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'gcash')
+			->sum('payment_amount');
+
 		
 		
 		$one_thousand_deno 		= $_PH5_SUM[0]->one_thousand_deno * 1000;
@@ -1924,7 +1929,7 @@ class CashiersReportController extends Controller
 						'teves_cashiers_report_p6.book_stock',
 						'teves_cashiers_report_p6.variance'
 					]);
-		
+		/*
 		$PH8_SUM_online_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
         ->sum('online_payment_amount');	
 		
@@ -1936,7 +1941,22 @@ class CashiersReportController extends Controller
 		
 		$PH8_SUM_gcash_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
 		->sum('gcash_payment_amount');	
+		*/
+		$PH8_SUM_online_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'online')
+			->sum('payment_amount');
 		
+		$PH8_SUM_limitless_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'limitless')
+			->sum('payment_amount');
+
+		$PH8_SUM_credit_debit_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'credit_debit')
+			->sum('payment_amount');
+
+		$PH8_SUM_gcash_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'gcash')
+			->sum('payment_amount');
 		
 		$branch_header = TevesBranchModel::find($CashiersReportData[0]['teves_branch'], ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 		

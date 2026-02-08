@@ -597,43 +597,25 @@ class DailySalesReportController extends Controller
 			$total_fuel_sales = $total_fuel_sales_1st_shift+$total_fuel_sales_2nd_shift+$total_fuel_sales_3rd_shift+$total_fuel_sales_4th_shift+$total_fuel_sales_5th_shift+$total_fuel_sales_6th_shift;
 			/*Start - Fuel Sales*/
 			
-			
-			/*Non Cash Payment*/
-			$total_non_cash_payment_1st_shift =  CashiersReportModel_P8::where('shift','1st Shift')
-			->where('teves_branch',$company_header)
-			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
-			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
-			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
-			
-			$total_non_cash_payment_2nd_shift =  CashiersReportModel_P8::where('shift','2nd Shift')
-			->where('teves_branch',$company_header)
-			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
-			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
-			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
-			
-			$total_non_cash_payment_3rd_shift =  CashiersReportModel_P8::where('shift','3rd Shift')
-			->where('teves_branch',$company_header)
-			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
-			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
-			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
-			
-			$total_non_cash_payment_4th_shift =  CashiersReportModel_P8::where('shift','4th Shift')
-			->where('teves_branch',$company_header)
-			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
-			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
-			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
-			
-			$total_non_cash_payment_5th_shift =  CashiersReportModel_P8::where('shift','5th Shift')
-			->where('teves_branch',$company_header)
-			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
-			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
-			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));
-			
-			$total_non_cash_payment_6th_shift =  CashiersReportModel_P8::where('shift','6th Shift')
-			->where('teves_branch',$company_header)
-			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
-			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p8.cashiers_report_idx')
-			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));	
+			/*Non-Cash*/
+			$total_non_cash_per_shift = CashiersReportModel_P8::join(
+					'teves_cashiers_report',
+					'teves_cashiers_report.cashiers_report_id',
+					'=',
+					'teves_cashiers_report_p8.cashiers_report_idx'
+				)
+				->where('teves_branch', $company_header)
+				->whereBetween('teves_cashiers_report.report_date', [$hourly_start, $hourly_end])
+				->groupBy('shift')
+				->selectRaw('shift, SUM(payment_amount) as total')
+				->pluck('total', 'shift');
+
+			$total_non_cash_payment_1st_shift = $total_non_cash_per_shift['1st Shift'] ?? 0;
+			$total_non_cash_payment_2nd_shift = $total_non_cash_per_shift['2nd Shift'] ?? 0;
+			$total_non_cash_payment_3rd_shift = $total_non_cash_per_shift['3rd Shift'] ?? 0;
+			$total_non_cash_payment_4th_shift = $total_non_cash_per_shift['4th Shift'] ?? 0;
+			$total_non_cash_payment_5th_shift = $total_non_cash_per_shift['5th Shift'] ?? 0;
+			$total_non_cash_payment_6th_shift = $total_non_cash_per_shift['6th Shift'] ?? 0;
 		
 			$total_non_cash_payment = $total_non_cash_payment_1st_shift + $total_non_cash_payment_2nd_shift + $total_non_cash_payment_3rd_shift + $total_non_cash_payment_4th_shift + $total_non_cash_payment_5th_shift + $total_non_cash_payment_6th_shift;
 		
@@ -1242,6 +1224,7 @@ class DailySalesReportController extends Controller
 			
 			
 			/*Non Cash Payment*/
+			/*
 			$total_non_cash_payment_1st_shift =  CashiersReportModel_P8::where('shift','1st Shift')
 			->where('teves_branch',$company_header)
 			->whereBetween('teves_cashiers_report.report_date', ["$hourly_start", "$hourly_end"])
@@ -1279,7 +1262,29 @@ class DailySalesReportController extends Controller
 			->sum(\DB::raw('online_payment_amount + limitless_payment_amount + credit_debit_payment_amount + gcash_payment_amount'));	
 		
 			$total_non_cash_payment = $total_non_cash_payment_1st_shift + $total_non_cash_payment_2nd_shift + $total_non_cash_payment_3rd_shift + $total_non_cash_payment_4th_shift + $total_non_cash_payment_5th_shift + $total_non_cash_payment_6th_shift;
+			*/
+			/*Non-Cash*/
+			$total_non_cash_per_shift = CashiersReportModel_P8::join(
+					'teves_cashiers_report',
+					'teves_cashiers_report.cashiers_report_id',
+					'=',
+					'teves_cashiers_report_p8.cashiers_report_idx'
+				)
+				->where('teves_branch', $company_header)
+				->whereBetween('teves_cashiers_report.report_date', [$hourly_start, $hourly_end])
+				->groupBy('shift')
+				->selectRaw('shift, SUM(payment_amount) as total')
+				->pluck('total', 'shift');
+
+			$total_non_cash_payment_1st_shift = $total_non_cash_per_shift['1st Shift'] ?? 0;
+			$total_non_cash_payment_2nd_shift = $total_non_cash_per_shift['2nd Shift'] ?? 0;
+			$total_non_cash_payment_3rd_shift = $total_non_cash_per_shift['3rd Shift'] ?? 0;
+			$total_non_cash_payment_4th_shift = $total_non_cash_per_shift['4th Shift'] ?? 0;
+			$total_non_cash_payment_5th_shift = $total_non_cash_per_shift['5th Shift'] ?? 0;
+			$total_non_cash_payment_6th_shift = $total_non_cash_per_shift['6th Shift'] ?? 0;
 		
+			$total_non_cash_payment = $total_non_cash_payment_1st_shift + $total_non_cash_payment_2nd_shift + $total_non_cash_payment_3rd_shift + $total_non_cash_payment_4th_shift + $total_non_cash_payment_5th_shift + $total_non_cash_payment_6th_shift;
+
 			/*Non Cash Payment*/
 			
 			/*Total Sales Per Shift*/
