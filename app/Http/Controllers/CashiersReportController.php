@@ -1604,7 +1604,6 @@ class CashiersReportController extends Controller
 			return response()->json($data);			
 	}
 
-	
 	public function cashiers_report_p6_info(Request $request){
 
 		$CHPH6_ID = $request->CHPH6_ID;
@@ -1674,8 +1673,8 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report_p5.cash_drop'
 			]);
 			
-		$PH8_SUM_online_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
-			->where('payment_type', 'online')
+		$PH8_SUM_check_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'check')
 			->sum('payment_amount');
 
 		$PH8_SUM_limitless_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
@@ -1718,7 +1717,7 @@ class CashiersReportController extends Controller
 				'miscellaneous_total' => $PH3_SUM,
 				'theoretical_sales' => $PH4_SUM,
 				'cash_on_hand' => $PH5_SUM,
-				'total_online_payment_amount' => $PH8_SUM_online_payment_amount,
+				'total_check_payment_amount' => $PH8_SUM_check_payment_amount,
 				'total_limitless_payment_amount' => $PH8_SUM_limitless_payment_amount,
 				'total_credit_debit_payment_amount' => $PH8_SUM_credit_debit_payment_amount,
 				'total_gcash_payment_amount' => $PH8_SUM_gcash_payment_amount
@@ -1729,8 +1728,7 @@ class CashiersReportController extends Controller
 		}
 			
 	}
-	
-	
+		
 	/*Print Via PDF*/
 	public function generate_cashier_report_pdf(Request $request){
 
@@ -1942,8 +1940,8 @@ class CashiersReportController extends Controller
 		$PH8_SUM_gcash_payment_amount =  CashiersReportModel_P8::where('teves_cashiers_report_p8.cashiers_report_idx', $CashiersReportId)
 		->sum('gcash_payment_amount');	
 		*/
-		$PH8_SUM_online_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
-			->where('payment_type', 'online')
+		$PH8_SUM_check_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+			->where('payment_type', 'check')
 			->sum('payment_amount');
 		
 		$PH8_SUM_limitless_payment_amount = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
@@ -1970,11 +1968,10 @@ class CashiersReportController extends Controller
 		'data_Cash_on_hand',
 		'branch_header',
 		'data_PH6_inventory',
-		'PH8_SUM_online_payment_amount',
 		'PH8_SUM_limitless_payment_amount',
 		'PH8_SUM_credit_debit_payment_amount',
 		'PH8_SUM_gcash_payment_amount',
-		'PH8_SUM_online_payment_amount'
+		'PH8_SUM_check_payment_amount'
 		));
 		
 		/*Download Directly*/

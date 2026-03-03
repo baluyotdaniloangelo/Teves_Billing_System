@@ -63,11 +63,10 @@
 			?>
 		<tr style="font-size:12px;">
 			<td colspan="1" align="left">PERIOD:</td>
-			<td colspan="2" align="left" style="border-bottom:1px solid #000;"><?=$po_start_date;?> - <?=$po_end_date;?></td>			
-			<td colspan="4" align="left"></td>
-			<td colspan="1" align="left">DATE PRINTED:</td>
+			<td colspan="3" align="left" style="border-bottom:1px solid #000;"><?=$po_start_date;?> - <?=$po_end_date;?></td>			
+			<td colspan="2" align="left"></td>
+			<td colspan="2" align="right">DATE GENERATED:</td>
 			<td colspan="2" align="left" style="border-bottom:1px solid #000;"><?php echo strtoupper(date('M/d/Y')); ?></td>
-			
 		</tr>
 		
 		
@@ -77,23 +76,12 @@
 		</table>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-			/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
-				/*1*/	{data: 'report_date', className: "text-center", orderable: false },
-						{data: 'branch_initial', className: "text-center", orderable: false },				
-				/*1*/	{data: 'shift', className: "text-center", orderable: false },
-				/*1*/	{data: 'cashiers_name', className: "text-center", orderable: false },
-				/*1*/	{data: 'forecourt_attendant', className: "text-center", orderable: false },
-				/*1*/	{data: 'encoder_name', className: "text-center", orderable: false },
-				/*1*/	{data: 'payment_type', className: "text-center", orderable: false },
-				/*2*/	{data: 'total_amount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 			<tr>
 				<th class="data_th" style="border:1px solid #000;">#</th>
 				<th class="data_th" style="border:1px solid #000;">Date</th>
 				<th class="data_th" style="border:1px solid #000;">Branch</th>
 				<th class="data_th" style="border:1px solid #000;">Shift</th>
-				<th class="data_th" style="border:1px solid #000;">Casheirs's On Duty</th>
-				<th class="data_th" style="border:1px solid #000;">Encoder's Name</th>
-				<th class="data_th" style="border:1px solid #000;">Employee's On-Duty</th>
+				<th class="data_th" style="border:1px solid #000;">Station In Charge</th>
 				<th class="data_th" style="border:1px solid #000;">Payment Type</th>
 				<th class="data_th" style="border:1px solid #000;">Amount</th>								
 			</tr>
@@ -128,9 +116,7 @@
 				<td align="center" nowrap style="border:1px solid #000;"><?=$report_date;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$branch_initial;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$shift;?></td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=$cashiers_name;?></td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=$forecourt_attendant;?></td>
-				<td align="center" nowrap style="border:1px solid #000;"><?=$encoder_name;?></td>
+				<td align="left" nowrap style="border:1px solid #000;"><?=$cashiers_name;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$payment_type;?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($total_amount,2);?></td>	
 			</tr>
@@ -146,27 +132,24 @@
 				<td align="left" ></td>
 				<td align="left" ></td>
 				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="left">TOTAL</td>
+				<td align="right">TOTAL:</td>
 				<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_non_cash" style="font-weight: normal;"><?=number_format($total_total_amount,2);?></span></td>
 			</tr>
 			
-			<tr style="font-size:12px;"><td colspan="9">&nbsp;</td></tr>
+			<tr style="font-size:12px;"><td colspan="7">&nbsp;</td></tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="2">Prepared by:</td>
-				<td align="center" colspan="3" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
+				<td align="left" >Prepared by:</td>
+				<td align="center" colspan="2" style="border-bottom:1px solid #000;">{{$user_data->user_real_name}}</td>
 				<td align="left" colspan="4"></td>
 			</tr>
 			
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" colspan="2"></td>
-				<td align="center" colspan="3">{{$user_data->user_job_title}}</td>
+				<td align="left"></td>
+				<td align="center" colspan="2">{{$user_data->user_job_title}}</td>
 				<td align="left" colspan="4"></td>
 			</tr>
-			<tr style="font-size:12px;"><td colspan="9
-			">&nbsp;</td></tr>
+			<tr style="font-size:12px;"><td colspan="7">&nbsp;</td></tr>
 			
 		</tbody>
 		</table>

@@ -57,7 +57,7 @@
                                 <option value="limitless">Limitless Payment</option>
                                 <option value="credit_debit">Credit / Debit</option>
                                 <option value="gcash">GCASH</option>
-                                <option value="online">Other Online Payment</option>
+                                <option value="check">Check</option>
                             </select>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                                 <option value="limitless">Limitless Payment</option>
                                 <option value="credit_debit">Credit / Debit</option>
                                 <option value="gcash">GCASH</option>
-                                <option value="online">Other Online Payment</option>
+                                <option value="check">Check</option>
                             </select>
                         </div>
                     </div>

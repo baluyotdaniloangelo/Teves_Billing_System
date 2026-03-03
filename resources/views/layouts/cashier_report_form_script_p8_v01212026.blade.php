@@ -231,8 +231,7 @@ var CashiersReportPH8Table = $('#CashiersReportPH8Table').DataTable({
 			render: $.fn.dataTable.render.number(',', '.', 2, '₱ '),
 			orderable: true,
         },
-		{data: 'payment_amount', orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ), className: "text-right" },
-        { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
+		{ data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
     ],
 	columnDefs: [
         {

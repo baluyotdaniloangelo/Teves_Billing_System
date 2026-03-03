@@ -380,7 +380,7 @@
 	   <?php
 	   
             $total_fuel_sales = $order_total_amount_P1_premium_95 + $order_total_amount_P1_super_regular + $order_total_amount_P1_diesel;
-       		$total_non_cash_payment = $PH8_SUM_limitless_payment_amount + $PH8_SUM_credit_debit_payment_amount + $PH8_SUM_gcash_payment_amount + $PH8_SUM_online_payment_amount;
+       		$total_non_cash_payment = $PH8_SUM_limitless_payment_amount + $PH8_SUM_credit_debit_payment_amount + $PH8_SUM_gcash_payment_amount + $PH8_SUM_check_payment_amount;
 			$theoretical_sales_total = ($total_fuel_sales + $other_sales_total) - ($total_sales_credit+$total_discount+$total_others_msc);
 		
 								$one_thousand_deno 		= $data_Cash_on_hand[0]->one_thousand_deno;
@@ -498,8 +498,8 @@
 								</tr>
 								<tr>
 								   <td style="font-size:11px; border-left:1px solid #000; text-align:right; background-color: #c6e0b4;"></td>
-								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">ONLINE PAYMENT</td>
-								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_online_payment_amount,2,".",",");?></td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:left; background-color: #c6e0b4;">CHECK PAYMENT</td>
+								   <td style="font-size:11px; border:1px solid #000; text-align:right;"><?=number_format($PH8_SUM_check_payment_amount,2,".",",");?></td>
 								</tr>
 								
 								<tr>

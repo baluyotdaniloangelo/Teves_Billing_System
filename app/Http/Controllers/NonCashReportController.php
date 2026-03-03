@@ -300,7 +300,7 @@ class NonCashReportController extends Controller
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
-		$pdf->setPaper('Legal', 'landscape');/*Set to Landscape*/
+		$pdf->setPaper('Legal', 'Portrait');/*Set to Landscape*/
 		return $pdf->stream($receivable_header['branch_code']."_NON_CASH_PAYMENT.pdf");
 		
 		

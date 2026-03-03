@@ -2585,7 +2585,7 @@ function LoadSellingPriceList(client_idx) {
 					
 					miscellaneous_total = response.miscellaneous_total;
 					
-					total_non_cash_payment = response.total_limitless_payment_amount + response.total_credit_debit_payment_amount + response.total_gcash_payment_amount + response.total_online_payment_amount;
+					total_non_cash_payment = response.total_limitless_payment_amount + response.total_credit_debit_payment_amount + response.total_gcash_payment_amount + response.total_check_payment_amount;
 					
 					cash_on_hand = response.cash_on_hand;
 					total_sales = cash_on_hand + total_non_cash_payment;

@@ -70,9 +70,7 @@
 													<th class="all">Date</th>
 													<th class="all">Branch</th>
 													<th class="all">Shift</th>
-													<th>Encoder's Name</th>
-													<th>Casheirs's On Duty</th>
-													<th>Employee's On-Duty</th>
+													<th>Station In Charge</th>
 													<th>Payment Type</th>
 													<th class="all">Amount</th>
 												</tr>
@@ -84,8 +82,6 @@
 											<tfoot>
 											
 												<tr>
-													<td align="left" ></td>
-													<td align="left" ></td>
 													<td align="left" ></td>
 													<td align="left" ></td>
 													<td align="left" ></td>
@@ -110,7 +106,7 @@
               <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Not-cash Report</h5>
+                      <h5 class="modal-title">Non-cash Report</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
@@ -142,7 +138,7 @@
 									<option value="limitless">Limitless Payment</option>
 									<option value="credit_debit">Credit / Debit</option>
 									<option value="gcash">GCASH</option>
-									<option value="online">Other Online Payment</option>
+									<option value="check">Check</option>
 								</select>
 							</div>
 						</div>

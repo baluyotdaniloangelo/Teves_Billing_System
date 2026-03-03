@@ -290,8 +290,6 @@
 						{data: 'branch_initial', className: "text-center", orderable: false },				
 				/*1*/	{data: 'shift', className: "text-center", orderable: false },
 				/*1*/	{data: 'cashiers_name', className: "text-center", orderable: false },
-				/*1*/	{data: 'forecourt_attendant', className: "text-center", orderable: false },
-				/*1*/	{data: 'encoder_name', className: "text-center", orderable: false },
 				/*1*/	{data: 'payment_type', className: "text-center", orderable: false },
 				/*2*/	{data: 'total_amount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				
