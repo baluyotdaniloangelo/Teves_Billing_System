@@ -210,9 +210,9 @@
 							
 							var id = response[i].purchase_order_payment_details_id;
 							
-							var purchase_order_bank 			= response[i].purchase_order_bank;
+							var purchase_order_bank 			= response[i].purchase_order_bank.replace(/\n/g, "<br>");
 							var purchase_order_date_of_payment 	= response[i].purchase_order_date_of_payment;
-							var purchase_order_reference_no		= response[i].purchase_order_reference_no;
+							var purchase_order_reference_no		= response[i].purchase_order_reference_no.replace(/\n/g, "<br>");
 							var purchase_order_payment_amount 	= response[i].purchase_order_payment_amount;
 							var image_reference 				= response[i].image_reference;
 							
@@ -220,20 +220,20 @@
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='left' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
-								"<td class='bank_td' align='center'>"+purchase_order_bank+"</td>"+
-								"<td class='update_date_of_payment_td' align='center'>"+purchase_order_date_of_payment+"</td>"+
-								"<td class='update_purchase_order_reference_no_td' align='center'>"+purchase_order_reference_no+"</td>"+
+								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
+								"<td class='update_date_of_payment_td' align='left'>"+purchase_order_date_of_payment+"</td>"+
+								"<td class='bank_td' align='left'>"+purchase_order_bank+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='left'>"+purchase_order_reference_no+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='center'>"+purchase_order_payment_amount+"</td>");
 								
 							}else{
 								
 								$('#update_table_payment_body_data tr:last').after("<tr>"+
 								"<td align='center'>" + (i+1) + "</td>" +
-								"<td><div align='left' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewPurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
-								"<td class='bank_td' align='center'>"+purchase_order_bank+"</td>"+
+								"<td><div align='center' class='action_table_menu_Product' ><a href='#' class='btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit' id='PurchaseOrderPayment_Edit' data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete' id='deletePurchaseOrderPayment'  data-id='"+id+"'></a> <a href='#' class='btn-danger btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_view' id='ViewPurchaseOrderPayment'  data-id='"+id+"'></a></div></td>"+	
 								"<td class='update_date_of_payment_td' align='center'>"+purchase_order_date_of_payment+"</td>"+
-								"<td class='update_purchase_order_reference_no_td' align='center'>"+purchase_order_reference_no+"</td>"+
+								"<td class='bank_td' align='left'>"+purchase_order_bank+"</td>"+
+								"<td class='update_purchase_order_reference_no_td' align='left'>"+purchase_order_reference_no+"</td>"+
 								"<td class='update_purchase_order_payment_amount_td' align='center'>"+purchase_order_payment_amount+"</td>");
 							
 							}	

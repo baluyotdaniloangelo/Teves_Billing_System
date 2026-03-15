@@ -24,6 +24,7 @@
 													<th class="all">Account Number</th>
 													<th>Address</th>
 													<th>TIN</th>
+													<th>Referred By</th>
 													<th title='Default Value' class="none">Discount(Less)</th>
 													<th class="none">Net</th>
 													<th class="none">Vat</th>
@@ -36,8 +37,6 @@
 											<tbody>
 												
 											</tbody>
-											
-											
 											
 										</table>
 									</div>		
@@ -151,6 +150,19 @@
 						  </div>
 						</div>
 						
+						<div class="row mb-2">
+						  <label for="referred_by" class="col-sm-3 col-form-label">Referred By</label>
+						  <div class="col-sm-9">
+							<input class="form-control" list="referred_by_name" name="referred_by_name" id="referred_by_id" required autocomplete="off">
+								<datalist id="referred_by_name">
+									@foreach ($client_data as $client_data_cols)
+										<option label="{{$client_data_cols->client_name}} : {{$client_data_cols->client_account_number}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}} : {{$client_data_cols->client_account_number}}">
+									@endforeach
+								</datalist>
+							<span class="valid-feedback" id="referred_byError"></span>
+						  </div>
+						</div>
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
@@ -245,7 +257,20 @@
 							<span class="valid-feedback" id="update_default_payment_termsError"></span>
 						  </div>
 						</div>
-								
+							
+						<div class="row mb-2">
+						  <label for="referred_by" class="col-sm-3 col-form-label">Referred By</label>
+						  <div class="col-sm-9">
+							<input class="form-control" list="update_referred_by_name" name="update_referred_by_name" id="update_referred_by_id" required autocomplete="off">
+								<datalist id="update_referred_by_name">
+									@foreach ($client_data as $client_data_cols)
+										<option label="{{$client_data_cols->client_name}} : {{$client_data_cols->client_account_number}}" data-id='{{$client_data_cols->client_id}}' value="{{$client_data_cols->client_name}} : {{$client_data_cols->client_account_number}}">
+									@endforeach
+								</datalist>
+							<span class="valid-feedback" id="update_referred_byError"></span>
+						  </div>
+						</div>
+						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">

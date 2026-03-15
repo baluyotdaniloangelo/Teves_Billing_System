@@ -22,18 +22,22 @@ class ClientController extends Controller
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$client_data = ClientModel::all();		
-			return view("pages.client", compact('data','title'));
+			return view("pages.client", compact('data','title','client_data'));
 	
 		}
 		
 	}   
+	
+	
+
 	
 	/*Fetch client List using Datatable*/
 	public function getClientList(Request $request)
     {
 		
 		if ($request->ajax()) {
-			$data = ClientModel::select(
+			
+			/*$data = ClientModel::select(
 			'client_id',
 			'client_name',
 			'client_account_number',
@@ -44,13 +48,29 @@ class ClientController extends Controller
 			'default_vat_percentage',
 			'default_withholding_tax_percentage',
 			'default_payment_terms')
-			->get()/*Remove After Update*/
-			;
-			
-			
+			->get()
+			;*/
+			$data = ClientModel::with('referrer')
+			->select(
+				'client_id',
+				'client_name',
+				'client_account_number',
+				'client_address',
+				'client_tin',
+				'default_less_percentage',
+				'default_net_percentage',
+				'default_vat_percentage',
+				'default_withholding_tax_percentage',
+				'default_payment_terms',
+				'referred_by_idx'
+			)
+			->get();
 			
 			return DataTables::of($data)
 					->addIndexColumn()
+					->addColumn('referred_by_name', function($row){
+						return $row->referrer->client_name ?? 'None';
+					})
 					->addColumn('action', function($row){
 						$actionBtn = '
 						<div align="center" class="action_table_menu_client">
@@ -58,10 +78,6 @@ class ClientController extends Controller
 						<a href="#" data-id="'.$row->client_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteclient"></a>
 						</div>';
 						return $actionBtn;
-						
-						
-						
-						
 					})
 					->rawColumns(['action'])
 					->make(true);
@@ -71,9 +87,42 @@ class ClientController extends Controller
 	/*Fetch client Information*/
 	public function client_info(Request $request){
 		
+		//$clientID = $request->clientID;
+		//$data = ClientModel::find($clientID, ['client_name', 'client_account_number', 'client_address','client_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
+		//return response()->json($data);
+		
 		$clientID = $request->clientID;
-		$data = ClientModel::find($clientID, ['client_name', 'client_account_number', 'client_address','client_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
-		return response()->json($data);
+
+		$data = ClientModel::with('referrer')
+			->find($clientID, [
+				'client_id',
+				'client_name',
+				'client_account_number',
+				'client_address',
+				'client_tin',
+				'default_less_percentage',
+				'default_net_percentage',
+				'default_vat_percentage',
+				'default_withholding_tax_percentage',
+				'default_payment_terms',
+				'referred_by_idx'
+			]);
+
+		return response()->json([
+			'client_name' => $data->client_name,
+			'client_account_number' => $data->client_account_number,
+			'client_address' => $data->client_address,
+			'client_tin' => $data->client_tin,
+			'default_less_percentage' => $data->default_less_percentage,
+			'default_net_percentage' => $data->default_net_percentage,
+			'default_vat_percentage' => $data->default_vat_percentage,
+			'default_withholding_tax_percentage' => $data->default_withholding_tax_percentage,
+			'default_payment_terms' => $data->default_payment_terms,
+			'referred_by_id' => $data->referred_by_idx,
+			'referred_by_name' => $data->referrer->client_name ?? null,
+			'referred_by_client_account_number' => $data->referrer->client_account_number ?? null
+		]); 
+		
 
 	}
 
@@ -126,6 +175,7 @@ class ClientController extends Controller
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
+			$client->referred_by_idx 					= $request->referred_by_idx;
 			$client->created_by_user_idx 				= Session::has('loginID');
 			
 			$result = $client->save();
@@ -162,6 +212,7 @@ class ClientController extends Controller
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
+			$client->referred_by_idx 					= $request->referred_by_idx;
 			$client->updated_by_user_idx 				= Session::has('loginID');
 			
 			$result = $client->update();

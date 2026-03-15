@@ -30,6 +30,17 @@ class ClientModel extends Model
 		parent::delete();
 	}
 
+	public function referrer()
+	{
+		return $this->belongsTo(ClientModel::class, 'referred_by_idx', 'client_id');
+	}
+
+	public function referrals()
+	{
+		return $this->hasMany(ClientModel::class, 'referred_by_idx', 'client_id');
+	}
+
+
 	protected $table = 'teves_client_table';
 	
 	protected $fillable = [
@@ -42,6 +53,7 @@ class ClientModel extends Model
 		'default_vat_percentage',
 		'default_withholding_tax_percentage',
 		'default_payment_terms',
+		'referred_by_idx',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
@@ -66,6 +78,7 @@ class ClientModel extends Model
 		'default_vat_percentage',
 		'default_withholding_tax_percentage',
 		'default_payment_terms',
+		'referred_by_idx',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',

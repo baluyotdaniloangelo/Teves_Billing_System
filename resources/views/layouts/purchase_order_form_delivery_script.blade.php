@@ -22,9 +22,14 @@
 			let purchase_order_component_idx 					= $("#product_list_delivery option[value='" + $('#purchase_order_component_product_idx').val() + "']").attr('data-id');
 		
 			let purchase_order_delivery_quantity 				= $("#purchase_order_delivery_quantity").val();
-			let purchase_order_delivery_withdrawal_reference 	= $("input[name=purchase_order_delivery_withdrawal_reference]").val();
-			let purchase_order_delivery_hauler_details 			= $("input[name=purchase_order_delivery_hauler_details]").val();
-			let purchase_order_delivery_remarks 				= $("input[name=purchase_order_delivery_remarks]").val();
+			
+			//let purchase_order_delivery_withdrawal_reference 	= $("input[name=purchase_order_delivery_withdrawal_reference]").val();
+			//let purchase_order_delivery_hauler_details 			= $("input[name=purchase_order_delivery_hauler_details]").val();
+			//let purchase_order_delivery_remarks 				= $("input[name=purchase_order_delivery_remarks]").val();
+			
+			let purchase_order_delivery_withdrawal_reference 	= $("#purchase_order_delivery_withdrawal_reference").val();
+			let purchase_order_delivery_hauler_details 			= $("#purchase_order_delivery_hauler_details").val();
+			let purchase_order_delivery_remarks 				= $("#purchase_order_delivery_remarks").val();
 			
 			  $.ajax({
 				url: "{{ route('PurchaseOrderDeliveryCompose') }}",

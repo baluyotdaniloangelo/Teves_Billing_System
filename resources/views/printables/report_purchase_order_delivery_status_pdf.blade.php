@@ -221,9 +221,9 @@
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_quantity; ?> {{@$purchase_order_delivery_component_cols->product_unit_measurement}}</td>
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$ordered_price; ?></td>
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$withdrawal_amount; ?></td>
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$purchase_order_delivery_component_cols->purchase_order_delivery_withdrawal_reference; ?></td>
-				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details;?></td>
-				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?=@$purchase_order_delivery_component_cols->purchase_order_delivery_remarks;?></td>			
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo nl2br(@$purchase_order_delivery_component_cols->purchase_order_delivery_withdrawal_reference); ?></td>
+				<td colspan="2" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo nl2br(@$purchase_order_delivery_component_cols->purchase_order_delivery_hauler_details);?></td>
+				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo nl2br(@$purchase_order_delivery_component_cols->purchase_order_delivery_remarks);?></td>			
 			</tr>
 			<?php 
 			$no_delivered_item++; 
@@ -381,21 +381,12 @@
 			   
 			   $variance = $total_debit_amount - $total_credit_amount;
 			   
-			   
-			  // if($total_po_amount==$total_credit_amount){
-				//   $variance = 0;
-			  // }
-			 //  else{
-			//	   $variance = $total_debit_amount - $total_credit_amount;
-			 //  }
-				   
-
 			?>
 			<tr class="data_tr" style="font-size:12px;">
 				<td colspan="1" align="center"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo "$no_transaction_item"; ?></td>
 				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$transaction_date; ?></td>
 				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$source_tb; ?></td>
-				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo @$item_description; ?></td>
+				<td colspan="1" align="left"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo nl2br(@$item_description); ?></td>
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo number_format($debit_amount,4,".",","); ?></td>
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo number_format($credit_amount,4,".",","); ?></td>
 				<td colspan="1" align="right"  style="height:<?=$component_height;?>px !important;border:1px solid gray;"><?php echo number_format($variance,4,".",","); ?></td>

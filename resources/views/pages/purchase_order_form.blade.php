@@ -292,21 +292,17 @@
 					  </div>
                     </div>
                     <div class="modal-body">
-					
+
 					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('save_purchase_order_payment')}}"  method="post" >
 						@csrf
 						<div class="col-sm-12">
 						
-						<div class="form-floating mb-3">
-						
-						<input type='text' class='form-control' id='purchase_order_bank' name='purchase_order_bank' list='purchase_order_bank_list' autocomplete='off' placeholder="Bank">
-							<datalist id='purchase_order_bank_list'>
-								<?php foreach ($purchase_payment_suggestion as $purchase_order_bank_cols) {?>
-									<option value='<?=$purchase_order_bank_cols->purchase_order_bank;?>'>
-								<?php } ?>
-							</datalist>
-							<label for="purchase_order_bank">Bank</label>
+						<div class="col-sm-12">
+							<div class="form-floating mb-3">
+							<textarea class="form-control" id="purchase_order_bank" name="purchase_order_bank" style="height: 50px;" placeholder="Bank" title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
+							<label for="purchase_order_bank" class="form-label">Bank</label>
 							<span class="valid-feedback" id="purchase_order_bankError"></span>
+							</div>
 						</div>
 						
 						</div>
@@ -323,11 +319,10 @@
 						
 						<div class="col-sm-12">
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_reference_no" id="purchase_order_reference_no" required placeholder="Reference No.">
-								<label for="purchase_order_reference_no">Reference No.</label>
-								<span class="valid-feedback" id="purchase_order_reference_noError"></span>
+							<textarea class="form-control" id="purchase_order_reference_no" name="purchase_order_reference_no" style="height: 50px;" placeholder="Reference No." title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
+							<label for="purchase_order_reference_no" class="form-label">Reference No.</label>
+							<span class="valid-feedback" id="purchase_order_reference_noError"></span>
 							</div>
-							 
 						</div>
 						
 						<div class="col-sm-12">
@@ -338,15 +333,7 @@
 							</div>
 							 
 						</div>
-						<!--
-						<div class="col-sm-12">
-							<div class="form-floating mb-3">
-								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_payment_withdraw_equivalent_amount" id="purchase_order_payment_withdraw_equivalent_amount" required step=".01" placeholder="Amount">
-								<label for="purchase_order_payment_withdraw_equivalent_amount">Withdraw Equivalent Amount</label>
-								<span class="valid-feedback" id="purchase_order_payment_withdraw_equivalent_amountError"></span>
-							</div>
-							 
-						</div>-->
+						
 						
 						<div class="row mb-3">
 							<div class="col-sm-12">
@@ -354,7 +341,6 @@
 							<input class="form-control" type="file" id="payment_image_reference" name="payment_image_reference">
 							</div>
 						
-						<!--<img id="preview-image-before-upload" src="" alt="preview image" style="max-height: 250px;">-->
 						 <input type="hidden" id="purchase_order_id_payment" name="purchase_order_id_payment" value="{{ $PurchaseOrderID }}">
 						 <input type="hidden" id="purchase_order_payment_details_id" name="purchase_order_payment_details_id" value="">		
 						</div>
@@ -551,32 +537,32 @@
 						</div>
 
 						<div class="col-sm-12">
+							
+							<div class="form-floating mb-3">
+							<textarea class="form-control" id="purchase_order_delivery_withdrawal_reference" name="purchase_order_delivery_withdrawal_reference" style="height: 50px;" placeholder="Withdrawal Reference" title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
+							<label for="purchase_order_delivery_withdrawal_reference" class="form-label">Withdrawal Reference</label>
+							<span class="valid-feedback" id="purchase_order_delivery_withdrawal_referenceError"></span>
+							</div>
+							
+						</div>
+						
+						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_withdrawal_reference" id="purchase_order_delivery_withdrawal_reference" placeholder="Withdrawal Reference">
-								<label for="purchase_order_delivery_withdrawal_reference">Withdrawal Reference</label>
-							</div>
-							 <span class="valid-feedback" id="purchase_order_delivery_withdrawal_referenceError"></span>
+							<textarea class="form-control" id="purchase_order_delivery_hauler_details" name="purchase_order_delivery_hauler_details" style="height: 50px;" placeholder="Hauler Details" title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
+							<label for="purchase_order_delivery_withdrawal_reference" class="form-label">Hauler Details</label>
+							<span class="valid-feedback" id="purchase_order_delivery_hauler_detailsError"></span>
+							</div> 
 							 
 						</div>
 						
 						<div class="col-sm-12">
 						
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_hauler_details" id="purchase_order_delivery_hauler_details" placeholder="Hauler Details">
-								<label for="purchase_order_delivery_hauler_details">Hauler Details</label>
-							</div>
-							 <span class="valid-feedback" id="purchase_order_delivery_hauler_detailsError"></span>
-							 
-						</div>
-						
-						<div class="col-sm-12">
-						
-							<div class="form-floating mb-3">
-								<input type="text" class="form-control" aria-describedby="basic-addon1" name="purchase_order_delivery_remarks" id="purchase_order_delivery_remarks" placeholder="Ship To Account">
-								<label for="purchase_order_delivery_remarks">Remarks</label>
-							</div>
-							 <span class="valid-feedback" id="purchase_order_delivery_remarksError"></span>
+							<textarea class="form-control" id="purchase_order_delivery_remarks" name="purchase_order_delivery_remarks" style="height: 50px;" placeholder="Remarks" title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
+							<label for="purchase_order_delivery_withdrawal_reference" class="form-label">Remarks</label>
+							<span class="valid-feedback" id="purchase_order_delivery_remarks"></span>
+							</div> 
 							 
 						</div>
 						

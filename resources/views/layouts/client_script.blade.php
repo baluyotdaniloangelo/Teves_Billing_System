@@ -30,6 +30,8 @@
 					{data: 'client_account_number', className: "text-left"},   
 					{data: 'client_address', className: "text-left"},
 					{data: 'client_tin', className: "text-left"},
+					// NEW COLUMN
+					{data: 'referred_by_name', className: "text-left"},
 					{data: 'default_less_percentage', className: "text-left"},
 					{data: 'default_net_percentage', className: "text-left"},
 					{data: 'default_vat_percentage', className: "text-left"},
@@ -91,12 +93,14 @@
 			let default_withholding_tax_percentage 	= $("input[name=default_withholding_tax_percentage]").val();
 			let default_payment_terms 				= $("input[name=default_payment_terms]").val();
 			
+			/*Referral System - March 14, 2026*/
+			let referred_by_idx 					= $('#referred_by_name option[value="' + $('#referred_by_id').val() + '"]').attr('data-id');
+			
 			  $.ajax({
 				url: "/create_client_post",
 				type:"POST",
 				data:{
 				  client_name:client_name,
-				  //client_account_number:client_account_number,
 				  client_address:client_address,
 				  client_tin:client_tin,
 				  default_less_percentage:default_less_percentage,
@@ -104,6 +108,7 @@
 				  default_vat_percentage:default_vat_percentage,
 				  default_withholding_tax_percentage:default_withholding_tax_percentage,
 				  default_payment_terms:default_payment_terms,
+				  referred_by_idx:referred_by_idx,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
@@ -188,6 +193,8 @@
 					document.getElementById("update_default_withholding_tax_percentage").value 	= response.default_withholding_tax_percentage;
 					document.getElementById("update_default_payment_terms").value 				= response.default_payment_terms;
 										
+					document.getElementById("update_referred_by_id").value 						= response.referred_by_name + " : "+ response.referred_by_client_account_number;					
+					
 					$('#UpdateClientModal').modal('toggle');					
 				  
 				  }
@@ -221,6 +228,9 @@
 			let default_withholding_tax_percentage 	= $("input[name=update_default_withholding_tax_percentage]").val();
 			let default_payment_terms 				= $("input[name=update_default_payment_terms]").val();
 			
+			/*Referral System - March 14, 2026*/
+			let referred_by_idx 					= $('#update_referred_by_name option[value="' + $('#update_referred_by_id').val() + '"]').attr('data-id');
+			
 			  $.ajax({
 				url: "/update_client_post",
 				type:"POST",
@@ -235,6 +245,7 @@
 				  default_vat_percentage:default_vat_percentage,
 				  default_withholding_tax_percentage:default_withholding_tax_percentage,
 				  default_payment_terms:default_payment_terms,
+				  referred_by_idx:referred_by_idx,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){

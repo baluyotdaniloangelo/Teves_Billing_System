@@ -218,28 +218,28 @@
 
 		<tr style="font-size:12px;">
 			<td colspan="1"></td>
-			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VATable Sales </td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; ">VATable Sales </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($VATable_Sales,2);?>
 			<td colspan="1"></td>
-			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Sales </td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; ">Total Sales </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($sales_order_data[0]['sales_order_gross_amount'],2);?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
 			<td colspan="1"></td>
-			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT - Exempt </td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; ">VAT - Exempt </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"></td>
 			<td colspan="1"></td>
-			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : VAT </td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; ">Less : VAT </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($Less_VAT,2);?></td>
 		</tr>
 		
 		<tr style="font-size:12px;">
 			<td colspan="1"></td>
-			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT Zero Rated </td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; ">VAT Zero Rated </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total </td>
@@ -249,17 +249,17 @@
 		
 		<tr style="font-size:12px;">			
 			<td colspan="1"></td>
-			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT 12% </td>
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; ">VAT 12% </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"><?=number_format($VAT_12_percent,2);?></td>
 			<td colspan="1"></td>
-			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">less : Discount </td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; ">less : Discount </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000;"></td>
 		</tr>		
 		
 		<tr style="font-size:12px;">			
 			<td colspan="5"></td>
 			<td colspan="1"></td>
-			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : Withholding Tax(<?=$sales_order_data[0]['sales_order_withholding_tax'];?>%) </td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; ">Less : Withholding Tax(<?=$sales_order_data[0]['sales_order_withholding_tax'];?>%) </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($Less_Withholding_Tax,2);?></td>
 		</tr>
 
@@ -267,7 +267,7 @@
 		<tr style="font-size:12px;">			
 			<td colspan="5"></td>
 			<td colspan="1"></td>
-			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Amount Due </td>
+			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; ">Total Amount Due </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($sales_order_data[0]['sales_order_total_due'],2);?></td>
 		</tr>
@@ -282,7 +282,7 @@
 		</tr>
 		
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:40px !important;font-style: italic;">In Words</td>
+			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:30px !important;font-style: italic;">In Words</td>
 			<td colspan="8" style="border-top:1px solid gray; border-bottom:1px solid gray; text-align:center;">&nbsp;<?php echo strtoupper($amount_in_words); ?></td>
 		</tr>
 
@@ -319,19 +319,21 @@
 	  	</table>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >			
+		
 		<tr style="font-size:10px;border:0 solid #000;">
 			<td colspan="6" align="left" style="border-top:1px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:0px solid gray; font-style: italic; height:32px !important;">Instructions;</td>
 			<td colspan="4" align="center" style="border:1px solid gray; font-weight:bold;">NOTE</td>	
 		</tr>
 	    
 		<tr style="font-size:10px;border:0 solid #000;" rowspan="6">
-			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:110px !important; text-align: justify;">
+			<td colspan="6" align="center" style="border-top:0px solid gray; border-left:1px solid gray; border-right:0px solid gray; border-bottom:1px solid gray; height:80px !important; text-align: justify;">
 			<?php echo nl2br($sales_order_data[0]['sales_order_instructions']); ?>
 			</td>
-			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:100px !important;">
+			<td colspan="4" align="left" style="border-top:0px solid gray; border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; height:90px !important; height:80px !important;">
 			<?php echo nl2br($sales_order_data[0]['sales_order_note']); ?>
 			</td>
 		</tr>
+		
 		<tr>
 			<td colspan="10" style="height:5.66px !important;"></td>
 		</tr>
@@ -366,7 +368,7 @@
 			</td>	
 				
 		</tr>
-		<tr style="font-size:10px;font-style: italic;">
+		<tr style="font-size:8px;font-style: italic;">
 			<td colspan="10" style="">This Sales Order is not valid for claims of taxes. Please refer to sales invoice / official receipts issued.<br>
 			This is a system-generated. No Signature is Required.</td>
 		</tr>

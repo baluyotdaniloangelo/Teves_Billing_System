@@ -115,16 +115,16 @@
 		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILS</td>			
+			<td colspan="10" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILSrrrrrr</td>			
 		</tr>		
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
 		</tr> 
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; height:25px !important; background-color: #c6e0b4;">BANK</td>
+			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; height:25px !important; background-color: #c6e0b4;" width="20%">BANK</td>
 			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">DATE OF PAYMENT</td>
-			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">REFERENCE NO.</td>
-			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">AMOUNT</td>			
+			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;" width="30%">REFERENCE NO.</td>
+			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;" width="20%">AMOUNT</td>			
 		</tr> 
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>

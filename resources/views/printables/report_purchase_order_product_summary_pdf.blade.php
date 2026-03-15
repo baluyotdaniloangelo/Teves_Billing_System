@@ -141,7 +141,7 @@
 			<td colspan="1" align="left" style="border:1px solid gray;">{{ $purchase_order_data_data_cols['supplier_name'] }}</td>
 			<td colspan="1" align="left" style="border:1px solid gray;"><?=$purchase_order_data_data_cols['product_name'];?></td>
 			<td colspan="1" align="center" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['product_price'],2);?></td>	
-			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['order_quantity'],2);?></td>		
+			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['order_quantity'],2);?> <?=$purchase_order_data_data_cols['product_unit_measurement'];?></td>		
 			<td colspan="1" align="right" style="border:1px solid gray;"><?=number_format($purchase_order_data_data_cols['order_total_amount'],2);?></td>			
 		</tr>
 		

@@ -144,19 +144,16 @@
 		<br>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #ffe699; font-weight:bold; height:5px !important; "></td>
-		</tr> 		
-		<tr style="font-size:12px;border:0 solid #000;">		
-			<td colspan="3" width="30%" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;  background-color: #ffe699; font-weight:bold; height:25px !important;">DESCRIPTION</td>		
-			<td colspan="2" width="20%"  nowrap align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000;    background-color: #ffe699; font-weight:bold;">QUANTITY</td>
-			<td colspan="1" width="10%"  align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000;  background-color: #ffe699; font-weight:bold;">UNIT</td>		
-			<td colspan="2" width="20%"  nowrap align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; background-color: #ffe699; font-weight:bold;">UNIT PRICE</td>
-			<td colspan="2" width="20%"  align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000;  background-color: #ffe699; font-weight:bold;">AMOUNT</td>							
+		
+		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">		
+			<td colspan="1" width="5%" align="center" style="border:1 solid gray;">No.</td>
+			<td colspan="3" width="30%" align="center" style="border:1 solid gray;">DESCRIPTION</td>		
+			<td colspan="2" width="20%" nowrap align="center" style="border:1 solid gray;">QUANTITY</td>
+			<td colspan="1" width="5%" align="center" style="border:1 solid gray;">UNIT</td>		
+			<td colspan="2" width="20%" nowrap align="center" style="border:1 solid gray;">UNIT PRICE</td>
+			<td colspan="2" width="20%" align="center" style="border:1 solid gray;">AMOUNT</td>							
 		</tr>									
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #ffe699; font-weight:bold; height:5px !important; "></td>
-		</tr> 	
+		
 			<?php 
 			$no = 1;
 			$total_liters = 0;
@@ -170,15 +167,16 @@
 				$total_liters += 0;
 			}
 			
-			$component_height = 160 / count($purchase_order_component);
-			
+			$component_height = 200 / count($purchase_order_component);
+			//#eaeaea
 			?>
-			<tr class="data_tr" style="font-size:12px;">
-				<td colspan="3" align="center" style=" height:<?=$component_height;?>px !important; border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_name}}</td>
-				<td colspan="2" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
-				<td colspan="1" align="center" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{$purchase_order_component_cols->product_unit_measurement}}</td>
-				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->product_price,2,".",",");?></td>
-				<td colspan="2" align="right" nowrap style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,2,".",",");?></td>
+			<tr style="font-size:12px; border:1 solid gray; <?php if ($no % 2 == 0) echo 'background-color:#eaeaea;'; ?>">
+				<td colspan="1" align="left" style=" height:<?=$component_height;?>px !important; border:1 solid gray;">{{$no}}</td>
+				<td colspan="3" align="left" style=" height:<?=$component_height;?>px !important; border:1 solid gray;">{{$purchase_order_component_cols->product_name}}</td>
+				<td colspan="2" align="right" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
+				<td colspan="1" align="left" nowrap style="border:1 solid gray;">{{$purchase_order_component_cols->product_unit_measurement}}</td>
+				<td colspan="2" align="right" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->product_price,2,".",",");?></td>
+				<td colspan="2" align="right" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,2,".",",");?></td>
 			</tr>
 			<?php 
 			$no++; 
@@ -187,7 +185,7 @@
 			@endforeach
 
 		<tr style="font-size:12px;">
-			<td colspan="1"></td>
+			<td colspan="2"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VATable Sales </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;">
 			<?=number_format($VATable_Sales,2);?>
@@ -198,7 +196,7 @@
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="1"></td>
+			<td colspan="2"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT - Exempt </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"></td>
 			<td colspan="1"></td>
@@ -208,7 +206,7 @@
 		</tr>
 		
 		<tr style="font-size:12px;">
-			<td colspan="1"></td>
+			<td colspan="2"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT Zero Rated </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"></td>
 			<td colspan="1"></td>
@@ -218,7 +216,7 @@
 		</tr>		
 		
 		<tr style="font-size:12px;">			
-			<td colspan="1"></td>
+			<td colspan="2"></td>
 			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">VAT 12% </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 0px solid #000;"><?=number_format($VAT_12_percent,2);?></td>
 			<td colspan="1"></td>
@@ -227,14 +225,14 @@
 		</tr>		
 		
 		<tr style="font-size:12px;">			
-			<td colspan="5"></td>
+			<td colspan="6"></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Less : Withholding Tax(<?=$purchase_order_data[0]['purchase_order_less_percentage'];?>%) </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom: 1px solid;"><?=number_format($Less_Withholding_Tax,2);?></td>
 		</tr>
 
 		<tr style="font-size:12px;">			
-			<td colspan="5"></td>
+			<td colspan="6"></td>
 			<td colspan="1"></td>
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Amount Due </td>
 			<td colspan="1" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
@@ -243,37 +241,28 @@
 		
 		
 		<tr>
-			<td colspan="10" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;"></td>
+			<td colspan="11" style="border-left:0px solid #000;border-right:0px solid #000;border-bottom:0px solid #000;"></td>
 		</tr>
 		
-		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
-		</tr>
-			
 		<tr style="font-size:12px;border:0 solid #000;">
 			<td colspan="2" align="center" style="border-top:1px solid gray; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:50px !important;font-style: italic;">In Words</td>
-			<td colspan="8" style="border-top:1px solid gray; border-bottom:1px solid gray; text-align:center;">&nbsp;<?php echo strtoupper($amount_in_words); ?></td>
+			<td colspan="9" style="border-top:1px solid gray; border-bottom:1px solid gray; text-align:center;">&nbsp;<?php echo strtoupper($amount_in_words); ?></td>
 		</tr>
 
 		<tr>
-			<td colspan="10" style="height:5.66px !important;"></td>
+			<td colspan="11" style="height:5.66px !important;"></td>
 		</tr>
 		</table>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
-		</tr> 
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="5" align="center" style="border-top:0px solid #000; border-left:0px solid gray; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">DELIVERY METHOD</td>
-			<td colspan="5" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4;">LOADING TERMINAL</td>
+		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">	
+			<td colspan="5" align="center" style="border-top:0px solid #000; border-left:0px solid gray; border-right:0px solid #000; font-weight:bold; height:25px !important;">DELIVERY METHOD</td>
+			<td colspan="5" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; font-weight:bold; ">LOADING TERMINAL</td>
 		</tr>		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
-		</tr>  
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="5" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray; height:25px !important;">{{ $purchase_order_data[0]['purchase_order_delivery_method'] }}</td>
-			<td colspan="5" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:1px solid gray;">{{ $purchase_order_data[0]['purchase_loading_terminal'] }}</td>
+		
+		<tr style="font-size:12px; border:1 solid gray; background-color: #eaeaea;">
+			<td colspan="5" align="center" style="border:1 solid gray; height:25px !important;">{{ $purchase_order_data[0]['purchase_order_delivery_method'] }}</td>
+			<td colspan="5" align="center" style="border:1 solid gray; ">{{ $purchase_order_data[0]['purchase_loading_terminal'] }}</td>
 			</td>			
 		</tr>
 		
@@ -284,7 +273,7 @@
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" > 	  	
 		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="10" align="center" style="border-top:1px solid gray; border-left:1px solid gray; border-right:1px solid gray; font-weight:bold; background-color: #c6e0b4; height:25px !important;">HAULER DETAILS</td>			
+			<td colspan="10" align="center" style="border-top:1px solid gray; border-left:1px solid gray; border-right:1px solid gray; font-weight:bold; background-color: #dee2e6; height:25px !important;">HAULER DETAILS</td>			
 		</tr>		
 		</table>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" > 	  	
@@ -421,22 +410,28 @@
 		</table>
 		<br>
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >	
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="12" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; font-weight:bold; background-color: #c6e0b4; height:25px !important;">PAYMENT DETAILS</td>			
+		
+		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">
+			<td colspan="12" align="center" style="border:1 solid gray;">PAYMENT DETAILS</td>			
 		</tr>		
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
-		</tr> 
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; height:25px !important; background-color: #c6e0b4;">BANK</td>
-			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">DATE OF PAYMENT</td>
-			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">REFERENCE NO.</td>
-			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">AMOUNT</td>			
-			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:1px solid gray; border-right:0px solid #000; border-bottom:0px solid #000; font-weight:bold; background-color: #c6e0b4;">REMAINING BALANCE</td>			
-		</tr> 
-		<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="12" nowrap align="center" style="border:0px solid gray; background-color: #c6e0b4; font-weight:bold; height:5px !important; "></td>
+		<!--
+		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">		
+			<td colspan="1" width="5%" align="center" style="border:1 solid gray;">No.</td>
+			<td colspan="3" width="30%" align="center" style="border:1 solid gray;">DESCRIPTION</td>		
+			<td colspan="2" width="20%" nowrap align="center" style="border:1 solid gray;">QUANTITY</td>
+			<td colspan="1" width="5%" align="center" style="border:1 solid gray;">UNIT</td>		
+			<td colspan="2" width="20%" nowrap align="center" style="border:1 solid gray;">UNIT PRICE</td>
+			<td colspan="2" width="20%" align="center" style="border:1 solid gray;">AMOUNT</td>							
 		</tr>
+		-->
+		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">
+			<td colspan="2" align="center" style="border:1 solid gray;" >DATE OF PAYMENT</td>
+			<td colspan="2" align="center" style="border:1 solid gray;" >BANK</td>
+			<td colspan="3" align="center" style="border:1 solid gray;" >REFERENCE NO.</td>
+			<td colspan="3" align="center" style="border:1 solid gray;" >AMOUNT</td>			
+			<td colspan="2" align="center" style="border:1 solid gray;" >REMAINING BALANCE</td>			
+		</tr> 
+		
 			<?php 
 			
 			$no_p = 1;
@@ -445,25 +440,26 @@
 			?>
 			
 			@foreach ($purchase_payment_component as $purchase_payment_component_cols)
-					
-			<tr style="font-size:12px;border:0 solid #000;">
-			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;height:25px !important;">{{$purchase_payment_component_cols->purchase_order_bank}}</td>
-				<?php
+			
+			<?php
+			
 				$_purchase_order_date_of_payment=date_create($purchase_payment_component_cols['purchase_order_date_of_payment']);
 				$purchase_order_date_of_payment = strtoupper(date_format($_purchase_order_date_of_payment,"M/d/Y"));
+				
+				$purchase_order_reference_no = $purchase_payment_component_cols->purchase_order_reference_no;
+				
+				$purchase_order_bank = $purchase_payment_component_cols->purchase_order_bank;
 				
 				$total_payment 				+= $purchase_payment_component_cols->purchase_order_payment_amount;
 				$total_remaining_balance 	= $purchase_order_data[0]['purchase_order_total_payable'] - $total_payment;
 				
-				?>
-			<td colspan="2" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;"><?=$purchase_order_date_of_payment;?></td>
-			<td colspan="3" align="center" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">{{$purchase_payment_component_cols->purchase_order_reference_no}}</td>
-			<td colspan="2" align="right" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">	
-			<?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],2);?>
-			</td>
-			<td colspan="2" align="right" style="border-top:0px solid #000; border-left:0px solid #000; border-right:0px solid #000; border-bottom:0px solid #000;">	
-			<?=number_format($total_remaining_balance,2);?>
-			</td>			
+			?>
+			<tr style="font-size:12px; border:1 solid gray; <?php if ($no_p % 2 == 0) echo 'background-color:#eaeaea;'; ?>">
+			<td colspan="2" align="center" style=" border:1 solid gray;"><?=$purchase_order_date_of_payment;?></td>
+			<td colspan="2" align="left" style=" border:1 solid gray;"><?php echo nl2br($purchase_order_bank); ?></td>
+			<td colspan="3" align="left" style=" border:1 solid gray;"><?php echo nl2br($purchase_order_reference_no); ?></td>
+			<td colspan="3" align="right" style=" border:1 solid gray;"><?=number_format($purchase_payment_component_cols['purchase_order_payment_amount'],2);?></td>
+			<td colspan="2" align="right" style=" border:1 solid gray;"><?=number_format($total_remaining_balance,2);?></td>			
 			</tr>
 			<?php 
 			$no_p++; 
@@ -473,16 +469,17 @@
 		
 		<tr style="font-size:12px;">			
 			<td colspan="5"></td>
-			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Payment </td>
-			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
+			<td colspan="2" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Total Payment </td>
+			<td colspan="3" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;" nowrap><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($total_payment,2);?></td>
+			<td colspan="2"></td>
 		</tr>
 		<?php
 		
-		$payment_grand_total 			= str_replace(',', '',$total_payment);
-		$payment_purchase_order_total_payable  = str_replace(',', '',$purchase_order_data[0]['purchase_order_total_payable']);
+		$payment_grand_total 					= str_replace(',', '',$total_payment);
+		$payment_purchase_order_total_payable  	= str_replace(',', '',$purchase_order_data[0]['purchase_order_total_payable']);
 		
-		$overpayment = $payment_grand_total - $payment_purchase_order_total_payable;
+		$overpayment 							= $payment_grand_total - $payment_purchase_order_total_payable;
 		
 		if($overpayment>=1){
 		?>
@@ -491,6 +488,7 @@
 			<td colspan="3" align="left" style="border-left: 0px solid #000; font-weight:bold; height:20px !important;">Over Payment </td>
 			<td colspan="2" align="right" style="background-color: #fff; border-right: 0px solid #000; border-bottom:double;"><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> 
 			<?=number_format($overpayment,2);?></td>
+			<td colspan="2"></td>
 		</tr>	
 		<?php
 		}
