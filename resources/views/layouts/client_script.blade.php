@@ -192,9 +192,14 @@
 					document.getElementById("update_default_vat_percentage").value 				= response.default_vat_percentage;
 					document.getElementById("update_default_withholding_tax_percentage").value 	= response.default_withholding_tax_percentage;
 					document.getElementById("update_default_payment_terms").value 				= response.default_payment_terms;
-										
-					document.getElementById("update_referred_by_id").value 						= response.referred_by_name + " : "+ response.referred_by_client_account_number;					
-					
+
+					if (response.referred_by_id == null || response.referred_by_id == 0) {
+						document.getElementById("update_referred_by_id").value = "";
+					} else {
+						document.getElementById("update_referred_by_id").value =
+							response.referred_by_name + " : " + response.referred_by_client_account_number;
+					}
+
 					$('#UpdateClientModal').modal('toggle');					
 				  
 				  }
