@@ -168,12 +168,12 @@
 			}
 			
 			$component_height = 200 / count($purchase_order_component);
-			//#eaeaea
+
 			?>
 			<tr style="font-size:12px; border:1 solid gray; <?php if ($no % 2 == 0) echo 'background-color:#eaeaea;'; ?>">
 				<td colspan="1" align="left" style=" height:<?=$component_height;?>px !important; border:1 solid gray;">{{$no}}</td>
 				<td colspan="3" align="left" style=" height:<?=$component_height;?>px !important; border:1 solid gray;">{{$purchase_order_component_cols->product_name}}</td>
-				<td colspan="2" align="right" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
+				<td colspan="2" align="left" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->order_quantity,2,".",",");?></td>
 				<td colspan="1" align="left" nowrap style="border:1 solid gray;">{{$purchase_order_component_cols->product_unit_measurement}}</td>
 				<td colspan="2" align="right" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->product_price,2,".",",");?></td>
 				<td colspan="2" align="right" nowrap style="border:1 solid gray;"><?=number_format($purchase_order_component_cols->order_total_amount,2,".",",");?></td>
@@ -414,16 +414,7 @@
 		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">
 			<td colspan="12" align="center" style="border:1 solid gray;">PAYMENT DETAILS</td>			
 		</tr>		
-		<!--
-		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">		
-			<td colspan="1" width="5%" align="center" style="border:1 solid gray;">No.</td>
-			<td colspan="3" width="30%" align="center" style="border:1 solid gray;">DESCRIPTION</td>		
-			<td colspan="2" width="20%" nowrap align="center" style="border:1 solid gray;">QUANTITY</td>
-			<td colspan="1" width="5%" align="center" style="border:1 solid gray;">UNIT</td>		
-			<td colspan="2" width="20%" nowrap align="center" style="border:1 solid gray;">UNIT PRICE</td>
-			<td colspan="2" width="20%" align="center" style="border:1 solid gray;">AMOUNT</td>							
-		</tr>
-		-->
+		
 		<tr style="font-size:12px; border:1 solid gray; background-color: #dee2e6;">
 			<td colspan="2" align="center" style="border:1 solid gray;" >DATE OF PAYMENT</td>
 			<td colspan="2" align="center" style="border:1 solid gray;" >BANK</td>

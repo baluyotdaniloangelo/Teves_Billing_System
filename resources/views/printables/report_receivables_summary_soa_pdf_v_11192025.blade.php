@@ -174,7 +174,7 @@
 					$payment_amount = $receivable_data_data_cols->amount;
 					$receivable_amount = 0;
 					
-					$payment_display = '<span style="color:red;">(' . number_format($payment_amount, 2) . ')</span>';
+					$payment_display = '<span style="color:black;">(' . number_format($payment_amount, 2) . ')</span>';
 					
 					$abs_balance = abs($current_balance);
 
@@ -183,7 +183,7 @@
 						$current_balance_display = number_format($abs_balance, 2);
 					} else {
 						// non-zero payment balance (red + parentheses)
-						$current_balance_display = '<span style="color:red;">(' . number_format($abs_balance, 2) . ')</span>';
+						$current_balance_display = '<span style="color:black;">(' . number_format($abs_balance, 2) . ')</span>';
 					}
 				} else {
 					
