@@ -29,15 +29,15 @@ use DataTables;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
-class NonCashReportController extends Controller
+class CashReportController extends Controller
 {
 	
-	/*Load Billing History Report Interface*/
-	public function non_cash_report_page(){
+	/*Load Report Interface*/
+	public function cash_report_page(){
 		
 		if(Session::has('loginID')){
 			
-			$title = 'Non-Cash Report';
+			$title = 'Cash Report';
 			$data = array();
 			if(Session::has('loginID')){
 				
@@ -306,5 +306,224 @@ class NonCashReportController extends Controller
 		
 	}		
 	
+	public function generate_cash_drop(Request $request){
+
+		$request->validate([
+			'start_date' => 'required|date',
+			'end_date'   => 'required|date',
+		]);
+
+		$current_user   = Session::get('loginID');
+		$start_date     = $request->start_date;
+		$end_date       = $request->end_date;
+		$company_header = $request->company_header;
+
+		\DB::statement("SET SQL_MODE=''");
+
+	$data = CashiersReportModel::query()
+
+    /* ===============================
+     | BRANCH ACCESS
+     =============================== */
+    ->where(function ($q) use ($current_user) {
+        if (Session::get('user_branch_access_type') === "BYBRANCH") {
+            $q->whereRaw(
+                "teves_cashiers_report.teves_branch 
+                 IN (SELECT branch_idx 
+                     FROM teves_user_branch_access 
+                     WHERE user_idx = ?)",
+                [$current_user]
+            );
+        }
+    })
+
+    /* ===============================
+     | DATE FILTER
+     =============================== */
+    ->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
+    ->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+
+    /* ===============================
+     | BRANCH FILTER (ALL OPTION)
+     =============================== */
+    ->when($company_header !== 'All', function ($q) use ($company_header) {
+        $q->where('teves_cashiers_report.teves_branch', $company_header);
+    })
+
+    ->whereNull('teves_cashiers_report.deleted_at')
+
+    /* ===============================
+     | JOINS
+     =============================== */
+    ->leftJoin('user_tb', function ($join) {
+        $join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+             ->whereNull('user_tb.deleted_at');
+    })
+
+    ->leftJoin('teves_branch_table', function ($join) {
+        $join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
+             ->whereNull('teves_branch_table.deleted_at');
+    })
+
+    ->join( // 🔥 SWITCHED TO P5 (cash drop)
+        'teves_cashiers_report_p5',
+        'teves_cashiers_report_p5.cashiers_report_id',
+        '=',
+        'teves_cashiers_report.cashiers_report_id'
+    )
+
+    /* ===============================
+     | GROUPING
+     =============================== */
+    ->groupBy(
+        'teves_cashiers_report.report_date',
+        'teves_cashiers_report.shift',
+        'teves_branch_table.branch_initial',
+        'teves_cashiers_report.cashiers_name',
+        'teves_cashiers_report.forecourt_attendant',
+        'user_tb.user_real_name'
+    )
+
+    /* ===============================
+     | SELECT
+     =============================== */
+    ->selectRaw('
+        teves_cashiers_report.report_date,
+        teves_branch_table.branch_initial,
+        teves_cashiers_report.shift,
+        teves_cashiers_report.cashiers_name,
+        teves_cashiers_report.forecourt_attendant,
+        user_tb.user_real_name as encoder_name,
+        SUM(teves_cashiers_report_p5.cash_drop) AS total_cash_drop
+    ')
+	->havingRaw('SUM(teves_cashiers_report_p5.cash_drop) > 0')
+    ->orderBy('teves_cashiers_report.report_date')
+    ->orderBy('teves_cashiers_report.shift')
+
+    ->get();
+
+		return DataTables::of($data)
+			->addIndexColumn()
+			->make(true);
+
+		
+	}	
+	
+	public function generate_cashdrop_report_pdf(Request $request){
+
+		$request->validate([
+			'start_date' => 'required|date',
+			'end_date'   => 'required|date',
+		]);
+
+		$current_user   = Session::get('loginID');
+		$start_date     = $request->start_date;
+		$end_date       = $request->end_date;
+		$company_header = $request->company_header;
+
+		\DB::statement("SET SQL_MODE=''");
+
+	$data = CashiersReportModel::query()
+
+    /* ===============================
+     | BRANCH ACCESS
+     =============================== */
+    ->where(function ($q) use ($current_user) {
+        if (Session::get('user_branch_access_type') === "BYBRANCH") {
+            $q->whereRaw(
+                "teves_cashiers_report.teves_branch 
+                 IN (SELECT branch_idx 
+                     FROM teves_user_branch_access 
+                     WHERE user_idx = ?)",
+                [$current_user]
+            );
+        }
+    })
+
+    /* ===============================
+     | DATE FILTER
+     =============================== */
+    ->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
+    ->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+
+    /* ===============================
+     | BRANCH FILTER (ALL OPTION)
+     =============================== */
+    ->when($company_header !== 'All', function ($q) use ($company_header) {
+        $q->where('teves_cashiers_report.teves_branch', $company_header);
+    })
+
+    ->whereNull('teves_cashiers_report.deleted_at')
+
+    /* ===============================
+     | JOINS
+     =============================== */
+    ->leftJoin('user_tb', function ($join) {
+        $join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+             ->whereNull('user_tb.deleted_at');
+    })
+
+    ->leftJoin('teves_branch_table', function ($join) {
+        $join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
+             ->whereNull('teves_branch_table.deleted_at');
+    })
+
+    ->join( // 🔥 SWITCHED TO P5 (cash drop)
+        'teves_cashiers_report_p5',
+        'teves_cashiers_report_p5.cashiers_report_id',
+        '=',
+        'teves_cashiers_report.cashiers_report_id'
+    )
+
+    /* ===============================
+     | GROUPING
+     =============================== */
+    ->groupBy(
+        'teves_cashiers_report.report_date',
+        'teves_cashiers_report.shift',
+        'teves_branch_table.branch_initial',
+        'teves_cashiers_report.cashiers_name',
+        'teves_cashiers_report.forecourt_attendant',
+        'user_tb.user_real_name'
+    )
+
+    /* ===============================
+     | SELECT
+     =============================== */
+    ->selectRaw('
+        teves_cashiers_report.report_date,
+        teves_branch_table.branch_initial,
+        teves_cashiers_report.shift,
+        teves_cashiers_report.cashiers_name,
+        teves_cashiers_report.forecourt_attendant,
+        user_tb.user_real_name as encoder_name,
+        SUM(teves_cashiers_report_p5.cash_drop) AS total_cash_drop
+    ')
+	->havingRaw('SUM(teves_cashiers_report_p5.cash_drop) > 0')
+    ->orderBy('teves_cashiers_report.report_date')
+    ->orderBy('teves_cashiers_report.shift')
+
+    ->get();
+		
+		if($company_header !== 'All'){		
+				$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}else{
+				$receivable_header = TevesBranchModel::find(1, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		}
+		/*USER INFO*/
+		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
+		
+		$title = 'Non Cash Payment';
+		  
+        $pdf = PDF::loadView('printables.report_cash_drop_report_pdf', compact('title', 'data', 'user_data','receivable_header','start_date','end_date'));
+		
+		/*Download Directly*/
+        //return $pdf->download($client_data['client_name'].".pdf");
+		/*Stream for Saving/Printing*/
+		$pdf->setPaper('Legal', 'Portrait');/*Set to Landscape*/
+		return $pdf->stream($receivable_header['branch_code']."_CASHDROP.pdf");
+		
+		
+	}		
 
 }

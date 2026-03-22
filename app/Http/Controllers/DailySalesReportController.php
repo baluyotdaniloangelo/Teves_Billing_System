@@ -648,30 +648,9 @@ class DailySalesReportController extends Controller
 			
 			$daily_total_cash_sales = $daily_non_cash_payment + $daily_cash_transaction;
 			
-			/*
-			$result[] = array(
-					 'date' 					=>  $date_only,
-					 'first_shift_total_sales'	=> 	$daily_sales_data[0]->first_shift_sales,
-					 'second_shift_total_sales' => 	$daily_sales_data[0]->second_shift_sales,
-					 'third_shift_total_sales' 	=> 	$daily_sales_data[0]->third_shift_sales,
-					 'fourth_shift_total_sales' => 	$daily_sales_data[0]->fourth_shift_sales,
-					 'fifth_shift_total_sales' 	=> 	$daily_sales_data[0]->fifth_shift_sales,
-					 'sixth_shift_total_sales' 	=> 	$daily_sales_data[0]->sixth_shift_sales,
-					 'shift_total_sales_sum' 	=> 	$shift_total_sales_sum,
-					 'daily_short_over' 		=> 	$daily_short_over,
-					 'daily_other_sales' 		=> 	$daily_other_sales,
-					 'daily_cash_transaction' 	=> 	$daily_cash_transaction,
-					 'daily_fuel_sales' 		=> 	$daily_fuel_sales,
-					 'daily_discount' 			=> 	$daily_discount,
-					 'daily_cashout_other' 		=> 	$daily_cashout_other,
-					 'daily_theoretical_sales' 	=>  $daily_theoretical_sales,
-					 'daily_non_cash_payment'	=> 	$daily_non_cash_payment,
-					 'daily_total_cash_sales'	=>	$daily_total_cash_sales
-					 );
-			*/
-			
 					$result[] = array(
 					 'date' 					=>  $date_only,
+					 'branch_idx' 					=>  $date_only,
 					 'first_shift_total_sales'	=> 	$first_shift_total_sales,
 					 'second_shift_total_sales' => 	$second_shift_total_sales,
 					 'third_shift_total_sales' 	=> 	$third_shift_total_sales,

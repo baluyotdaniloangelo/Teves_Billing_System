@@ -94,11 +94,12 @@ else if (Request::is('billing_history')){
 @include('layouts.daily_sales_script')
 <?php
 }
-else if (Request::is('non_cash_report_page')){
+else if (Request::is('cash_report_page')){
 ?>
 <body class="">
 @include('layouts.footer')
 @include('layouts.non-cash_report_script')
+@include('layouts.cashdrop_report_script')
 <?php
 }
 else if (Request::is('sales_order_summary')){

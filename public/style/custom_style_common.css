@@ -389,7 +389,7 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 /**/
 .nav-tabs-bordered{
 	border-bottom: 2px solid #00bd66 !important;
-	margin-bottom: 8px;
+	/*margin-bottom: 8px;*/
 }
 
 .sidebar-nav .nav-item {
@@ -399,6 +399,7 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 .nav-tabs-bordered .nav-link.active{
 	border-color : #ff8d00 !important;
 	font-weight: bold;
+	margin-bottom: 0px !important;
 }
 
 .form-check-input:checked{

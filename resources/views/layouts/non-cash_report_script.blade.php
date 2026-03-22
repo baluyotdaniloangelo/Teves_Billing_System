@@ -95,7 +95,8 @@
 				/*Close Form*/
 				$('#NonCashReportModal').modal('toggle');
 				
-				get_branch_details();
+				var report_mode = 'noncash';
+				get_branch_details(report_mode);
 							
 				  console.log(response);
 				  if(response!='') {
@@ -334,15 +335,22 @@
 	
 	
 
-function get_branch_details(){
+function get_branch_details(report_mode){
 
     event.preventDefault();
 
-    let branchID = $("#company_header").val();
+    let branchID; // ✅ declare outside
 
-    // If "all" is selected → hide branch info and stop
+    if(report_mode === 'cash_drop'){
+        branchID = $("#company_header_cash_drop").val();
+    }else{
+        branchID = $("#company_header").val();
+    }
+
+    // If "All" is selected → hide branch info and stop
     if (branchID === 'All') {
         $('#hide_branch_details').hide();
+        $('#hide_branch_details_cashdrop').hide();        
         return;
     }
 
@@ -356,11 +364,24 @@ function get_branch_details(){
         },
         success: function(response){
             if(response){
-				$('#hide_branch_details').show();
-                $('#branch_name_report').show().text(response.branch_name);
-                $('#branch_code_report').show().text(response.branch_code);
-                $('#branch_address_report').show().text(response.branch_address);
-                $('#branch_tin_report').show().text(response.branch_tin);
+				
+				if(report_mode=='cash_drop'){
+				
+					$('#hide_branch_details_cashdrop').show();
+					$('#branch_name_report_cashdrop').show().text(response.branch_name);
+					$('#branch_code_report_cashdrop').show().text(response.branch_code);
+					$('#branch_address_report_cashdrop').show().text(response.branch_address);
+					$('#branch_tin_report_cashdrop').show().text(response.branch_tin);
+					
+				}else{
+					
+					$('#hide_branch_details').show();
+					$('#branch_name_report').show().text(response.branch_name);
+					$('#branch_code_report').show().text(response.branch_code);
+					$('#branch_address_report').show().text(response.branch_address);
+					$('#branch_tin_report').show().text(response.branch_tin);
+					
+				}
 
             }
         },

@@ -1,164 +1,155 @@
-   <!-- Page level plugins -->
-   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
-   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
-   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
-   
-   <script src="{{asset('template/assets/vendor/chart.js/chart.min.js')}}"></script>   
-   
 <script type="text/javascript">
 
-	setMaxonEndDate();
+	setMaxonEndDate_cash_drop();
 	
-	function setMaxonEndDate(){
+	function setMaxonEndDate_cash_drop(){
 	
-		let start_date 			= $("input[name=start_date]").val();
+		let start_date_cash_drop 			= $("input[name=start_date_cash_drop]").val();
 		
-		var myDate = new Date(start_date);
+		var myDate = new Date(start_date_cash_drop);
 		var result1 = myDate.setMonth(myDate.getMonth()+12);
 		
 		const date_new = new Date(result1);
 		
-		const max_date = document.getElementById('end_date');
+		const max_date = document.getElementById('end_date_cash_drop');
 		
-		document.getElementById("end_date").min = start_date;
-		document.getElementById("end_date").max = date_new.toISOString("en-US").substring(0, 10);
+		document.getElementById("end_date_cash_drop").min = start_date_cash_drop;
+		document.getElementById("end_date_cash_drop").max = date_new.toISOString("en-US").substring(0, 10);
 		
-		document.getElementById("end_date").value = start_date;
+		document.getElementById("end_date_cash_drop").value = start_date_cash_drop;
 		
 	}
 	
-	function CheckEndDateValidity(){
+	function CheckEndDateValidity_cash_drop(){
 		
-		let start_date 			= $("input[name=start_date]").val();
-		let end_date 			= $("input[name=end_date]").val();
+		let start_date_cash_drop 			= $("input[name=start_date_cash_drop]").val();
+		let end_date_cash_drop 			= $("input[name=end_date_cash_drop]").val();
 		
-		let end_date_max 		= document.getElementById("end_date").max;
+		let end_date_cash_drop_max 		= document.getElementById("end_date_cash_drop").max;
 		
-		const x = new Date(start_date);
-		const y = new Date(end_date);
+		const x = new Date(start_date_cash_drop);
+		const y = new Date(end_date_cash_drop);
 		
-		const edt = new Date(end_date_max);
+		const edt = new Date(end_date_cash_drop_max);
 		
 			if(x > y){
 					
 					/*Set The End Date same with Start Date*/
-					document.getElementById("end_date").value = start_date;
+					document.getElementById("end_date_cash_drop").value = start_date_cash_drop;
 				
 			}
 			else if(edt < y){
 					
 					/*Set The End Date same with Start Date*/
-					document.getElementById("end_date").value = start_date;
+					document.getElementById("end_date_cash_drop").value = start_date_cash_drop;
 					
 			}else{
-					$('#end_dateError').html('');
-					document.getElementById('end_dateError').className = "valid-feedback";
+					$('#end_date_cash_dropError').html('');
+					document.getElementById('end_date_cash_dropError').className = "valid-feedback";
 			}
 	
 	}
 
 	<!--Load Table-->
 	var branch_description_chart = [];
-	$("#generate_report").click(function(event){
+	$("#generate_report_cash_drop").click(function(event){
 		
 			event.preventDefault();
 			branch_description_chart.pop();	
-			document.querySelector("#chartarea_noncash").innerHTML = '<canvas id="chart_noncash" style="max-height: 400px; display: block; box-sizing: border-box; height: 393px; width: 787px;" width="787" height="393"></canvas>';
+			document.querySelector("#chartarea_cashdrop").innerHTML = '<canvas id="chart_cashdrop" style="max-height: 400px; display: block; box-sizing: border-box; height: 393px; width: 787px;" width="787" height="393"></canvas>';
 
 					/*Reset Warnings*/
 					$('#client_idxError').text('');
-					$('#start_dateError').text('');
-					$('#end_dateError').text('');		
+					$('#start_date_cash_dropError').text('');
+					$('#end_date_cash_dropError').text('');		
 					
 					/*Reset Table Upon Resubmit form*/					
-					$("#table_noncash tbody").html("");					
+					$("#table_cashdrop tbody").html("");					
 					
-			document.getElementById('generate_report_form').className = "g-3 needs-validation was-validated";
+			document.getElementById('generate_report_cash_drop_form').className = "g-3 needs-validation was-validated";
 
-			let start_date 			= $("input[name=start_date]").val();
-			let end_date 			= $("input[name=end_date]").val();
-			let company_header 		= $("#company_header").val();	
-			let payment_type   		= $("#payment_type").val();
+			let start_date 		= $("input[name=start_date_cash_drop]").val();
+			let end_date 		= $("input[name=end_date_cash_drop]").val();
+			let company_header 	= $("#company_header_cash_drop").val();	
 			 
 			  $.ajax({
-				url: "/generate_non_cash_payment",
+				url: "/generate_cash_drop",
 				type:"POST",
 				data:{
 				  start_date:start_date,
 				  end_date:end_date,
 				  company_header:company_header,
-				  payment_type:payment_type,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){
 				
 				/*Close Form*/
-				$('#NonCashReportModal').modal('toggle');
+				$('#CashDropReportModal').modal('toggle');
 				
-				get_branch_details();
+				var report_mode = 'cash_drop';
+				
+				get_branch_details(report_mode);
 							
 				  console.log(response);
 				  if(response!='') {
 					
 					$('#client_idxError').text('');
-					$('#start_dateError').text('');
-					$('#end_dateError').text('');	
+					$('#start_date_cash_dropError').text('');
+					$('#end_date_cash_dropError').text('');	
 				
-						var total_non_cash_payment = 0;
-					
+						var grand_total_cash_drop = 0;
 						
 						var len = response['data'].length;
 						
 						for(var i=0; i<len; i++){
 							
 							var date_shift 					= response['data'][i].report_date;
-							var shift 						= response['data'][i].shift;
-							var cashiers_name 				= response['data'][i].cashiers_name;
-							var forecourt_attendant 		= response['data'][i].forecourt_attendant;
-							var payment_type 				= response['data'][i].payment_type;
-							var encoder_name 				= response['data'][i].encoders_name;
-							var total_amount 				= response['data'][i].total_amount;
+							//var shift 						= response['data'][i].shift;
+							//var cashiers_name 				= response['data'][i].cashiers_name;
+							//var forecourt_attendant 		= response['data'][i].forecourt_attendant;
+							//var encoder_name 				= response['data'][i].encoders_name;
+							var total_cash_drop 			= response['data'][i].total_cash_drop;
 							
-							total_non_cash_payment 			+= response['data'][i].total_amount;
+							grand_total_cash_drop 			+= response['data'][i].total_cash_drop;
 	
 							var data_count = i+1;
-							addData(date_shift,total_amount,data_count);
+							addData(date_shift,total_cash_drop,data_count);
 							
 						}			
 						
-						LoadBillingHistoryData.clear().draw();
-						LoadBillingHistoryData.rows.add(response.data).draw();	
+						LoadCashDropData.clear().draw();
+						LoadCashDropData.rows.add(response.data).draw();	
 							
-							$('#total_non_cash').text(total_non_cash_payment.toLocaleString("en-PH", {maximumFractionDigits: 2}));
+							$('#grand_total_cash_drop').text(grand_total_cash_drop.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							
 									
-							var start_date_new  = new Date(start_date);
-							start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+							var start_date_cash_drop_new  = new Date(start_date);
+							start_date_cash_drop_new_format = (start_date_cash_drop_new.toLocaleDateString("en-PH")); // 9/17/2016
 							
-							var end_date_new  = new Date(end_date);
-							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+							var end_date_cash_drop_new  = new Date(end_date);
+							end_date_cash_drop_new_format = (end_date_cash_drop_new.toLocaleDateString("en-PH")); // 9/17/2016
 
-							$('#date_range_info').text(start_date_new_format + ' - ' +end_date_new_format);	
+							$('#date_range_info_cashdrop').text(start_date_cash_drop_new_format + ' - ' +end_date_cash_drop_new_format);	
 							
 						
-							branch_description_chart.push('Total Non-cash Payment');
+							branch_description_chart.push('Total Cash Drop');
 							
-							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
-							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_daily_sales_report_pdf()"> PDF</button>'+
+							$("#download_options_cashdrop").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
+							'<button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_cashdrop_report_pdf()"> PDF</button>'+
 							'</div>');
 							
 				  }else{
 							/*Close Form*/
-							$('#NonCashReportModal').modal('toggle');
+							$('#CashDropReportModal').modal('toggle');
 							/*No Result Found*/
 							$('#total_non_cash').text('');
 							
 
-							$('#branch_name_report').text('');
-							$('#date_range_info').text('');
+							$('#branch_name_report_cashdrop').text('');
+							$('#date_range_info_cashdrop').text('');
 							
-							$("#table_noncash tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
-							$("#download_options").html(''); 
+							$("#table_cashdrop tbody").append("<tr><td colspan='10' align='center'>No Result Found</td></tr>");
+							$("#download_options_cashdrop").html(''); 
 				
 					}
 				},
@@ -166,7 +157,7 @@
 				{
 					
 					/*Disable Submit Button*/
-					document.getElementById("generate_report").disabled = true;
+					document.getElementById("generate_report_cash_drop").disabled = true;
 					/*Show Status*/
 					$('#loading_data').show();
 					
@@ -174,7 +165,7 @@
 				complete: function(){
 					
 					/*Enable Submit Button*/
-					document.getElementById("generate_report").disabled = false;
+					document.getElementById("generate_report_cash_drop").disabled = false;
 					/*Hide Status*/
 					$('#loading_data').hide();
 					
@@ -182,11 +173,11 @@
 				error: function(error) {
 				 console.log(error);	
 				 
-				  $('#start_dateError').text(error.responseJSON.errors.start_date);
-				  document.getElementById('start_dateError').className = "invalid-feedback";		
+				  $('#start_date_cash_dropError').text(error.responseJSON.errors.start_date_cash_drop);
+				  document.getElementById('start_date_cash_dropError').className = "invalid-feedback";		
 
-				  $('#end_dateError').text(error.responseJSON.errors.end_date);
-				  document.getElementById('end_dateError').className = "invalid-feedback";		
+				  $('#end_date_cash_dropError').text(error.responseJSON.errors.end_date_cash_drop);
+				  document.getElementById('end_date_cash_dropError').className = "invalid-feedback";		
 				
 				$('#InvalidModal').modal('toggle');				  	  
 				  
@@ -194,7 +185,7 @@
 			   });
 		
 		/*chart Setup*/		
-		var canvas = document.getElementById("chart_noncash");
+		var canvas = document.getElementById("chart_cashdrop");
 		var ctx = canvas.getContext('2d');
 		var chartType = 'bar';
 		var myBarChart;
@@ -265,40 +256,36 @@
 	
 	});
 
-		  
-
 		/*Load to Datatables*/	
-		let LoadBillingHistoryData = $('#table_noncash').DataTable({
+		let LoadCashDropData = $('#table_cashdrop').DataTable({
 				"language": {
 						"emptyTable": "No Result Found",
 						"infoEmpty": "No entries to show"
 			    }, 
-				// processing: true,
-				//serverSide: true,
+				processing: true,
+				serverSide: false,
 				//stateSave: true,/*Remember Searches*/
 				responsive: true,
-				paging: false,
-				searching: false,
+				paging: true,
+				searching: true,
 				info: false,
 				data: [],
 				scrollCollapse: true,
 				scrollY: '500px',
 				scrollx: true,
 				"columns": [
-				/*0*/	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
-				/*1*/	{data: 'report_date', className: "text-center", orderable: false },
-						{data: 'branch_initial', className: "text-left", orderable: false },				
-				/*1*/	{data: 'shift', className: "text-center", orderable: false },
-				/*1*/	{data: 'cashiers_name', className: "text-left", orderable: false },
-				/*1*/	{data: 'payment_type', className: "text-center", orderable: false },
-				/*2*/	{data: 'total_amount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
-				
+				 	{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false, className: "text-center",},  
+				 	{data: 'report_date', className: "text-center", orderable: false },
+				 	{data: 'branch_initial', className: "text-left", orderable: false },				
+				 	{data: 'shift', className: "text-center", orderable: false },
+				 	{data: 'cashiers_name', className: "text-left", orderable: false },
+				 	{data: 'total_cash_drop', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				],
 				
 		});
 		
 		
-	autoAdjustColumns(LoadBillingHistoryData);
+	autoAdjustColumns(LoadCashDropData);
 
 		 /*Adjust Table Column*/
 		 function autoAdjustColumns(table) {
@@ -309,67 +296,23 @@
 			 resizeObserver.observe(container);
 		 }
 
-	function download_daily_sales_report_pdf(receivable_id){
+	function download_cashdrop_report_pdf(){
 			
-			let start_date 			= $("input[name=start_date]").val();
-			let end_date 			= $("input[name=end_date]").val();
-			let company_header 		= $("#company_header").val();
-			let payment_type   		= $("#payment_type").val();
+			let start_date 		= $("input[name=start_date_cash_drop]").val();
+			let end_date 		= $("input[name=end_date_cash_drop]").val();
+			let company_header 	= $("#company_header_cash_drop").val();
 			
 		var query = {
 			start_date:start_date,
 			end_date:end_date,
 			company_header:company_header,
-			payment_type:payment_type,
 			_token: "{{ csrf_token() }}"
 		}
 
-		var url = "{{URL::to('generate_non_cash_payment_report_pdf')}}?" + $.param(query)
+		var url = "{{URL::to('generate_cashdrop_report_pdf')}}?" + $.param(query)
 		window.open(url);
 	  
 	}
-
-
-	<!--Select Branch For Update-->
-	
-	
-
-function get_branch_details(){
-
-    event.preventDefault();
-
-    let branchID = $("#company_header").val();
-
-    // If "all" is selected → hide branch info and stop
-    if (branchID === 'All') {
-        $('#hide_branch_details').hide();
-        return;
-    }
-
-    // Otherwise → show fields and fetch data
-    $.ajax({
-        url: "{{ route('BranchInfo') }}",
-        type: "POST",
-        data: {
-            branchID: branchID,
-            _token: "{{ csrf_token() }}"
-        },
-        success: function(response){
-            if(response){
-				$('#hide_branch_details').show();
-                $('#branch_name_report').show().text(response.branch_name);
-                $('#branch_code_report').show().text(response.branch_code);
-                $('#branch_address_report').show().text(response.branch_address);
-                $('#branch_tin_report').show().text(response.branch_tin);
-
-            }
-        },
-        error: function(error){
-            console.log(error);
-            alert(error);
-        }
-    });
-}
 
 	    
 </script>

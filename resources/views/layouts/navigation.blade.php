@@ -149,8 +149,8 @@
               <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Daily Sales</span>
             </a>
 			
-			<a href="{{ route('non_cash_report_page') }}" class="sidebar_li_a" title="Daily Sales">
-              <i class="bi bi-bar-chart-line navbar_icon" title="Non Cash Report"></i><span> Non Cash Report</span>
+			<a href="{{ route('cash_report_page') }}" class="sidebar_li_a" title="Daily Sales">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Cash/Non-Cash Report"></i><span> Cash/Non-Cash Report</span>
             </a>
 			
 			<a href="{{ route('sales_report') }}" class="sidebar_li_a" title="Sales Report">

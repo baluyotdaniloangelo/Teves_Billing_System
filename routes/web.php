@@ -35,7 +35,7 @@ use App\Http\Controllers\DailySalesReportController;
 use App\Http\Controllers\SalesReportController;
 
 /*Non Cash Report - January 25, 2025*/
-use App\Http\Controllers\NonCashReportController;
+use App\Http\Controllers\CashReportController;
 
 /*September 20 2025*/
 use App\Http\Controllers\ProductPumpController;
@@ -552,10 +552,12 @@ Route::post('/delete_product_pump_confirmed', [ProductPumpController::class, 'de
 
 
 /*01/24/2026*/
-Route::get('/non_cash_report_page', [NonCashReportController::class,'non_cash_report_page'])->name('non_cash_report_page')->middleware('isLoggedIn');
-Route::post('/generate_non_cash_payment', [NonCashReportController::class,'generate_non_cash_payment'])->name('generate_non_cash_payment')->middleware('isLoggedIn');
-Route::get('/generate_non_cash_payment_report_pdf', [NonCashReportController::class,'generate_non_cash_payment_report_pdf'])->name('generate_non_cash_payment_report_pdf')->middleware('isLoggedIn');
-
+Route::get('/cash_report_page', [CashReportController::class,'cash_report_page'])->name('cash_report_page')->middleware('isLoggedIn');
+Route::post('/generate_non_cash_payment', [CashReportController::class,'generate_non_cash_payment'])->name('generate_non_cash_payment')->middleware('isLoggedIn');
+Route::get('/generate_non_cash_payment_report_pdf', [CashReportController::class,'generate_non_cash_payment_report_pdf'])->name('generate_non_cash_payment_report_pdf')->middleware('isLoggedIn');
+/*03/21/2026 - Cash Drop Report*/
+Route::post('/generate_cash_drop', [CashReportController::class,'generate_cash_drop'])->name('generate_cash_drop')->middleware('isLoggedIn');
+Route::get('/generate_cashdrop_report_pdf', [CashReportController::class,'generate_cashdrop_report_pdf'])->name('generate_cashdrop_report_pdf')->middleware('isLoggedIn');
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

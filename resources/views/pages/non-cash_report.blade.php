@@ -22,16 +22,16 @@
         <div class="tab-pane fade show active" id="noncash">
 
             <div class="card">
-                <div class="card-header d-flex justify-content-end">
-                    <button class="btn btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target="#NonCashReportModal">
-                        Options
-                    </button>
-                </div>
-
+			
                 <div class="card-body">
-
+					<div class="d-flex justify-content-end mb-3">
+						<button class="btn btn-success"
+							data-bs-toggle="modal"
+							data-bs-target="#NonCashReportModal">
+							Options
+						</button>
+					</div>
+					<hr class="my-2">
                     <!-- ACTION BUTTONS -->
                     <div class="d-flex justify-content-end mb-2">
                         <div id="download_options"></div>
@@ -90,16 +90,18 @@
         <div class="tab-pane fade" id="cashdrop">
 
             <div class="card">
-                <div class="card-header d-flex justify-content-end">
-                    <button class="btn btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target="#CashDropReportModal">
-                        Options
-                    </button>
-                </div>
-
+                
                 <div class="card-body">
 
+					<div class="d-flex justify-content-end mb-3">
+						<button class="btn btn-success"
+							data-bs-toggle="modal"
+							data-bs-target="#CashDropReportModal">
+							Options
+						</button>
+					</div>
+					<hr class="my-2">
+					
                     <!-- ACTION BUTTONS -->
                     <div class="d-flex justify-content-end mb-2">
                         <div id="download_options_cashdrop"></div>
@@ -118,7 +120,7 @@
                     </div>
 
                     <!-- CHART -->
-                    <div class="mb-3">
+                    <div class="mb-3" id="chartarea_cashdrop">
                         <canvas id="chart_cashdrop" style="max-height:400px;"></canvas>
                     </div>
 
@@ -138,9 +140,9 @@
                             <tbody></tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5"></td>
+                                    <td colspan="4"></td>
                                     <td><strong>TOTAL</strong></td>
-                                    <td>₱ <span id="total_cash_drop">0.00</span></td>
+                                    <td>₱ <span id="grand_total_cash_drop">0.00</span></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -234,21 +236,21 @@
               <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Non-cash Report</h5>
+                      <h5 class="modal-title">Cash Drop Report</h5>
 					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
 						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
 					  </div>
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-2 needs-validation" id="generate_report_form">
+					  <form class="g-2 needs-validation" id="generate_report_cash_drop_form">
 
 					  
 						<div class="row mb-2">
-						  <label for="company_header" class="col-sm-4 col-form-label">Branch</label>
+						  <label for="company_header_cash_drop" class="col-sm-4 col-form-label">Branch</label>
 						  <div class="col-sm-8">
 						  
-							<select class="form-select form-control" required="" name="company_header" id="company_header">
+							<select class="form-select form-control" required="" name="company_header_cash_drop" id="company_header_cash_drop">
 							<option value="All">All Branches</option>
 							@foreach ($teves_branch as $teves_branch_cols)
 								<option value="{{$teves_branch_cols->branch_id}}">{{$teves_branch_cols->branch_code}}</option>
@@ -258,50 +260,39 @@
 						  </div>
 						</div>
 						
-						<div class="row mb-2">
-						  <label class="col-sm-4 col-form-label">Payment Type</label>
-							<div class="col-sm-8">
-								<select class="form-select" name="payment_type" id="payment_type">
-									<option value="All">All</option>
-									<option value="limitless">Limitless Payment</option>
-									<option value="credit_debit">Credit / Debit</option>
-									<option value="gcash">GCASH</option>
-									<option value="check">Check</option>
-								</select>
-							</div>
-						</div>
-					  
 					  
 						<div class="row mb-2">
 						  <label for="start_date" class="col-sm-4 col-form-label">Start Date</label>
 						  <div class="col-sm-8">
-							<input type="date" class="form-control " name="start_date" id="start_date" value="<?=date('Y-m-d');?>" max="9999-12-31" required onchange="setMaxonEndDate()">
-							<span class="valid-feedback" id="start_dateError"></span>
+							<input type="date" class="form-control " name="start_date_cash_drop" id="start_date_cash_drop" value="<?=date('Y-m-d');?>" max="9999-12-31" required onchange="setMaxonEndDate_cash_drop()">
+							<span class="valid-feedback" id="start_date_cash_dropError"></span>
 						  </div>
 						</div>						
 								
 						<div class="row mb-2">
-						  <label for="end_date" class="col-sm-4 col-form-label">End Date</label>
+						  <label for="end_date_cash_drop" class="col-sm-4 col-form-label">End Date</label>
 						  <div class="col-sm-8">
-							<input type="date" class="form-control " name="end_date" id="end_date" value="<?=date('Y-m-d');?>" required onchange="CheckEndDateValidity()">
-							<span class="valid-feedback" id="end_dateError"></span>
+							<input type="date" class="form-control " name="end_date_cash_drop" id="end_date_cash_drop" value="<?=date('Y-m-d');?>" required onchange="CheckEndDateValidity_cash_drop()">
+							<span class="valid-feedback" id="end_date_cash_dropError"></span>
 						  </div>
 						</div>
 						
 						</div>
 						
                     <div class="modal-footer modal-footer_form">
-							<div id="loading_data" style="display:none;">
+							<div id="loading_data_cash_drop" style="display:none;">
 							<div class="spinner-border text-success" role="status">
 								<span class="visually-hidden">Loading...</span>
 							</div>
 							</div>
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_report"> Submit</button>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_report_cash_drop"> Submit</button>
 					</div>
 					</form><!-- End Multi Columns Form -->
                   </div>
                 </div>
              </div>
+			 <br>
+			 <br>
 </section>
 </main>
 
