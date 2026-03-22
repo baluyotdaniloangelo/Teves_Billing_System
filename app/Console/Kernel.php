@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 		//$schedule->command('database:backup')->daily();
 		 $schedule->job(new ProcessCashierReportJob)
-             ->dailyAt('12:40')
+             ->dailyAt('12:45')
              ->withoutOverlapping()
              ->onOneServer();
 		//$schedule->job(new ProcessCashierReportJob)->everyMinute();/*Temporary*/
