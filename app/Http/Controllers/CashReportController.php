@@ -1,4 +1,6 @@
 <?php
+ini_set('memory_limit', '512M');
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -515,7 +517,7 @@ class CashReportController extends Controller
 		
 		$title = 'Non Cash Payment';
 		
-		ini_set('memory_limit', '512M');
+		
 		
         $pdf = PDF::loadView('printables.report_cash_drop_report_pdf', compact('title', 'data', 'user_data','receivable_header','start_date','end_date'));
 		
