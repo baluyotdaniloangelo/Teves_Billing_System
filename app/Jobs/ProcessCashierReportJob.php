@@ -64,40 +64,12 @@ class ProcessCashierReportJob implements ShouldQueue
         // 👉 paste your computations here (cash, fuel, etc.)
         // from your controller
 
-        // OPTIONAL: save result to table
-        //DB::table('daily_reports')->updateOrInsert(
-         //   [
-         //       'branch' => $company_header,
-          //      'date'   => $date_only
-          //  ],
-          //  [
-          //      'total_sales' => $daily_total_cash_sales,
-          //      'short_over'  => $daily_short_over,
-          //      'updated_at'  => now()
-          //  ]
-        //);
-		
-			/*		$daily 	= $date->format('Y-m-d H:i:s');
-			$hourly 	= $date->format('Y-m-d H:i:s');
-			
-			$date_only 	= $date->format('Y-m-d');
-			
-			$dt_from_w_time = $hourly;
-			$date1=date_create($dt_from_w_time);
-			date_sub($date1,date_interval_create_from_date_string("5 minutes"));
-			$hourly_start = date_format($date1,"Y-m-d H:i:s");
-			
-			/*NEXT DATE MAX*/
-			/*$dt_to_w_time = $hourly;
-			$date2=date_create($dt_to_w_time);
-			date_add($date2,date_interval_create_from_date_string("1435 minutes"));
-			$hourly_end = date_format($date2,"Y-m-d H:i:s");
-		*/
 		/*Disable SQL Violation*/
 			\DB::statement("SET SQL_MODE=''");
 			
 		/*Raw*/
-				/*Start - Cash on Hand*/	 
+				/*Start - Cash on Hand*/	
+				/*		
 				$raw_query_cash_tansaction = "SELECT  
 					(select
 					ifnull(sum(
@@ -238,13 +210,44 @@ class ProcessCashierReportJob implements ShouldQueue
 											$company_header,$hourly_start,$hourly_end,
 											$company_header,$hourly_start,$hourly_end]
 											);
+				*/
 				
-				 $shift_cash_tansaction_sum = $daily_cash_transaction_data[0]->first_shift_total_cash_tansaction + 
-				 $daily_cash_transaction_data[0]->second_shift_total_cash_tansaction +
-				 $daily_cash_transaction_data[0]->third_shift_total_cash_tansaction + 
-				 $daily_cash_transaction_data[0]->fourth_shift_total_cash_tansaction + 
-				 $daily_cash_transaction_data[0]->fifth_shift_total_cash_tansaction + 
-				 $daily_cash_transaction_data[0]->sixth_shift_total_cash_tansaction;
+			$cash_transactions = DB::table('teves_cashiers_report_p5')
+			->join('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_cashiers_report_p5.cashiers_report_id')
+			->where('teves_cashiers_report.teves_branch', $company_header)
+			->whereBetween('teves_cashiers_report.report_date', [$hourly_start, $hourly_end])
+			->selectRaw("
+				teves_cashiers_report.shift,
+				SUM(
+					one_thousand_deno*1000 +
+					five_hundred_deno*500 +
+					two_hundred_deno*200 +
+					one_hundred_deno*100 +
+					fifty_deno*50 +
+					twenty_deno*20 +
+					ten_deno*10 +
+					five_deno*5 +
+					one_deno*1 +
+					twenty_five_cent_deno*0.25 +
+					cash_drop
+				) as total
+			")
+			->groupBy('teves_cashiers_report.shift')
+			->pluck('total', 'shift');
+	
+			$first_shift_total_cash = $cash_transactions['1st Shift'] ?? 0;
+			$second_shift_total_cash = $cash_transactions['2nd Shift'] ?? 0;
+			$third_shift_total_cash = $cash_transactions['3rd Shift'] ?? 0;
+			$fourth_shift_total_cash = $cash_transactions['4th Shift'] ?? 0;
+			$fifth_shift_total_cash = $cash_transactions['5th Shift'] ?? 0;
+			$sixth_shift_total_cash = $cash_transactions['6th Shift'] ?? 0;
+				
+				 $shift_cash_tansaction_sum = $first_shift_total_cash + 
+				 $second_shift_total_cash +
+				 $third_shift_total_cash + 
+				 $fourth_shift_total_cash + 
+				 $fifth_shift_total_cash + 
+				 $sixth_shift_total_cash;
 				 /* End - Cash On Hand*/
 			
 				/*Start - Other Sales*/
@@ -600,14 +603,21 @@ class ProcessCashierReportJob implements ShouldQueue
 			$total_non_cash_payment = $total_non_cash_payment_1st_shift + $total_non_cash_payment_2nd_shift + $total_non_cash_payment_3rd_shift + $total_non_cash_payment_4th_shift + $total_non_cash_payment_5th_shift + $total_non_cash_payment_6th_shift;
 		
 			/*Non Cash Payment*/
-			
+			/*
+			$first_shift_total_cash = $cash_transactions['1st Shift'] ?? 0;
+			$second_shift_total_cash = $cash_transactions['2nd Shift'] ?? 0;
+			$third_shift_total_cash = $cash_transactions['3rd Shift'] ?? 0;
+			$fourth_shift_total_cash = $cash_transactions['4th Shift'] ?? 0;
+			$fifth_shift_total_cash = $cash_transactions['5th Shift'] ?? 0;
+			$sixth_shift_total_cash = $cash_transactions['6th Shift'] ?? 0;
+			*/
 			/*Total Sales Per Shift*/
-			$first_shift_total_sales	 =  $daily_cash_transaction_data[0]->first_shift_total_cash_tansaction + $total_non_cash_payment_1st_shift;
-			$second_shift_total_sales	 =  $daily_cash_transaction_data[0]->second_shift_total_cash_tansaction + $total_non_cash_payment_2nd_shift;
-			$third_shift_total_sales	 =  $daily_cash_transaction_data[0]->third_shift_total_cash_tansaction + $total_non_cash_payment_3rd_shift;
-			$fourth_shift_total_sales	 =  $daily_cash_transaction_data[0]->fourth_shift_total_cash_tansaction + $total_non_cash_payment_4th_shift;
-			$fifth_shift_total_sales	 =  $daily_cash_transaction_data[0]->fifth_shift_total_cash_tansaction + $total_non_cash_payment_5th_shift;
-			$sixth_shift_total_sales	 =  $daily_cash_transaction_data[0]->sixth_shift_total_cash_tansaction + $total_non_cash_payment_6th_shift;
+			$first_shift_total_sales	 =  $first_shift_total_cash + $total_non_cash_payment_1st_shift;
+			$second_shift_total_sales	 =  $second_shift_total_cash + $total_non_cash_payment_2nd_shift;
+			$third_shift_total_sales	 =  $third_shift_total_cash + $total_non_cash_payment_3rd_shift;
+			$fourth_shift_total_sales	 =  $fourth_shift_total_cash + $total_non_cash_payment_4th_shift;
+			$fifth_shift_total_sales	 =  $fifth_shift_total_cash + $total_non_cash_payment_5th_shift;
+			$sixth_shift_total_sales	 =  $sixth_shift_total_cash + $total_non_cash_payment_6th_shift;
 			
 			/*Short/Over*/
 			$daily_fuel_sales			 = $total_fuel_sales;		/*Phase 1*/
