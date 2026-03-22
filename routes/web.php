@@ -168,7 +168,7 @@ Route::get('/generate_soa_summary_pdf_v_11192025', [ReportController::class,'gen
 /*Daily Sales Reports*/
 Route::get('/daily_sales', [DailySalesReportController::class,'daily_sales_page'])->name('daily_sales')->middleware('isLoggedIn');
 Route::post('/generate_daily_sales', [DailySalesReportController::class,'generate_daily_sales_new'])->name('generate_daily_sales')->middleware('isLoggedIn');
-Route::get('/generate_daily_sales_report_pdf', [DailySalesReportController::class,'generate_daily_sales_report_pdf'])->name('generate_daily_sales_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_daily_sales_report_pdf', [DailySalesReportController::class,'generate_daily_sales_report_pdf_new'])->name('generate_daily_sales_report_pdf')->middleware('isLoggedIn');
 
 /*Generate via Web Page View*/
 Route::post('/generate_report', [ReportController::class,'generate_report'])->name('generate_report')->middleware('isLoggedIn');
