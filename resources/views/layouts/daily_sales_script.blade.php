@@ -97,8 +97,8 @@
 				
 				get_branch_details();
 							
-				  console.log(response);
-				  if(response!='') {
+				  console.log(response.data);
+				  if(response.data!='') {
 					
 					$('#client_idxError').text('');
 					$('#start_dateError').text('');
@@ -117,40 +117,50 @@
 						var total_sales = 0;
 						var total_short_over = 0;
 						
-						var len = response['data'].length;
-						
-						for(var i=0; i<len; i++){
-							
-							var date_shift 						= response['data'][i].date;
-							var first_shift_total_sales 		= response['data'][i].first_shift_total_sales;
-							var second_shift_total_sales 		= response['data'][i].second_shift_total_sales;
-							var third_shift_total_sales 		= response['data'][i].third_shift_total_sales;
-							var fourth_shift_total_sales 		= response['data'][i].fourth_shift_total_sales;
-							var fifth_shift_total_sales 		= response['data'][i].fifth_shift_total_sales;
-							var sixth_shift_total_sales 		= response['data'][i].sixth_shift_total_sales;
-							
-							total_fuel_sales 					+= response['data'][i].daily_fuel_sales;
-							total_discount 						+= response['data'][i].daily_discount;
-							total_cashout_other 				+= response['data'][i].daily_cashout_other;
-							total_other_sales 					+= response['data'][i].daily_other_sales;
-							total_theoretical_sales 			+= response['data'][i].daily_theoretical_sales;
-							
-							total_cash_tansaction 				+= response['data'][i].daily_cash_transaction;
-							total_non_cash_payment 				+= response['data'][i].daily_non_cash_payment;
-							total_cash_sales 					+= response['data'][i].daily_total_cash_sales;
-	
-							total_daily_sales = first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;
-		
-							total_sales += first_shift_total_sales + second_shift_total_sales + third_shift_total_sales + fourth_shift_total_sales + fifth_shift_total_sales + sixth_shift_total_sales;					
-							total_short_over += response['data'][i].daily_short_over;
-							
-							var data_count = i+1;
-							addData(date_shift,total_daily_sales,data_count);
-							
-						}			
-						
-						LoadBillingHistoryData.clear().draw();
-						LoadBillingHistoryData.rows.add(response.data).draw();	
+						var data = response.data;
+						var len = data.length;
+
+						for (var i = 0; i < len; i++) {
+
+							var row = data[i];
+
+							var date_shift = row.date;
+
+							var first_shift_total_sales  = parseFloat(row.first_shift_total_sales) || 0;
+							var second_shift_total_sales = parseFloat(row.second_shift_total_sales) || 0;
+							var third_shift_total_sales  = parseFloat(row.third_shift_total_sales) || 0;
+							var fourth_shift_total_sales = parseFloat(row.fourth_shift_total_sales) || 0;
+							var fifth_shift_total_sales  = parseFloat(row.fifth_shift_total_sales) || 0;
+							var sixth_shift_total_sales  = parseFloat(row.sixth_shift_total_sales) || 0;
+
+							var total_daily_sales =
+								first_shift_total_sales +
+								second_shift_total_sales +
+								third_shift_total_sales +
+								fourth_shift_total_sales +
+								fifth_shift_total_sales +
+								sixth_shift_total_sales;
+
+							total_sales += total_daily_sales;
+
+							total_fuel_sales += parseFloat(row.daily_fuel_sales) || 0;
+							total_discount += parseFloat(row.daily_discount) || 0;
+							total_cashout_other += parseFloat(row.daily_cashout_other) || 0;
+							total_other_sales += parseFloat(row.daily_other_sales) || 0;
+							total_theoretical_sales += parseFloat(row.daily_theoretical_sales) || 0;
+
+							total_cash_tansaction += parseFloat(row.daily_cash_transaction) || 0;
+							total_non_cash_payment += parseFloat(row.daily_non_cash_payment) || 0;
+							total_cash_sales += parseFloat(row.daily_total_cash_sales) || 0;
+
+							total_short_over += parseFloat(row.daily_short_over) || 0;
+
+							var data_count = i + 1;
+							addData(date_shift, total_daily_sales, data_count);
+						}
+
+						LoadDailySalesData.clear().draw();
+						LoadDailySalesData.rows.add(data).draw();
 							
 							$('#total_fuel_sales').text(total_fuel_sales.toLocaleString("en-PH", {maximumFractionDigits: 2}));
 							$('#total_discount').text(total_discount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
@@ -300,7 +310,7 @@
 		  
 
 		/*Load to Datatables*/	
-		let LoadBillingHistoryData = $('#billingstatementreport').DataTable({
+		let LoadDailySalesData = $('#billingstatementreport').DataTable({
 				"language": {
 						"emptyTable": "No Result Found",
 						"infoEmpty": "No entries to show"
@@ -339,7 +349,7 @@
 				
 		});
 		
-	autoAdjustColumns(LoadBillingHistoryData);
+	autoAdjustColumns(LoadDailySalesData);
 
 		 /*Adjust Table Column*/
 		 function autoAdjustColumns(table) {

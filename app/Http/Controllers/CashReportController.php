@@ -180,7 +180,6 @@ class CashReportController extends Controller
 			->addIndexColumn()
 			->make(true);
 
-		
 	}	
 	
 	public function generate_non_cash_payment_report_pdf(Request $request){
@@ -303,7 +302,6 @@ class CashReportController extends Controller
 		$pdf->setPaper('Legal', 'Portrait');/*Set to Landscape*/
 		return $pdf->stream($receivable_header['branch_code']."_NON_CASH_PAYMENT.pdf");
 		
-		
 	}		
 	
 	public function generate_cash_drop(Request $request){
@@ -406,7 +404,6 @@ class CashReportController extends Controller
 			->addIndexColumn()
 			->make(true);
 
-		
 	}	
 	
 	public function generate_cashdrop_report_pdf(Request $request){
@@ -522,7 +519,6 @@ class CashReportController extends Controller
 		/*Stream for Saving/Printing*/
 		$pdf->setPaper('Legal', 'Portrait');/*Set to Landscape*/
 		return $pdf->stream($receivable_header['branch_code']."_CASHDROP.pdf");
-		
 		
 	}		
 

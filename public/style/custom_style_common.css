@@ -315,9 +315,9 @@ div.dataTables_wrapper div.dataTables_length select {
 }
 
 #main{
-	margin-top: 75px !important;
+	/*margin-top: 75px !important;
 	padding: 0px !important;
-	/*margin-left: 0px !important;*/
+	margin-left: 0px !important;*/
 }
 
 /*.loading_style{
@@ -437,9 +437,7 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 	/*margin-bottom: 0px !important;*/
 }
 
-.card{
-	margin-bottom: 0px !important;
-}
+
 
 .card-12-btm{
 	margin-bottom: 0px !important;

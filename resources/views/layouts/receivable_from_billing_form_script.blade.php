@@ -119,6 +119,22 @@
 					document.getElementById("vat_value_percentage").value = response[0].receivable_vat_value_percentage;						
 							
 					
+					/*Information*/
+					
+					document.getElementById("client_name_information").innerHTML 			= response[0].client_name;
+					document.getElementById("branch_information").innerHTML 				= response[0].branch_code + "-" + response[0].branch_name;
+					document.getElementById("date_information").innerHTML 					= response[0].billing_date;
+					document.getElementById("time_information").innerHTML 					= response[0].billing_time;
+					document.getElementById("period_information").innerHTML 				= response[0].billing_period_start + "-" + response[0].billing_period_end;
+					document.getElementById("discount_information").innerHTML 				= response[0].less_per_liter;
+					document.getElementById("net_value_information").innerHTML 				= response[0].receivable_net_value_percentage;
+					document.getElementById("vat_value_information").innerHTML 				= response[0].receivable_vat_value_percentage;
+					document.getElementById("withholding_tax_value_information").innerHTML 	= response[0].receivable_withholding_tax_percentage;
+					document.getElementById("payment_term_information").innerHTML 			= response[0].payment_term;
+					document.getElementById("receivable_description").innerHTML 			= response[0].receivable_description;
+					document.getElementById("amount_information").innerHTML 			= response[0].receivable_amount;
+
+					
 					$('#UpdateReceivablesModal').modal('toggle');					
 				  
 				  }

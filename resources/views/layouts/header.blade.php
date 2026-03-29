@@ -23,6 +23,7 @@
   <link href="{{asset('NiceAdmin-pro/assets/vendor/quill/quill.snow.css')}}" rel="stylesheet">
   <link href="{{asset('NiceAdmin-pro/assets/vendor/quill/quill.bubble.css')}}" rel="stylesheet">
 
+    <link href="{{asset('NiceAdmin-pro/assets/vendor/simple-datatables/style.css')}}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="{{asset('NiceAdmin-pro/assets/css/style.css')}}" rel="stylesheet">

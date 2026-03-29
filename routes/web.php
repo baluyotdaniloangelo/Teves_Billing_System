@@ -39,6 +39,9 @@ use App\Http\Controllers\CashReportController;
 
 /*September 20 2025*/
 use App\Http\Controllers\ProductPumpController;
+
+/*March 29 2026*/
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -64,6 +67,9 @@ Route::get('logout', [UserAuthController::class,'logout']);
 /*Reset Password - Unable to Login*/
 Route::get('/passwordreset',[UserAuthController::class,'passwordreset'])->name('passwordreset');
 Route::post('/reset-password', [EmailController::class, 'sendTemporaryPasswordtoEmail'])->name('sendTemporaryPasswordtoEmail');
+
+/*Load Billing Transaction*/
+Route::get('/dashboard', [DashboardController::class,'dashboard'])->name('dashboard')->middleware('isLoggedIn');
 
 
 /*Load Billing Transaction*/
@@ -477,6 +483,8 @@ Route::post('/cashiers_report_p5_info', [CashiersReportController::class, 'cashi
 
 /*GET Cashiers Summary Report*/
 Route::post('/cashiers_report_summary_info', [CashiersReportController::class, 'cashiers_report_summary_info'])->name('CashiersReportSummary')->middleware('isLoggedIn');
+/*Update Cashiers Summary Report*/
+Route::post('/cashiers_report_update_summary_info', [CashiersReportController::class, 'cashiers_report_update_summary_info'])->name('CashiersReportUpdateSummary')->middleware('isLoggedIn');
 
 
 

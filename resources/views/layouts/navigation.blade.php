@@ -150,7 +150,7 @@
             </a>
 			
 			<a href="{{ route('cash_report_page') }}" class="sidebar_li_a" title="Daily Sales">
-              <i class="bi bi-bar-chart-line navbar_icon" title="Cash/Non-Cash Report"></i><span> Cash/Non-Cash Report</span>
+              <i class="bi bi-bar-chart-line navbar_icon" title="Cash/Non-Cash Report"></i><span> Cash/Non-Cash</span>
             </a>
 			
 			<a href="{{ route('sales_report') }}" class="sidebar_li_a" title="Sales Report">

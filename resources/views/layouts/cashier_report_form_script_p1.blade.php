@@ -120,6 +120,7 @@
 						document.getElementById("calibration").value = '';
 						document.getElementById("product_manual_price").value = '';
 						
+						UpdateCashiersReportSummary();
 						LoadCashiersReportSummary();
 						
 					  }
@@ -413,6 +414,7 @@
 						
 						/*Clear Form*/
 						$('#Update_CRPH1_Modal').modal('toggle');
+						UpdateCashiersReportSummary();
 						LoadCashiersReportSummary();
 					  }
 					},
@@ -490,6 +492,7 @@
 					$('#CRPH1_delete_order_total_amount').text(response[0].order_total_amount);
 					
 					$('#CRPH1DeleteModal').modal('toggle');					
+					UpdateCashiersReportSummary();
 					LoadCashiersReportSummary();
 				  }
 				},

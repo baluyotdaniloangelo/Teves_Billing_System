@@ -601,6 +601,7 @@ class ReceivablesController extends Controller
 					$receivable_id = $request->receivable_id;
 					$data = ReceivablesModel::where('receivable_id', $request->receivable_id)
 					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
+					->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_receivable_table.company_header')	
               		->get([
 					'teves_receivable_table.receivable_id',
 					'teves_receivable_table.sales_order_idx',
@@ -623,6 +624,8 @@ class ReceivablesController extends Controller
 					'teves_receivable_table.receivable_vat_value_percentage',
 					'teves_receivable_table.receivable_withholding_tax_percentage',
 					'teves_receivable_table.company_header',
+					'teves_branch_table.branch_code',
+					'teves_branch_table.branch_name',
 					'teves_receivable_table.receivable_lock_status',
 					'teves_receivable_table.receivable_unlock_expiration',
 					'teves_receivable_table.created_at']);
@@ -943,6 +946,7 @@ class ReceivablesController extends Controller
 			$drivers_name = BillingTransactionModel::select('drivers_name')->distinct()->get();
 			$plate_no = BillingTransactionModel::select('plate_no')->distinct()->get();
 					
+		//return view("pages.billing_to_receivable_form_v2", compact('data','title','product_data','client_data','teves_branch','receivables_payment_suggestion','receivables_details','tab','drivers_name','plate_no'));
 		return view("pages.billing_to_receivable_form", compact('data','title','product_data','client_data','teves_branch','receivables_payment_suggestion','receivables_details','tab','drivers_name','plate_no'));
 		
 		}

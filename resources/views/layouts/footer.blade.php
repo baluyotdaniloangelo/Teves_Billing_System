@@ -87,8 +87,11 @@
   <!-- Vendor JS Files -->
   <script src="{{asset('NiceAdmin-pro/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   <!-- --><script src="{{asset('NiceAdmin-pro/assets/vendor/tinymce/tinymce.min.js')}}"></script> 
-
+<script src="{{asset('NiceAdmin-pro/assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
+<script src="{{asset('NiceAdmin-pro/assets/vendor/apexcharts/apexcharts.min.js')}}"></script>
+  <script src="{{asset('NiceAdmin-pro/assets/vendor/echarts/echarts.min.js')}}"></script>
   <!-- Template Main JS File -->
   <script src="{{asset('NiceAdmin-pro/assets/js/main.js')}}"></script>
   <!-- Bootstrap core JavaScript-->
   <script src="{{asset('/jquery/jquery-3.6.0.min.js')}}"></script>
+  

@@ -1639,7 +1639,6 @@ class CashiersReportController extends Controller
 		
 	}
 	
-	/*OLD cashiers_report_p6_info*/
 	public function cashiers_report_summary_info(Request $request){
 
 		$CashiersReportId = $request->CashiersReportId;
@@ -1728,6 +1727,154 @@ class CashiersReportController extends Controller
 		}
 			
 	}
+		
+		
+	public function cashiers_report_update_summary_info(Request $request){
+
+		$CashiersReportId = $request->CashiersReportId;
+		
+		if ($CashiersReportId != 0) {
+
+			// =========================
+			// PH1 - FUEL SALES
+			// =========================
+			$PH1_SUM = CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
+				->sum('order_total_amount');
+
+			// =========================
+			// PH2 - OTHER SALES
+			// =========================
+			$PH2_SUM = CashiersReportModel_P2::where('cashiers_report_id', $CashiersReportId)
+				->sum('order_total_amount');
+
+			// =========================
+			// PH3 - SPLIT (SALES / DISCOUNT / CASHOUT)
+			// =========================
+			$misc = CashiersReportModel_P3::where('cashiers_report_id', $CashiersReportId)
+				->whereNull('deleted_at')
+				->selectRaw("
+					SUM(CASE WHEN miscellaneous_items_type = 'SALES_CREDIT' THEN order_total_amount ELSE 0 END) as sales_credit,
+					SUM(CASE WHEN miscellaneous_items_type = 'DISCOUNTS' THEN order_total_amount ELSE 0 END) as discount,
+					SUM(CASE WHEN miscellaneous_items_type IN ('CASHOUT','OTHERS') THEN order_total_amount ELSE 0 END) as cashout_other
+				")
+				->first();
+
+			$sales_credit  = $misc->sales_credit ?? 0;
+			$discount      = $misc->discount ?? 0;
+			$cashout_other = $misc->cashout_other ?? 0;
+
+			// =========================
+			// PH4 - THEORETICAL SALES (existing)
+			// =========================
+			$PH4_SUM = CashiersReportModel_P4::where('cashiers_report_id', $CashiersReportId)
+				->sum('amount_p4');
+
+			// =========================
+			// PH5 - CASH ON HAND (OPTIMIZED)
+			// =========================
+			$p5 = CashiersReportModel_P5::where('cashiers_report_id', $CashiersReportId)->first();
+
+			$PH5_SUM = 0;
+			$cash_on_hand = 0;
+			$cash_drop = 0;
+
+			if ($p5) {
+				$PH5_SUM =
+					($p5->one_thousand_deno * 1000) +
+					($p5->five_hundred_deno * 500) +
+					($p5->two_hundred_deno * 200) +
+					($p5->one_hundred_deno * 100) +
+					($p5->fifty_deno * 50) +
+					($p5->twenty_deno * 20) +
+					($p5->ten_deno * 10) +
+					($p5->five_deno * 5) +
+					($p5->one_deno * 1) +
+					($p5->twenty_five_cent_deno * 0.25) +
+					($p5->cash_drop);
+					
+				$cash_on_hand =
+					($p5->one_thousand_deno * 1000) +
+					($p5->five_hundred_deno * 500) +
+					($p5->two_hundred_deno * 200) +
+					($p5->one_hundred_deno * 100) +
+					($p5->fifty_deno * 50) +
+					($p5->twenty_deno * 20) +
+					($p5->ten_deno * 10) +
+					($p5->five_deno * 5) +
+					($p5->one_deno * 1) +
+					($p5->twenty_five_cent_deno * 0.25);	
+					
+				$cash_drop =
+					($p5->cash_drop);
+			}
+
+			// =========================
+			// PH8 - NON CASH PAYMENTS (OPTIMIZED)
+			// =========================
+			$non_cash_payment = CashiersReportModel_P8::where('cashiers_report_idx', $CashiersReportId)
+				->sum('payment_amount');
+
+			// =========================
+			// FINAL COMPUTATIONS
+			// =========================
+
+			// THEORETICAL SALES (correct formula)
+			$theoretical_sales = ($PH1_SUM + $PH2_SUM) - ($sales_credit + $discount + $cashout_other);
+
+			// TOTAL CASH SALES
+			$total_cash_sales = $PH5_SUM + $non_cash_payment;
+
+			// TOTAL SALES
+			$total_sales = $total_cash_sales;
+
+			// SHORT / OVER
+			$short_over = $total_cash_sales - $theoretical_sales;
+
+			// =========================
+			// SAVE TO MAIN TABLE
+			// =========================
+			DB::table('teves_cashiers_report')
+				->where('cashiers_report_id', $CashiersReportId)
+				->update([
+					'fuel_sales'        => $PH1_SUM,
+					'other_sales'       => $PH2_SUM,
+					'cash_transaction'  => $PH5_SUM,
+					'cash_on_hand'  	=> $cash_on_hand,
+					'cash_drop'  		=> $cash_drop,
+					'discount'          => $discount,
+					'cashout_other'     => $cashout_other,
+					'theoretical_sales' => $theoretical_sales,
+					'non_cash_payment'  => $non_cash_payment,
+					'total_cash_sales'  => $total_cash_sales,
+					'total_sales'       => $total_sales,
+					'short_over'        => $short_over,
+				]);
+
+			// =========================
+			// RESPONSE
+			// =========================
+			return response()->json([
+				'success' => "Success",
+
+				'fuel_sales_total'        => $PH1_SUM,
+				'other_sales_total'       => $PH2_SUM,
+				'sales_credit'            => $sales_credit,
+				'discount'                => $discount,
+				'cashout_other'           => $cashout_other,
+				'theoretical_sales'       => $theoretical_sales,
+				'cash_on_hand'            => $PH5_SUM,
+				'non_cash_payment'        => $non_cash_payment,
+				'total_cash_sales'        => $total_cash_sales,
+				'short_over'              => $short_over
+			], 200);
+
+		} else {
+			return response()->json(['success' => "Error on Load"]);
+		}
+			
+	}
+		
+				
 		
 	/*Print Via PDF*/
 	public function generate_cashier_report_pdf(Request $request){

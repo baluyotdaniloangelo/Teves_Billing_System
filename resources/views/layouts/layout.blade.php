@@ -9,7 +9,13 @@ Use to automatically hide the Side Nav Bar
 
 <?php
 
-if (Request::is('billing')){
+if (Request::is('dashboard')){
+?>
+<body class="">
+@include('layouts.footer')
+<?php
+}
+else if (Request::is('billing')){
 ?>
 <body class="">
 @include('layouts.footer')

@@ -102,50 +102,6 @@ $("#update-CRPH8").click(function(event){
     });
 });
 
-
-/* ================= LOAD TABLE ================= 
-LoadCashiersReportPH8();
-
-function LoadCashiersReportPH8(){
-
-    $("#table_cash_payment_body_data").empty();
-
-    let CashiersReportId = {{ $CashiersReportId }};
-
-    $.ajax({
-        url: "{{ route('GetCashiersP8') }}",
-        type: "POST",
-        data: {
-            CashiersReportId: CashiersReportId,
-            _token: "{{ csrf_token() }}"
-        },
-        success: function(response){
-
-            for (let i = 0; i < response.length; i++) {
-
-                let id = response[i].cashiers_report_p8_id;
-                let type = response[i].payment_type.replace('_', ' ').toUpperCase();
-                let amount = Number(response[i].payment_amount)
-                    .toLocaleString("en-PH", { minimumFractionDigits: 2 });
-
-                $("#table_cash_payment_body_data").append(`
-                    <tr>
-                        <td align="center">${type}</td>
-                        <td align="center">₱ ${amount}</td>
-                        <td align="center">
-                            <a href="#" class="btn-danger btn-circle btn-sm bi-pencil-fill"
-                               id="CHPH8_Edit" data-id="${id}"></a>
-                            <a href="#" class="btn-danger btn-circle btn-sm bi-trash3-fill"
-                               id="CHPH8_Delete" data-id="${id}"></a>
-                        </td>
-                    </tr>
-                `);
-            }
-        }
-    });
-}*/
-
-
 /* ================= DELETE ================= */
 $('body').on('click', '#CHPH8_Delete', function(event){
 
