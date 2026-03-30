@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '256M');
 
 use Illuminate\Http\Request;
 use App\Models\User;
