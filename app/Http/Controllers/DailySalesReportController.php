@@ -1,6 +1,8 @@
 <?php
-ini_set('memory_limit', '512M');
+
 namespace App\Http\Controllers;
+
+ini_set('memory_limit', '512M');
 
 use Illuminate\Http\Request;
 use App\Models\User;
