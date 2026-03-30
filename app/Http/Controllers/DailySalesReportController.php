@@ -713,9 +713,10 @@ public function generate_daily_sales_new(Request $request){
             }
         })
 
-        ->whereDate('report_date', '>=', $start_date)
-        ->whereDate('report_date', '<=', $end_date)
-
+        //->whereDate('report_date', '>=', $start_date)
+        //->whereDate('report_date', '<=', $end_date)
+		->where('report_date', '>=', $start_date)
+		->where('report_date', '<=', $end_date)
         ->when($company_header !== 'All', function ($q) use ($company_header) {
             $q->where('teves_branch', $company_header);
         })
