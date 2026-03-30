@@ -1521,14 +1521,15 @@ public function generate_daily_sales_new(Request $request){
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		$title = 'Branch - Daily Sales';
+		var_dump($result);
 		  
-        $pdf = PDF::loadView('printables.report_daily_sales_pdf', compact('title', 'result', 'user_data','receivable_header','start_date','end_date'));
+       // $pdf = PDF::loadView('printables.report_daily_sales_pdf', compact('title', 'result', 'user_data','receivable_header','start_date','end_date'));
 		
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/
-		$pdf->setPaper('Legal', 'landscape');/*Set to Landscape*/
-		return $pdf->stream($receivable_header['branch_code']."_DAILY_SALES.pdf");
+		//$pdf->setPaper('Legal', 'landscape');/*Set to Landscape*/
+		//return $pdf->stream($receivable_header['branch_code']."_DAILY_SALES.pdf");
 		
 		
 	}		
