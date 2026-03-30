@@ -680,119 +680,119 @@ class DailySalesReportController extends Controller
 		
 	}	
 
-public function generate_daily_sales_new(Request $request){
+	public function generate_daily_sales_new(Request $request){
 
-    $request->validate([
-        'start_date' => 'required',
-        'end_date'   => 'required'
-    ], [
-        'start_date.required' => 'Please select a Start Date',
-        'end_date.required'   => 'Please select a End Date'
-    ]);
+		$request->validate([
+			'start_date' => 'required',
+			'end_date'   => 'required'
+		], [
+			'start_date.required' => 'Please select a Start Date',
+			'end_date.required'   => 'Please select a End Date'
+		]);
 
-    $start_date = $request->start_date;
-    $end_date = $request->end_date;
-    $company_header = $request->company_header;
-    $current_user = auth()->user()->user_id ?? null;
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+		$company_header = $request->company_header;
+		$current_user = auth()->user()->user_id ?? null;
 
-    /* ===============================
-     | MAIN QUERY (NO JOINS, FAST)
-     =============================== */
-    $data = DB::table('teves_cashiers_report')
+		/* ===============================
+		 | MAIN QUERY (NO JOINS, FAST)
+		 =============================== */
+		$data = DB::table('teves_cashiers_report')
 
-        ->where(function ($q) use ($current_user) {
-            if (Session::get('user_branch_access_type') === "BYBRANCH") {
-                $q->whereRaw(
-                    "teves_branch IN (
-                        SELECT branch_idx 
-                        FROM teves_user_branch_access 
-                        WHERE user_idx = ?
-                    )",
-                    [$current_user]
-                );
-            }
-        })
+			->where(function ($q) use ($current_user) {
+				if (Session::get('user_branch_access_type') === "BYBRANCH") {
+					$q->whereRaw(
+						"teves_branch IN (
+							SELECT branch_idx 
+							FROM teves_user_branch_access 
+							WHERE user_idx = ?
+						)",
+						[$current_user]
+					);
+				}
+			})
 
-        //->whereDate('report_date', '>=', $start_date)
-        //->whereDate('report_date', '<=', $end_date)
-		->where('report_date', '>=', $start_date)
-		->where('report_date', '<=', $end_date)
-        ->when($company_header !== 'All', function ($q) use ($company_header) {
-            $q->where('teves_branch', $company_header);
-        })
+			//->whereDate('report_date', '>=', $start_date)
+			//->whereDate('report_date', '<=', $end_date)
+			->where('report_date', '>=', $start_date)
+			->where('report_date', '<=', $end_date)
+			->when($company_header !== 'All', function ($q) use ($company_header) {
+				$q->where('teves_branch', $company_header);
+			})
 
-        ->whereNull('deleted_at')
+			->whereNull('deleted_at')
 
-        ->selectRaw('
-            report_date,
-            shift,
+			->selectRaw('
+				report_date,
+				shift,
 
-            SUM(total_sales) as total_sales,
-            SUM(other_sales) as other_sales,
-            SUM(cash_transaction) as cash_transaction,
-            SUM(fuel_sales) as fuel_sales,
-            SUM(discount) as discount,
-            SUM(cashout_other) as cashout_other,
-            SUM(theoretical_sales) as theoretical_sales,
-            SUM(non_cash_payment) as non_cash_payment,
-            SUM(total_cash_sales) as total_cash_sales,
-            SUM(short_over) as short_over
-        ')
+				SUM(total_sales) as total_sales,
+				SUM(other_sales) as other_sales,
+				SUM(cash_transaction) as cash_transaction,
+				SUM(fuel_sales) as fuel_sales,
+				SUM(discount) as discount,
+				SUM(cashout_other) as cashout_other,
+				SUM(theoretical_sales) as theoretical_sales,
+				SUM(non_cash_payment) as non_cash_payment,
+				SUM(total_cash_sales) as total_cash_sales,
+				SUM(short_over) as short_over
+			')
 
-        ->groupBy('report_date', 'shift')
-        ->orderBy('report_date')
-        ->get();
+			->groupBy('report_date', 'shift')
+			->orderBy('report_date')
+			->get();
 
-    /* ===============================
-     | TRANSFORM TO PER SHIFT FORMAT
-     =============================== */
-    $result = [];
+		/* ===============================
+		 | TRANSFORM TO PER SHIFT FORMAT
+		 =============================== */
+		$result = [];
 
-    $grouped = $data->groupBy('report_date');
+		$grouped = $data->groupBy('report_date');
 
-    foreach ($grouped as $date => $rows) {
+		foreach ($grouped as $date => $rows) {
 
-        $shifts = [
-            '1st Shift','2nd Shift','3rd Shift',
-            '4th Shift','5th Shift','6th Shift'
-        ];
+			$shifts = [
+				'1st Shift','2nd Shift','3rd Shift',
+				'4th Shift','5th Shift','6th Shift'
+			];
 
-        $shiftData = [];
+			$shiftData = [];
 
-        foreach ($shifts as $shift) {
-            $row = $rows->firstWhere('shift', $shift);
-            $shiftData[$shift] = $row->total_sales ?? 0;
-        }
+			foreach ($shifts as $shift) {
+				$row = $rows->firstWhere('shift', $shift);
+				$shiftData[$shift] = $row->total_sales ?? 0;
+			}
 
-        $result[] = [
-            'date' => $date,
-            'branch_idx' => 'N/A',
+			$result[] = [
+				'date' => $date,
+				'branch_idx' => 'N/A',
 
-            'first_shift_total_sales'  => $shiftData['1st Shift'],
-            'second_shift_total_sales' => $shiftData['2nd Shift'],
-            'third_shift_total_sales'  => $shiftData['3rd Shift'],
-            'fourth_shift_total_sales'=> $shiftData['4th Shift'],
-            'fifth_shift_total_sales'  => $shiftData['5th Shift'],
-            'sixth_shift_total_sales'  => $shiftData['6th Shift'],
+				'first_shift_total_sales'  => $shiftData['1st Shift'],
+				'second_shift_total_sales' => $shiftData['2nd Shift'],
+				'third_shift_total_sales'  => $shiftData['3rd Shift'],
+				'fourth_shift_total_sales'=> $shiftData['4th Shift'],
+				'fifth_shift_total_sales'  => $shiftData['5th Shift'],
+				'sixth_shift_total_sales'  => $shiftData['6th Shift'],
 
-            'shift_total_sales_sum' => collect($shiftData)->sum(),
+				'shift_total_sales_sum' => collect($shiftData)->sum(),
 
-            'daily_short_over' => $rows->sum('short_over'),
-            'daily_other_sales' => $rows->sum('other_sales'),
-            'daily_cash_transaction' => $rows->sum('cash_transaction'),
-            'daily_fuel_sales' => $rows->sum('fuel_sales'),
-            'daily_discount' => $rows->sum('discount'),
-            'daily_cashout_other' => $rows->sum('cashout_other'),
-            'daily_theoretical_sales' => $rows->sum('theoretical_sales'),
-            'daily_non_cash_payment' => $rows->sum('non_cash_payment'),
-            'daily_total_cash_sales' => $rows->sum('total_cash_sales'),
-        ];
-    }
+				'daily_short_over' => $rows->sum('short_over'),
+				'daily_other_sales' => $rows->sum('other_sales'),
+				'daily_cash_transaction' => $rows->sum('cash_transaction'),
+				'daily_fuel_sales' => $rows->sum('fuel_sales'),
+				'daily_discount' => $rows->sum('discount'),
+				'daily_cashout_other' => $rows->sum('cashout_other'),
+				'daily_theoretical_sales' => $rows->sum('theoretical_sales'),
+				'daily_non_cash_payment' => $rows->sum('non_cash_payment'),
+				'daily_total_cash_sales' => $rows->sum('total_cash_sales'),
+			];
+		}
 
-    return DataTables::of($result)
-        ->addIndexColumn()
-        ->make(true);
-}
+		return DataTables::of($result)
+			->addIndexColumn()
+			->make(true);
+	}
 	
 	public function generate_daily_sales_report_pdf(Request $request){
 
@@ -1444,8 +1444,8 @@ public function generate_daily_sales_new(Request $request){
             }
         })
 
-        ->whereDate('report_date', '>=', $start_date)
-        ->whereDate('report_date', '<=', $end_date)
+        ->where('report_date', '>=', $start_date)
+		->where('report_date', '<=', $end_date)
 
         ->when($company_header !== 'All', function ($q) use ($company_header) {
             $q->where('teves_branch', $company_header);
