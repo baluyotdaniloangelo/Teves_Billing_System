@@ -111,8 +111,10 @@ class CashReportController extends Controller
 			/* ===============================
 			 | DATE FILTER (IMPORTANT FIX)
 			 =============================== */
-			->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
-			->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+			//->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
+			//->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+			->where('report_date', '>=', $start_date)
+			->where('report_date', '<=', $end_date)
 			
 			/* ===============================
 			 | BRANCH FILTER (ALL OPTION)
@@ -219,8 +221,8 @@ class CashReportController extends Controller
 			/* ===============================
 			 | DATE FILTER (IMPORTANT FIX)
 			 =============================== */
-			->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
-			->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+			->where('report_date', '>=', $start_date)
+			->where('report_date', '<=', $end_date)
 			
 			/* ===============================
 			 | BRANCH FILTER (ALL OPTION)
@@ -340,8 +342,8 @@ class CashReportController extends Controller
 		/* ===============================
 		 | DATE FILTER
 		 =============================== */
-		->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
-		->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+		->where('report_date', '>=', $start_date)
+		->where('report_date', '<=', $end_date)
 
 		/* ===============================
 		 | BRANCH FILTER (ALL OPTION)
@@ -442,8 +444,8 @@ class CashReportController extends Controller
     /* ===============================
      | DATE FILTER
      =============================== */
-    ->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
-    ->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
+    ->where('report_date', '>=', $start_date)
+	->where('report_date', '<=', $end_date)
 
     /* ===============================
      | BRANCH FILTER (ALL OPTION)
