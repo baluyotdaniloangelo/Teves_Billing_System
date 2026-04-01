@@ -349,7 +349,7 @@ class CashReportController extends Controller
 			/* ===============================
 			 | FILTER (NO HAVING NEEDED)
 			 =============================== */
-			->where('teves_cashiers_report.cash_drop', '>', 0)
+			//->where('teves_cashiers_report.cash_drop', '>', 0)
 
 			/* ===============================
 			 | GROUPING (MINIMAL)
