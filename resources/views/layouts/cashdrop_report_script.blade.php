@@ -98,23 +98,23 @@
 					$('#end_date_cash_dropError').text('');	
 				
 						var grand_total_cash_drop = 0;
-						
-						var len = response['data'].length;
-						
-						for(var i=0; i<len; i++){
-							
-							var date_shift 					= response['data'][i].report_date;
-							//var shift 						= response['data'][i].shift;
-							//var cashiers_name 				= response['data'][i].cashiers_name;
-							//var forecourt_attendant 		= response['data'][i].forecourt_attendant;
-							//var encoder_name 				= response['data'][i].encoders_name;
-							var total_cash_drop 			= response['data'][i].total_cash_drop;
-							
-							grand_total_cash_drop 			+= response['data'][i].total_cash_drop;
-	
-							var data_count = i+1;
-							addData(date_shift,total_cash_drop,data_count);
-							
+
+						var data = response.data;
+						var len = data.length;
+
+						for (var i = 0; i < len; i++) {
+
+							var row = data[i];
+
+							var date_shift = row.report_date;
+
+							var total_cash_drop = parseFloat(row.total_cash_drop) || 0;
+
+							grand_total_cash_drop += total_cash_drop;
+
+							var data_count = i + 1;
+
+							addData(date_shift, total_cash_drop, data_count);
 						}			
 						
 						LoadCashDropData.clear().draw();
@@ -159,7 +159,7 @@
 					/*Disable Submit Button*/
 					document.getElementById("generate_report_cash_drop").disabled = true;
 					/*Show Status*/
-					$('#loading_data').show();
+					$('#loading_data_cash_drop').show();
 					
 				},
 				complete: function(){
@@ -167,7 +167,7 @@
 					/*Enable Submit Button*/
 					document.getElementById("generate_report_cash_drop").disabled = false;
 					/*Hide Status*/
-					$('#loading_data').hide();
+					$('#loading_data_cash_drop').hide();
 					
 				},
 				error: function(error) {
@@ -267,7 +267,7 @@
 				//stateSave: true,/*Remember Searches*/
 				responsive: true,
 				paging: true,
-				searching: true,
+				searching: false,
 				info: false,
 				data: [],
 				scrollCollapse: true,

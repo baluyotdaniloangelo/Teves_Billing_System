@@ -199,94 +199,80 @@ class CashReportController extends Controller
 		$company_header = $request->company_header;
 		$payment_type   = $request->payment_type;
 
-		\DB::statement("SET SQL_MODE=''");
-
 		$data = CashiersReportModel::query()
 
-			/* ===============================
-			 | BRANCH ACCESS
-			 =============================== */
-			->where(function ($q) use ($current_user) {
-				if (Session::get('user_branch_access_type') === "BYBRANCH") {
-					$q->whereRaw(
-						"teves_cashiers_report.teves_branch 
-						 IN (SELECT branch_idx 
-							 FROM teves_user_branch_access 
-							 WHERE user_idx = ?)",
-						[$current_user]
-					);
-				}
-			})
+		/* ===============================
+		 | BRANCH ACCESS (OPTIMIZED)
+		 =============================== */
+		->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
+			$q->whereIn('teves_cashiers_report.teves_branch', function ($sub) use ($current_user) {
+				$sub->select('branch_idx')
+					->from('teves_user_branch_access')
+					->where('user_idx', $current_user);
+			});
+		})
 
-			/* ===============================
-			 | DATE FILTER (IMPORTANT FIX)
-			 =============================== */
-			->where('report_date', '>=', $start_date)
-			->where('report_date', '<=', $end_date)
-			
-			/* ===============================
-			 | BRANCH FILTER (ALL OPTION)
-			 =============================== */
-			->when($company_header !== 'All', function ($q) use ($company_header) {
-				$q->where('teves_cashiers_report.teves_branch', $company_header);
-			})
+		/* ===============================
+		 | DATE FILTER (INDEX FRIENDLY)
+		 =============================== */
+		->whereBetween('teves_cashiers_report.report_date', [$start_date, $end_date])
 
-			->whereNull('teves_cashiers_report.deleted_at')
+		/* ===============================
+		 | BRANCH FILTER
+		 =============================== */
+		->when($company_header !== 'All', function ($q) use ($company_header) {
+			$q->where('teves_cashiers_report.teves_branch', $company_header);
+		})
 
-			/* ===============================
-			 | JOINS
-			 =============================== */
-			->leftJoin('user_tb', function ($join) {
-				$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-					 ->whereNull('user_tb.deleted_at');
-			})
+		->whereNull('teves_cashiers_report.deleted_at')
 
-			->leftJoin('teves_branch_table', function ($join) {
-				$join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
-					 ->whereNull('teves_branch_table.deleted_at');
-			})
+		/* ===============================
+		 | JOINS (KEEP ONLY NECESSARY)
+		 =============================== */
+		->leftJoin('user_tb', function ($join) {
+			$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+				 ->whereNull('user_tb.deleted_at');
+		})
 
-			->join( // 🔥 INNER JOIN ON P8 (non-cash only)
-				'teves_cashiers_report_p8',
-				'teves_cashiers_report_p8.cashiers_report_idx',
-				'=',
-				'teves_cashiers_report.cashiers_report_id'
-			)
+		->leftJoin('teves_branch_table', function ($join) {
+			$join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
+				 ->whereNull('teves_branch_table.deleted_at');
+		})
 
-			/* ===============================
-			 | PAYMENT TYPE FILTER
-			 =============================== */
-			->when(($payment_type !== 'All'), function ($q) use ($payment_type) {
-				$q->where('teves_cashiers_report_p8.payment_type', $payment_type);
-			})
+		/* ===============================
+		 | FILTER (NO HAVING NEEDED)
+		 =============================== */
+		->where('teves_cashiers_report.cash_drop', '>', 0)
 
-			/* ===============================
-			 | GROUPING
-			 =============================== */
-			->groupBy(
-				'teves_cashiers_report.report_date',
-				'teves_cashiers_report.shift',
-				'teves_cashiers_report_p8.payment_type'
-			)
+		/* ===============================
+		 | GROUPING (MINIMAL)
+		 =============================== */
+		->groupBy(
+			'teves_cashiers_report.report_date',
+			'teves_cashiers_report.shift',
+			'teves_branch_table.branch_initial',
+			'teves_cashiers_report.cashiers_name',
+			'teves_cashiers_report.forecourt_attendant',
+			'user_tb.user_real_name'
+		)
 
-			/* ===============================
-			 | SELECT
-			 =============================== */
-			->selectRaw('
-				teves_cashiers_report.report_date,
-				teves_branch_table.branch_initial,
-				teves_cashiers_report.shift,
-				teves_cashiers_report.cashiers_name,
-				teves_cashiers_report.forecourt_attendant,
-				user_tb.user_real_name as encoder_name,
-				teves_cashiers_report_p8.payment_type,
-				SUM(teves_cashiers_report_p8.payment_amount) AS total_amount
-			')
+		/* ===============================
+		 | SELECT (NO P5 JOIN!)
+		 =============================== */
+		->selectRaw('
+			teves_cashiers_report.report_date,
+			teves_branch_table.branch_initial,
+			teves_cashiers_report.shift,
+			teves_cashiers_report.cashiers_name,
+			teves_cashiers_report.forecourt_attendant,
+			user_tb.user_real_name as encoder_name,
+			SUM(teves_cashiers_report.cash_drop) AS total_cash_drop
+		')
 
-			->orderBy('teves_cashiers_report.report_date')
-			->orderBy('teves_cashiers_report.shift')
+		->orderBy('teves_cashiers_report.report_date')
+		->orderBy('teves_cashiers_report.shift')
 
-			->get();
+		->get();
 		
 		if($company_header !== 'All'){		
 				$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
@@ -320,89 +306,81 @@ class CashReportController extends Controller
 		$end_date       = $request->end_date;
 		$company_header = $request->company_header;
 
-		\DB::statement("SET SQL_MODE=''");
-
 		$data = CashiersReportModel::query()
 
-		/* ===============================
-		 | BRANCH ACCESS
-		 =============================== */
-		->where(function ($q) use ($current_user) {
-			if (Session::get('user_branch_access_type') === "BYBRANCH") {
-				$q->whereRaw(
-					"teves_cashiers_report.teves_branch 
-					 IN (SELECT branch_idx 
-						 FROM teves_user_branch_access 
-						 WHERE user_idx = ?)",
-					[$current_user]
-				);
-			}
-		})
+			/* ===============================
+			 | BRANCH ACCESS (OPTIMIZED)
+			 =============================== */
+			->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
+				$q->whereIn('teves_cashiers_report.teves_branch', function ($sub) use ($current_user) {
+					$sub->select('branch_idx')
+						->from('teves_user_branch_access')
+						->where('user_idx', $current_user);
+				});
+			})
 
-		/* ===============================
-		 | DATE FILTER
-		 =============================== */
-		->where('report_date', '>=', $start_date)
-		->where('report_date', '<=', $end_date)
+			/* ===============================
+			 | DATE FILTER (INDEX FRIENDLY)
+			 =============================== */
+			->whereBetween('teves_cashiers_report.report_date', [$start_date, $end_date])
 
-		/* ===============================
-		 | BRANCH FILTER (ALL OPTION)
-		 =============================== */
-		->when($company_header !== 'All', function ($q) use ($company_header) {
-			$q->where('teves_cashiers_report.teves_branch', $company_header);
-		})
+			/* ===============================
+			 | BRANCH FILTER
+			 =============================== */
+			->when($company_header !== 'All', function ($q) use ($company_header) {
+				$q->where('teves_cashiers_report.teves_branch', $company_header);
+			})
 
-		->whereNull('teves_cashiers_report.deleted_at')
+			->whereNull('teves_cashiers_report.deleted_at')
 
-		/* ===============================
-		 | JOINS
-		 =============================== */
-		->leftJoin('user_tb', function ($join) {
-			$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-				 ->whereNull('user_tb.deleted_at');
-		})
+			/* ===============================
+			 | JOINS (KEEP ONLY NECESSARY)
+			 =============================== */
+			->leftJoin('user_tb', function ($join) {
+				$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+					 ->whereNull('user_tb.deleted_at');
+			})
 
-		->leftJoin('teves_branch_table', function ($join) {
-			$join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
-				 ->whereNull('teves_branch_table.deleted_at');
-		})
+			->leftJoin('teves_branch_table', function ($join) {
+				$join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
+					 ->whereNull('teves_branch_table.deleted_at');
+			})
 
-		->join( // 🔥 SWITCHED TO P5 (cash drop)
-			'teves_cashiers_report_p5',
-			'teves_cashiers_report_p5.cashiers_report_id',
-			'=',
-			'teves_cashiers_report.cashiers_report_id'
-		)
+			/* ===============================
+			 | FILTER (NO HAVING NEEDED)
+			 =============================== */
+			->where('teves_cashiers_report.cash_drop', '>', 0)
 
-		/* ===============================
-		 | GROUPING
-		 =============================== */
-		->groupBy(
-			'teves_cashiers_report.report_date',
-			'teves_cashiers_report.shift',
-			'teves_branch_table.branch_initial',
-			'teves_cashiers_report.cashiers_name',
-			'teves_cashiers_report.forecourt_attendant',
-			'user_tb.user_real_name'
-		)
+			/* ===============================
+			 | GROUPING (MINIMAL)
+			 =============================== */
+			->groupBy(
+				'teves_cashiers_report.report_date',
+				'teves_cashiers_report.shift',
+				'teves_branch_table.branch_initial',
+				'teves_cashiers_report.cashiers_name',
+				'teves_cashiers_report.forecourt_attendant',
+				'user_tb.user_real_name'
+			)
 
-		/* ===============================
-		 | SELECT
-		 =============================== */
-		->selectRaw('
-			teves_cashiers_report.report_date,
-			teves_branch_table.branch_initial,
-			teves_cashiers_report.shift,
-			teves_cashiers_report.cashiers_name,
-			teves_cashiers_report.forecourt_attendant,
-			user_tb.user_real_name as encoder_name,
-			SUM(teves_cashiers_report_p5.cash_drop) AS total_cash_drop
-		')
-		->havingRaw('SUM(teves_cashiers_report_p5.cash_drop) > 0')
-		->orderBy('teves_cashiers_report.report_date')
-		->orderBy('teves_cashiers_report.shift')
+			/* ===============================
+			 | SELECT (NO P5 JOIN!)
+			 =============================== */
+			->selectRaw('
+				teves_cashiers_report.report_date,
+				teves_branch_table.branch_initial,
+				teves_cashiers_report.shift,
+				teves_cashiers_report.cashiers_name,
+				teves_cashiers_report.forecourt_attendant,
+				user_tb.user_real_name as encoder_name,
+				SUM(teves_cashiers_report.cash_drop) AS total_cash_drop
+			')
 
-		->get();
+			->orderBy('teves_cashiers_report.report_date')
+			->orderBy('teves_cashiers_report.shift')
+
+			->get();
+
 
 			return DataTables::of($data)
 				->addIndexColumn()
@@ -422,89 +400,80 @@ class CashReportController extends Controller
 		$end_date       = $request->end_date;
 		$company_header = $request->company_header;
 
-		\DB::statement("SET SQL_MODE=''");
+		$data = CashiersReportModel::query()
 
-	$data = CashiersReportModel::query()
+			/* ===============================
+			 | BRANCH ACCESS (OPTIMIZED)
+			 =============================== */
+			->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
+				$q->whereIn('teves_cashiers_report.teves_branch', function ($sub) use ($current_user) {
+					$sub->select('branch_idx')
+						->from('teves_user_branch_access')
+						->where('user_idx', $current_user);
+				});
+			})
 
-    /* ===============================
-     | BRANCH ACCESS
-     =============================== */
-    ->where(function ($q) use ($current_user) {
-        if (Session::get('user_branch_access_type') === "BYBRANCH") {
-            $q->whereRaw(
-                "teves_cashiers_report.teves_branch 
-                 IN (SELECT branch_idx 
-                     FROM teves_user_branch_access 
-                     WHERE user_idx = ?)",
-                [$current_user]
-            );
-        }
-    })
+			/* ===============================
+			 | DATE FILTER (INDEX FRIENDLY)
+			 =============================== */
+			->whereBetween('teves_cashiers_report.report_date', [$start_date, $end_date])
 
-    /* ===============================
-     | DATE FILTER
-     =============================== */
-    ->where('report_date', '>=', $start_date)
-	->where('report_date', '<=', $end_date)
+			/* ===============================
+			 | BRANCH FILTER
+			 =============================== */
+			->when($company_header !== 'All', function ($q) use ($company_header) {
+				$q->where('teves_cashiers_report.teves_branch', $company_header);
+			})
 
-    /* ===============================
-     | BRANCH FILTER (ALL OPTION)
-     =============================== */
-    ->when($company_header !== 'All', function ($q) use ($company_header) {
-        $q->where('teves_cashiers_report.teves_branch', $company_header);
-    })
+			->whereNull('teves_cashiers_report.deleted_at')
 
-    ->whereNull('teves_cashiers_report.deleted_at')
+			/* ===============================
+			 | JOINS (KEEP ONLY NECESSARY)
+			 =============================== */
+			->leftJoin('user_tb', function ($join) {
+				$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+					 ->whereNull('user_tb.deleted_at');
+			})
 
-    /* ===============================
-     | JOINS
-     =============================== */
-    ->leftJoin('user_tb', function ($join) {
-        $join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
-             ->whereNull('user_tb.deleted_at');
-    })
+			->leftJoin('teves_branch_table', function ($join) {
+				$join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
+					 ->whereNull('teves_branch_table.deleted_at');
+			})
 
-    ->leftJoin('teves_branch_table', function ($join) {
-        $join->on('teves_branch_table.branch_id', '=', 'teves_cashiers_report.teves_branch')
-             ->whereNull('teves_branch_table.deleted_at');
-    })
+			/* ===============================
+			 | FILTER (NO HAVING NEEDED)
+			 =============================== */
+			->where('teves_cashiers_report.cash_drop', '>', 0)
 
-    ->join( // 🔥 SWITCHED TO P5 (cash drop)
-        'teves_cashiers_report_p5',
-        'teves_cashiers_report_p5.cashiers_report_id',
-        '=',
-        'teves_cashiers_report.cashiers_report_id'
-    )
+			/* ===============================
+			 | GROUPING (MINIMAL)
+			 =============================== */
+			->groupBy(
+				'teves_cashiers_report.report_date',
+				'teves_cashiers_report.shift',
+				'teves_branch_table.branch_initial',
+				'teves_cashiers_report.cashiers_name',
+				'teves_cashiers_report.forecourt_attendant',
+				'user_tb.user_real_name'
+			)
 
-    /* ===============================
-     | GROUPING
-     =============================== */
-    ->groupBy(
-        'teves_cashiers_report.report_date',
-        'teves_cashiers_report.shift',
-        'teves_branch_table.branch_initial',
-        'teves_cashiers_report.cashiers_name',
-        'teves_cashiers_report.forecourt_attendant',
-        'user_tb.user_real_name'
-    )
+			/* ===============================
+			 | SELECT (NO P5 JOIN!)
+			 =============================== */
+			->selectRaw('
+				teves_cashiers_report.report_date,
+				teves_branch_table.branch_initial,
+				teves_cashiers_report.shift,
+				teves_cashiers_report.cashiers_name,
+				teves_cashiers_report.forecourt_attendant,
+				user_tb.user_real_name as encoder_name,
+				SUM(teves_cashiers_report.cash_drop) AS total_cash_drop
+			')
 
-    /* ===============================
-     | SELECT
-     =============================== */
-    ->selectRaw('
-        teves_cashiers_report.report_date,
-        teves_branch_table.branch_initial,
-        teves_cashiers_report.shift,
-        teves_cashiers_report.cashiers_name,
-        teves_cashiers_report.forecourt_attendant,
-        user_tb.user_real_name as encoder_name,
-        SUM(teves_cashiers_report_p5.cash_drop) AS total_cash_drop
-    ')
-	->havingRaw('SUM(teves_cashiers_report_p5.cash_drop) > 0')
-    ->orderBy('teves_cashiers_report.report_date')
-    ->orderBy('teves_cashiers_report.shift')
+			->orderBy('teves_cashiers_report.report_date')
+			->orderBy('teves_cashiers_report.shift')
 
-    ->get();
+			->get();
 		
 		if($company_header !== 'All'){		
 				$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);

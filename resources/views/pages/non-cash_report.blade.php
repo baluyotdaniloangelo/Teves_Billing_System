@@ -245,7 +245,6 @@
 					
 					  <form class="g-2 needs-validation" id="generate_report_cash_drop_form">
 
-					  
 						<div class="row mb-2">
 						  <label for="company_header_cash_drop" class="col-sm-4 col-form-label">Branch</label>
 						  <div class="col-sm-8">
@@ -260,7 +259,6 @@
 						  </div>
 						</div>
 						
-					  
 						<div class="row mb-2">
 						  <label for="start_date" class="col-sm-4 col-form-label">Start Date</label>
 						  <div class="col-sm-8">
