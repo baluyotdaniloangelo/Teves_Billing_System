@@ -1,6 +1,16 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">
+
+<style>
+.bg-image {
+    background: linear-gradient(rgb(0 0 0 / 20%), rgb(106 106 69 / 42%)), url(http://localhost:8000/background/background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+</style>
+    <div class="container-fluid bg-image">
 
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">

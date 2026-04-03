@@ -566,6 +566,7 @@ Route::get('/generate_non_cash_payment_report_pdf', [CashReportController::class
 /*03/21/2026 - Cash Drop Report*/
 Route::post('/generate_cash_drop', [CashReportController::class,'generate_cash_drop'])->name('generate_cash_drop')->middleware('isLoggedIn');
 Route::get('/generate_cashdrop_report_pdf', [CashReportController::class,'generate_cashdrop_report_pdf'])->name('generate_cashdrop_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_cashdrop_report_excel', [CashReportController::class,'generate_cashdrop_report_excel'])->name('generate_cashdrop_report_excel')->middleware('isLoggedIn');
 
 /* Sales Summary */
 Route::get('/monthly_sales', [SalesSummaryController::class,'MonthlySalesSummary'])->name('MonthlySalesSummary')->middleware('isLoggedIn');

@@ -296,23 +296,44 @@
 			 resizeObserver.observe(container);
 		 }
 
-	function download_cashdrop_report_pdf(){
-			
-			let start_date 		= $("input[name=start_date_cash_drop]").val();
-			let end_date 		= $("input[name=end_date_cash_drop]").val();
-			let company_header 	= $("#company_header_cash_drop").val();
-			
-		var query = {
-			start_date:start_date,
-			end_date:end_date,
-			company_header:company_header,
-			_token: "{{ csrf_token() }}"
+		function download_cashdrop_report_pdf(){
+
+			let start_date     = $("input[name=start_date_cash_drop]").val();
+			let end_date       = $("input[name=end_date_cash_drop]").val();
+			let company_header = $("#company_header_cash_drop").val();
+
+			// 🔥 convert to Date
+			let start = new Date(start_date);
+			let end   = new Date(end_date);
+
+			// compute difference in days
+			let diffTime = Math.abs(end - start);
+			let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+			var query = {
+				start_date: start_date,
+				end_date: end_date,
+				company_header: company_header,
+				_token: "{{ csrf_token() }}"
+			};
+
+			// 🔥 SWITCH LOGIC
+			if (diffDays > 31) {
+
+				// Excel
+				let url = "{{URL::to('generate_cashdrop_report_excel')}}?" + $.param(query);
+
+				alert("Large data detected. Export switched to Excel.");
+
+				window.open(url);
+
+			} else {
+
+				// PDF
+				let url = "{{URL::to('generate_cashdrop_report_pdf')}}?" + $.param(query);
+
+				window.open(url);
+			}
 		}
 
-		var url = "{{URL::to('generate_cashdrop_report_pdf')}}?" + $.param(query)
-		window.open(url);
-	  
-	}
-
-	    
 </script>
