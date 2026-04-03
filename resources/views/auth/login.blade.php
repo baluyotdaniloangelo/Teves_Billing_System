@@ -3,7 +3,8 @@
 
 <style>
 .bg-image {
-    background: linear-gradient(rgb(0 0 0 / 20%), rgb(106 106 69 / 42%)), url(http://localhost:8000/background/background.jpg);
+    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
+                    url('{{ asset('background/background.jpg') }}');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
