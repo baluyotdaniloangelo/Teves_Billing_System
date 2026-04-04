@@ -19,7 +19,7 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
 			<div class="card mb-3 border-0 shadow"
-				 style="background: rgb(201 215 196 / 24%); backdrop-filter: blur(2px); ">
+				 style="background: rgb(201 215 196 / 24%); backdrop-filter: blur(3px); ">
 
 				<div class="card-body text-dark">
 
