@@ -24,16 +24,11 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
-		//$schedule->command('database:backup')->daily();
-		 $schedule->job(new ProcessCashierReportJob)
-            // ->dailyAt('12:45')
-			->everyMinute()
-             ->withoutOverlapping()
-             ->onOneServer();
-		//$schedule->job(new ProcessCashierReportJob)->everyMinute();/*Temporary*/
-    }
+	{
+    $schedule->call(function () {
+        app(\App\Http\Controllers\EmailController::class)->sendUnbilledReport();
+    })->dailyAt('22:30');
+	}
 
     /**
      * Register the commands for the application.
