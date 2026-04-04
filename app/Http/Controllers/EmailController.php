@@ -87,7 +87,7 @@ class EmailController extends Controller
 		");
 
 		// 👉 change to your recipient
-		$email = 'your@email.com';
+		$email = 'baluyotdaniloangelo@gmail.com';
 
 		Mail::to($email)->send(new UnbilledReportMail($data));
 
