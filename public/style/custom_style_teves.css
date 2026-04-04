@@ -14,7 +14,14 @@
     /* background-size: cover;*/
 }
 
-
+.bg-image-login {
+    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
+                    url('{{ asset('background/background.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
 
 .sidebar_li_a{
 	/*color: #0030ff !important; */

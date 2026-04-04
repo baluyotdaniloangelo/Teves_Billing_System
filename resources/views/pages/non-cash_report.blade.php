@@ -224,6 +224,7 @@
 								<span class="visually-hidden">Loading...</span>
 							</div>
 							</div>
+						  <button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_daily_sales_report_pdf()"> PDF</button>
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_report"> Submit</button>
 					</div>
 					</form><!-- End Multi Columns Form -->
@@ -283,6 +284,7 @@
 								<span class="visually-hidden">Loading...</span>
 							</div>
 							</div>
+						  <button type="button" class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" onclick="download_cashdrop_report_pdf()"> PDF</button>
 						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_report_cash_drop"> Submit</button>
 					</div>
 					</form><!-- End Multi Columns Form -->

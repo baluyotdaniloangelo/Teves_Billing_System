@@ -1,32 +1,16 @@
 @extends('layouts.app')
 @section('content')
 
-<style>
-.bg-image {
-    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
-                    url('{{ asset('background/background.jpg') }}');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
-}
-</style>
-    <div class="container-fluid bg-image">
+
+    <div class="container-fluid bg-image-login">
 
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-             <!--  <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                  <img src="{{asset('client_logo/pngegg.png')}}" alt="">
-                  <span class="d-none d-lg-block">Centralize Automatic Meter Reading</span>
-                </a>
-              </div>End Logo -->
-
 			<div class="card mb-3 border-0 shadow"
-				 style="background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(2px);">
+				 style="background: rgb(40 66 45 / 38%); backdrop-filter: blur(2px); ">
 
 				<div class="card-body text-dark">
 
@@ -49,7 +33,7 @@
 						</div>
 			</div>
 
-            <h5 class="card-title text-center pb-0 fs-6"
+            <h5 class="card-title text-center pb-0 fs-6 text-light"
                 style="font-weight:bold; padding:0;">
                 Portal
             </h5>
@@ -74,8 +58,8 @@
             <div class="col-12">
              
 				<div class="form-floating mb-3">
-					<input class="form-control" name="user_name" id="user_name" required="" autocomplete="off" placeholder="Username" value="{{ old('user_name') }}">
-					<label for="user_name">Username</label>
+					<input class="form-control text-center bg-transparent text-white border-light" name="user_name" id="user_name" required="" autocomplete="off" placeholder="Username" value="{{ old('user_name') }}">
+					<label for="user_name" class="text-light">Username</label>
 					<span class="text-danger">@error('user_name') {{$message}} @enderror</span>
 				</div>
 				
@@ -85,12 +69,12 @@
 			
                 <div class="form-floating mb-3">
 				<input type="password" 
-                       class="form-control text-center"
+                       class="form-control text-center bg-transparent text-white border-light"
                        id="InputPassword" 
                        name="InputPassword"
                        placeholder="Password"
                        value="{{ old('InputPassword') }}">
-				<label for="InputPassword" class="form-label">Password</label>
+				<label for="InputPassword" class="form-label text-light">Password</label>
                 <span class="text-danger">@error('InputPassword') {{$message}} @enderror</span>
 				</div>
 				
@@ -101,8 +85,8 @@
             </div>
 
             <div class="col-12">
-                <p class="small mb-0 text-center">
-                    <a href="{{ route('passwordreset') }}">Reset Password</a>
+                <p class="small mb-0 text-center text-light">
+                    <a href="{{ route('passwordreset') }}" class=" text-light">Reset Password</a>
                 </p>
             </div>
 

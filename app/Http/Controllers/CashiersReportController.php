@@ -1776,7 +1776,7 @@ class CashiersReportController extends Controller
 
 			$PH5_SUM = 0;
 			$cash_on_hand = 0;
-			$cash_drop = 0;
+			$1 = 0;
 
 			if ($p5) {
 				$PH5_SUM =

@@ -309,7 +309,7 @@
 			 });
 			 resizeObserver.observe(container);
 		 }
-
+/*
 	function download_daily_sales_report_pdf(receivable_id){
 			
 			let start_date 			= $("input[name=start_date]").val();
@@ -329,68 +329,106 @@
 		window.open(url);
 	  
 	}
+*/
+		function download_daily_sales_report_pdf(){
 
+			let start_date 			= $("input[name=start_date]").val();
+			let end_date 			= $("input[name=end_date]").val();
+			let company_header 		= $("#company_header").val();
+			let payment_type   		= $("#payment_type").val();
 
-	<!--Select Branch For Update-->
-	
-	
+			// 🔥 convert to Date
+			let start = new Date(start_date);
+			let end   = new Date(end_date);
 
-function get_branch_details(report_mode){
+			// compute difference in days
+			let diffTime = Math.abs(end - start);
+			let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    event.preventDefault();
+			var query = {
+				start_date:start_date,
+				end_date:end_date,
+				company_header:company_header,
+				payment_type:payment_type,
+				_token: "{{ csrf_token() }}"
+			};
 
-    let branchID; // ✅ declare outside
+			// 🔥 SWITCH LOGIC
+			if (diffDays > 31) {
 
-    if(report_mode === 'cash_drop'){
-        branchID = $("#company_header_cash_drop").val();
-    }else{
-        branchID = $("#company_header").val();
-    }
+				// Excel
+				let url = "{{URL::to('generate_non_cash_payment_report_excel')}}?" + $.param(query);
 
-    // If "All" is selected → hide branch info and stop
-    if (branchID === 'All') {
-        $('#hide_branch_details').hide();
-        $('#hide_branch_details_cashdrop').hide();        
-        return;
-    }
+				alert("Large data detected. Export switched to Excel.");
 
-    // Otherwise → show fields and fetch data
-    $.ajax({
-        url: "{{ route('BranchInfo') }}",
-        type: "POST",
-        data: {
-            branchID: branchID,
-            _token: "{{ csrf_token() }}"
-        },
-        success: function(response){
-            if(response){
-				
-				if(report_mode=='cash_drop'){
-				
-					$('#hide_branch_details_cashdrop').show();
-					$('#branch_name_report_cashdrop').show().text(response.branch_name);
-					$('#branch_code_report_cashdrop').show().text(response.branch_code);
-					$('#branch_address_report_cashdrop').show().text(response.branch_address);
-					$('#branch_tin_report_cashdrop').show().text(response.branch_tin);
-					
-				}else{
-					
-					$('#hide_branch_details').show();
-					$('#branch_name_report').show().text(response.branch_name);
-					$('#branch_code_report').show().text(response.branch_code);
-					$('#branch_address_report').show().text(response.branch_address);
-					$('#branch_tin_report').show().text(response.branch_tin);
-					
+				window.open(url);
+
+			} else {
+
+				// PDF
+				let url = "{{URL::to('generate_non_cash_payment_report_pdf')}}?" + $.param(query);
+
+				window.open(url);
+			}
+		}
+		
+		<!--Select Branch For Update-->
+		function get_branch_details(report_mode){
+
+			event.preventDefault();
+
+			let branchID; // ✅ declare outside
+
+			if(report_mode === 'cash_drop'){
+				branchID = $("#company_header_cash_drop").val();
+			}else{
+				branchID = $("#company_header").val();
+			}
+
+			// If "All" is selected → hide branch info and stop
+			if (branchID === 'All') {
+				$('#hide_branch_details').hide();
+				$('#hide_branch_details_cashdrop').hide();        
+				return;
+			}
+
+			// Otherwise → show fields and fetch data
+			$.ajax({
+				url: "{{ route('BranchInfo') }}",
+				type: "POST",
+				data: {
+					branchID: branchID,
+					_token: "{{ csrf_token() }}"
+				},
+				success: function(response){
+					if(response){
+						
+						if(report_mode=='cash_drop'){
+						
+							$('#hide_branch_details_cashdrop').show();
+							$('#branch_name_report_cashdrop').show().text(response.branch_name);
+							$('#branch_code_report_cashdrop').show().text(response.branch_code);
+							$('#branch_address_report_cashdrop').show().text(response.branch_address);
+							$('#branch_tin_report_cashdrop').show().text(response.branch_tin);
+							
+						}else{
+							
+							$('#hide_branch_details').show();
+							$('#branch_name_report').show().text(response.branch_name);
+							$('#branch_code_report').show().text(response.branch_code);
+							$('#branch_address_report').show().text(response.branch_address);
+							$('#branch_tin_report').show().text(response.branch_tin);
+							
+						}
+
+					}
+				},
+				error: function(error){
+					console.log(error);
+					alert(error);
 				}
-
-            }
-        },
-        error: function(error){
-            console.log(error);
-            alert(error);
-        }
-    });
-}
+			});
+		}
 
 	    
 </script>
