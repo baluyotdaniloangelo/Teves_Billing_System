@@ -25,69 +25,88 @@
                 </a>
               </div>End Logo -->
 
-              <div class="card mb-3">
+			<div class="card mb-3 border-0 shadow"
+				 style="background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(2px);">
 
-                <div class="card-body" style="">
+				<div class="card-body text-dark">
 
-                  <div class="pt-4 pb-2">
-				  
-				  <div class="d-flex justify-content-center py-4">
-					<img src="{{asset('client_logo/logo-2.png')}}" alt="" style="width:130px;">
-				  </div>
-                  
-				  <h5 class="card-title text-center pb-0 fs-6" style="font-weight:bold !important; padding:0px !important">Portal</h5>
-                  </div>
-									@if(Session::has('success'))
-										
-										<div class="bg-success text-white shadow">
-											
-                                            {{Session::get('success')}}
-											
-											
-										</div>
-										
-									@endif
-									
-									@if(Session::has('fail'))
-										
-											
-											
-                                           
-										<div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
-                 {{Session::get('fail')}}
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>	
-										
-									@endif			
-									
-				  <form class="row g-3 needs-validation" action="{{route('login-user')}}" method="POST">
-                    @csrf								
-                    <div class="col-12">
-                      <label for="user_name" class="form-label">Username</label>
-					  
-                       <input type="Text" class="form-control form-control-user" id="user_name" name="user_name" placeholder="Enter Username" style="text-align:center;" value="{{old('user_name')}}">
-					   <span class="text-danger">@error('user_name') {{$message}} @enderror</span>
-                      
-                    </div>
+					<div class="pt-4 pb-2">
 
-                    <div class="col-12">
-                      <label for="InputPassword" class="form-label">Password</label>
-                      <input type="password" class="form-control form-control-user" id="InputPassword" name="InputPassword" placeholder="Enter Password" style="text-align:center;" value="{{old('InputPassword')}}">
-					  <span class="text-danger">@error('InputPassword') {{$message}} @enderror</span>
-                    </div>
-					
-					
-                    <div class="col-12">
-					<button class="btn btn-primary w-100" type="submit">Login</button>
-                      
-                    </div>
-					<div class="col-12">
-                      <p class="small mb-0" align="center"><a href="{{ route('passwordreset') }}">Reset Password</a></p>
-                    </div>
-                  </form>
+						<div class="d-flex justify-content-center py-4">
+						<div style="
+							background: #fff;
+							border-radius: 50%;
+							width: 130px;
+							height: 130px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+						">
+							<img src="{{ asset('client_logo/logo-2.png') }}" 
+								 alt="" 
+								 style="width:100px;">
+						</div>
+			</div>
 
-                </div>
-              </div>
+            <h5 class="card-title text-center pb-0 fs-6"
+                style="font-weight:bold; padding:0;">
+                Portal
+            </h5>
+        </div>
+
+        @if(Session::has('success'))
+            <div class="bg-success text-white shadow">
+                {{ Session::get('success') }}
+            </div>
+        @endif
+
+        @if(Session::has('fail'))
+            <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
+                {{ Session::get('fail') }}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        <form class="row g-3 needs-validation" action="{{ route('login-user') }}" method="POST">
+            @csrf
+
+            <div class="col-12">
+                <label for="user_name" class="form-label">Username</label>
+                <input type="text" 
+                       class="form-control text-center"
+                       id="user_name" 
+                       name="user_name"
+                       placeholder="Enter Username"
+                       value="{{ old('user_name') }}">
+                <span class="text-danger">@error('user_name') {{$message}} @enderror</span>
+            </div>
+
+            <div class="col-12">
+                <label for="InputPassword" class="form-label">Password</label>
+                <input type="password" 
+                       class="form-control text-center"
+                       id="InputPassword" 
+                       name="InputPassword"
+                       placeholder="Enter Password"
+                       value="{{ old('InputPassword') }}">
+                <span class="text-danger">@error('InputPassword') {{$message}} @enderror</span>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary w-100" type="submit">Login</button>
+            </div>
+
+            <div class="col-12">
+                <p class="small mb-0 text-center">
+                    <a href="{{ route('passwordreset') }}">Reset Password</a>
+                </p>
+            </div>
+
+        </form>
+
+    </div>
+</div>
 
          
             </div>
