@@ -5,22 +5,13 @@
 }
 
 .sidebar-brand {
-  height: 6.375rem !important;
+	height: 6.375rem !important;
 }
 
 .bg-gradient-primary {
     background-color: #1c3789 !important;
     background-image: none !important; 
     /* background-size: cover;*/
-}
-
-.bg-image-login {
-    background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
-                    url('{{ asset('background/background.jpg') }}');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
 }
 
 .sidebar_li_a{

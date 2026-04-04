@@ -1,7 +1,16 @@
 @extends('layouts.app')
 @section('content')
 
-
+<style>
+	.bg-image-login {
+		background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
+		url('{{ asset('background/background.jpg') }}');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		min-height: 100vh;
+	}
+</style>
     <div class="container-fluid bg-image-login">
 
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
@@ -10,7 +19,7 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
 			<div class="card mb-3 border-0 shadow"
-				 style="background: rgb(40 66 45 / 38%); backdrop-filter: blur(2px); ">
+				 style="background: rgb(201 215 196 / 24%); backdrop-filter: blur(2px); ">
 
 				<div class="card-body text-dark">
 
