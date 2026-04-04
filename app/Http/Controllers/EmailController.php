@@ -60,38 +60,53 @@ class EmailController extends Controller
 		
     }
 	
-	public function sendUnbilledReport()
-	{
-		$data = DB::select("
-			SELECT 
-				c.client_id,
-				c.client_name,
+public function sendUnbilledReport()
+{
+    // ✅ Get report data
+    $data = \DB::select("
+        SELECT 
+            c.client_id,
+            c.client_name,
 
-				COUNT(b.billing_id) AS unbilled_count,
-				SUM(b.order_total_amount) AS total_unbilled_amount,
+            COUNT(b.billing_id) AS unbilled_count,
+            SUM(b.order_total_amount) AS total_unbilled_amount,
 
-				MIN(STR_TO_DATE(b.order_date, '%Y-%m-%d')) AS first_transaction_date,
-				MAX(STR_TO_DATE(b.order_date, '%Y-%m-%d')) AS last_transaction_date
+            MIN(STR_TO_DATE(b.order_date, '%Y-%m-%d')) AS first_transaction_date,
+            MAX(STR_TO_DATE(b.order_date, '%Y-%m-%d')) AS last_transaction_date
 
-			FROM teves_client_table c
-			INNER JOIN teves_billing_table b 
-				ON b.client_idx = c.client_id
-				AND (b.receivable_idx = 0 OR b.receivable_idx IS NULL)
-				AND b.deleted_at IS NULL
+        FROM teves_client_table c
+        INNER JOIN teves_billing_table b 
+            ON b.client_idx = c.client_id
+            AND (b.receivable_idx = 0 OR b.receivable_idx IS NULL)
+            AND b.deleted_at IS NULL
 
-			WHERE c.deleted_at IS NULL
+        WHERE c.deleted_at IS NULL
 
-			GROUP BY c.client_id, c.client_name
+        GROUP BY c.client_id, c.client_name
 
-			ORDER BY total_unbilled_amount DESC
-		");
+        ORDER BY total_unbilled_amount DESC
+    ");
 
-		// 👉 change to your recipient
-		$email = 'baluyotdaniloangelo@gmail.com';
+    // ✅ Get recipients
+    $emails = \DB::table('user_tb')
+        ->whereIn('user_type', ['SUAdmin', 'Supervisor', 'Admin'])
+        ->where('user_status', 'Active')
+        ->whereNull('deleted_at')
+        ->whereNotNull('user_email_address')
+        ->pluck('user_email_address')
+        ->toArray();
 
-		Mail::to($email)->send(new UnbilledReportMail($data));
+    if (empty($emails)) {
+        return response()->json(['error' => 'No recipients found']);
+    }
 
-		return response()->json(['success' => 'Unbilled report sent!']);
-	}
+    // ✅ Send email to multiple users
+    \Mail::to($emails)->send(new \App\Mail\UnbilledReportMail($data));
+
+    return response()->json([
+        'success' => 'Unbilled report sent!',
+        'recipients' => $emails
+    ]);
+}
 		
 }
