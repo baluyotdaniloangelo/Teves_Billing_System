@@ -575,7 +575,7 @@ Route::get('/monthly-chart-line-ajax', [SalesSummaryController::class,'MonthlySa
 Route::post('/reload_monthly_sales_per_year', [SalesSummaryController::class,'ReloadMonthlySales'])->name('ReloadMonthlySales')->middleware('isLoggedIn');
 
 Route::get('monthly-chart-line-ajax', 'SalesSummaryController@MonthlySaleschartLineAjax');
-
+Route::get('/send-unbilled-report', [EmailController::class, 'sendUnbilledReport']);
 /*CHARTS TEST
 
 Route::get('chart-line', 'ChartController@chartLine');
