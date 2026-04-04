@@ -41,7 +41,7 @@
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+							box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 						">
 							<img src="{{ asset('client_logo/logo-2.png') }}" 
 								 alt="" 
@@ -72,25 +72,28 @@
             @csrf
 
             <div class="col-12">
-                <label for="user_name" class="form-label">Username</label>
-                <input type="text" 
-                       class="form-control text-center"
-                       id="user_name" 
-                       name="user_name"
-                       placeholder="Enter Username"
-                       value="{{ old('user_name') }}">
-                <span class="text-danger">@error('user_name') {{$message}} @enderror</span>
+             
+				<div class="form-floating mb-3">
+					<input class="form-control" name="user_name" id="user_name" required="" autocomplete="off" placeholder="Username" value="{{ old('user_name') }}">
+					<label for="user_name">Username</label>
+					<span class="text-danger">@error('user_name') {{$message}} @enderror</span>
+				</div>
+				
             </div>
 
             <div class="col-12">
-                <label for="InputPassword" class="form-label">Password</label>
-                <input type="password" 
+			
+                <div class="form-floating mb-3">
+				<input type="password" 
                        class="form-control text-center"
                        id="InputPassword" 
                        name="InputPassword"
-                       placeholder="Enter Password"
+                       placeholder="Password"
                        value="{{ old('InputPassword') }}">
+				<label for="InputPassword" class="form-label">Password</label>
                 <span class="text-danger">@error('InputPassword') {{$message}} @enderror</span>
+				</div>
+				
             </div>
 
             <div class="col-12">
