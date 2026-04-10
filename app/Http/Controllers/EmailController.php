@@ -92,7 +92,7 @@ class EmailController extends Controller
 
         // ✅ STEP 2: Get valid recipient emails
         $emails = DB::table('user_tb')
-            ->whereIn('user_type', ['SUAdmin', 'Supervisor', 'Admin'])
+            ->whereIn('user_type', ['SUAdmin'])
             ->where('user_status', 'Active')
             ->whereNull('deleted_at')
             ->whereNotNull('user_email_address')
