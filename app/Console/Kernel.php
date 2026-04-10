@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
 	{
     $schedule->call(function () {
         app(\App\Http\Controllers\EmailController::class)->sendUnbilledReport();
-    })->dailyAt('09:30');
+    })->dailyAt('09:40');
 	}
 
     /**
