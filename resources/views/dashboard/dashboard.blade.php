@@ -11,7 +11,7 @@ $total_short_over = $result->sum('short_over');
 <main id="main" class="main">
 
   <div class="pagetitle">
-    <h1>Cashier Dashboard</h1>
+    <h1>Dashboard</h1>
   </div>
 
   <section class="section dashboard">
@@ -97,7 +97,7 @@ $total_short_over = $result->sum('short_over');
               <tbody>
                 @forelse($result as $row)
                 <tr>
-                  <td>{{ $row->report_date }}</td>
+                  <td>{{ \Carbon\Carbon::parse($row->report_date)->format('F d, Y') }}</td>
                   <td><strong>₱{{ number_format($row->total_sales,2) }}</strong></td>
                   <td>₱{{ number_format($row->total_cash_sales,2) }}</td>
                   <td>₱{{ number_format($row->non_cash_payment,2) }}</td>
@@ -134,7 +134,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let rawData = @json($result);
 
-let dates = rawData.map(item => item.report_date);
+let dates = rawData.map(item => {
+    let d = new Date(item.report_date);
+    return d.toLocaleDateString('en-US', {
+        month: 'long',
+        day: '2-digit',
+        year: 'numeric'
+    });
+});
 let sales = rawData.map(item => parseFloat(item.total_sales));
 //let cash = rawData.map(item => parseFloat(item.total_cash_sales));
 //let non_cash = rawData.map(item => parseFloat(item.non_cash_payment));
