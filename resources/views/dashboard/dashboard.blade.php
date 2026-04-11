@@ -121,37 +121,48 @@ $total_short_over = $result->sum('short_over');
   </section>
 
 </main>
-
-
-<!-- APEXCHART 
-<script>
-console.log(@json($result));
-</script>-->
+<!-- APEXCHART -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
     let rawData = @json($result);
 
+
     // get unique dates
     let dates = [...new Set(rawData.map(item => item.report_date))];
 
     // get unique branches
-let branches = [...new Set(rawData.map(item => item.branch_code))];
+	let branches = [...new Set(rawData.map(item => item.branch_code))];
+	
+	// 🔥 RANDOM COLORS
+    function getRandomColor() {
+        return '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
 
-let series = branches.map(branch => {
-    let branchData = dates.map(date => {
-        let found = rawData.find(d => 
-            d.report_date === date &&
-            (d.branch_code) === branch
-        );
-        return found ? parseFloat(found.total_sales) : 0;
-    });
+	function getSafeColor() {
+    let r = Math.floor(Math.random() * 156) + 60; // 50–205
+    let g = Math.floor(Math.random() * 156) + 80;
+    let b = Math.floor(Math.random() * 156) + 100;
 
-    return {
-        name: branch,
-        data: branchData
-    };
-});
+    return `rgb(${r}, ${g}, ${b})`;
+	}
+
+    let colors = branches.map(() => getSafeColor());
+	
+	let series = branches.map(branch => {
+		let branchData = dates.map(date => {
+			let found = rawData.find(d => 
+				d.report_date === date &&
+				(d.branch_code) === branch
+			);
+			return found ? parseFloat(found.total_sales) : 0;
+		});
+
+		return {
+			name: branch,
+			data: branchData
+		};
+	});
 
     // format dates
     let formattedDates = dates.map(d => {
@@ -168,6 +179,10 @@ let series = branches.map(branch => {
             height: 350,
             type: 'area'
         },
+        stroke: {
+            curve: 'smooth'
+        },
+		colors: colors, // 🔥 APPLY COLORS
         stroke: {
             curve: 'smooth'
         },
