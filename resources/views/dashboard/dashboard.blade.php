@@ -140,9 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 	function getSafeColor() {
-    let r = Math.floor(Math.random() * 156) + 60; // 50–205
-    let g = Math.floor(Math.random() * 156) + 80;
-    let b = Math.floor(Math.random() * 156) + 100;
+    let r = Math.floor(Math.random() * 156) + 50; // 50–205
+    let g = Math.floor(Math.random() * 156) + 50;
+    let b = Math.floor(Math.random() * 156) + 50;
 
     return `rgb(${r}, ${g}, ${b})`;
 	}
