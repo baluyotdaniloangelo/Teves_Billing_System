@@ -85,27 +85,25 @@ $total_short_over = $result->sum('short_over');
             <table class="table table-bordered table-striped">
               <thead class="table-dark">
                 <tr>
-                  <th>Date</th>
-                  <th>Total Sales</th>
-                  <th>Cash</th>
-                  <th>Non-Cash</th>
-                  <th>Fuel Sales</th>
-                  <th>Discount</th>
-                  <th>Short/Over</th>
+					<th>Date</th>
+					<th>Branch</th>
+					<th>Total Sales</th>
+					<th>Cash on Hand</th>
+					<th>Non-Cash</th>
+					<th>Short/Over</th>
                 </tr>
               </thead>
               <tbody>
                 @forelse($result as $row)
                 <tr>
-                  <td>{{ \Carbon\Carbon::parse($row->report_date)->format('F d, Y') }}</td>
-                  <td><strong>₱{{ number_format($row->total_sales,2) }}</strong></td>
-                  <td>₱{{ number_format($row->total_cash_sales,2) }}</td>
-                  <td>₱{{ number_format($row->non_cash_payment,2) }}</td>
-                  <td>₱{{ number_format($row->fuel_sales,2) }}</td>
-                  <td>₱{{ number_format($row->discount,2) }}</td>
-                  <td class="{{ $row->short_over < 0 ? 'text-danger' : 'text-success' }}">
-                    ₱{{ number_format($row->short_over,2) }}
-                  </td>
+                  <td>{{ \Carbon\Carbon::parse($row->report_date)->format('M d, Y') }}</td>
+				  <td>{{ $row->branch_code }} - {{ $row->branch_name }}</td>
+				  <td><strong>₱{{ number_format($row->total_sales,2) }}</strong></td>
+				  <td>₱{{ number_format($row->total_cash_sales,2) }}</td>
+				  <td>₱{{ number_format($row->non_cash_payment,2) }}</td>
+				  <td class="{{ $row->short_over < 0 ? 'text-danger' : 'text-success' }}">
+					₱{{ number_format($row->short_over,2) }}
+				  </td>
                 </tr>
                 @empty
                 <tr>
@@ -132,35 +130,40 @@ console.log(@json($result));
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-let rawData = @json($result);
+    let rawData = @json($result);
 
-let dates = rawData.map(item => {
-    let d = new Date(item.report_date);
-    return d.toLocaleDateString('en-US', {
-        month: 'long',
-        day: '2-digit',
-        year: 'numeric'
+    // get unique dates
+    let dates = [...new Set(rawData.map(item => item.report_date))];
+
+    // get unique branches
+let branches = [...new Set(rawData.map(item => item.branch_code))];
+
+let series = branches.map(branch => {
+    let branchData = dates.map(date => {
+        let found = rawData.find(d => 
+            d.report_date === date &&
+            (d.branch_code) === branch
+        );
+        return found ? parseFloat(found.total_sales) : 0;
     });
+
+    return {
+        name: branch,
+        data: branchData
+    };
 });
-let sales = rawData.map(item => parseFloat(item.total_sales));
-//let cash = rawData.map(item => parseFloat(item.total_cash_sales));
-//let non_cash = rawData.map(item => parseFloat(item.non_cash_payment));
 
-    console.log(dates, sales); // DEBUG
-
-    if (sales.length === 1) {
-        dates.push(dates[0]);
-        sales.push(sales[0]);
-        cash.push(cash[0]);
-        non_cash.push(non_cash[0]);
-    }
+    // format dates
+    let formattedDates = dates.map(d => {
+        let dt = new Date(d);
+        return dt.toLocaleDateString('en-US', {
+            month: 'short',
+            day: '2-digit'
+        });
+    });
 
     new ApexCharts(document.querySelector("#reportsChart"), {
-        series: [
-            { name: 'Total Sales', data: sales },
-           // { name: 'Cash', data: cash },
-           // { name: 'Non-Cash', data: non_cash }
-        ],
+        series: series,
         chart: {
             height: 350,
             type: 'area'
@@ -169,7 +172,19 @@ let sales = rawData.map(item => parseFloat(item.total_sales));
             curve: 'smooth'
         },
         xaxis: {
-            categories: dates
+            categories: formattedDates
+        },
+        yaxis: {
+            labels: {
+                formatter: val => "₱" + val.toLocaleString()
+            }
+        },
+        tooltip: {
+            y: {
+                formatter: val => "₱" + val.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                })
+            }
         }
     }).render();
 

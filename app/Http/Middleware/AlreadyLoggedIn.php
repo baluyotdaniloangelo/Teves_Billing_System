@@ -21,7 +21,7 @@ class AlreadyLoggedIn
 		{
 			//return redirect('login')->with('fail', "You Have to Login First");
 			//return back();
-			return redirect('billing');
+			return redirect('dashboard');
 		}
         return $next($request);
     }

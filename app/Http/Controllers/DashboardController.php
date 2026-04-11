@@ -55,45 +55,44 @@ class DashboardController extends Controller
     /* ===============================
      | MAIN QUERY (DAILY TOTAL ONLY)
      =============================== */
-    $result = DB::table('teves_cashiers_report')
+	$result = DB::table('teves_cashiers_report as r')
 
-        ->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
-            $q->whereRaw("
-                teves_branch IN (
-                    SELECT branch_idx 
-                    FROM teves_user_branch_access 
-                    WHERE user_idx = ?
-                )
-            ", [$current_user]);
-        })
+		->leftJoin('teves_branch_table as b', 'b.branch_id', '=', 'r.teves_branch')
 
-        ->whereDate('report_date', '>=', $start_date)
-        ->whereDate('report_date', '<=', $end_date)
+		->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
+			$q->whereRaw("
+				r.teves_branch IN (
+					SELECT branch_idx 
+					FROM teves_user_branch_access 
+					WHERE user_idx = ?
+				)
+			", [$current_user]);
+		})
 
-        ->when($company_header !== 'All', function ($q) use ($company_header) {
-            $q->where('teves_branch', $company_header);
-        })
+		->whereDate('r.report_date', '>=', $start_date)
+		->whereDate('r.report_date', '<=', $end_date)
 
-        ->whereNull('deleted_at')
+		->when($company_header !== 'All', function ($q) use ($company_header) {
+			$q->where('r.teves_branch', $company_header);
+		})
 
-        ->selectRaw('
-            report_date,
+		->whereNull('r.deleted_at')
 
-            SUM(total_sales) as total_sales,
-            SUM(other_sales) as other_sales,
-            SUM(cash_transaction) as cash_transaction,
-            SUM(fuel_sales) as fuel_sales,
-            SUM(discount) as discount,
-            SUM(cashout_other) as cashout_other,
-            SUM(theoretical_sales) as theoretical_sales,
-            SUM(non_cash_payment) as non_cash_payment,
-            SUM(total_cash_sales) as total_cash_sales,
-            SUM(short_over) as short_over
-        ')
+		->selectRaw('
+			r.report_date,
 
-        ->groupBy('report_date')
-        ->orderBy('report_date')
-        ->get();
+			COALESCE(b.branch_code, r.teves_branch) as branch_code,
+			b.branch_name,
+
+			SUM(r.total_sales) as total_sales,
+			SUM(r.total_cash_sales) as total_cash_sales,
+			SUM(r.non_cash_payment) as non_cash_payment,
+			SUM(r.short_over) as short_over
+		')
+
+		->groupBy('r.report_date', 'b.branch_code', 'b.branch_name', 'r.teves_branch')
+		->orderBy('r.report_date')
+		->get();
 
 
     /* ===============================
