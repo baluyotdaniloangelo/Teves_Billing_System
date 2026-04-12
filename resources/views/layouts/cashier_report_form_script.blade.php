@@ -699,7 +699,7 @@
             document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
 			
 			/*Clear*/
-			document.getElementById("update_product_idx_PH3").value = '';
+			//document.getElementById("update_product_idx_PH3").value = '';
 
         }
     }
@@ -1133,7 +1133,6 @@
 					document.getElementById("update_product_manual_price_PH3").value 		= response[0].unit_price;
 					
 					update_input_settings_create_PH3();
-					//var total_amount = response[0].order_total_amount;
 					$('#UpdateTotalAmount_PH3').html('0');		
 
 					UpdateTotalAmount_PH3();
@@ -1292,7 +1291,6 @@
 				  if(response) {				
 					document.getElementById("deleteCRPH3Confirmed_DISCOUNT").value = CHPH3_ID;				
 					/*Set Details*/					
-					//$('#CRPH1_delete_product_idx').text(response[0].product_name);
 					$('#delete_reference_PH3_DISCOUNT').text(response[0].reference_no);
 					$('#delete_product_idx_PH3_DISCOUNT').text(response[0].product_name);
 					$('#delete_order_quantity_PH3_DISCOUNT').text(response[0].order_quantity);
@@ -1329,10 +1327,7 @@
 					
 					$('#delete_reference_PH3_others').text(response[0].reference_no);
 					$('#delete_liters_pcs_PH3_others').text(response[0].order_quantity);
-					$('#delete_amount_PH3_others').text(response[0].unit_price);
-					
-					//var total_amount = response[0].order_total_amount;
-					//$('#delete_TotalAmount_PH3_OTHERS').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));				
+					$('#delete_amount_PH3_others').text(response[0].unit_price);			
 					
 					$('#CRPH3DeleteModal_OTHERS').modal('toggle');							  
 				  
@@ -1654,17 +1649,6 @@
 				}
 			   });			
 		
-		/*
-		if(order_quantity!=0 || order_quantity!=''){
-			if(product_manual_price!='' && product_manual_price!=0){
-				var total_amount = product_manual_price * order_quantity;
-				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-			}else{
-				var total_amount = product_price * order_quantity;
-				$('#UpdateTotalAmount_PH3').html(total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2}));
-			}
-		}		
-		*/
 	}	
 
 	
