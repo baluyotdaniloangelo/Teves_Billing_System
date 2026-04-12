@@ -1102,7 +1102,11 @@ class CashiersReportController extends Controller
                                     $CashiersReportModel_P3->so_idx 					= @$so_id;
 									$CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
-									$CashiersReportModel_P3->product_idx 				= $product_idx;
+									
+										if($miscellaneous_items_type!='OTHERS' || $miscellaneous_items_type!='CASHOUT'){
+											$CashiersReportModel_P3->product_idx 				= $product_idx;
+										}
+										
 									$CashiersReportModel_P3->item_description 			= $request->item_description;
 									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
                                     $CashiersReportModel_P3->pump_price 				= $pump_price;
@@ -1127,7 +1131,11 @@ class CashiersReportController extends Controller
                                     $CashiersReportModel_P3->so_idx 					= @$so_id;
 									$CashiersReportModel_P3->reference_no 				= $reference_no;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
-									$CashiersReportModel_P3->product_idx 				= $product_idx;
+									
+										if($miscellaneous_items_type!='OTHERS' || $miscellaneous_items_type!='CASHOUT'){
+											$CashiersReportModel_P3->product_idx 				= $product_idx;
+										}
+										
 									$CashiersReportModel_P3->item_description 			= $request->item_description;
 									$CashiersReportModel_P3->order_quantity 			= $order_quantity;
                                     $CashiersReportModel_P3->pump_price 			    = $pump_price;
@@ -1248,7 +1256,7 @@ class CashiersReportController extends Controller
 		$CHPH3_ID = $request->CHPH3_ID;
 		
 		$data =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
-			->join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
+			->leftJoin('teves_product_table', 'teves_product_table.product_id', '=', 'teves_cashiers_report_p3.product_idx')
 				->get([
 					'teves_product_table.product_name',
 					'teves_product_table.product_id',

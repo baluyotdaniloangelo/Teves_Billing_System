@@ -29,75 +29,73 @@ class DashboardController extends Controller
 			
 			$user_info = User::where('user_id', '=', Session::get('loginID'))->first();
 
+		/* ===============================
+		 | MAIN QUERY (FAST + FILTERED)
+		 =============================== */
+		/* ===============================
+		 | VALIDATION (OPTIONAL FILTERS)
+		 =============================== */
+		$request->validate([
+			'start_date' => 'nullable|date',
+			'end_date'   => 'nullable|date'
+		]);
+
+		/* ===============================
+		 | DEFAULT = TODAY (OR RANGE)
+		 =============================== */
+		$start_date = now()->subDays(6)->toDateString();
+		//$start_date     = $request->start_date ?? now()->toDateString();
+		$end_date       = $request->end_date ?? now()->toDateString();
+		$company_header = $request->company_header ?? 'All';
+		$current_user   = auth()->user()->user_id ?? null;
 
 
-/* ===============================
- | MAIN QUERY (FAST + FILTERED)
- =============================== */
-    /* ===============================
-     | VALIDATION (OPTIONAL FILTERS)
-     =============================== */
-    $request->validate([
-        'start_date' => 'nullable|date',
-        'end_date'   => 'nullable|date'
-    ]);
+		/* ===============================
+		 | MAIN QUERY (DAILY TOTAL ONLY)
+		 =============================== */
+		$result = DB::table('teves_cashiers_report as r')
 
-    /* ===============================
-     | DEFAULT = TODAY (OR RANGE)
-     =============================== */
-	$start_date = now()->subDays(6)->toDateString();
-    //$start_date     = $request->start_date ?? now()->toDateString();
-    $end_date       = $request->end_date ?? now()->toDateString();
-    $company_header = $request->company_header ?? 'All';
-    $current_user   = auth()->user()->user_id ?? null;
+			->leftJoin('teves_branch_table as b', 'b.branch_id', '=', 'r.teves_branch')
 
+			->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
+				$q->whereRaw("
+					r.teves_branch IN (
+						SELECT branch_idx 
+						FROM teves_user_branch_access 
+						WHERE user_idx = ?
+					)
+				", [$current_user]);
+			})
 
-    /* ===============================
-     | MAIN QUERY (DAILY TOTAL ONLY)
-     =============================== */
-	$result = DB::table('teves_cashiers_report as r')
+			->whereDate('r.report_date', '>=', $start_date)
+			->whereDate('r.report_date', '<=', $end_date)
 
-		->leftJoin('teves_branch_table as b', 'b.branch_id', '=', 'r.teves_branch')
+			->when($company_header !== 'All', function ($q) use ($company_header) {
+				$q->where('r.teves_branch', $company_header);
+			})
 
-		->when(Session::get('user_branch_access_type') === "BYBRANCH", function ($q) use ($current_user) {
-			$q->whereRaw("
-				r.teves_branch IN (
-					SELECT branch_idx 
-					FROM teves_user_branch_access 
-					WHERE user_idx = ?
-				)
-			", [$current_user]);
-		})
+			->whereNull('r.deleted_at')
 
-		->whereDate('r.report_date', '>=', $start_date)
-		->whereDate('r.report_date', '<=', $end_date)
+			->selectRaw('
+				r.report_date,
 
-		->when($company_header !== 'All', function ($q) use ($company_header) {
-			$q->where('r.teves_branch', $company_header);
-		})
+				COALESCE(b.branch_code, r.teves_branch) as branch_code,
+				b.branch_name,
 
-		->whereNull('r.deleted_at')
+				SUM(r.total_sales) as total_sales,
+				SUM(r.total_cash_sales) as total_cash_sales,
+				SUM(r.non_cash_payment) as non_cash_payment,
+				SUM(r.short_over) as short_over
+			')
 
-		->selectRaw('
-			r.report_date,
-
-			COALESCE(b.branch_code, r.teves_branch) as branch_code,
-			b.branch_name,
-
-			SUM(r.total_sales) as total_sales,
-			SUM(r.total_cash_sales) as total_cash_sales,
-			SUM(r.non_cash_payment) as non_cash_payment,
-			SUM(r.short_over) as short_over
-		')
-
-		->groupBy('r.report_date', 'b.branch_code', 'b.branch_name', 'r.teves_branch')
-		->orderBy('r.report_date')
-		->get();
+			->groupBy('r.report_date', 'b.branch_code', 'b.branch_name', 'r.teves_branch')
+			->orderBy('r.report_date')
+			->get();
 
 
-    /* ===============================
-     | RETURN VIEW
-     =============================== */
+		/* ===============================
+		 | RETURN VIEW
+		 =============================== */
 			
 
 			return view('dashboard.dashboard', [

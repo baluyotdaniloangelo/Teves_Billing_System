@@ -224,7 +224,7 @@
 			   });
 	} 
 	
-function LoadSellingPriceList(client_idx) {
+	function LoadSellingPriceList(client_idx) {
     let branch_idx = $("#teves_branch").val();
     $("#product_list_PH3").empty(); // clear before loading
 
@@ -260,7 +260,6 @@ function LoadSellingPriceList(client_idx) {
         }
     });
 }
-
 
 	function UpdateBranch(){ 
 	
@@ -655,6 +654,9 @@ function LoadSellingPriceList(client_idx) {
 			
             document.getElementById("quantity_label").innerHTML = "LITERS/PCS";
             document.getElementById("manual_price_label").innerHTML = "AMOUNT";
+			
+			/*Clear*/
+			document.getElementById("product_idx_PH3").value = '';
 
         }
         
@@ -695,6 +697,9 @@ function LoadSellingPriceList(client_idx) {
 			
             document.getElementById("update_quantity_label").innerHTML = "LITERS/PCS";
             document.getElementById("update_manual_price_label").innerHTML = "AMOUNT";
+			
+			/*Clear*/
+			document.getElementById("update_product_idx_PH3").value = '';
 
         }
     }
@@ -1121,12 +1126,11 @@ function LoadSellingPriceList(client_idx) {
 					
 					document.getElementById("update_miscellaneous_items_type_PH3").value 	= response[0].miscellaneous_items_type;
 					document.getElementById("update_reference_no_PH3").value 				= response[0].reference_no;
-					//alert(response[0].item_description);
+					
 					document.getElementById("update_product_idx_PH3").value = response[0].item_description;
 					
 					document.getElementById("update_order_quantity_PH3").value 				= response[0].order_quantity;
 					document.getElementById("update_product_manual_price_PH3").value 		= response[0].unit_price;
-					
 					
 					update_input_settings_create_PH3();
 					//var total_amount = response[0].order_total_amount;
@@ -1161,7 +1165,7 @@ function LoadSellingPriceList(client_idx) {
 			
 			var client_idx 			    	= $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			var product_idx 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
-			alert(product_idx);
+			
 			/*Product Name*/
 			let product_name 				= $("input[name=update_product_name_PH3]").val();
 			
@@ -1545,22 +1549,27 @@ function LoadSellingPriceList(client_idx) {
     let product_price = matchedOption.attr('data-price');
     let product_id = matchedOption.attr('data-id');
 
-	let product_id2 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');		
+	let product_id2 			= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');		
 	let product_price2 			= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-price');
 
     console.log("✅ product_id:", product_id);
     console.log("✅ product_price:", product_price);
 
+	let miscellaneous_items_type = $("#update_miscellaneous_items_type_PH3").val();
+	 
     // If still undefined, show a helpful alert
-    if (!product_id || !product_price) {
-        alert("⚠ Please select a valid product from the list."+product_id2);
-        return;
-    }
-
+	if(miscellaneous_items_type=='OTHERS' || miscellaneous_items_type==''){
+	}
+	else{
+		if (!product_id || !product_price) {
+			alert("⚠ Please select a valid product from the list."+product_id2);
+			return;
+		}
+	}
     // Continue your logic safely now that product_id and price are defined
     let product_manual_price = $("#update_product_manual_price_PH3").val();
     let order_quantity = $("input[name=update_order_quantity_PH3]").val();
-    let miscellaneous_items_type = $("#update_miscellaneous_items_type_PH3").val();
+   
     let CashiersReportId = {{ $CashiersReportId }};
 			$.ajax({
 				url: "{{ route('CRP1_info') }}",
