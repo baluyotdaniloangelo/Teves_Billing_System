@@ -2,6 +2,7 @@
 @section('content')  
 
 @php
+
 $total_sales = $result->sum('total_sales');
 $total_cash = $result->sum('total_cash_sales');
 $total_non_cash = $result->sum('non_cash_payment');

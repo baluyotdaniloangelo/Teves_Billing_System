@@ -47,7 +47,8 @@ class DashboardController extends Controller
 		//$start_date     = $request->start_date ?? now()->toDateString();
 		$end_date       = $request->end_date ?? now()->toDateString();
 		$company_header = $request->company_header ?? 'All';
-		$current_user   = auth()->user()->user_id ?? null;
+		//$current_user   = auth()->user()->user_id ?? null;
+		$current_user = Session::get('loginID');
 
 
 		/* ===============================
