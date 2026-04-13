@@ -38,9 +38,14 @@ class UserAuthController extends Controller
 			// Check password
 			if (Hash::check($request->InputPassword, $user->user_password)) {
 
-				$request->session()->put('loginID', $user->user_id);
+				$request->session()->put('loginID', $user->user_id); 
 				$request->session()->put('UserType', $user->user_type);
 				$request->session()->put('user_branch_access_type', $user->user_branch_access_type);
+
+				// Redirect based on user type
+				if ($user->user_type !== 'SUAdmin') {
+					return redirect('billing');
+				}
 
 				return redirect('dashboard');
 

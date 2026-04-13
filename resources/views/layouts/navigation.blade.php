@@ -65,6 +65,15 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
+	   <?php if($data->user_type=="SUAdmin"){ ?>
+	   <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('dashboard') }}" title="Dashboard">
+          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <span title="Dashboard">Dashboard</span>
+        </a>
+       </li>
+	   <?php } ?>
+	  
 	   <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#billing-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
           <i class="bi bi-file-spreadsheet navbar_icon"></i><span title="Billing">Billing</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -72,9 +81,7 @@
         <ul id="billing-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         
 		<li>
-		<?php if($data->user_type!="Supervisor"){ ?>
-
-		<?php } ?>
+		
 		<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('so') }}" title="SO List">
           <i class="bi bi-file-spreadsheet navbar_icon"></i>
           <span title="New Billing Transaction History">SO List</span>
