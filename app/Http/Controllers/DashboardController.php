@@ -28,7 +28,12 @@ class DashboardController extends Controller
 			$data = array();
 			
 			$user_info = User::where('user_id', '=', Session::get('loginID'))->first();
-
+		
+		// 🔥 REDIRECT NON-SUAdmin
+		if ($user_info->user_type !== 'SUAdmin') {
+			return redirect('/billing');
+		}
+	
 		/* ===============================
 		 | MAIN QUERY (FAST + FILTERED)
 		 =============================== */
