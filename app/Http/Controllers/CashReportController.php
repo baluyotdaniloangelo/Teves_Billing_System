@@ -115,8 +115,6 @@ class CashReportController extends Controller
 			/* ===============================
 			 | DATE FILTER (IMPORTANT FIX)
 			 =============================== */
-			//->whereDate('teves_cashiers_report.report_date', '>=', $start_date)
-			//->whereDate('teves_cashiers_report.report_date', '<=', $end_date)
 			->where('report_date', '>=', $start_date)
 			->where('report_date', '<=', $end_date)
 			
@@ -176,6 +174,9 @@ class CashReportController extends Controller
 				teves_cashiers_report.forecourt_attendant,
 				user_tb.user_real_name as encoder_name,
 				teves_cashiers_report_p8.payment_type,
+				teves_cashiers_report_p8.payer_name,
+				teves_cashiers_report_p8.payer_number,
+				teves_cashiers_report_p8.reference_number,
 				SUM(teves_cashiers_report_p8.payment_amount) AS total_amount
 			')
 
@@ -286,6 +287,9 @@ class CashReportController extends Controller
 				teves_cashiers_report.forecourt_attendant,
 				user_tb.user_real_name as encoder_name,
 				teves_cashiers_report_p8.payment_type,
+				teves_cashiers_report_p8.payer_name,
+				teves_cashiers_report_p8.payer_number,
+				teves_cashiers_report_p8.reference_number,
 				SUM(teves_cashiers_report_p8.payment_amount) AS total_amount
 			')
 
@@ -408,6 +412,9 @@ class CashReportController extends Controller
 				teves_cashiers_report.forecourt_attendant,
 				user_tb.user_real_name as encoder_name,
 				teves_cashiers_report_p8.payment_type,
+				teves_cashiers_report_p8.payer_name,
+				teves_cashiers_report_p8.payer_number,
+				teves_cashiers_report_p8.reference_number,
 				SUM(teves_cashiers_report_p8.payment_amount) AS total_amount
 			')
 
@@ -545,6 +552,11 @@ class CashReportController extends Controller
 					$encoder_name 			= $non_cash_data_column['encoder_name'];
 					
 					$payment_type 			= $non_cash_data_column['payment_type'];
+					
+					$payer_name 			= $non_cash_data_column['payer_name'];
+					$payer_number 			= $non_cash_data_column['payer_number'];
+					$reference_number 		= $non_cash_data_column['reference_number'];
+					
 					$total_amount 			= $non_cash_data_column['total_amount'];					
 							
 					$spreadSheet->getActiveSheet()
@@ -552,17 +564,20 @@ class CashReportController extends Controller
 						->setCellValue('B'.$no_excl, $report_date)
 						->setCellValue('C'.$no_excl, $branch_initial)
 						->setCellValue('D'.$no_excl, $shift)
-						->setCellValue('G'.$no_excl, $payment_type);
+						->setCellValue('G'.$no_excl, $payment_type)
+						->setCellValue('H'.$no_excl, $payer_name)
+						->setCellValue('I'.$no_excl, $payer_number)
+						->setCellValue('J'.$no_excl, $reference_number);
 					
 					// merge cells
 					$sheet->mergeCells('E'.$no_excl.':F'.$no_excl);
-					$sheet->mergeCells('H'.$no_excl.':I'.$no_excl);
+					$sheet->mergeCells('K'.$no_excl.':L'.$no_excl);
 
 					$spreadSheet->getActiveSheet()
 						->setCellValue('E'.$no_excl, $cashiers_name)
-						->setCellValue('H'.$no_excl, $total_amount);
+						->setCellValue('K'.$no_excl, $total_amount);
 						
-					$sheet->getStyle('H'.$no_excl)
+					$sheet->getStyle('K'.$no_excl)
 					->getNumberFormat()
 					->setFormatCode('#,##0.00');
 	
@@ -594,7 +609,7 @@ class CashReportController extends Controller
 					$sheet->getStyle("B$no_excl:H$no_excl")
 						->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 						
-					$sheet->getStyle("A$no_excl:I$no_excl")->applyFromArray($styleBorder);
+					$sheet->getStyle("A$no_excl:L$no_excl")->applyFromArray($styleBorder);
 					
 				/*Increment*/
 				$no_excl++;
@@ -611,17 +626,17 @@ class CashReportController extends Controller
 					//$sheet->setAutoFilter("A$startRow:H$endRow");
 					
 					$sheet = $spreadSheet->getActiveSheet();
-					$sheet->setCellValue("F$totalRow", 'Total:');
+					$sheet->setCellValue("J$totalRow", 'Total:');
 					
-					$sheet->getStyle("F$totalRow")
+					$sheet->getStyle("J$totalRow")
 						->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
 					
-					$sheet->mergeCells("H$totalRow".':'."I$totalRow");
+					$sheet->mergeCells("K$totalRow".':'."L$totalRow");
 					
 					$sheet = $spreadSheet->getActiveSheet();
-					$sheet->setCellValue("H$totalRow", "=SUM(H$startRow:H$endRow)");	
+					$sheet->setCellValue("K$totalRow", "=SUM(K$startRow:K$endRow)");	
 					
-					$sheet->getStyle("H$totalRow")
+					$sheet->getStyle("K$totalRow")
 					
 					->getNumberFormat()
 					->setFormatCode('#,##0.00');

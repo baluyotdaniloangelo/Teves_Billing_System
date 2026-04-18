@@ -22,7 +22,10 @@ class CashiersReport_Payment_Controller extends Controller
         $request->validate(
             [
                 'payment_type'   => 'required|string',
-                'payment_amount' => 'required|numeric|min:0'
+                'payment_amount' => 'required|numeric|min:0',
+				'payer_name'     => 'nullable|string',
+				'payer_number'   => 'nullable|string',
+				'reference_number' => 'nullable|string'
             ],
             [
                 'payment_type.required'   => 'Payment Type is required',
@@ -42,6 +45,9 @@ class CashiersReport_Payment_Controller extends Controller
             $CashiersReportModel_P8->cashiers_report_idx    = $CashiersReportId;
             $CashiersReportModel_P8->payment_type           = $request->payment_type;
             $CashiersReportModel_P8->payment_amount         = $request->payment_amount;
+			$CashiersReportModel_P8->payer_name     = $request->payer_name;
+			$CashiersReportModel_P8->payer_number   = $request->payer_number;
+			$CashiersReportModel_P8->reference_number = $request->reference_number;
             $CashiersReportModel_P8->created_by_user_id     = Session::get('loginID');
 
             $result = $CashiersReportModel_P8->save();
@@ -56,6 +62,11 @@ class CashiersReport_Payment_Controller extends Controller
 
         $CashiersReportModel_P8->payment_type       = $request->payment_type;
         $CashiersReportModel_P8->payment_amount     = $request->payment_amount;
+		
+		$CashiersReportModel_P8->payer_name     = $request->payer_name;
+		$CashiersReportModel_P8->payer_number   = $request->payer_number;
+		$CashiersReportModel_P8->reference_number = $request->reference_number;
+		
         $CashiersReportModel_P8->updated_by_user_id = Session::get('loginID');
 
         $result = $CashiersReportModel_P8->update();
@@ -65,23 +76,8 @@ class CashiersReport_Payment_Controller extends Controller
             : response()->json(['error' => 'Error updating Cash Payment'], 500);
     }
 
-    /* ================= LIST ================= 
-    public function get_cash_payment_inventory_list(Request $request)
-    {
-        $data = CashiersReportModel_P8::where(
-                'cashiers_report_idx',
-                $request->CashiersReportId
-            )
-            ->orderBy('cashiers_report_p8_id', 'asc')
-            ->get([
-                'cashiers_report_p8_id',
-                'payment_type',
-                'payment_amount'
-            ]);
+    /* ================= LIST ================= */
 
-        return response()->json($data);
-    }*/
-//use Yajra\DataTables\DataTables;
 
 public function get_cash_payment_inventory_list(Request $request)
 {
@@ -94,7 +90,10 @@ public function get_cash_payment_inventory_list(Request $request)
             ->select(
                 'cashiers_report_p8_id',
                 'payment_type',
-                'payment_amount'
+                'payment_amount',
+				'payer_name',
+				'payer_number',
+				'reference_number'
             );
 
         return DataTables::of($data)
@@ -140,7 +139,10 @@ public function get_cash_payment_inventory_list(Request $request)
             )
             ->get([
                 'payment_type',
-                'payment_amount'
+                'payment_amount',
+				'payer_name',
+				'payer_number',
+				'reference_number'
             ]);
 
         return response()->json($data);

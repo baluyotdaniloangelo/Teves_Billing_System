@@ -10,6 +10,10 @@ $("#save-CRPH8").click(function(event){
     let payment_type   = $("#payment_type").val();
     let payment_amount = $("#payment_amount").val();
 
+	let payer_name = $("input[name=payer_name]").val();
+	let payer_number = $("input[name=payer_number]").val();
+	let reference_number = $("input[name=reference_number]").val();
+
     document.getElementById('CRPH8_form').className =
         "g-3 needs-validation was-validated";
 
@@ -21,6 +25,9 @@ $("#save-CRPH8").click(function(event){
             CashiersReportId: CashiersReportId,
             payment_type: payment_type,
             payment_amount: payment_amount,
+			payer_name: payer_name,
+			payer_number: payer_number,
+			reference_number: reference_number,
             _token: "{{ csrf_token() }}"
         },
         success: function(response) {
@@ -31,6 +38,10 @@ $("#save-CRPH8").click(function(event){
 
             $("#payment_type").val('');
             $("#payment_amount").val('');
+			
+			$("#payer_name").val('');
+			$("#payer_number").val('');
+			$("#reference_number").val('');
 
             LoadCashiersReportPH8();
             document.getElementById('CRPH8_form').className =
@@ -62,6 +73,10 @@ $('body').on('click', '#CHPH8_Edit', function(event){
             $("#update_payment_type").val(response[0].payment_type);
             $("#update_payment_amount").val(response[0].payment_amount);
 
+			$("#update_payer_name").val(response[0].payer_name);
+			$("#update_payer_number").val(response[0].payer_number);
+			$("#update_reference_number").val(response[0].reference_number);
+			
             $('#Update_CRPH8_Modal').modal('toggle');
         }
     });
@@ -78,6 +93,10 @@ $("#update-CRPH8").click(function(event){
     let payment_type   = $("#update_payment_type").val();
     let payment_amount = $("#update_payment_amount").val();
 
+	let payer_name = $("input[name=update_payer_name]").val();
+	let payer_number = $("input[name=update_payer_number]").val();
+	let reference_number = $("input[name=update_reference_number]").val();
+	
     document.getElementById('update_CRPH8_form').className =
         "g-3 needs-validation was-validated";
 
@@ -88,6 +107,9 @@ $("#update-CRPH8").click(function(event){
             CRPH8_ID: CRPH8_ID,
             payment_type: payment_type,
             payment_amount: payment_amount,
+			payer_name: payer_name,
+			payer_number: payer_number,
+			reference_number: reference_number,
             _token: "{{ csrf_token() }}"
         },
         success: function(response){
@@ -98,6 +120,7 @@ $("#update-CRPH8").click(function(event){
 
             LoadCashiersReportPH8();
             $('#Update_CRPH8_Modal').modal('toggle');
+			
         }
     });
 });
@@ -160,60 +183,63 @@ $(function () {
 
     let CashiersReportId = {{ $CashiersReportId }};
 
-var CashiersReportPH8Table = $('#CashiersReportPH8Table').DataTable({
-    processing: true,
-    serverSide: true,
-    responsive: true,   // ❗ IMPORTANT: turn OFF responsive
-    //scrollY: '400px',
-    scrollX: false,       // ✅ ADD THIS
-    //scrollCollapse: true,
-    //autoWidth: false,    // ✅ ADD THIS
+	var CashiersReportPH8Table = $('#CashiersReportPH8Table').DataTable({
+		processing: true,
+		serverSide: true,
+		responsive: true,   // ❗ IMPORTANT: turn OFF responsive
+		//scrollY: '400px',
+		scrollX: false,       // ✅ ADD THIS
+		//scrollCollapse: true,
+		//autoWidth: false,    // ✅ ADD THIS
 
-    ajax: {
-        url: "{{ route('GetCashiersP8') }}",
-        type: "POST",
-        data: function (d) {
-            d.CashiersReportId = {{ $CashiersReportId }};
-            d._token = "{{ csrf_token() }}";
-        }
-    },
+		ajax: {
+			url: "{{ route('GetCashiersP8') }}",
+			type: "POST",
+			data: function (d) {
+				d.CashiersReportId = {{ $CashiersReportId }};
+				d._token = "{{ csrf_token() }}";
+			}
+		},
 
-    columns: [
-        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-        { data: 'payment_type', name: 'payment_type', className: 'text-center' },
-        {
-            data: 'payment_amount',
-			name: 'payment_amount',
-			render: $.fn.dataTable.render.number(',', '.', 2, '₱ '),
-			orderable: true,
-        },
-		{ data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
-    ],
-	columnDefs: [
-        {
-            targets: [2],               // Amount column index
-            className: 'text-right'    // BODY
-        },
-        {
-            targets: [2],
-            createdCell: function () {},
-            title: 'Amount'
-        }
-    ],
-    order: [[1, 'asc']],
-	
-	footerCallback: function (row, data) {
+		columns: [
+			{ data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+			{ data: 'payment_type', name: 'payment_type', className: 'text-center' },
+			{
+				data: 'payment_amount',
+				name: 'payment_amount',
+				render: $.fn.dataTable.render.number(',', '.', 2, '₱ '),
+				orderable: true,
+			},
+			{ data: 'payer_name', className: 'text-center' },
+			{ data: 'payer_number', className: 'text-center' },
+			{ data: 'reference_number', className: 'text-center' },
+			{ data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
+		],
+		columnDefs: [
+			{
+				targets: [2],               // Amount column index
+				className: 'text-right'    // BODY
+			},
+			{
+				targets: [2],
+				createdCell: function () {},
+				title: 'Amount'
+			}
+		],
+		order: [[1, 'asc']],
+		
+		footerCallback: function (row, data) {
 
-        let total = data.reduce(function (sum, row) {
-            return sum + Number(row.payment_amount);
-        }, 0);
+			let total = data.reduce(function (sum, row) {
+				return sum + Number(row.payment_amount);
+			}, 0);
 
-        $('#ph8_footer_total').html(
-            '₱ ' + total.toLocaleString('en-PH', { minimumFractionDigits: 2 })
-        );
-    }
-	
-});
+			$('#ph8_footer_total').html(
+				'₱ ' + total.toLocaleString('en-PH', { minimumFractionDigits: 2 })
+			);
+		}
+		
+	});
 
     /* Reusable reload after save/update/delete */
     window.LoadCashiersReportPH8 = function () {

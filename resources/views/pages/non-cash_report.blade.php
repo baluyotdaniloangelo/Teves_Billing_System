@@ -49,8 +49,6 @@
 							<div><strong>PERIOD:</strong> <span id="date_range_info"></span></div>
                     </div>
 
-                    
-
                     <!-- CHART -->
                     <div class="mb-3" id="chartarea_noncash">
                         <canvas id="chart_noncash" style="max-height:400px;"></canvas>
@@ -67,13 +65,16 @@
                                     <th>Shift</th>
                                     <th>Station In Charge</th>
                                     <th>Payment Type</th>
+                                    <th>Name</th>
+                                    <th>Number</th>
+                                    <th>Reference Number</th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5"></td>
+                                    <td colspan="8"></td>
                                     <td><strong>TOTAL</strong></td>
                                     <td>₱ <span id="total_non_cash">0.00</span></td>
                                 </tr>

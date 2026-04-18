@@ -21,6 +21,9 @@
 			<th>#</th>
             <th>Payment Type</th>
             <th class="text-right" >Amount</th>
+			<th>Name</th>
+			<th>Number</th>
+			<th>Reference No.</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -28,7 +31,7 @@
         <tr>
             <th colspan="2" class="text-end">TOTAL</th>
             <th class="text-right" id="ph8_footer_total">₱ 0.00</th>
-            <th></th>
+            <th colspan="4"></th>
         </tr>
     </tfoot>
 </table>
@@ -75,6 +78,27 @@
                                    required>
                         </div>
                     </div>
+					
+					<div class="row mb-2">
+						<label class="col-sm-4 col-form-label">Name</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="payer_name">
+						</div>
+					</div>
+
+					<div class="row mb-2">
+						<label class="col-sm-4 col-form-label">Number</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="payer_number">
+						</div>
+					</div>
+
+					<div class="row mb-2">
+						<label class="col-sm-4 col-form-label">Reference No.</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="reference_number">
+						</div>
+					</div>
 
             </div>
 
@@ -135,7 +159,28 @@
                                    required>
                         </div>
                     </div>
+					
+					<div class="row mb-2">
+						<label class="col-sm-4 col-form-label">Name</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="update_payer_name" id="update_payer_name">
+						</div>
+					</div>
 
+					<div class="row mb-2">
+						<label class="col-sm-4 col-form-label">Number</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="update_payer_number" id="update_payer_number">
+						</div>
+					</div>
+
+					<div class="row mb-2">
+						<label class="col-sm-4 col-form-label">Reference No.</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="update_reference_number" id="update_reference_number">
+						</div>
+					</div>
+					
             </div>
 
             <div class="modal-footer">

@@ -292,12 +292,14 @@
 				/*1*/	{data: 'shift', className: "text-center", orderable: false },
 				/*1*/	{data: 'cashiers_name', className: "text-left", orderable: false },
 				/*1*/	{data: 'payment_type', className: "text-center", orderable: false },
+				/*1*/	{data: 'payer_name', className: "text-left", orderable: false },
+				/*1*/	{data: 'payer_number', className: "text-center", orderable: false },
+				/*1*/	{data: 'reference_number', className: "text-center", orderable: false },
 				/*2*/	{data: 'total_amount', className: "text-right", orderable: true, render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 				
 				],
 				
 		});
-		
 		
 	autoAdjustColumns(LoadBillingHistoryData);
 
@@ -309,27 +311,7 @@
 			 });
 			 resizeObserver.observe(container);
 		 }
-/*
-	function download_daily_sales_report_pdf(receivable_id){
-			
-			let start_date 			= $("input[name=start_date]").val();
-			let end_date 			= $("input[name=end_date]").val();
-			let company_header 		= $("#company_header").val();
-			let payment_type   		= $("#payment_type").val();
-			
-		var query = {
-			start_date:start_date,
-			end_date:end_date,
-			company_header:company_header,
-			payment_type:payment_type,
-			_token: "{{ csrf_token() }}"
-		}
 
-		var url = "{{URL::to('generate_non_cash_payment_report_pdf')}}?" + $.param(query)
-		window.open(url);
-	  
-	}
-*/
 		function download_daily_sales_report_pdf(){
 
 			let start_date 			= $("input[name=start_date]").val();

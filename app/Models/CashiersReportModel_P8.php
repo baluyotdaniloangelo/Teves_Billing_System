@@ -25,6 +25,10 @@ class CashiersReportModel_P8 extends Model
 		'payment_type',
 		'payment_amount',
 
+		'payer_name',
+		'payer_number',
+		'reference_number',
+		
 		'created_at',
 		'created_by_user_id',
 		'updated_at',
@@ -47,6 +51,10 @@ class CashiersReportModel_P8 extends Model
 		'payment_type',
 		'payment_amount',
 
+		'payer_name',
+		'payer_number',
+		'reference_number',
+		
 		'created_at',
 		'created_by_user_id',
 		'updated_at',

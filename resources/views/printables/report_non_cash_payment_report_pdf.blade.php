@@ -69,10 +69,10 @@
 			<td colspan="2" align="left" style="border-bottom:1px solid #000;"><?php echo strtoupper(date('M/d/Y')); ?></td>
 		</tr>
 		
-		
 		<tr style="font-size:12px;">
 			<td colspan="10">&nbsp;</td>
 		</tr>
+		
 		</table>
 		
 		<table class="" width="100%" cellspacing="0" cellpadding="1" >
@@ -83,6 +83,9 @@
 				<th class="data_th" style="border:1px solid #000;">Shift</th>
 				<th class="data_th" style="border:1px solid #000;">Station In Charge</th>
 				<th class="data_th" style="border:1px solid #000;">Payment Type</th>
+				<th class="data_th" style="border:1px solid #000;">Name</th>
+				<th class="data_th" style="border:1px solid #000;">Number</th>
+				<th class="data_th" style="border:1px solid #000;">Reference No.</th>
 				<th class="data_th" style="border:1px solid #000;">Amount</th>								
 			</tr>
 											
@@ -107,6 +110,11 @@
 					$forecourt_attendant 	= $result_cols['forecourt_attendant'];
 					$encoder_name 			= $result_cols['encoder_name'];
 					$payment_type 			= $result_cols['payment_type'];
+					
+					$payer_name 			= $result_cols['payer_name'];
+					$payer_number 			= $result_cols['payer_number'];
+					$reference_number 		= $result_cols['reference_number'];
+					
 					$total_amount 			= $result_cols['total_amount'];
 					$total_total_amount 	+= $result_cols['total_amount'];
 							
@@ -118,6 +126,9 @@
 				<td align="center" nowrap style="border:1px solid #000;"><?=$shift;?></td>
 				<td align="left" nowrap style="border:1px solid #000;"><?=$cashiers_name;?></td>
 				<td align="center" nowrap style="border:1px solid #000;"><?=$payment_type;?></td>
+				<td align="left" nowrap style="border:1px solid #000;"><?=$payer_name;?></td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=$payer_number;?></td>
+				<td align="center" nowrap style="border:1px solid #000;"><?=$reference_number;?></td>
 				<td align="right" nowrap style="border:1px solid #000;"><?=number_format($total_amount,2);?></td>	
 			</tr>
 			<?php 
@@ -127,12 +138,7 @@
 			@endforeach
 
 			<tr class="data_tr" style="font-size:12px;">
-				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="left" ></td>
-				<td align="right">TOTAL:</td>
+				<td align="right" colspan="9">TOTAL:</td>
 				<td align="right" ><span style="font-family: DejaVu Sans; sans-serif;">&#8369;</span> <span id="total_non_cash" style="font-weight: normal;"><?=number_format($total_total_amount,2);?></span></td>
 			</tr>
 			
