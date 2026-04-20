@@ -83,7 +83,7 @@ class ReminderController extends Controller
         $reminder->reminders_title = $request->reminders_title;
         $reminder->reminders_content = $request->reminders_content;
         $reminder->reminder_date = $request->reminder_date;
-
+		$reminder->email_sent = false;
         // ✅ FIXED
         $reminder->created_by_user_idx = Session::get('loginID');
 

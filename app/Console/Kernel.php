@@ -22,13 +22,17 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+	protected function schedule(Schedule $schedule)
 	{
-    $schedule->call(function () {
-        app(\App\Http\Controllers\EmailController::class)->sendUnbilledReport();
-    })->dailyAt('10:00');
-		app(\App\Http\Controllers\ReminderController::class)->sendReminderEmails();
-    })->everyMinute();
+		// ✅ Daily unbilled report
+		$schedule->call(function () {
+			app(\App\Http\Controllers\EmailController::class)->sendUnbilledReport();
+		})->dailyAt('10:00');
+
+		// ✅ Reminder emails every minute
+		$schedule->call(function () {
+			app(\App\Http\Controllers\ReminderController::class)->sendReminderEmails();
+		})->everyMinute();
 	}
 
     /**
