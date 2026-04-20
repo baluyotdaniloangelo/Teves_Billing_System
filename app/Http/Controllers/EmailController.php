@@ -121,7 +121,7 @@ class EmailController extends Controller
         ]);
     }
 
-	public function sendReminderEmails()
+	public function sendReminderEmails_old()
 	{
 		// ✅ STEP 1: Get due reminders
 		$reminders = ReminderModel::where('email_sent', false)
@@ -138,7 +138,7 @@ class EmailController extends Controller
 
 			// 👉 get recipient (you can customize this)
 			$user = DB::table('user_tb')
-				->where('user_id', 1249)
+				//->where('user_id', 1249)
 				->where('user_status', 'Active')
 				->whereNull('deleted_at')
 				->first();
@@ -165,5 +165,48 @@ class EmailController extends Controller
 			'success' => 'Reminder emails sent successfully!',
 			'total_sent' => $reminders->count()
 		]);
-	}		
+	}	
+
+	public function sendReminderEmails()
+	{
+		// ✅ STEP 1: due reminders
+		$reminders = ReminderModel::where('email_sent', false)
+			->where('reminder_date', '<=', now())
+			->whereNull('deleted_at') // if using soft deletes
+			->get();
+
+		if ($reminders->isEmpty()) {
+			return;
+		}
+
+		// ✅ STEP 2: get ALL valid users
+		$emails = DB::table('user_tb')
+			->where('user_status', 'Active')
+			->whereNull('deleted_at')
+			->whereNotNull('user_email_address')
+			->pluck('user_email_address')
+			->filter(function ($email) {
+				return !empty(trim($email)) && filter_var($email, FILTER_VALIDATE_EMAIL);
+			})
+			->unique()
+			->values()
+			->toArray();
+
+		if (empty($emails)) {
+			return;
+		}
+
+		// ✅ STEP 3: send per reminder
+		foreach ($reminders as $reminder) {
+
+			Mail::to('noreply@yourdomain.com') // main recipient (required)
+				->bcc($emails) // 👈 send to ALL users
+				->send(new ReminderMail($reminder));
+
+			// ✅ STEP 4: mark as sent
+			$reminder->email_sent = true;
+			$reminder->save();
+		}
+	}
+	
 }
