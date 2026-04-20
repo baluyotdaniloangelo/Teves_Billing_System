@@ -183,7 +183,7 @@ class EmailController extends Controller
 		$userIds = [1249, 1274]; // 👈 your target users
 		$emails = DB::table('user_tb')
 			->where('user_status', 'Active')
-			->whereIn('user_id', $userIds) // ✅ MULTIPLE IDs
+			//->whereIn('user_id', $userIds) // ✅ MULTIPLE IDs
 			->whereNull('deleted_at')
 			->whereNotNull('user_email_address')
 			->pluck('user_email_address')
