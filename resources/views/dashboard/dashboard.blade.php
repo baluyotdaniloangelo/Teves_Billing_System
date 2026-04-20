@@ -21,7 +21,7 @@ $total_short_over = $result->sum('short_over');
       <!-- SUMMARY CARDS -->
       <div class="col-12">
         <div class="row">
-
+		<!--
           <div class="col-md-3">
             <div class="card info-card sales-card">
               <div class="card-body">
@@ -30,35 +30,146 @@ $total_short_over = $result->sum('short_over');
               </div>
             </div>
           </div>
+		-->
 
-          <div class="col-md-3">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
-                <h5 class="card-title">Cash on Hand</h5>
-                <h6>₱{{ number_format($total_cash,2) }}</h6>
+			<div class="col-xxl-3 col-md-3">
+              <div class="card info-card sales-card">
+
+                <!--<div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>-->
+
+                <div class="card-body">
+                  <h5 class="card-title">Total Sales <span></span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cart"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ number_format($total_sales,2) }}</h6>
+                      <!--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>-->
+
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
-          </div>
 
-          <div class="col-md-3">
-            <div class="card info-card customers-card">
-              <div class="card-body">
-                <h5 class="card-title">Non-Cash Payment</h5>
-                <h6>₱{{ number_format($total_non_cash,2) }}</h6>
+			<div class="col-xxl-3 col-md-3">
+              <div class="card info-card sales-card">
+
+                <!--<div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>-->
+
+                <div class="card-body">
+                  <h5 class="card-title">Cash on Hand <span></span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      ₱
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ number_format($total_cash,2) }}</h6>
+                      <!--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>-->
+
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
-          </div>
+		
+			<div class="col-xxl-3 col-md-3">
+              <div class="card info-card sales-card">
 
-          <div class="col-md-3">
-            <div class="card info-card">
-              <div class="card-body">
-                <h5 class="card-title">Short / Over</h5>
-                <h6 class="{{ $total_short_over < 0 ? 'text-danger' : 'text-success' }}">
-                  ₱{{ number_format($total_short_over,2) }}
-                </h6>
+                <!--<div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>-->
+
+                <div class="card-body">
+                  <h5 class="card-title">Non-Cash Payment <span></span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-credit-card-2-back-fill"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ number_format($total_non_cash,2) }}</h6>
+                      <!--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>-->
+
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
-          </div>
+
+		
+			<div class="col-xxl-3 col-md-3">
+              <div class="card info-card sales-card">
+
+                <!--<div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>-->
+
+                <div class="card-body">
+                  <h5 class="card-title">Short / Over <span></span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      ₱
+                    </div>
+                    <div class="ps-3">
+                      <h6 class="{{ $total_short_over < 0 ? 'text-danger' : 'text-success' }}">
+					  {{ number_format($total_short_over,2) }}
+					</h6>
+                      <!--<span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>-->
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
 
         </div>
       </div>
@@ -88,10 +199,10 @@ $total_short_over = $result->sum('short_over');
                 <tr>
 					<th>Date</th>
 					<th>Branch</th>
-					<th>Total Sales</th>
-					<th>Cash on Hand</th>
-					<th>Non-Cash</th>
-					<th>Short/Over</th>
+					<th align="right">Total Sales</th>
+					<th align="right">Cash on Hand</th>
+					<th align="right">Non-Cash</th>
+					<th align="right">Short/Over</th>
                 </tr>
               </thead>
               <tbody>
@@ -99,11 +210,11 @@ $total_short_over = $result->sum('short_over');
                 <tr>
                   <td>{{ \Carbon\Carbon::parse($row->report_date)->format('M d, Y') }}</td>
 				  <td>{{ $row->branch_code }} - {{ $row->branch_name }}</td>
-				  <td><strong>₱{{ number_format($row->total_sales,2) }}</strong></td>
-				  <td>₱{{ number_format($row->total_cash_sales,2) }}</td>
-				  <td>₱{{ number_format($row->non_cash_payment,2) }}</td>
-				  <td class="{{ $row->short_over < 0 ? 'text-danger' : 'text-success' }}">
-					₱{{ number_format($row->short_over,2) }}
+				  <td align="right"><strong>₱ {{ number_format($row->total_sales,2) }}</strong></td>
+				  <td align="right">₱ {{ number_format($row->total_cash_sales,2) }}</td>
+				  <td align="right">₱ {{ number_format($row->non_cash_payment,2) }}</td>
+				  <td  align="right" class="{{ $row->short_over < 0 ? 'text-danger' : 'text-success' }}">
+					₱ {{ number_format($row->short_over,2) }}
 				  </td>
                 </tr>
                 @empty
@@ -206,5 +317,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script>
+$(document).ready(function() {
+    $('#salesTable').DataTable({
+        pageLength: 10,
+        ordering: true,
+        responsive: true,
+        order: [[0, 'desc']], // sort by date desc
 
+        columnDefs: [
+            { targets: [2,3,4,5], className: 'text-end' } // align amounts right
+        ]
+    });
+});
+</script>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 @endsection

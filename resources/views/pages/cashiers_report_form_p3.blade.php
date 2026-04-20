@@ -24,6 +24,7 @@
 								<th style="text-align:center !important;">#</th>
 								<th style="text-align:left !important;">Account Name</th>
 								<th style="text-align:left !important;">Reference No.</th>
+								<th style="text-align:left !important;">Time</th>
 								<th style="text-align:left !important;">Product</th>
 								<th style="text-align:center !important;">Liters</th>
 								<th style="text-align:center !important;">Pump Price</th>
@@ -112,8 +113,6 @@
 									</div>	
 					  </div>
 
-                      
-
 					  <div class="row mb-2">
 						  <label for="sold_to_client_id" class="col-sm-4 col-form-label">ACCOUNT NAME</label>
 						  <div class="col-sm-8">
@@ -133,6 +132,14 @@
 									<input class="form-control" list="so_list_reference" name="reference_no_PH3" id="reference_no_PH3" autocomplete="off">
 												
 									<span class="valid-feedback" id="reference_no_PH3Error"></span>
+									</div>	
+					  </div>
+					  
+					  <div class="row mb-2">
+						  <label for="order_time_PH3" class="col-sm-4 col-form-label">TIME</label>
+						  <div class="col-sm-8">
+									<input class="form-control" name="order_time_PH3" id="order_time_PH3" autocomplete="off" type='time'>		
+									<span class="valid-feedback" id="order_time_PH3Error"></span>
 									</div>	
 					  </div>
 					  
@@ -243,6 +250,15 @@
 									<span class="valid-feedback" id="update_reference_no_PH3Error"></span>
 									</div>	
 					  </div>
+					  
+					  <div class="row mb-2">
+						  <label for="reference_no_PH3" class="col-sm-4 col-form-label">TIME</label>
+						  <div class="col-sm-8">
+									<input class="form-control" name="update_order_time_PH3" id="update_order_time_PH3" autocomplete="off" type='time'>		
+									<span class="valid-feedback" id="update_order_time_PH3Error"></span>
+									</div>	
+					  </div>
+					  
 					  
 					  <div class="row mb-2">
 						  <label for="update_product_idx_PH3" class="col-sm-4 col-form-label">PRODUCT / DESCRIPTION</label>

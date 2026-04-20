@@ -480,7 +480,7 @@ class SOBillingTransactionController extends Controller
 						$Billing->branch_idx			= $request->branch_idx;
 						//$Billing->cashiers_report_idx	= $cashiers_report_id;
 						$Billing->order_date 			= $so_info->order_date;
-						$Billing->order_time 			= $so_info->order_time;
+						//$Billing->order_time 			= $so_info->order_time;
 						$Billing->order_po_number 		= $so_info->so_number;                                                                                                                                                                     ;	
 						$Billing->client_idx 			= $so_info->client_idx;
 						$Billing->plate_no 				= $so_info->plate_no;

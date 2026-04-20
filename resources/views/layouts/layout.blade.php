@@ -80,6 +80,13 @@ else if (Request::is('supplier')){
 @include('layouts.supplier_script')
 <?php
 }
+else if (Request::is('reminder')){
+?>
+<body class="">
+@include('layouts.footer')
+@include('layouts.reminder_script')
+<?php
+}
 else if (Request::is('create_recievable')){
 ?>
 <body class="">

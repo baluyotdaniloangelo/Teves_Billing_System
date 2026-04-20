@@ -42,6 +42,23 @@ use App\Http\Controllers\ProductPumpController;
 
 /*March 29 2026*/
 use App\Http\Controllers\DashboardController;
+
+/* April 19, 2026*/
+use App\Http\Controllers\ReminderController;
+
+/*Load Supplier List*/
+Route::get('/reminder', [ReminderController::class,'reminder'])->name('reminder')->middleware('isLoggedIn');
+Route::get('reminder/list', [ReminderController::class, 'getReminderList'])->name('getReminderList')->middleware('isLoggedIn');
+/*Create Product*/
+Route::post('/create_reminder_post', [ReminderController::class,'create_reminder_post'])->name('create_reminder_post')->middleware('isLoggedIn');
+/*GET Product Info*/
+Route::post('/reminder_info', [ReminderController::class, 'reminder_info'])->name('reminder_info')->middleware('isLoggedIn');
+/*Update Product*/
+Route::post('/update_reminder_post', [ReminderController::class,'update_reminder_post'])->name('update_reminder_post')->middleware('isLoggedIn');
+/*Confirm Delete Product*/
+Route::post('/delete_reminder_confirmed', [ReminderController::class, 'delete_reminder_confirmed'])->name('delete_reminder_confirmed')->middleware('isLoggedIn');
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

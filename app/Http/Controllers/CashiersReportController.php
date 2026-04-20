@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\DB;
 /*PDF*/
 use PDF;
 use Illuminate\Validation\Rule;
+
+use Carbon\Carbon;
+
 class CashiersReportController extends Controller
 {
 	
@@ -893,6 +896,8 @@ class CashiersReportController extends Controller
 			$product_manual_price 		= $request->product_manual_price + 0;
 			
 			$branch_idx 		= $request->branch_idx;
+			$order_time 		= $request->order_time;
+			
 			
 			$CHPH3_ID 			= $request->CHPH3_ID;
 			$pump_price_data =  CashiersReportModel_P1::where('cashiers_report_id', $CashiersReportId)
@@ -966,7 +971,7 @@ class CashiersReportController extends Controller
 						$Billing->cashiers_report_idx 	= $CashiersReportId;
 						$Billing->branch_idx 			= $request->branch_idx;
 						$Billing->order_date 			= $request->report_date;
-						$Billing->order_time 			= '00:00';
+						$Billing->order_time 			= $order_time;
 						$Billing->order_po_number 		= $reference_no;	
 						$Billing->client_idx 			= $request->client_idx;
 						$Billing->plate_no 				= 'N/A';
@@ -982,7 +987,6 @@ class CashiersReportController extends Controller
 					}
 					else{
 						
-						
 						$billing_id =  CashiersReportModel_P3::where('cashiers_report_p3_id', $CHPH3_ID)
 								->get([
 									'teves_cashiers_report_p3.billing_idx',
@@ -996,7 +1000,7 @@ class CashiersReportController extends Controller
 							$SOBilling->cashiers_report_idx	= $CashiersReportId;
 							$SOBilling->branch_idx 			= $request->branch_idx;
 							$SOBilling->order_date 			= $request->report_date;
-							$SOBilling->order_time 			= '00:00';
+							$SOBilling->order_time 			= $order_time;
 							$SOBilling->so_number 			= $reference_no;	
 							$SOBilling->client_idx 			= $request->client_idx;
 							$SOBilling->plate_no 			= 'N/A';
@@ -1012,7 +1016,6 @@ class CashiersReportController extends Controller
 							
 						}
 						
-						
 							/*UPDATE*/
 							/*Update Product SO*/	
 							$Billing = new BillingTransactionModel();
@@ -1027,13 +1030,13 @@ class CashiersReportController extends Controller
 								$Billing->product_idx 			= $request->product_idx;
 								$Billing->product_price 		= $product_price;
 								$Billing->order_quantity 		= $request->order_quantity;
+								$Billing->order_time 			= $request->order_time;
 								$Billing->order_total_amount 	= $peso_sales;
 							}	
 							
 							$Billing->updated_by_user_idx 	= Session::get('loginID');
 							
 							$result = $Billing->update();
-						
 						
 					}
 					
@@ -1101,6 +1104,7 @@ class CashiersReportController extends Controller
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->so_idx 					= @$so_id;
 									$CashiersReportModel_P3->reference_no 				= $reference_no;
+									$CashiersReportModel_P3->order_time 				= $order_time;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									
 										if($miscellaneous_items_type!='OTHERS' || $miscellaneous_items_type!='CASHOUT'){
@@ -1130,6 +1134,7 @@ class CashiersReportController extends Controller
                                     $CashiersReportModel_P3->miscellaneous_items_type 	= $miscellaneous_items_type;
                                     $CashiersReportModel_P3->so_idx 					= @$so_id;
 									$CashiersReportModel_P3->reference_no 				= $reference_no;
+									$CashiersReportModel_P3->order_time 				= $order_time;
 									$CashiersReportModel_P3->client_idx		 			= $request->client_idx;
 									
 										if($miscellaneous_items_type!='OTHERS' || $miscellaneous_items_type!='CASHOUT'){
@@ -1167,6 +1172,7 @@ class CashiersReportController extends Controller
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
 					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.pump_price',
 					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.discounted_price',
@@ -1192,6 +1198,7 @@ class CashiersReportController extends Controller
 					'teves_product_table.product_name',
 					'teves_client_table.client_name',
 					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.pump_price',
 					'teves_cashiers_report_p3.unit_price',
 					'teves_cashiers_report_p3.discounted_price',
@@ -1199,7 +1206,13 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report_p3.cashiers_report_id',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.order_total_amount'
-					]);
+				])
+				->map(function ($item) {
+					$item->order_time_12 = $item->order_time 
+						? Carbon::parse($item->order_time)->format('g:i A') 
+						: null;
+					return $item;
+				});
 		
 			return response()->json($data);
 	}
@@ -1212,6 +1225,7 @@ class CashiersReportController extends Controller
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.item_description',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.cashiers_report_id',
@@ -1239,6 +1253,7 @@ class CashiersReportController extends Controller
 					'teves_product_table.product_id',
 					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.pump_price',
@@ -1261,6 +1276,7 @@ class CashiersReportController extends Controller
 					'teves_product_table.product_name',
 					'teves_product_table.product_id',
 					'teves_cashiers_report_p3.reference_no',
+					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
@@ -1282,6 +1298,7 @@ class CashiersReportController extends Controller
 				->get([
 					'teves_cashiers_report_p3.miscellaneous_items_type',
 					'teves_cashiers_report_p3.item_description',
+					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.cashiers_report_p3_id',
 					'teves_cashiers_report_p3.order_quantity',
 					'teves_cashiers_report_p3.unit_price',

@@ -773,6 +773,8 @@
 			var reference_no_id 			= $('#so_list_reference option[value="' + $('#reference_no_PH3').val() + '"]').attr('data-id');/*IF Available*/
 			var client_idx 			   		= $('#sold_to_client_name_list option[value="' + $('#sold_to_client_id').val() + '"]').attr('data-id');
 			
+			var order_time 			    	= $("input[name=order_time_PH3]").val();
+			
 			/*Product ID*/
 			var product_idx 			    = $('#product_list_PH3 option[value="' + $('#product_idx_PH3').val() + '"]').attr('data-id');
 			/*Product Name*/
@@ -798,6 +800,7 @@
                       reference_no_id:reference_no_id,
 					  client_idx:client_idx,
                       product_idx:product_idx,
+					  order_time:order_time,
 					  branch_idx:teves_branch,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 
@@ -937,6 +940,7 @@
 							var product_name = response[i].product_name;
 							var client_name = response[i].client_name;
 							var reference_no = response[i].reference_no;
+							var order_time = response[i].order_time_12 ;
 							var order_quantity = response[i].order_quantity.toLocaleString("en-PH", {maximumFractionDigits: 2});
 							
 							var order_total_amount = response[i].order_total_amount.toLocaleString("en-PH", {maximumFractionDigits: 2});
@@ -945,6 +949,7 @@
 							"<td align='center'>" + (i+1) + "</td>" +
 							"<td align='left'>"+client_name+"</td>"+
 							"<td align='left'>"+reference_no+"</td>"+
+							"<td align='left'>"+order_time+"</td>"+
 							"<td align='left'>"+product_name+"</td>"+
 							"<td class='calibration_td' align='center'>"+order_quantity+"</td>"+
 							"<td class='manual_price_td' align='center'>"+pump_price+"</td>"+
@@ -1165,6 +1170,8 @@
 			var client_idx 			    	= $('#update_sold_to_client_name_list option[value="' + $('#update_sold_to_client_id').val() + '"]').attr('data-id');
 			var product_idx 				= $('#product_list_PH3 option[value="' + $('#update_product_idx_PH3').val() + '"]').attr('data-id');
 			
+			var order_time 			    	= $("input[name=update_order_time_PH3]").val();
+			
 			/*Product Name*/
 			let product_name 				= $("input[name=update_product_name_PH3]").val();
 			
@@ -1192,6 +1199,7 @@
 					  client_idx:client_idx,
 					  branch_idx:teves_branch,
 					  product_idx:product_idx,
+					  order_time:order_time,
 					  item_description:product_name,
 					  order_quantity:order_quantity, 
 					  product_manual_price:product_manual_price, 
