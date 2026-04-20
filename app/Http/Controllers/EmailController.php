@@ -199,7 +199,7 @@ class EmailController extends Controller
 		// ✅ STEP 3: send per reminder
 		foreach ($reminders as $reminder) {
 
-			Mail::to('noreply@yourdomain.com') // main recipient (required)
+			Mail::to('support@tevesgasoline.com') // main recipient (required)
 				->bcc($emails) // 👈 send to ALL users
 				->send(new ReminderMail($reminder));
 
