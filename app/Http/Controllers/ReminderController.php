@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\ReminderModel;
 use Session;
 use DataTables;
-
+use Illuminate\Support\Facades\DB;
 class ReminderController extends Controller
 {
 
