@@ -199,11 +199,18 @@ class EmailController extends Controller
 		// ✅ STEP 3: send per reminder
 		foreach ($reminders as $reminder) {
 
-			Mail::to('support@tevesgasoline.com') // main recipient (required)
-				->bcc($emails) // 👈 send to ALL users
-				->send(new ReminderMail($reminder));
+			foreach ($emails as $email) {
 
-			// ✅ STEP 4: mark as sent
+				try {
+					Mail::to($email)
+						->send(new ReminderMail($reminder));
+
+				} catch (\Exception $e) {
+					\Log::error('Mail error: '.$e->getMessage());
+				}
+			}
+
+			// mark as sent AFTER all users received
 			$reminder->email_sent = true;
 			$reminder->save();
 		}
