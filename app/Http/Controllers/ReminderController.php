@@ -115,4 +115,49 @@ class ReminderController extends Controller
         return response()->json(['success'=>'Reminder Updated']);
     }
 
+	public function sendReminderEmails()
+	{
+		// ✅ STEP 1: Get due reminders
+		$reminders = ReminderModel::where('email_sent', false)
+			->where('reminder_date', '<=', now())
+			->whereNull('deleted_at')
+			->get();
+
+		if ($reminders->isEmpty()) {
+			return response()->json(['message' => 'No reminders to send']);
+		}
+
+		// ✅ STEP 2: Loop reminders
+		foreach ($reminders as $reminder) {
+
+			// 👉 get recipient (you can customize this)
+			$user = DB::table('user_tb')
+				->where('user_id', 1249)
+				->where('user_status', 'Active')
+				->whereNull('deleted_at')
+				->first();
+
+			if (!$user || empty($user->user_email_address)) {
+				continue; // skip if no valid email
+			}
+
+			// ✅ validate email
+			if (!filter_var($user->user_email_address, FILTER_VALIDATE_EMAIL)) {
+				continue;
+			}
+
+			// ✅ STEP 3: Send Email
+			Mail::to($user->user_email_address)
+				->send(new ReminderMail($reminder));
+
+			// ✅ STEP 4: Mark as sent
+			$reminder->email_sent = true;
+			$reminder->save();
+		}
+
+		return response()->json([
+			'success' => 'Reminder emails sent successfully!',
+			'total_sent' => $reminders->count()
+		]);
+	}	
 }
