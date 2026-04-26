@@ -96,6 +96,7 @@ class DashboardController extends Controller
 
 			->groupBy('r.report_date', 'b.branch_code', 'b.branch_name', 'r.teves_branch')
 			->orderBy('r.report_date', 'desc')
+			//->orderByDesc('total_sales')
 			->get();
 
 

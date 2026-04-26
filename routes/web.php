@@ -58,6 +58,10 @@ Route::post('/update_reminder_post', [ReminderController::class,'update_reminder
 /*Confirm Delete Product*/
 Route::post('/delete_reminder_confirmed', [ReminderController::class, 'delete_reminder_confirmed'])->name('delete_reminder_confirmed')->middleware('isLoggedIn');
 
+Route::get('/notifications/reminders', [ReminderController::class, 'getTopReminders'])->name('getTopReminders')->middleware('isLoggedIn');
+Route::post('/mark_as_read', [ReminderController::class, 'markAsRead'])->name('mark_as_read')->middleware('isLoggedIn');
+
+//Route::get('/notifications/reminders', [ReminderController::class, 'getTopReminders']);
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +100,10 @@ Route::get('billing/list', [BillingTransactionController::class, 'getBillingTran
 
 /*Billed Item to MAnually Generated*/
 Route::get('billing/billed_list', [BillingTransactionController::class, 'getBillingTransactionList_Billed'])->name('getBillingTransactionList_Billed')->middleware('isLoggedIn');
+/*Unbilled Item to MAnually Generated*/
+Route::get('billing/unbilled_list', [BillingTransactionController::class, 'getBillingTransactionList_Unbilled'])->name('getBillingTransactionList_Unbilled')->middleware('isLoggedIn');
+/*Unbilled Per Client*/
+Route::get('billing/unbilled_client', [BillingTransactionController::class, 'getUnbilledClients'])->name('getUnbilledClients')->middleware('isLoggedIn');
 Route::post('/update_bill_post', [BillingTransactionController::class,'update_bill_post'])->name('update_bill_post')->middleware('isLoggedIn');
 
 /*FOR SO Billing*/

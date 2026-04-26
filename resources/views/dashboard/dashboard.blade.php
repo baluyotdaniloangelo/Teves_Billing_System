@@ -21,32 +21,10 @@ $total_short_over = $result->sum('short_over');
       <!-- SUMMARY CARDS -->
       <div class="col-12">
         <div class="row">
-		<!--
-          <div class="col-md-3">
-            <div class="card info-card sales-card">
-              <div class="card-body">
-                <h5 class="card-title">Total Sales</h5>
-                <h6>₱{{ number_format($total_sales,2) }}</h6>
-              </div>
-            </div>
-          </div>
-		-->
+
 
 			<div class="col-xxl-3 col-md-3">
               <div class="card info-card sales-card">
-
-                <!--<div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>-->
 
                 <div class="card-body">
                   <h5 class="card-title">Total Sales <span></span></h5>
@@ -69,18 +47,6 @@ $total_short_over = $result->sum('short_over');
 			<div class="col-xxl-3 col-md-3">
               <div class="card info-card sales-card">
 
-                <!--<div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>-->
 
                 <div class="card-body">
                   <h5 class="card-title">Cash on Hand <span></span></h5>
@@ -103,18 +69,6 @@ $total_short_over = $result->sum('short_over');
 			<div class="col-xxl-3 col-md-3">
               <div class="card info-card sales-card">
 
-                <!--<div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>-->
 
                 <div class="card-body">
                   <h5 class="card-title">Non-Cash Payment <span></span></h5>
@@ -137,19 +91,6 @@ $total_short_over = $result->sum('short_over');
 		
 			<div class="col-xxl-3 col-md-3">
               <div class="card info-card sales-card">
-
-                <!--<div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>-->
 
                 <div class="card-body">
                   <h5 class="card-title">Short / Over <span></span></h5>
@@ -194,7 +135,7 @@ $total_short_over = $result->sum('short_over');
           <div class="card-body">
             <h5 class="card-title">Daily Summary</h5>
 
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" id="salesTable">
               <thead class="table-dark">
                 <tr>
 					<th>Date</th>
@@ -239,44 +180,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let rawData = @json($result);
 
-
-    // get unique dates
+    // ✅ UNIQUE DATES
     let dates = [...new Set(rawData.map(item => item.report_date))];
 
-    // get unique branches
-	let branches = [...new Set(rawData.map(item => item.branch_code))];
-	
-	// 🔥 RANDOM COLORS
-    function getRandomColor() {
-        return '#' + Math.floor(Math.random()*16777215).toString(16);
+    // ✅ UNIQUE BRANCH LABEL
+    let branches = [...new Set(
+        rawData.map(item => item.branch_code)
+    )];
+
+    // ✅ SAFE COLOR GENERATOR (NO DARK COLORS)
+    function stringToColor(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+
+        let r = (hash >> 0) & 0xFF;
+        let g = (hash >> 8) & 0xFF;
+        let b = (hash >> 16) & 0xFF;
+
+        // normalize brightness
+        r = (r % 156) + 50;
+        g = (g % 156) + 50;
+        b = (b % 156) + 50;
+
+        return `rgb(${r}, ${g}, ${b})`;
     }
 
-	function getSafeColor() {
-    let r = Math.floor(Math.random() * 156) + 50; // 50–205
-    let g = Math.floor(Math.random() * 156) + 50;
-    let b = Math.floor(Math.random() * 156) + 50;
+    let colors = branches.map(branch => stringToColor(branch));
 
-    return `rgb(${r}, ${g}, ${b})`;
-	}
+    // ✅ BUILD SERIES
+    let series = branches.map(branch => {
+        let branchData = dates.map(date => {
+            let found = rawData.find(d => 
+                d.report_date === date &&
+                (d.branch_code) === branch
+            );
+            return found ? parseFloat(found.total_sales) : 0;
+        });
 
-    let colors = branches.map(() => getSafeColor());
-	
-	let series = branches.map(branch => {
-		let branchData = dates.map(date => {
-			let found = rawData.find(d => 
-				d.report_date === date &&
-				(d.branch_code) === branch
-			);
-			return found ? parseFloat(found.total_sales) : 0;
-		});
+        return {
+            name: branch,
+            data: branchData
+        };
+    });
 
-		return {
-			name: branch,
-			data: branchData
-		};
-	});
-
-    // format dates
+    // ✅ FORMAT DATES
     let formattedDates = dates.map(d => {
         let dt = new Date(d);
         return dt.toLocaleDateString('en-US', {
@@ -285,18 +234,24 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // ✅ CHART
     new ApexCharts(document.querySelector("#reportsChart"), {
         series: series,
         chart: {
             height: 350,
             type: 'area'
         },
+        colors: colors,
         stroke: {
-            curve: 'smooth'
+            curve: 'smooth',
+            width: 2
         },
-		colors: colors, // 🔥 APPLY COLORS
-        stroke: {
-            curve: 'smooth'
+        fill: {
+            type: 'gradient',
+            gradient: {
+                opacityFrom: 0.4,
+                opacityTo: 0.1
+            }
         },
         xaxis: {
             categories: formattedDates
@@ -306,33 +261,55 @@ document.addEventListener("DOMContentLoaded", () => {
                 formatter: val => "₱" + val.toLocaleString()
             }
         },
+
+        // 🔥 SORTED TOOLTIP (PER HOVER)
         tooltip: {
-            y: {
-                formatter: val => "₱" + val.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                })
+            shared: true,
+            intersect: false,
+            custom: function({ series, dataPointIndex, w }) {
+
+                let data = w.config.series.map((s, i) => {
+                    return {
+                        name: s.name,
+                        value: s.data[dataPointIndex],
+                        color: w.globals.colors[i]
+                    };
+                });
+
+                // 🔥 SORT HIGHEST → LOWEST
+                data.sort((a, b) => b.value - a.value);
+
+                let dateLabel = w.globals.categoryLabels[dataPointIndex];
+
+                let html = `
+                    <div style="padding:10px; min-width:200px;">
+                        <strong>${dateLabel}</strong>
+                `;
+
+                data.forEach(d => {
+                    if (d.value > 0) {
+                        html += `
+                            <div style="margin:4px 0;">
+                                <span style="color:${d.color}; font-size:14px;">●</span>
+                                ${d.name}: 
+                                <b>₱${d.value.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                })}</b>
+                            </div>
+                        `;
+                    }
+                });
+
+                html += `</div>`;
+                return html;
             }
         }
+
     }).render();
 
 });
 </script>
-<script>
-$(document).ready(function() {
-    $('#salesTable').DataTable({
-        pageLength: 10,
-        ordering: true,
-        responsive: true,
-        order: [[0, 'desc']], // sort by date desc
 
-        columnDefs: [
-            { targets: [2,3,4,5], className: 'text-end' } // align amounts right
-        ]
-    });
-});
-</script>
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
 @endsection

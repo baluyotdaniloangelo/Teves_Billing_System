@@ -13,17 +13,17 @@
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
-<!--
-<li class="nav-item dropdown">
+
+		<li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a>--><!-- End Notification Icon -->
-<!--
+            <span class="badge bg-primary badge-number">0</span>
+          </a><!-- End Notification Icon -->
+
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" style="">
             <li class="dropdown-header">
-              You have 4 new notifications
+              You have 0 new notifications
               <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
             </li>
             <li>
@@ -33,48 +33,9 @@
             <li class="notification-item">
               <i class="bi bi-exclamation-circle text-warning"></i>
               <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
+                <h4>loading</h4>
+                <p>loading</p>
+                <p>loading</p>
               </div>
             </li>
 
@@ -86,8 +47,8 @@
             </li>
 
           </ul><!-- End Notification Dropdown Items -->
-<!--
-        </li>-->
+
+        </li>
 		
         <li class="nav-item dropdown pe-3">
 
@@ -142,7 +103,7 @@
 	   <?php if($data->user_type=="SUAdmin"){ ?>
 	   <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('dashboard') }}" title="Dashboard">
-          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <i class="bi bi-speedometer2 navbar_icon"></i>
           <span title="Dashboard">Dashboard</span>
         </a>
        </li>
@@ -150,7 +111,7 @@
 	  
 	   <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#billing-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
-          <i class="bi bi-file-spreadsheet navbar_icon"></i><span title="Billing">Billing</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-receipt navbar_icon"></i><span title="Billing">Billing</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="billing-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         
@@ -172,7 +133,7 @@
 	  
 	  <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Receivable List">
-          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <i class="bi bi-cash-stack navbar_icon"></i>
           <span title="Create Billing Transaction">Receivable</span>
         </a>
       </li>
@@ -180,7 +141,7 @@
 	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 	   <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('salesorder') }}" title="Create Sales Order">
-          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <i class="bi bi-cart-check navbar_icon"></i>
           <span title="Create Sales Order">Sales Order</span>
         </a>
       </li>
@@ -189,7 +150,7 @@
 		
 	  <li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('purchaseorder_v2') }}" title="Create Sales Order">
-          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <i class="bi bi-bag-check navbar_icon"></i>
           <span title="Create Purchases Order Order">Purchase Order</span>
         </a>
       </li>
@@ -197,7 +158,7 @@
 		
 		<li class="nav-item ">
         <a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Sales Order">
-          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <i class="bi bi-journal-text navbar_icon"></i>
           <span title="Create Sales Order">Cashier's Report</span>
         </a>
       </li>
@@ -205,7 +166,7 @@
 	  <li class="nav-item ">
 	  
 		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
-          <i class="bi bi-graph-up navbar_icon"></i>
+          <i class="bi bi-graph-up-arrow navbar_icon"></i>
           <span title="Generate Billing History">Report</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
 		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
@@ -245,7 +206,7 @@
 	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
       <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
-          <i class="bi bi-gear navbar_icon"></i><span title="Manage Product, Client and System User Account">Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-gear-fill navbar_icon"></i><span title="Manage Product, Client and System User Account">Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -344,3 +305,71 @@
                   </div>
                 </div>
     </div>
+	
+
+
+<div class="modal fade" id="viewReminderModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+
+      <!-- HEADER -->
+      <div class="modal-header text-white rounded-top-4" style="background: linear-gradient(135deg, #4e73df, #1cc88a);">
+        <h5 class="modal-title fw-bold" id="view_title"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- ICON + DATE -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3">
+            <i class="bi bi-bell-fill fs-2 text-primary"></i>
+          </div>
+          <div>
+            <small class="text-muted" id="view_date"></small>
+          </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="p-3 rounded-3 bg-light border">
+          <p id="view_content" class="mb-0 fs-6"></p>
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer justify-content-between">
+
+        <button class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+          Close
+        </button>
+
+        <button id="markAsDoneBtn" class="btn btn-success btn-sm">
+          ✔ Mark as Done
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.modal-content {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+</style>

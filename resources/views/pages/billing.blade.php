@@ -17,8 +17,13 @@
 				<div class="p-d3">
 				
 				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Unbilled</button>
+                <?php if($data->user_type=="SUAdmin"){ ?>
+				<li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="unbilled-client-tab" data-bs-toggle="tab" data-bs-target="#bordered-unbilled-client" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Client</button>
+                </li>
+				<?php } ?>
+				<li class="nav-item" role="presentation"  data-bs-toggle="modal" data-bs-target="#UnbilledModal">
+                  <button class="nav-link <?php if($data->user_type!="SUAdmin"){ ?>  active <?php } ?>" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Unbilled</button>
                 </li>
                 <li class="nav-item" role="presentation"  data-bs-toggle="modal" data-bs-target="#BilledModal">
                   <button class="nav-link" id="billed-tab" data-bs-toggle="tab" data-bs-target="#bordered-billed" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Oder">Billed</button>
@@ -27,8 +32,49 @@
 				</ul>					
 				
 				<div class="tab-content pt-2" id="borderedTabContent">
-				
-                <div class="tab-pane fade show active" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
+				 <?php if($data->user_type=="SUAdmin"){ ?>
+                <div class="tab-pane fade show active" id="bordered-unbilled-client" role="tabpanel" aria-labelledby="unbilled-client-tab">
+											<div class="table-responsive">
+											<table class="table dataTable display nowrap cell-border" id="getUnbilledClientList" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th class="all">#</th>
+													<th class="all">Client</th>
+													<th class="none">Count</th>
+													<th class="all">Total Amount</th>
+													<th class="all">Period</th>
+												</tr>
+											</thead>				
+											
+											<tbody>
+												
+											</tbody>
+									
+										</table>
+									</div>
+				</div>				
+				<?php } ?>
+                <div class="tab-pane fade <?php if($data->user_type!="SUAdmin"){ ?>  show active <?php } ?>" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
+				<div class="d-flex justify-content-end" id="">
+					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
+						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#UnbilledModal"> Options</button>
+					</div>					
+					</div>
+					
+					<div class="row mb-2">
+						
+						<div class="col-sm-12">
+							<div class="ms-2">
+								<div class="fw-bold">ACCOUNT NAME: <span id="client_name_unbilled_info" style="font-weight: normal;"></span></div>
+							</div>
+						
+							<div class="ms-2">
+								<div class="fw-bold">PERIOD: <span id="period_unbilled_info" style="font-weight: normal;"></span></div>			
+							</div>
+						</div>
+						
+					</div>
+						
 											<div class="table-responsive">
 											<table class="table dataTable display nowrap cell-border" id="getBillingTransactionList" width="100%" cellspacing="0">
 											<thead>
@@ -63,6 +109,21 @@
 						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#BilledModal"> Options</button>
 					</div>					
 					</div>
+					
+					<div class="row mb-2">
+						
+						<div class="col-sm-12">
+							<div class="ms-2">
+								<div class="fw-bold">ACCOUNT NAME: <span id="client_name_billed_info" style="font-weight: normal;"></span></div>
+							</div>
+						
+							<div class="ms-2">
+								<div class="fw-bold">PERIOD: <span id="period_billed_info" style="font-weight: normal;"></span></div>			
+							</div>
+						</div>
+						
+					</div>					
+					
 									    <div class="table-responsive">
 										
 										<table class="table dataTable display nowrap cell-border" id="BillingListTable_billed" width="100%" cellspacing="0">
@@ -98,7 +159,66 @@
             </div>
           </div>
 
-	<!--Modal to Create Client-->
+	<!--Modal to Generate Unbilled List-->
+	<div class="modal fade" id="UnbilledModal" tabindex="-1">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Unbilled</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">	
+						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+					
+					  <form class="g-2 needs-validation" id="generate_unbilled_form">
+					  
+						<div class="row mb-2">
+						  <label for="client_idx_billed" class="col-sm-4 col-form-label" title="***Client is Optional, You Can Generate the Billed item using the Date Range.">Client(Optional)</label>
+						  <div class="col-sm-8">
+							<input class="form-control" list="client_name_unbilled" name="client_name_unbilled" id="client_id_unbilled" required autocomplete="off">
+								<datalist id="client_name_unbilled">
+									@foreach ($client_data as $client_data_cols)
+										<option label="{{$client_data_cols->client_name}}" data-id="{{$client_data_cols->client_id}}" value="{{$client_data_cols->client_name}}">
+									@endforeach
+								</datalist>
+							<span class="valid-feedback" id="client_idxError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="start_date_unbilled" class="col-sm-4 col-form-label">Start Date</label>
+						  <div class="col-sm-8">
+							<input type="date" class="form-control " name="start_date_unbilled" id="start_date_unbilled" value="<?=date('Y-m-d');?>" required>
+							<span class="valid-feedback" id="start_date_unbilledError"></span>
+						  </div>
+						</div>						
+								
+						<div class="row mb-2">
+						  <label for="end_date_unbilled" class="col-sm-4 col-form-label">End Date</label>
+						  <div class="col-sm-8">
+							<input type="date" class="form-control " name="end_date_unbilled" id="end_date_unbilled" value="<?=date('Y-m-d');?>" required>
+							<span class="valid-feedback" id="end_date_unbilledError"></span>
+						  </div>
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+					
+							<div id="loading_data" style="display:none;">
+							<div class="spinner-border text-success" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+							</div>
+						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="generate_unbilled"> Submit</button>
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+             </div>
+
+	<!--Modal to Generate billed List-->
 	<div class="modal fade" id="BilledModal" tabindex="-1">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -156,7 +276,7 @@
                   </div>
                 </div>
              </div>
-
+			 
 	<!-- Bill Delete Modal-->
     <div class="modal fade" id="BillDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">

@@ -1,33 +1,170 @@
     <!-- Page level plugins -->
-   <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
-   <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
-   <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
- <script type="text/javascript">
+    <script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+    <script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+    <script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
+	<script type="text/javascript">
+
+
 	<!--Load Table-->
 	$(function () {
 
-		var BillingListTable = $('#getBillingTransactionList').DataTable({
+		var UnbilledClientListTable = $('#getUnbilledClientList').DataTable({
 			"language": {
-						 "decimal": ".",
-            "thousands": ",",
 						"lengthMenu":'<select class="dt-input">'+
 			             '<option value="10">10</option>'+
 			             '<option value="20">20</option>'+
 			             '<option value="30">30</option>'+
 			             '<option value="40">40</option>'+
 			             '<option value="50">50</option>'+
-			             '<option value="100">100</option>'+
+			             '<option value="-1">All</option>'+
 			             '</select> '
 		    },
-			processing: true,
+			/*processing: true,*/
 			serverSide: true,
-			pageLength: 10,
 			stateSave: true,/*Remember Searches*/
+			ajax: "{{ route('getUnbilledClients') }}",
 			responsive: true,
 			scrollCollapse: true,
 			scrollY: '500px',
-			ajax: "{{ route('getBillingTransactionList') }}",
 			columns: [
+				{ data: 'DT_RowIndex', name: 'DT_RowIndex' },
+				{ data: 'client_name', name: 'client_name' },
+				{ data: 'unbilled_count', name: 'unbilled_count' },
+				{ data: 'total_unbilled_amount', name: 'total_unbilled_amount', className: "text-right", orderable: true },
+				//{ data: 'first_transaction_date', name: 'first_transaction_date' },
+				//{ data: 'last_transaction_date', name: 'last_transaction_date' },
+				{ data: 'date_range', name: 'date_range', orderable: false, searchable: false }
+			],
+			columnDefs: [
+					{ className: 'text-center', targets: [0] },
+			]
+		});
+				/*
+				$('<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">'+
+				'<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CreateBranchModal"></button>'+
+				'</div>').appendTo('#branch_option');*/
+				
+		autoAdjustColumns(UnbilledClientListTable);
+
+		 /*Adjust Table Column*/
+		 function autoAdjustColumns(table) {
+			 var container = table.table().container();
+			 var resizeObserver = new ResizeObserver(function () {
+				 table.columns.adjust();
+			 });
+			 resizeObserver.observe(container);
+		 }		
+				
+		$('a.toggle-vis').on('click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column($(this).attr('data-column'));
+ 
+        // Toggle the visibility
+        column.visible(!column.visible());
+		
+		});					
+	});
+	
+
+	function get_client_details(client_idx,gererate_type){
+		  
+			//let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
+			
+			  $.ajax({
+				url: "/client_info",
+				type:"POST",
+				data:{
+				  clientID:client_idx,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {		
+					
+					/*Set Details*/
+				  if(gererate_type=='unbilled'){
+					  
+						$('#client_name_unbilled_info').text(response.client_name);
+						
+				  }else{
+				  }
+					
+						$('#client_name_billed_info').text(response.client_name);
+					
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	  
+	}
+
+	$('body').on('click','#generate_unbilled',function(){
+		
+			event.preventDefault();
+			
+			let client_idx 	= $("#client_name_unbilled option[value=\"" + $('#client_id_unbilled').val() + "\"]").attr('data-id');
+			let start_date 	= $("input[name=start_date_unbilled]").val();
+			let end_date 	= $("input[name=end_date_unbilled]").val();
+			
+			  $.ajax({
+				url: "{{ route('getBillingTransactionList_Unbilled') }}",
+				type:"GET",
+				data:{
+				  client_idx:client_idx,
+				  start_date:start_date,
+				  end_date:end_date,
+				  _token: "{{ csrf_token() }}"
+				}
+			 }).done(function (result) {
+				 
+					BillingListTable_unbilled.clear().draw();
+					BillingListTable_unbilled.rows.add(result.data).draw();
+					
+					$('#UnbilledModal').modal('toggle');	
+					
+					gererate_type = 'unbilled',
+					get_client_details(client_idx,gererate_type);
+							
+					var start_date_new  = new Date(start_date);
+					start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+							
+					var end_date_new  = new Date(end_date);
+					end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+
+					$('#period_unbilled_info').text(start_date_new_format + ' - ' +end_date_new_format);	
+							
+            })	
+			
+	});
+
+	/*Load Billed List*/	
+		let BillingListTable_unbilled = $('#getBillingTransactionList').DataTable( {
+			"language": {
+				"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+			        '<option value="10">10</option>'+
+			        '<option value="20">20</option>'+
+			        '<option value="30">30</option>'+
+			        '<option value="40">40</option>'+
+			        '<option value="50">50</option>'+
+			        '<option value="-1">All</option>'+
+			        '</select> '
+			    }, 
+				//processing: true,
+				//serverSide: true,
+				//stateSave: true,/*Remember Searches*/
+				responsive: true,
+				scrollCollapse: true,
+				scrollY: '500px',
+				paging: true,
+				searching: true,
+				info: true,
+				data: [],
+				"columns": [	
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'order_date', className: "text-center"},
 					{data: 'order_time',orderable: false, className: "text-center"},
@@ -41,53 +178,28 @@
 					{data: 'quantity_measurement', name: 'quantity_measurement', orderable: true, searchable: true},
 					{data: "order_total_amount", render: $.fn.dataTable.render.number( ',', '.', 2, '' ) },
 					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
-			],
-			order: [[ 1, "desc" ]],
-			columnDefs: [
-					{ className: 'text-center', targets: [0, 1] },
-					{ type: 'numeric-comma', targets: [8,9] }
-			]
-		});
-				
-		autoAdjustColumns(BillingListTable);
-
-				 /*Adjust Table Column*/
-				 function autoAdjustColumns(table) {
-					 var container = table.table().container();
-					 var resizeObserver = new ResizeObserver(function () {
-						 table.columns.adjust();
-					 });
-					 resizeObserver.observe(container);
-				 }	
-				 
-		$('a.toggle-vis').on('click', function (e) {
-        e.preventDefault();
- 
-        // Get the column API object
-        var column = table.column($(this).attr('data-column'));
- 
-        // Toggle the visibility
-        column.visible(!column.visible());
-		
-		});				
-				
-	});
-
+				]
+			} 
+			);
+			
+			autoAdjustColumns(BillingListTable_unbilled);
+			
 	$('body').on('click','#generate_billed',function(){
 		
 			event.preventDefault();
-			//let gatewayID = $(this).data('id');
-			let client_idx_billed 			= $('#client_name_billed option[value="' + $('#client_id_billed').val() + '"]').attr('data-id');
-			let start_date_billed 			= $("input[name=start_date_billed]").val();
-			let end_date_billed 			= $("input[name=end_date_billed]").val();
+			
+			let client_idx = $("#client_name_billed option[value=\"" + $('#client_id_billed').val() + "\"]").attr('data-id');
+			
+			let start_date 			= $("input[name=start_date_billed]").val();
+			let end_date 			= $("input[name=end_date_billed]").val();
 			
 			  $.ajax({
 				url: "{{ route('getBillingTransactionList_Billed') }}",
 				type:"GET",
 				data:{
-				  client_idx_billed:client_idx_billed,
-				  start_date_billed:start_date_billed,
-				  end_date_billed:end_date_billed,
+				  client_idx_billed:client_idx,
+				  start_date_billed:start_date,
+				  end_date_billed:end_date,
 				  _token: "{{ csrf_token() }}"
 				}
 			 }).done(function (result) {
@@ -95,7 +207,19 @@
 					BillingListTable_billed.clear().draw();
 					BillingListTable_billed.rows.add(result.data).draw();
 					
-					$('#BilledModal').modal('toggle');		
+					$('#BilledModal').modal('toggle');	
+					
+					gererate_type = 'unbilled',
+					get_client_details(client_idx,gererate_type);
+							
+					var start_date_new  = new Date(start_date);
+					start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+							
+					var end_date_new  = new Date(end_date);
+					end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
+
+					$('#period_billed_info').text(start_date_new_format + ' - ' +end_date_new_format);
+					
             })	
 	  });
 
@@ -136,7 +260,7 @@
 					{data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center"},
 				]
 			} 
-			);
+			);			
 			
 			autoAdjustColumns(BillingListTable_billed);
 

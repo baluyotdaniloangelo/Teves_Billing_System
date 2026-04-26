@@ -171,8 +171,11 @@ class EmailController extends Controller
 	{
 		// ✅ STEP 1: due reminders
 		$reminders = ReminderModel::where('email_sent', false)
-			->where('reminder_date', '<=', now())
-			->whereNull('deleted_at') // if using soft deletes
+			->where(function($q){
+				$q->where('reminder_date', '<=', now())
+				  ->orWhere('next_run_at', '<=', now());
+			})
+			->whereNull('deleted_at')
 			->get();
 
 		if ($reminders->isEmpty()) {
@@ -215,6 +218,70 @@ class EmailController extends Controller
 			// mark as sent AFTER all users received
 			$reminder->email_sent = true;
 			$reminder->save();
+		}
+		
+		/*NEW*/
+		foreach ($reminders as $reminder) {
+
+			// send email (your existing logic)
+			foreach ($emails as $email) {
+
+				try {
+					Mail::to($email)
+						->send(new ReminderMail($reminder));
+
+				} catch (\Exception $e) {
+					\Log::error('Mail error: '.$e->getMessage());
+				}
+			}
+			
+			// mark sent
+			$reminder->email_sent = true;
+			$reminder->save();
+
+			// ✅ HANDLE RECURRING
+			if ($reminder->is_recurring) {
+
+				$nextDate = null;
+
+				switch ($reminder->recurrence_type) {
+					case 'daily':
+						$nextDate = now()->addDay();
+						break;
+
+					case 'weekly':
+						$nextDate = now()->addWeek();
+						break;
+
+					case 'monthly':
+						$nextDate = now()->addMonth();
+						break;
+				}
+
+				// stop if beyond end date
+				if ($reminder->recurrence_end_date && $nextDate > $reminder->recurrence_end_date) {
+					continue;
+				}
+
+				// OPTION A: update same record
+				$reminder->email_sent = true;
+				$reminder->reminder_date = $nextDate;
+				$reminder->next_run_at = $nextDate;
+				$reminder->save();
+
+				// OPTION B (better): create new record
+				/**/
+				ReminderModel::create([
+					'reminders_title' => $reminder->reminders_title,
+					'reminders_content' => $reminder->reminders_content,
+					'reminder_date' => $nextDate,
+					'next_run_at' => $nextDate,
+					'is_recurring' => true,
+					'recurrence_type' => $reminder->recurrence_type,
+					'parent_reminder_id' => $reminder->reminder_id
+				]);
+				
+			}
 		}
 	}
 	

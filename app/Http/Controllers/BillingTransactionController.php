@@ -64,8 +64,50 @@ class BillingTransactionController extends Controller
 		}
 	}   
  	
-	/*Fetch Site List using Datatable*/
-	/*This will only Fetch the Unbilled Transaction*/
+	/*Unbilled Client*/
+	
+	public function getUnbilledClients(Request $request)
+	{
+		if ($request->ajax()) {
+
+			$data = DB::table('teves_client_table as c')
+				->join('teves_billing_table as b', function ($join) {
+					$join->on('b.client_idx', '=', 'c.client_id')
+						->where(function ($q) {
+							$q->where('b.receivable_idx', 0)
+							  ->orWhereNull('b.receivable_idx');
+						})
+						->whereNull('b.deleted_at');
+				})
+				->whereNull('c.deleted_at')
+				->groupBy('c.client_id', 'c.client_name')
+				->select([
+					'c.client_id',
+					'c.client_name',
+					DB::raw('COUNT(b.billing_id) as unbilled_count'),
+					DB::raw('SUM(b.order_total_amount) as total_unbilled_amount'),
+					DB::raw("MIN(STR_TO_DATE(b.order_date, '%Y-%m-%d')) as first_transaction_date"),
+					DB::raw("MAX(STR_TO_DATE(b.order_date, '%Y-%m-%d')) as last_transaction_date"),
+				])
+				->orderByDesc('total_unbilled_amount')
+				->get();
+
+			return DataTables::of($data)
+				->addIndexColumn()
+
+				->addColumn('date_range', function ($row) {
+					return $row->first_transaction_date . " to " . $row->last_transaction_date;
+				})
+
+				->editColumn('total_unbilled_amount', function ($row) {
+					return number_format($row->total_unbilled_amount, 2);
+				})
+
+				->rawColumns(['date_range'])
+				->make(true);
+		}
+	}	
+	
 	public function getBillingTransactionList(Request $request)
     {
 
@@ -186,6 +228,114 @@ class BillingTransactionController extends Controller
 				
 				 ->addColumn('quantity_measurement', function($row){									
 					return  $row->order_quantity." ".$row->product_unit_measurement;
+                })
+				
+				->rawColumns(['action','quantity_measurement'])
+                ->make(true);		
+		}
+		}
+    }
+
+	/*Manualy Fetch the Unbilled transaction by Date Range,Client or Product*/
+	public function getBillingTransactionList_Unbilled(Request $request)
+    {
+
+		if(Session::has('loginID')){
+			
+			$current_user = Session::get('loginID');
+	
+		if ($request->ajax()) {
+		
+		$client_idx = $request->client_idx;
+		$start_date_billed = $request->start_date;
+		$end_date_billed = $request->end_date;
+		
+    	$data = BillingTransactionModel::join('teves_product_table', 'teves_product_table.product_id', '=', 'teves_billing_table.product_idx')
+              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_table.client_idx')
+					->leftJoin('teves_receivable_table', 'teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
+              		->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_table.branch_idx')
+					->where(function ($q) use($client_idx) {
+						if ($client_idx) {
+						   $q->where('teves_billing_table.client_idx', $client_idx);
+						}
+						})
+					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
+					->WHERE(function ($r) use($current_user) {
+							if (Session::get('user_branch_access_type')=="BYBRANCH") {
+									$r->whereRaw("teves_billing_table.branch_idx IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
+							}
+						})
+              		->get([
+					'teves_billing_table.billing_id',
+					'teves_billing_table.receivable_idx',
+					'teves_receivable_table.control_number',
+					'teves_billing_table.drivers_name',
+					'teves_billing_table.plate_no',
+					'teves_product_table.product_name',
+					'teves_branch_table.branch_code',
+					'teves_product_table.product_unit_measurement',
+					'teves_billing_table.product_price',
+					'teves_billing_table.order_quantity',					
+					'teves_billing_table.order_total_amount',
+					'teves_billing_table.order_po_number',
+					'teves_client_table.client_name',
+					'teves_billing_table.order_date',
+					'teves_billing_table.order_time',
+					'teves_billing_table.created_at',
+					'teves_billing_table.created_by_user_idx']);
+					
+		return DataTables::of($data)
+				
+				->addIndexColumn()				
+                ->addColumn('action', function($row){
+						
+					if($row->receivable_idx==0){
+						
+						if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
+							$actionBtn = '
+							<div align="center" class="action_table_menu_site">
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+							<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+							</div>';
+						}
+						else{
+						
+						$startTimeStamp = strtotime($row->created_at);
+						$endTimeStamp = strtotime(date('y-m-d'));
+						$timeDiff = abs($endTimeStamp - $startTimeStamp);
+						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+						// and you might want to convert to integer
+						$numberDays = intval($numberDays);
+							
+							if($numberDays>=3){
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+								</div>';
+							}else{
+								$actionBtn = '
+								<div align="center" class="action_table_menu_site">
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editBill"></a>
+								<a href="#" data-id="'.$row->billing_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteBill"></a>
+								</div>';
+							}
+
+						}
+
+					}else{
+						
+						$actionBtn = '
+						<div align="center" class="action_table_menu_site">
+						<a href="#" data-id="'.$row->billing_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_edit" id="viewBill"></a>
+						</div>';
+					
+					}
+                    return $actionBtn;
+                })
+				
+				 ->addColumn('quantity_measurement', function($row){									
+					return  $row->order_quantity." ".$row->product_unit_measurement;
+                    //return $actionBtn;
                 })
 				
 				->rawColumns(['action','quantity_measurement'])
