@@ -33,7 +33,7 @@ class CashiersReport_CashDeposit_Controller extends Controller
 			'cash_deposit_reference' => [
 				'required',
 				'string',
-				Rule::unique('cashiers_report_p9', 'cash_deposit_reference')
+				Rule::unique('teves_cashiers_report_p9', 'cash_deposit_reference')
 					->ignore($CRPH9_ID, 'cashiers_report_p9_id')
 			],
 		];
