@@ -15,8 +15,8 @@ return new class extends Migration
 			$table->boolean('is_done')->default(false);
 			$table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
-			$table->unsignedBigInteger('created_by_user_idx')->nullable()->after('reminder_date');
-            $table->unsignedBigInteger('updated_by_user_idx')->nullable()->after('created_by_user_idx');
+			$table->unsignedBigInteger('created_by_user_idx')->nullable();
+            $table->unsignedBigInteger('updated_by_user_idx')->nullable();
 			$table->boolean('email_sent')->default(false);
 			$table->boolean('is_recurring')->default(false);
 
