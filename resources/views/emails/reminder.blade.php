@@ -10,9 +10,10 @@
 
     <p><strong>Title:</strong> {{ $reminder->reminders_title }}</p>
 
-    <p><strong>Content:</strong><br>
-        {{ $reminder->reminders_content }}
-    </p>
+    <p>
+    <strong>Content:</strong><br>
+    {!! nl2br(e($reminder->reminders_content)) !!}
+	</p>
 
     <p><strong>Date:</strong>
         {{ \Carbon\Carbon::parse($reminder->reminder_date)->format('M d, Y h:i A') }}

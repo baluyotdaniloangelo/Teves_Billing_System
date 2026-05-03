@@ -64,7 +64,7 @@ class SOBillingTransactionController extends Controller
 	}   
 
 	/*Fetch SO List using Datatable*/
-	public function getSOBillingTransactionList(Request $request)
+	public function getSOBillingTransactionList_old(Request $request)
     {
 
 	if(Session::has('loginID')){
@@ -151,6 +151,87 @@ class SOBillingTransactionController extends Controller
 		}
 	}
     }
+
+public function getSOBillingTransactionList(Request $request)
+{
+    if (!Session::has('loginID')) {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    $current_user = Session::get('loginID');
+
+    if ($request->ajax()) {
+
+        $query = SOBillingTransactionModel::leftJoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+            ->leftJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_so_table.branch_idx')
+            ->when(Session::get('user_branch_access_type') == "BYBRANCH", function ($q) use ($current_user) {
+                $q->whereIn('teves_billing_so_table.branch_idx', function ($sub) use ($current_user) {
+                    $sub->select('branch_idx')
+                        ->from('teves_user_branch_access')
+                        ->where('user_idx', $current_user);
+                });
+            })
+            ->select([
+                'teves_branch_table.branch_code',
+                'teves_billing_so_table.so_id',
+                'teves_billing_so_table.so_number',
+                'teves_billing_so_table.drivers_name',
+                'teves_billing_so_table.plate_no',
+                'teves_client_table.client_name',
+                'teves_billing_so_table.order_date',
+                'teves_billing_so_table.order_time',
+                'teves_billing_so_table.created_at',
+                'teves_billing_so_table.created_by_user_id'
+            ]);
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+
+                $startTimeStamp = strtotime($row->created_at);
+                $endTimeStamp   = strtotime(date('Y-m-d'));
+                $numberDays     = intval(abs($endTimeStamp - $startTimeStamp) / 86400);
+
+                if (Session::get('UserType') == "SUAdmin") {
+
+                    return '
+                    <div align="center" class="action_table_menu_site">
+                        <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit"></a>
+                        <a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete"></a>
+                    </div>';
+
+                } elseif (Session::get('UserType') == "Admin") {
+
+                    if ($numberDays >= 3) {
+                        return '
+                        <div align="center" class="action_table_menu_site">
+                            <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit"></a>
+                        </div>';
+                    } else {
+                        return '
+                        <div align="center" class="action_table_menu_site">
+                            <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit"></a>
+                            <a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete"></a>
+                        </div>';
+                    }
+
+                } else {
+
+                    if ($numberDays >= 3 || Session::get('loginID') != $row->created_by_user_id) {
+                        return '';
+                    } else {
+                        return '
+                        <div align="center" class="action_table_menu_site">
+                            <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit"></a>
+                            <a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete"></a>
+                        </div>';
+                    }
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+}
 
 	public function so_info(Request $request){
 
