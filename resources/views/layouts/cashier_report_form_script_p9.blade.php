@@ -162,49 +162,6 @@ $(document).on("click", ".CRP9_Preview", function(e){
 });
 
 /* ================= UPDATE ================= */
-$("#update-CRPH9s").click(function(event){
-
-    event.preventDefault();
-
-    let CRPH9_ID = $("#update-CRPH9").val();
-
-    let cash_deposit_bank   = $("#update_cash_deposit_bank").val();
-    let cash_deposit_date = $("#update_cash_deposit_date").val();
-
-	let cash_deposit_amount = $("input[name=update_cash_deposit_amount]").val();
-	let cash_deposit_reference = $("input[name=update_cash_deposit_reference]").val();
-	let cash_deposit_remarks = $("input[name=update_cash_deposit_remarks]").val();
-
-	
-    document.getElementById('update_CRPH9_form').className =
-        "g-3 needs-validation was-validated";
-
-    $.ajax({
-        url: "{{ route('SAVE_CHR_PH9') }}",
-        type: "POST",
-        data: {
-            CRPH9_ID: CRPH9_ID,
-            cash_deposit_bank: cash_deposit_bank,
-            cash_deposit_date: cash_deposit_date,
-			cash_deposit_amount: cash_deposit_amount,
-			cash_deposit_reference: cash_deposit_reference,
-			cash_deposit_remarks: cash_deposit_remarks,
-            _token: "{{ csrf_token() }}"
-        },
-        success: function(response){
-
-            $('#switch_notice_on').show();
-            $('#sw_on').html(response.success);
-            setTimeout(() => $('#switch_notice_on').fadeOut('fast'), 1000);
-
-            LoadCashiersReportPH9();
-            $('#Update_CRPH9_Modal').modal('toggle');
-			
-        }
-    });
-});
-
-
 $("#update-CRPH9").click(function(event){
 
     event.preventDefault();
@@ -308,39 +265,7 @@ $('body').on('click', '#CRP9_Delete', function(event){
     });
 });
 
-$("#save-CRPH9").click(function(event){
 
-    event.preventDefault();
-
-    let form = document.getElementById('CRPH9_form');
-    let formData = new FormData(form);
-
-    formData.append('CRPH9_ID', 0);
-    formData.append('CashiersReportId', {{ $CashiersReportId }});
-
-    $.ajax({
-        url: "{{ route('SAVE_CHR_PH9') }}",
-        type: "POST",
-        data: formData,
-        processData: false, // REQUIRED
-        contentType: false, // REQUIRED
-
-        success: function(response) {
-
-            $('#switch_notice_on').show();
-            $('#sw_on').html(response.success);
-            setTimeout(() => $('#switch_notice_on').fadeOut('fast'), 1000);
-
-            $("#CRPH9_form")[0].reset();
-
-            LoadCashiersReportPH9();
-        },
-
-        error: function(xhr) {
-            console.log(xhr);
-        }
-    });
-});
 $('body').on('click', '#deleteCRPH9Confirmed', function(){
 
     let CRPH9_ID = $(this).val();

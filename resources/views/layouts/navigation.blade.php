@@ -333,7 +333,7 @@
 
         <!-- CONTENT -->
         <div class="p-3 rounded-3 bg-light border">
-          <p id="view_content" class="mb-0 fs-6"></p>
+          <p id="view_content" style="white-space: pre-line;"></p>
         </div>
 
       </div>
