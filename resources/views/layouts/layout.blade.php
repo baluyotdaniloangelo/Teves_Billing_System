@@ -221,6 +221,7 @@ else if (Request::is('cashiers_report_form/*')){
 @include('layouts.cashier_report_form_script_p1')
 @include('layouts.cashier_report_form_script_p7')
 @include('layouts.cashier_report_form_script_p8_v01212026')
+@include('layouts.cashier_report_form_script_p9')
 <?php
 }
 else if (Request::is('monthly_sales')){
@@ -555,7 +556,7 @@ data.forEach(reminder => {
 }
 
 // ⏱️ run every 10 seconds
-setInterval(loadReminders, 59000);
+setInterval(loadReminders, 590000);
 
 // 🧠 helper function (time ago)
 function timeAgo(dateString){

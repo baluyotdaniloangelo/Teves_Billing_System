@@ -33,9 +33,9 @@
             <li class="notification-item">
               <i class="bi bi-exclamation-circle text-warning"></i>
               <div>
-                <h4>loading</h4>
-                <p>loading</p>
-                <p>loading</p>
+                <h4></h4>
+                <p></p>
+                <p></p>
               </div>
             </li>
 
@@ -213,7 +213,7 @@
 		
 			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
-              <i class="bi bi-cart navbar_icon" title="Manage Product list"></i><span>Product</span>
+              <i class="bi bi-box-seam navbar_icon" title="Manage Product list"></i><span>Product</span>
             </a>
 			<?php } ?>
 			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
@@ -222,19 +222,19 @@
             </a>
 			
 			<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
-              <i class="bi bi-file-person navbar_icon" title="Manage Client list"></i><span>Client</span>
+              <i class="bi bi-person-badge navbar_icon" title="Manage Client list"></i><span>Client</span>
             </a>
 			
 			<a href="{{ route('supplier') }}" class="sidebar_li_a" title="Manage Supplier list">
-              <i class="bi bi-file-person navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
+              <i class="bi bi-truck navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
             </a>
 			
 			<a href="{{ route('reminder') }}" class="sidebar_li_a" title="Reminders">
-              <i class="bi bi-file-person navbar_icon" title="Reminders list"></i><span>Reminders</span>
+              <i class="bi bi-bell navbar_icon" title="Reminders list"></i><span>Reminders</span>
             </a>
 			
 			<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
-              <i class="bi bi-people navbar_icon" title="Manage System User"></i><span>User's Account</span>
+              <i class="bi bi-people-fill navbar_icon" title="Manage System User"></i><span>User's Account</span>
             </a>
 			
 			<?php } ?>
@@ -344,11 +344,11 @@
         <button class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
           Close
         </button>
-
+		<!--
         <button id="markAsDoneBtn" class="btn btn-success btn-sm">
           ✔ Mark as Done
         </button>
-
+		-->
       </div>
 
     </div>

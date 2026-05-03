@@ -68,7 +68,7 @@
 	});
 	
 
-	function get_client_details(client_idx,gererate_type){
+	function get_client_details(client_idx,generate_type){
 		  
 			//let client_idx = $("#client_name option[value=\"" + $('#client_id').val() + "\"]").attr('data-id');
 			
@@ -84,7 +84,7 @@
 				  if(response) {		
 					
 					/*Set Details*/
-				  if(gererate_type=='unbilled'){
+				  if(generate_type=='unbilled'){
 					  
 						$('#client_name_unbilled_info').text(response.client_name);
 						
@@ -127,8 +127,14 @@
 					
 					$('#UnbilledModal').modal('toggle');	
 					
-					gererate_type = 'unbilled',
-					get_client_details(client_idx,gererate_type);
+					if (client_idx) {
+						const generate_type = 'unbilled';
+						get_client_details(client_idx, generate_type);
+					} else {
+						
+						$('#client_name_unbilled_info_div').hide();
+					}
+						
 							
 					var start_date_new  = new Date(start_date);
 					start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
@@ -209,9 +215,14 @@
 					
 					$('#BilledModal').modal('toggle');	
 					
-					gererate_type = 'unbilled',
-					get_client_details(client_idx,gererate_type);
-							
+					if (client_idx) {
+						const generate_type = 'billed';
+						get_client_details(client_idx, generate_type);
+					} else {
+						
+						$('#client_name_billed_info_div').hide();
+					}
+					
 					var start_date_new  = new Date(start_date);
 					start_date_new_format = (start_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 							

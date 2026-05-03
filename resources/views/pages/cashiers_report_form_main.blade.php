@@ -158,6 +158,11 @@
 							<li class="nav-item" role="presentation">
 							  <button class="nav-link" id="ph8v2-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph8v2" type="button" role="tab" aria-controls="ph8v2" aria-selected="false" tabindex="-1">Payment</button>
 							</li>
+							
+							<li class="nav-item" role="presentation">
+							  <button class="nav-link" id="ph9-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph9" type="button" role="tab" aria-controls="ph9" aria-selected="false" tabindex="-1">Cash Deposit</button>
+							</li>
+							
 						  </ul>
 						  <div class="tab-content pt-2" id="borderedTabContent">
 							<div class="tab-pane fade show active" id="bordered-ph1" role="tabpanel" aria-labelledby="ph1-tab">
@@ -179,6 +184,10 @@
 							
 							<div class="tab-pane fade" id="bordered-ph8v2" role="tabpanel" aria-labelledby="ph8v2-tab">						
 							@include('pages.cashiers_report_form_p8_payment_v01212026')
+							</div>
+							<!--Cash Deposit-->
+							<div class="tab-pane fade" id="bordered-ph9" role="tabpanel" aria-labelledby="ph9-tab">						
+							@include('pages.cashiers_report_form_p9_cash_deposit')
 							</div>
 							
 						  </div><!-- End Bordered Tabs -->

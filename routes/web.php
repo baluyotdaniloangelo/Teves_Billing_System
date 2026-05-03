@@ -19,6 +19,7 @@ use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
 use App\Http\Controllers\CashiersReport_Payment_Controller;
+use App\Http\Controllers\CashiersReport_CashDeposit_Controller;
 use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
@@ -528,12 +529,16 @@ Route::get('/generate_cashier_report_pdf', [CashiersReportController::class,'gen
 
 /*Cashiers Report Part - Cash Payment*/
 Route::post('/save_cash_payment_cashiers_report_p8', [CashiersReport_Payment_Controller::class,'save_cash_payment_cashiers_report_p8'])->name('SAVE_CHR_PH8')->middleware('isLoggedIn');
-/* Load P6 */
 Route::post('/get_cash_payment_inventory_list', [CashiersReport_Payment_Controller::class,'get_cash_payment_inventory_list'])->name('GetCashiersP8')->middleware('isLoggedIn');
-/*Delete*/
 Route::post('/delete_cash_payment_report', [CashiersReport_Payment_Controller::class,'delete_cash_payment_report'])->name('DeleteCashiersProductP8')->middleware('isLoggedIn');
-
 Route::post('/cashiers_report_p8_info', [CashiersReport_Payment_Controller::class, 'cashiers_report_p8_info'])->name('CRP8_info')->middleware('isLoggedIn');
+
+/*Cashiers Report Part - Cash Deposit*/
+Route::post('/save_cash_deposit_cashiers_report_p9', [CashiersReport_CashDeposit_Controller::class,'save_cash_deposit_cashiers_report_p9'])->name('SAVE_CHR_PH9')->middleware('isLoggedIn');
+Route::post('/get_cash_deposit_list', [CashiersReport_CashDeposit_Controller::class,'get_cash_deposit_list'])->name('GetCashiersP9')->middleware('isLoggedIn');
+Route::post('/delete_cash_deposit_report', [CashiersReport_CashDeposit_Controller::class,'delete_cash_deposit_report'])->name('DeleteCashDeposit')->middleware('isLoggedIn');
+Route::post('/cashiers_report_p9_info', [CashiersReport_CashDeposit_Controller::class, 'cashiers_report_p9_info'])->name('CRP9_info')->middleware('isLoggedIn');
+
 
 /*Dev Date Nov 30 2022*/
 /*Load Branch List*/

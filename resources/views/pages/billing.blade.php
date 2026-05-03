@@ -64,7 +64,7 @@
 					<div class="row mb-2">
 						
 						<div class="col-sm-12">
-							<div class="ms-2">
+							<div class="ms-2" id="client_name_unbilled_info_div">
 								<div class="fw-bold">ACCOUNT NAME: <span id="client_name_unbilled_info" style="font-weight: normal;"></span></div>
 							</div>
 						
@@ -113,7 +113,7 @@
 					<div class="row mb-2">
 						
 						<div class="col-sm-12">
-							<div class="ms-2">
+							<div class="ms-2" id="client_name_billed_info_div">
 								<div class="fw-bold">ACCOUNT NAME: <span id="client_name_billed_info" style="font-weight: normal;"></span></div>
 							</div>
 						
