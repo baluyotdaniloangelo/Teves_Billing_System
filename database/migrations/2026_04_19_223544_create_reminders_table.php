@@ -15,6 +15,22 @@ return new class extends Migration
 			$table->boolean('is_done')->default(false);
 			$table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
+			$table->unsignedBigInteger('created_by_user_idx')->nullable()->after('reminder_date');
+            $table->unsignedBigInteger('updated_by_user_idx')->nullable()->after('created_by_user_idx');
+			$table->boolean('email_sent')->default(false)->after('reminder_date');
+			$table->boolean('is_recurring')->default(false)->after('reminder_date');
+
+			// how often
+			$table->enum('recurrence_type', ['daily','weekly','monthly'])->nullable();
+
+			// when it ends (optional)
+			$table->dateTime('recurrence_end_date')->nullable();
+
+			// track next run
+			$table->dateTime('next_run_at')->nullable();
+
+			// optional: parent id for generated instances
+			$table->unsignedBigInteger('parent_reminder_id')->nullable();
 			$table->softDeletes();
         });
     }
