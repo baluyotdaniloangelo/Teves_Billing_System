@@ -28,7 +28,16 @@ $(function () {
         columns: [
             {data: 'DT_RowIndex', orderable: false, searchable: false},
             {data: 'reminders_title'},
-            {data: 'reminders_content'},
+            {
+				data: 'reminders_content',
+				render: function(data){
+
+					if(!data) return '';
+
+					// convert new lines to <br>
+					return data.replace(/\n/g, '<br>');
+				}
+			}
             {data: 'reminder_date'},
             {data: 'action', orderable: false, searchable: false, className: "text-center"}
         ]
