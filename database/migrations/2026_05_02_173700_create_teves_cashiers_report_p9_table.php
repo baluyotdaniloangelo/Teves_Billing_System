@@ -17,9 +17,10 @@ return new class extends Migration
 
             // Form fields
             $table->string('cash_deposit_bank')->nullable();
-            $table->date('cash_deposit_date')->nullable();
+            $table->dateTime('cash_deposit_date')->nullable();
             $table->decimal('cash_deposit_amount', 15, 2);
             $table->string('cash_deposit_reference')->nullable();
+			$table->string('cash_deposit_photo')->nullable();
             $table->text('cash_deposit_remarks')->nullable();
 
             // Audit fields
