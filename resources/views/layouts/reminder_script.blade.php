@@ -30,12 +30,17 @@ $(function () {
             {data: 'reminders_title'},
             {
 				data: 'reminders_content',
-				render: function(data){
+				render: function(data, type, row){
 
 					if(!data) return '';
 
-					// convert new lines to <br>
-					return data.replace(/\n/g, '<br>');
+					let maxLength = 80; // 🔧 adjust limit
+
+					if(data.length > maxLength){
+						return data.substring(0, maxLength) + '...';
+					}
+
+					return data;
 				}
 			},
             {data: 'reminder_date'},
