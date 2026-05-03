@@ -37,7 +37,7 @@ $(function () {
 					// convert new lines to <br>
 					return data.replace(/\n/g, '<br>');
 				}
-			}
+			},
             {data: 'reminder_date'},
             {data: 'action', orderable: false, searchable: false, className: "text-center"}
         ]
