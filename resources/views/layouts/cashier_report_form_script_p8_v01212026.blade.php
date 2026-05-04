@@ -1,21 +1,52 @@
 <script type="text/javascript">
 
 /* ================= SAVE PAYMENT ================= */
-$("#save-CRPH8").click(function(event){
-
+$("#save-CRPH8").click(function(event) {
     event.preventDefault();
 
     let CashiersReportId = {{ $CashiersReportId }};
 
-    let payment_type   = $("#payment_type").val();
-    let payment_amount = $("#payment_amount").val();
+    let payment_type      = $("#payment_type").val().trim();
+    let payment_amount    = $("#payment_amount").val().trim();
+    let payer_name        = $("#payer_name").val().trim();
+    let payer_number      = $("#payer_number").val().trim();
+    let reference_number  = $("#reference_number").val().trim();
 
-	let payer_name = $("input[name=payer_name]").val();
-	let payer_number = $("input[name=payer_number]").val();
-	let reference_number = $("input[name=reference_number]").val();
+    let hasError = false;
 
-    document.getElementById('CRPH8_form').className =
-        "g-3 needs-validation was-validated";
+    // Reset validation UI
+    $(".is-invalid").removeClass("is-invalid");
+
+    // Client-side validation (same as controller)
+    if (!payment_type) {
+        $("#payment_type").addClass("is-invalid");
+        hasError = true;
+    }
+
+    if (!payment_amount || isNaN(payment_amount) || parseFloat(payment_amount) < 0) {
+        $("#payment_amount").addClass("is-invalid");
+        hasError = true;
+    }
+
+    if (!payer_name) {
+        $("#payer_name").addClass("is-invalid");
+        hasError = true;
+    }
+
+    if (!payer_number) {
+        $("#payer_number").addClass("is-invalid");
+        hasError = true;
+    }
+
+    if (!reference_number) {
+        $("#reference_number").addClass("is-invalid");
+        hasError = true;
+    }
+
+    if (hasError) return;
+
+    // Apply bootstrap validation class
+    $("#CRPH8_form").addClass("was-validated");
 
     $.ajax({
         url: "{{ route('SAVE_CHR_PH8') }}",
@@ -25,9 +56,9 @@ $("#save-CRPH8").click(function(event){
             CashiersReportId: CashiersReportId,
             payment_type: payment_type,
             payment_amount: payment_amount,
-			payer_name: payer_name,
-			payer_number: payer_number,
-			reference_number: reference_number,
+            payer_name: payer_name,
+            payer_number: payer_number,
+            reference_number: reference_number,
             _token: "{{ csrf_token() }}"
         },
         success: function(response) {
@@ -36,19 +67,24 @@ $("#save-CRPH8").click(function(event){
             $('#sw_on').html(response.success);
             setTimeout(() => $('#switch_notice_on').fadeOut('fast'), 1000);
 
-            $("#payment_type").val('');
-            $("#payment_amount").val('');
-			
-			$("#payer_name").val('');
-			$("#payer_number").val('');
-			$("#reference_number").val('');
+            // Clear fields
+            $("#CRPH8_form")[0].reset();
 
             LoadCashiersReportPH8();
-            document.getElementById('CRPH8_form').className =
-                "g-3 needs-validation";
+
+            $("#CRPH8_form").removeClass("was-validated");
         },
-        error: function(error) {
-            console.log(error);
+        error: function(xhr) {
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+
+                // Display Laravel validation errors
+                $.each(errors, function(key, value) {
+                    $("#" + key).addClass("is-invalid");
+                });
+            } else {
+                console.log(xhr);
+            }
         }
     });
 });

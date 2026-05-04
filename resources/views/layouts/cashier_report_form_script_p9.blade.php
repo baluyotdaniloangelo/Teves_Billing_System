@@ -55,24 +55,32 @@ $("#save-CRPH9").click(function(event){
 
         error: function(xhr) {
 
-            if (xhr.status === 422) {
+    // Clear old errors first
+    $(".is-invalid").removeClass("is-invalid");
+    $(".invalid-feedback").remove();
 
-                let errors = xhr.responseJSON.errors;
+    if (xhr.status === 422) {
 
-                $.each(errors, function(field, messages) {
+        let errors = xhr.responseJSON.errors;
 
-                    let input = $("[name="+field+"]");
+        $.each(errors, function(field, messages) {
 
-                    input.addClass("is-invalid");
+            let input = $("[name='" + field + "']");
 
-                    input.after(
-                        '<div class="invalid-feedback">' + messages[0] + '</div>'
-                    );
-                });
-            } else {
-                console.log(xhr);
+            input.addClass("is-invalid");
+
+            // Avoid duplicate messages
+            if (input.next(".invalid-feedback").length === 0) {
+                input.after(
+                    '<div class="invalid-feedback">' + messages[0] + '</div>'
+                );
             }
-        }
+        });
+
+    } else {
+        console.log(xhr);
+    }
+}
     });
 });
 

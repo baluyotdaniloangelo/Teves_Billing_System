@@ -82,21 +82,21 @@
 					<div class="row mb-2">
 						<label class="col-sm-4 col-form-label">Name</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="payer_name">
+							<input type="text" class="form-control" name="payer_name" id="payer_name" required>
 						</div>
 					</div>
 
 					<div class="row mb-2">
 						<label class="col-sm-4 col-form-label">Number</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="payer_number">
+							<input type="text" class="form-control" name="payer_number" id="payer_number" required>
 						</div>
 					</div>
 
 					<div class="row mb-2">
 						<label class="col-sm-4 col-form-label">Reference No.</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="reference_number">
+							<input type="text" class="form-control" name="reference_number" id="reference_number" required>
 						</div>
 					</div>
 

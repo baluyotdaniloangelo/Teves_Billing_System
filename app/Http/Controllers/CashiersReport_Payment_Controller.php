@@ -23,13 +23,16 @@ class CashiersReport_Payment_Controller extends Controller
             [
                 'payment_type'   => 'required|string',
                 'payment_amount' => 'required|numeric|min:0',
-				'payer_name'     => 'nullable|string',
-				'payer_number'   => 'nullable|string',
-				'reference_number' => 'nullable|string'
+				'payer_name'     => 'required|string',
+				'payer_number'   => 'required|string',
+				'reference_number' => 'required|string'
             ],
             [
                 'payment_type.required'   => 'Payment Type is required',
-                'payment_amount.required' => 'Payment Amount is required'
+                'payment_amount.required' => 'Payment Amountbbb is required',
+                'payer_name.required' => 'Name is required',
+                'payer_number.required' => 'Account Number is required',
+                'reference_number.required' => 'Reference Number is required'
             ]
         );
 
