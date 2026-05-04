@@ -19,14 +19,14 @@
 				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
                 <?php if($data->user_type=="SUAdmin"){ ?>
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="unbilled-client-tab" data-bs-toggle="tab" data-bs-target="#bordered-unbilled-client" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Client</button>
+                  <button class="nav-link active" id="unbilled-client-tab" data-bs-toggle="tab" data-bs-target="#bordered-unbilled-client" type="button" role="tab" aria-controls="home" aria-selected="true" title="Unbilled Summary per Client">Client</button>
                 </li>
 				<?php } ?>
 				<li class="nav-item" role="presentation"  data-bs-toggle="modal" data-bs-target="#UnbilledModal">
-                  <button class="nav-link <?php if($data->user_type!="SUAdmin"){ ?>  active <?php } ?>" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Unbilled</button>
+                  <button class="nav-link <?php if($data->user_type!="SUAdmin"){ ?>  active <?php } ?>" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="Unbilled Item">Unbilled</button>
                 </li>
                 <li class="nav-item" role="presentation"  data-bs-toggle="modal" data-bs-target="#BilledModal">
-                  <button class="nav-link" id="billed-tab" data-bs-toggle="tab" data-bs-target="#bordered-billed" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Oder">Billed</button>
+                  <button class="nav-link" id="billed-tab" data-bs-toggle="tab" data-bs-target="#bordered-billed" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="Billed Item">Billed</button>
                 </li>
               
 				</ul>					

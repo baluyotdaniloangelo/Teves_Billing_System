@@ -34,7 +34,7 @@ $(function () {
 
 					if(!data) return '';
 
-					let maxLength = 80; // 🔧 adjust limit
+					let maxLength = 20; // 🔧 adjust limit
 
 					if(data.length > maxLength){
 						return data.substring(0, maxLength) + '...';
