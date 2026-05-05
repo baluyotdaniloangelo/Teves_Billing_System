@@ -999,7 +999,6 @@ class ReceivablesController extends Controller
 				Rule::unique('teves_receivable_payment', 'receivable_reference')
 					->where(fn ($query) => $query
 						->where('receivable_idx', $request->receivable_idx_payment)
-						->where('client_idx', $request->client_idx)
 					)
 					->ignore($request->receivable_payment_id, 'receivable_payment_id')
 			],
@@ -1263,25 +1262,6 @@ class ReceivablesController extends Controller
 			'receivable_payment_amount.required' => 'Payment Amount is Required'
 		]);
 
-	/*	
-	$request->validate([
-		  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
-		  'receivable_mode_of_payment'      	=> 'required',
-		  'receivable_date_of_payment'      	=> 'required',
-		  'receivable_reference'      		=> ['required',Rule::unique('teves_receivable_payment')->where( 
-											  fn ($query) =>$query
-												  ->where('receivable_idx', $request->receivable_idx_payment)
-												  ->where('receivable_reference', $request->receivable_reference)
-												  ->where('receivable_payment_id', '<>',  $request->receivable_payment_id )
-											  )],
-		  'receivable_payment_amount'       	=> 'required',
-	 ],[
-		  'receivable_mode_of_payment.required' 	=> 'Bank Details is Required',
-		  'receivable_date_of_payment.required' 	=> 'Date of Payment is Required',
-		  'receivable_reference.required' 		=> 'Reference Number Required',
-		  'receivable_payment_amount.required' 	=> 'Payment Amount is Required'
-	 ]);
-	*/
 	
 		 if ($request->hasFile('payment_image_reference')) {
 			 
