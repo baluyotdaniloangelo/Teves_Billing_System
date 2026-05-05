@@ -119,9 +119,9 @@
 					document.getElementById("vat_value_percentage").value = response[0].receivable_vat_value_percentage;						
 							
 					
-					/*Information*/
+					/*Information
 					
-					document.getElementById("client_name_information").innerHTML 			= response[0].client_name;
+					//document.getElementById("client_name_information").innerHTML 			= response[0].client_name;
 					document.getElementById("branch_information").innerHTML 				= response[0].branch_code + "-" + response[0].branch_name;
 					document.getElementById("date_information").innerHTML 					= response[0].billing_date;
 					document.getElementById("time_information").innerHTML 					= response[0].billing_time;
@@ -133,7 +133,7 @@
 					document.getElementById("payment_term_information").innerHTML 			= response[0].payment_term;
 					document.getElementById("receivable_description").innerHTML 			= response[0].receivable_description;
 					document.getElementById("amount_information").innerHTML 			= response[0].receivable_amount;
-
+*/
 					
 					$('#UpdateReceivablesModal').modal('toggle');					
 				  
@@ -697,6 +697,9 @@
 	document.getElementById('AddPayment').className = "g-3 needs-validation was-validated";
 
 	var form = this;
+	
+	let formData = new FormData(form);
+    formData.append('client_idx', {{ $receivables_details['client_idx'] }});
 
 	$.ajax({
 		url:$(form).attr('action'),

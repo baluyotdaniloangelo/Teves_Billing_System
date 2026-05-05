@@ -62,7 +62,7 @@
 						<h6>
 						<div class="row mb-2">
 							<label class="col-sm-3 col-form-label">Client:</label>
-							<label class="col-sm-9 col-form-label" id='client_name_receivables'>{{ $receivables_details['control_number'] }}</label>
+							<label class="col-sm-9 col-form-label" id='client_name_receivables'>...</label>
 						</div>
 						</h6>
 						

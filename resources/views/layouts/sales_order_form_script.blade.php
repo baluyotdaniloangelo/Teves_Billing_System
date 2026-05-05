@@ -1035,10 +1035,14 @@
                 
 				var form = this;
 				
+				let formData = new FormData(form);
+				formData.append('client_idx', {{ $receivables_details['client_idx'] }});
+//alert($receivables_details['client_idx']);
 				$.ajax({
                     url:$(form).attr('action'),
                     method:$(form).attr('method'),
-                    data:new FormData(form),
+                    //data:new FormData(form),
+					data: formData, // ✅ use this
                     processData:false,
                     dataType:'json',
                     contentType:false,

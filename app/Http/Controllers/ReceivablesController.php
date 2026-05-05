@@ -955,7 +955,8 @@ class ReceivablesController extends Controller
 
 	/*Generated for receivable after saved*/
 	public function billing_to_receivable_product(Request $request){
-
+		
+		/*
 		$request->validate([
           'client_idx'      		=> 'required',
 		  'start_date'      		=> 'required',
@@ -967,11 +968,11 @@ class ReceivablesController extends Controller
 			'end_date.required' 	=> 'Please select a End Date'
         ]
 		);
-		
+		*/
 		$receivable_id = $request->receivable_id;
 		$client_idx = $request->client_idx;
-		$start_date = $request->start_date;
-		$end_date = $request->end_date;
+		//$start_date = $request->start_date;
+		//$end_date = $request->end_date;
 					
 		/*Using Raw Query*/
 		$raw_query = "select `teves_billing_table`.`billing_id`, `teves_billing_table`.`cashiers_report_idx`, `teves_billing_table`.`drivers_name`, `teves_billing_table`.`plate_no`, `teves_product_table`.`product_name`, `teves_product_table`.`product_unit_measurement`, `teves_billing_table`.`product_price`, `teves_billing_table`.`order_quantity`, `teves_billing_table`.`order_total_amount`, `teves_billing_table`.`order_po_number`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_date`, `teves_billing_table`.`order_time`, `teves_billing_table`.`created_at`, `teves_billing_table`.`updated_at` from `teves_billing_table` USE INDEX (billing_index) inner join `teves_product_table` on `teves_product_table`.`product_id` = `teves_billing_table`.`product_idx` where `teves_billing_table`.`receivable_idx` = ? and `teves_billing_table`.`deleted_at` IS NULL order by `teves_billing_table`.`order_date` asc";			
@@ -988,25 +989,28 @@ class ReceivablesController extends Controller
 	}	
 	
 	public function billing_receivable_payment_post(Request $request){
-        	 
+		
 		$request->validate([
-			  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
-			  'receivable_mode_of_payment'      	=> 'required',
-			  'receivable_date_of_payment'      	=> 'required',
-			  'receivable_reference'      		=> ['required',Rule::unique('teves_receivable_payment')->where( 
-												  fn ($query) =>$query
-													  ->where('receivable_idx', $request->receivable_idx_payment)
-													  ->where('receivable_reference', $request->receivable_reference)
-													  ->where('receivable_payment_id', '<>',  $request->receivable_payment_id )
-												  )],
-			  'receivable_payment_amount'       	=> 'required',
-		 ],[
-			  'receivable_mode_of_payment.required' 	=> 'Bank Details is Required',
-			  'receivable_date_of_payment.required' 	=> 'Date of Payment is Required',
-			  'receivable_reference.required' 		=> 'Reference Number Required',
-			  'receivable_payment_amount.required' 	=> 'Payment Amount is Required'
-		 ]);
-			 
+			'payment_image_reference' => 'image|mimes:jpg,png,jpeg,svg|max:10048',
+			'receivable_mode_of_payment' => 'required',
+			'receivable_date_of_payment' => 'required',
+			'receivable_reference' => [
+				'required',
+				Rule::unique('teves_receivable_payment', 'receivable_reference')
+					->where(fn ($query) => $query
+						->where('receivable_idx', $request->receivable_idx_payment)
+						->where('client_idx', $request->client_idx)
+					)
+					->ignore($request->receivable_payment_id, 'receivable_payment_id')
+			],
+			'receivable_payment_amount' => 'required',
+		], [
+			'receivable_mode_of_payment.required' => 'Bank Details is Required',
+			'receivable_date_of_payment.required' => 'Date of Payment is Required',
+			'receivable_reference.required' => 'Reference Number Required',
+			'receivable_payment_amount.required' => 'Payment Amount is Required'
+		]);
+		
 			 if ($request->hasFile('payment_image_reference')) {
 				 
 					 $path = 'files/';
@@ -1237,7 +1241,29 @@ class ReceivablesController extends Controller
   }
 
 	public function sales_order_receivable_payment(Request $request){
-        	 
+    
+
+	$request->validate([
+			'payment_image_reference' => 'image|mimes:jpg,png,jpeg,svg|max:10048',
+			'receivable_mode_of_payment' => 'required',
+			'receivable_date_of_payment' => 'required',
+			'receivable_reference' => [
+        'required',
+        Rule::unique('teves_receivable_payment', 'receivable_reference')
+            ->where(function ($query) use ($request) {
+                return $query->where('receivable_idx', $request->receivable_idx_payment);
+            })
+            ->ignore($request->receivable_payment_id, 'receivable_payment_id')
+    ],
+			'receivable_payment_amount' => 'required',
+		], [
+			'receivable_mode_of_payment.required' => 'Bank Details is Required',
+			'receivable_date_of_payment.required' => 'Date of Payment is Required',
+			'receivable_reference.required' => 'Reference Number Required',
+			'receivable_payment_amount.required' => 'Payment Amount is Required'
+		]);
+
+	/*	
 	$request->validate([
 		  'payment_image_reference'			=>'image|mimes:jpg,png,jpeg,svg|max:10048',
 		  'receivable_mode_of_payment'      	=> 'required',
@@ -1255,7 +1281,8 @@ class ReceivablesController extends Controller
 		  'receivable_reference.required' 		=> 'Reference Number Required',
 		  'receivable_payment_amount.required' 	=> 'Payment Amount is Required'
 	 ]);
-		 
+	*/
+	
 		 if ($request->hasFile('payment_image_reference')) {
 			 
 				 $path = 'files/';
