@@ -66,16 +66,6 @@
 						</div>
 						</div>
 						
-						<!--<div class="row mb-2">
-						<div class="col-sm-12">
-						
-							<div id="chartarea">
-								<canvas id="KWhChart" style="max-height: 400px; display: block; box-sizing: border-box; height: 360px; width: 660px;"></canvas>
-							</div>
-							
-						</div>
-						-->
-						
 						</div>
 						
 									<div class="table-responsive">
@@ -434,309 +424,288 @@
                 </div>
              </div>
 
-<div class="modal fade" id="CreateReportModal_V" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+	<div class="modal fade" id="CreateReportModal_V" tabindex="-1">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+			<!-- HEADER -->
+			<div class="modal-header bg-success text-white border-0 py-3 px-4">
 
-<!-- HEADER -->
-<div class="modal-header bg-success text-white border-0 py-3 px-4">
+				<div class="d-flex align-items-center">
 
-    <div class="d-flex align-items-center">
+						<!-- MOVING ICON -->
+						<div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-3"
+							 style="width:60px;height:60px;">
 
-			<!-- MOVING ICON -->
-			<div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-3"
-				 style="width:60px;height:60px;">
+							<i class="bi bi-bar-chart-line-fill text-white"
+							   style="font-size:28px;"></i>
 
-				<i class="bi bi-bar-chart-line-fill text-white"
-				   style="font-size:28px;"></i>
+						</div>
 
-			</div>
+						<!-- TITLE -->
+						<div>
 
-			<!-- TITLE -->
-			<div>
+							<h4 class="modal-title fw-bold mb-1">
+								Purchase Order Volume Summary
+							</h4>
 
-				<h4 class="modal-title fw-bold mb-1">
-					Purchase Order Volume Summary
-				</h4>
+							<small class="opacity-75">
+								Dynamic monthly product summary report
+							</small>
 
-				<small class="opacity-75">
-					Dynamic monthly product summary report
-				</small>
+						</div>
 
-			</div>
+					</div>
+			<!-- HEADER -->
+			<!-- CLOSE BUTTON -->
+			<button type="button"
+					class="btn btn-light btn-sm rounded-circle shadow-sm"
+					data-bs-dismiss="modal">
+
+				<i class="bi bi-x-lg"></i>
+
+			</button>
 
 		</div>
 
-		<!-- CLOSE BUTTON -->
-		<button type="button"
-				class="btn btn-light btn-sm rounded-circle shadow-sm"
-				data-bs-dismiss="modal">
+				<!-- FORM -->
+				<form id="generate_report_form_V">
+					<div class="modal-body p-4">
+						<!-- BRANCH -->
+						<div class="card border-0 shadow-sm mb-3 rounded-4">
+							<div class="card-body">
+								<label class="form-label fw-semibold">
+									<i class="bi bi-building me-2 text-success"></i>
+									Branch
+								</label>
 
-			<i class="bi bi-x-lg"></i>
+								<select class="form-select form-select-lg rounded-3"
+										name="company_header_V"
+										id="company_header_V"
+										required>
+									<option value="All">
+										All Branches
+									</option>
+									@foreach ($teves_branch as $teves_branch_cols)
+										<option value="{{$teves_branch_cols->branch_id}}">
+											{{$teves_branch_cols->branch_code}}
+										</option>
+									@endforeach
+								</select>
 
-		</button>
+							</div>
+						</div>
+						<!-- SUPPLIER -->
+						<div class="card border-0 shadow-sm mb-3 rounded-4">
+							<div class="card-body">
+								<label class="form-label fw-semibold">
+									<i class="bi bi-truck me-2 text-success"></i>
+									Supplier
+								</label>
 
+								<input class="form-control form-control-lg rounded-3"
+									   list="supplier_name_V"
+									   name="supplier_name_V"
+									   id="supplier_idx_V"
+									   autocomplete="off"
+									   placeholder="All Suppliers">
+
+								<datalist id="supplier_name_V">
+									<option value="All">All Suppliers</option>
+									@foreach ($supplier_data as $supplier_data_cols)
+										<option
+											data-id="{{$supplier_data_cols->supplier_id}}"
+											value="{{$supplier_data_cols->supplier_name}}">
+										</option>
+									@endforeach
+								</datalist>
+
+								<small class="text-muted">
+									Leave blank to include all suppliers
+								</small>
+
+								<span class="valid-feedback"
+									  id="supplier_idxError_V">
+								</span>
+
+							</div>
+
+						</div>
+						<!-- PRODUCT -->
+						<div class="card border-0 shadow-sm mb-3 rounded-4">
+
+							<div class="card-body">
+
+								<label class="form-label fw-semibold">
+									<i class="bi bi-box-seam me-2 text-success"></i>
+									Product Filter
+								</label>
+
+								<input class="form-control form-control-lg rounded-3"
+									   list="product_list"
+									   name="product_name_V"
+									   id="product_idx_V"
+									   autocomplete="off"
+									   placeholder="All Products">
+
+								<small class="text-muted">
+									Leave blank to include all products
+								</small>
+
+							</div>
+
+						</div>
+
+						<!-- DATE RANGE -->
+						<div class="card border-0 shadow-sm mb-3 rounded-4">
+
+							<div class="card-body">
+
+								<!-- HEADER -->
+								<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+									<!-- LABEL -->
+									<label class="form-label fw-semibold mb-0">
+										<i class="bi bi-calendar-range me-2 text-success"></i>
+										Date Range
+									</label>
+
+									<!-- QUICK FILTER -->
+									<div class="btn-group btn-group-sm">
+
+										<button type="button"
+												class="btn btn-outline-success"
+												onclick="setCurrentMonth()">
+
+											Current Month
+
+										</button>
+
+										<button type="button"
+												class="btn btn-outline-primary"
+												onclick="setCurrentYear()">
+
+											Current Year
+
+										</button>
+
+										<button type="button"
+												class="btn btn-outline-dark"
+												onclick="setLast12Months()">
+
+											Last 12 Months
+
+										</button>
+
+									</div>
+
+								</div>
+
+							<!-- DATE INPUTS -->
+							<div class="row">
+
+								<div class="col-md-6 mb-3 mb-md-0">
+
+									<label class="small text-muted mb-1">
+										Start Date
+									</label>
+
+									<input type="date"
+										   class="form-control form-control-lg rounded-3"
+										   name="start_date_V"
+										   id="start_date_V"
+										   value="<?=date('Y-m-01');?>"
+										   required>
+
+								</div>
+
+								<div class="col-md-6">
+
+									<label class="small text-muted mb-1">
+										End Date
+									</label>
+
+									<input type="date"
+										   class="form-control form-control-lg rounded-3"
+										   name="end_date_V"
+										   id="end_date_V"
+										   value="<?=date('Y-m-d');?>"
+										   required>
+
+								</div>
+
+							</div>
+
+						</div>
+
+			</div>
+
+						<!-- INFO -->
+						<div class="alert alert-success border-0 rounded-4 mt-4 mb-0">
+
+							<div class="d-flex align-items-start">
+
+								<i class="bi bi-info-circle-fill me-3 fs-5"></i>
+
+								<div>
+
+									<strong>
+										Dynamic Monthly Summary
+									</strong>
+
+									<div class="small mt-1">
+										Columns will automatically generate based
+										on your selected date range.
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- FOOTER -->
+					<div class="modal-footer border-0 px-4 pb-4">
+
+						<div id="loading_data"
+							 style="display:none;">
+
+							<div class="spinner-border text-success"
+								 role="status">
+
+								<span class="visually-hidden">
+									Loading...
+								</span>
+
+							</div>
+
+						</div>
+
+						<button type="button"
+								class="btn btn-light rounded-3 px-4"
+								data-bs-dismiss="modal">
+
+							Cancel
+
+						</button>
+
+						<button type="submit"
+								class="btn btn-success rounded-3 px-4 shadow-sm"
+								id="generate_report_V">
+
+							<i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
+							Generate Report
+
+						</button>
+
+					</div>
+
+				</form>
+
+			</div>
+		</div>
 	</div>
-
-            <!-- FORM -->
-            <form id="generate_report_form_V">
-
-                <div class="modal-body p-4">
-
-
-                    <!-- BRANCH -->
-                    <div class="card border-0 shadow-sm mb-3 rounded-4">
-
-                        <div class="card-body">
-
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-building me-2 text-success"></i>
-                                Branch
-                            </label>
-
-                            <select class="form-select form-select-lg rounded-3"
-                                    name="company_header_V"
-                                    id="company_header_V"
-                                    required>
-
-                                <option value="All">
-                                    All Branches
-                                </option>
-
-                                @foreach ($teves_branch as $teves_branch_cols)
-                                    <option value="{{$teves_branch_cols->branch_id}}">
-                                        {{$teves_branch_cols->branch_code}}
-                                    </option>
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <!-- PRODUCT -->
-                    <div class="card border-0 shadow-sm mb-3 rounded-4">
-
-                        <div class="card-body">
-
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-box-seam me-2 text-success"></i>
-                                Product Filter
-                            </label>
-
-                            <input class="form-control form-control-lg rounded-3"
-                                   list="product_list"
-                                   name="product_name_V"
-                                   id="product_idx_V"
-                                   autocomplete="off"
-                                   placeholder="All Products">
-
-                            <small class="text-muted">
-                                Leave blank to include all products
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <!-- DATE RANGE -->
-                    <!-- DATE RANGE -->
-<div class="card border-0 shadow-sm mb-3 rounded-4">
-
-    <div class="card-body">
-
-        <!-- HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-
-            <!-- LABEL -->
-            <label class="form-label fw-semibold mb-0">
-                <i class="bi bi-calendar-range me-2 text-success"></i>
-                Date Range
-            </label>
-
-            <!-- QUICK FILTER -->
-            <div class="btn-group btn-group-sm">
-
-                <button type="button"
-                        class="btn btn-outline-success"
-                        onclick="setCurrentMonth()">
-
-                    Current Month
-
-                </button>
-
-                <button type="button"
-                        class="btn btn-outline-primary"
-                        onclick="setCurrentYear()">
-
-                    Current Year
-
-                </button>
-
-                <button type="button"
-                        class="btn btn-outline-dark"
-                        onclick="setLast12Months()">
-
-                    Last 12 Months
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- DATE INPUTS -->
-        <div class="row">
-
-            <div class="col-md-6 mb-3 mb-md-0">
-
-                <label class="small text-muted mb-1">
-                    Start Date
-                </label>
-
-                <input type="date"
-                       class="form-control form-control-lg rounded-3"
-                       name="start_date_V"
-                       id="start_date_V"
-                       value="<?=date('Y-m-01');?>"
-                       required>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <label class="small text-muted mb-1">
-                    End Date
-                </label>
-
-                <input type="date"
-                       class="form-control form-control-lg rounded-3"
-                       name="end_date_V"
-                       id="end_date_V"
-                       value="<?=date('Y-m-d');?>"
-                       required>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-                    <!-- QUICK FILTER 
-                    <div class="card border-0 shadow-sm rounded-4">
-
-                        <div class="card-body">
-
-                            <label class="form-label fw-semibold mb-3">
-                                <i class="bi bi-lightning-charge-fill me-2 text-warning"></i>
-                                Quick Date Filters
-                            </label>
-
-                            <div class="d-grid gap-2">
-
-                                <button type="button"
-                                        class="btn btn-outline-success rounded-3"
-                                        onclick="setCurrentMonth()">
-
-                                    <i class="bi bi-calendar-month me-2"></i>
-                                    Current Month
-
-                                </button>
-
-                                <button type="button"
-                                        class="btn btn-outline-primary rounded-3"
-                                        onclick="setCurrentYear()">
-
-                                    <i class="bi bi-calendar3 me-2"></i>
-                                    Current Year
-
-                                </button>
-
-                                <button type="button"
-                                        class="btn btn-outline-dark rounded-3"
-                                        onclick="setLast12Months()">
-
-                                    <i class="bi bi-clock-history me-2"></i>
-                                    Last 12 Months
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>-->
-
-                    <!-- INFO -->
-                    <div class="alert alert-success border-0 rounded-4 mt-4 mb-0">
-
-                        <div class="d-flex align-items-start">
-
-                            <i class="bi bi-info-circle-fill me-3 fs-5"></i>
-
-                            <div>
-
-                                <strong>
-                                    Dynamic Monthly Summary
-                                </strong>
-
-                                <div class="small mt-1">
-                                    Columns will automatically generate based
-                                    on your selected date range.
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- FOOTER -->
-                <div class="modal-footer border-0 px-4 pb-4">
-
-                    <div id="loading_data"
-                         style="display:none;">
-
-                        <div class="spinner-border text-success"
-                             role="status">
-
-                            <span class="visually-hidden">
-                                Loading...
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                    <button type="button"
-                            class="btn btn-light rounded-3 px-4"
-                            data-bs-dismiss="modal">
-
-                        Cancel
-
-                    </button>
-
-                    <button type="submit"
-                            class="btn btn-success rounded-3 px-4 shadow-sm"
-                            id="generate_report_V">
-
-                        <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
-                        Generate Report
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-    </div>
-</div>
 
 	<!--Data List for Product-->	
 	<datalist id="product_list">

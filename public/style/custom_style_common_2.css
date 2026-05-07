@@ -333,10 +333,10 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 	background-color: #009f22;
     border-color: #009f22;
 }
-
+/*
 .card-header{
 	border-bottom: 1px solid #3f8f48  !important;
-}
+}*/
 .card-title{
 	font-family: "Nunito", sans-serif !important;
 }

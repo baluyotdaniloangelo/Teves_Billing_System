@@ -941,7 +941,7 @@ class PurchaseOrderController_v2 extends Controller
 			
 		}
 
-		return view("pages.purchase_order_summary", compact('data','title','supplier_data','teves_branch'));
+		return view("pages.purchase_order_summary.index", compact('data','title','supplier_data','teves_branch'));
 		
 	}   
 	
@@ -1548,6 +1548,7 @@ class PurchaseOrderController_v2 extends Controller
 			$start_date = $request->start_date;
 			$end_date   = $request->end_date;
 			$company_header   = $request->company_header;
+			$supplier_idx   = $request->supplier_idx;
 
 			// =========================
 			// GENERATE DYNAMIC COLUMNS
@@ -1560,6 +1561,15 @@ if($company_header != 'All'){
 
     $whereBranch = "
         AND tpo.company_header = '{$company_header}'
+    ";
+}
+
+$whereSupplier = '';
+
+if($supplier_idx != 'All' && $supplier_idx != ''){
+
+    $whereSupplier = "
+        AND tpo.purchase_order_supplier_idx = '{$supplier_idx}'
     ";
 }
 
@@ -1597,7 +1607,7 @@ if($company_header != 'All'){
 	
     AND tp.product_unit_measurement = 'L'
 	{$whereBranch}
-
+	{$whereSupplier}
 ", [$start_date, $end_date]);
 
 			$dynamicColumns =
@@ -1644,6 +1654,7 @@ if($company_header != 'All'){
 				
 				AND tp.product_unit_measurement = 'L'
 				{$whereBranch}
+				{$whereSupplier}
 				GROUP BY
 
 					tpoc.product_idx,

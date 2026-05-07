@@ -581,7 +581,9 @@ $("#generate_report_V").click(function(event){
     let start_date     = $("#start_date_V").val();
     let end_date       = $("#end_date_V").val();
     let company_header = $("#company_header_V").val();
-
+	//let supplier_idx = $("#supplier_idx_V").val();
+	let supplier_idx 		= $('#supplier_name option[value="' + $('#supplier_idx_V').val() + '"]').attr('data-id');
+	
     $.ajax({
 
         url: "/generate_purchase_order_volume_summary_report",
@@ -591,6 +593,7 @@ $("#generate_report_V").click(function(event){
             start_date: start_date,
             end_date: end_date,
             company_header: company_header,
+			supplier_idx: supplier_idx,
             _token: "{{ csrf_token() }}"
         },
 

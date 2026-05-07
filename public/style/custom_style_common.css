@@ -407,15 +407,6 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
     border-color: #009f22;
 }
 
-.card-header{
-	/*border-bottom: 2px solid #3f8f48  !important;
-	border-color: #153948;*/
-    background-color: #fff;
-    color: #153948;
-    padding: 0px !important;
-	margin: 15px;
-	border-radius: 0px !important;
-}
 
 .modal-header_form {
     border-bottom: 2px #198754 solid !important
