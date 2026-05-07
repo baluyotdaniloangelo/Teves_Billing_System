@@ -1547,10 +1547,21 @@ class PurchaseOrderController_v2 extends Controller
 
 			$start_date = $request->start_date;
 			$end_date   = $request->end_date;
+			$company_header   = $request->company_header;
 
 			// =========================
 			// GENERATE DYNAMIC COLUMNS
 			// =========================
+
+
+$whereBranch = '';
+
+if($company_header != 'All'){
+
+    $whereBranch = "
+        AND tpo.company_header = '{$company_header}'
+    ";
+}
 
 			$monthColumns = DB::select("
 
@@ -1583,8 +1594,9 @@ class PurchaseOrderController_v2 extends Controller
 
     WHERE tpo.purchase_order_date
     BETWEEN ? AND ?
-
+	
     AND tp.product_unit_measurement = 'L'
+	{$whereBranch}
 
 ", [$start_date, $end_date]);
 
@@ -1629,7 +1641,9 @@ class PurchaseOrderController_v2 extends Controller
 
 				WHERE tpo.purchase_order_date
 				BETWEEN ? AND ?
+				
 				AND tp.product_unit_measurement = 'L'
+				{$whereBranch}
 				GROUP BY
 
 					tpoc.product_idx,
