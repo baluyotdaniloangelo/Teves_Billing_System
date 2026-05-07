@@ -719,7 +719,7 @@ Object.keys(firstRow).forEach(function(key){
                     '<button type="button" '+
                             'class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" '+
                             'onclick="download_purchase_order_product_report_pdf()">'+
-                        ' Product Summary'+
+                        ' Product Volume Summary'+
                     '</button>'+
                 '</div>'
             );
