@@ -713,7 +713,7 @@ Object.keys(firstRow).forEach(function(key){
                 end_date_new.toLocaleDateString("en-PH")
             );
 
-            /*DOWNLOAD BUTTON*/
+            /*DOWNLOAD BUTTON
             $("#download_options_V").html(
                 '<div class="btn-group">'+
                     '<button type="button" '+
@@ -722,7 +722,7 @@ Object.keys(firstRow).forEach(function(key){
                         ' Product Volume Summary'+
                     '</button>'+
                 '</div>'
-            );
+            );*/
 
         },
 
