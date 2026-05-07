@@ -106,7 +106,117 @@
 			}
 	
 	}
+
+	setMaxonEndDate_V();
 	
+	function setMaxonEndDate_V(){
+	
+		let start_date 			= $("input[name=start_date_V]").val();
+		
+		var myDate = new Date(start_date);
+		var result1 = myDate.setMonth(myDate.getMonth()+12);
+		
+		const date_new = new Date(result1);
+		
+		const max_date = document.getElementById('end_date_V');
+		
+		document.getElementById("end_date_V").min = start_date;
+		document.getElementById("end_date_V").max = date_new.toISOString("en-US").substring(0, 10);
+		
+		document.getElementById("end_date_V").value = start_date;
+		
+	}
+	
+	function CheckEndDateValidity_V(){
+		
+		let start_date 			= $("input[name=start_date_V]").val();
+		let end_date 			= $("input[name=end_date_V]").val();
+		
+		let end_date_max 		= document.getElementById("end_date_V").max;
+		
+		const x = new Date(start_date);
+		const y = new Date(end_date);
+		
+		const edt = new Date(end_date_max);
+		
+			if(x > y){
+					
+					/*Set The End Date same with Start Date*/
+					document.getElementById("end_date_V").value = start_date;
+				
+			}
+			else if(edt < y){
+					
+					/*Set The End Date same with Start Date*/
+					document.getElementById("end_date_V").value = start_date;
+					
+			}else{
+					$('#end_dateError_V').html('');
+					document.getElementById('end_dateError_V').className = "valid-feedback";
+			}
+	
+	}
+
+function setCurrentMonth() {
+
+    let today = new Date();
+
+    let firstDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+    );
+
+    let lastDay = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        0
+    );
+
+    document.getElementById('start_date_V').value =
+        firstDay.toISOString().split('T')[0];
+
+    document.getElementById('end_date_V').value =
+        lastDay.toISOString().split('T')[0];
+}
+
+function setCurrentYear() {
+
+    let today = new Date();
+
+    let firstDay =
+        today.getFullYear() + '-01-01';
+
+    let lastDay =
+        today.getFullYear() + '-12-31';
+
+    document.getElementById('start_date_V').value =
+        firstDay;
+
+    document.getElementById('end_date_V').value =
+        lastDay;
+}
+
+function setLast12Months() {
+
+    let today = new Date();
+
+    let startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 11);
+    startDate.setDate(1);
+
+    let endDate = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        0
+    );
+
+    document.getElementById('start_date_V').value =
+        startDate.toISOString().split('T')[0];
+
+    document.getElementById('end_date_V').value =
+        endDate.toISOString().split('T')[0];
+}	
 	<!--Load Table-->
 	$("#generate_report").click(function(event){
 		
@@ -455,6 +565,199 @@
 		});
 		
 	autoAdjustColumns(LoadPurchaseOrderProductSummaryData);
+
+
+let LoadPurchaseOrderProductVolumeSummaryData = null;
+
+/*LOAD REPORT*/
+$("#generate_report_V").click(function(event){
+
+    event.preventDefault();
+
+    /*RESET ERRORS*/
+    $('#start_dateError_V').text('');
+    $('#end_dateError_V').text('');
+
+    let start_date     = $("#start_date_V").val();
+    let end_date       = $("#end_date_V").val();
+    let company_header = $("#company_header_V").val();
+
+    $.ajax({
+
+        url: "/generate_purchase_order_volume_summary_report",
+        type: "POST",
+
+        data: {
+            start_date: start_date,
+            end_date: end_date,
+            company_header: company_header,
+            _token: "{{ csrf_token() }}"
+        },
+
+        success: function(response){
+
+            $('#CreateReportModal_V').modal('toggle');
+
+            console.log(response);
+
+            /*DESTROY OLD TABLE*/
+            if ($.fn.DataTable.isDataTable('#sale_order_product_volume_summary_table')) {
+
+                $('#sale_order_product_volume_summary_table')
+                    .DataTable()
+                    .destroy();
+
+                $('#sale_order_product_volume_summary_table thead').empty();
+                $('#sale_order_product_volume_summary_table tbody').empty();
+            }
+
+            /*NO RESULT*/
+            if(response.data.length === 0){
+
+                $("#sale_order_product_volume_summary_table tbody")
+                    .html("<tr><td class='text-center'>No Result Found</td></tr>");
+
+                return;
+            }
+
+            /*=========================
+              BUILD DYNAMIC COLUMNS
+            =========================*/
+
+            let columns = [];
+            let headerRow = '<tr>';
+
+            let firstRow = response.data[0];
+
+Object.keys(firstRow).forEach(function(key){
+
+    /*SKIP INTERNAL COLUMN*/
+    if(key === 'DT_RowIndex'){
+        return;
+    }
+
+    let title = key
+        .replaceAll('_', ' ')
+        .replace(/\b\w/g, l => l.toUpperCase());
+
+    headerRow += `<th>${title}</th>`;
+
+    columns.push({
+        data: key,
+        title: title,
+        className:
+            key === 'product_name'
+            ? ''
+            : 'text-end',
+
+        render: function(data){
+
+            if($.isNumeric(data)){
+
+                return parseFloat(data)
+                    .toLocaleString(
+                        undefined,
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    );
+            }
+
+            return data;
+        }
+    });
+
+});
+
+            headerRow += '</tr>';
+
+            $('#sale_order_product_volume_summary_table thead')
+                .html(headerRow);
+
+            /*=========================
+              LOAD DATATABLE
+            =========================*/
+
+            LoadPurchaseOrderProductVolumeSummaryData =
+                $('#sale_order_product_volume_summary_table').DataTable({
+
+                    responsive: false,
+                    paging: false,
+                    searching: false,
+                    info: false,
+
+                    scrollX: true,
+                    scrollY: '500px',
+                    scrollCollapse: true,
+
+                    data: response.data,
+                    columns: columns,
+
+                    language: {
+                        emptyTable: "No Result Found",
+                        infoEmpty: "No entries to show"
+                    }
+                });
+
+            /*DATE RANGE DISPLAY*/
+            let start_date_new = new Date(start_date);
+            let end_date_new = new Date(end_date);
+
+            $('#date_range_info_V').text(
+                start_date_new.toLocaleDateString("en-PH")
+                + ' - ' +
+                end_date_new.toLocaleDateString("en-PH")
+            );
+
+            /*DOWNLOAD BUTTON*/
+            $("#download_options_V").html(
+                '<div class="btn-group">'+
+                    '<button type="button" '+
+                            'class="btn btn-outline-primary btn-sm bi-file-earmark-pdf" '+
+                            'onclick="download_purchase_order_product_report_pdf()">'+
+                        ' Product Summary'+
+                    '</button>'+
+                '</div>'
+            );
+
+        },
+
+        beforeSend:function(){
+
+            $("#generate_report_V").prop('disabled', true);
+            $('#loading_data').show();
+
+        },
+
+        complete:function(){
+
+            $("#generate_report_V").prop('disabled', false);
+            $('#loading_data').hide();
+
+        },
+
+        error:function(error){
+
+            console.log(error);
+
+            if(error.responseJSON?.errors){
+
+                $('#start_dateError_V')
+                    .text(error.responseJSON.errors.start_date);
+
+                $('#end_dateError_V')
+                    .text(error.responseJSON.errors.end_date);
+            }
+
+            $('#InvalidModal').modal('toggle');
+
+        }
+
+    });
+
+});
+
 
 		 /*Adjust Table Column*/
 		 function autoAdjustColumns(table) {

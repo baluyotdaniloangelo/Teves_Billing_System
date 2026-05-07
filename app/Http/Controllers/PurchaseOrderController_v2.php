@@ -1540,5 +1540,116 @@ class PurchaseOrderController_v2 extends Controller
 		
 		}
 	}	
+	
+	public function generate_purchase_order_volume_summary_report(Request $request){
+		
+		if ($request->ajax()) {
+
+			$start_date = $request->start_date;
+			$end_date   = $request->end_date;
+
+			// =========================
+			// GENERATE DYNAMIC COLUMNS
+			// =========================
+
+			$monthColumns = DB::select("
+
+    SELECT GROUP_CONCAT(
+        DISTINCT
+        CONCAT(
+            'SUM(
+                CASE
+                    WHEN DATE_FORMAT(tpo.purchase_order_date, ''%b %Y'') = ''',
+            DATE_FORMAT(tpo.purchase_order_date, '%b %Y'),
+            '''
+                    THEN tpoc.order_quantity
+                    ELSE 0
+                END
+            ) AS `',
+            DATE_FORMAT(tpo.purchase_order_date, '%b %Y'),
+            '`'
+        )
+        ORDER BY YEAR(tpo.purchase_order_date),
+                 MONTH(tpo.purchase_order_date)
+    ) AS dynamic_columns
+
+    FROM teves_purchase_order_table tpo
+
+    LEFT JOIN teves_purchase_order_component_table tpoc
+        ON tpoc.purchase_order_idx = tpo.purchase_order_id
+
+    LEFT JOIN teves_product_table tp
+        ON tp.product_id = tpoc.product_idx
+
+    WHERE tpo.purchase_order_date
+    BETWEEN ? AND ?
+
+    AND tp.product_unit_measurement = 'L'
+
+", [$start_date, $end_date]);
+
+			$dynamicColumns =
+				$monthColumns[0]->dynamic_columns ?? '';
+
+			/*NO DATA*/
+			if(empty($dynamicColumns)){
+
+				return response()->json([
+					'data' => []
+				]);
+			}
+
+			// =========================
+			// MAIN QUERY
+			// =========================
+
+			$query = "
+
+				SELECT
+
+					IFNULL(
+						tp.product_name,
+						tpoc.item_description
+					) AS product_name,
+
+					IFNULL(
+						tp.product_unit_measurement,
+						'PC'
+					) AS unit,
+
+					{$dynamicColumns}
+
+				FROM teves_purchase_order_table tpo
+
+				LEFT JOIN teves_purchase_order_component_table tpoc
+					ON tpoc.purchase_order_idx = tpo.purchase_order_id
+
+				LEFT JOIN teves_product_table tp
+					ON tp.product_id = tpoc.product_idx
+
+				WHERE tpo.purchase_order_date
+				BETWEEN ? AND ?
+				AND tp.product_unit_measurement = 'L'
+				GROUP BY
+
+					tpoc.product_idx,
+					tp.product_name,
+					tp.product_unit_measurement,
+					tpoc.item_description
+
+				ORDER BY product_name ASC
+			";
+
+			$data = DB::select($query, [
+				$start_date,
+				$end_date
+			]);
+
+			return DataTables::of($data)
+				->addIndexColumn()
+				->make(true);
+		}
+		
+	}
 
 }

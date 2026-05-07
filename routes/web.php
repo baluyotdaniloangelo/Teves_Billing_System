@@ -367,6 +367,8 @@ Route::get('/generate_purchase_order_summary_report_per_client_consolidated_pdf'
 Route::get('/generate_purchase_order_summary_report_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_consolidated_pdf'])->name('generate_purchase_order_summary_report_consolidated_pdf')->middleware('isLoggedIn');
 /*1/18/2026*/
 Route::get('/generate_purchase_order_product_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_product_summary_report_pdf'])->name('generate_purchase_order_product_summary_report_pdf')->middleware('isLoggedIn');
+/*5/7/2026*/
+Route::post('/generate_purchase_order_volume_summary_report', [PurchaseOrderController_v2::class,'generate_purchase_order_volume_summary_report'])->name('generate_purchase_order_volume_summary_report')->middleware('isLoggedIn');
 
 
 /*01/14/2026*/
