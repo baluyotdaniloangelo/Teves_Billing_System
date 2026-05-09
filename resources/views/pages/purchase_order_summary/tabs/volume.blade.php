@@ -26,11 +26,11 @@
                         <h5 class="card-title fw-bold mb-1">
                             Volume Summary
                         </h5>
-
+						<!--
                         <small class="text-muted">
                             Dynamic monthly fuel volume monitoring
                         </small>
-
+						-->
                     </div>
 
                 </div>
@@ -38,14 +38,14 @@
                 <!-- ACTION BUTTONS -->
                 <div class="d-flex align-items-center gap-2 flex-wrap">
 
-                    <div id="download_options_V"></div>
+                    <div id="download_options_volume"></div>
 
-                    <div id="save_options_V"></div>
+                    <div id="save_options_volume"></div>
 
                     <button type="button"
                             class="btn btn-success rounded-3 shadow-sm"
                             data-bs-toggle="modal"
-                            data-bs-target="#CreateReportModal_V">
+                            data-bs-target="#CreateReportModal_volume">
 
                         <i class="bi bi-sliders me-2"></i>
                         Report Options
@@ -61,86 +61,161 @@
         <!-- BODY -->
         <div class="card-body p-4">
 
-            <!-- OPTIONAL REPORT INFO -->
-            <!--
-            <div class="card border-0 bg-light rounded-4 mb-4">
+<!-- REPORT INFORMATION -->
+<div class="card border-0 bg-light rounded-4 mb-4 shadow-sm">
 
-                <div class="card-body">
+    <div class="card-body p-4">
 
-                    <div class="row g-3">
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
 
-                        <div class="col-md-6">
+            <!-- LEFT HEADER -->
+            <div class="d-flex align-items-center">
 
-                            <div class="small text-muted">
-                                Branch Name
-                            </div>
+                <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3"
+                     style="width:50px;height:50px;">
 
-                            <div class="fw-semibold"
-                                 id="branch_name_report_v">
-                            </div>
+                    <i class="bi bi-graph-up-arrow text-success fs-4"></i>
 
-                        </div>
+                </div>
 
-                        <div class="col-md-6">
+                <div>
 
-                            <div class="small text-muted">
-                                Branch Code
-                            </div>
+                    <h6 class="fw-bold mb-1">
+                        Report Information
+                    </h6>
+					<!--
+                    <small class="text-muted">
+                        Branch and Supplier reporting details
+                    </small>
+					-->
+                </div>
 
-                            <div class="fw-semibold"
-                                 id="branch_code_report_v">
-                            </div>
+            </div>
 
-                        </div>
+            <!-- REPORT PERIOD -->
+            <div class="text-md-end">
 
-                        <div class="col-md-6">
+                <div class="text-muted small mb-1">
+                    Report Period
+                </div>
 
-                            <div class="small text-muted">
-                                TIN
-                            </div>
+                <div class="fw-bold fs-6 text-success"
+                     id="date_range_info_volume">
+                </div>
 
-                            <div class="fw-semibold"
-                                 id="branch_tin_report_v">
-                            </div>
+            </div>
 
-                        </div>
+        </div>
 
-                        <div class="col-md-6">
+        <!-- CONTENT -->
+        <div class="row g-4">
 
-                            <div class="small text-muted">
-                                Report Period
-                            </div>
+            <!-- LEFT -->
+            <div class="col-md-6" id="branch_product_report">
 
-                            <div class="fw-semibold"
-                                 id="date_range_info_v">
-                            </div>
+                <div class="mb-3">
 
-                        </div>
+                    <div class="text-muted small mb-1">
+                        Branch Name
+                    </div>
 
-                        <div class="col-12">
+                    <div class="fw-semibold fs-6 fs-6 text-success"
+                         id="branch_name_volume_report">
+                    </div>
 
-                            <div class="small text-muted">
-                                Address
-                            </div>
+                </div>
 
-                            <div class="fw-semibold"
-                                 id="branch_address_report_v">
-                            </div>
+                <div class="mb-3">
 
-                        </div>
+                    <div class="text-muted small mb-1">
+                        Branch Code
+                    </div>
 
+                    <div class="fw-semibold fs-6 fs-6 text-success"
+                         id="branch_code_volume_report">
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <div class="text-muted small mb-1">
+                        TIN
+                    </div>
+
+                    <div class="fw-semibold fs-6 fs-6 text-success"
+                         id="branch_tin_volume_report">
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted small mb-1">
+                        Address
+                    </div>
+
+                    <div class="fw-semibold fs-6 fs-6 text-success"
+                         id="branch_address_volume_report">
                     </div>
 
                 </div>
 
             </div>
-            -->
+
+            <!-- RIGHT -->
+            <div class="col-md-6">
+				<div id='supplier_product_report' style="display:none;">
+					<div class="mb-3">
+
+						<div class="text-muted small mb-1">
+							Supplier
+						</div>
+
+						<div class="fw-semibold fs-6 fs-6 text-success"
+							 id="supplier_name_volume_report">
+						</div>
+
+					</div>
+
+					<div class="mb-3">
+
+						<div class="text-muted small mb-1">
+							TIN
+						</div>
+
+						<div class="fw-semibold fs-6 fs-6 text-success"
+							 id="supplier_tin_volume_report">
+						</div>
+
+					</div>
+
+					<div>
+
+						<div class="text-muted small mb-1">
+							Address
+						</div>
+
+						<div class="fw-semibold fs-6 fs-6 text-success"
+							 id="supplier_address_volume_report">
+						</div>
+
+					</div>
+				</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
             <!-- TABLE -->
             <div class="table-responsive">
 
                 <table class="table table-hover align-middle nowrap w-100"
-                       id="sale_order_product_volume_summary_table">
+                       id="POVolumeSummaryTable">
 
                     <thead class="table-light">
                     </thead>

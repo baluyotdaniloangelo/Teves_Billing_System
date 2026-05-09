@@ -1,9 +1,9 @@
 <!-- VOLUME SUMMARY MODAL -->
 <div class="modal fade"
-     id="CreateReportModal_V"
+     id="CreateReportModal_volume"
      tabindex="-1">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
 
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
@@ -47,7 +47,7 @@
             </div>
 
             <!-- FORM -->
-            <form id="generate_report_form_V">
+            <form id="generate_report_form_volume">
 
                 <!-- BODY -->
                 <div class="modal-body p-4">
@@ -65,8 +65,8 @@
                             </label>
 
                             <select class="form-select form-select-lg rounded-3"
-                                    name="company_header_V"
-                                    id="company_header_V"
+                                    name="company_header_volume"
+                                    id="company_header_volume"
                                     required>
 
                                 <option value="All">
@@ -100,13 +100,13 @@
                             </label>
 
                             <input class="form-control form-control-lg rounded-3"
-                                   list="supplier_name_V"
-                                   name="supplier_name_V"
-                                   id="supplier_idx_V"
+                                   list="supplier_name_volume"
+                                   name="supplier_name_volume"
+                                   id="supplier_idx_volume"
                                    autocomplete="off"
                                    placeholder="All Suppliers">
 
-                            <datalist id="supplier_name_V">
+                            <datalist id="supplier_name_volume">
 
                                 <option value="All">
                                     All Suppliers
@@ -128,14 +128,14 @@
                             </small>
 
                             <span class="valid-feedback"
-                                  id="supplier_idxError_V">
+                                  id="supplier_idxError_volume">
                             </span>
 
                         </div>
 
                     </div>
 
-                    <!-- PRODUCT -->
+                    <!-- PRODUCT
                     <div class="card border-0 shadow-sm mb-3 rounded-4">
 
                         <div class="card-body">
@@ -148,19 +148,19 @@
                             </label>
 
                             <input class="form-control form-control-lg rounded-3"
-                                   list="product_list"
-                                   name="product_name_V"
-                                   id="product_idx_V"
+                                   list="product_list_product"
+                                   name="product_name_volume"
+                                   id="product_idx_volume"
                                    autocomplete="off"
-                                   placeholder="All Fuel Products">
+                                   placeholder="All Fuel Products"> -->
 							<!--
                             <small class="text-muted">
                                 Leave blank to include all products
                             </small>
 							-->
-                        </div>
+                       <!-- </div>
 
-                    </div>
+                    </div>-->
 
                     <!-- DATE RANGE -->
                     <div class="card border-0 shadow-sm mb-3 rounded-4">
@@ -182,7 +182,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-success"
-                                            onclick="setCurrentMonth()">
+                                            onclick="setCurrentMonth('volume')">
 
                                         Current Month
 
@@ -190,7 +190,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-success"
-                                            onclick="setCurrentYear()">
+                                            onclick="setCurrentYear('volume')">
 
                                         Current Year
 
@@ -198,7 +198,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-success"
-                                            onclick="setLast12Months()">
+                                            onclick="setLast12Months('volume')">
 
                                         Last 12 Months
 
@@ -220,13 +220,14 @@
 
                                     <input type="date"
                                            class="form-control form-control-lg rounded-3"
-                                           name="start_date_V"
-                                           id="start_date_V"
+                                           name="start_date_volume"
+                                           id="start_date_volume"
+										   onclick="setMaxonEndDate('volume')"
                                            value="<?=date('Y-m-01');?>"
                                            required>
 
                                     <span class="valid-feedback"
-                                          id="start_dateError_V">
+                                          id="start_dateError_volume">
                                     </span>
 
                                 </div>
@@ -240,13 +241,14 @@
 
                                     <input type="date"
                                            class="form-control form-control-lg rounded-3"
-                                           name="end_date_V"
-                                           id="end_date_V"
+                                           name="end_date_volume"
+                                           id="end_date_volume"
+										   onclick="CheckEndDateValidity('volume')"
                                            value="<?=date('Y-m-d');?>"
                                            required>
 
                                     <span class="valid-feedback"
-                                          id="end_dateError_V">
+                                          id="end_dateError_volume">
                                     </span>
 
                                 </div>
@@ -290,7 +292,7 @@
                 <div class="modal-footer border-0 px-4 pb-4">
 
                     <!-- LOADING -->
-                    <div id="loading_data_V"
+                    <div id="loading_data_volume"
                          style="display:none;">
 
                         <div class="spinner-border text-success"
@@ -315,7 +317,7 @@
 
                     <button type="submit"
                             class="btn btn-success rounded-3 px-4 shadow-sm"
-                            id="generate_report_V">
+                            id="generate_report_volume">
 
                         <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
                         Generate Report

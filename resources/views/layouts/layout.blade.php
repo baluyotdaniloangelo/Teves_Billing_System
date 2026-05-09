@@ -132,8 +132,7 @@ else if (Request::is('sales_report')){
 else if (Request::is('purchase_order_summary')){
 ?>
 <body class="">
-@include('layouts.footer')
-@include('layouts.purchase_order_summary_script')
+
 <?php
 }
 else if (Request::is('soa_summary_history')){

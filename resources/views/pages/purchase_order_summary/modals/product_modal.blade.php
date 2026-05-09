@@ -1,6 +1,6 @@
 <!-- PRODUCT SUMMARY MODAL -->
 <div class="modal fade"
-     id="CreateReportModal_P"
+     id="PurchaseOrderProductModal"
      tabindex="-1">
 
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -47,7 +47,7 @@
             </div>
 
             <!-- FORM -->
-            <form id="generate_report_form_P">
+            <form id="PurchaseOrderProductForm">
 
                 <!-- BODY -->
                 <div class="modal-body p-4">
@@ -65,8 +65,8 @@
                             </label>
 
                             <select class="form-select form-select-lg rounded-3"
-                                    name="company_header_P"
-                                    id="company_header_P"
+                                    name="company_header_product"
+                                    id="company_header_product"
                                     required>
 
                                 <option value="All" data-id="All">
@@ -100,13 +100,13 @@
                             </label>
 
                             <input class="form-control form-control-lg rounded-3"
-                                   list="supplier_name_P"
-                                   name="supplier_name_P"
-                                   id="supplier_idx_P"
+                                   list="supplier_name_product_list"
+                                   name="supplier_name_product"
+                                   id="supplier_idx_product"
                                    autocomplete="off"
                                    placeholder="All Suppliers">
 
-                            <datalist id="supplier_name_P">
+                            <datalist id="supplier_name_product_list">
 
                                 <option value="All" data-id="All">
                                     All Suppliers
@@ -122,13 +122,13 @@
                                 @endforeach
 
                             </datalist>
-							<!--
+							<!-- -->
                             <small class="text-muted">
                                 Leave blank to include all suppliers
                             </small>
-							-->
+							
                             <span class="valid-feedback"
-                                  id="supplier_idxError_P">
+                                  id="supplier_idxError_product">
                             </span>
 
                         </div>
@@ -148,18 +148,21 @@
                             </label>
 
                             <input class="form-control form-control-lg rounded-3"
-                                   list="product_list"
-                                   name="product_name"
-                                   id="product_idx"
+                                   list="product_list_product"
+                                   name="product_name_product"
+                                   id="product_idx_product"
                                    autocomplete="off"
                                    placeholder="Select Product">
-
+								<!--Data List for Product-->	
+								<datalist id="product_list_product">
+										<span >	</span>
+								</datalist>	
                             <small class="text-muted">
-                                Search and select a product
+                                Search and select a product. Leave blank to include all product
                             </small>
 
                             <span class="valid-feedback"
-                                  id="product_idxError_P">
+                                  id="product_idxError_product">
                             </span>
 
                         </div>
@@ -186,7 +189,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-primary"
-                                            onclick="setCurrentMonth_P()">
+                                            onclick="setCurrentMonth('product')">
 
                                         Current Month
 
@@ -194,7 +197,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-primary"
-                                            onclick="setCurrentYear_P()">
+                                            onclick="setCurrentYear('product')">
 
                                         Current Year
 
@@ -202,7 +205,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-dark"
-                                            onclick="setLast12Months_P()">
+                                            onclick="setLast12Months('product')">
 
                                         Last 12 Months
 
@@ -223,13 +226,14 @@
 
                                     <input type="date"
                                            class="form-control form-control-lg rounded-3"
-                                           name="start_date_P"
-                                           id="start_date_P"
+                                           name="start_date_product"
+                                           id="start_date_product"
+										   onclick="setMaxonEndDate('product')"
                                            value="<?=date('Y-m-01');?>"
                                            required>
 
                                     <span class="valid-feedback"
-                                          id="start_dateError_P">
+                                          id="start_dateError_product">
                                     </span>
 
                                 </div>
@@ -242,13 +246,14 @@
 
                                     <input type="date"
                                            class="form-control form-control-lg rounded-3"
-                                           name="end_date_P"
-                                           id="end_date_P"
+                                           name="end_date_product"
+                                           id="end_date_product"
+										   onclick="CheckEndDateValidity('product')"
                                            value="<?=date('Y-m-d');?>"
                                            required>
 
                                     <span class="valid-feedback"
-                                          id="end_dateError_P">
+                                          id="end_dateError_product">
                                     </span>
 
                                 </div>
@@ -292,7 +297,7 @@
                 <div class="modal-footer border-0 px-4 pb-4">
 
                     <!-- LOADING -->
-                    <div id="loading_data_P"
+                    <div id="loading_data_product"
                          style="display:none;">
 
                         <div class="spinner-border text-primary"
@@ -317,7 +322,7 @@
 
                     <button type="submit"
                             class="btn btn-primary rounded-3 px-4 shadow-sm"
-                            id="generate_report_P">
+                            id="generate_report_product">
 
                         <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
                         Generate Report

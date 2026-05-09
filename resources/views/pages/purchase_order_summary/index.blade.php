@@ -6,7 +6,7 @@
 
     <section class="section">
 
-        <div class="card rounded-4">
+        <div class="card rounded-4 p-3">
 
             @include('pages.purchase_order_summary.tabs.navigation')
 
@@ -37,8 +37,14 @@
 
     </section>
 
+
 </main>
 
-
+@include('pages.purchase_order_summary.scripts.plugins_script')
+@include('pages.purchase_order_summary.scripts.customized_script')
+@include('pages.purchase_order_summary.scripts.summary_script')
+@include('pages.purchase_order_summary.scripts.product_script')
+@include('pages.purchase_order_summary.scripts.volume_script')
 
 @endsection
+

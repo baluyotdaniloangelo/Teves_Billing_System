@@ -1,6 +1,6 @@
 <!-- SUMMARY REPORT MODAL -->
 <div class="modal fade"
-     id="CreateReportModal"
+     id="PurchaseOrderSummaryModal"
      tabindex="-1">
 
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -47,7 +47,7 @@
             </div>
 
             <!-- FORM -->
-            <form id="generate_report_form">
+            <form id="PurchaseOrderSummaryForm">
 
                 <!-- BODY -->
                 <div class="modal-body p-4">
@@ -122,11 +122,11 @@
                                 @endforeach
 
                             </datalist>
-							<!--
+							
                             <small class="text-muted">
                                 Leave blank to include all suppliers
                             </small>
-							-->
+							
                             <span class="valid-feedback"
                                   id="supplier_idxError">
                             </span>
@@ -155,7 +155,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-success"
-                                            onclick="setCurrentMonth()">
+                                            onclick="setCurrentMonth('summary')">
 
                                         Current Month
 
@@ -163,7 +163,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-primary"
-                                            onclick="setCurrentYear()">
+                                            onclick="setCurrentYear('summary')">
 
                                         Current Year
 
@@ -171,7 +171,7 @@
 
                                     <button type="button"
                                             class="btn btn-outline-dark"
-                                            onclick="setLast12Months()">
+                                            onclick="setLast12Months('summary')">
 
                                         Last 12 Months
 
@@ -192,13 +192,14 @@
 
                                     <input type="date"
                                            class="form-control form-control-lg rounded-3"
-                                           name="start_date"
-                                           id="start_date"
+										   onclick="setMaxonEndDate('summary')"
+                                           name="start_date_summary"
+                                           id="start_date_summary"
                                            value="<?=date('Y-m-01');?>"
                                            required>
 
                                     <span class="valid-feedback"
-                                          id="start_dateError">
+                                          id="start_date_summary_Error">
                                     </span>
 
                                 </div>
@@ -211,13 +212,14 @@
 
                                     <input type="date"
                                            class="form-control form-control-lg rounded-3"
-                                           name="end_date"
-                                           id="end_date"
+										   onclick="CheckEndDateValidity('summary')"
+                                           name="end_date_summary"
+                                           id="end_date_summary"
                                            value="<?=date('Y-m-d');?>"
                                            required>
 
                                     <span class="valid-feedback"
-                                          id="end_dateError">
+                                          id="end_date_summary_Error">
                                     </span>
 
                                 </div>
@@ -261,7 +263,7 @@
                 <div class="modal-footer border-0 px-4 pb-4">
 
                     <!-- LOADING -->
-                    <div id="loading_data"
+                    <div id="PurchaseOrderSummaryLoading"
                          style="display:none;">
 
                         <div class="spinner-border text-success"
@@ -286,7 +288,7 @@
 
                     <button type="submit"
                             class="btn btn-success rounded-3 px-4 shadow-sm"
-                            id="generate_report">
+                            id="PurchaseOrderSummaryGenerate">
 
                         <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
                         Generate Report
