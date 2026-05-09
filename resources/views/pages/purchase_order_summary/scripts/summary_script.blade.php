@@ -480,8 +480,14 @@ function handleSupplierInfo(supplier_idx, report_type) {
 			
 			let start_date 			= $("input[name=start_date_summary]").val();
 			let end_date 			= $("input[name=end_date_summary]").val();
-			let company_header 		= $("#company_header").val();
-			let supplier_idx 		= $('#supplier_name option[value="' + $('#supplier_idx').val() + '"]').attr('data-id');
+			
+			const company_header =
+				$("#company_header").val();
+				
+			let supplier_idx =
+			$('#supplier_name option[value="' +
+				$('#supplier_idx').val() +
+			'"]').attr('data-id') || 'All';
 			
 		var query = {
 			start_date:start_date,
