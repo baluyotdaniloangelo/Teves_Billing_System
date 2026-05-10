@@ -152,28 +152,52 @@
 				/*========================
 				DATE RANGE
 				========================*/
-				$("#date_range_info_product")
-					.text(
-						formatDate(start_date)
-						+ ' - ' +
-						formatDate(end_date)
-					);
+					
+					let start_date_new = new Date(start_date);
+					let end_date_new = new Date(end_date);
 
+					$('#date_range_info_product').text(
+						start_date_new.toLocaleDateString("en-PH")
+						+ ' - ' +
+						end_date_new.toLocaleDateString("en-PH")
+					);
+					
 				/*========================
 				DOWNLOAD BUTTON
 				========================*/
 				$("#download_options_product").html(`
-					<div class="btn-group">
 
-						<button type="button"
-								class="btn btn-outline-primary btn-sm bi-file-earmark-pdf"
-								onclick="download_purchase_order_product_report_pdf()">
+					<div class="dropdown">
 
-							Product Summary
+						<button class="btn btn-primary rounded-3 shadow-sm dropdown-toggle"
+								type="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false">
+
+							<i class="bi bi-download me-1"></i>
+							Download Report
 
 						</button>
 
+						<ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3">
+
+							<li>
+
+								<button class="dropdown-item"
+										type="button"
+										onclick="download_purchase_order_product_report_pdf()">
+
+									<i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+									Product Summary PDF
+
+								</button>
+
+							</li>
+
+						</ul>
+
 					</div>
+
 				`);
 
 			},

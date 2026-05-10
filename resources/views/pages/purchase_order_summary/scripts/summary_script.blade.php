@@ -199,37 +199,68 @@ $("#PurchaseOrderSummaryGenerate").on("click", function (event) {
             /*========================
             DATE RANGE
             ========================*/
-            $("#date_range_info_summary")
-                .text(
-                    formatDate(start_date)
-                    + ' - ' +
-                    formatDate(end_date)
-                );
+  
+			let start_date_new = new Date(start_date);
+			let end_date_new = new Date(end_date);
 
+			$('#date_range_info_summary').text(
+				start_date_new.toLocaleDateString("en-PH")
+					+ ' - ' +
+				end_date_new.toLocaleDateString("en-PH")
+			);
+					
             /*========================
             DOWNLOAD BUTTONS
             ========================*/
-            $("#download_options_summary").html(`
-                <div class="btn-group">
+			$("#download_options_summary").html(`
 
-                    <button type="button"
-                            class="btn btn-outline-primary btn-sm bi-file-earmark-pdf"
-                            onclick="download_daily_purchase_report_pdf()">
+				<div class="dropdown">
 
-                        Summary
+					<button class="btn btn-primary rounded-3 shadow-sm dropdown-toggle"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false">
 
-                    </button>
+						<i class="bi bi-download me-1"></i>
+						Download Report
 
-                    <button type="button"
-                            class="btn btn-outline-primary btn-sm bi-file-earmark-pdf"
-                            onclick="download_daily_purchase_report_pdf_consolidated()">
+					</button>
 
-                        Consolidated
+					<ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3">
 
-                    </button>
+						<!-- SUMMARY PDF -->
+						<li>
 
-                </div>
-            `);
+							<button class="dropdown-item"
+									type="button"
+									onclick="download_daily_purchase_report_pdf()">
+
+								<i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+								Summary PDF
+
+							</button>
+
+						</li>
+
+						<!-- CONSOLIDATED PDF -->
+						<li>
+
+							<button class="dropdown-item"
+									type="button"
+									onclick="download_daily_purchase_report_pdf_consolidated()">
+
+								<i class="bi bi-file-earmark-richtext text-primary me-2"></i>
+								Consolidated PDF
+
+							</button>
+
+						</li>
+
+					</ul>
+
+				</div>
+
+			`);
 
         },
 

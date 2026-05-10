@@ -60,7 +60,7 @@ class PurchaseOrderController_v2 extends Controller
 		
 		}
 
-		return view("pages.purchaseorder_v2", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion','supplier_data','teves_branch'));
+		return view("pages.purchase_order.index", compact('data','title','product_data','purchase_data_suggestion','purchase_payment_suggestion','supplier_data','teves_branch'));
 		
 	}   
 	
@@ -100,7 +100,7 @@ class PurchaseOrderController_v2 extends Controller
                 })
 				
 				->addColumn('action', function($row){
-					
+					/*
 					$actionBtn = '
 					<div align="center" class="action_table_menu_Product">
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
@@ -114,7 +114,142 @@ class PurchaseOrderController_v2 extends Controller
 					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
 					<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->purchase_order_id.')" id="viewPaymentGalery"></a>
 					</div>';
-					
+					*/
+					$actionBtn = '
+
+<div class="dropdown dropstart text-center">
+
+    <button class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+
+        <i class="bi bi-three-dots"></i>
+
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+
+        <!-- PRINT -->
+        <li>
+
+            <a href="#"
+               data-id="'.$row->purchase_order_id.'"
+               class="dropdown-item"
+               id="PrintPurchaseOrder">
+
+                <i class="bi bi-printer-fill text-warning me-2"></i>
+                Print Purchase Order
+
+            </a>
+
+        </li>
+
+        <!-- GALLERY -->
+        <li>
+
+            <a href="#"
+               class="dropdown-item"
+               onclick="ViewGalery('.$row->purchase_order_id.')"
+               id="viewPaymentGalery">
+
+                <i class="bi bi-images text-primary me-2"></i>
+                View Payment Gallery
+
+            </a>
+
+        </li>
+
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+
+        <!-- EDIT -->
+        <li>
+
+            <a href="purchase_order_form/'.$row->purchase_order_id.'"
+               class="dropdown-item">
+
+                <i class="bi bi-pencil-fill text-success me-2"></i>
+                Edit Purchase Order
+
+            </a>
+
+        </li>
+
+        <!-- DELETE -->
+        <li>
+
+            <a href="#"
+               data-id="'.$row->purchase_order_id.'"
+               class="dropdown-item text-danger"
+               id="deletePurchaseOrder">
+
+                <i class="bi bi-trash3-fill me-2"></i>
+                Delete Purchase Order
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+';
+
+
+$actionBtn_view_only = '
+
+<div class="dropdown dropstart text-center">
+
+    <button class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+
+        <i class="bi bi-three-dots"></i>
+
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+
+        <!-- PRINT -->
+        <li>
+
+            <a href="#"
+               data-id="'.$row->purchase_order_id.'"
+               class="dropdown-item"
+               id="PrintPurchaseOrder">
+
+                <i class="bi bi-printer-fill text-warning me-2"></i>
+                Print Purchase Order
+
+            </a>
+
+        </li>
+
+        <!-- GALLERY -->
+        <li>
+
+            <a href="#"
+               class="dropdown-item"
+               onclick="ViewGalery('.$row->purchase_order_id.')"
+               id="viewPaymentGalery">
+
+                <i class="bi bi-images text-primary me-2"></i>
+                View Payment Gallery
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+';
+
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
 						$timeDiff = abs($endTimeStamp - $startTimeStamp);

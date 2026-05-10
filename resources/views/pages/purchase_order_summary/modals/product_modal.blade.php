@@ -8,7 +8,7 @@
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
             <!-- HEADER -->
-            <div class="modal-header bg-primary text-white border-0 py-3 px-4">
+            <div class="modal-header bg-success text-white border-0 py-3 px-4">
 
                 <div class="d-flex align-items-center">
 

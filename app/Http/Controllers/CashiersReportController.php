@@ -12,6 +12,7 @@ use App\Models\CashiersReportModel_P4;
 use App\Models\CashiersReportModel_P5;
 use App\Models\CashiersReportModel_P6;
 use App\Models\CashiersReportModel_P8;
+use App\Models\BankModel;
 
 use App\Models\SOBillingTransactionModel;
 use App\Models\BillingTransactionModel;
@@ -44,6 +45,7 @@ class CashiersReportController extends Controller
 			if($data->user_branch_access_type=='ALL'){
 				
 				$teves_branch = TevesBranchModel::all();
+				
 			
 			}else{
 				
@@ -434,7 +436,7 @@ class CashiersReportController extends Controller
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$client_data = ClientModel::all();
-			
+			$bank_list = BankModel::all();
 			if($data->user_branch_access_type=='ALL'){
 				
 				$teves_branch = TevesBranchModel::all();
@@ -476,7 +478,7 @@ class CashiersReportController extends Controller
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
-		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch','client_data'));	
+		return view("pages.cashiers_report_form_main", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch','client_data','bank_list'));	
 		
 		}
 		

@@ -29,7 +29,7 @@ class CashiersReport_Payment_Controller extends Controller
             ],
             [
                 'payment_type.required'   => 'Payment Type is required',
-                'payment_amount.required' => 'Payment Amountbbb is required',
+                'payment_amount.required' => 'Payment Amount is required',
                 'payer_name.required' => 'Name is required',
                 'payer_number.required' => 'Account Number is required',
                 'reference_number.required' => 'Reference Number is required'

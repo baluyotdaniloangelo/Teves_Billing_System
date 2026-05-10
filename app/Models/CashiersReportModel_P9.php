@@ -20,6 +20,7 @@ class CashiersReportModel_P9 extends Model
 	protected $fillable = [
 		'cashiers_report_p9_id',
 		'user_idx',
+		'bank_idx',
 		'cashiers_report_idx',
 
 		'cash_deposit_bank',
@@ -46,6 +47,7 @@ class CashiersReportModel_P9 extends Model
 	protected static $logAttributes = [
 		'cashiers_report_p8_id',
 		'user_idx',
+		'bank_idx',
 		'cashiers_report_idx',
 
 		'cash_deposit_bank',

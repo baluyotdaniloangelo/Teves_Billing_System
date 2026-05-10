@@ -39,131 +39,323 @@
 
 <!-- ================= ADD CASH DEPOSIT MODAL ================= -->
 <div class="modal fade" id="CRPH9_Modal" tabindex="-1">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content shadow">
+    
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
-      <!-- HEADER -->
-      <div class="modal-header bg-light">
-        <h5 class="modal-title fw-semibold">
-          <i class="bi bi-cash-coin me-2"></i> Add Cash Deposit
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+            <!-- HEADER -->
+            <div class="modal-header bg-light border-0 px-4 py-3">
 
-      <!-- BODY -->
-      <div class="modal-body px-4 py-3">
-        <form id="CRPH9_form" class="needs-validation" novalidate>
+                <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
 
-          <div class="row">
+                    <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                          style="width:42px;height:42px;">
 
-            <!-- LEFT SIDE -->
-            <div class="col-md-8">
+                        <i class="bi bi-cash-coin text-success"></i>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Bank</label>
-                <input type="text" 
-                       class="form-control" 
-                       name="cash_deposit_bank" 
-                       id="cash_deposit_bank"
-                       placeholder="Enter bank name (e.g. BDO, BPI)">
-              </div>
+                    </span>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Date</label>
-                <input type="datetime-local" 
-                       class="form-control" 
-                       name="cash_deposit_date" 
-                       id="cash_deposit_date">
-              </div>
+                    <span>
+                        Add Cash Deposit
+                    </span>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Amount</label>
-                <div class="input-group">
-                  <span class="input-group-text">₱</span>
-                  <input type="number"
-                         class="form-control"
-                         name="cash_deposit_amount"
-                         id="cash_deposit_amount"
-                         step=".01"
-                         min="0"
-                         placeholder="0.00"
-                         required>
-                </div>
-              </div>
+                </h5>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Reference Number</label>
-                <input type="text" 
-                       class="form-control" 
-                       name="cash_deposit_reference" 
-                       id="cash_deposit_reference"
-                       placeholder="Transaction / Deposit Slip No.">
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Remarks</label>
-                <textarea class="form-control" 
-                          name="cash_deposit_remarks" 
-                          id="cash_deposit_remarks" 
-                          rows="3"
-                          placeholder="Optional notes..."></textarea>
-              </div>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
 
             </div>
 
-            <!-- RIGHT SIDE -->
-            <div class="col-md-4 border-start">
+            <!-- BODY -->
+            <div class="modal-body px-4 py-4">
 
-              <div class="ps-md-3">
+                <form id="CRPH9_form"
+                      class="needs-validation"
+                      novalidate>
 
-                <label class="form-label fw-semibold">Receipt Preview</label>
+                    <div class="row g-4">
 
-                <!-- IMAGE PREVIEW -->
-                <div class="text-center mb-3">
-                  <img id="cash_deposit_preview" 
-                       src="" 
-                       class="img-fluid rounded border shadow-sm"
-                       style="max-height:300px; display:none;">
-                </div>
+                        <!-- LEFT SIDE -->
+                        <div class="col-md-8">
 
-                <!-- FILE INPUT -->
-                <div class="mb-3">
-                  <label class="form-label">Upload Receipt</label>
-                  <input type="file"
-                         class="form-control"
-                         name="cash_deposit_photo"
-                         id="cash_deposit_photo"
-                         accept="image/*">
-                  <small class="text-muted">JPG, PNG (Max 10MB)</small>
-                </div>
+                            <!-- BANK -->
+                            <div class="mb-3">
 
-              </div>
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2">
+
+                                    <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-bank text-primary"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Bank
+                                    </span>
+
+                                </label>
+
+                                <select class="form-select rounded-3"
+                                        name="bank_idx"
+                                        id="bank_idx"
+                                        required>
+
+                                    <option value="">
+                                        -- Select Bank --
+                                    </option>
+
+                                    @foreach($bank_list as $bank)
+
+                                        <option value="{{ $bank->bank_id }}">
+
+                                            {{ $bank->bank_name }}
+
+                                            @if($bank->bank_branch)
+                                                | {{ $bank->bank_account_number }}
+                                            @endif
+
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+
+                                <div class="invalid-feedback">
+
+                                    Please select a bank.
+
+                                </div>
+
+                            </div>
+
+                            <!-- DATE -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2">
+
+                                    <span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-calendar-event text-info"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Date
+                                    </span>
+
+                                </label>
+
+                                <input type="datetime-local"
+                                       class="form-control rounded-3"
+                                       name="cash_deposit_date"
+                                       id="cash_deposit_date"
+                                       required>
+
+                                <div class="invalid-feedback">
+
+                                    Please select deposit date.
+
+                                </div>
+
+                            </div>
+
+                            <!-- AMOUNT -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2">
+
+                                    <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-currency-dollar text-success"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Amount
+                                    </span>
+
+                                </label>
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+                                        ₱
+                                    </span>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           name="cash_deposit_amount"
+                                           id="cash_deposit_amount"
+                                           step=".01"
+                                           min="0"
+                                           placeholder="0.00"
+                                           required>
+
+                                    <div class="invalid-feedback">
+
+                                        Please enter deposit amount.
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- REFERENCE NUMBER -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2">
+
+                                    <span class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-upc-scan text-warning"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Reference Number
+                                    </span>
+
+                                </label>
+
+                                <input type="text"
+                                       class="form-control rounded-3"
+                                       name="cash_deposit_reference"
+                                       id="cash_deposit_reference"
+                                       placeholder="Transaction / Deposit Slip No.">
+
+                            </div>
+
+                            <!-- REMARKS -->
+                            <div class="mb-0">
+
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2">
+
+                                    <span class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-chat-left-text text-secondary"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Remarks
+                                    </span>
+
+                                </label>
+
+                                <textarea class="form-control rounded-3"
+                                          name="cash_deposit_remarks"
+                                          id="cash_deposit_remarks"
+                                          rows="4"
+                                          placeholder="Optional notes..."></textarea>
+
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT SIDE -->
+                        <div class="col-md-4">
+
+                            <div class="border rounded-4 bg-light p-3 h-100">
+
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-3">
+
+                                    <span class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-image text-danger"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Receipt Preview
+                                    </span>
+
+                                </label>
+
+                                <!-- IMAGE PREVIEW -->
+                                <div class="text-center mb-3">
+
+                                    <img id="cash_deposit_preview"
+                                         src=""
+                                         class="img-fluid rounded-4 border shadow-sm"
+                                         style="max-height:300px; display:none;">
+
+                                </div>
+
+                                <!-- FILE INPUT -->
+                                <div class="mb-2">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Upload Receipt
+
+                                    </label>
+
+                                    <input type="file"
+                                           class="form-control rounded-3"
+                                           name="cash_deposit_photo"
+                                           id="cash_deposit_photo"
+                                           accept="image/*">
+
+                                </div>
+
+                                <small class="text-muted">
+
+                                    JPG, PNG (Max 10MB)
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
 
             </div>
 
-          </div>
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 px-4 py-3 d-flex justify-content-between">
 
-        </form>
-      </div>
+                <!-- RESET -->
+                <button type="reset"
+                        form="CRPH9_form"
+                        class="btn btn-light rounded-3 px-4"
+                        id="clear-CRPH9-save">
 
-      <!-- FOOTER -->
-      <div class="modal-footer d-flex justify-content-between px-4">
-        <button type="reset" 
-                form="CRPH9_form"
-                class="btn btn-outline-secondary"
-                id="clear-CRPH9-save">
-          <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
-        </button>
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>
 
-        <button type="submit" 
-                class="btn btn-success px-4"
-                id="save-CRPH9">
-          <i class="bi bi-save me-1"></i> Save Deposit
-        </button>
-      </div>
+                    Reset
+
+                </button>
+
+                <!-- SAVE -->
+                <button type="submit"
+                        class="btn btn-success rounded-3 shadow-sm px-4"
+                        id="save-CRPH9">
+
+                    <i class="bi bi-save me-2"></i>
+
+                    Save Deposit
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-  </div>
+
 </div>
 
 <!-- ================= Update CASH DEPOSIT MODAL ================= -->
@@ -188,15 +380,56 @@
             <!-- LEFT SIDE (FORM) -->
             <div class="col-md-8">
 
-              <!-- BANK -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Bank</label>
-                <input type="text" 
-                       class="form-control" 
-                       name="update_cash_deposit_bank" 
-                       id="update_cash_deposit_bank"
-                       placeholder="Enter bank name (e.g. BDO, BPI)">
-              </div>
+                            <!-- BANK -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-semibold d-flex align-items-center gap-2">
+
+                                    <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                          style="width:32px;height:32px;">
+
+                                        <i class="bi bi-bank text-primary"></i>
+
+                                    </span>
+
+                                    <span>
+                                        Bank
+                                    </span>
+
+                                </label>
+
+                                <select class="form-select rounded-3"
+                                        name="update_bank_idx"
+                                        id="update_bank_idx"
+                                        required>
+
+                                    <option value="">
+                                        -- Select Bank --
+                                    </option>
+
+                                    @foreach($bank_list as $bank)
+
+                                        <option value="{{ $bank->bank_id }}">
+
+                                            {{ $bank->bank_name }}
+
+                                            @if($bank->bank_branch)
+                                                | {{ $bank->bank_account_number }}
+                                            @endif
+
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+
+                                <div class="invalid-feedback">
+
+                                    Please select a bank.
+
+                                </div>
+
+                            </div>
 
               <!-- DATE -->
               <div class="mb-3">

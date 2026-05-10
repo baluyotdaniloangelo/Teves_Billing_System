@@ -25,7 +25,7 @@ class CashiersReport_CashDeposit_Controller extends Controller
 
 		/* ================= VALIDATION ================= */
 		$rules = [
-			'cash_deposit_bank'   => 'required|string',
+			'bank_idx'   => 'required|string',
 			'cash_deposit_amount' => 'required|numeric|min:0',
 			'cash_deposit_date'   => 'required|date',
 			'cash_deposit_remarks'=> 'nullable|string',
@@ -46,7 +46,7 @@ class CashiersReport_CashDeposit_Controller extends Controller
 		}
 
 		$request->validate($rules, [
-			'cash_deposit_bank.required'      => 'Bank is required',
+			'bank_idx.required'      => 'Bank is required',
 			'cash_deposit_amount.required'    => 'Amount is required',
 			'cash_deposit_date.required'      => 'Date is required',
 			'cash_deposit_reference.required' => 'Reference is required',
@@ -62,7 +62,7 @@ class CashiersReport_CashDeposit_Controller extends Controller
 			$data = new CashiersReportModel_P9();
 
 			$data->cashiers_report_idx    = $CashiersReportId;
-			$data->cash_deposit_bank      = $request->cash_deposit_bank;
+			$data->bank_idx      		  = $request->bank_idx;
 			$data->cash_deposit_amount    = $request->cash_deposit_amount;
 			$data->cash_deposit_date      = Carbon::parse($request->cash_deposit_date);
 			$data->cash_deposit_remarks   = $request->cash_deposit_remarks;
@@ -97,7 +97,7 @@ class CashiersReport_CashDeposit_Controller extends Controller
 		/* ================= UPDATE ================= */
 		$data = CashiersReportModel_P9::findOrFail($CRPH9_ID);
 
-		$data->cash_deposit_bank       = $request->cash_deposit_bank;
+		$data->bank_idx      		   = $request->bank_idx;
 		$data->cash_deposit_amount     = $request->cash_deposit_amount;
 		$data->cash_deposit_date       = Carbon::parse($request->cash_deposit_date);
 		$data->cash_deposit_remarks    = $request->cash_deposit_remarks;
@@ -139,7 +139,7 @@ class CashiersReport_CashDeposit_Controller extends Controller
 	public function get_cash_deposit_list(Request $request)
 	{
 		if ($request->ajax()) {
-
+			/*
 			$data = CashiersReportModel_P9::where(
 					'cashiers_report_idx',
 					$request->CashiersReportId
@@ -153,7 +153,40 @@ class CashiersReport_CashDeposit_Controller extends Controller
 					'cash_deposit_reference',
 					'cash_deposit_photo'
 				);
+*/
+			$data = CashiersReportModel_P9::where(
+						'cashiers_report_idx',
+						$request->CashiersReportId
+					)
 
+					->leftJoin(
+						'teves_bank_table as tbt',
+						'tbt.bank_id',
+						'=',
+						'teves_cashiers_report_p9.bank_idx'
+					)
+					->select(
+						'bank_id',
+						'cashiers_report_p9_id',
+						 DB::raw("
+							CONCAT(
+								tbt.bank_name,
+								' | ',
+								tbt.bank_account_number
+							) as cash_deposit_bank
+						"),
+						'tbt.bank_name',
+						'tbt.bank_branch',
+						'tbt.bank_account_number',
+						'cash_deposit_amount',
+						'cash_deposit_date',
+						'cash_deposit_remarks',
+						'cash_deposit_reference',
+						'cash_deposit_photo'
+
+					)
+
+					->get();
 			return DataTables::of($data)
 				->addIndexColumn()
 
@@ -164,22 +197,6 @@ class CashiersReport_CashDeposit_Controller extends Controller
 				->editColumn('cash_deposit_amount', function ($row) {
 					return $row->cash_deposit_amount;
 				})
-
-				/*->addColumn('action', function ($row) {
-					return '
-						<div align="center" class="action_table_menu_Product">
-							<a href="#" 
-							   data-id="'.$row->cashiers_report_p9_id.'" 
-							   class="btn-danger btn-circle btn-sm bi-pencil-fill btn_icon_table btn_icon_table_edit"
-							   id="CRP9_Edit"></a>
-
-							<a href="#" 
-							   data-id="'.$row->cashiers_report_p9_id.'" 
-							   class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete"
-							   id="CRP9_Delete"></a>
-						</div>
-					';
-				})*/
 				->addColumn('photo', function ($row) {
 					return $row->cash_deposit_photo;
 				})
@@ -225,8 +242,22 @@ class CashiersReport_CashDeposit_Controller extends Controller
                 'cashiers_report_p9_id',
                 $CRPH9_ID
             )
+			->leftJoin(
+						'teves_bank_table as tbt',
+						'tbt.bank_id',
+						'=',
+						'teves_cashiers_report_p9.bank_idx'
+					)
             ->get([
-                'cash_deposit_bank',
+                'bank_idx',
+				'cashiers_report_p9_id',
+						 DB::raw("
+							CONCAT(
+								tbt.bank_name,
+								' | ',
+								tbt.bank_account_number
+							) as cash_deposit_bank
+						"),
                 'cash_deposit_amount',
 				'cash_deposit_date',
 				'cash_deposit_remarks',

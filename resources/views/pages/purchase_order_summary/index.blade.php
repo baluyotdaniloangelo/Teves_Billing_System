@@ -34,7 +34,7 @@
 @include('pages.purchase_order_summary.modals.summary_modal')
 @include('pages.purchase_order_summary.modals.product_modal')
 @include('pages.purchase_order_summary.modals.volume_modal')	
-
+@include('pages.user_account_settings.modals.logout_modal')	
     </section>
 
 

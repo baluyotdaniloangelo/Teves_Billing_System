@@ -192,8 +192,7 @@ else if (Request::is('purchaseorder')){
 else if (Request::is('purchaseorder_v2')){
 	?>
 	<body class="">
-	@include('layouts.footer')
-	@include('layouts.purchaseorder_script_v2')
+	
 	<?php
 }
 else if (Request::is('purchase_order_form/*')){

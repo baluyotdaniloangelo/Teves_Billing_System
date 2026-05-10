@@ -16,8 +16,9 @@ $("#save-CRPH9").click(function(event){
 
     formData.append('CRPH9_ID', 0);
     formData.append('CashiersReportId', CashiersReportId);
-    formData.append('cash_deposit_bank', $("#cash_deposit_bank").val());
-    formData.append('cash_deposit_date', $("#cash_deposit_date").val());
+    //formData.append('cash_deposit_bank', $("#cash_deposit_bank").val());
+    formData.append('bank_idx' , $("#bank_idx").val());
+	formData.append('cash_deposit_date', $("#cash_deposit_date").val());
     formData.append('cash_deposit_amount', $("#cash_deposit_amount").val());
     formData.append('cash_deposit_reference', $("#cash_deposit_reference").val());
     formData.append('cash_deposit_remarks', $("textarea[name=cash_deposit_remarks]").val());
@@ -122,7 +123,8 @@ $('body').on('click', '#CRP9_Edit', function(event){
         success: function(response){
 
             $("#update-CRPH9").val(CRPH9_ID);
-            $("#update_cash_deposit_bank").val(response[0].cash_deposit_bank);
+			
+            $("#update_bank_idx").val(response[0].bank_idx);
             $("#update_cash_deposit_date").val(response[0].cash_deposit_date);
 
 			$("#update_cash_deposit_amount").val(response[0].cash_deposit_amount);
@@ -185,8 +187,9 @@ $("#update-CRPH9").click(function(event){
 
     formData.append('CRPH9_ID', $("#update-CRPH9").val());
     formData.append('CashiersReportId', CashiersReportId);
-    formData.append('cash_deposit_bank', $("#update_cash_deposit_bank").val());
-    formData.append('cash_deposit_date', $("#update_cash_deposit_date").val());
+    //formData.append('cash_deposit_bank', $("#update_cash_deposit_bank").val());
+    formData.append('bank_idx' , $("#update_bank_idx").val());
+	formData.append('cash_deposit_date', $("#update_cash_deposit_date").val());
     formData.append('cash_deposit_amount', $("#update_cash_deposit_amount").val());
     formData.append('cash_deposit_reference', $("#update_cash_deposit_reference").val());
     formData.append('cash_deposit_remarks', $("textarea[name=update_cash_deposit_remarks]").val());

@@ -23,6 +23,7 @@ use App\Http\Controllers\CashiersReport_CashDeposit_Controller;
 use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\BankController;
 
 /*June 19, 2025*/
 use App\Http\Controllers\ProductPricePerSellerController;
@@ -554,6 +555,22 @@ Route::post('/branch_info', [BranchController::class, 'branch_info'])->name('Bra
 Route::post('/update_branch_post', [BranchController::class,'update_branch_post'])->name('UpdateBranch')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
 Route::post('/delete_branch_confirmed', [BranchController::class, 'delete_branch_confirmed'])->name('DeleteBranch')->middleware('isLoggedIn');
+
+
+
+/*Dev Date May 10 2026*/
+/*Load Bank List*/
+Route::get('/bank', [BankController::class,'bank'])->name('bank')->middleware('isLoggedIn');
+Route::get('bank/list', [BankController::class, 'getBankList'])->name('getBankDetailsList')->middleware('isLoggedIn');
+/*Create Bank*/
+Route::post('/create_bank_post', [BankController::class,'create_bank_post'])->name('CreateBank')->middleware('isLoggedIn');
+/*GET Bank Info*/
+Route::post('/bank_info', [BankController::class, 'bank_info'])->name('BankInfo')->middleware('isLoggedIn');
+/*Update Bank*/
+Route::post('/update_bank_post', [BankController::class,'update_bank_post'])->name('UpdateBank')->middleware('isLoggedIn');
+/*Confirm Delete Bank*/
+Route::post('/delete_bank_confirmed', [BankController::class, 'delete_bank_confirmed'])->name('DeleteBank')->middleware('isLoggedIn');
+
 
 /*June 19, 2025 - Seller's Price*/
 Route::post('sellers_price/list', [ProductPricePerSellerController::class, 'get_product_price_per_seller'])->name('ProductPricePerSellerList')->middleware('isLoggedIn');
