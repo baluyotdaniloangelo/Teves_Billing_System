@@ -29,7 +29,7 @@ div.dataTables_wrapper {
 						<div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3"
 							 style="width:55px;height:55px;">
 
-							<i class="bi bi-bank text-success fs-4"></i>
+							<i class="bi bi-tags text-success fs-4"></i>
 
 						</div>
 

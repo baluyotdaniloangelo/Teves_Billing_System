@@ -17,7 +17,7 @@
                     <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0"
                          style="width:60px;height:60px;">
 
-                        <i class="bi bi-bank2 fs-3"></i>
+                        <i class="bi bi-tags fs-3"></i>
 
                     </div>
 

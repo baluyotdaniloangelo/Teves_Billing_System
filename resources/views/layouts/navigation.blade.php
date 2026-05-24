@@ -216,7 +216,7 @@
               <i class="bi bi-box-seam navbar_icon" title="Manage Product list"></i><span>Product</span>
             </a>
 			<a href="{{ route('product_category') }}" class="sidebar_li_a" title="Manage Bank list">
-              <i class="bi bi-box-seam navbar_icon" title="Manage Bank list"></i><span>Product Category</span>
+              <i class="bi bi-tags navbar_icon" title="Manage Bank list"></i><span>Product Category</span>
             </a>
 			<a href="{{ route('bank') }}" class="sidebar_li_a" title="Manage Bank list">
               <i class="bi bi-bank2 navbar_icon" title="Manage Bank list"></i><span>Bank</span>

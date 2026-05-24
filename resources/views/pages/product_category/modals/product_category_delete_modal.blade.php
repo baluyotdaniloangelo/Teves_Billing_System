@@ -17,7 +17,7 @@
                     <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                          style="width:75px;height:75px;">
 
-                        <i class="bi bi-bank2 text-danger fs-1"></i>
+                        <i class="bi bi-tags text-danger fs-1"></i>
 
                     </div>
 
@@ -81,7 +81,7 @@
 
                                 <div class="small text-muted mb-1">
 
-                                    <i class="bi bi-bank me-1 text-primary"></i>
+                                    <i class="bi bi-tags me-1 text-primary"></i>
                                     Product Category
 
                                 </div>
