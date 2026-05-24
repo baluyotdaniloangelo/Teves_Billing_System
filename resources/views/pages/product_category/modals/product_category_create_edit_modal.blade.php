@@ -219,7 +219,7 @@
                 </div>
 
                 <!-- TITLE -->
-                <h5 class="fw-bold text-danger mb-2">
+                <h5 class="fw-bold text-danger mb-2" id="action_error_message">
 
                     Validation Error
 

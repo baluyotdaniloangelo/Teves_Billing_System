@@ -41,7 +41,7 @@ div.dataTables_wrapper {
 							</h4>
 							
 							<small class="text-muted">
-								Client List
+								Manage Account List
 							</small>
 
 						</div>
@@ -59,7 +59,7 @@ div.dataTables_wrapper {
 								data-bs-target="#CreateClientModal">
 
 							<i class="bi bi-plus-circle me-2"></i>
-							New Client
+							New Account
 
 						</button>
 
@@ -122,11 +122,13 @@ div.dataTables_wrapper {
 											<thead>
 												<tr>
 													<th>#</th>
-													<th class="all">Client Name</th>
+													<th class="all">Name</th>
 													<th class="all">Account Number</th>
 													<th>Address</th>
 													<th>TIN</th>
 													<th>Referred By</th>
+													<th title='Contact Number' class="none">Contact Number</th>
+													<th title='Age' class="none">Age</th>
 													<th title='Default Value' class="none">Discount(Less)</th>
 													<th class="none">Net</th>
 													<th class="none">Vat</th>

@@ -1,4 +1,4 @@
-<!-- CREATE CLIENT MODAL -->
+<!-- Account Creation MODAL -->
 <div class="modal fade"
      id="CreateClientModal"
      tabindex="-1"
@@ -25,11 +25,11 @@
                     <div>
 
                         <h4 class="modal-title fw-bold mb-0" id="client_modal_title">
-                            Create Client
+                            Account Creation
                         </h4>
 
                         <small class="opacity-75">
-                            Add and manage client information
+                            Add and manage Account information
                         </small>
 
                     </div>
@@ -65,7 +65,7 @@
                                 <div class="card-body p-4">
 
                                     <h6 class="fw-bold mb-4 text-success">
-                                        Client Information
+                                        Account Information
                                     </h6>
 
                                     <!-- CLIENT NAME -->
@@ -80,7 +80,7 @@
 
                                             </span>
 
-                                            <span>Client Name</span>
+                                            <span>Name</span>
 
                                         </label>
 
@@ -88,7 +88,7 @@
                                                class="form-control form-control-lg rounded-3"
                                                name="client_name"
                                                id="client_name"
-                                               placeholder="Enter Client Name"
+                                               placeholder="Enter Name/Description"
                                                autocomplete="off"
                                                required>
 
@@ -417,7 +417,7 @@
                             id="save-client">
 
                         <i class="bi bi-save-fill me-2"></i>
-                        Save Client
+                        Save
 
                     </button>
 

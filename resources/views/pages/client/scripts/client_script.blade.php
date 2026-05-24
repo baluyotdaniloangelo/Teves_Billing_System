@@ -40,6 +40,8 @@ function initializeClientTable()
                 { data: 'client_address' },
                 { data: 'client_tin' },
                 { data: 'referred_by_name' },
+                { data: 'client_contact_number' },
+                { data: 'client_age' },
                 { data: 'default_less_percentage' },
                 { data: 'default_net_percentage' },
                 { data: 'default_vat_percentage' },
@@ -141,8 +143,8 @@ function openCreateClientModal()
     resetClientForm();
 	$('#clear-client').show();
     $('#client_id').val('');
-    $('#client_modal_title').text('Create Client');
-    $('#save-client').html(`<i class="bi bi-save-fill me-2"></i>Save Client`);
+    $('#client_modal_title').text('Account Creation');
+    $('#save-client').html(`<i class="bi bi-save-fill me-2"></i>Save`);
     $('#CreateClientModal').modal('show');
 }
 
@@ -155,8 +157,8 @@ $('#CreateClientModal').on('hidden.bs.modal', function ()
 {
     resetClientForm();
 	$('#clear-client').show();
-    $('#client_modal_title').text('Create Client');
-    $('#save-client').html(`<i class="bi bi-save-fill me-2"></i>Save Client`);
+    $('#client_modal_title').text('Account Creation');
+    $('#save-client').html(`<i class="bi bi-save-fill me-2"></i>Save`);
 	
 });
 
@@ -221,8 +223,8 @@ function openEditClientModal()
             /*
             UPDATE MODAL
             */
-            $('#client_modal_title').text('Update Client');
-            $('#save-client').html(`<i class="bi bi-check-circle-fill me-2"></i>Update Client`);
+            $('#client_modal_title').text('Account Update');
+            $('#save-client').html(`<i class="bi bi-check-circle-fill me-2"></i>Update`);
 
         },
 

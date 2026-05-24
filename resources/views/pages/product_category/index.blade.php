@@ -143,7 +143,6 @@ div.dataTables_wrapper {
 
 		</div>
 	
-
 @include('pages.product_category.modals.product_category_create_edit_modal')	
 @include('pages.product_category.modals.product_category_delete_modal')	
 @include('pages.reminders.modals.reminder_modal')	
@@ -154,7 +153,6 @@ div.dataTables_wrapper {
 </main>
 
 @include('pages.product_category.scripts.plugins_script')
-@include('pages.product_category.scripts.customized_script')
 @include('pages.product_category.scripts.product_category_script')
 
 @endsection

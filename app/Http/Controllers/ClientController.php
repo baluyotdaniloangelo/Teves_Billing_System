@@ -14,10 +14,9 @@ class ClientController extends Controller
 	/*Load client Interface*/
 	public function client(){
 		
-
 		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 		
-			$title = 'Client';
+			$title = 'Account';
 			$data = array();
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
@@ -41,6 +40,8 @@ class ClientController extends Controller
 				'client_account_number',
 				'client_address',
 				'client_tin',
+				'client_contact_number',
+				'client_age',
 				'default_less_percentage',
 				'default_net_percentage',
 				'default_vat_percentage',
@@ -55,72 +56,43 @@ class ClientController extends Controller
 					->addColumn('referred_by_name', function($row){
 						return $row->referrer->client_name ?? 'None';
 					})
-					/*->addColumn('action', function($row){
-						$actionBtn = '
-						<div align="center" class="action_table_menu_client">
-						<a href="#" data-id="'.$row->client_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editclient"></a>
-						<a href="#" data-id="'.$row->client_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteclient"></a>
-						</div>';
-						return $actionBtn;
-					})*/
-			
-			->addColumn('action', function ($row)
-            {
-                return '
-
-                <div class="dropdown dropstart text-center">
-
-                    <!-- BUTTON -->
-                    <button class="btn btn-sm btn-light border rounded-3 shadow-sm"
-                            type="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false">
-
-                        <i class="bi bi-three-dots"></i>
-
-                    </button>
-
-                    <!-- MENU -->
-                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4">
-
-                        <!-- EDIT -->
-                        <li>
-
-                            <a href="#"
-                               class="dropdown-item"
-                               data-id="'.$row->client_id.'"
-                               id="editClientDetails">
-
-                                <i class="bi bi-pencil-square text-warning me-2"></i>
-
-                                Edit Client Details
-
-                            </a>
-
-                        </li>
-
-                        <!-- DELETE -->
-                        <li>
-
-                            <a href="#"
-                               class="dropdown-item text-danger"
-                               data-id="'.$row->client_id.'"
-                               id="deleteClientDetails">
-
-                                <i class="bi bi-trash3-fill me-2"></i>
-
-                                Delete Client Details
-
-                            </a>
-
-                        </li>
-
-                    </ul>
-
-                </div>
-
-                ';
-            })
+					->addColumn('action', function ($row)
+					{
+						return '
+						<div class="dropdown dropstart text-center">
+							<!-- BUTTON -->
+							<button class="btn btn-sm btn-light border rounded-3 shadow-sm"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false">
+								<i class="bi bi-three-dots"></i>
+							</button>
+							<!-- MENU -->
+							<ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4">
+								<!-- EDIT -->
+								<li>
+									<a href="#"
+									   class="dropdown-item"
+									   data-id="'.$row->client_id.'"
+									   id="editClientDetails">
+										<i class="bi bi-pencil-square text-warning me-2"></i>
+										Edit Client Details
+									</a>
+								</li>
+								<!-- DELETE -->
+								<li>
+									<a href="#"
+									   class="dropdown-item text-danger"
+									   data-id="'.$row->client_id.'"
+									   id="deleteClientDetails">
+										<i class="bi bi-trash3-fill me-2"></i>
+										Delete Client Details
+									</a>
+								</li>
+							</ul>
+						</div>
+						';
+					})
 					->rawColumns(['action'])
 					->make(true);
 		}
