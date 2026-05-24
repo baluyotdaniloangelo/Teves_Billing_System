@@ -156,7 +156,7 @@
 							</li>
 							
 							<li class="nav-item" role="presentation">
-							  <button class="nav-link" id="ph8v2-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph8v2" type="button" role="tab" aria-controls="ph8v2" aria-selected="false" tabindex="-1">Payment</button>
+							  <button class="nav-link" id="ph8v2-tab" data-bs-toggle="tab" data-bs-target="#bordered-ph8v2" type="button" role="tab" aria-controls="ph8v2" aria-selected="false" tabindex="-1">Non-Cash Payment</button>
 							</li>
 							
 							<li class="nav-item" role="presentation">

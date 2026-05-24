@@ -81,6 +81,21 @@
 					  <form class="g-2 needs-validation" id="ProductformNew">
 					  
 						<div class="row mb-2">
+						  <label for="category_idx" class="col-sm-3 col-form-label">Product Category</label>
+						  <div class="col-sm-9">
+							<select class="form-select form-control" required="" name="category_idx" id="category_idx">
+									@foreach ($product_category as $product_category_cols)
+										<option value="{{$product_category_cols->category_id}}">
+												{{$product_category_cols->category_name}}
+										</option>
+													
+									@endforeach
+								</select>
+							<span class="valid-feedback" id="category_idxError"></span>
+						  </div>
+						</div>					  
+					  
+						<div class="row mb-2">
 						  <label for="product_name" class="col-sm-3 col-form-label">Product Name</label>
 						  <div class="col-sm-9">
 							<input type="text" class="form-control" name="product_name" id="product_name" value="" required>

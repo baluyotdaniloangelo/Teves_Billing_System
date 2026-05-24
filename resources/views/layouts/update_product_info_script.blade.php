@@ -29,7 +29,8 @@
 					document.getElementById("update_product_name").value = response.product_name;
 					document.getElementById("update_product_price").value = response.product_price;
 					document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement;
-										
+					document.getElementById("update_category_idx").value = response.category_idx;
+					
 					$('#UpdateProductModal').modal('toggle');		
 				  
 				  }
@@ -54,12 +55,14 @@
 			let product_name 				= $("input[name=update_product_name]").val();
 			let product_price 				= $("input[name=update_product_price]").val();
 			let product_unit_measurement 	= $("#update_product_unit_measurement").val();
+			let category_idx 				= $("#update_category_idx").val();
 			
 			  $.ajax({
 				url: "/update_product_post",
 				type:"POST",
 				data:{
 				  productID:productID,
+				  category_idx:category_idx,
 				  product_name:product_name,
 				  product_price:product_price,
 				  product_unit_measurement:product_unit_measurement ,

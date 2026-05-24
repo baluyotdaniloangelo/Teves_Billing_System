@@ -11,6 +11,7 @@ use App\Models\ProductPricePerBranchModel;
 use App\Models\ProductPricePerBranchHistoryModel;
 use App\Models\SupplierModel;/*June 9, 2025*/
 use App\Models\ClientModel;
+use App\Models\ProductCategoryModel;
 use Session;
 use Validator;
 use DataTables;
@@ -29,7 +30,9 @@ class ProductController extends Controller
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$product_data = ProductModel::all();
-			return view("pages.product", compact('data','title'));
+			$product_category = ProductCategoryModel::all();/*May 23, 2026*/
+			
+			return view("pages.product", compact('data','title','product_category'));
 		
 		}
 		
@@ -69,7 +72,7 @@ class ProductController extends Controller
 	public function product_info(Request $request){
 
 		$productID = $request->productID;
-		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement']);
+		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','category_idx']);
 		return response()->json($data);
 		
 	}
@@ -98,6 +101,7 @@ class ProductController extends Controller
 			$Product = new ProductModel();
 			
 			$Product->product_name 						= $request->product_name;
+			$Product->category_idx 						= $request->category_idx;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 			$Product->created_by_user_idx 				= Session::has('loginID');
@@ -139,6 +143,7 @@ class ProductController extends Controller
 			$Product = ProductModel::find($request->productID);
 			
 			$Product->product_name 						= $request->product_name;
+			$Product->category_idx 						= $request->category_idx;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 			$Product->updated_by_user_idx 				= Session::has('loginID');
@@ -392,8 +397,9 @@ class ProductController extends Controller
 			$teves_branch = TevesBranchModel::all();
 			$supplier_data = SupplierModel::all();/*June 9, 2025*/
 			$client_data = ClientModel::all();/*June 29, 2025*/
+			$product_category = ProductCategoryModel::all();/*May 23, 2026*/
 			
-			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID', 'supplier_data', 'client_data'));
+			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID', 'supplier_data', 'client_data', 'product_category'));
 		
 		}
 		

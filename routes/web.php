@@ -24,6 +24,7 @@ use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ProductCategoryController;
 
 /*June 19, 2025*/
 use App\Http\Controllers\ProductPricePerSellerController;
@@ -47,6 +48,37 @@ use App\Http\Controllers\DashboardController;
 
 /* April 19, 2026*/
 use App\Http\Controllers\ReminderController;
+
+
+
+Route::get('/test-infobip', function () {
+
+    $response = Http::withHeaders([
+        'Authorization' => 'App ' . env('INFOBIP_API_KEY'),
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+    ])->post(
+        env('INFOBIP_BASE_URL') . '/sms/2/text/advanced',
+        [
+            'messages' => [
+                [
+                    'from' => env('INFOBIP_SENDER', 'InfoSMS'),
+                    'destinations' => [
+                        [
+                            'to' => '+639764458063'
+                        ]
+                    ],
+                    'text' => 'Laravel Infobip SMS test from Hostinger VPS'
+                ]
+            ]
+        ]
+    );
+
+    return [
+        'status' => $response->status(),
+        'body' => $response->json(),
+    ];
+});
 
 /*Load Supplier List*/
 Route::get('/reminder', [ReminderController::class,'reminder'])->name('reminder')->middleware('isLoggedIn');
@@ -571,6 +603,18 @@ Route::post('/update_bank_post', [BankController::class,'update_bank_post'])->na
 /*Confirm Delete Bank*/
 Route::post('/delete_bank_confirmed', [BankController::class, 'delete_bank_confirmed'])->name('DeleteBank')->middleware('isLoggedIn');
 
+/*Dev Date May 12 2026*/
+/*Load Product CAtegory List*/
+Route::get('/product_category', [ProductCategoryController::class,'product_category'])->name('product_category')->middleware('isLoggedIn');
+Route::get('product_category/list', [ProductCategoryController::class, 'getProductCategoryList'])->name('getProductCategoryDetailsList')->middleware('isLoggedIn');
+/*Create Bank*/
+Route::post('/create_product_category_post', [ProductCategoryController::class,'create_product_category_post'])->name('UpdateProductCategory')->middleware('isLoggedIn');
+/*GET Bank Info*/
+Route::post('/product_category_info', [ProductCategoryController::class, 'product_category_info'])->name('ProductCategoryInfo')->middleware('isLoggedIn');
+/*Update Bank*/
+Route::post('/update_product_category_post', [ProductCategoryController::class,'update_product_category_post'])->name('UpdateProductCategory')->middleware('isLoggedIn');
+/*Confirm Delete Bank*/
+Route::post('/delete_product_category_confirmed', [ProductCategoryController::class, 'delete_product_category_confirmed'])->name('DeleteProductCategory')->middleware('isLoggedIn');
 
 /*June 19, 2025 - Seller's Price*/
 Route::post('sellers_price/list', [ProductPricePerSellerController::class, 'get_product_price_per_seller'])->name('ProductPricePerSellerList')->middleware('isLoggedIn');

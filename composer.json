@@ -19,6 +19,7 @@
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.19",
         "spatie/laravel-activitylog": "^3.17",
+        "twilio/sdk": "^8.11",
         "vpominchuk/laravel-mysql-use-index-scope": "^1.0",
         "yajra/laravel-datatables-oracle": "^9.0"
     },

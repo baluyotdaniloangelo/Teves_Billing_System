@@ -6,8 +6,9 @@ BANK DETAILS MODULE
 
 $(document).ready(function ()
 {
-    initializeBankDetailsTable();
-    bindBankDetailsEvents();
+    initializeProductCategoryDetailsTable();
+
+    bindProductCategoryDetailsEvents();
 });
 
 
@@ -15,40 +16,46 @@ $(document).ready(function ()
 DATATABLE
 ==================================================*/
 
-let BankDetailsTable;
+let ProductCategoryDetailsTable;
 
-function initializeBankDetailsTable()
+function initializeProductCategoryDetailsTable()
 {
-    BankDetailsTable =
-        $('#getBankDetailsList').DataTable({
+    ProductCategoryDetailsTable =
+        $('#getProductCategoryDetailsList').DataTable({
+
             processing: true,
             serverSide: true,
             responsive: true,
             scrollY: '500px',
             stateSave: true,
+
             ajax:
-                "{{ route('getBankDetailsList') }}",
+                "{{ route('getProductCategoryDetailsList') }}",
+
             columns: [
+
                 {
                     data: 'DT_RowIndex',
                     orderable: false,
                     searchable: false
                 },
-                { data: 'bank_name' },
-                { data: 'bank_branch' },
-                { data: 'bank_account_number' },
+
+                { data: 'category_name' },
+
                 {
                     data: 'action',
                     orderable: false,
                     searchable: false,
                     className: 'text-center'
                 }
+
             ],
 
             order: [[1, 'asc']]
 
         });
-    autoAdjustColumns(BankDetailsTable);
+
+    autoAdjustColumns(ProductCategoryDetailsTable);
 }
 
 
@@ -75,14 +82,14 @@ function autoAdjustColumns(table)
 EVENT BINDINGS
 ==================================================*/
 
-function bindBankDetailsEvents()
+function bindProductCategoryDetailsEvents()
 {
     /*
     CREATE
     */
     $('body').on(
         'click',
-        '#createBankDetails',
+        '#createProductCategoryDetails',
         openCreateBankModal
     );
 
@@ -91,16 +98,16 @@ function bindBankDetailsEvents()
     */
     $('body').on(
         'click',
-        '#editBankDetails',
-        openEditBankModal
+        '#editProductCategoryDetails',
+        openEditProductCategoryModal
     );
 
     /*
     SAVE / UPDATE
     */
-    $('#save-bank').on(
+    $('#save-category').on(
         'click',
-        saveBankDetails
+        saveProductCategoryDetails
     );
 
     /*
@@ -108,8 +115,8 @@ function bindBankDetailsEvents()
     */
     $('body').on(
         'click',
-        '#deleteBankDetails',
-        showDeleteBankModal
+        '#deleteProductCategoryDetails',
+        showDeleteCategoryModal
     );
 
     /*
@@ -117,8 +124,8 @@ function bindBankDetailsEvents()
     */
     $('body').on(
         'click',
-        '#deleteBankDetailsConfirmed',
-        deleteBankDetailsConfirmed
+        '#deleteProductCategoryDetailsConfirmed',
+        deleteProductCategoryDetailsConfirmed
     );
 }
 
@@ -129,19 +136,22 @@ CREATE MODAL
 
 function openCreateBankModal()
 {
-    resetBankForm();
+    resetProductCategoryForm();
 
-    $('#bank_id').val('');
+    $('#category_id').val('');
 
-    $('#bank_modal_title')
-        .text('Create Bank Details');
+    $('#product_category_modal_title')
+        .text('Create Product Category Details');
 	
-	$('#reset-bank-form').show();
+	$('#reset-category-form').show();
 	
-    $('#save-bank')
-        .html("<i class='bi bi-save-fill me-2'></i>Save Bank Details");
+    $('#save-category')
+        .html(`
+            <i class="bi bi-save-fill me-2"></i>
+            Save Product Category Details
+        `);
 
-    $('#BankDetailsModal')
+    $('#ProductCategoryDetailsModal')
         .modal('show');
 }
 
@@ -149,29 +159,32 @@ function openCreateBankModal()
 RESET MODAL ON CLOSE
 ==================================================*/
 
-$('#BankDetailsModal').on('hidden.bs.modal', function ()
+$('#ProductCategoryDetailsModal').on('hidden.bs.modal', function ()
 {
     /*
     RESET FORM
     */
-    resetBankForm();
+    resetProductCategoryForm();
 
     /*
     RESET TITLE
     */
-    $('#bank_modal_title')
-        .text('Create Bank Details');
+    $('#product_category_modal_title')
+        .text('Create Product Category Details');
 
     /*
     RESET BUTTON
     */
-    $('#save-bank')
-        .html("<i class='bi bi-save-fill me-2'></i>Save Bank Details");
+    $('#save-category')
+        .html(`
+            <i class="bi bi-save-fill me-2"></i>
+            Save Product Category Details
+        `);
 
     /*
     SHOW RESET BUTTON
     */
-    $('#reset-bank-form')
+    $('#reset-category-form')
         .show();
 });
 
@@ -179,55 +192,73 @@ $('#BankDetailsModal').on('hidden.bs.modal', function ()
 EDIT MODAL
 ==================================================*/
 
-function openEditBankModal()
+function openEditProductCategoryModal()
 {
-    const bank_id =
+    const category_id =
         $(this).data('id');
 
-    resetBankForm();
+    resetProductCategoryForm();
 	
-	$('#reset-bank-form').hide();
+	$('#reset-category-form').hide();
 	
     $('#loading_data')
         .show();
 
-    $('#BankDetailsModal')
+    $('#ProductCategoryDetailsModal')
         .modal('show');
 
     $.ajax({
-        url: '/bank_info',
+
+        url: '/product_category_info',
+
         type: 'POST',
+
         data: {
-            bank_id: bank_id,
-            _token: "{{ csrf_token() }}"
+
+            category_id: category_id,
+
+            _token:
+                "{{ csrf_token() }}"
         },
+
         success: function(response)
         {
             console.log(response);
+
             const data =
                 response.data ?? response;
+
             if(!data)
             {
                 showDangerMessage(
-                    'Bank details not found.'
+                    'Product Category details not found.'
                 );
+
                 return;
             }
 
             /*
             LOAD VALUES
             */
-            $('#bank_id').val(data.bank_id);
-            $('#bank_name').val(data.bank_name);
-            $('#bank_branch').val(data.bank_branch);
-            $('#bank_account_number').val(data.bank_account_number);
+            $('#category_id')
+                .val(data.category_id);
+
+            $('#category_name')
+                .val(data.category_name);
+
+           
 
             /*
             UPDATE MODAL
             */
-            $('#bank_modal_title').text('Update Bank Details');
+            $('#product_category_modal_title')
+                .text('Update Product Category Details');
 
-            $('#save-bank').html("<i class='bi bi-check-circle-fill me-2'></i>Update Bank Details");
+            $('#save-category')
+                .html(`
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    Update Product Category Details
+                `);
 			
 			
 			
@@ -244,7 +275,7 @@ function openEditBankModal()
             console.log(xhr);
 
             showDangerMessage(
-                'Unable to load bank details.'
+                'Unable to load Product Category details.'
             );
         }
 
@@ -256,67 +287,86 @@ function openEditBankModal()
 SAVE / UPDATE
 ==================================================*/
 
-function saveBankDetails(event)
+function saveProductCategoryDetails(event)
 {
     event.preventDefault();
 
-    const form = $('#BankDetailsForm');
+    const form =
+        $('#ProductCategoryDetailsForm');
 
     form.addClass('was-validated');
 
-    const bank_id =
-        $('#bank_id').val();
+    const category_id =
+        $('#category_id').val();
 
     const payload = {
-        bank_id: bank_id,
-        bank_name: $('#bank_name').val(),
-        bank_branch: $('#bank_branch').val(),
-        bank_account_number: $('#bank_account_number').val(),
-        _token: "{{ csrf_token() }}"
+
+        category_id:
+            category_id,
+
+        category_name:
+            $('#category_name').val(),
+
+        _token:
+            "{{ csrf_token() }}"
     };
 
     $.ajax({
+
         url:
-            bank_id
-            ? '/update_bank_post'
-            : '/create_bank_post',
+            category_id
+            ? '/update_product_category_post'
+            : '/create_product_category_post',
+
         type: 'POST',
+
         data: payload,
+
         beforeSend: function()
         {
             setButtonLoading(
-                '#save-bank',
+                '#save-category',
                 true
             );
         },
+
         success: function(response)
         {
             console.log(response);
 
-            $('#BankDetailsModal')
+            $('#ProductCategoryDetailsModal')
                 .modal('hide');
 
-            reloadBankDetailsTable();
+            reloadProductCategoryDetailsTable();
 
 			showSuccessModal(response.success);
 			
-            resetBankForm();
+            resetProductCategoryForm();
 			
-			$('#bank_modal_title').text('Create Bank Details');
+			$('#product_category_modal_title')
+				.text('Create Product CategoryDetails');
 
-			$('#save-bank').html("<i class='bi bi-save-fill me-2'></i>Save Bank Details");
+			$('#save-category')
+				.html(`
+					<i class="bi bi-save-fill me-2"></i>
+					Save Product CategoryDetails
+				`);
 	
         },
+
         complete: function()
         {
-            setButtonLoading( '#save-bank', false);
+            setButtonLoading(
+                '#save-category',
+                false
+            );
         },
 
         error: function(xhr)
         {
             console.log(xhr);
-            handleBankValidation(xhr);
-			$('#action_error_message').text('Validation Error');
+
+            handleProductCategoryValidation(xhr);
         }
 
     });
@@ -351,28 +401,35 @@ function showSuccessModal(message)
 SHOW DELETE MODAL
 ==================================================*/
 
-function showDeleteBankModal(event)
+function showDeleteCategoryModal(event)
 {
     event.preventDefault();
 
-    const bank_id =
+    const category_id =
         $(this).data('id');
 
-    resetDeleteBankModal();
+    resetDeleteCategoryModal();
 
-    $('#BankDetailsDeleteModal')
+    $('#ProductCategoryDetailsDeleteModal')
         .modal('show');
 
-    $('#deleteBankDetailsConfirmed')
+    $('#deleteProductCategoryDetailsConfirmed')
         .prop('disabled', true);
 
     $.ajax({
-        url: '/bank_info',
+
+        url: '/product_category_info',
+
         type: 'POST',
+
         data: {
-            bank_id: bank_id,
-            _token:"{{ csrf_token() }}"
+
+            category_id: category_id,
+
+            _token:
+                "{{ csrf_token() }}"
         },
+
         success: function(response)
         {
             console.log(response);
@@ -383,10 +440,10 @@ function showDeleteBankModal(event)
             if(!data)
             {
                 showDangerMessage(
-                    'Bank details not found.'
+                    'Product Category details not found.'
                 );
 
-                $('#BankDetailsDeleteModal')
+                $('#ProductCategoryDetailsDeleteModal')
                     .modal('hide');
 
                 return;
@@ -395,25 +452,19 @@ function showDeleteBankModal(event)
             /*
             SET BUTTON VALUE
             */
-            $('#deleteBankDetailsConfirmed')
-                .val(data.bank_id);
+            $('#deleteProductCategoryDetailsConfirmed')
+                .val(data.category_id);
 
             /*
             LOAD DETAILS
             */
-            $('#confirm_delete_bank_name')
-                .text(data.bank_name || '-');
-
-            $('#confirm_delete_bank_branch')
-                .text(data.bank_branch || '-');
-
-            $('#confirm_delete_bank_account_number')
-                .text(data.bank_account_number || '-');
+            $('#confirm_delete_category_name')
+                .text(data.category_name || '-');
 
             /*
             ENABLE BUTTON
             */
-            $('#deleteBankDetailsConfirmed')
+            $('#deleteProductCategoryDetailsConfirmed')
                 .prop('disabled', false);
         },
 
@@ -422,10 +473,10 @@ function showDeleteBankModal(event)
             console.log(xhr);
 
             showDangerMessage(
-                'Unable to load bank details.'
+                'Unable to load Product Category details.'
             );
 
-            $('#BankDetailsDeleteModal')
+            $('#ProductCategoryDetailsDeleteModal')
                 .modal('hide');
         }
 
@@ -437,24 +488,24 @@ function showDeleteBankModal(event)
 DELETE CONFIRMED
 ==================================================*/
 
-function deleteBankDetailsConfirmed()
+function deleteProductCategoryDetailsConfirmed()
 {
-    const bank_id =
-        $('#deleteBankDetailsConfirmed')
+    const category_id =
+        $('#deleteProductCategoryDetailsConfirmed')
             .val();
 
-    $('#deleteBankDetailsConfirmed')
+    $('#deleteProductCategoryDetailsConfirmed')
         .prop('disabled', true);
 
     $.ajax({
 
-        url: '/delete_bank_confirmed',
+        url: '/delete_product_category_confirmed',
 
         type: 'POST',
 
         data: {
 
-            bank_id: bank_id,
+            category_id: category_id,
 
             _token:
                 "{{ csrf_token() }}"
@@ -464,21 +515,19 @@ function deleteBankDetailsConfirmed()
         {
             console.log(response);
 
-            $('#BankDetailsDeleteModal')
+            $('#ProductCategoryDetailsDeleteModal')
                 .modal('hide');
 
-            reloadBankDetailsTable();
+            reloadProductCategoryDetailsTable();
 
             showDangerMessage(
-                'Bank Details Deleted'
+                'Product Category Details Deleted'
             );
-			
-			$('#action_error_message').text('');
         },
 
         complete: function()
         {
-            $('#deleteBankDetailsConfirmed')
+            $('#deleteProductCategoryDetailsConfirmed')
                 .prop('disabled', false);
         },
 
@@ -487,7 +536,7 @@ function deleteBankDetailsConfirmed()
             console.log(xhr);
 
             showDangerMessage(
-                'Unable to delete bank details.'
+                'Unable to delete Product Category details.'
             );
         }
 
@@ -499,42 +548,36 @@ function deleteBankDetailsConfirmed()
 HELPERS
 ==================================================*/
 
-function reloadBankDetailsTable()
+function reloadProductCategoryDetailsTable()
 {
-    BankDetailsTable
+    ProductCategoryDetailsTable
         .ajax
         .reload(null, false);
 }
 
 
-function resetBankForm()
+function resetProductCategoryForm()
 {
-    $('#BankDetailsForm')[0]
+    $('#ProductCategoryDetailsForm')[0]
         .reset();
 
-    $('#bank_id')
+    $('#category_id')
         .val('');
 
     $('.invalid-feedback')
         .html('');
 
-    $('#BankDetailsForm')
+    $('#ProductCategoryDetailsForm')
         .removeClass('was-validated');
 }
 
 
-function resetDeleteBankModal()
+function resetDeleteCategoryModal()
 {
-    $('#confirm_delete_bank_name')
+    $('#confirm_delete_category_name')
         .text('-');
 
-    $('#confirm_delete_bank_branch')
-        .text('-');
-
-    $('#confirm_delete_bank_account_number')
-        .text('-');
-
-    $('#deleteBankDetailsConfirmed')
+    $('#deleteProductCategoryDetailsConfirmed')
         .val('');
 }
 
@@ -557,11 +600,16 @@ function setButtonLoading(button, loading)
 
 function showDangerMessage(message)
 {
-    $('#validation_error_message')
-        .text(message);
+    $('#switch_notice_off').show();
 
-    $('#ValidationErrorModal')
-        .modal('show');
+    $('#sw_off').html(message);
+
+    setTimeout(function ()
+    {
+        $('#switch_notice_off')
+            .fadeOut('slow');
+
+    }, 1000);
 }
 
 /*==================================================
@@ -577,46 +625,23 @@ function showValidationErrorModal(message)
         .modal('show');
 }
 
-function handleBankValidation(xhr)
+function handleProductCategoryValidation(xhr)
 {
     const errors =
         xhr.responseJSON.errors;
 
     /*
-    BANK NAME
+    CATEGORY NAME
     */
-    if(errors.bank_name)
+    if(errors.category_name)
     {
-        $('#bank_name_error')
-            .html(errors.bank_name[0])
+        $('#category_name_error')
+            .html(errors.category_name[0])
             .show();
     }
 
-    /*
-    BANK BRANCH
-    */
-    if(errors.bank_branch)
-    {
-        $('#bank_branch_error')
-            .html(errors.bank_branch[0])
-            .show();
-    }
-
-    /*
-    ACCOUNT NUMBER
-    */
-    if(errors.bank_account_number)
-    {
-        $('#bank_account_number_error')
-            .html(errors.bank_account_number[0])
-            .show();
-
-        /*
-        SHOW MODAL ALERT
-        */
-        showValidationErrorModal(
-            errors.bank_account_number[0]
-        );
-    }
 }
+
+
+
 </script>

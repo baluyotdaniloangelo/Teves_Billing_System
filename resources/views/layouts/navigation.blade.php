@@ -215,6 +215,12 @@
 			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
               <i class="bi bi-box-seam navbar_icon" title="Manage Product list"></i><span>Product</span>
             </a>
+			<a href="{{ route('product_category') }}" class="sidebar_li_a" title="Manage Bank list">
+              <i class="bi bi-box-seam navbar_icon" title="Manage Bank list"></i><span>Product Category</span>
+            </a>
+			<a href="{{ route('bank') }}" class="sidebar_li_a" title="Manage Bank list">
+              <i class="bi bi-bank2 navbar_icon" title="Manage Bank list"></i><span>Bank</span>
+            </a>
 			<?php } ?>
 			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
 			<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
@@ -229,9 +235,7 @@
               <i class="bi bi-truck navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
             </a>
 			
-			<a href="{{ route('bank') }}" class="sidebar_li_a" title="Manage Bank list">
-              <i class="bi bi-bank2 navbar_icon" title="Manage Bank list"></i><span>Bank</span>
-            </a>
+			
 			
 			<a href="{{ route('reminder') }}" class="sidebar_li_a" title="Reminders">
               <i class="bi bi-bell navbar_icon" title="Reminders list"></i><span>Reminders</span>

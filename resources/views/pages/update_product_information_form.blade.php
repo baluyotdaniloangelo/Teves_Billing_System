@@ -34,7 +34,23 @@
 					<div class="col-sm-3">
 						
 						<form class="g-3 needs-validation" id="ProductformEdit">
-							<div class="row mb-2">
+						
+						<div class="row mb-2">
+						  <label for="update_product_name" class="col-sm-4 col-form-label">Product Category</label>
+						  <div class="col-sm-8">
+							<select class="form-select form-control" required="" name="update_category_idx" id="update_category_idx">
+									@foreach ($product_category as $product_category_cols)
+										<option value="{{$product_category_cols->category_id}}">
+												{{$product_category_cols->category_name}}
+										</option>
+													
+									@endforeach
+								</select>
+							<span class="valid-feedback" id="update_category_idxError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
 						  <label for="update_product_name" class="col-sm-4 col-form-label">Product Name</label>
 						  <div class="col-sm-8">
 							<input type="text" class="form-control" name="update_product_name" id="update_product_name" value="" required>

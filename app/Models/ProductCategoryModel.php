@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Session;
 
-class ProductModel extends Model
+class ProductCategoryModel extends Model
 {
 	use LogsActivity;
 	
@@ -29,13 +29,10 @@ class ProductModel extends Model
 		parent::delete();
 	}
 	
-	protected $table = 'teves_product_table';
+	protected $table = 'teves_product_category';
 	
 	protected $fillable = [
-        'product_name',
-        'product_price',
-		'product_unit_measurement',
-		'category_idx',
+		'category_name',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
@@ -44,17 +41,14 @@ class ProductModel extends Model
 		'deleted_by_user_id'
     ];
 	
-	protected $primaryKey = 'product_id';
+	protected $primaryKey = 'category_id';
     
-	protected static $logName = 'Product Information';
+	protected static $logName = 'Product Category Information';
 	
 	protected static $logOnlyDirty = true;
 	
 	protected static $logAttributes = [
-		'product_name',
-        'product_price',
-		'product_unit_measurement',
-		'category_idx',
+		'category_name',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
@@ -62,5 +56,4 @@ class ProductModel extends Model
 		'deleted_at',
 		'deleted_by_user_id'
     ];
-    
 }

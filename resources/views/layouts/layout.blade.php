@@ -59,13 +59,6 @@ else if (Request::path()==('update_product_information')){
 @include('layouts.update_product_info_pump_script')
 <?php
 }
-else if (Request::is('client')){
-?>
-<body class="">
-@include('layouts.footer')
-@include('layouts.client_script')
-<?php
-}
 else if (Request::is('branch')){
 ?>
 <body class="">

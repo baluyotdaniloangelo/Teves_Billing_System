@@ -64,12 +64,14 @@
 			let product_name 				= $("input[name=product_name]").val();
 			let product_price 				= $("input[name=product_price]").val();
 			let product_unit_measurement 	= $("#product_unit_measurement").val();
+			let category_idx 				= $("#category_idx").val();
 			
 			  $.ajax({
 				url: "/create_product_post",
 				type:"POST",
 				data:{
 				  product_name:product_name,
+				  category_idx:category_idx,
 				  product_price:product_price,
 				  product_unit_measurement:product_unit_measurement,
 				  _token: "{{ csrf_token() }}"
@@ -92,12 +94,12 @@
 				    table.ajax.reload(null, false);
 					
 					/*Load Receivable Payment Table*/
-					loadPricingPerBranch(response.productID);
-					loadProductInfo(response.productID);
+					//loadPricingPerBranch(response.productID);
+					//loadProductInfo(response.productID);
 										
 					$('#CreateProductModal').modal('toggle');	
 					
-					$('#ProductBranchPriceModal').modal('toggle');	
+					//$('#ProductBranchPriceModal').modal('toggle');	
 				  
 				  }
 				},

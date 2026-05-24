@@ -1,6 +1,6 @@
 <!-- CREATE BANK DETAILS MODAL -->
 <div class="modal fade"
-     id="BankDetailsModal"
+     id="ProductCategoryDetailsModal"
      tabindex="-1"
      aria-hidden="true">
 
@@ -25,11 +25,11 @@
                     <div>
 
                         <h4 class="modal-title fw-bold mb-0">
-                            Create Bank Details
+                            Create Product Category Details
                         </h4>
 
                         <small class="opacity-75">
-                            Add and manage banking information
+                            Add and manage Product Category information
                         </small>
 
                     </div>
@@ -49,7 +49,7 @@
 
             <!-- FORM -->
             <form class="needs-validation"
-                  id="BankDetailsForm"
+                  id="ProductCategoryDetailsForm"
                   novalidate>
 
                 <!-- BODY -->
@@ -65,7 +65,7 @@
                                 <!-- BANK NAME -->
                                 <div class="col-md-12">
 
-                                    <label for="bank_name_create"
+                                    <label for="category_name"
                                            class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
                                         <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
@@ -76,93 +76,25 @@
                                         </span>
 
                                         <span>
-                                            Bank Name
+                                            Category Name
                                         </span>
 
                                     </label>
 
                                     <input type="text"
                                            class="form-control form-control-lg rounded-3"
-                                           id="bank_name"
-                                           name="bank_name"
-                                           placeholder="Enter Bank Name"
+                                           id="category_name"
+                                           name="category_name"
+                                           placeholder="Enter Category Name"
                                            autocomplete="off"
                                            required>
 
                                     <span class="invalid-feedback"
-                                          id="bank_name_error">
+                                          id="category_name_error">
                                     </span>
 
                                 </div>
 
-                                <!-- BRANCH -->
-                                <div class="col-md-12">
-
-                                    <label for="bank_branch_create"
-                                           class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
-
-                                        <span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                                              style="width:34px;height:34px;">
-
-                                            <i class="bi bi-geo-alt text-info"></i>
-
-                                        </span>
-
-                                        <span>
-                                            Branch
-                                        </span>
-
-                                    </label>
-
-                                    <input type="text"
-                                           class="form-control form-control-lg rounded-3"
-                                           name="bank_branch"
-                                           id="bank_branch"
-                                           placeholder="Enter Branch Name"
-                                           autocomplete="off"
-                                           required>
-
-                                    <span class="invalid-feedback"
-                                          id="bank_branch_error">
-                                    </span>
-
-                                </div>
-
-                                <!-- ACCOUNT NUMBER -->
-                                <div class="col-md-12">
-
-                                    <label for="bank_account_number_create"
-                                           class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
-
-                                        <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                                              style="width:34px;height:34px;">
-
-                                            <i class="bi bi-credit-card-2-front text-success"></i>
-
-                                        </span>
-
-                                        <span>
-                                            Account Number
-                                        </span>
-
-                                    </label>
-
-                                    <input type="text"
-                                           class="form-control form-control-lg rounded-3"
-                                           id="bank_account_number"
-                                           name="bank_account_number"
-                                           placeholder="Enter Account Number"
-                                           autocomplete="off"
-                                           required>
-
-                                   <div class="invalid-feedback"
-										 id="bank_account_number_error">
-
-										Please enter Account Number.
-
-									</div>
-
-                                </div>
 
                             </div>
 
@@ -189,11 +121,11 @@
                         </div>
 
                     </div>
-					<input type="hidden" id="bank_id">
+					<input type="hidden" id="category_id">
                     <!-- RESET -->
                     <button type="reset"
                             class="btn btn-light rounded-3 px-4"
-							id="reset-bank-form">
+							id="reset-category-form">
 
                         <i class="bi bi-arrow-counterclockwise me-2"></i>
                         Reset
@@ -203,10 +135,10 @@
                     <!-- SUBMIT -->
                     <button type="submit"
                             class="btn btn-primary rounded-3 shadow-sm px-4"
-                            id="save-bank">
+                            id="save-category">
 
                         <i class="bi bi-save-fill me-2"></i>
-                        Save Bank Details
+                        Save Category Details
 
                     </button>
 
@@ -287,7 +219,7 @@
                 </div>
 
                 <!-- TITLE -->
-                <h5 class="fw-bold text-danger mb-2" id="action_error_message">
+                <h5 class="fw-bold text-danger mb-2">
 
                     Validation Error
 

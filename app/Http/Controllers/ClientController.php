@@ -22,14 +22,11 @@ class ClientController extends Controller
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$client_data = ClientModel::all();		
-			return view("pages.client", compact('data','title','client_data'));
+			return view("pages.client.index", compact('data','title','client_data'));
 	
 		}
 		
 	}   
-	
-	
-
 	
 	/*Fetch client List using Datatable*/
 	public function getClientList(Request $request)
@@ -37,19 +34,6 @@ class ClientController extends Controller
 		
 		if ($request->ajax()) {
 			
-			/*$data = ClientModel::select(
-			'client_id',
-			'client_name',
-			'client_account_number',
-			'client_address',
-			'client_tin',
-			'default_less_percentage',
-			'default_net_percentage',
-			'default_vat_percentage',
-			'default_withholding_tax_percentage',
-			'default_payment_terms')
-			->get()
-			;*/
 			$data = ClientModel::with('referrer')
 			->select(
 				'client_id',
@@ -71,14 +55,72 @@ class ClientController extends Controller
 					->addColumn('referred_by_name', function($row){
 						return $row->referrer->client_name ?? 'None';
 					})
-					->addColumn('action', function($row){
+					/*->addColumn('action', function($row){
 						$actionBtn = '
 						<div align="center" class="action_table_menu_client">
 						<a href="#" data-id="'.$row->client_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editclient"></a>
 						<a href="#" data-id="'.$row->client_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteclient"></a>
 						</div>';
 						return $actionBtn;
-					})
+					})*/
+			
+			->addColumn('action', function ($row)
+            {
+                return '
+
+                <div class="dropdown dropstart text-center">
+
+                    <!-- BUTTON -->
+                    <button class="btn btn-sm btn-light border rounded-3 shadow-sm"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                        <i class="bi bi-three-dots"></i>
+
+                    </button>
+
+                    <!-- MENU -->
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4">
+
+                        <!-- EDIT -->
+                        <li>
+
+                            <a href="#"
+                               class="dropdown-item"
+                               data-id="'.$row->client_id.'"
+                               id="editClientDetails">
+
+                                <i class="bi bi-pencil-square text-warning me-2"></i>
+
+                                Edit Client Details
+
+                            </a>
+
+                        </li>
+
+                        <!-- DELETE -->
+                        <li>
+
+                            <a href="#"
+                               class="dropdown-item text-danger"
+                               data-id="'.$row->client_id.'"
+                               id="deleteClientDetails">
+
+                                <i class="bi bi-trash3-fill me-2"></i>
+
+                                Delete Client Details
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                ';
+            })
 					->rawColumns(['action'])
 					->make(true);
 		}
@@ -86,10 +128,6 @@ class ClientController extends Controller
 
 	/*Fetch client Information*/
 	public function client_info(Request $request){
-		
-		//$clientID = $request->clientID;
-		//$data = ClientModel::find($clientID, ['client_name', 'client_account_number', 'client_address','client_tin','default_less_percentage','default_net_percentage','default_vat_percentage','default_withholding_tax_percentage','default_payment_terms']);
-		//return response()->json($data);
 		
 		$clientID = $request->clientID;
 
@@ -100,6 +138,8 @@ class ClientController extends Controller
 				'client_account_number',
 				'client_address',
 				'client_tin',
+				'client_contact_number',
+				'client_age',
 				'default_less_percentage',
 				'default_net_percentage',
 				'default_vat_percentage',
@@ -113,6 +153,8 @@ class ClientController extends Controller
 			'client_account_number' => $data->client_account_number,
 			'client_address' => $data->client_address,
 			'client_tin' => $data->client_tin,
+			'client_contact_number' => $data->client_contact_number,
+			'client_age' => $data->client_age,
 			'default_less_percentage' => $data->default_less_percentage,
 			'default_net_percentage' => $data->default_net_percentage,
 			'default_vat_percentage' => $data->default_vat_percentage,
@@ -138,9 +180,11 @@ class ClientController extends Controller
 	public function create_client_post(Request $request){
 		
 		$request->validate([
-          'client_name'      => 'required|unique:teves_client_table,client_name',
-		  'client_address'   => 'required',
-		  'client_tin'    => 'required'
+          'client_name'      		=> 'required|unique:teves_client_table,client_name',
+		  'client_address'   		=> 'required',
+		  'client_tin'    			=> 'required',
+		  'client_contact_number' 	=> 'nullable|string|max:50',
+		  'client_age'            	=> 'nullable|integer|min:1|max:120',
         ], 
         [
 			'client_name.required' => 'Client Name is required',
@@ -169,7 +213,8 @@ class ClientController extends Controller
 			$client->client_account_number 				= $client_account_number;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
-		
+			$client->client_contact_number 				= $request->client_contact_number;
+			$client->client_age 						= $request->client_age;
 			$client->default_less_percentage 			= $request->default_less_percentage;
 			$client->default_net_percentage 			= $request->default_net_percentage;
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
@@ -192,7 +237,9 @@ class ClientController extends Controller
 		$request->validate([
           'client_name'      		=> 'required|unique:teves_client_table,client_name,'.$request->clientID.',client_id',
 		  'client_address'      	=> 'required',
-		  'client_tin'      	=> 'required'
+		  'client_tin'      		=> 'required',
+		  'client_contact_number' 	=> 'nullable|string|max:50',
+		  'client_age'            	=> 'nullable|integer|min:1|max:120',
         ], 
         [
 			'client_name.required' => 'Client Name is required',
@@ -206,7 +253,8 @@ class ClientController extends Controller
 			$client->client_name 						= $request->client_name;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
-			
+			$client->client_contact_number 				= $request->client_contact_number;
+			$client->client_age 						= $request->client_age;
 			$client->default_less_percentage 			= $request->default_less_percentage;
 			$client->default_net_percentage 			= $request->default_net_percentage;
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
