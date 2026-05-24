@@ -608,7 +608,7 @@ Route::post('/delete_bank_confirmed', [BankController::class, 'delete_bank_confi
 Route::get('/product_category', [ProductCategoryController::class,'product_category'])->name('product_category')->middleware('isLoggedIn');
 Route::get('product_category/list', [ProductCategoryController::class, 'getProductCategoryList'])->name('getProductCategoryDetailsList')->middleware('isLoggedIn');
 /*Create Bank*/
-Route::post('/create_product_category_post', [ProductCategoryController::class,'create_product_category_post'])->name('UpdateProductCategory')->middleware('isLoggedIn');
+Route::post('/create_product_category_post', [ProductCategoryController::class,'create_product_category_post'])->name('CreateProductCategory')->middleware('isLoggedIn');
 /*GET Bank Info*/
 Route::post('/product_category_info', [ProductCategoryController::class, 'product_category_info'])->name('ProductCategoryInfo')->middleware('isLoggedIn');
 /*Update Bank*/
