@@ -6,11 +6,9 @@ use Spatie\Activitylog\Contracts\Activity;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\SalesAgentModel;
-
 use Session;
 
-class ClientModel extends Model
+class SalesAgentModel extends Model
 {
 	
 	use LogsActivity;
@@ -32,32 +30,26 @@ class ClientModel extends Model
 		parent::delete();
 	}
 
+	/*
 	public function referrer()
 	{
-		return $this->belongsTo(SalesAgentModel::class, 'sales_agent_idx', 'sales_agent_id');
+		return $this->belongsTo(ClientModel::class, 'referred_by_idx', 'client_id');
 	}
 
 	public function referrals()
 	{
-		return $this->hasMany(ClientModel::class, 'sales_agent_idx', 'client_id');
+		return $this->hasMany(ClientModel::class, 'referred_by_idx', 'client_id');
 	}
+	*/
 
-
-	protected $table = 'teves_client_table';
+	protected $table = 'teves_sales_agent_table';
 	
 	protected $fillable = [
-        'client_name',
-		'client_account_number',
-		'client_address',
-		'client_tin',
-		'client_contact_number',
-		'client_age',
-		'default_net_percentage',
-		'default_less_percentage',
-		'default_vat_percentage',
-		'default_withholding_tax_percentage',
-		'default_payment_terms',
-		'sales_agent_idx',
+        'sales_agent_name',
+		'sales_agent_contact_number',
+		'sales_agent_email_address',
+		'sales_agent_address',
+		'sales_agent_status',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
@@ -66,25 +58,18 @@ class ClientModel extends Model
 		'deleted_by_user_id'
     ];
 	
-	protected $primaryKey = 'client_id';
+	protected $primaryKey = 'sales_agent_id';
      
-	protected static $logName = 'Client Information';
+	protected static $logName = 'Sales Agent Information';
 	
 	protected static $logOnlyDirty = true;
 	
 	protected static $logAttributes = [
-		'client_name',
-		'client_account_number',
-		'client_address',
-		'client_tin',
-		'client_contact_number',
-		'client_age',		
-		'default_net_percentage',
-		'default_less_percentage',
-		'default_vat_percentage',
-		'default_withholding_tax_percentage',
-		'default_payment_terms',
-		'sales_agent_idx',
+		'sales_agent_name',
+		'sales_agent_contact_number',
+		'sales_agent_email_address',
+		'sales_agent_address',
+		'sales_agent_status',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',

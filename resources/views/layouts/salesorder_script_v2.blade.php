@@ -6,7 +6,7 @@
 
 	<!--Load Table-->
 	$(function () {
-		
+
 		/*Get List Of Undelivered Sales Order*/
 		var SalesOrderListTable = $('#getSalesOrderList').DataTable({
 			"language": {
@@ -29,6 +29,7 @@
 				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 				{data: 'sales_order_date'},
 				{data: 'sales_order_control_number'},
+				{data: 'sales_order_type'},
 				{data: 'client_name'},   
 				{data: 'sales_order_payment_term'},   
 				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
@@ -101,6 +102,7 @@
 				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 				{data: 'sales_order_date'},
 				{data: 'sales_order_control_number'},
+				{data: 'sales_order_type'},
 				{data: 'client_name'},   
 				{data: 'sales_order_payment_term'},   
 				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
@@ -172,6 +174,7 @@
 				{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 				{data: 'sales_order_date'},
 				{data: 'sales_order_control_number'},
+				{data: 'sales_order_type'},
 				{data: 'client_name'},   
 				{data: 'sales_order_payment_term'},   
 				{data: 'sales_order_gross_amount', render: $.fn.dataTable.render.number( ',', '.', 2, '' )},  
@@ -272,6 +275,8 @@
 
 			var _sales_order_quotation 				= $('.sales_order_quotation:checked').val() || 'off';
 			var sales_order_quotation 				= (_sales_order_quotation ==="on") ? "1":"0";
+				
+			var sales_order_type 				= $("#sales_order_type").val();
 			
 			  $.ajax({
 				url: "/create_sales_order_post",
@@ -280,6 +285,7 @@
 				  client_idx:client_idx,
 				  company_header:company_header,
 				  sales_order_payment_type:sales_order_payment_type,
+				  sales_order_type:sales_order_type,
 				  sales_order_date:sales_order_date,
 				  payment_term:payment_term,
 				  sales_order_invoice:sales_order_invoice,
@@ -340,6 +346,9 @@
 				  $('#sales_order_dateError').text(error.responseJSON.errors.sales_order_date);
 				  document.getElementById('sales_order_dateError').className = "invalid-feedback";
 				 
+				  $('#sales_order_typeError').text(error.responseJSON.errors.sales_order_type);
+				  document.getElementById('sales_order_typeError').className = "invalid-feedback";	
+				  
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
 				  document.getElementById('client_idxError').className = "invalid-feedback";
 				  

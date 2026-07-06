@@ -259,6 +259,11 @@ class BillingTransactionController extends Controller
 						   $q->where('teves_billing_table.client_idx', $client_idx);
 						}
 						})
+					// Only include billings with no receivable yet
+    ->where(function ($q) {
+        $q->whereNull('teves_billing_table.receivable_idx')
+          ->orWhere('teves_billing_table.receivable_idx', 0);
+    })
 					->whereBetween('teves_billing_table.order_date', ["$start_date_billed", "$end_date_billed"])
 					->WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {

@@ -49,7 +49,7 @@ use App\Http\Controllers\DashboardController;
 /* April 19, 2026*/
 use App\Http\Controllers\ReminderController;
 
-
+use App\Http\Controllers\SalesAgentController;
 
 Route::get('/test-infobip', function () {
 
@@ -211,6 +211,14 @@ Route::post('/update_client_post', [ClientController::class,'update_client_post'
 /*Confirm Delete Product*/
 Route::post('/delete_client_confirmed', [ClientController::class, 'delete_client_confirmed'])->name('delete_client_confirmed')->middleware('isLoggedIn');
 
+/*Dev Date June 7 2026*/
+/*Load Sales Agent List*/
+Route::get('/salesagent', [SalesAgentController::class,'salesagent'])->name('salesagent')->middleware('isLoggedIn');
+Route::get('salesagent/list', [SalesAgentController::class, 'getSalesAgentList'])->name('getSalesAgentList')->middleware('isLoggedIn');
+Route::post('/create_sales_agent_post', [SalesAgentController::class,'create_sales_agent_post'])->name('create_sales_agent_post')->middleware('isLoggedIn');
+Route::post('/sales_agent_info', [SalesAgentController::class, 'sales_agent_info'])->name('sales_agent_info')->middleware('isLoggedIn');
+Route::post('/update_sales_agent_post', [SalesAgentController::class,'update_sales_agent_post'])->name('update_SalesAgent_post')->middleware('isLoggedIn');
+Route::post('/delete_sales_agent_confirmed', [SalesAgentController::class, 'delete_sales_agent_confirmed'])->name('delete_sales_agent_confirmed')->middleware('isLoggedIn');
 
 /*Load Billing Report History Interface*/
 Route::get('/billing_history', [ReportController::class,'billing_history'])->name('report')->middleware('isLoggedIn');

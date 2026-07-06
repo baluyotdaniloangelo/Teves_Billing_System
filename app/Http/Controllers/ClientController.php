@@ -7,6 +7,7 @@ use App\Models\ClientModel;
 use Session;
 use Validator;
 use DataTables;
+use App\Models\SalesAgentModel;
 
 class ClientController extends Controller
 {
@@ -20,8 +21,8 @@ class ClientController extends Controller
 			$data = array();
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$client_data = ClientModel::all();		
-			return view("pages.client.index", compact('data','title','client_data'));
+			$sales_agent_data = SalesAgentModel::all();		
+			return view("pages.client.index", compact('data','title','sales_agent_data'));
 	
 		}
 		
@@ -47,14 +48,14 @@ class ClientController extends Controller
 				'default_vat_percentage',
 				'default_withholding_tax_percentage',
 				'default_payment_terms',
-				'referred_by_idx'
+				'sales_agent_idx'
 			)
 			->get();
 			
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('referred_by_name', function($row){
-						return $row->referrer->client_name ?? 'None';
+						return $row->referrer->sales_agent_name ?? 'None';
 					})
 					->addColumn('action', function ($row)
 					{
@@ -117,7 +118,7 @@ class ClientController extends Controller
 				'default_vat_percentage',
 				'default_withholding_tax_percentage',
 				'default_payment_terms',
-				'referred_by_idx'
+				'sales_agent_idx'
 			]);
 
 		return response()->json([
@@ -132,9 +133,8 @@ class ClientController extends Controller
 			'default_vat_percentage' => $data->default_vat_percentage,
 			'default_withholding_tax_percentage' => $data->default_withholding_tax_percentage,
 			'default_payment_terms' => $data->default_payment_terms,
-			'referred_by_id' => $data->referred_by_idx,
-			'referred_by_name' => $data->referrer->client_name ?? null,
-			'referred_by_client_account_number' => $data->referrer->client_account_number ?? null
+			'sales_agent_idx' => $data->sales_agent_idx,
+			'sales_agent_name' => $data->referrer->sales_agent_name ?? null
 		]); 
 		
 
@@ -192,7 +192,7 @@ class ClientController extends Controller
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
-			$client->referred_by_idx 					= $request->referred_by_idx;
+			$client->sales_agent_idx 					= $request->sales_agent_idx;
 			$client->created_by_user_idx 				= Session::has('loginID');
 			
 			$result = $client->save();
@@ -232,7 +232,7 @@ class ClientController extends Controller
 			$client->default_vat_percentage 			= $request->default_vat_percentage;
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
-			$client->referred_by_idx 					= $request->referred_by_idx;
+			$client->sales_agent_idx 					= $request->sales_agent_idx;
 			$client->updated_by_user_idx 				= Session::has('loginID');
 			
 			$result = $client->update();

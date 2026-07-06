@@ -204,20 +204,20 @@
                                         </label>
 
                                         <input class="form-control form-control-lg rounded-3"
-                                           list="referred_by_name"
-                                           name="referred_by_name"
-                                           id="referred_by_id"
+                                           list="sales_agent_name"
+                                           name="sales_agent_name"
+                                           id="sales_agent_id"
                                            autocomplete="off"
-                                           placeholder="Search Client">
+                                           placeholder="Search Agent">
 
-                                    <datalist id="referred_by_name">
+                                    <datalist id="sales_agent_name">
 
-                                        @foreach ($client_data as $client_data_cols)
+                                        @foreach ($sales_agent_data as $sales_agent_data_cols)
 
                                             <option
-                                                label="{{$client_data_cols->client_name}} : {{$client_data_cols->client_account_number}}"
-                                                data-id="{{$client_data_cols->client_id}}"
-                                                value="{{$client_data_cols->client_name}} : {{$client_data_cols->client_account_number}}">
+                                                label="{{$sales_agent_data_cols->sales_agent_name}}"
+                                                data-id="{{$sales_agent_data_cols->sales_agent_id}}"
+                                                value="{{$sales_agent_data_cols->sales_agent_name}}">
                                             </option>
 
                                         @endforeach

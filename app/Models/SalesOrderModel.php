@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Session;
 
+use App\Models\ProductCategoryModel;
+
 class SalesOrderModel extends Model
 {
 
@@ -30,11 +32,17 @@ class SalesOrderModel extends Model
 
 		parent::delete();
 	}	
+
+	public function referrer()
+	{
+		return $this->belongsTo(ProductCategoryModel::class, 'category_idx', 'category_id');
+	}	
 	
 	protected $table = 'teves_sales_order_table';
 	
 	protected $fillable = [
         'sales_order_client_idx',
+		'category_idx',
 		'sales_order_control_number',
 		'sales_order_date',
 		'sales_order_invoice',
@@ -79,6 +87,7 @@ class SalesOrderModel extends Model
 	
 	protected static $logAttributes = [
 		'sales_order_client_idx',
+		'category_idx',
 		'sales_order_control_number',
 		'sales_order_date',
 		'sales_order_invoice',

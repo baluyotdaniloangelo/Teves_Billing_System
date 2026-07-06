@@ -1,6 +1,6 @@
-   <script type="text/javascript">		 
+   <script type="text/javascript">	
+   
 	<!--Update Sales Order-->
-	//ClientInfo();
 	LoadProduct_under_sales_order();
 	LoadPayment();
 	LoadReceivables();
@@ -26,10 +26,11 @@
 			let sales_order_id 				= {{ $SalesOrderID }};
 			let company_header 				= $("#company_header").val();
 			let sales_order_payment_type 	= $("#sales_order_payment_type").val();
+			let sales_order_type 			= $("#sales_order_type").val();
 			let client_idx 					= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));	
 			let sales_order_date 			= $("input[name=sales_order_date]").val();
 			let delivered_to 				= $("input[name=delivered_to]").val();
-			let delivered_to_address 		= $("input[name=delivered_to_address]").val();
+			let delivered_to_address 		= $("#delivered_to_address").val();
 			let dr_number 					= $("input[name=dr_number]").val();
 			
 			let sales_order_or_number 					= $("input[name=sales_order_or_number]").val();
@@ -61,6 +62,7 @@
 				  sales_order_id:sales_order_id,
 				  company_header:company_header,
 				  sales_order_payment_type:sales_order_payment_type,
+				  sales_order_type:sales_order_type,
 				  client_idx:client_idx,
 				  sales_order_date:sales_order_date,
 				  delivered_to:delivered_to,
@@ -87,7 +89,6 @@
 				  console.log(response);
 				  if(response) {
 					  
-					//LoadProduct_under_sales_order(sales_order_id);
 					document.getElementById("AddSalesOrderProductBTN").disabled = false;
 					
 					$('#switch_notice_on').show();
@@ -124,6 +125,9 @@
 				 
 				  $('#client_idxError').text(error.responseJSON.errors.client_idx);
 				  document.getElementById('client_idxError').className = "invalid-feedback";
+				  
+				  $('#sales_order_typeError').text(error.responseJSON.errors.sales_order_type);
+				  document.getElementById('sales_order_typeError').className = "invalid-feedback";
 				  
 				  $('#product_idxError').html(error.responseJSON.errors.product_idx);
 								
@@ -490,13 +494,16 @@
 
 		let client_idx 	= ($("#client_name option[value='" + $('#client_id').val() + "']").attr('data-id'));				
 		let branch_idx 	= $("#company_header").val();		
-
+		let category_idx = {{ $category_idx ?? 0 }};
+		
+		
 			  $.ajax({
 				url: "/get_product_list_selling_price",
 				type:"POST",
 				data:{
 					client_idx:client_idx,
 					branch_idx:branch_idx,
+					category_idx:category_idx,
 				  _token: "{{ csrf_token() }}"
 				},
 				success:function(response){						

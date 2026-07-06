@@ -16,6 +16,9 @@ use Validator;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+
+use App\Models\ProductCategoryModel;
+
 /*PDF*/
 use PDF;
 class SalesOrderController extends Controller
@@ -30,6 +33,7 @@ class SalesOrderController extends Controller
 			
 			$client_data = ClientModel::all();
 			$product_data = ProductModel::all();
+			$product_category_data = ProductCategoryModel::all();
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			if($data->user_branch_access_type=='ALL'){
@@ -61,7 +65,7 @@ class SalesOrderController extends Controller
 		
 		}
 
-		return view("pages.sales_order_v2", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch'));
+		return view("pages.sales_order_v2", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch','product_category_data'));
 		
 	}   
 	
@@ -93,6 +97,7 @@ class SalesOrderController extends Controller
 						})	
               		->get([
 					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.category_idx',
 					'teves_sales_order_table.sales_order_date',
 					'teves_client_table.client_name',
 					DB::raw("IFNULL(teves_receivable_table.receivable_lock_status, '00000') AS receivable_lock_status"),	
@@ -110,7 +115,9 @@ class SalesOrderController extends Controller
 
 		return DataTables::of($data)
 				->addIndexColumn()
-				
+				->addColumn('sales_order_type', function($row){
+						return $row->referrer->category_name ?? 'None';
+					})
                 ->addColumn('action', function($row){
 					
 						$startTimeStamp = strtotime($row->created_at);
@@ -221,6 +228,7 @@ class SalesOrderController extends Controller
               		->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
+					'teves_sales_order_table.category_idx',
 					'teves_client_table.client_name',
 					DB::raw("IFNULL(teves_receivable_table.receivable_lock_status, '00000') AS receivable_lock_status"),	
 					'teves_sales_order_table.sales_order_payment_term',	
@@ -237,7 +245,9 @@ class SalesOrderController extends Controller
 
 		return DataTables::of($data)
 				->addIndexColumn()
-				
+				->addColumn('sales_order_type', function($row){
+						return $row->referrer->category_name ?? 'None';
+					})
                 ->addColumn('action', function($row){
 					
 						$startTimeStamp = strtotime($row->created_at);
@@ -347,6 +357,7 @@ class SalesOrderController extends Controller
               		->get([
 					'teves_sales_order_table.sales_order_id',
 					'teves_sales_order_table.sales_order_date',
+					'teves_sales_order_table.category_idx',
 					'teves_client_table.client_name',
 					DB::raw("IFNULL(teves_receivable_table.receivable_lock_status, '00000') AS receivable_lock_status"),	
 					'teves_sales_order_table.sales_order_payment_term',	
@@ -362,7 +373,9 @@ class SalesOrderController extends Controller
 	
 		return DataTables::of($data)
 				->addIndexColumn()
-				
+				->addColumn('sales_order_type', function($row){
+						return $row->referrer->category_name ?? 'None';
+					})
                 ->addColumn('action', function($row){
 					
 						$startTimeStamp = strtotime($row->created_at);
@@ -446,6 +459,7 @@ class SalesOrderController extends Controller
 					->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')	
 					->get([
 					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.category_idx',
 					'teves_sales_order_table.company_header',
 					'teves_sales_order_table.sales_order_date',
 					'teves_sales_order_table.sales_order_client_idx',
@@ -525,10 +539,12 @@ class SalesOrderController extends Controller
 
 		$request->validate([
 			'sales_order_date'  => 'required',
+			'sales_order_type'  => 'required',
 			'client_idx'  		=> 'required'
         ], 
         [
 			'sales_order_date.required' 	=> 'Sales Order Date is Required',
+			'sales_order_type.required' 	=> 'Sales Order Type is Required',
 			'client_idx.required' 			=> 'Client is Required'
         ]
 		);
@@ -556,6 +572,7 @@ class SalesOrderController extends Controller
 			}
 			
 			$Salesorder->sales_order_payment_type 			= $request->sales_order_payment_type;
+			$Salesorder->category_idx 						= $request->sales_order_type;
 			$Salesorder->sales_order_invoice 				= $request->sales_order_invoice;
 			$Salesorder->sales_order_quotation				= $request->sales_order_quotation;/*7/26/2025*/
 			$Salesorder->sales_order_quotation_hide_volume	= $request->sales_order_quotation_hide_volume;/*8/2/2025*/
@@ -598,9 +615,11 @@ class SalesOrderController extends Controller
 
 		$request->validate([
 			'client_idx'  	=> 'required',
+			'sales_order_type'  => 'required'
         ], 
         [
 			'client_idx.required' 	=> 'Client is Required',
+			'sales_order_type.required' 	=> 'Sales Order Type is Required',
         ]
 		);
 		
@@ -639,6 +658,7 @@ class SalesOrderController extends Controller
 				$Salesorder->sales_order_collection_receipt 		= $request->sales_order_collection_receipt;
 				
 				$Salesorder->sales_order_payment_term 				= $request->payment_term;
+				$Salesorder->category_idx 							= $request->sales_order_type;
 				$Salesorder->sales_order_delivery_method 			= $request->delivery_method;
 				$Salesorder->sales_order_hauler 					= $request->hauler;
 				$Salesorder->sales_order_required_date 				= $request->required_date;
@@ -815,7 +835,8 @@ class SalesOrderController extends Controller
 		
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
 			$client_data = ClientModel::all();
-			$product_data = ProductModel::all();
+			
+			$product_category_data = ProductCategoryModel::all();
 			
 			if($data->user_branch_access_type=='ALL'){
 				
@@ -852,6 +873,7 @@ class SalesOrderController extends Controller
 					->join('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_sales_order_table.company_header')	
 					->get([
 					'teves_sales_order_table.sales_order_id',
+					'teves_sales_order_table.category_idx',
 					'teves_sales_order_table.company_header',
 					'teves_branch_table.branch_code',
 					'teves_branch_table.branch_name',
@@ -886,6 +908,9 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_quotation',
 					'teves_sales_order_table.sales_order_quotation_hide_volume']);
 				
+			//$product_data = ProductModel::all();
+			$product_data = ProductModel::where('category_idx', $sales_order_data[0]->category_idx)->get();
+			
 			$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();
 				
 				if($receivables_details===NULL){
@@ -916,8 +941,10 @@ class SalesOrderController extends Controller
 						$result = $Receivables->save();
 					
 				}	
-					
-		return view("pages.sales_order_form", compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','sales_order_data','receivables_payment_suggestion','receivables_details','tab'));
+		
+		$category_idx = $sales_order_data[0]->category_idx;
+		
+		return view("pages.sales_order_form", compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','category_idx','sales_order_data','receivables_payment_suggestion','receivables_details','tab','product_category_data'));
 		
 		}
 		
@@ -1344,23 +1371,52 @@ class SalesOrderController extends Controller
 	
 	
 	public function get_product_list_selling_price(Request $request){
-
+/*
 		$clients_price_list = DB::table('teves_product_table as pt')
-		->select([
-			'pt.product_id as product_idx',
-			'pt.product_name',
-			'pt.product_unit_measurement',
-			DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
-		])
-		->leftJoin('teves_product_selling_price_table as spt', function($join) use ($request) {
-			$join->on('pt.product_id', '=', 'spt.product_idx')
-				 ->where('spt.branch_idx', '=', $request->branch_idx)
-				 ->where('spt.client_idx', '=', $request->client_idx);
-		})
-		->get();
-	
-		return response()->json(array('clients_price_list'=>$clients_price_list));
+			->select([
+				'pt.product_id as product_idx',
+				'pt.product_name',
+				'pt.product_unit_measurement',
+				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+			])
+			->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($request) {
+				$join->on('pt.product_id', '=', 'spt.product_idx')
+					 ->where('spt.branch_idx', $request->branch_idx)
+					 ->where('spt.client_idx', $request->client_idx);
+			})
 			
+			->where('pt.category_idx', $request->category_idx)
+			
+			->whereNull('pt.deleted_at') // if using soft deletes
+			->get();
+			
+				return response()->json(array('clients_price_list'=>$clients_price_list));
+					
+			}
+*/
+		$clients_price_list = DB::table('teves_product_table as pt')
+			->select([
+				'pt.product_id as product_idx',
+				'pt.product_name',
+				'pt.product_unit_measurement',
+				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+			])
+			->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($request) {
+				$join->on('pt.product_id', '=', 'spt.product_idx')
+					 ->where('spt.branch_idx', $request->branch_idx)
+					 ->where('spt.client_idx', $request->client_idx);
+			})
+
+			->when($request->category_idx != 0, function ($query) use ($request) {
+				return $query->where('pt.category_idx', $request->category_idx);
+			})
+
+			->whereNull('pt.deleted_at')
+			->get();
+
+		return response()->json([
+			'clients_price_list' => $clients_price_list
+		]);
+
 	}
-	
-}
+	}

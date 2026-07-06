@@ -46,6 +46,7 @@
 													<th class="all">No.</th>
 													<th class="all">Date</th>
 													<th class="all">S.O. No.</th>
+													<th class="all">Sales Order Type</th>
 													<th class="all">Account Name</th>
 													<th class="none">Payment Term : </th>
 													<th class="none">Gross Amount : </th>
@@ -74,6 +75,7 @@
 													<th class="all">No.</th>
 													<th class="all">Date</th>
 													<th class="all">S.O. No.</th>
+													<th class="all">Sales Order Type</th>
 													<th class="all">Account Name</th>
 													<th class="none">Payment Term : </th>
 													<th class="none">Gross Amount : </th>
@@ -106,6 +108,7 @@
 													<th class="all">No.</th>
 													<th class="all">Date</th>
 													<th class="all">S.O. No.</th>
+													<th class="all">Sales Order Type</th>
 													<th class="all">Account Name</th>
 													<th class="none">Payment Term : </th>
 													<th class="none">Gross Amount : </th>
@@ -151,6 +154,21 @@
 								<div class="row">
 										
 										<div class="col-md-12">
+											<!--Based From Product Category-->
+											<label for="sales_order_type" class="form-label">Sales Order Type</label>
+											<select class="form-select form-control" required="" name="sales_order_type" id="sales_order_type" required>
+												<option value="">Please select Type</option>
+												@foreach ($product_category_data as $product_category_data_cols)
+													<option value="{{$product_category_data_cols->category_id}}">{{$product_category_data_cols->category_name}}</option>
+												@endforeach
+											</select>
+											<span class="valid-feedback" id="sales_order_typeError"></span>
+										</div>
+								</div>
+								<hr>								
+								<div class="row">
+										
+										<div class="col-md-12">
 										
 											<label for="company_header" class="form-label">Branch</label>
 											<select class="form-select form-control" required="" name="company_header" id="company_header">
@@ -162,6 +180,7 @@
 										</div>
 								</div>
 								<hr>
+
 								<div class="row">								
 								
 										<div class="col-md-12">

@@ -1467,7 +1467,7 @@ class ReportController extends Controller
 		$title_soa = 'STATEMENT OF ACCOUNT';
 		  
         $pdf = PDF::loadView('printables.report_receivables_soa_pdf_v_732025', compact('title_soa', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','branch_header','client_data'));
-		
+		//return view('printables.report_receivables_soa_pdf_v_732025', compact('title_soa', 'receivable_data', 'user_data', 'amount_in_words', 'receivable_payment_data','branch_header','client_data'));
 		/*Download Directly*/
         //return $pdf->download($client_data['client_name'].".pdf");
 		/*Stream for Saving/Printing*/

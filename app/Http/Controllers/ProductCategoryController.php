@@ -9,6 +9,7 @@ use App\Models\ProductCategoryModel;
 use Session;
 use Validator;
 use DataTables;
+use Illuminate\Validation\Rule;
 
 class ProductCategoryController extends Controller
 {
@@ -133,15 +134,18 @@ public function getProductCategoryList(Request $request)
 	
 	/*Create bank Information*/
 	public function create_product_category_post(Request $request){
-		
+
 		$request->validate([
-          'category_name'     => 'required|unique:teves_product_category,category_name',
-        ], 
-        [
-			'category_name.required' 	=> 'Product Category Name is required',
-        ]
-		);
-		
+			'category_name' => [
+				'required',
+				Rule::unique('teves_product_category', 'category_name')
+					->whereNull('deleted_at'),
+			],
+		], [
+			'category_name.required' => 'Product Category Name is required',
+			'category_name.unique'   => 'Product Category Name already exists',
+		]);
+				
 			$bank = new ProductCategoryModel();
 			$bank->category_name 	= $request->category_name;
 			$bank->created_by_user_idx 	= Session::get('loginID');
@@ -160,14 +164,18 @@ public function getProductCategoryList(Request $request)
 
 	/*Update bank Information*/
 	public function update_product_category_post(Request $request){
-		
+
 		$request->validate([
-          'category_name'     => 'required|unique:teves_product_category,category_name,'.$request->category_id.',category_id',
-        ], 
-        [
-			'category_name.required' 	=> 'Product Category Name is required',
-        ]
-		);
+			'category_name' => [
+				'required',
+				Rule::unique('teves_product_category', 'category_name')
+					->ignore($request->category_id, 'category_id')
+					->whereNull('deleted_at'),
+			],
+		], [
+			'category_name.required' => 'Product Category Name is required',
+			'category_name.unique'   => 'Product Category Name already exists',
+		]);
 			
 			$bank = new ProductCategoryModel();
 			$bank = ProductCategoryModel::find($request->category_id);

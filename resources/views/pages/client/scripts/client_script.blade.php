@@ -215,9 +215,9 @@ function openEditClientModal()
             /*
             REFERRAL
             */
-            if(data.referred_by_id)
+            if(data.sales_agent_idx)
             {
-                $('#referred_by_id').val(data.referred_by_name + " : " + data.referred_by_client_account_number);
+                $('#sales_agent_id').val(data.sales_agent_name);
             }
 
             /*
@@ -252,9 +252,9 @@ function saveClient(event)
 
     const client_id = $('#client_id').val();
 
-    const referred_by_idx =
-        $('#referred_by_name option[value="' +
-        $('#referred_by_id').val() +
+    const sales_agent_idx =
+        $('#sales_agent_name option[value="' +
+        $('#sales_agent_id').val() +
         '"]').attr('data-id');
 
     const payload = {
@@ -267,7 +267,7 @@ function saveClient(event)
         default_vat_percentage: $('#default_vat_percentage').val(),
         default_withholding_tax_percentage: $('#default_withholding_tax_percentage').val(),
         default_payment_terms: $('#default_payment_terms').val(),
-        referred_by_idx: referred_by_idx,
+        sales_agent_idx: sales_agent_idx,
 		client_contact_number: $('#client_contact_number').val(),
 		client_age: $('#client_age').val(),
         _token: "{{ csrf_token() }}"

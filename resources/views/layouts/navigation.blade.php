@@ -213,7 +213,7 @@
 		
 			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
-              <i class="bi bi-box-seam navbar_icon" title="Manage Product list"></i><span>Product</span>
+              <i class="bi bi-box-seam navbar_icon" title="Manage Product list"></i><span>Products & Services</span>
             </a>
 			<a href="{{ route('product_category') }}" class="sidebar_li_a" title="Manage Bank list">
               <i class="bi bi-tags navbar_icon" title="Manage Bank list"></i><span>Product Category</span>
@@ -235,7 +235,9 @@
               <i class="bi bi-truck navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
             </a>
 			
-			
+			<a href="{{ route('salesagent') }}" class="sidebar_li_a" title="Sales Agent list">
+              <i class="bi bi-person-badge navbar_icon" title="Sales Agent list"></i><span>Sales Agent</span>
+            </a>
 			
 			<a href="{{ route('reminder') }}" class="sidebar_li_a" title="Reminders">
               <i class="bi bi-bell navbar_icon" title="Reminders list"></i><span>Reminders</span>
