@@ -32,12 +32,12 @@ use App\Services\SmsService;
 
 Route::get('/test-itexmo', function (SmsService $sms) {
 
-
+/*
 dd(
     env('ITEXMO_EMAIL'),
     env('ITEXMO_PASSWORD'),
     env('ITEXMO_API_CODE')
-);
+);*/
 
     return $sms->send(
         '09266213790',
