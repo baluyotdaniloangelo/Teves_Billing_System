@@ -20,6 +20,7 @@ class SmsService
             'Recipients' => [$number],
             'Message' => $message,
             'SenderId' => env('ITEXMO_SENDER_ID', 'TevesGas'),
+			'ApiCode'    => env('ITEXMO_API_CODE'),
         ]);
 
         return [
