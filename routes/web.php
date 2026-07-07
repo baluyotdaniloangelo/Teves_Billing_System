@@ -26,6 +26,19 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\ProductCategoryController;
 
+
+use App\Services\SmsService;
+
+
+Route::get('/test-itexmo', function (SmsService $sms) {
+
+    return $sms->send(
+        '09266213790',
+        'Test SMS from Laravel ITEXMO'
+    );
+
+});
+
 /*June 19, 2025*/
 use App\Http\Controllers\ProductPricePerSellerController;
 /*June 29, 2025*/
