@@ -31,7 +31,7 @@ use App\Services\SmsService;
 
 
 Route::get('/test-itexmo', function (SmsService $sms) {
-
+ 
     return $sms->send(
         '09266213790',
         'Test SMS from Laravel ITEXMO'
