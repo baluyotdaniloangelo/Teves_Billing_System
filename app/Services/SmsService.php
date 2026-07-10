@@ -13,15 +13,16 @@ class SmsService
 
         $endpoint = 'https://api.itexmo.com/api/broadcast';
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Basic ' . base64_encode($email . ':' . $password),
-        ])->post($endpoint, [
-            'Recipients' => [$number],
-            'Message' => $message,
-            'SenderId' => env('ITEXMO_SENDER_ID', 'TevesGas'),
-			'ApiCode'    => env('ITEXMO_API_CODE'),
-        ]);
+        $response = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Basic ' . base64_encode($email . ':' . $password),
+            ])
+            ->post($endpoint, [
+                'ApiCode'    => env('ITEXMO_API_CODE'),
+                'Recipients' => json_encode([$number]),
+                'Message'    => $message,
+                'SenderId'   => env('ITEXMO_SENDER_ID', 'TevesGas'),
+            ]);
 
         return [
             'status' => $response->status(),
