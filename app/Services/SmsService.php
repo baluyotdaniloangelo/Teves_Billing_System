@@ -25,7 +25,7 @@ class SmsService
         return [
             'status' => $response->status(),
             'body'   => $response->json(),
-			'ver'=>'V2'
+			'ver'=>'V3'
         ];
     }
 }
