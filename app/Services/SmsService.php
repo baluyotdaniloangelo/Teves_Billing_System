@@ -8,7 +8,9 @@ class SmsService
 {
     public function send($number, $message)
     {
-        $response = Http::post(
+        $response = Http::withOptions([
+    'force_ip_resolve' => 'v4',
+])->post(
             'https://api.itexmo.com/api/broadcast',
             [
                 'Email'      => env('ITEXMO_EMAIL'),
