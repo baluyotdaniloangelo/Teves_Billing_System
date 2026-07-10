@@ -39,6 +39,24 @@ Route::get('/test-itexmo', function (SmsService $sms) {
 
 });
 
+Route::get('/test-itexmo-query', function () {
+
+    $response = Http::post(
+        'https://api.itexmo.com/api/query',
+        [
+            'Email'    => env('ITEXMO_EMAIL'),
+            'Password' => env('ITEXMO_PASSWORD'),
+            'ApiCode'  => env('ITEXMO_API_CODE'),
+            'Action'   => 'ApiCodeInfo',
+        ]
+    );
+
+    return [
+        'status' => $response->status(),
+        'body'   => $response->json(),
+    ];
+});
+
 /*June 19, 2025*/
 use App\Http\Controllers\ProductPricePerSellerController;
 /*June 29, 2025*/
