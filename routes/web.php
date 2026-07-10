@@ -57,6 +57,15 @@ Route::get('/test-itexmo-query', function () {
     ];
 });
 
+
+Route::get('/test-env', function () {
+    return [
+        'email' => env('ITEXMO_EMAIL'),
+        'password_length' => strlen(env('ITEXMO_PASSWORD')),
+        'api_code' => env('ITEXMO_API_CODE'),
+    ];
+});
+
 /*June 19, 2025*/
 use App\Http\Controllers\ProductPricePerSellerController;
 /*June 29, 2025*/
