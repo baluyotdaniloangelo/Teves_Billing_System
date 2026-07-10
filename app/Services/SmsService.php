@@ -8,25 +8,21 @@ class SmsService
 {
     public function send($number, $message)
     {
-        $email = env('ITEXMO_EMAIL');
-        $password = env('ITEXMO_PASSWORD');
-
-        $endpoint = 'https://api.itexmo.com/api/broadcast';
-
-        $response = Http::asForm()
-            ->withHeaders([
-                'Authorization' => 'Basic ' . base64_encode($email . ':' . $password),
-            ])
-            ->post($endpoint, [
+        $response = Http::post(
+            'https://api.itexmo.com/api/broadcast',
+            [
+                'Email'      => env('ITEXMO_EMAIL'),
+                'Password'   => env('ITEXMO_PASSWORD'),
                 'ApiCode'    => env('ITEXMO_API_CODE'),
-                'Recipients' => json_encode([$number]),
+                'Recipients' => [$number],
                 'Message'    => $message,
-                'SenderId'   => env('ITEXMO_SENDER_ID', 'TevesGas'),
-            ]);
+                'SenderId'   => env('ITEXMO_SENDER_ID'),
+            ]
+        );
 
         return [
             'status' => $response->status(),
-            'body' => $response->json(),
+            'body'   => $response->json(),
         ];
     }
 }
