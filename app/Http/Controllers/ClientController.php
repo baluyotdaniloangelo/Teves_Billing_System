@@ -38,6 +38,7 @@ class ClientController extends Controller
 			->select(
 				'client_id',
 				'client_name',
+				'customer_type',
 				'client_account_number',
 				'client_address',
 				'client_tin',
@@ -108,6 +109,7 @@ class ClientController extends Controller
 			->find($clientID, [
 				'client_id',
 				'client_name',
+				'customer_type',
 				'client_account_number',
 				'client_address',
 				'client_tin',
@@ -123,6 +125,7 @@ class ClientController extends Controller
 
 		return response()->json([
 			'client_name' => $data->client_name,
+			'customer_type' => $data->customer_type,
 			'client_account_number' => $data->client_account_number,
 			'client_address' => $data->client_address,
 			'client_tin' => $data->client_tin,
@@ -182,6 +185,7 @@ class ClientController extends Controller
 
 			$client = new ClientModel();
 			$client->client_name 						= $request->client_name;
+			$client->customer_type						= $request->customer_type;
 			$client->client_account_number 				= $client_account_number;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
@@ -223,6 +227,7 @@ class ClientController extends Controller
 			$client = new ClientModel();
 			$client = ClientModel::find($request->clientID);
 			$client->client_name 						= $request->client_name;
+			$client->customer_type						= $request->customer_type;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
 			$client->client_contact_number 				= $request->client_contact_number;

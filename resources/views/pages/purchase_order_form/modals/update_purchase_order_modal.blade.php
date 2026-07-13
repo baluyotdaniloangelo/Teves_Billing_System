@@ -29,7 +29,7 @@
                         </h4>
 
                         <small class="opacity-75">
-                            Create and manage Purchase Order transaction
+                            Manage Purchase Order transaction
                         </small>
 
                     </div>
@@ -184,12 +184,15 @@
 
 											<input type="date"
 												   class="form-control rounded-3"
-												   id="update_purchase_order_date"
-												   name="update_purchase_order_date"
+												   id="purchase_order_date"
+												   name="purchase_order_date"
 												   value=""
 												   required
 												   max="9999-12-31">
 
+											<span class="text-danger small"
+											  id="purchase_order_date_error"></span>
+											  
 										</div>
 
 										
@@ -206,8 +209,8 @@
 
 											<select class="form-select rounded-3"
 													required
-													name="update_company_header"
-													id="update_company_header"
+													name="company_header"
+													id="company_header"
 													onchange="UpdateBranch()">
 													
 												@foreach ($teves_branch as $teves_branch_cols)
@@ -231,15 +234,19 @@
 										</label>
 
 										<input class="form-control rounded-3"
-											   list="update_supplier_name_list"
-											   name="update_supplier_name"
-											   id="update_supplier_idx"
+											   list="supplier_name_list"
+											   name="supplier_name"
+											   id="supplier_idx"
 											   onChange="SupplierInfo()"
 											   placeholder="Supplier's Name"
 											   autocomplete="off"
 											   required>
-
-										<datalist id="update_supplier_name_list">
+										
+										<input type="hidden"
+										   id="supplier_idx"
+										   name="supplier_idx">
+	   
+										<datalist id="supplier_name_list">
 											@foreach ($supplier_data as $supplier_data_cols)
 											  <option label="{{$supplier_data_cols->supplier_name}}"
 											  data-id="{{$supplier_data_cols->supplier_id}}"
@@ -248,7 +255,7 @@
 										</datalist>
 
 										<span class="text-danger small"
-											  id="update_supplier_idxError"></span>
+											  id="supplier_idxError"></span>
 
 									</div>
 
@@ -272,8 +279,8 @@
 
 											<input type="number"
 												   class="form-control rounded-3 bg-light"
-												   id="update_purchase_order_net_percentage"
-												   name="update_purchase_order_net_percentage"
+												   id="purchase_order_net_percentage"
+												   name="purchase_order_net_percentage"
 												   >
 
 										</div>
@@ -286,8 +293,8 @@
 											</label>
 
 											<select class="form-select rounded-3"
-													id="update_purchase_order_invoice"
-													name="update_purchase_order_invoice"
+													id="purchase_order_invoice"
+													name="purchase_order_invoice"
 													onchange="check_withholding_tax()"
 													required>
 
@@ -307,8 +314,8 @@
 
 											<input type="number"
 												   class="form-control rounded-3 bg-light"
-												   id="update_purchase_order_less_percentage"
-												   name="update_purchase_order_less_percentage"
+												   id="purchase_order_less_percentage"
+												   name="purchase_order_less_percentage"
 											>
 
 										</div>
@@ -365,8 +372,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_purchase_order_sales_order_number"
-										   name="update_purchase_order_sales_order_number"
+										   id="purchase_order_sales_order_number"
+										   name="purchase_order_sales_order_number"
 										   placeholder="Enter Sales Order #">
 
 								</div>
@@ -384,8 +391,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_purchase_order_collection_receipt_no"
-										   name="update_purchase_order_collection_receipt_no"
+										   id="purchase_order_collection_receipt_no"
+										   name="purchase_order_collection_receipt_no"
 										   placeholder="Enter Purchase Order Number">
 
 								</div>
@@ -403,8 +410,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_purchase_order_official_receipt_no"
-										   name="update_purchase_order_official_receipt_no"
+										   id="purchase_order_official_receipt_no"
+										   name="purchase_order_official_receipt_no"
 										   placeholder="Enter Sales Invoice Number">
 
 								</div>
@@ -422,8 +429,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_purchase_order_delivery_receipt_no"
-										   name="update_purchase_order_delivery_receipt_no"
+										   id="purchase_order_delivery_receipt_no"
+										   name="purchase_order_delivery_receipt_no"
 										   placeholder="Enter Charge Delivery Receipt #">
 
 								</div>
@@ -476,8 +483,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_purchase_order_delivery_method"
-										   name="update_purchase_order_delivery_method"
+										   id="purchase_order_delivery_method"
+										   name="purchase_order_delivery_method"
 										   placeholder="e.g. Company Truck, Pick-up">
 
 								</div>
@@ -495,8 +502,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_purchase_loading_terminal"
-										   name="update_purchase_loading_terminal" 
+										   id="purchase_loading_terminal"
+										   name="purchase_loading_terminal" 
 										   list="purchase_loading_terminal_list" 
 										   placeholder="Loading Terminal">
 										   
@@ -521,8 +528,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_hauler_operator"
-										   name="update_hauler_operator"
+										   id="hauler_operator"
+										   name="hauler_operator"
 										   placeholder="Enter Hauler">
 
 								</div>								
@@ -541,8 +548,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_lorry_driver"
-										   name="update_lorry_driver"
+										   id="lorry_driver"
+										   name="lorry_driver"
 										   list="lorry_driver_list" 
 										   placeholder="Driver's Name">
 									
@@ -567,8 +574,8 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="update_plate_number"
-										   name="update_plate_number"
+										   id="plate_number"
+										   name="plate_number"
 										   placeholder="Plate Number">
 									
 									
@@ -587,8 +594,8 @@
 
 										<textarea
 											class="form-control rounded-3"
-											id="update_purchase_destination"
-											name="update_purchase_destination"
+											id="purchase_destination"
+											name="purchase_destination"
 											rows="4"
 											placeholder="Destination"
 											 list="purchase_destination_list"></textarea>
@@ -647,8 +654,8 @@
 
 										<textarea
 											class="form-control rounded-3"
-											id="update_purchase_order_instructions"
-											name="update_purchase_order_instructions"
+											id="purchase_order_instructions"
+											name="purchase_order_instructions"
 											rows="4"
 											placeholder="Enter delivery or processing instructions..."></textarea>
 
@@ -667,8 +674,8 @@
 
 										<textarea
 											class="form-control rounded-3"
-											id="update_purchase_order_note"
-											name="update_purchase_order_note"
+											id="purchase_order_note"
+											name="purchase_order_note"
 											rows="4"
 											placeholder="Enter additional notes or remarks..."></textarea>
 
@@ -721,13 +728,115 @@
                             id="update-purchase-order">
 
                         <i class="bi bi-save-fill me-1"></i>
-                        Save Purchase Order
+                        Update Purchase Order
 
                     </button>
 
                 </div>
 
             </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal fade"
+     id="SuccessModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <div class="modal-body text-center p-4">
+
+                <!-- ICON -->
+                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width:80px;height:80px;">
+
+                    <i class="bi bi-check-circle-fill text-success fs-1"></i>
+
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-bold mb-2"
+                    id="success_modal_title">
+
+                    Success
+
+                </h5>
+
+                <!-- MESSAGE -->
+                <div class="text-muted"
+                     id="success_modal_message">
+
+                    Record saved successfully.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- VALIDATION ERROR MODAL -->
+<div class="modal fade"
+     id="ValidationErrorModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <!-- BODY -->
+            <div class="modal-body text-center p-4">
+
+                <!-- ICON -->
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width:80px;height:80px;">
+
+                    <i class="bi bi-exclamation-circle-fill text-danger fs-1"></i>
+
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-bold text-danger mb-2" id="action_error_message">
+
+                    Validation Error
+
+                </h5>
+
+                <!-- MESSAGE -->
+                <div class="text-muted"
+                     id="validation_error_message">
+
+                    Please check the Required Input.
+
+                </div> 
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 justify-content-center pb-4">
+
+                <button type="button"
+                        class="btn btn-danger rounded-3 px-4"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-circle me-2"></i>
+                    Close
+
+                </button>
+
+            </div>
 
         </div>
 

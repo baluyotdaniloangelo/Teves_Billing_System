@@ -1,4 +1,5 @@
 @include('layouts.header')
+
 </head>
 <!--
 Use to automatically hide the Side Nav Bar
@@ -175,26 +176,10 @@ else if (Request::path()==('receivable_from_billing_form')){
 <?php
 }
 
-else if (Request::is('purchaseorder')){
-?>
-<body class="">
-@include('layouts.footer')
-@include('layouts.purchaseorder_script')
-<?php
-}
-else if (Request::is('purchaseorder_v2')){
-	?>
-	<body class="">
-	
-	<?php
-}
 else if (Request::is('purchase_order_form/*')){
 	?>
 	<meta name="csrf-token" content="{{csrf_token()}}">
 	<body class="">
-	@include('layouts.footer')
-	@include('layouts.purchase_order_form_script')
-	@include('layouts.purchase_order_form_delivery_script')
 	<?php
 }
 else if (Request::is('cashier_report')){

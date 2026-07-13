@@ -63,11 +63,65 @@
                             <div class="card border-0 bg-light rounded-4 h-90">
 
                                 <div class="card-body p-4">
+<!--
 
+<div class="col-md-4 mb-3">
+
+											<label class="form-label fw-semibold">
+
+												<i class="bi bi-tags-fill text-success me-2"></i>
+
+												Sales Order Type
+
+											</label>
+
+											<select class="form-select rounded-3" required="" name="sales_order_type" id="sales_order_type">
+												<option value="">Please select Type</option>
+												<option value="1" selected="">Fuel</option>
+												<option value="2">Services</option>
+											</select>
+											
+											<span class="text-danger small" id="sales_order_typeError"></span>
+											  
+										</div>
+										
+										-->
+										
                                     <h6 class="fw-bold mb-4 text-success">
                                         Account Information
                                     </h6>
 
+                                    <!-- CLIENT NAME -->
+                                    <div class="mb-3">
+
+                                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+                                            <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                                  style="width:34px;height:34px;">
+
+                                                <i class="bi bi-person text-success"></i>
+
+                                            </span>
+
+                                            <span>Customer Type</span>
+
+                                        </label>
+
+                                        <select class="form-select rounded-3" required="" name="customer_type" id="customer_type">
+												<option value="Commercial Account" selected title="(discounted customers kasi mga restuarant, laundry and other business uses lpg)">Commercial Account</option>
+												<option value="Household">Household</option>
+												<option value="Outlet">Outlet</option>
+												<option value="Fuel Station">Fuel Station</option>
+												<option value="Fuel Customer">Fuel Customer</option>
+												<option value="Industrial">Industrial</option>
+										</select>
+
+                                        <div class="invalid-feedback"
+                                             id="customer_type_error">
+                                        </div>
+
+                                    </div>
+									
                                     <!-- CLIENT NAME -->
                                     <div class="mb-3">
 
@@ -117,7 +171,7 @@
                                         <textarea class="form-control rounded-3"
                                                   name="client_address"
                                                   id="client_address"
-                                                  rows="3"
+                                                  rows="1"
                                                   placeholder="Enter Complete Address"
                                                   required></textarea>
 
@@ -130,64 +184,65 @@
 
 
 
-<!-- CONTACT NUMBER -->
-<div class="mb-3">
+									<!-- CONTACT NUMBER -->
+									<div class="mb-3">
 
-    <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-        <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-              style="width:34px;height:34px;">
+											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+												  style="width:34px;height:34px;">
 
-            <i class="bi bi-telephone-fill text-success"></i>
+												<i class="bi bi-telephone-fill text-success"></i>
 
-        </span>
+											</span>
 
-        <span>Contact Number</span>
+											<span>Contact Number</span>
 
-    </label>
+										</label>
 
-    <input type="text"
-           class="form-control form-control-lg rounded-3"
-           name="client_contact_number"
-           id="client_contact_number"
-           placeholder="09XXXXXXXXX"
-           autocomplete="off">
+										<input type="text"
+											   class="form-control form-control-lg rounded-3"
+											   name="client_contact_number"
+											   id="client_contact_number"
+											   placeholder="09XXXXXXXXX"
+											   autocomplete="off">
 
-    <div class="invalid-feedback"
-         id="client_contact_number_error">
-    </div>
+										<div class="invalid-feedback"
+											 id="client_contact_number_error">
+										</div>
 
-</div>
+									</div>
 
-<!-- AGE -->
-<div class="mb-3">
+									<!-- AGE -->
+									<div class="mb-3">
 
-    <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-        <span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-              style="width:34px;height:34px;">
+											<span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+												  style="width:34px;height:34px;">
 
-            <i class="bi bi-person-badge-fill text-info"></i>
+												<i class="bi bi-person-badge-fill text-info"></i>
 
-        </span>
+											</span>
 
-        <span>Age</span>
+											<span>Age</span>
 
-    </label>
+										</label>
 
-    <input type="number"
-           class="form-control form-control-lg rounded-3"
-           name="client_age"
-           id="client_age"
-           min="1"
-           max="120"
-           placeholder="Enter Age">
+										<input type="number"
+											   class="form-control form-control-lg rounded-3"
+											   name="client_age"
+											   id="client_age"
+											   min="1"
+											   max="120"
+											   placeholder="Enter Age">
 
-    <div class="invalid-feedback"
-         id="client_age_error">
-    </div>
+										<div class="invalid-feedback"
+											 id="client_age_error">
+										</div>
 
-</div>
+									</div>
+									
                                     <div class="mb-3">
 
                                         <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">

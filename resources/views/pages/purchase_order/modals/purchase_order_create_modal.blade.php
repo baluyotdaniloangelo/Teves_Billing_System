@@ -55,6 +55,51 @@
                 <!-- BODY -->
                 <div class="modal-body p-4">
 
+
+                    <!-- SUPPLIER -->
+                    <div class="card border-0 bg-light rounded-4 mb-3">
+
+                        <div class="card-body p-3">
+
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <label for="purchase_order_type_create"
+                                           class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+                                        <span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                              style="width:34px;height:34px;padding-top:1px;">
+
+                                            <i class="bi bi-tags-fill text-info"></i>
+
+                                        </span>
+
+                                        <span>
+                                            Purchase Order Type
+                                        </span>
+
+                                    </label>
+
+                                    <select class="form-select form-select-lg rounded-3" required="" name="purchase_order_type_create" id="purchase_order_type_create" required>
+												<option value="">Please select Type</option>
+												@foreach ($product_category_data as $product_category_data_cols)
+													<option value="{{$product_category_data_cols->category_id}}">{{$product_category_data_cols->category_name}}</option>
+												@endforeach
+									</select>
+
+                                    <span class="valid-feedback"
+                                          id="purchase_order_typeError_create">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+					
                     <!-- BRANCH -->
                     <div class="card border-0 bg-light rounded-4 mb-3">
 
@@ -200,6 +245,9 @@
                         </div>
 
                     </div>
+
+
+
 
                     <!-- FINANCIAL SETTINGS -->
                     <div class="card border-0 bg-light rounded-4">

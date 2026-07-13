@@ -14,7 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReceivablesController;
 use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\SalesOrderDeliveryController;
-use App\Http\Controllers\PurchaseOrderController_v2;
+use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
@@ -25,7 +25,7 @@ use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\ProductCategoryController;
-
+use App\Http\Controllers\UserProductAccessController;
 
 use App\Services\SmsService;
 
@@ -214,8 +214,7 @@ Route::post('/delete_product_confirmed', [ProductController::class, 'delete_prod
 /*Load Product Pricing Per Branch 01-02-2023*/
 Route::post('/get_product_pricing_per_branch', [ProductController::class,'get_product_pricing_per_branch'])->name('ProductPricingPerBranch')->middleware('isLoggedIn');
 Route::post('/get_product_pricing_per_branch_history', [ProductController::class,'get_product_pricing_per_branch_history'])->name('ProductPricingPerBranchHistory')->middleware('isLoggedIn');
-/*Save Product Pricing Per Branch 01-02-2023*/
-//Route::post('/save_branches_product_pricing_post', [ProductController::class,'save_branches_product_pricing_post'])->name('save_branches_product_pricing_post')->middleware('isLoggedIn');
+
 /*Load Product Pricing Per Branch per Billing 01-09-2023*/
 Route::post('/get_product_list_pricing_per_branch', [ProductController::class,'get_product_list_pricing_per_branch'])->name('ProductListPricingPerBranch')->middleware('isLoggedIn');
 
@@ -314,6 +313,11 @@ Route::post('/user_account_post', [UserController::class,'user_account_post'])->
 Route::get('user_branch_access', [UserBranchAccessController::class, 'getUserBranchAccess'])->name('getUserBranchAccess')->middleware('isLoggedIn');
 /*Add Site Access*/
 Route::post('/add_user_access_post', [UserBranchAccessController::class,'add_user_access_post'])->name('add_user_access_post')->middleware('isLoggedIn');
+
+/*User Product Access*/
+Route::get('user_product_access', [UserProductAccessController::class, 'user_product_access'])->name('getUserProductAccess')->middleware('isLoggedIn');
+/*Add Product Access*/
+Route::post('/add_user_product_access_post', [UserProductAccessController::class,'add_user_product_access_post'])->name('add_user_product_access_post')->middleware('isLoggedIn');
 
 /*Receivables*/
 /*December 17, 2022*/
@@ -423,61 +427,62 @@ Route::post('/billing_receivable_delete_payment', [ReceivablesController::class,
 
 /*Purchase Order Version 2*/
 /*January 25, 2023*/
-Route::get('/purchaseorder_v2', [PurchaseOrderController_v2::class,'purchaseorder'])->name('purchaseorder_v2')->middleware('isLoggedIn');
-Route::get('purchaseorder_v2/list', [PurchaseOrderController_v2::class, 'getPurchaseOrderList_v2'])->name('getPurchaseOrderList_v2')->middleware('isLoggedIn');
+Route::get('/purchaseorder', [PurchaseOrderController::class,'purchaseorder'])->name('purchaseorder')->middleware('isLoggedIn');
+Route::get('purchaseorder/list', [PurchaseOrderController::class, 'getPurchaseOrderList'])->name('getPurchaseOrderList')->middleware('isLoggedIn');
 /*GET Purchase Order Info*/
-Route::post('/purchase_order_info', [PurchaseOrderController_v2::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');
+Route::post('/purchase_order_info', [PurchaseOrderController::class, 'purchase_order_info'])->name('purchase_order_info')->middleware('isLoggedIn');
 /*Confirm Delete Purchase Order*/
-Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController_v2::class, 'delete_purchase_order_confirmed'])->name('delete_purchase_order_confirmed')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_confirmed', [PurchaseOrderController::class, 'delete_purchase_order_confirmed'])->name('delete_purchase_order_confirmed')->middleware('isLoggedIn');
 /*Create Purchase Order*/
-Route::post('/create_purchase_order_post_v2', [PurchaseOrderController_v2::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
+Route::post('/create_purchase_order_post', [PurchaseOrderController::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
 /*Update Purchase Order*/
-Route::post('/update_purchase_order_post', [PurchaseOrderController_v2::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');
+Route::post('/update_purchase_order_post', [PurchaseOrderController::class,'update_purchase_order_post'])->name('update_purchase_order_post')->middleware('isLoggedIn');
+
 /*Create Purchase Order Product Item*/
-Route::post('/create_purchase_order_product_item', [PurchaseOrderController_v2::class,'create_purchase_order_product_item'])->name('PurchaseOrderProduct')->middleware('isLoggedIn');
+Route::post('/create_purchase_order_product_item', [PurchaseOrderController::class,'create_purchase_order_product_item'])->name('PurchaseOrderProduct')->middleware('isLoggedIn');
 /*Create Product for Purchase Order*/
-Route::post('/create_purchase_order_post_v2', [PurchaseOrderController_v2::class,'create_purchase_order_post'])->name('SavePurchaseOrder')->middleware('isLoggedIn');
-Route::post('/purchase_order_product_info', [PurchaseOrderController_v2::class,'purchase_order_product_info'])->name('purchase_order_product_info')->middleware('isLoggedIn');
+Route::post('/purchase_order_product_info', [PurchaseOrderController::class,'purchase_order_product_info'])->name('purchase_order_product_info')->middleware('isLoggedIn');
 /*Generate via Web Page View - For Purchase Order Summary - April 12, 2025*/
-Route::get('/purchase_order_summary', [PurchaseOrderController_v2::class,'purchase_order_summary'])->name('purchaseordersummary')->middleware('isLoggedIn');
-Route::post('/purchase_order_summary_data', [PurchaseOrderController_v2::class,'purchase_order_summary_data'])->name('purchase_order_summary_data')->middleware('isLoggedIn');
-Route::get('/generate_purchase_order_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_pdf'])->name('generate_purchase_order_summary_report_pdf')->middleware('isLoggedIn');
-Route::get('/generate_purchase_order_summary_report_per_client_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_per_client_pdf'])->name('generate_purchase_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
+Route::get('/purchase_order_summary', [PurchaseOrderController::class,'purchase_order_summary'])->name('purchaseordersummary')->middleware('isLoggedIn');
+Route::post('/purchase_order_summary_data', [PurchaseOrderController::class,'purchase_order_summary_data'])->name('purchase_order_summary_data')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_pdf', [PurchaseOrderController::class,'generate_purchase_order_summary_report_pdf'])->name('generate_purchase_order_summary_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_per_client_pdf', [PurchaseOrderController::class,'generate_purchase_order_summary_report_per_client_pdf'])->name('generate_purchase_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
+
 /*8/31/2025*/
-Route::get('/generate_purchase_order_summary_report_per_client_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_per_client_consolidated_pdf'])->name('generate_purchase_order_summary_report_per_client_consolidated_pdf')->middleware('isLoggedIn');
-Route::get('/generate_purchase_order_summary_report_consolidated_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_summary_report_consolidated_pdf'])->name('generate_purchase_order_summary_report_consolidated_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_per_client_consolidated_pdf', [PurchaseOrderController::class,'generate_purchase_order_summary_report_per_client_consolidated_pdf'])->name('generate_purchase_order_summary_report_per_client_consolidated_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_summary_report_consolidated_pdf', [PurchaseOrderController::class,'generate_purchase_order_summary_report_consolidated_pdf'])->name('generate_purchase_order_summary_report_consolidated_pdf')->middleware('isLoggedIn');
 /*1/18/2026*/
-Route::get('/generate_purchase_order_product_summary_report_pdf', [PurchaseOrderController_v2::class,'generate_purchase_order_product_summary_report_pdf'])->name('generate_purchase_order_product_summary_report_pdf')->middleware('isLoggedIn');
+Route::get('/generate_purchase_order_product_summary_report_pdf', [PurchaseOrderController::class,'generate_purchase_order_product_summary_report_pdf'])->name('generate_purchase_order_product_summary_report_pdf')->middleware('isLoggedIn');
 /*5/7/2026*/
-Route::post('/generate_purchase_order_volume_summary_report', [PurchaseOrderController_v2::class,'generate_purchase_order_volume_summary_report'])->name('generate_purchase_order_volume_summary_report')->middleware('isLoggedIn');
+Route::post('/generate_purchase_order_volume_summary_report', [PurchaseOrderController::class,'generate_purchase_order_volume_summary_report'])->name('generate_purchase_order_volume_summary_report')->middleware('isLoggedIn');
 
 
 /*01/14/2026*/
-Route::post('/purchase_order_product_summary_data', [PurchaseOrderController_v2::class,'purchase_order_product_summary_data'])->name('purchase_order_product_summary_data')->middleware('isLoggedIn');
+Route::post('/purchase_order_product_summary_data', [PurchaseOrderController::class,'purchase_order_product_summary_data'])->name('purchase_order_product_summary_data')->middleware('isLoggedIn');
 
 /*Get Purchase Order Product Item*/
-Route::post('/get_purchase_order_product_list', [PurchaseOrderController_v2::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
+Route::post('/get_purchase_order_product_list', [PurchaseOrderController::class,'get_purchase_order_product_list'])->name('get_purchase_order_product_list')->middleware('isLoggedIn');
 /*Delete Purchase Order Product Item*/
-Route::post('/delete_purchase_order_product', [PurchaseOrderController_v2::class,'delete_purchase_order_product'])->name('PurchaseOrderDeleteProduct')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_product', [PurchaseOrderController::class,'delete_purchase_order_product'])->name('PurchaseOrderDeleteProduct')->middleware('isLoggedIn');
 /*Get Purchase Order Payment Item*/
-Route::post('/get_purchase_order_payment_list', [PurchaseOrderController_v2::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');
+Route::post('/get_purchase_order_payment_list', [PurchaseOrderController::class,'get_purchase_order_payment_list'])->name('get_purchase_order_payment_list')->middleware('isLoggedIn');
 /*Delete Purchase Order Payment Item*/
-Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController_v2::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
+Route::post('/delete_purchase_order_payment_item', [PurchaseOrderController::class,'delete_purchase_order_payment_item'])->name('delete_purchase_order_payment_item')->middleware('isLoggedIn');
 /*Update Purchase Status*/
-Route::post('/update_purchase_status', [PurchaseOrderController_v2::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
+Route::post('/update_purchase_status', [PurchaseOrderController::class,'update_purchase_status'])->name('update_purchase_status')->middleware('isLoggedIn');
 /*Update Purchase - Add/Edit/Delete Product,Withdrawal,Payment*/
-Route::get('/purchase_order_form/{id}', [PurchaseOrderController_v2::class, 'purchase_order_form'])->name('purchase_order_forms')->middleware('isLoggedIn');
+Route::get('/purchase_order_form/{id}', [PurchaseOrderController::class, 'purchase_order_form'])->name('purchase_order_forms')->middleware('isLoggedIn');
 /*Get Product Selleing Price of Supplier*/
-Route::post('/get_product_list_suppliers_price', [PurchaseOrderController_v2::class, 'get_product_list_suppliers_price'])->name('get_product_list_suppliers_price')->middleware('isLoggedIn');
+Route::post('/get_product_list_suppliers_price', [PurchaseOrderController::class, 'get_product_list_suppliers_price'])->name('get_product_list_suppliers_price')->middleware('isLoggedIn');
 
 /*Create Payment for Purchase Order*/
-Route::post('/create_purchase_order_payment_item', [PurchaseOrderController_v2::class,'create_purchase_order_payment_item'])->name('PurchaseOrderPayment')->middleware('isLoggedIn');
-Route::post('/purchase_order_payment_info', [PurchaseOrderController_v2::class,'purchase_order_payment_info'])->name('PaymentInfo')->middleware('isLoggedIn');
-Route::post('/purchase_order_delete_payment', [PurchaseOrderController_v2::class,'purchase_order_delete_payment'])->name('DeletePayment')->middleware('isLoggedIn');
+Route::post('/create_purchase_order_payment_item', [PurchaseOrderController::class,'create_purchase_order_payment_item'])->name('PurchaseOrderPayment')->middleware('isLoggedIn');
+Route::post('/purchase_order_payment_info', [PurchaseOrderController::class,'purchase_order_payment_info'])->name('PaymentInfo')->middleware('isLoggedIn');
+Route::post('/purchase_order_delete_payment', [PurchaseOrderController::class,'purchase_order_delete_payment'])->name('DeletePayment')->middleware('isLoggedIn');
 
-Route::post('/save_purchase_order_payment',[PurchaseOrderController_v2::class,'save_purchase_order_payment'])->name('save_purchase_order_payment')->middleware('isLoggedIn');
+Route::post('/save_purchase_order_payment',[PurchaseOrderController::class,'save_purchase_order_payment'])->name('save_purchase_order_payment')->middleware('isLoggedIn');
 
-Route::post('upload', [PurchaseOrderController_v2::class, 'store']);
+Route::post('upload', [PurchaseOrderController::class, 'store']);
 
 /*Purchase Order Delivery*/
 Route::post('/purchase_order_component_delivery_compose', [PurchaseOrderDeliveryController::class,'purchase_order_component_delivery_compose'])->name('PurchaseOrderDeliveryCompose')->middleware('isLoggedIn');

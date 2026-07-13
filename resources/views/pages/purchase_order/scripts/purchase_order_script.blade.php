@@ -42,7 +42,7 @@ function initializePurchaseOrderTable() {
             stateSave: true,
 
             ajax:
-                "{{ route('getPurchaseOrderList_v2') }}",
+                "{{ route('getPurchaseOrderList') }}",
 
             columns: [
 
@@ -53,18 +53,12 @@ function initializePurchaseOrderTable() {
                 },
 
                 { data: 'purchase_order_date' },
-
                 { data: 'purchase_order_control_number' },
-
                 { data: 'supplier_name' },
-
                 { data: 'purchase_order_sales_order_number' },
-
                 { data: 'purchase_order_official_receipt_no' },
-
                 {
                     data: 'purchase_order_total_payable',
-
                     render:
                         $.fn.dataTable.render.number(
                             ',',
@@ -73,33 +67,23 @@ function initializePurchaseOrderTable() {
                             ''
                         )
                 },
-
                 { data: 'purchase_order_delivery_status' },
-
                 { data: 'purchase_status' },
-
                 {
                     data: 'action',
                     orderable: false,
                     searchable: false,
                     className: 'text-center'
                 }
-
             ],
-
             order: [[1, 'desc']],
-
             columnDefs: [
-
                 {
                     className: 'text-center',
                     targets: [0, 1, 6, 7, 8, 9]
                 }
-
             ]
-
         });
-
     autoAdjustColumns(PurchaseOrderTable);
 }
 
@@ -170,42 +154,24 @@ function savePurchaseOrder(event) {
         $('#PurchaseOrderformNew');
 
     form.addClass('was-validated');
-
+	
     const payload = {
-
-        purchase_order_date:
-            $('#purchase_order_date_create').val(),
-
-        purchase_order_invoice:
-            $('#purchase_order_invoice_create').val(),
-
-        supplier_idx:
-            getSelectedSupplierId(),
-
-        company_header:
-            $('#company_header_create').val(),
-
-        default_net_percentage:
-            $('#purchase_order_net_percentage_create').val(),
-
-        default_less_percentage:
-            $('#purchase_order_less_percentage_create').val(),
-
-        _token:
-            "{{ csrf_token() }}"
+        purchase_order_date:		$('#purchase_order_date_create').val(),
+		category_idx:				$('#purchase_order_type_create').val(),
+        purchase_order_invoice:		$('#purchase_order_invoice_create').val(),
+        supplier_idx:				getSelectedSupplierId(),
+        company_header:				$('#company_header_create').val(),
+        default_net_percentage:		$('#purchase_order_net_percentage_create').val(),
+        default_less_percentage:	$('#purchase_order_less_percentage_create').val(),
+        _token:						"{{ csrf_token() }}"
     };
 
     $.ajax({
 
-        url:
-            "{{ route('SavePurchaseOrder') }}",
-
-        type: 'POST',
-
-        data: payload,
-
+        url:	"{{ route('SavePurchaseOrder') }}",
+        type: 	'POST',
+        data: 	payload,
         beforeSend: function () {
-
             setButtonLoading(
                 '#save-purchase-order',
                 true
@@ -487,17 +453,14 @@ function showDangerMessage(message) {
 
 function handlePurchaseOrderValidation(xhr) {
 
-    const errors =
-        xhr.responseJSON.errors;
-
-    const supplier_name =
-        $('#supplier_idx').val();
+    const errors = xhr.responseJSON.errors;
+    const supplier_name = $('#supplier_idx_create').val();
 
     if (errors.supplier_idx) {
 
         if (getSelectedSupplierId() === undefined) {
 
-            $('#supplier_idxError')
+            $('#supplier_idxError_create')
                 .html(
                     "Incorrect Supplier's Name <b>" +
                     supplier_name +
@@ -506,18 +469,23 @@ function handlePurchaseOrderValidation(xhr) {
 
         } else {
 
-            $('#supplier_idxError')
-                .html(errors.supplier_idx);
+            $('#supplier_idxError_create') .html(errors.supplier_idx);
         }
 
-        $('#supplier_idxError')
-            .removeClass('valid-feedback')
+        $('#supplier_idxError_create')
+			.removeClass('valid-feedback')
             .addClass('invalid-feedback');
+
 
         $('#supplier_idx')
             .val('');
     }
-
+	
+	$('#purchase_order_typeError_create') .html(errors.category_idx);
+	$('#purchase_order_typeError_create')
+			.removeClass('valid-feedback')
+            .addClass('invalid-feedback');
+			
     showDangerMessage('Invalid Input');
 }
 

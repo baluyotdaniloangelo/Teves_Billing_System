@@ -161,13 +161,24 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="user_access" class="col-sm-3 col-form-label">User Access:</label>
+						  <label for="user_access" class="col-sm-3 col-form-label">Branch Access:</label>
 						  <div class="col-sm-9">
 								<select class="form-select form-control" required="" name="user_access" id="user_access">
 								<option value="BYBRANCH" selected>Assign by Branch</option>
 								<option value="ALL">All</option>
 								</select>
 							<span class="valid-feedback" id="user_accessError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="user_product_access" class="col-sm-3 col-form-label">Branch Access:</label>
+						  <div class="col-sm-9">
+								<select class="form-select form-control" required="" name="user_product_access" id="user_product_access">
+								<option value="BYCategory" selected>By Category</option>
+								<option value="ALL">All</option>
+								</select>
+							<span class="valid-feedback" id="user_product_accessError"></span>
 						  </div>
 						</div>
 						
@@ -264,13 +275,24 @@
 						</div>	
 						
 						<div class="row mb-2">
-						  <label for="update_user_access" class="col-sm-3 col-form-label">User Access:</label>
+						  <label for="update_user_access" class="col-sm-3 col-form-label">Branch Access:</label>
 						  <div class="col-sm-9">
 								<select class="form-select form-control" required="" name="update_user_access" id="update_user_access">
 								<option value="BYBRANCH" selected>Assign by Branch</option>
 								<option value="ALL">All</option>
 								</select>
 							<span class="valid-feedback" id="update_user_accessError"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="update_user_product_access" class="col-sm-3 col-form-label">Branch Access:</label>
+						  <div class="col-sm-9">
+								<select class="form-select form-control" required="" name="update_user_product_access" id="update_user_product_access">
+								<option value="BYCategory" selected>By Category</option>
+								<option value="ALL">All</option>
+								</select>
+							<span class="valid-feedback" id="update_user_product_accessError"></span>
 						  </div>
 						</div>
 						
@@ -288,95 +310,443 @@
 	
 	
 			<!--Modal to Create User-->
-	<div class="modal fade" id="SiteUserAccessModal" tabindex="-1">
-           <div class="modal-dialog modal-xl">
-                  <div class="modal-content">
-				  
-                    <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">User Site Access</h5>
-					  
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
-					  </div>
-					  
+<div class="modal fade" id="SiteUserAccessModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <!-- HEADER -->
+            <div class="modal-header bg-success text-white border-0 py-3 px-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-3"
+                         style="width:60px;height:60px;">
+
+                        <i class="bi bi-building-lock fs-3"></i>
+
                     </div>
-					
-                    <div class="modal-body">
-						<div class="row mb-3">
-						
-							<div class="col-sm-4">
-							
-									<ol class="list-group list-group-numbered">
-									<li class="list-group-item d-flex justify-content-between align-items-start">
-									  <div class="ms-2 me-auto">
-										<div class="fw-bold">Name</div>
-										<span id="user_real_name_info_site_access"></span>
-									  </div>
-									 
-									</li>
-									<li class="list-group-item d-flex justify-content-between align-items-start">
-									  <div class="ms-2 me-auto">
-										<div class="fw-bold">Username</div>
-										<span id="user_name_info_site_access"></span>
-									  </div>
-									 
-									</li>
-									<li class="list-group-item d-flex justify-content-between align-items-start">
-									  <div class="ms-2 me-auto">
-										<div class="fw-bold">User Type</div>
-										<span id="user_type_info_site_access"></span>
-									  </div>
-									  
-									</li>
-								  </ol>
-							  
-							</div>
-							
-							<div class="col-sm-8">
-							
-									<div class="table-responsive">
-										<table class="table table-bordered dataTable" id="UserSiteAccessList" width="100%" cellspacing="0">
-											<thead>
-												<tr>
-													<th class="all"></th>
-													<th class="all">#</th>
-													<th class="all">Branch Code</th>
-													<th class="all">Branch Name</th>
-												</tr>
-											</thead>				
-											
-											<tbody>
-												
-											</tbody>
-											
-											<tfoot>
-												<tr>
-													<th class="all"></th>
-													<th class="all">#</th>
-													<th class="all">Branch Code</th>
-													<th class="all">Branch Name</th>
-												</tr>
-											</tfoot>
-											
-										</table>
-										
-									</div>
-							</div>		
-	
-                  </div>
-				  
-					
-					
+
+                    <div>
+
+                        <h4 class="modal-title fw-bold mb-0">
+                            User Site Access
+                        </h4>
+
+                        <small class="opacity-75">
+                            Manage user access to company branches
+                        </small>
+
+                    </div>
+
                 </div>
-				
-					<div class="modal-footer modal-footer_form">
-						
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="update-user-site-access"> Submit</button>
-						  <!--<button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="update-clear-user"> Clear Form</button>-->
-						  
-				    </div>
+
+                <button type="button"
+                        class="btn btn-light btn-sm rounded-circle shadow-sm"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
             </div>
-			
+
+            <!-- BODY -->
+<div class="modal-body p-4">
+
+    <!-- USER INFORMATION -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-header bg-white border-0 py-3">
+
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-person-circle text-primary me-2"></i>
+                User Information
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <small class="text-muted text-uppercase">
+                        Full Name
+                    </small>
+
+                    <div class="fw-semibold fs-5"
+                         id="user_real_name_info_site_access">
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <small class="text-muted text-uppercase">
+                        Username
+                    </small>
+
+                    <div class="fw-semibold"
+                         id="user_name_info_site_access">
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <small class="text-muted text-uppercase">
+                        User Type
+                    </small>
+
+                    <div>
+
+                        <span class="badge bg-primary fs-6 px-3 py-2"
+                              id="user_type_info_site_access">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BRANCH ACCESS -->
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-header bg-white border-0 py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-building-check text-success me-2"></i>
+
+                    Branch Access
+
+                </h5>
+
+                <span class="badge bg-success rounded-pill px-3 py-2"
+                      id="selected_site_count">
+
+                    Manage Access
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle"
+                       id="UserSiteAccessList"
+                       width="100%">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th width="5%"></th>
+
+                            <th width="8%">#</th>
+
+                            <th width="20%">Branch Code</th>
+
+                            <th>Branch Name</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+
+                    <tfoot>
+
+                        <tr>
+
+                            <th></th>
+
+                            <th>#</th>
+
+                            <th>Branch Code</th>
+
+                            <th>Branch Name</th>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 px-4 pb-4">
+
+                <button type="button"
+                        class="btn btn-light rounded-3"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-circle me-2"></i>
+
+                    Cancel
+
+                </button>
+
+                <button type="button"
+                        class="btn btn-success rounded-3 shadow-sm"
+                        id="update-user-site-access">
+
+                    <i class="bi bi-save-fill me-2"></i>
+
+                    Save Access
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+	
+<div class="modal fade" id="ProductUserAccessModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <!-- HEADER -->
+            <div class="modal-header bg-success text-white border-0 py-3 px-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-3"
+                         style="width:60px;height:60px;">
+
+                        <i class="bi bi-shield-lock fs-3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h4 class="modal-title fw-bold mb-0">
+                            User Product Access
+                        </h4>
+
+                        <small class="opacity-75">
+                            Manage encoder access to product categories
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="btn btn-light btn-sm rounded-circle shadow-sm"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+<!-- BODY -->
+<div class="modal-body p-4">
+
+    <!-- USER INFORMATION -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-header bg-white border-0 py-3">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-person-circle text-primary me-2"></i>
+
+                User Information
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <small class="text-muted text-uppercase">
+                        Full Name
+                    </small>
+
+                    <div class="fw-semibold fs-5"
+                         id="user_real_name_info_product_access">
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <small class="text-muted text-uppercase">
+                        Username
+                    </small>
+
+                    <div class="fw-semibold"
+                         id="user_name_info_product_access">
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <small class="text-muted text-uppercase">
+                        User Type
+                    </small>
+
+                    <div>
+
+                        <span class="badge bg-primary fs-6 px-3 py-2"
+                              id="user_type_info_product_access">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PRODUCT CATEGORY ACCESS -->
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-header bg-white border-0 py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-box-seam text-success me-2"></i>
+
+                    Product Category Access
+
+                </h5>
+
+                <span class="badge bg-success rounded-pill px-3 py-2"
+                      id="selected_product_count">
+
+                    Manage Access
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle"
+                       id="UserProductAccessList"
+                       width="100%">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th width="5%"></th>
+
+                            <th width="8%">#</th>
+
+                            <th>Product Category</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+
+                    <tfoot>
+
+                        <tr>
+
+                            <th></th>
+
+                            <th>#</th>
+
+                            <th>Product Category</th>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 px-4 pb-4">
+
+                <button type="button"
+                        class="btn btn-light rounded-3"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-circle me-2"></i>
+
+                    Cancel
+
+                </button>
+
+                <button type="button"
+                        class="btn btn-success rounded-3 shadow-sm"
+                        id="update-user-product-access">
+
+                    <i class="bi bi-save-fill me-2"></i>
+
+                    Save Access
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
     </section>
 </main>
 

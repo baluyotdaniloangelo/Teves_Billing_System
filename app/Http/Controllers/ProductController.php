@@ -371,7 +371,7 @@ class ProductController extends Controller
 	}			
 	
 	/*Pricing List*/
-	public function get_product_list_pricing_per_branch(Request $request){		
+	public function get_product_list_pricing_per_branch_OLD(Request $request){		
 
 			$raw_query_product = "SELECT a.product_id,a.product_name,ifnull(b.branch_price,a.product_price) AS product_price ,c.branch_code FROM teves_product_table AS a
 			LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
@@ -379,6 +379,42 @@ class ProductController extends Controller
 			$product_data = DB::select("$raw_query_product", [$request->branch_idx]);
 
 			return response()->json($product_data);			
+	}
+	
+	public function get_product_list_pricing_per_branch(Request $request)
+	{
+		$userId = Session::get('loginID');
+
+		$raw_query_product = "
+			SELECT
+				a.product_id,
+				a.product_name,
+				IFNULL(b.branch_price, a.product_price) AS product_price,
+				c.branch_code
+			FROM teves_product_table AS a
+
+			INNER JOIN teves_user_product_category_access upca
+				ON upca.category_idx = a.category_idx
+			   AND upca.user_idx = ?
+
+			LEFT JOIN teves_product_branch_price_table b
+				ON b.product_idx = a.product_id
+
+			LEFT JOIN teves_branch_table c
+				ON c.branch_id = b.branch_idx
+
+			WHERE c.branch_id = ?
+			  AND a.deleted_at IS NULL
+
+			ORDER BY a.category_idx
+		";
+
+		$product_data = DB::select($raw_query_product, [
+			$userId,
+			$request->branch_idx
+		]);
+
+		return response()->json($product_data);
 	}
 	
 	/*Load Form Form Interface*/

@@ -123,9 +123,10 @@ div.dataTables_wrapper {
 												<tr>
 													<th>#</th>
 													<th class="all">Name</th>
+													<th class="all">Type</th>
 													<th class="all">Account Number</th>
-													<th>Address</th>
-													<th>TIN</th>
+													<th class="none">Address</th>
+													<th class="none">TIN</th>
 													<th>Referred By</th>
 													<th title='Contact Number' class="none">Contact Number</th>
 													<th title='Age' class="none">Age</th>

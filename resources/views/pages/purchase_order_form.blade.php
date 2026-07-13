@@ -16,7 +16,7 @@
 					<div class="col-sm-6">
 						<div class="d-flex justify-content-end" id="">
 							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -35px; position: absolute;">
-								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder_v2') }}" title="Back">  
+								<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('purchaseorder') }}" title="Back">  
 								  <span title="Back to Sales Order List">Back</span>
 								</a>
 								<button type="button" class="btn btn-dark new_item bi-printer-fill form_button_icon" id="PrintPurchaseOrder">&nbsp;Print</button>
@@ -63,27 +63,165 @@
 					</div>					
 					</div>
 
-					<!--Information Here-->
-					<ul class="list-group list-group-flush">
-							<li class="list-group-item"><b>Date:&nbsp;</b><span style="font-weight: normal;" id="po_info_date">&nbsp;</span></li>
-							<li class="list-group-item"><b>Branch:&nbsp;</b><span style="font-weight: normal;" id="po_info_branch_name">&nbsp;</span></li>
-							<li class="list-group-item"><b>Supplier's Name:&nbsp;</b><span style="font-weight: normal;" id="po_info_suppliers_name">&nbsp;</span></li>
-							<li class="list-group-item"><b>Net Value:&nbsp;</b><span style="font-weight: normal;" id="po_info_net_value"></span>&nbsp;</li>
-							<li class="list-group-item"><b>With Sales Invoice:&nbsp;</b><span style="font-weight: normal;" id="po_info_with_sales_invoice">&nbsp;</span></li>
-							<li class="list-group-item"><b>Less Value:&nbsp;</b><span style="font-weight: normal;" id="po_info_less_value">&nbsp;</span></li>
-							<li class="list-group-item"><b>Sales Order #:&nbsp;</b><span style="font-weight: normal;" id="po_info_sales_order">&nbsp;</span></li>
-							<li class="list-group-item"><b>Collection Receipt #:&nbsp;</b><span style="font-weight: normal;" id="po_info_collection_receipt">&nbsp;</span></li>
-							<li class="list-group-item"><b>Sales Invoice #:&nbsp;</b><span style="font-weight: normal;" id="po_info_sales_invoice">&nbsp;</span></li>
-							<li class="list-group-item"><b>Delivery Receipt #:&nbsp;</b><span style="font-weight: normal;" id="po_info_delivery_receipt">&nbsp;</span></li>
-							<li class="list-group-item"><b>Delivery Method:&nbsp;</b><span style="font-weight: normal;" id="po_info_delivery_method">&nbsp;</span></li>
-							<li class="list-group-item"><b>Loading Terminal:&nbsp;</b><span style="font-weight: normal;" id="po_info_loading_terminal">&nbsp;</span></li>
-							<li class="list-group-item"><b>Hauler's Name:&nbsp;</b><span style="font-weight: normal;" id="po_info_haulers_name">&nbsp;</span></li>
-							<li class="list-group-item"><b>Driver's Name:&nbsp;</b><span style="font-weight: normal;" id="po_info_drivers_name">&nbsp;</span></li>
-							<li class="list-group-item"><b>Plate Number:&nbsp;</b><span style="font-weight: normal;" id="po_info_plate_number">&nbsp;</span></li>
-							<li class="list-group-item"><b>Destination:&nbsp;</b><span style="font-weight: normal;" id="po_info_destination">&nbsp;</span></li>
-							<li class="list-group-item"><b>Instructions:&nbsp;</b><span style="font-weight: normal;" id="po_info_instructions">&nbsp;</span></li>
-							<li class="list-group-item"><b>Notes:&nbsp;</b><span style="font-weight: normal;" id="po_info_notes">&nbsp;</span></li>
-					</ul>
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Purchase Order Information
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                    <small class="text-muted">
+                        <i class="bi bi-calendar-event me-1"></i>Date
+                    </small>
+                    <div class="fw-semibold fs-6" id="po_info_date">-</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                    <small class="text-muted">
+                        <i class="bi bi-building me-1"></i>Branch
+                    </small>
+                    <div class="fw-semibold" id="po_info_branch_name">-</div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="border rounded-3 p-3">
+                    <small class="text-muted">
+                        <i class="bi bi-person-fill me-1"></i>Supplier
+                    </small>
+                    <div class="fw-semibold" id="po_info_suppliers_name">-</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="border rounded-3 p-3 text-center">
+                    <small class="text-muted">Net Value</small>
+                    <h5 class="text-success mb-0" id="po_info_net_value">0.00</h5>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="border rounded-3 p-3 text-center">
+                    <small class="text-muted">Sales Invoice</small>
+                    <h5 class="text-primary mb-0" id="po_info_with_sales_invoice">Yes</h5>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="border rounded-3 p-3 text-center">
+                    <small class="text-muted">Less Value</small>
+                    <h5 class="text-danger mb-0" id="po_info_less_value">0.00</h5>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="fw-bold mb-3">
+            <i class="bi bi-file-earmark-text me-2"></i>
+            References
+        </h6>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="text-muted small">Sales Order #</label>
+                <div class="fw-semibold" id="po_info_sales_order"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Collection Receipt #</label>
+                <div class="fw-semibold" id="po_info_collection_receipt"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Sales Invoice #</label>
+                <div class="fw-semibold" id="po_info_sales_invoice"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Delivery Receipt #</label>
+                <div class="fw-semibold" id="po_info_delivery_receipt"></div>
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="fw-bold mb-3">
+            <i class="bi bi-truck me-2"></i>
+            Delivery Information
+        </h6>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="text-muted small">Delivery Method</label>
+                <div class="fw-semibold" id="po_info_delivery_method"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Loading Terminal</label>
+                <div class="fw-semibold" id="po_info_loading_terminal"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Hauler</label>
+                <div class="fw-semibold" id="po_info_haulers_name"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Driver</label>
+                <div class="fw-semibold" id="po_info_drivers_name"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Plate Number</label>
+                <div class="fw-semibold" id="po_info_plate_number"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Destination</label>
+                <div class="fw-semibold" id="po_info_destination"></div>
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="fw-bold mb-3">
+            <i class="bi bi-journal-text me-2"></i>
+            Notes
+        </h6>
+
+        <div class="mb-3">
+            <label class="text-muted small">Instructions</label>
+            <div class="border rounded-3 p-3 bg-light"
+                 id="po_info_instructions">
+            </div>
+        </div>
+
+        <div>
+            <label class="text-muted small">Notes</label>
+            <div class="border rounded-3 p-3 bg-light"
+                 id="po_info_notes">
+            </div>
+        </div>
+
+    </div>
+
+</div>
 						
                 </div>
 			  

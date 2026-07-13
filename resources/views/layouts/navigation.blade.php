@@ -149,7 +149,7 @@
 	  
 		
 	  <li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('purchaseorder_v2') }}" title="Create Sales Order">
+        <a class="nav-link navbar_bg" href="{{ route('purchaseorder') }}" title="Create Sales Order">
           <i class="bi bi-bag-check navbar_icon"></i>
           <span title="Create Purchases Order Order">Purchase Order</span>
         </a>

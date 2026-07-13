@@ -47,6 +47,7 @@ class ClientModel extends Model
 	
 	protected $fillable = [
         'client_name',
+        'customer_type',
 		'client_account_number',
 		'client_address',
 		'client_tin',
@@ -74,6 +75,7 @@ class ClientModel extends Model
 	
 	protected static $logAttributes = [
 		'client_name',
+        'customer_type',
 		'client_account_number',
 		'client_address',
 		'client_tin',

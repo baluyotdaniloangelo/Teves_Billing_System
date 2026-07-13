@@ -36,6 +36,7 @@ function initializeClientTable()
                     searchable: false
                 },
                 { data: 'client_name' },
+                { data: 'customer_type' },
                 { data: 'client_account_number' },
                 { data: 'client_address' },
                 { data: 'client_tin' },
@@ -260,6 +261,7 @@ function saveClient(event)
     const payload = {
         clientID: client_id,
         client_name: $('#client_name').val(),
+        customer_type: $("#customer_type").val(),
         client_address: $('#client_address').val(),
         client_tin: $('#client_tin').val(),
         default_less_percentage: $('#default_less_percentage').val(),

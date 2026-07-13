@@ -574,11 +574,12 @@
 				  if(result) {
 					
 					document.getElementById("update-user-site-access").value = UserID;
-					LoadSiteList.clear().draw();
+					LoadCList.clear().draw();
 					LoadSiteList.rows.add(result.data).draw();
 					
+					var access_type = 'branch';
 					/*Get User Info*/
-					UserSiteInfo(UserID);
+					UserInfoAccess(UserID,access_type);
 					
 					$('#SiteUserAccessModal').modal('toggle');					
 				  
@@ -618,6 +619,68 @@
 				]
 	} );
   
+  
+ 	function UpdateUserProductAccess(UserID){
+			
+			event.preventDefault();
+			
+			  $.ajax({
+				url: "{{ route('getUserProductAccess') }}",
+				type:"GET",
+				data:{
+				  UserID:UserID,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(result){
+				  console.log(result);
+				  if(result) {
+					
+					document.getElementById("update-user-product-access").value = UserID;
+					LoadCategoryList.clear().draw();
+					LoadCategoryList.rows.add(result.data).draw();
+					
+					var access_type = 'category';
+					/*Get User Info*/
+					UserInfoAccess(UserID,access_type);
+					
+					$('#ProductUserAccessModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });		
+	} 
+	
+	
+	let LoadCategoryList = $('#UserProductAccessList').DataTable( {
+				"language": {
+						"lengthMenu":'<select class="form-select form-control form-control-sm">'+
+			             '<option value="10">10</option>'+
+			             '<option value="20">20</option>'+
+			             '<option value="30">30</option>'+
+			             '<option value="40">40</option>'+
+			             '<option value="50">50</option>'+
+			             '<option value="-1">All</option>'+
+			             '</select> '
+			    }, 
+				//processing: true,
+				//serverSide: true,
+				//stateSave: true,/*Remember Searches*/
+				responsive: true,
+				paging: true,
+				searching: true,
+				info: true,
+				data: [],
+				"columns": [
+					{data: 'action', name: 'action', orderable: false, searchable: false},   
+					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+					{data: 'category_name'}
+				]
+	} );
+	
 	$('body').on('click','#update-user-site-access',function(){
 			
 			event.preventDefault();
@@ -654,8 +717,45 @@
 				}
 			   });	
 	});
-	  
-	function UserSiteInfo(UserID){
+
+	$('body').on('click','#update-user-product-access',function(){
+			
+			event.preventDefault();
+
+			let userID = document.getElementById("update-user-product-access").value;
+
+			var category_checklist_item = [];		
+			$.each($("input[name='category_checklist']:checked"), function(){
+			category_checklist_item.push($(this).val());
+			});
+			var category_checklist_item_checked = category_checklist_item.join(",");
+			
+				$.ajax({
+				url: "/add_user_product_access_post",
+				type:"POST",
+				data:{
+				  userID:userID,
+				  category_items:category_checklist_item_checked,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  
+				  if(response) {
+					
+					$('.success_modal_bg').html(response.success);
+					$('#SuccessModal').modal('toggle');	
+				  }
+				},
+				error: function(errors) {
+				 console.log(errors);
+				 
+					$('#InvalidModal').modal('toggle');
+				}
+			   });	
+	});
+	
+	function UserInfoAccess(UserID,access_type){
 			
 			event.preventDefault();
 			
@@ -670,12 +770,20 @@
 				  console.log(response);
 				  if(response) {
 					
-					document.getElementById("update-user").value = UserID;
-					
-					/*Set User Details*/
-					$('#user_real_name_info_site_access').html(response.user_real_name);
-					$('#user_name_info_site_access').html(response.user_name);
-					$('#user_type_info_site_access').html(response.user_type);			
+					if(access_type=='branch'){
+						//document.getElementById("update-user").value = UserID;
+						
+						/*Set User Details*/
+						$('#user_real_name_info_site_access').html(response.user_real_name);
+						$('#user_name_info_site_access').html(response.user_name);
+						$('#user_type_info_site_access').html(response.user_type);	
+					}	
+					else{
+						/*Set User Details*/
+						$('#user_real_name_info_product_access').html(response.user_real_name);
+						$('#user_name_info_product_access').html(response.user_name);
+						$('#user_type_info_product_access').html(response.user_type);
+					}
 				  
 				  }
 				},

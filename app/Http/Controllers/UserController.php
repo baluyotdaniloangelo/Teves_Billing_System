@@ -76,6 +76,12 @@ class UserController extends Controller
 				->addIndexColumn()
 				->addColumn('action', function($row){	
 					
+					if($row->user_type=='Encoder'){
+						$product_access_button = '<a href="#" data-id="'.$row->user_id.'" class="bi bi-box-seam btn_icon_table btn_icon_table_view" id="UserAccess" onclick="UpdateUserProductAccess('.$row->user_id.')" title="Add User Ptoduct Access"></a>';
+					}else{
+						$product_access_button = '';
+					}
+					
 					if($row->user_branch_access_type=='ALL'){
 						
 						$actionBtn = '
@@ -93,6 +99,7 @@ class UserController extends Controller
 						<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
 						<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
 						<a href="#" data-id="'.$row->user_id.'" class="bi bi-building btn_icon_table btn_icon_table_view" id="UserAccess" onclick="UpdateUserAccess('.$row->user_id.')" title="Add User Site Access"></a>
+						'.$product_access_button.'
 						</div>';
 					
 					}

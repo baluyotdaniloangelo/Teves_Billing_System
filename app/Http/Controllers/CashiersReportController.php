@@ -462,7 +462,18 @@ class CashiersReportController extends Controller
 			}	
 			
 		$title = "Cashier's Report";
-		$product_data = ProductModel::all();
+		
+		//$product_data = ProductModel::all();
+		$userId = Session::get('loginID');
+		$product_data = ProductModel::select('teves_product_table.*')
+		->join('teves_user_product_category_access as upca', function ($join) use ($userId) {
+			$join->on('teves_product_table.category_idx', '=', 'upca.category_idx')
+				 ->where('upca.user_idx', $userId);
+		})
+		->whereNull('teves_product_table.deleted_at')
+		->orderBy('product_name')
+		->get();
+		
 		$CashiersReportData = CashiersReportModel::where('cashiers_report_id', $CashiersReportId)
 			->join('user_tb', 'user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
             ->get([				
@@ -809,6 +820,7 @@ class CashiersReportController extends Controller
 		
 			return response()->json($data);
 	}
+	
 
 	public function cashiers_report_p2_info(Request $request){
 

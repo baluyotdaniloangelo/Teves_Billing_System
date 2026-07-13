@@ -20,6 +20,8 @@ class PurchaseOrderModel extends Model
 	protected $table = 'teves_purchase_order_table';
 	
 	protected $fillable = [
+		'purchase_order_supplier_idx',
+		'category_idx',
 		'purchase_order_control_number',
 		'purchase_order_date',
 		'purchase_order_sales_order_number',
@@ -61,6 +63,8 @@ class PurchaseOrderModel extends Model
 	protected static $logOnlyDirty = true;
 	
 	protected static $logAttributes = [
+		'purchase_order_supplier_idx',
+		'category_idx',
 		'purchase_order_control_number',
 		'purchase_order_date',
 		'purchase_order_sales_order_number',
