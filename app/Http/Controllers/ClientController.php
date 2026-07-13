@@ -43,6 +43,7 @@ class ClientController extends Controller
 				'client_address',
 				'client_tin',
 				'client_contact_number',
+				'client_email_address',
 				'client_age',
 				'default_less_percentage',
 				'default_net_percentage',
@@ -113,6 +114,7 @@ class ClientController extends Controller
 				'client_account_number',
 				'client_address',
 				'client_tin',
+				'client_email_address',
 				'client_contact_number',
 				'client_age',
 				'default_less_percentage',
@@ -129,6 +131,7 @@ class ClientController extends Controller
 			'client_account_number' => $data->client_account_number,
 			'client_address' => $data->client_address,
 			'client_tin' => $data->client_tin,
+			'client_email_address' => $data->client_email_address,
 			'client_contact_number' => $data->client_contact_number,
 			'client_age' => $data->client_age,
 			'default_less_percentage' => $data->default_less_percentage,
@@ -189,6 +192,7 @@ class ClientController extends Controller
 			$client->client_account_number 				= $client_account_number;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
+			$client->client_email_address 				= $request->client_email_address;
 			$client->client_contact_number 				= $request->client_contact_number;
 			$client->client_age 						= $request->client_age;
 			$client->default_less_percentage 			= $request->default_less_percentage;
@@ -230,6 +234,7 @@ class ClientController extends Controller
 			$client->customer_type						= $request->customer_type;
 			$client->client_address 					= $request->client_address;
 			$client->client_tin 						= $request->client_tin;
+			$client->client_email_address 				= $request->client_email_address;
 			$client->client_contact_number 				= $request->client_contact_number;
 			$client->client_age 						= $request->client_age;
 			$client->default_less_percentage 			= $request->default_less_percentage;

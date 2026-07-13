@@ -129,6 +129,7 @@ div.dataTables_wrapper {
 													<th class="none">TIN</th>
 													<th>Referred By</th>
 													<th title='Contact Number' class="none">Contact Number</th>
+													<th title='Email Address' class="none">Email Address</th>
 													<th title='Age' class="none">Age</th>
 													<th title='Default Value' class="none">Discount(Less)</th>
 													<th class="none">Net</th>

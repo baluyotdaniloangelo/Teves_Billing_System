@@ -139,7 +139,7 @@
                                         </label>
 
                                         <input type="text"
-                                               class="form-control form-control-lg rounded-3"
+                                               class="form-control rounded-3"
                                                name="client_name"
                                                id="client_name"
                                                placeholder="Enter Name/Description"
@@ -181,9 +181,6 @@
 
                                     </div>
 
-
-
-
 									<!-- CONTACT NUMBER -->
 									<div class="mb-3">
 
@@ -201,10 +198,40 @@
 										</label>
 
 										<input type="text"
-											   class="form-control form-control-lg rounded-3"
+											   class="form-control rounded-3"
 											   name="client_contact_number"
 											   id="client_contact_number"
 											   placeholder="09XXXXXXXXX"
+											   autocomplete="off">
+
+										<div class="invalid-feedback"
+											 id="client_contact_number_error">
+										</div>
+
+									</div>
+
+
+									<!-- Email Address -->
+									<div class="mb-3">
+
+										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+												  style="width:34px;height:34px;">
+
+												<i class="bi bi-telephone-fill text-success"></i>
+
+											</span>
+
+											<span>Email Address</span>
+
+										</label>
+
+										<input type="text"
+											   class="form-control rounded-3"
+											   name="client_email_address"
+											   id="client_email_address"
+											   placeholder="Email Address"
 											   autocomplete="off">
 
 										<div class="invalid-feedback"
@@ -230,7 +257,7 @@
 										</label>
 
 										<input type="number"
-											   class="form-control form-control-lg rounded-3"
+											   class="form-control rounded-3"
 											   name="client_age"
 											   id="client_age"
 											   min="1"
@@ -258,7 +285,7 @@
 
                                         </label>
 
-                                        <input class="form-control form-control-lg rounded-3"
+                                        <input class="form-control rounded-3"
                                            list="sales_agent_name"
                                            name="sales_agent_name"
                                            id="sales_agent_id"
@@ -316,7 +343,7 @@
                                         </label>
 
                                         <input type="text"
-                                               class="form-control form-control-lg rounded-3"
+                                               class="form-control rounded-3"
                                                name="client_tin"
                                                id="client_tin"
                                                placeholder="000-000-000-000"
@@ -338,7 +365,7 @@
                                         <div class="input-group">
 
                                             <input type="number"
-                                                   class="form-control form-control-lg rounded-start"
+                                                   class="form-control rounded-start"
                                                    name="default_less_percentage"
                                                    id="default_less_percentage"
                                                    step=".01"
@@ -363,7 +390,7 @@
                                         <div class="input-group">
 
                                             <input type="number"
-                                                   class="form-control form-control-lg rounded-start"
+                                                   class="form-control rounded-start"
                                                    name="default_net_percentage"
                                                    id="default_net_percentage"
                                                    step=".01"
@@ -388,7 +415,7 @@
                                         <div class="input-group">
 
                                             <input type="number"
-                                                   class="form-control form-control-lg rounded-start"
+                                                   class="form-control rounded-start"
                                                    name="default_vat_percentage"
                                                    id="default_vat_percentage"
                                                    step=".01"
@@ -413,7 +440,7 @@
                                         <div class="input-group">
 
                                             <input type="number"
-                                                   class="form-control form-control-lg rounded-start"
+                                                   class="form-control rounded-start"
                                                    name="default_withholding_tax_percentage"
                                                    id="default_withholding_tax_percentage"
                                                    step=".01"
@@ -436,7 +463,7 @@
                                         </label>
 
                                         <input type="text"
-                                               class="form-control form-control-lg rounded-3"
+                                               class="form-control rounded-3"
                                                name="default_payment_terms"
                                                id="default_payment_terms"
                                                placeholder="e.g. 30 Days">

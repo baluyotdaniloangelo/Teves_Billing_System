@@ -42,6 +42,7 @@ function initializeClientTable()
                 { data: 'client_tin' },
                 { data: 'referred_by_name' },
                 { data: 'client_contact_number' },
+				{ data: 'client_email_address' },
                 { data: 'client_age' },
                 { data: 'default_less_percentage' },
                 { data: 'default_net_percentage' },
@@ -212,7 +213,9 @@ function openEditClientModal()
 			/*For SMS Notification*/
 			$('#client_contact_number').val(data.client_contact_number);
 			$('#client_age').val(data.client_age);
-	
+			
+			/*For Email Notification*/
+			$('#client_email_address').val(data.client_email_address);
             /*
             REFERRAL
             */
@@ -271,6 +274,7 @@ function saveClient(event)
         default_payment_terms: $('#default_payment_terms').val(),
         sales_agent_idx: sales_agent_idx,
 		client_contact_number: $('#client_contact_number').val(),
+		client_email_address: $('#client_email_address').val(),
 		client_age: $('#client_age').val(),
         _token: "{{ csrf_token() }}"
     };
