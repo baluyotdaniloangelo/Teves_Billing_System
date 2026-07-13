@@ -114,37 +114,145 @@ div.dataTables_wrapper {
 					</div>
 
 				</div>
+<style>
+.client-avatar{
 
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:4px solid #fff;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+
+}
+
+.client-avatar-placeholder{
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    background:#198754;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+
+}
+
+.client-card{
+
+    padding:4px;
+
+}
+
+.client-card hr{
+
+    margin:.7rem 0;
+
+    opacity:.15;
+
+}
+
+.client-name{
+
+    font-size:1.15rem;
+
+    font-weight:700;
+
+    color:#212529;
+
+}
+
+.client-sub{
+
+    color:#6c757d;
+
+    margin-top:3px;
+
+    font-size:.92rem;
+
+}
+
+.client-card .badge{
+
+    margin-right:5px;
+
+    margin-top:4px;
+
+}
+
+.client-card small{
+
+    color:#495057;
+
+    display:block;
+
+    margin-bottom:3px;
+
+}
+
+#getclientList tbody td{
+
+    vertical-align:top;
+
+    padding:16px;
+
+}
+
+#getclientList tbody tr:hover{
+
+    background:#f8fff9;
+
+    transition:.2s;
+
+}
+
+#getclientList thead th{
+
+    background:#198754;
+
+    color:#fff;
+
+    border:none;
+
+    font-weight:600;
+
+}
+
+#getclientList tbody tr{
+
+    border-bottom:1px solid #edf2f7;
+
+}
+</style>
 				<!-- TABLE -->
 				<div class="table-responsive">
 
-					<table class="table dataTable display nowrap cell-border" id="getclientList" width="100%" cellspacing="0">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th class="all">Name</th>
-													<th class="all">Type</th>
-													<th class="all">Account Number</th>
-													<th class="none">Address</th>
-													<th class="none">TIN</th>
-													<th>Referred By</th>
-													<th title='Contact Number' class="none">Contact Number</th>
-													<th title='Email Address' class="none">Email Address</th>
-													<th title='Age' class="none">Age</th>
-													<th title='Default Value' class="none">Discount(Less)</th>
-													<th class="none">Net</th>
-													<th class="none">Vat</th>
-													<th class="none">Withhoding Tax</th>
-													<th class="none">Payment Terms</th>
-													<th class="all">Action</th>
-												</tr>
-											</thead>				
-											
-											<tbody>
-												
-											</tbody>
-											
-										</table>
+					<table class="table table-hover align-middle" id="getclientList" width="100%">
+    <thead>
+        <tr>
+            <th width="5%">#</th>
+            <th>Client Information</th>
+            <th width="90">Action</th>
+        </tr>
+    </thead>
+</table>
 
 				</div>
 

@@ -19,50 +19,212 @@ let ClientTable;
 
 function initializeClientTable()
 {
-    ClientTable =
-        $('#getclientList').DataTable({
+    ClientTable = $('#getclientList').DataTable({
 
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            scrollY: '500px',
-            stateSave: true,
-            ajax:
-                "{{ route('getClientList') }}",
-            columns: [
-                {
-                    data: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                },
-                { data: 'client_name' },
-                { data: 'customer_type' },
-                { data: 'client_account_number' },
-                { data: 'client_address' },
-                { data: 'client_tin' },
-                { data: 'referred_by_name' },
-                { data: 'client_contact_number' },
-				{ data: 'client_email_address' },
-                { data: 'client_age' },
-                { data: 'default_less_percentage' },
-                { data: 'default_net_percentage' },
-                { data: 'default_vat_percentage' },
-                { data: 'default_withholding_tax_percentage' },
-                { data: 'default_payment_terms' },
-                {
-                    data: 'action',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-center'
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        stateSave: true,
+        scrollY: "550px",
+        pageLength: 10,
+
+        ajax: "{{ route('getClientList') }}",
+
+        columns: [
+
+            {
+                data: 'DT_RowIndex',
+                searchable: false,
+                orderable: false,
+                className: 'text-center align-top'
+            },
+
+            {
+
+                data: null,
+
+                name: 'client_name',
+
+                render: function(data){
+
+                    return `
+
+<div class="client-card">
+
+    <div class="d-flex justify-content-between">
+
+<div class="d-flex align-items-start">
+
+    <div class="me-4 flex-shrink-0">
+
+        <img src="/images/default-avatar.png"
+             class="client-avatar"
+             alt="Client Avatar" >
+
+    </div>
+
+    <div class="flex-grow-1">
+
+        <div class="client-name">
+
+            ${data.client_name}
+
+            <span class="badge bg-primary ms-2">
+
+                ${data.customer_type ?? 'N/A'}
+
+            </span>
+
+        </div>
+
+        <div class="client-sub">
+
+            <i class="bi bi-credit-card text-primary me-1"></i>
+
+            <strong>Account Number:</strong>
+
+            ${data.client_account_number}
+
+        </div>
+
+        <div class="client-sub">
+
+            <i class="bi bi-receipt text-primary me-1"></i>
+
+            <strong>TIN:</strong>
+
+            ${data.client_tin ?? "-"}
+
+        </div>
+
+        <div class="client-sub">
+
+            <i class="bi bi-geo-alt text-primary me-1"></i>
+
+            <strong>Address:</strong>
+
+            ${data.client_address ?? "-"}
+
+        </div>
+
+    </div>
+
+</div>
+
+    </div>
+
+    <hr>
+
+    <div class="row">
+
+        <div class="client-sub">
+
+            <small>
+
+                <i class="bi bi-telephone-fill text-primary me-1">Contact #:</i>
+
+                ${data.client_contact_number || '-'}
+
+            </small>
+
+        </div>
+
+        <div class="client-sub">
+
+            <small>
+
+                <i class="bi bi-envelope-fill text-primary me-1">Email:</i>
+
+                ${data.client_email_address || '-'}
+
+            </small>
+
+        </div>
+
+    </div>
+
+    <hr>
+	
+    <div class="mt-3">
+
+        <span class="badge bg-danger">
+
+            Less: ${data.default_less_percentage}%
+
+        </span>
+
+        <span class="badge bg-success">
+
+            Net: ${data.default_net_percentage}
+
+        </span>
+
+        <span class="badge bg-info text-dark">
+
+            VAT: ${data.default_vat_percentage}%
+
+        </span>
+
+        <span class="badge bg-warning text-dark">
+
+            WHT: ${data.default_withholding_tax_percentage}%
+
+        </span>
+
+    </div>
+
+    <div class="mt-3">
+
+        <i class="bi bi-calendar-check me-1 text-secondary"></i>
+
+        <strong>Payment Terms:</strong>
+
+        ${data.default_payment_terms}
+
+    </div>
+
+    <hr>
+	
+    <div class="mt-2">
+
+        <i class="bi bi-person-check-fill me-1 text-secondary"></i>
+
+        <strong>Referred By:</strong>
+
+        ${data.referred_by_name ?? 'None'}
+
+    </div>
+
+</div>
+
+                    `;
+
                 }
-            ],
 
-            order: [[1, 'asc']]
+            },
 
-        });
+            {
+
+                data:'action',
+
+                searchable:false,
+
+                orderable:false,
+
+                className:'text-center align-middle'
+
+            }
+
+        ],
+
+        order:[[1,'asc']]
+
+    });
 
     autoAdjustColumns(ClientTable);
 }
+
+
 
 
 /*==================================================
