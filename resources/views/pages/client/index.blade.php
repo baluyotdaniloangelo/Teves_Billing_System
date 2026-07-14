@@ -115,20 +115,7 @@ div.dataTables_wrapper {
 
 				</div>
 <style>
-.client-avatar{
 
-    width:90px;
-    height:90px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-    border:4px solid #fff;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.15);
-
-}
 
 .client-avatar-placeholder{
 
@@ -155,37 +142,69 @@ div.dataTables_wrapper {
 
 }
 
+.client-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.client-avatar{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid #e9ecef;
+    box-shadow:0 2px 6px rgba(0,0,0,.10);
+}
+
 .client-card{
 
-    padding:4px;
+    padding:10px;
+
+}
+
+.client-avatar{
+
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+    object-fit:cover;
+
+    border:3px solid #e9ecef;
 
 }
 
 .client-card hr{
 
-    margin:.7rem 0;
+    opacity:.12;
 
-    opacity:.15;
+}
+
+.client-actions{
+
+   align-self:flex-start;
+
+}
+
+.client-actions .btn{
+
+    margin-left:4px;
 
 }
 
 .client-name{
 
     font-size:1.15rem;
-
     font-weight:700;
-
-    color:#212529;
+    margin-bottom:8px;
 
 }
 
 .client-sub{
 
     color:#6c757d;
-
-    margin-top:3px;
-
-    font-size:.92rem;
+    margin-bottom:4px;
 
 }
 
@@ -249,7 +268,6 @@ div.dataTables_wrapper {
         <tr>
             <th width="5%">#</th>
             <th>Client Information</th>
-            <th width="90">Action</th>
         </tr>
     </thead>
 </table>

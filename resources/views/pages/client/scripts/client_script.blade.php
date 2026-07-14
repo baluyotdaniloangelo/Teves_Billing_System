@@ -42,18 +42,15 @@ function initializeClientTable()
             {
 
                 data: null,
-
                 name: 'client_name',
-
                 render: function(data){
-
                     return `
 
 <div class="client-card">
 
     <div class="d-flex justify-content-between">
 
-<div class="d-flex align-items-start">
+<div class="d-flex justify-content-between align-items-center">
 
     <div class="me-4 flex-shrink-0">
 
@@ -108,6 +105,13 @@ function initializeClientTable()
         </div>
 
     </div>
+
+<!-- ACTION BUTTONS -->
+        <div class="client-actions">
+
+            ${data.action}
+
+        </div>
 
 </div>
 
@@ -200,18 +204,6 @@ function initializeClientTable()
                     `;
 
                 }
-
-            },
-
-            {
-
-                data:'action',
-
-                searchable:false,
-
-                orderable:false,
-
-                className:'text-center align-middle'
 
             }
 
