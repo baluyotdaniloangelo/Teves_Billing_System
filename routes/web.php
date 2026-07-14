@@ -34,6 +34,7 @@ use App\Services\SmsService;
 Route::get('/sms_blast', [SMSBlastController::class,'sms_blast'])->name('sms_blast')->middleware('isLoggedIn');
 Route::post('/send_sms_blast', [SMSBlastController::class,'send_sms_blast'])->name('send_sms_blast')->middleware('isLoggedIn');
 
+
 Route::get('/test-itexmo', function (SmsService $sms) {
  
     return $sms->send(
