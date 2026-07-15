@@ -434,21 +434,21 @@ public function process_sms_campaign($campaign_id)
 
             }
 
-        }
-foreach ($pendingSms as $sms) {
+        }/*
+			foreach ($pendingSms as $sms) {
 
-    dump("Sending to: " . $sms->mobile_number);
+				dump("Sending to: " . $sms->mobile_number);
 
-    $response = $this->smsService->send(
-        $sms->mobile_number,
-        $sms->sms_message
-    );
+				$response = $this->smsService->send(
+					$sms->mobile_number,
+					$sms->sms_message
+				);
 
-    dump($response);
+				dump($response);
 
-}
+			}
 
-dd("Finished");
+			dd("Finished");*/
         /*
         |--------------------------------------------------------------------------
         | Update Campaign
