@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 class SmsService
 {
+	
     public function send($number, $message)
     {
         $response = Http::withOptions([

@@ -64,11 +64,13 @@ Route::get('/test-itexmo-query', function () {
 
 
 Route::get('/test-env', function () {
-    return [
-        'email' => env('ITEXMO_EMAIL'),
-        'password_length' => strlen(env('ITEXMO_PASSWORD')),
-        'api_code' => env('ITEXMO_API_CODE'),
-    ];
+   dd([
+        'APP_NAME' => env('APP_NAME'),
+        'APP_ENV' => env('APP_ENV'),
+        'ITEXMO_EMAIL' => env('ITEXMO_EMAIL'),
+        'ITEXMO_PASSWORD' => env('ITEXMO_PASSWORD'),
+        'ITEXMO_API_CODE' => env('ITEXMO_API_CODE'),
+    ]);
 });
 
 /*June 19, 2025*/
