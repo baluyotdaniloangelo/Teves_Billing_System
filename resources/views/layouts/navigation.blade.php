@@ -106,7 +106,15 @@
           <i class="bi bi-speedometer2 navbar_icon"></i>
           <span title="Dashboard">Dashboard</span>
         </a>
+       </li>	   
+	   
+	   <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('sms_blast') }}" title="Dashboard">
+          <i class="bi bi-chat-left-text navbar_icon"></i>
+          <span title="SMS Blast">SMS Blast</span>
+        </a>
        </li>
+	   
 	   <?php } ?>
 	  
 	   <li class="nav-item">
