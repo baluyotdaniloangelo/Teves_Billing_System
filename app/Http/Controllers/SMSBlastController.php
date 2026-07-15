@@ -127,7 +127,7 @@ public function send_sms_blast(Request $request)
             ];
 
         }
-
+dd($customers->count());
         /*
         |--------------------------------------------------------------------------
         | Remove Duplicate Numbers
