@@ -127,7 +127,7 @@ public function send_sms_blast(Request $request)
             ];
 
         }
-dd($customers->count());
+
         /*
         |--------------------------------------------------------------------------
         | Remove Duplicate Numbers
@@ -366,7 +366,7 @@ public function process_sms_campaign($campaign_id)
                     $sms->mobile_number,
                     $sms->sms_message
                 );
-				dd($response);
+				//dd($response);
 
                 /*
                 |--------------------------------------------------------------------------
@@ -435,7 +435,20 @@ public function process_sms_campaign($campaign_id)
             }
 
         }
+foreach ($pendingSms as $sms) {
 
+    dump("Sending to: " . $sms->mobile_number);
+
+    $response = $this->smsService->send(
+        $sms->mobile_number,
+        $sms->sms_message
+    );
+
+    dump($response);
+
+}
+
+dd("Finished");
         /*
         |--------------------------------------------------------------------------
         | Update Campaign
