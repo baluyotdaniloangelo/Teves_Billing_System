@@ -67,9 +67,10 @@ Route::get('/test-env', function () {
    dd([
         'APP_NAME' => env('APP_NAME'),
         'APP_ENV' => env('APP_ENV'),
-        'ITEXMO_EMAIL' => env('ITEXMO_EMAIL'),
-        'ITEXMO_PASSWORD' => env('ITEXMO_PASSWORD'),
-        'ITEXMO_API_CODE' => env('ITEXMO_API_CODE'),
+        'Email' => config('services.itexmo.email'),
+		'Password' => config('services.itexmo.password'),
+		'ApiCode' => config('services.itexmo.api_code'),
+		'SenderId' => config('services.itexmo.sender_id'),
     ]);
 });
 

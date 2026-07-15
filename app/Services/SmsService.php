@@ -14,12 +14,12 @@ class SmsService
 		])->post(
             'https://api.itexmo.com/api/broadcast',
             [
-                'Email'      => env('ITEXMO_EMAIL'),
-                'Password'   => env('ITEXMO_PASSWORD'),
-                'ApiCode'    => env('ITEXMO_API_CODE'),
+				'Email' => config('services.itexmo.email'),
+				'Password' => config('services.itexmo.password'),
+				'ApiCode' => config('services.itexmo.api_code'),
+				'SenderId' => config('services.itexmo.sender_id'),
                 'Recipients' => [$number],
                 'Message'    => $message,
-                'SenderId'   => env('ITEXMO_SENDER_ID'),
             ]
         );
 

@@ -29,5 +29,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+	'itexmo' => [
+    'email' => env('ITEXMO_EMAIL'),
+    'password' => env('ITEXMO_PASSWORD'),
+    'api_code' => env('ITEXMO_API_CODE'),
+    'sender_id' => env('ITEXMO_SENDER_ID'),
+],
 
 ];
