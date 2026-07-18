@@ -74,7 +74,6 @@
 														<th class="none">Total Amount Due : </th>
 														<th class="none">Total Amount Rendered : </th>
 														<th class="none">Remaining Balance : </th>
-														<!--<th class="all">Status</th>-->
 														<th class="all">Payment Status</th>
 														<th class="all">Delivery Status</th>
 														<th class="all">Generate</th>

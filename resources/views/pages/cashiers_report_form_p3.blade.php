@@ -108,6 +108,7 @@
 								        <option value="DISCOUNTS">DISCOUNTS</option>
                                         <option value="OTHERS">OTHERS</option>
 										 <option value="CASHOUT">CASH OUT</option>
+										 <option value="CASHOUT">CASH ADVANCE</option>
 							        </select>
 									<span class="valid-feedback" id="miscellaneous_items_type_PH3Error"></span>
 									</div>	
@@ -222,6 +223,7 @@
 								        <option value="DISCOUNTS">DISCOUNTS</option>
                                         <option value="OTHERS">OTHERS</option>
 										 <option value="CASHOUT">CASH OUT</option>
+										 <option value="CASHOUT">CASH ADVANCE</option>
 							        </select>
 									<span class="valid-feedback" id="update_miscellaneous_items_type_PH3Error"></span>
 									</div>	

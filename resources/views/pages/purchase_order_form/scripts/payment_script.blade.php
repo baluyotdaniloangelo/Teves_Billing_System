@@ -8,7 +8,7 @@
 		/*Reset Payment Id*/
 		document.getElementById("purchase_order_payment_details_id").value = 0;
 	}
-	
+	function LoadPayment(purchase_order_id)();
 	function LoadPayment(purchase_order_id) {
 	
 			  $.ajax({
