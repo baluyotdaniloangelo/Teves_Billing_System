@@ -128,7 +128,7 @@ function savePayment(event)
 
             resetPaymentForm();
 
-            LoadPayment();
+            //LoadPayment();
 
             LoadProduct();
         },
@@ -165,6 +165,8 @@ function handlePaymentValidation(xhr)
 
         return;
     }
+	
+	
 
     const errors = xhr.responseJSON.errors;
 
@@ -309,4 +311,68 @@ function setButtonLoading(button, loading)
             .html($button.data('original-html'));
     }
 }
+
+/*==================================================
+VALIDATION ERROR MODAL
+==================================================*/
+
+function showValidationErrorModal(message)
+{
+    $('#validation_error_message').text(message);
+
+    const modal = new bootstrap.Modal(
+        document.getElementById('ValidationErrorModal')
+    );
+
+    modal.show();
+}
+
+	
+	<!--Select For Update-->
+	$('body').on('click','#PurchaseOrderPayment_Edit',function(){
+			
+			event.preventDefault();
+			let purchase_order_payment_details_id = $(this).data('id');
+			  $.ajax({
+				url: "{{ route('PaymentInfo') }}",
+				type:"POST",
+				data:{
+				  purchase_order_payment_details_id:purchase_order_payment_details_id,
+				  _token: "{{ csrf_token() }}"
+				},
+				success:function(response){
+				  console.log(response);
+				  if(response) {
+					
+					document.getElementById("purchase_order_id_payment").value = response[0].purchase_order_idx;
+					document.getElementById("purchase_order_payment_details_id").value = response[0].purchase_order_payment_details_id;
+					
+					/*Set Details*/
+					document.getElementById("purchase_order_bank").value = response[0].purchase_order_bank;
+					document.getElementById("purchase_order_date_of_payment").value = response[0].purchase_order_date_of_payment;
+					document.getElementById("purchase_order_reference_no").value = response[0].purchase_order_reference_no;
+					document.getElementById("purchase_order_payment_amount").value = response[0].purchase_order_payment_amount;
+					
+					/*Display Image*/
+					if(response[0].image_reference != null){
+						
+						var img_holder = $('.img-holder');
+						img_holder.empty();
+						image_src = "data:image/jpg;image/png;base64,"+response[0].image_reference;
+						
+						$('<img/>',{'src':image_src,'class':'img-fluid','style':'max-width:400px;margin-bottom:5px;'}).appendTo(img_holder);
+						$("#image_payment_div").show();
+					}else{
+					}
+					
+					$('#AddPaymentModal').modal('toggle');					
+				  
+				  }
+				},
+				error: function(error) {
+				 console.log(error);
+					alert(error);
+				}
+			   });	
+	});	  	
  </script>
