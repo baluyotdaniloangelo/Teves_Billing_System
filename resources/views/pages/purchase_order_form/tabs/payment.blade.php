@@ -66,21 +66,19 @@
         <!-- BODY -->
 
 		<div class="card-body p-4">
-						<table class="table table-striped" id="">
-						<thead>
+						<table class="table table-hover align-middle nowrap w-100" id="PurchaseOrderPaymentTable">
+						<thead class="table-light">
 						<tr class='report'>
-							<th style="text-align:center !important;">#</th>
-							<th style="text-align:center !important;">Action</th>
-							<th style="text-align:center !important;">Bank</th>
-							<th style="text-align:center !important;">Date of Payment</th>
-							<th style="text-align:center !important;">Reference No.</th>
-							<th style="text-align:center !important;">Amount</th>	
+							<th class="all">#</th>
+							<th class="all">Bank</th>
+							<th class="all">Date of Payment</th>
+							<th class="all">Reference No.</th>
+							<th class="all">Amount</th>	
+							<th class="all">Action</th>
 						</tr>
 						</thead>
-							<tbody id="update_table_payment_body_data">
-									<tr style="display: none;">
-										<td>HIDDEN</td>
-									</tr>
+							<tbody id="">
+									
 							</tbody>
 						</table>
 		</div>

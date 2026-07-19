@@ -1,89 +1,420 @@
-	<!--Modal to Product-->
-	<div class="modal fade" id="AddPaymentModal" tabindex="-1">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Payment</h5>
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						
-						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
-					  </div>
-                    </div>
-                    <div class="modal-body">
+<!-- =========================== -->
+<!-- Add Purchase Order Payment -->
+<!-- =========================== -->
+<div class="modal fade" id="AddPaymentModal" tabindex="-1">
 
-					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('save_purchase_order_payment')}}"  method="post" >
-						@csrf
-						<div class="col-sm-12">
-						
-						<div class="col-sm-12">
-							<div class="form-floating mb-3">
-							<textarea class="form-control" id="purchase_order_bank" name="purchase_order_bank" style="height: 50px;" placeholder="Bank" title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
-							<label for="purchase_order_bank" class="form-label">Bank</label>
-							<span class="valid-feedback" id="purchase_order_bankError"></span>
-							</div>
-						</div>
-						
-						</div>
-						
-						<div class="col-sm-12">
-						
-							<div class="form-floating mb-3">
-								<input type='date' class='form-control' id='purchase_order_date_of_payment' name='purchase_order_date_of_payment' value='<?=date('Y-m-d');?>'>
-								<label for="purchase_order_date_of_payment">Date of Payment</label>
-								<span class="valid-feedback" id="purchase_order_date_of_paymentError"></span>
-							</div>
-						 
-						</div>
-						
-						<div class="col-sm-12">
-							<div class="form-floating mb-3">
-							<textarea class="form-control" id="purchase_order_reference_no" name="purchase_order_reference_no" style="height: 50px;" placeholder="Reference No." title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
-							<label for="purchase_order_reference_no" class="form-label">Reference No.</label>
-							<span class="valid-feedback" id="purchase_order_reference_noError"></span>
-							</div>
-						</div>
-						
-						<div class="col-sm-12">
-							<div class="form-floating mb-3">
-								<input type="number" class="form-control" aria-describedby="basic-addon1" name="purchase_order_payment_amount" id="purchase_order_payment_amount" required step=".01" placeholder="Amount">
-								<label for="purchase_order_payment_amount">Amount</label>
-								<span class="valid-feedback" id="purchase_order_payment_amountError"></span>
-							</div>
-							 
-						</div>
-						
-						
-						<div class="row mb-3">
-							<div class="col-sm-12">
-							<label for="payment_image_reference" class="form-label">Upload</label>
-							<input class="form-control" type="file" id="payment_image_reference" name="payment_image_reference">
-							</div>
-						
-						 <input type="hidden" id="purchase_order_id_payment" name="purchase_order_id_payment" value="{{ $PurchaseOrderID }}">
-						 <input type="hidden" id="purchase_order_payment_details_id" name="purchase_order_payment_details_id" value="">		
-						</div>
-						
-						<div class="row mb-3">
-							<div class="col-sm-12">
-								<div class="img-holder" align="center" id="image_payment_div"></div>
-							</div>
-						</div>
-						
-						</div>
-						
-                    <div class="modal-footer modal-footer_form">
-							<div id="loading_data_update_product" style="display:none;">
-							<div class="spinner-border text-success" role="status">
-								<span class="visually-hidden">Loading...</span>
-							</div>
-							</div>
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="save-payment" value="0"> Save</button>
-						  <button type="reset" class="btn btn-primary btn-sm bi bi-backspace-fill form_button_icon" id="clear-payment"> Reset</button>					  
-					</div>
-					</form><!-- End Multi Columns Form -->
-                  </div>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+
+            <!-- HEADER -->
+            <div class="modal-header bg-success border-0 py-3 px-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="rounded-3 bg-white bg-opacity-25 d-flex align-items-center justify-content-center me-3"
+                        style="width:58px;height:58px;">
+
+                        <i class="bi bi-credit-card-2-front-fill fs-3 text-white"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2 class="mb-0 fw-bold text-white">
+
+                            Purchase Order Payment
+
+                        </h2>
+
+                        <small class="text-white-50">
+
+                            Record purchase order payment transaction
+
+                        </small>
+
+                    </div>
+
                 </div>
-             </div>			
+
+                <button type="button"
+                        class="btn btn-light rounded-circle"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+
+            <div class="modal-body bg-light p-4">
+
+                <form id="AddPayment"
+                      action="{{ route('save_purchase_order_payment') }}"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+                    @csrf
+
+                    <div class="row g-4">
+
+                        <!-- LEFT -->
+
+                        <div class="col-lg-6">
+
+                            <div class="card border-0 shadow-sm rounded-4">
+
+                                <div class="card-body p-4">
+
+                                    <h4 class="fw-bold text-primary">
+
+                                        <i class="bi bi-credit-card me-2"></i>
+
+                                        Payment Information
+
+                                    </h4>
+
+                                    <p class="text-muted mb-4">
+
+                                        Enter payment details.
+
+                                    </p>
+
+
+                                    <div class="row">
+
+                                        <!-- DATE -->
+
+                                        <div class="mb-4">
+
+                                            <label class="form-label fw-semibold">
+
+                                                <i class="bi bi-calendar-event text-primary me-2"></i>
+
+                                                Date of Payment
+
+                                            </label>
+
+                                            <input type="date"
+                                                   class="form-control rounded-3"
+                                                   id="purchase_order_date_of_payment"
+                                                   name="purchase_order_date_of_payment"
+                                                   value="{{ date('Y-m-d') }}">
+											<span id="purchase_order_date_of_paymentError"></span>
+                                        </div>
+
+
+                                    </div>
+									
+                                    <!-- BANK -->
+
+                                    <div class="mb-4">
+
+                                        <label class="form-label fw-semibold">
+
+                                            <i class="bi bi-bank text-success me-2"></i>
+
+                                            Bank
+
+                                        </label>
+
+                                        <textarea
+                                            class="form-control rounded-3"
+                                            rows="4"
+                                            id="purchase_order_bank"
+                                            name="purchase_order_bank"
+                                            placeholder="Bank&#10;Branch&#10;Account Name&#10;Account Number"></textarea>
+										<span id="purchase_order_bankError"></span>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <!-- REFERENCE -->
+
+                                        <div class="mb-4">
+
+                                            <label class="form-label fw-semibold">
+
+                                                <i class="bi bi-upc-scan text-warning me-2"></i>
+
+                                                Reference Number
+
+                                            </label>
+											<!--
+                                            <input type="text"
+                                                   class="form-control rounded-3"
+                                                   id="purchase_order_reference_no"
+                                                   name="purchase_order_reference_no"
+                                                   placeholder="Transaction / Deposit Slip No.">-->
+											<textarea class="form-control rounded-3"
+											id="purchase_order_reference_no"
+											name="purchase_order_reference_no"
+											style="height: 50px;"
+											placeholder="Transaction / Deposit Slip No."
+											title="Please press Enter to create new lines for proper text formatting and improved readability."></textarea>
+											<span id="purchase_order_reference_noError"></span>
+
+                                        </div>
+
+                                    </div>									
+
+                                    <!-- AMOUNT -->
+
+                                    <div class="mb-2">
+
+                                        <label class="form-label fw-semibold">
+
+                                            <i class="bi bi-cash-stack text-success me-2"></i>
+
+                                            Payment Amount
+
+                                        </label>
+
+                                        <div class="input-group">
+
+                                            <span class="input-group-text">
+
+                                                ₱
+
+                                            </span>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   id="purchase_order_payment_amount"
+                                                   name="purchase_order_payment_amount"
+                                                   placeholder="0.00"
+                                                   step=".01">
+											<span id="purchase_order_payment_amountError"></span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT -->
+
+                        <div class="col-lg-6">
+
+                            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                                <div class="card-body p-4">
+
+                                    <h4 class="fw-bold text-primary">
+
+                                        <i class="bi bi-image me-2"></i>
+
+                                        Receipt Preview
+
+                                    </h4>
+
+                                    <p class="text-muted mb-4">
+
+                                        Upload payment receipt.
+
+                                    </p>
+
+                                    <div class="text-center mb-4">
+
+                                        <img id="payment_preview"
+                                             src=""
+                                             class="img-fluid rounded-4 border shadow-sm"
+                                             style="display:none;max-height:280px;">
+
+                                        <div id="image_payment_div"></div>
+
+                                    </div>
+
+                                    <label class="form-label fw-semibold">
+
+                                        Upload Receipt
+
+                                    </label>
+
+                                    <input type="file"
+                                           class="form-control rounded-3"
+                                           id="payment_image_reference"
+                                           name="payment_image_reference"
+                                           accept="image/*">
+
+                                    <small class="text-muted">
+
+                                        JPG / PNG • Maximum 10MB
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <input type="hidden"
+                           id="purchase_order_id_payment"
+                           name="purchase_order_id_payment"
+                           value="{{ $PurchaseOrderID }}">
+
+                    <input type="hidden"
+                           id="purchase_order_payment_details_id"
+                           name="purchase_order_payment_details_id">
+
+                </form>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer bg-white border-0 px-4 py-3">
+
+                <div class="me-auto"
+                     id="loading_data_update_product"
+                     style="display:none;">
+
+                    <div class="spinner-border text-success"></div>
+
+                </div>
+
+                <button type="reset"
+                        form="AddPayment"
+                        id="clear-payment"
+                        class="btn btn-light border px-4">
+
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>
+
+                    Reset
+
+                </button>
+
+                <button type="submit"
+                        form="AddPayment"
+                        id="save-payment"
+                        value="0"
+                        class="btn btn-success px-4">
+
+                    <i class="bi bi-save-fill me-1"></i>
+
+                    Save Payment
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>	
+	
+<!-- SUCCESS MODAL -->
+<div class="modal fade"
+     id="SuccessModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <div class="modal-body text-center p-4">
+
+                <!-- ICON -->
+                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width:80px;height:80px;">
+
+                    <i class="bi bi-check-circle-fill text-success fs-1"></i>
+
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-bold mb-2"
+                    id="success_modal_title">
+
+                    Success
+
+                </h5>
+
+                <!-- MESSAGE -->
+                <div class="text-muted"
+                     id="success_modal_message">
+
+                    Record saved successfully.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- VALIDATION ERROR MODAL -->
+<div class="modal fade"
+     id="ValidationErrorModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <!-- BODY -->
+            <div class="modal-body text-center p-4">
+
+                <!-- ICON -->
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width:80px;height:80px;">
+
+                    <i class="bi bi-exclamation-circle-fill text-danger fs-1"></i>
+
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-bold text-danger mb-2" id="action_error_message">
+
+                    Validation Error
+
+                </h5>
+
+                <!-- MESSAGE -->
+                <div class="text-muted"
+                     id="validation_error_message">
+
+                    Please check the Required Input.
+
+                </div> 
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 justify-content-center pb-4">
+
+                <button type="button"
+                        class="btn btn-danger rounded-3 px-4"
+                        data-bs-dismiss="modal">
+
+                    <i class="bi bi-x-circle me-2"></i>
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>	
+	
 	
 	<!-- Bill Delete Modal-->
     <div class="modal fade" id="PurchaseOrderPaymentDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">

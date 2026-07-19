@@ -45,8 +45,13 @@
 
                 <i class="bi bi-pencil-fill me-1"></i>
                 Edit
-            </button>
-
+            </button> 
+			<button type="button" 
+					class="btn btn-dark rounded-3 shadow-sm"
+					id="PrintPurchaseOrder">
+				<i class="bi-printer-fill me-1"></i>
+					Print
+			</button>
         </div>
 
     </div>

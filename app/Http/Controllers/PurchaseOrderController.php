@@ -600,7 +600,7 @@ $actionBtn_view_only = '
 		}
     }
 
-	public function get_purchase_order_payment_list(Request $request){		
+	public function get_purchase_order_payment_list_OLD(Request $request){		
 	
 			$data =  PurchaseOrderPaymentModel::where('teves_purchase_order_payment_details.purchase_order_idx', $request->purchase_order_id)
 				->orderBy('purchase_order_payment_details_id', 'asc')
@@ -614,6 +614,112 @@ $actionBtn_view_only = '
 					]);
 		
 			return response()->json($data);
+	}
+
+
+	public function get_purchase_order_payment_list(Request $request)
+	{
+		$data = PurchaseOrderPaymentModel::query()
+			->where('teves_purchase_order_payment_details.purchase_order_idx', $request->purchase_order_id)
+			->orderBy('purchase_order_payment_details_id', 'asc')
+			->select([
+				'teves_purchase_order_payment_details.purchase_order_payment_details_id',
+				'teves_purchase_order_payment_details.purchase_order_bank',
+				'teves_purchase_order_payment_details.purchase_order_date_of_payment',
+				'teves_purchase_order_payment_details.purchase_order_reference_no',
+				'teves_purchase_order_payment_details.purchase_order_payment_amount',
+				'teves_purchase_order_payment_details.image_reference'
+			]);
+
+		return DataTables::of($data)
+
+			->addIndexColumn()
+
+			->editColumn('purchase_order_payment_amount', function ($row) {
+				return number_format($row->purchase_order_payment_amount, 2);
+			})
+
+			->editColumn('purchase_order_date_of_payment', function ($row) {
+				return date('F d, Y', strtotime($row->purchase_order_date_of_payment));
+			})
+
+			->addColumn('attachment', function ($row) {
+
+				if (empty($row->image_reference)) {
+					return '<span class="badge bg-secondary">No Attachment</span>';
+				}
+
+				return '
+					<a href="/storage/purchase_order_payment/'.$row->image_reference.'"
+					   target="_blank"
+					   class="btn btn-sm btn-outline-primary rounded-circle"
+					   title="View Attachment">
+						<i class="bi bi-paperclip"></i>
+					</a>';
+			})
+
+			->addColumn('action', function ($row) {
+
+				$menu = '
+				<div class="dropdown dropstart text-center">
+
+					<button class="btn btn-sm btn-light border rounded-3 shadow-sm"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false">
+						<i class="bi bi-three-dots"></i>
+					</button>
+
+					<ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4">
+
+						<!-- Edit -->
+						<li>
+							<a href="#"
+							   class="dropdown-item"
+							   data-id="'.$row->purchase_order_payment_details_id.'"
+							   id="PurchaseOrderPayment_Edit">
+								<i class="bi bi-pencil-square text-warning me-2"></i>
+								Edit Payment
+							</a>
+						</li>
+
+						<!-- Delete -->
+						<li>
+							<a href="#"
+							   class="dropdown-item text-danger"
+							   data-id="'.$row->purchase_order_payment_details_id.'"
+							   id="deletePurchaseOrderPayment">
+								<i class="bi bi-trash3-fill me-2"></i>
+								Delete Payment
+							</a>
+						</li>';
+
+				if (!empty($row->image_reference)) {
+
+					$menu .= '
+						<li><hr class="dropdown-divider"></li>
+
+						<li>
+							<a href="#"
+							   class="dropdown-item"
+							   data-id="'.$row->purchase_order_payment_details_id.'"
+							   id="ViewPurchaseOrderPayment">
+								<i class="bi bi-eye-fill text-primary me-2"></i>
+								View Attachment
+							</a>
+						</li>';
+				}
+
+				$menu .= '
+					</ul>
+
+				</div>';
+
+				return $menu;
+			})
+			->rawColumns(['action'])
+
+			->make(true);
 	}
 
 	public function delete_purchase_order_product(Request $request){		
