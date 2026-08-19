@@ -15,7 +15,7 @@ class ClientController extends Controller
 	/*Load client Interface*/
 	public function client(){
 		
-		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
+		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin" || Session::get('UserType')=="Encoder")){
 		
 			$title = 'Account';
 			$data = array();
@@ -33,46 +33,84 @@ class ClientController extends Controller
     {
 		
 		if ($request->ajax()) {
-			
-			$data = ClientModel::with('referrer')
-			->select(
-				'client_id',
-				'client_name',
-				'customer_type',
-				'client_account_number',
-				'client_address',
-				'client_tin',
-				'client_contact_number',
-				'client_email_address',
-				'client_age',
-				'default_less_percentage',
-				'default_net_percentage',
-				'default_vat_percentage',
-				'default_withholding_tax_percentage',
-				'default_payment_terms',
-				'sales_agent_idx'
-			)
-			->get();
+
+			$query = ClientModel::with('referrer')
+				->select(
+					'client_id',
+					'client_name',
+					'customer_type',
+					'client_account_number',
+					'client_address',
+					'client_tin',
+					'client_contact_number',
+					'client_email_address',
+					'client_age',
+					'default_less_percentage',
+					'default_net_percentage',
+					'default_vat_percentage',
+					'default_withholding_tax_percentage',
+					'default_payment_terms',
+					'sales_agent_idx',
+					'created_by_user_idx',
+					'created_at'
+				);
+
+			if (Session::get('UserType') == "Encoder") {
+				$query->where('created_by_user_idx', Session::get('loginID'));
+			}
+
+			$data = $query->get();
 			
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('referred_by_name', function($row){
 						return $row->referrer->sales_agent_name ?? 'None';
 					})
-					->addColumn('action', function ($row)
-					{
-						return '
+					->addColumn('action', function ($row) {
+
+					$userType = Session::get('UserType');
+					$loginID  = Session::get('loginID');
+
+					$canEdit = true;
+					$canDelete = false;
+
+					if ($userType == "Encoder") {
+
+						// Encoder can only edit their own clients
+						if ($row->created_by_user_idx != $loginID) {
+							$canEdit = false;
+						}
+
+						// Encoder can only edit within 24 hours
+						if ($row->created_at && now()->diffInHours($row->created_at) >= 24) {
+							$canEdit = false;
+						}
+
+						// Encoder cannot delete
+						$canDelete = false;
+
+					} elseif ($userType == "Admin" || $userType == "SUAdmin") {
+
+						// Admin and SUAdmin can edit and delete
+						$canEdit = true;
+						$canDelete = true;
+					}
+
+					$menu = '
 						<div class="dropdown dropstart text-center">
-							<!-- BUTTON -->
 							<button class="btn btn-sm btn-light border rounded-3 shadow-sm"
 									type="button"
 									data-bs-toggle="dropdown"
 									aria-expanded="false">
 								<i class="bi bi-three-dots"></i>
 							</button>
-							<!-- MENU -->
+
 							<ul class="dropdown-menu dropdown-menu-end border-0 shadow rounded-4">
-								<!-- EDIT -->
+					';
+
+					// EDIT
+					if ($canEdit) {
+						$menu .= '
 								<li>
 									<a href="#"
 									   class="dropdown-item"
@@ -82,7 +120,12 @@ class ClientController extends Controller
 										Edit Client Details
 									</a>
 								</li>
-								<!-- DELETE -->
+						';
+					}
+
+					// DELETE
+					if ($canDelete) {
+						$menu .= '
 								<li>
 									<a href="#"
 									   class="dropdown-item text-danger"
@@ -92,10 +135,16 @@ class ClientController extends Controller
 										Delete Client Details
 									</a>
 								</li>
+						';
+					}
+
+					$menu .= '
 							</ul>
 						</div>
-						';
-					})
+					';
+
+					return $menu;
+				})
 					->rawColumns(['action'])
 					->make(true);
 		}
@@ -201,7 +250,7 @@ class ClientController extends Controller
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
 			$client->sales_agent_idx 					= $request->sales_agent_idx;
-			$client->created_by_user_idx 				= Session::has('loginID');
+			$client->created_by_user_idx 				= Session::get('loginID');
 			
 			$result = $client->save();
 			if($result){
@@ -243,7 +292,7 @@ class ClientController extends Controller
 			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
 			$client->default_payment_terms 				= $request->default_payment_terms;
 			$client->sales_agent_idx 					= $request->sales_agent_idx;
-			$client->updated_by_user_idx 				= Session::has('loginID');
+			$client->updated_by_user_idx 				= Session::get('loginID');
 			
 			$result = $client->update();
 			if($result){

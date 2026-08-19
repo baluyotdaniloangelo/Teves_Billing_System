@@ -111,9 +111,9 @@
 												<option value="Commercial Account" selected title="(discounted customers kasi mga restuarant, laundry and other business uses lpg)">Commercial Account</option>
 												<option value="Household">Household</option>
 												<option value="Outlet">Outlet</option>
-												<option value="Fuel Station">Fuel Station</option>
-												<option value="Fuel Customer">Fuel Customer</option>
-												<option value="Industrial">Industrial</option>
+												<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
+												<option value="Industrial – Fuel">Industrial – Fuel</option>
+												<option value="Industrial – LPG">Industrial – LPG</option>
 										</select>
 
                                         <div class="invalid-feedback"

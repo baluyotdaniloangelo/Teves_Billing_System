@@ -211,7 +211,7 @@
 		</ul>
       </li>
 	  
-	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
+	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff" || $data->user_type=="Encoder" ){ ?>
       <li class="nav-item">
         <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
           <i class="bi bi-gear-fill navbar_icon"></i><span title="Manage Product, Client and System User Account">Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -231,30 +231,45 @@
             </a>
 			<?php } ?>
 			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
-			<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
-              <i class="bi bi-building navbar_icon" title="Manage Client list"></i><span>Branch</span>
-            </a>
-			
-			<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
-              <i class="bi bi-person-badge navbar_icon" title="Manage Client list"></i><span>Client</span>
-            </a>
-			
-			<a href="{{ route('supplier') }}" class="sidebar_li_a" title="Manage Supplier list">
-              <i class="bi bi-truck navbar_icon" title="Manage Supplier list"></i><span>Supplier</span>
-            </a>
-			
-			<a href="{{ route('salesagent') }}" class="sidebar_li_a" title="Sales Agent list">
-              <i class="bi bi-person-badge navbar_icon" title="Sales Agent list"></i><span>Sales Agent</span>
-            </a>
-			
-			<a href="{{ route('reminder') }}" class="sidebar_li_a" title="Reminders">
-              <i class="bi bi-bell navbar_icon" title="Reminders list"></i><span>Reminders</span>
-            </a>
-			
-			<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
-              <i class="bi bi-people-fill navbar_icon" title="Manage System User"></i><span>User's Account</span>
-            </a>
-			
+
+				<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
+					<i class="bi bi-building navbar_icon"></i>
+					<span>Branch</span>
+				</a>
+
+			<?php } ?>
+
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Encoder"){ ?>
+
+				<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
+					<i class="bi bi-person-badge navbar_icon"></i>
+					<span>Client</span>
+				</a>
+
+			<?php } ?>
+
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
+
+				<a href="{{ route('supplier') }}" class="sidebar_li_a" title="Manage Supplier list">
+					<i class="bi bi-truck navbar_icon"></i>
+					<span>Supplier</span>
+				</a>
+
+				<a href="{{ route('salesagent') }}" class="sidebar_li_a" title="Sales Agent list">
+					<i class="bi bi-person-badge navbar_icon"></i>
+					<span>Sales Agent</span>
+				</a>
+
+				<a href="{{ route('reminder') }}" class="sidebar_li_a" title="Reminders">
+					<i class="bi bi-bell navbar_icon"></i>
+					<span>Reminders</span>
+				</a>
+
+				<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
+					<i class="bi bi-people-fill navbar_icon"></i>
+					<span>User's Account</span>
+				</a>
+
 			<?php } ?>
 
           </li>
