@@ -25,7 +25,7 @@
 			scrollCollapse: true,
 			scrollCollapse: true,
 			scrollY: '500px',
-			ajax: "{{ route('getCashierReport') }}",
+			ajax: "{{ route('getCashierReportFuel') }}",
 			columns: [
 					{data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
 					{data: 'report_date', className: "text-center"},

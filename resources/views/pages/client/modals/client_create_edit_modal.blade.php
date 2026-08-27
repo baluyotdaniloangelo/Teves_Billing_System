@@ -57,140 +57,166 @@
 
                     <div class="row g-4">
 
-                        <!-- LEFT SIDE -->
-                        <div class="col-lg-6">
+					<ul class="nav nav-tabs mb-3" id="PurchaseOrderTabs" role="tablist">
 
-                            <div class="card border-0 bg-light rounded-4 h-90">
+						<li class="nav-item">
+							<button class="nav-link active"
+									data-bs-toggle="tab"
+									data-bs-target="#account-information-tab"
+									type="button"
+									role="tab">
+								<i class="bi bi-info-circle me-1"></i>
+								Account Information
+							</button>
+						</li>
 
-                                <div class="card-body p-4">
-<!--
+						<li class="nav-item">
+							<button class="nav-link"
+									data-bs-toggle="tab"
+									data-bs-target="#owner-information-tab"
+									type="button"
+									role="tab">
+								<i class="bi bi-person-badge me-1"></i>
+								Owner Information
+							</button>
+						</li>
 
-<div class="col-md-4 mb-3">
+						<li class="nav-item">
+							<button class="nav-link"
+									data-bs-toggle="tab"
+									data-bs-target="#tax-payment-settings-tab"
+									type="button"
+									role="tab">
+								<i class="bi bi-cash-coin me-1"></i>
+								Tax & Payment Settings
+							</button>
+						</li>
 
-											<label class="form-label fw-semibold">
+						
+					</ul>  
+					
+					
+					
+					<div class="tab-content" id="ClientTabsContent">
 
-												<i class="bi bi-tags-fill text-success me-2"></i>
+					<!-- ===================================== -->
+					<!-- ACCOUNT INFORMATION -->
+					<!-- ===================================== -->
+					<div class="tab-pane fade show active"
+						 id="account-information-tab"
+						 role="tabpanel">
 
-												Sales Order Type
+						<div class="tab-pane fade show active"
+							 id="account-information-tab"
+							 role="tabpanel">
 
-											</label>
+							<div class="row">
 
-											<select class="form-select rounded-3" required="" name="sales_order_type" id="sales_order_type">
-												<option value="">Please select Type</option>
-												<option value="1" selected="">Fuel</option>
-												<option value="2">Services</option>
-											</select>
-											
-											<span class="text-danger small" id="sales_order_typeError"></span>
-											  
-										</div>
-										
-										-->
-										
-                                    <h6 class="fw-bold mb-4 text-success">
-                                        Account Information
-                                    </h6>
+								<div class="col-lg-8 mx-auto">
 
-                                    <!-- CLIENT NAME -->
-                                    <div class="mb-3">
-
-                                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
-
-                                            <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                                                  style="width:34px;height:34px;">
-
-                                                <i class="bi bi-person text-success"></i>
-
-                                            </span>
-
-                                            <span>Customer Type</span>
-
-                                        </label>
-
-                                        <select class="form-select rounded-3" required="" name="customer_type" id="customer_type">
-												<option value="Commercial Account" selected title="(discounted customers kasi mga restuarant, laundry and other business uses lpg)">Commercial Account</option>
-												<option value="Household">Household</option>
-												<option value="Outlet">Outlet</option>
-												<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
-												<option value="Industrial – Fuel">Industrial – Fuel</option>
-												<option value="Industrial – LPG">Industrial – LPG</option>
-										</select>
-
-                                        <div class="invalid-feedback"
-                                             id="customer_type_error">
-                                        </div>
-
-                                    </div>
-									
-                                    <!-- CLIENT NAME -->
-                                    <div class="mb-3">
-
-                                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
-
-                                            <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                                                  style="width:34px;height:34px;">
-
-                                                <i class="bi bi-person text-success"></i>
-
-                                            </span>
-
-                                            <span>Name</span>
-
-                                        </label>
-
-                                        <input type="text"
-                                               class="form-control rounded-3"
-                                               name="client_name"
-                                               id="client_name"
-                                               placeholder="Enter Name/Description"
-                                               autocomplete="off"
-                                               required>
-
-                                        <div class="invalid-feedback"
-                                             id="client_name_error">
-                                        </div>
-
-                                    </div>
-
-                                    <!-- ADDRESS -->
-                                    <div class="mb-3">
-
-                                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
-
-                                            <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                                                  style="width:34px;height:34px;">
-
-                                                <i class="bi bi-geo-alt text-primary"></i>
-
-                                            </span>
-
-                                            <span>Address</span>
-
-                                        </label>
-
-                                        <textarea class="form-control rounded-3"
-                                                  name="client_address"
-                                                  id="client_address"
-                                                  rows="1"
-                                                  placeholder="Enter Complete Address"
-                                                  required></textarea>
-
-                                        <div class="invalid-feedback"
-                                             id="client_address_error">
-                                        </div>
-
-                                    </div>
-
-									<!-- CONTACT NUMBER -->
-									<div class="mb-3">
+									<!-- CUSTOMER TYPE -->
+									<div class="mb-4">
 
 										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
 											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
 												  style="width:34px;height:34px;">
+												<i class="bi bi-person text-success"></i>
+											</span>
 
+											<span>Customer Type</span>
+
+										</label>
+
+										<select class="form-select rounded-3"
+												required
+												name="customer_type"
+												id="customer_type">
+
+											<option value="Commercial Account" selected>
+												Commercial Account
+											</option>
+
+											<option value="Household">Household</option>
+											<option value="Outlet">Outlet</option>
+											<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
+											<option value="Industrial – Fuel">Industrial – Fuel</option>
+											<option value="Industrial – LPG">Industrial – LPG</option>
+
+										</select>
+
+										<div class="invalid-feedback"
+											 id="customer_type_error">
+										</div>
+
+									</div>
+
+
+									<!-- COMPANY NAME -->
+									<div class="mb-4">
+
+										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+												  style="width:34px;height:34px;">
+												<i class="bi bi-building text-success"></i>
+											</span>
+
+											<span>Company Name</span>
+
+										</label>
+
+										<input type="text"
+											   class="form-control rounded-3"
+											   name="client_name"
+											   id="client_name"
+											   placeholder="Enter Company Name"
+											   autocomplete="off"
+											   required>
+
+										<div class="invalid-feedback"
+											 id="client_name_error">
+										</div>
+
+									</div>
+
+
+									<!-- ADDRESS -->
+									<div class="mb-4">
+
+										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+											<span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+												  style="width:34px;height:34px;">
+												<i class="bi bi-geo-alt text-primary"></i>
+											</span>
+
+											<span>Address</span>
+
+										</label>
+
+										<textarea class="form-control rounded-3"
+												  name="client_address"
+												  id="client_address"
+												  rows="2"
+												  placeholder="Enter Complete Address"
+												  required></textarea>
+
+										<div class="invalid-feedback"
+											 id="client_address_error">
+										</div>
+
+									</div>
+
+
+									<!-- CONTACT NUMBER -->
+									<div class="mb-4">
+
+										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+												  style="width:34px;height:34px;">
 												<i class="bi bi-telephone-fill text-success"></i>
-
 											</span>
 
 											<span>Contact Number</span>
@@ -202,7 +228,8 @@
 											   name="client_contact_number"
 											   id="client_contact_number"
 											   placeholder="09XXXXXXXXX"
-											   autocomplete="off">
+											   autocomplete="off"
+											   required>
 
 										<div class="invalid-feedback"
 											 id="client_contact_number_error">
@@ -211,274 +238,505 @@
 									</div>
 
 
-									<!-- Email Address -->
-									<div class="mb-3">
+									<!-- EMAIL ADDRESS -->
+									<div class="mb-4">
 
 										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
 											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
 												  style="width:34px;height:34px;">
-
-												<i class="bi bi-telephone-fill text-success"></i>
-
+												<i class="bi bi-envelope-fill text-success"></i>
 											</span>
 
 											<span>Email Address</span>
 
 										</label>
 
-										<input type="text"
+										<input type="email"
 											   class="form-control rounded-3"
 											   name="client_email_address"
 											   id="client_email_address"
-											   placeholder="Email Address"
+											   placeholder="Enter Email Address"
 											   autocomplete="off">
 
 										<div class="invalid-feedback"
-											 id="client_contact_number_error">
+											 id="client_email_address_error">
 										</div>
 
 									</div>
 
-									<!-- AGE -->
-									<div class="mb-3">
+								</div>
 
-										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+							</div>
 
-											<span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-												  style="width:34px;height:34px;">
+						</div>
+					</div>
 
-												<i class="bi bi-person-badge-fill text-info"></i>
+<!-- ===================================== -->
+<!-- OWNER INFORMATION -->
+<!-- ===================================== -->
 
-											</span>
+<div class="tab-pane fade"
+     id="owner-information-tab"
+     role="tabpanel">
 
-											<span>Age</span>
+    <div class="row">
 
-										</label>
+        <div class="col-lg-8 mx-auto">
+
+            <!-- ================================= -->
+            <!-- TITLE -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Title
+                </label>
+
+                <input type="text"
+                       class="form-control rounded-3"
+                       name="client_title"
+                       id="client_title"
+                       placeholder="Enter Title (Example: Dr., Engr.)"
+                       autocomplete="off"
+                       required>
+
+                <div class="invalid-feedback"
+                     id="client_title_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- GENDER -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Gender
+                </label>
+
+                <select class="form-select rounded-3"
+                        name="client_gender"
+                        id="client_gender"
+                        required>
+
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+
+                </select>
+
+                <div class="invalid-feedback"
+                     id="client_gender_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- FIRST NAME -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    First Name
+                </label>
+
+                <input type="text"
+                       class="form-control rounded-3"
+                       name="client_first_name"
+                       id="client_first_name"
+                       placeholder="Enter First Name"
+                       autocomplete="off"
+                       required>
+
+                <div class="invalid-feedback"
+                     id="client_first_name_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- MIDDLE NAME -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Middle Name
+                </label>
+
+                <input type="text"
+                       class="form-control rounded-3"
+                       name="client_middle_name"
+                       id="client_middle_name"
+                       placeholder="Enter Middle Name"
+                       autocomplete="off">
+
+                <div class="invalid-feedback"
+                     id="client_middle_name_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- LAST NAME -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Last Name
+                </label>
+
+                <input type="text"
+                       class="form-control rounded-3"
+                       name="client_last_name"
+                       id="client_last_name"
+                       placeholder="Enter Last Name"
+                       autocomplete="off"
+                       required>
+
+                <div class="invalid-feedback"
+                     id="client_last_name_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- NAME EXTENSION -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Name Extension
+                </label>
+
+                <select class="form-select rounded-3"
+                        name="client_name_extension"
+                        id="client_name_extension">
+
+                    <option value="">None</option>
+                    <option value="Jr.">Jr.</option>
+                    <option value="Sr.">Sr.</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+
+                </select>
+
+                <div class="invalid-feedback"
+                     id="client_name_extension_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- BIRTHDAY -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Birthday
+                </label>
+
+                <input type="date"
+                       class="form-control rounded-3"
+                       name="client_birthday"
+                       id="client_birthday"
+                       required>
+
+                <div class="invalid-feedback"
+                     id="client_birthday_error">
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- REFERRED BY -->
+            <!-- ================================= -->
+
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Referred By
+                </label>
+
+                <input class="form-control rounded-3"
+                       list="sales_agent_name"
+                       name="sales_agent_name"
+                       id="sales_agent_id"
+                       autocomplete="off"
+                       placeholder="Search Sales Agent">
+
+                <datalist id="sales_agent_name">
+
+                    @foreach ($sales_agent_data as $sales_agent_data_cols)
+
+                        <option
+                            label="{{ $sales_agent_data_cols->sales_agent_name }}"
+                            data-id="{{ $sales_agent_data_cols->sales_agent_id }}"
+                            value="{{ $sales_agent_data_cols->sales_agent_name }}">
+                        </option>
+
+                    @endforeach
+
+                </datalist>
+
+                <div class="invalid-feedback"
+                     id="sales_agent_name_error">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+					
+
+					<!-- ===================================== -->
+					<!-- TAX & PAYMENT SETTINGS -->
+					<!-- ===================================== -->
+					<div class="tab-pane fade"
+						 id="tax-payment-settings-tab"
+						 role="tabpanel">
+
+						<div class="row">
+
+							<div class="col-lg-8 mx-auto">
+
+								<!-- TIN -->
+								<div class="mb-4">
+
+									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+										<span class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+											  style="width:34px;height:34px;">
+											<i class="bi bi-receipt text-warning"></i>
+										</span>
+
+										<span>TIN Number</span>
+
+									</label>
+
+									<input type="text"
+										   class="form-control rounded-3"
+										   name="client_tin"
+										   id="client_tin"
+										   placeholder="000-000-000-000"
+										   autocomplete="off">
+
+									<div class="invalid-feedback"
+										 id="client_tin_error">
+									</div>
+
+								</div>
+
+
+								<!-- LESS / DISCOUNT -->
+								<div class="mb-4">
+
+									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+										<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+											  style="width:34px;height:34px;">
+											<i class="bi bi-percent text-success"></i>
+										</span>
+
+										<span>Less / Discount</span>
+
+									</label>
+
+									<div class="input-group">
 
 										<input type="number"
-											   class="form-control rounded-3"
-											   name="client_age"
-											   id="client_age"
-											   min="1"
-											   max="120"
-											   placeholder="Enter Age">
+											   class="form-control rounded-start"
+											   name="default_less_percentage"
+											   id="default_less_percentage"
+											   step=".01"
+											   min="0"
+											   placeholder="0.00">
 
-										<div class="invalid-feedback"
-											 id="client_age_error">
-										</div>
+										<span class="input-group-text">%</span>
 
 									</div>
-									
-                                    <div class="mb-3">
 
-                                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+									<div class="invalid-feedback"
+										 id="default_less_percentage_error">
+									</div>
 
-                                            <span class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                                                  style="width:34px;height:34px;">
+								</div>
 
-                                                <i class="bi bi-receipt text-warning"></i>
 
-                                            </span>
+								<!-- NET -->
+								<div class="mb-4">
 
-                                            <span>Referred By</span>
+									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-                                        </label>
+										<span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+											  style="width:34px;height:34px;">
+											<i class="bi bi-calculator text-primary"></i>
+										</span>
 
-                                        <input class="form-control rounded-3"
-                                           list="sales_agent_name"
-                                           name="sales_agent_name"
-                                           id="sales_agent_id"
-                                           autocomplete="off"
-                                           placeholder="Search Agent">
+										<span>Net Value</span>
 
-                                    <datalist id="sales_agent_name">
+									</label>
 
-                                        @foreach ($sales_agent_data as $sales_agent_data_cols)
+									<div class="input-group">
 
-                                            <option
-                                                label="{{$sales_agent_data_cols->sales_agent_name}}"
-                                                data-id="{{$sales_agent_data_cols->sales_agent_id}}"
-                                                value="{{$sales_agent_data_cols->sales_agent_name}}">
-                                            </option>
+										<input type="number"
+											   class="form-control rounded-start"
+											   name="default_net_percentage"
+											   id="default_net_percentage"
+											   step=".01"
+											   min="0"
+											   placeholder="0.00">
 
-                                        @endforeach
+										<span class="input-group-text">%</span>
 
-                                    </datalist>
+									</div>
 
-                                    </div>
-								
-                                </div>
+									<div class="invalid-feedback"
+										 id="default_net_percentage_error">
+									</div>
 
-                            </div>
+								</div>
 
-                        </div>
 
-                        <!-- RIGHT SIDE -->
-                        <div class="col-lg-6">
+								<!-- VAT -->
+								<div class="mb-4">
 
-                            <!-- TAX SETTINGS -->
-                            <div class="card border-0 bg-light rounded-4 mb-4">
+									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-                                <div class="card-body p-4">
+										<span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+											  style="width:34px;height:34px;">
+											<i class="bi bi-receipt-cutoff text-info"></i>
+										</span>
 
-                                    <h6 class="fw-bold mb-4 text-success">
-                                        Tax & Payment Settings
-                                    </h6>
-									
-                                    <!-- TIN -->
-                                    <div class="mb-3">
+										<span>VAT Value</span>
 
-                                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+									</label>
 
-                                            <span class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                                                  style="width:34px;height:34px;">
+									<div class="input-group">
 
-                                                <i class="bi bi-receipt text-warning"></i>
+										<input type="number"
+											   class="form-control rounded-start"
+											   name="default_vat_percentage"
+											   id="default_vat_percentage"
+											   step=".01"
+											   min="0"
+											   placeholder="0.00">
 
-                                            </span>
+										<span class="input-group-text">%</span>
 
-                                            <span>TIN Number</span>
+									</div>
 
-                                        </label>
+									<div class="invalid-feedback"
+										 id="default_vat_percentage_error">
+									</div>
 
-                                        <input type="text"
-                                               class="form-control rounded-3"
-                                               name="client_tin"
-                                               id="client_tin"
-                                               placeholder="000-000-000-000"
-                                               autocomplete="off">
-											   
-										<div class="invalid-feedback"
-                                             id="client_tin_error">
-                                        </div>
+								</div>
 
-                                    </div>
 
-                                    <!-- DISCOUNT -->
-                                    <div class="mb-3">
+								<!-- WITHHOLDING TAX -->
+								<div class="mb-4">
 
-                                        <label class="form-label fw-semibold">
-                                            Less / Discount
-                                        </label>
+									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-                                        <div class="input-group">
+										<span class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+											  style="width:34px;height:34px;">
+											<i class="bi bi-cash-coin text-danger"></i>
+										</span>
 
-                                            <input type="number"
-                                                   class="form-control rounded-start"
-                                                   name="default_less_percentage"
-                                                   id="default_less_percentage"
-                                                   step=".01"
-                                                   min="0"
-                                                   placeholder="0.00">
+										<span>Withholding Tax</span>
 
-                                            <span class="input-group-text">
-                                                %
-                                            </span>
+									</label>
 
-                                        </div>
+									<div class="input-group">
 
-                                    </div>
+										<input type="number"
+											   class="form-control rounded-start"
+											   name="default_withholding_tax_percentage"
+											   id="default_withholding_tax_percentage"
+											   step=".01"
+											   min="0"
+											   placeholder="0.00">
 
-                                    <!-- NET -->
-                                    <div class="mb-3">
+										<span class="input-group-text">%</span>
 
-                                        <label class="form-label fw-semibold">
-                                            Net Value
-                                        </label>
+									</div>
 
-                                        <div class="input-group">
+									<div class="invalid-feedback"
+										 id="default_withholding_tax_percentage_error">
+									</div>
 
-                                            <input type="number"
-                                                   class="form-control rounded-start"
-                                                   name="default_net_percentage"
-                                                   id="default_net_percentage"
-                                                   step=".01"
-                                                   min="0"
-                                                   placeholder="0.00">
+								</div>
 
-                                            <span class="input-group-text">
-                                                %
-                                            </span>
 
-                                        </div>
+								<!-- PAYMENT TERMS -->
+								<div class="mb-4">
 
-                                    </div>
+									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-                                    <!-- VAT -->
-                                    <div class="mb-3">
+										<span class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+											  style="width:34px;height:34px;">
+											<i class="bi bi-calendar-check text-secondary"></i>
+										</span>
 
-                                        <label class="form-label fw-semibold">
-                                            VAT Value
-                                        </label>
+										<span>Payment Terms</span>
 
-                                        <div class="input-group">
+									</label>
 
-                                            <input type="number"
-                                                   class="form-control rounded-start"
-                                                   name="default_vat_percentage"
-                                                   id="default_vat_percentage"
-                                                   step=".01"
-                                                   min="0"
-                                                   placeholder="0.00">
+									<select class="form-select rounded-3"
+											name="default_payment_terms"
+											id="default_payment_terms">
 
-                                            <span class="input-group-text">
-                                                %
-                                            </span>
+										<option value="Not Set" selected>Not Set</option>
+										<option value="COD">COD</option>
+										<option value="7 Days">7 Days</option>
+										<option value="15 Days">15 Days</option>
+										<option value="30 Days">30 Days</option>
+										<option value="45 Days">45 Days</option>
+										<option value="60 Days">60 Days</option>
+										<option value="90 Days">90 Days</option>
 
-                                        </div>
+									</select>
 
-                                    </div>
+									<div class="invalid-feedback"
+										 id="default_payment_terms_error">
+									</div>
 
-                                    <!-- WITHHOLDING -->
-                                    <div class="mb-3">
+								</div>
 
-                                        <label class="form-label fw-semibold">
-                                            Withholding Tax
-                                        </label>
+							</div>
 
-                                        <div class="input-group">
+						</div>
 
-                                            <input type="number"
-                                                   class="form-control rounded-start"
-                                                   name="default_withholding_tax_percentage"
-                                                   id="default_withholding_tax_percentage"
-                                                   step=".01"
-                                                   min="0"
-                                                   placeholder="0.00">
+					</div>
 
-                                            <span class="input-group-text">
-                                                %
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                    <!-- PAYMENT TERMS -->
-                                    <div class="mb-0">
-
-                                        <label class="form-label fw-semibold">
-                                            Payment Terms
-                                        </label>
-
-                                        <input type="text"
-                                               class="form-control rounded-3"
-                                               name="default_payment_terms"
-                                               id="default_payment_terms"
-                                               placeholder="e.g. 30 Days">
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-
-                    </div>
-
-                </div></div>
+				</div>
+					
+					
+                       
+                </div>
+				
+				</div>
 
                 <!-- FOOTER -->
                 <div class="modal-footer border-0 px-4 pb-4">

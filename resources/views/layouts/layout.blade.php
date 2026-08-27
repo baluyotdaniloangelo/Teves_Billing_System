@@ -182,7 +182,7 @@ else if (Request::is('purchase_order_form/*')){
 	<body class="">
 	<?php
 }
-else if (Request::is('cashier_report')){
+else if (Request::is('cashier_report_fuel')){
 ?>
 <body class="">
 @include('layouts.footer')

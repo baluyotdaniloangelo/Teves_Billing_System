@@ -164,11 +164,29 @@
       </li>
 		<?php } ?>
 		
-		<li class="nav-item ">
-        <a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Sales Order">
-          <i class="bi bi-journal-text navbar_icon"></i>
-          <span title="Create Sales Order">Cashier's Report</span>
+
+
+	  <li class="nav-item ">
+	  
+		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Cashier's Report">
+          <i class="bi bi-graph-up-arrow navbar_icon"></i>
+          <span title="Cashier's Report">Cashier's Report</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
+		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
+          <li>
+		  
+			<a class="nav-link navbar_bg" href="{{ route('cashierReport_Fuel') }}" title="Create Cashier's Report for Fuel">
+			  <i class="bi bi-journal-text navbar_icon"></i>
+			  <span title="Create Cashier's Report for Fuel">Fuel</span>
+			</a>
+			
+			<a class="nav-link navbar_bg" href="" title="Create Cashier's Report for Fuel">
+			  <i class="bi bi-journal-text navbar_icon"></i>
+			  <span title="Create Cashier's Report for Fuel">LPG</span>
+			</a>
+			
+		  </li>
+		</ul>
       </li>
 	
 	  <li class="nav-item ">

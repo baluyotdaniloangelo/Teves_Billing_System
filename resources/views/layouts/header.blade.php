@@ -36,7 +36,7 @@
   <link href="{{asset('Datatables/2.0.8/css/dataTables.dataTables.css')}}" rel="stylesheet">
   <!--Responsive Datatable Plugin-->
   <link href="{{asset('Datatables/responsive/3.0.2/css/responsive.dataTables.css')}}" rel="stylesheet">  
- 
+	
   <link href="{{asset('style/custom_style_common.css')}}" rel="stylesheet">
   <link href="{{asset('style/custom_style_teves.css')}}" rel="stylesheet">
  

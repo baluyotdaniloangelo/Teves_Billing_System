@@ -33,7 +33,7 @@ class CashiersReportController extends Controller
 {
 	
 	/*Load client Interface*/
-	public function cashierReport(){
+	public function cashierReport_Fuel(){
 		
 		if(Session::has('loginID')){
 			
@@ -67,14 +67,14 @@ class CashiersReportController extends Controller
 				
 			}	
 			
-			return view("pages.cashiers_report", compact('data','title','teves_branch'));
+			return view("pages.cashiers_report_fuel", compact('data','title','teves_branch'));
 			
 		}
 		
 	}   
 	
 	/*Fetch client List using Datatable*/
-	public function getCashierReport(Request $request)
+	public function getCashierReportFuel(Request $request)
     {
 		
 		if(Session::has('loginID')){
@@ -82,7 +82,7 @@ class CashiersReportController extends Controller
 			$current_user = Session::get('loginID');
 			
 		if ($request->ajax()) {
-			
+			/* OLD QUERY
 				$data = CashiersReportModel::WHERE(function ($r) use($current_user) {
 							if (Session::get('user_branch_access_type')=="BYBRANCH") {
 									$r->whereRaw("teves_cashiers_report.teves_branch IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
@@ -111,7 +111,48 @@ class CashiersReportController extends Controller
 					'teves_cashiers_report.shift',
 					'teves_cashiers_report.created_at',
 					'teves_cashiers_report.updated_at']);
-			
+			*/
+			$data = CashiersReportModel::WHERE(function ($r) use ($current_user) { 
+				if (Session::get('user_branch_access_type') == "BYBRANCH") { 
+					$r->whereRaw(
+						"teves_cashiers_report.teves_branch IN 
+						(SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)",
+						[$current_user]
+					); 
+				} 
+			}) 
+			->whereNull('teves_cashiers_report.deleted_at')
+
+			// Only FUEL cashier reports
+			->where('teves_cashiers_report.cashier_report_type', 'FUEL')
+
+			->leftJoin('user_tb', function ($join) { 
+				$join->on('user_tb.user_id', '=', 'teves_cashiers_report.user_idx')
+					 ->whereNull('user_tb.deleted_at');
+			}) 
+
+			->leftJoin('teves_branch_table', function ($join) { 
+				$join->on(
+					'teves_branch_table.branch_id', 
+					'=', 
+					'teves_cashiers_report.teves_branch'
+				)
+				->whereNull('teves_branch_table.deleted_at');
+			}) 
+
+			->get([
+				'teves_cashiers_report.cashiers_report_id', 
+				'teves_cashiers_report.user_idx', 
+				'user_tb.user_real_name', 
+				'teves_branch_table.branch_code', 
+				'teves_cashiers_report.cashiers_name', 
+				'teves_cashiers_report.forecourt_attendant', 
+				'teves_cashiers_report.report_date', 
+				'teves_cashiers_report.shift', 
+				'teves_cashiers_report.created_at', 
+				'teves_cashiers_report.updated_at'
+			]);
+	
 			return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row){

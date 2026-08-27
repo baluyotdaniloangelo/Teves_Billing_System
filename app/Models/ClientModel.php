@@ -45,56 +45,84 @@ class ClientModel extends Model
 
 	protected $table = 'teves_client_table';
 	
-	protected $fillable = [
-        'client_name',
-        'customer_type',
-		'client_account_number',
-		'client_address',
-		'client_tin',
-		'client_email_address',
-		'client_contact_number',
-		'client_age',
-		'default_net_percentage',
-		'default_less_percentage',
-		'default_vat_percentage',
-		'default_withholding_tax_percentage',
-		'default_payment_terms',
-		'sales_agent_idx',
-		'created_at',
-		'created_by_user_idx',
-		'updated_at',
-		'updated_by_user_idx',
-		'deleted_at',
-		'deleted_by_user_id'
-    ];
+protected $fillable = [
+    'client_name',
+    'customer_type',
+    'client_account_number',
+    'client_address',
+    'client_tin',
+    'client_email_address',
+    'client_contact_number',
+
+    // Owner Information
+    'client_title',
+    'client_first_name',
+    'client_middle_name',
+    'client_last_name',
+    'client_name_extension',
+    'client_birthday',
+	'client_gender',
+
+    // Tax & Payment
+    'default_net_percentage',
+    'default_less_percentage',
+    'default_vat_percentage',
+    'default_withholding_tax_percentage',
+    'default_payment_terms',
+
+    // Referral
+    'sales_agent_idx',
+
+    // Audit
+    'created_at',
+    'created_by_user_idx',
+    'updated_at',
+    'updated_by_user_idx',
+    'deleted_at',
+    'deleted_by_user_id'
+];
+
+protected $primaryKey = 'client_id';
+
+protected static $logName = 'Client Information';
+
+protected static $logOnlyDirty = true;
+
+protected static $logAttributes = [
+    'client_name',
+    'customer_type',
+    'client_account_number',
+    'client_address',
+    'client_tin',
+    'client_email_address',
+    'client_contact_number',
+
+    // Owner Information
+    'client_title',
+    'client_first_name',
+    'client_middle_name',
+    'client_last_name',
+    'client_name_extension',
+    'client_birthday',
+	'client_gender',
 	
-	protected $primaryKey = 'client_id';
-     
-	protected static $logName = 'Client Information';
-	
-	protected static $logOnlyDirty = true;
-	
-	protected static $logAttributes = [
-		'client_name',
-        'customer_type',
-		'client_account_number',
-		'client_address',
-		'client_tin',
-		'client_email_address',
-		'client_contact_number',
-		'client_age',		
-		'default_net_percentage',
-		'default_less_percentage',
-		'default_vat_percentage',
-		'default_withholding_tax_percentage',
-		'default_payment_terms',
-		'sales_agent_idx',
-		'created_at',
-		'created_by_user_idx',
-		'updated_at',
-		'updated_by_user_idx',
-		'deleted_at',
-		'deleted_by_user_id'
-    ];
+    // Tax & Payment
+    'default_net_percentage',
+    'default_less_percentage',
+    'default_vat_percentage',
+    'default_withholding_tax_percentage',
+    'default_payment_terms',
+
+    // Referral
+    'sales_agent_idx',
+
+    // Audit
+    'created_at',
+    'created_by_user_idx',
+    'updated_at',
+    'updated_by_user_idx',
+    'deleted_at',
+    'deleted_by_user_id'
+];
        
 }

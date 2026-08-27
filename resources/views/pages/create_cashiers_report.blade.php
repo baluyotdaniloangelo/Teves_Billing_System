@@ -91,7 +91,7 @@
 					
 					  <form class="g-2 needs-validation" id="CashierReportformNew">
 						<div class="row mb-2">
-						  <label for="teves_branch" class="col-sm-3 col-form-label">Branch</label>
+						  <label for="teves_branch" class="col-sm-3 col-form-label">Branchddd</label>
 						  <div class="col-sm-9">
 							<select class="form-select form-control" required="" name="teves_branch" id="teves_branch">
 								<option value="GT">GT</option>

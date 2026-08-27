@@ -43,167 +43,293 @@ function initializeClientTable()
 
                 data: null,
                 name: 'client_name',
-                render: function(data){
-                    return `
+render: function(data) {
 
-<div class="client-card">
+    /*
+    ==========================================
+    OWNER FULL NAME
+    ==========================================
+    */
 
-    <div class="d-flex justify-content-between">
+    const ownerName = [
+        data.client_title,
+        data.client_first_name,
+        data.client_middle_name,
+        data.client_last_name,
+        data.client_name_extension
+    ]
+    .filter(value => value && value.trim() !== '')
+    .join(' ');
 
-<div class="d-flex justify-content-between align-items-center">
 
-    <div class="me-4 flex-shrink-0">
+    /*
+    ==========================================
+    BIRTHDAY
+    ==========================================
+    */
 
-        <img src="/images/default-avatar.png"
-             class="client-avatar"
-             alt="Client Avatar" >
+    let birthday = '-';
 
-    </div>
+    if (data.client_birthday) {
 
-    <div class="flex-grow-1">
+        const date = new Date(data.client_birthday);
 
-        <div class="client-name">
+        birthday = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
 
-            ${data.client_name}
 
-            <span class="badge bg-primary ms-2">
+    return `
 
-                ${data.customer_type ?? 'N/A'}
+        <div class="client-card">
 
-            </span>
+            <!-- ================================= -->
+            <!-- HEADER -->
+            <!-- ================================= -->
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- AVATAR -->
+                    <div class="me-4 flex-shrink-0">
+
+                        <img src="/images/default-avatar.png"
+                             class="client-avatar"
+                             alt="Client Avatar">
+
+                    </div>
+
+
+                    <!-- CLIENT INFORMATION -->
+                    <div class="flex-grow-1">
+
+                        <!-- COMPANY NAME -->
+                        <div class="client-name">
+
+                            ${data.client_name}
+
+                            <span class="badge bg-primary ms-2">
+
+                                ${data.customer_type ?? 'N/A'}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- OWNER -->
+                        <div class="client-sub">
+
+                            <i class="bi bi-person-badge text-primary me-1"></i>
+
+                            <strong>Owner:</strong>
+
+                            ${ownerName || '-'}
+
+                        </div>
+
+
+                        <!-- ACCOUNT NUMBER -->
+                        <div class="client-sub">
+
+                            <i class="bi bi-credit-card text-primary me-1"></i>
+
+                            <strong>Account Number:</strong>
+
+                            ${data.client_account_number}
+
+                        </div>
+
+
+                        <!-- TIN -->
+                        <div class="client-sub">
+
+                            <i class="bi bi-receipt text-primary me-1"></i>
+
+                            <strong>TIN:</strong>
+
+                            ${data.client_tin ?? '-'}
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+                        <div class="client-sub">
+
+                            <i class="bi bi-geo-alt text-primary me-1"></i>
+
+                            <strong>Address:</strong>
+
+                            ${data.client_address ?? '-'}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="client-actions">
+
+                        ${data.action}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- ================================= -->
+            <!-- CONTACT INFORMATION -->
+            <!-- ================================= -->
+
+            <div class="row">
+
+                <!-- CONTACT NUMBER -->
+                <div class="col-lg-6">
+
+                    <div class="client-sub">
+
+                        <small>
+
+                            <i class="bi bi-telephone-fill text-primary me-1"></i>
+
+                            <strong>Contact #:</strong>
+
+                            ${data.client_contact_number || '-'}
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+                <div class="col-lg-6">
+
+                    <div class="client-sub">
+
+                        <small>
+
+                            <i class="bi bi-envelope-fill text-primary me-1"></i>
+
+                            <strong>Email:</strong>
+
+                            ${data.client_email_address || '-'}
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- ================================= -->
+            <!-- OWNER / BIRTHDAY -->
+            <!-- ================================= -->
+
+            <div class="row">
+
+                <div class="col-lg-6">
+
+                    <div class="client-sub">
+
+                        <i class="bi bi-calendar-heart text-info me-1"></i>
+
+                        <strong>Birthday:</strong>
+
+                        ${birthday}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- TAX SETTINGS -->
+            <!-- ================================= -->
+
+            <div class="mt-3">
+
+                <span class="badge bg-danger">
+
+                    Less: ${data.default_less_percentage ?? 0}%
+
+                </span>
+
+                <span class="badge bg-success">
+
+                    Net: ${data.default_net_percentage ?? 0}
+
+                </span>
+
+                <span class="badge bg-info text-dark">
+
+                    VAT: ${data.default_vat_percentage ?? 0}%
+
+                </span>
+
+                <span class="badge bg-warning text-dark">
+
+                    WHT: ${data.default_withholding_tax_percentage ?? 0}%
+
+                </span>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- PAYMENT TERMS -->
+            <!-- ================================= -->
+
+            <div class="mt-3">
+
+                <i class="bi bi-calendar-check me-1 text-secondary"></i>
+
+                <strong>Payment Terms:</strong>
+
+                ${data.default_payment_terms ?? 'Not Set'}
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- ================================= -->
+            <!-- REFERRED BY -->
+            <!-- ================================= -->
+
+            <div class="mt-2">
+
+                <i class="bi bi-person-check-fill me-1 text-secondary"></i>
+
+                <strong>Referred By:</strong>
+
+                ${data.referred_by_name ?? 'None'}
+
+            </div>
 
         </div>
 
-        <div class="client-sub">
+    `;
 
-            <i class="bi bi-credit-card text-primary me-1"></i>
-
-            <strong>Account Number:</strong>
-
-            ${data.client_account_number}
-
-        </div>
-
-        <div class="client-sub">
-
-            <i class="bi bi-receipt text-primary me-1"></i>
-
-            <strong>TIN:</strong>
-
-            ${data.client_tin ?? "-"}
-
-        </div>
-
-        <div class="client-sub">
-
-            <i class="bi bi-geo-alt text-primary me-1"></i>
-
-            <strong>Address:</strong>
-
-            ${data.client_address ?? "-"}
-
-        </div>
-
-    </div>
-
-<!-- ACTION BUTTONS -->
-        <div class="client-actions">
-
-            ${data.action}
-
-        </div>
-
-</div>
-
-    </div>
-
-    <hr>
-
-    <div class="row">
-
-        <div class="client-sub">
-
-            <small>
-
-                <i class="bi bi-telephone-fill text-primary me-1">Contact #:</i>
-
-                ${data.client_contact_number || '-'}
-
-            </small>
-
-        </div>
-
-        <div class="client-sub">
-
-            <small>
-
-                <i class="bi bi-envelope-fill text-primary me-1">Email:</i>
-
-                ${data.client_email_address || '-'}
-
-            </small>
-
-        </div>
-
-    </div>
-
-    <hr>
-	
-    <div class="mt-3">
-
-        <span class="badge bg-danger">
-
-            Less: ${data.default_less_percentage}%
-
-        </span>
-
-        <span class="badge bg-success">
-
-            Net: ${data.default_net_percentage}
-
-        </span>
-
-        <span class="badge bg-info text-dark">
-
-            VAT: ${data.default_vat_percentage}%
-
-        </span>
-
-        <span class="badge bg-warning text-dark">
-
-            WHT: ${data.default_withholding_tax_percentage}%
-
-        </span>
-
-    </div>
-
-    <div class="mt-3">
-
-        <i class="bi bi-calendar-check me-1 text-secondary"></i>
-
-        <strong>Payment Terms:</strong>
-
-        ${data.default_payment_terms}
-
-    </div>
-
-    <hr>
-	
-    <div class="mt-2">
-
-        <i class="bi bi-person-check-fill me-1 text-secondary"></i>
-
-        <strong>Referred By:</strong>
-
-        ${data.referred_by_name ?? 'None'}
-
-    </div>
-
-</div>
-
-                    `;
-
-                }
+}
 
             }
 
@@ -325,66 +451,114 @@ EDIT MODAL
 
 function openEditClientModal()
 {
-    const clientID = $(this).data('id');
+const clientID = $(this).data('id');
 
-    resetClientForm();
-	$('#clear-client').hide();
-	
-    $('#CreateClientModal').modal('show');
+resetClientForm();
+$('#clear-client').hide();
 
-    $.ajax({
-        url: '/client_info',
-        type: 'POST',
-        data: {
-            clientID: clientID,
-            _token:
-                "{{ csrf_token() }}"
-        },
-        success: function(response)
+$('#CreateClientModal').modal('show');
+
+$.ajax({
+    url: '/client_info',
+    type: 'POST',
+    data: {
+        clientID: clientID,
+        _token: "{{ csrf_token() }}"
+    },
+    success: function(response)
+    {
+        console.log(response);
+
+        const data = response.data ?? response;
+
+        if (!data)
         {
-            console.log(response);
-            const data = response.data ?? response;
+            showDangerMessage('Client not found.');
+            return;
+        }
 
-            if(!data)
-            {
-                showDangerMessage('Client not found.');
-				return;
-            }
+        /*
+        ==========================================
+        LOAD CLIENT ID
+        ==========================================
+        */
 
-            /*
-            LOAD VALUES
-            */
-            $('#client_id').val(clientID);
-            $('#client_name').val(data.client_name);
-            $('#client_address').val(data.client_address);
-            $('#client_tin').val(data.client_tin);
-            $('#default_less_percentage').val(data.default_less_percentage);
-            $('#default_net_percentage').val(data.default_net_percentage);
-            $('#default_vat_percentage').val(data.default_vat_percentage);
-            $('#default_withholding_tax_percentage').val(data.default_withholding_tax_percentage);
-            $('#default_payment_terms').val(data.default_payment_terms);
-			
-			/*For SMS Notification*/
-			$('#client_contact_number').val(data.client_contact_number);
-			$('#client_age').val(data.client_age);
-			
-			/*For Email Notification*/
-			$('#client_email_address').val(data.client_email_address);
-            /*
-            REFERRAL
-            */
-            if(data.sales_agent_idx)
-            {
-                $('#sales_agent_id').val(data.sales_agent_name);
-            }
+        $('#client_id').val(clientID);
 
-            /*
-            UPDATE MODAL
-            */
-            $('#client_modal_title').text('Account Update');
-            $('#save-client').html(`<i class="bi bi-check-circle-fill me-2"></i>Update`);
 
-        },
+        /*
+        ==========================================
+        ACCOUNT INFORMATION
+        ==========================================
+        */
+
+        $('#customer_type').val(data.customer_type);
+        $('#client_name').val(data.client_name);
+        $('#client_address').val(data.client_address);
+        $('#client_contact_number').val(data.client_contact_number);
+        $('#client_email_address').val(data.client_email_address);
+
+
+        /*
+        ==========================================
+        OWNER INFORMATION
+        ==========================================
+        */
+
+        $('#client_title').val(data.client_title);
+        $('#client_gender').val(data.client_gender);
+        $('#client_first_name').val(data.client_first_name);
+        $('#client_middle_name').val(data.client_middle_name);
+        $('#client_last_name').val(data.client_last_name);
+        $('#client_name_extension').val(data.client_name_extension);
+        $('#client_birthday').val(data.client_birthday);
+
+
+        /*
+        ==========================================
+        TAX & PAYMENT SETTINGS
+        ==========================================
+        */
+
+        $('#client_tin').val(data.client_tin);
+        $('#default_less_percentage').val(data.default_less_percentage);
+        $('#default_net_percentage').val(data.default_net_percentage);
+        $('#default_vat_percentage').val(data.default_vat_percentage);
+        $('#default_withholding_tax_percentage').val(
+            data.default_withholding_tax_percentage
+        );
+        $('#default_payment_terms').val(data.default_payment_terms);
+
+
+        /*
+        ==========================================
+        REFERRAL
+        ==========================================
+        */
+
+        if (data.sales_agent_idx)
+        {
+            $('#sales_agent_id').val(data.sales_agent_name);
+        }
+        else
+        {
+            $('#sales_agent_id').val('');
+        }
+
+
+        /*
+        ==========================================
+        UPDATE MODAL
+        ==========================================
+        */
+
+        $('#client_modal_title').text('Account Update');
+
+        $('#save-client').html(
+            `<i class="bi bi-check-circle-fill me-2"></i>Update`
+        );
+
+    },
 
         error: function(xhr)
         {
@@ -416,53 +590,115 @@ function saveClient(event)
         '"]').attr('data-id');
 
     const payload = {
+
+        /*
+        ==========================================
+        CLIENT
+        ==========================================
+        */
+
         clientID: client_id,
+
+        /*
+        ==========================================
+        ACCOUNT INFORMATION
+        ==========================================
+        */
+
         client_name: $('#client_name').val(),
-        customer_type: $("#customer_type").val(),
+        customer_type: $('#customer_type').val(),
         client_address: $('#client_address').val(),
+        client_contact_number: $('#client_contact_number').val(),
+        client_email_address: $('#client_email_address').val(),
+
+        /*
+        ==========================================
+        OWNER INFORMATION
+        ==========================================
+        */
+
+        client_gender: $('#client_gender').val(),
+        client_title: $('#client_title').val(),
+        client_first_name: $('#client_first_name').val(),
+        client_middle_name: $('#client_middle_name').val(),
+        client_last_name: $('#client_last_name').val(),
+        client_name_extension: $('#client_name_extension').val(),
+        client_birthday: $('#client_birthday').val(),
+
+        /*
+        ==========================================
+        REFERRAL
+        ==========================================
+        */
+
+        sales_agent_idx: sales_agent_idx,
+
+        /*
+        ==========================================
+        TAX & PAYMENT SETTINGS
+        ==========================================
+        */
+
         client_tin: $('#client_tin').val(),
         default_less_percentage: $('#default_less_percentage').val(),
         default_net_percentage: $('#default_net_percentage').val(),
         default_vat_percentage: $('#default_vat_percentage').val(),
-        default_withholding_tax_percentage: $('#default_withholding_tax_percentage').val(),
-        default_payment_terms: $('#default_payment_terms').val(),
-        sales_agent_idx: sales_agent_idx,
-		client_contact_number: $('#client_contact_number').val(),
-		client_email_address: $('#client_email_address').val(),
-		client_age: $('#client_age').val(),
+        default_withholding_tax_percentage:
+            $('#default_withholding_tax_percentage').val(),
+        default_payment_terms:
+            $('#default_payment_terms').val(),
+
+        /*
+        ==========================================
+        CSRF
+        ==========================================
+        */
+
         _token: "{{ csrf_token() }}"
     };
 
+
     $.ajax({
-        url:
-            client_id
+        url: client_id
             ? '/update_client_post'
             : '/create_client_post',
+
         type: 'POST',
-		data: payload,
+
+        data: payload,
+
         beforeSend: function()
         {
-            setButtonLoading('#save-client',true);
+            setButtonLoading('#save-client', true);
         },
+
         success: function(response)
         {
             console.log(response);
+
             $('#CreateClientModal').modal('hide');
+
             reloadClientTable();
+
             showSuccessModal(response.success);
+
             resetClientForm();
         },
 
         complete: function()
         {
-            setButtonLoading('#save-client',false);
+            setButtonLoading('#save-client', false);
         },
 
         error: function(xhr)
         {
             console.log(xhr);
+
             handleClientValidation(xhr);
-			$('#action_error_message').text('Validation Error');
+
+            $('#action_error_message').text(
+                'Validation Error'
+            );
         }
 
     });
@@ -645,7 +881,7 @@ function showSuccessModal(message)
 VALIDATION
 ==================================================*/
 
-function handleClientValidation(xhr)
+function handleClientValidation_OLD(xhr)
 {
     /*
     GET ERRORS
@@ -683,6 +919,135 @@ function handleClientValidation(xhr)
         $('#client_tin_error').html(errors.client_tin[0]).show();
         firstError = errors.client_tin[0];
     }
+
+    /*
+    SHOW MODAL
+    */
+    showValidationErrorModal(firstError);
+}
+
+
+function handleClientValidation(xhr)
+{
+    /*
+    GET ERRORS
+    */
+    const errors = xhr.responseJSON.errors;
+
+    /*
+    DEFAULT MESSAGE
+    */
+    let firstError = 'Invalid input detected.';
+
+
+    /*
+    CLIENT NAME
+    */
+    if(errors.client_name)
+    {
+        $('#client_name_error')
+            .html(errors.client_name[0])
+            .show();
+
+        firstError = errors.client_name[0];
+    }
+
+
+    /*
+    ADDRESS
+    */
+    if(errors.client_address)
+    {
+        $('#client_address_error')
+            .html(errors.client_address[0])
+            .show();
+
+        if(firstError === 'Invalid input detected.')
+        {
+            firstError = errors.client_address[0];
+        }
+    }
+
+
+    /*
+    TIN
+    */
+    if(errors.client_tin)
+    {
+        $('#client_tin_error')
+            .html(errors.client_tin[0])
+            .show();
+
+        if(firstError === 'Invalid input detected.')
+        {
+            firstError = errors.client_tin[0];
+        }
+    }
+
+
+    /*
+    CONTACT NUMBER
+    */
+    if(errors.client_contact_number)
+    {
+        $('#client_contact_number_error')
+            .html(errors.client_contact_number[0])
+            .show();
+
+        if(firstError === 'Invalid input detected.')
+        {
+            firstError = errors.client_contact_number[0];
+        }
+    }
+
+
+    /*
+    FIRST NAME
+    */
+    if(errors.client_first_name)
+    {
+        $('#client_first_name_error')
+            .html(errors.client_first_name[0])
+            .show();
+
+        if(firstError === 'Invalid input detected.')
+        {
+            firstError = errors.client_first_name[0];
+        }
+    }
+
+
+    /*
+    LAST NAME
+    */
+    if(errors.client_last_name)
+    {
+        $('#client_last_name_error')
+            .html(errors.client_last_name[0])
+            .show();
+
+        if(firstError === 'Invalid input detected.')
+        {
+            firstError = errors.client_last_name[0];
+        }
+    }
+
+
+    /*
+    BIRTHDAY
+    */
+    if(errors.client_birthday)
+    {
+        $('#client_birthday_error')
+            .html(errors.client_birthday[0])
+            .show();
+
+        if(firstError === 'Invalid input detected.')
+        {
+            firstError = errors.client_birthday[0];
+        }
+    }
+
 
     /*
     SHOW MODAL
