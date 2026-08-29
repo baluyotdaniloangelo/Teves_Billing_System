@@ -179,12 +179,12 @@
 			  <i class="bi bi-journal-text navbar_icon"></i>
 			  <span title="Create Cashier's Report for Fuel">Fuel</span>
 			</a>
-			
+			<!--
 			<a class="nav-link navbar_bg" href="" title="Create Cashier's Report for Fuel">
 			  <i class="bi bi-journal-text navbar_icon"></i>
 			  <span title="Create Cashier's Report for Fuel">LPG</span>
 			</a>
-			
+			-->
 		  </li>
 		</ul>
       </li>
