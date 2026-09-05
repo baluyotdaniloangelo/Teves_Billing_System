@@ -530,8 +530,8 @@ Route::post('/delete_supplier_confirmed', [SupplierController::class, 'delete_su
 
 /*Load Cashier's Report List*/
 /*Dev Date May 10, 2023*/
-Route::get('/cashier_report_fuel', [CashiersReportController::class,'cashierReport_Fuel'])->name('cashierReport_Fuel')->middleware('isLoggedIn'); 
-Route::get('cashier_report_fuel/list', [CashiersReportController::class, 'getCashierReportFuel'])->name('getCashierReportFuel')->middleware('isLoggedIn');
+Route::get('/cashier_report', [CashiersReportController::class,'cashierReport'])->name('cashierReport')->middleware('isLoggedIn'); 
+Route::get('cashier_report/list', [CashiersReportController::class, 'getCashierReport'])->name('getCashierReport')->middleware('isLoggedIn');
 /*Create Cashier's Report Primary Information*/
 Route::post('/create_cashier_report_post', [CashiersReportController::class,'create_cashier_report_post'])->name('create_cashier_report_post')->middleware('isLoggedIn');
 /*Update Cashier's Report Primary Information*/
@@ -543,6 +543,7 @@ Route::post('/delete_cashiers_report_info', [CashiersReportController::class, 'd
 
 /*Cashiers Report Part 1*/
 Route::get('/cashiers_report_form/{id}', [CashiersReportController::class, 'cashiers_report_form'])->name('cashiers_report_form')->middleware('isLoggedIn');
+Route::get('/cashiers_report_form_new/{id}', [CashiersReportController::class, 'cashiers_report_form_new'])->name('cashiers_report_form_new')->middleware('isLoggedIn');
 /*Save Cashier's Report Product*/
 Route::post('/save_product_cashiers_report_p1', [CashiersReportController::class,'save_product_cashiers_report_p1'])->name('SAVE_CHR_PH1')->middleware('isLoggedIn');
 /* Load Product P1 */

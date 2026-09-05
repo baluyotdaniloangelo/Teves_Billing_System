@@ -354,71 +354,23 @@ class ClientController extends Controller
 
 	} 
 
-	public function create_client_post_OLD(Request $request){
-		
-		$request->validate([
-          'client_name'      		=> 'required|unique:teves_client_table,client_name',
-		  'client_address'   		=> 'required',
-		  'client_tin'    			=> 'required',
-		  'client_contact_number' 	=> 'nullable|string|max:50',
-		  'client_birthday'            	=> 'nullable',
-        ], 
-        [
-			'client_name.required' => 'Client Name is required',
-			'client_address.required' => 'Address is Required',
-			'client_tin.required' => 'TIN is Required'
-        ]
-		);
-		
-			@$last_id = ClientModel::latest()->first()->client_id;
-
-			// Add 2345 first, then reverse
-			$_computed = $last_id + 1 + 1135;
-			$_reversed = strrev((string) $_computed);
-				
-				if($_reversed<1000){
-					$reversed = $_reversed + 999;
-				}else{
-					$reversed = $_reversed;
-				}
-
-			// Ensure exactly 8 digits with leading zeros
-			$client_account_number = str_pad($reversed, 8, "0", STR_PAD_LEFT);
-
-			$client = new ClientModel();
-			$client->client_name 						= $request->client_name;
-			$client->customer_type						= $request->customer_type;
-			$client->client_account_number 				= $client_account_number;
-			$client->client_address 					= $request->client_address;
-			$client->client_tin 						= $request->client_tin;
-			$client->client_email_address 				= $request->client_email_address;
-			$client->client_contact_number 				= $request->client_contact_number;
-			$client->client_birthday 						= $request->client_birthday;
-			$client->default_less_percentage 			= $request->default_less_percentage;
-			$client->default_net_percentage 			= $request->default_net_percentage;
-			$client->default_vat_percentage 			= $request->default_vat_percentage;
-			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
-			$client->default_payment_terms 				= $request->default_payment_terms;
-			$client->sales_agent_idx 					= $request->sales_agent_idx;
-			$client->created_by_user_idx 				= Session::get('loginID');
-			
-			$result = $client->save();
-			if($result){
-				return response()->json(['success'=>'Client Information Successfully Created!']);
-			}
-			else{
-				return response()->json(['success'=>'Error on Insert client Information']);
-			}
-	}
-
-
 	public function create_client_post(Request $request)
 	{
 		$request->validate(
 			[
 				'client_name'           => 'required|unique:teves_client_table,client_name',
 				'customer_type'         => 'required',
+				
 				'client_address'        => 'required',
+				
+				'client_house_number' => 'nullable|string|max:100',
+				'client_street'       => 'nullable|string|max:255',
+				'client_subdivision'  => 'nullable|string|max:255',
+				'client_barangay'     => 'required|string|max:255',
+				'client_city'         => 'required|string|max:255',
+				'client_province'     => 'required|string|max:255',
+				'client_country'      => 'required|string|max:100',
+	
 				'client_tin'            => 'required',
 				'client_contact_number' => 'required|string|max:50',
 				'client_email_address'  => 'nullable|email|max:255',
@@ -440,11 +392,18 @@ class ClientController extends Controller
 				'default_payment_terms'              => 'nullable|string|max:255',
 			],
 			[
-				'client_name.required'    => 'Company Name is required',
-				'client_address.required' => 'Address is Required',
-				'client_tin.required'     => 'TIN is Required',
+				'client_name.required'       => 'Company Name is required',
+				'client_contact_number.required'       => 'Contact Number is required',
+				
+				'client_address.required'    => 'Address is Required',
+				'client_barangay.required'   => 'Barangay is Required',
+				'client_city.required'    	 => 'City is Required',
+				'client_province.required'   => 'Province is Required',
+				'client_country.required'    => 'Country is Required',
+				
+				'client_tin.required'        => 'TIN is Required',
 				'client_email_address.email' => 'Please enter a valid email address.',
-				'client_birthday.date'    => 'Please enter a valid birthday.',
+				'client_birthday.date'       => 'Please enter a valid birthday.',
 			]
 		);
 
@@ -600,48 +559,6 @@ class ClientController extends Controller
 			]);
 		}
 	}
-
-	public function update_client_post_OLD(Request $request){
-		
-		$request->validate([
-          'client_name'      		=> 'required|unique:teves_client_table,client_name,'.$request->clientID.',client_id',
-		  'client_address'      	=> 'required',
-		  'client_tin'      		=> 'required',
-		  'client_contact_number' 	=> 'nullable|string|max:50',
-		  'client_birthday'            	=> 'nullable',
-        ], 
-        [
-			'client_name.required' => 'Client Name is required',
-			'client_address.required' => 'Address is Required',
-			'client_tin.required' => 'TIN is Required'
-        ]
-		);
-			
-			$client = new ClientModel();
-			$client = ClientModel::find($request->clientID);
-			$client->client_name 						= $request->client_name;
-			$client->customer_type						= $request->customer_type;
-			$client->client_address 					= $request->client_address;
-			$client->client_tin 						= $request->client_tin;
-			$client->client_email_address 				= $request->client_email_address;
-			$client->client_contact_number 				= $request->client_contact_number;
-			$client->client_birthday 					= $request->client_birthday;
-			$client->default_less_percentage 			= $request->default_less_percentage;
-			$client->default_net_percentage 			= $request->default_net_percentage;
-			$client->default_vat_percentage 			= $request->default_vat_percentage;
-			$client->default_withholding_tax_percentage = $request->default_withholding_tax_percentage;
-			$client->default_payment_terms 				= $request->default_payment_terms;
-			$client->sales_agent_idx 					= $request->sales_agent_idx;
-			$client->updated_by_user_idx 				= Session::get('loginID');
-			
-			$result = $client->update();
-			if($result){
-				return response()->json(['success'=>'Client Information Successfully Updated!']);
-			}
-			else{
-				return response()->json(['success'=>'Error on Update client Information']);
-			}
-	}
 	
 	public function update_client_post(Request $request)
 	{
@@ -650,7 +567,17 @@ class ClientController extends Controller
 				'clientID'              => 'required|integer|exists:teves_client_table,client_id',
 				'client_name'           => 'required|unique:teves_client_table,client_name,' . $request->clientID . ',client_id',
 				'customer_type'         => 'required',
+				
 				'client_address'        => 'required',
+						  				
+				'client_house_number' => 'nullable|string|max:100',
+				'client_street'       => 'nullable|string|max:255',
+				'client_subdivision'  => 'nullable|string|max:255',
+				'client_barangay'     => 'required|string|max:255',
+				'client_city'         => 'required|string|max:255',
+				'client_province'     => 'required|string|max:255',
+				'client_country'      => 'required|string|max:100',
+				
 				'client_tin'            => 'required',
 
 				'client_contact_number' => 'required',
@@ -674,7 +601,14 @@ class ClientController extends Controller
 			],
 			[
 				'client_name.required'       => 'Company Name is required',
+				'client_contact_number.required'       => 'Contact Number is required',
+				
 				'client_address.required'    => 'Address is Required',
+				'client_barangay.required'   => 'Barangay is Required',
+				'client_city.required'    	 => 'City is Required',
+				'client_province.required'   => 'Province is Required',
+				'client_country.required'    => 'Country is Required',
+				
 				'client_tin.required'        => 'TIN is Required',
 				'client_email_address.email' => 'Please enter a valid email address.',
 				'client_birthday.date'       => 'Please enter a valid birthday.',

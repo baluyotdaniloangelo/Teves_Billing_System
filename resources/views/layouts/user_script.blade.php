@@ -574,7 +574,7 @@
 				  if(result) {
 					
 					document.getElementById("update-user-site-access").value = UserID;
-					LoadCList.clear().draw();
+					LoadSiteList.clear().draw();
 					LoadSiteList.rows.add(result.data).draw();
 					
 					var access_type = 'branch';

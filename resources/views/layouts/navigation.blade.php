@@ -175,9 +175,9 @@
 		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
           <li>
 		  
-			<a class="nav-link navbar_bg" href="{{ route('cashierReport_Fuel') }}" title="Create Cashier's Report for Fuel">
+			<a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Cashier's Report for Fuel">
 			  <i class="bi bi-journal-text navbar_icon"></i>
-			  <span title="Create Cashier's Report for Fuel">Fuel</span>
+			  <span title="Create Cashier's Report">List</span>
 			</a>
 			<!--
 			<a class="nav-link navbar_bg" href="" title="Create Cashier's Report for Fuel">
@@ -191,37 +191,37 @@
 	
 	  <li class="nav-item ">
 	  
-		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
+		<a class="nav-link collapsed " data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
           <i class="bi bi-graph-up-arrow navbar_icon"></i>
           <span title="Generate Billing History">Report</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
 		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
           <li>
-			<a href="{{ route('report') }}" class="sidebar_li_a" title="Billing History">
+			<a href="{{ route('report') }}" class="" title="Billing History">
               <i class="bi bi-file-earmark-text navbar_icon" title="Billing History"></i><span> Billing History</span>
             </a>
 			
-			<a href="{{ route('salesordersummary') }}" class="sidebar_li_a" title="Sales Summary">
+			<a href="{{ route('salesordersummary') }}" class="" title="Sales Summary">
               <i class="bi bi-bar-chart-line navbar_icon" title="Sales Order Summary"></i><span> Sales Order</span>
             </a>		
 			
-			<a href="{{ route('purchaseordersummary') }}" class="sidebar_li_a" title="Purchase Order Summary">
+			<a href="{{ route('purchaseordersummary') }}" class="" title="Purchase Order Summary">
               <i class="bi bi-bar-chart-line navbar_icon" title="Purchase Order Summary"></i><span> Purchase Order</span>
             </a>
 			
-			<a href="{{ route('soa_summary_history') }}" class="sidebar_li_a" title="Statement of Account Summary">
+			<a href="{{ route('soa_summary_history') }}" class="" title="Statement of Account Summary">
               <i class="bi bi-file-earmark-text navbar_icon" title="SOA Summary"></i><span> SOA Summary</span>
             </a>
 			
-			<a href="{{ route('daily_sales') }}" class="sidebar_li_a" title="Daily Sales">
+			<a href="{{ route('daily_sales') }}" class="" title="Daily Sales">
               <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Daily Sales</span>
             </a>
 			
-			<a href="{{ route('cash_report_page') }}" class="sidebar_li_a" title="Daily Sales">
+			<a href="{{ route('cash_report_page') }}" class="" title="Daily Sales">
               <i class="bi bi-bar-chart-line navbar_icon" title="Cash/Non-Cash Report"></i><span> Cash/Non-Cash</span>
             </a>
 			
-			<a href="{{ route('sales_report') }}" class="sidebar_li_a" title="Sales Report">
+			<a href="{{ route('sales_report') }}" class="" title="Sales Report">
               <i class="bi bi-bar-chart-line navbar_icon" title="Sales Report"></i><span> Sales Report</span>
             </a>
 			

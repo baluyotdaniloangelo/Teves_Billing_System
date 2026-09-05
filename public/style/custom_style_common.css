@@ -392,10 +392,6 @@ table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thea
 	/*margin-bottom: 8px;*/
 }
 
-.sidebar-nav .nav-item {
-     margin-bottom: 0px !important;
-}
-
 .nav-tabs-bordered .nav-link.active{
 	border-color : #ff8d00 !important;
 	font-weight: bold;

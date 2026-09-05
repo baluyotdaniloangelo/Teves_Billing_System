@@ -4,7 +4,7 @@
      tabindex="-1"
      aria-hidden="true">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
 
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
@@ -112,7 +112,7 @@
 
 							<div class="row">
 
-								<div class="col-lg-8 mx-auto">
+								<div class="col-lg-12 mx-auto">
 
 									<!-- CUSTOMER TYPE -->
 									<div class="mb-4">
@@ -180,90 +180,261 @@
 
 									</div>
 
+<!-- CONTACT NUMBER + EMAIL ADDRESS -->
+<div class="row g-3 mb-4">
 
-									<!-- ADDRESS -->
-									<div class="mb-4">
+    <!-- CONTACT NUMBER -->
+    <div class="col-md-6">
 
-										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-											<span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-												  style="width:34px;height:34px;">
-												<i class="bi bi-geo-alt text-primary"></i>
-											</span>
+            <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-telephone-fill text-success"></i>
+            </span>
 
-											<span>Address</span>
+            <span>Contact Number</span>
 
-										</label>
+        </label>
 
-										<textarea class="form-control rounded-3"
-												  name="client_address"
-												  id="client_address"
-												  rows="2"
-												  placeholder="Enter Complete Address"
-												  required></textarea>
+        <input type="text"
+               class="form-control rounded-3"
+               name="client_contact_number"
+               id="client_contact_number"
+               placeholder="09XXXXXXXXX"
+               autocomplete="off"
+               required>
 
-										<div class="invalid-feedback"
-											 id="client_address_error">
-										</div>
+        <div class="invalid-feedback"
+             id="client_contact_number_error">
+        </div>
 
-									</div>
-
-
-									<!-- CONTACT NUMBER -->
-									<div class="mb-4">
-
-										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
-
-											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-												  style="width:34px;height:34px;">
-												<i class="bi bi-telephone-fill text-success"></i>
-											</span>
-
-											<span>Contact Number</span>
-
-										</label>
-
-										<input type="text"
-											   class="form-control rounded-3"
-											   name="client_contact_number"
-											   id="client_contact_number"
-											   placeholder="09XXXXXXXXX"
-											   autocomplete="off"
-											   required>
-
-										<div class="invalid-feedback"
-											 id="client_contact_number_error">
-										</div>
-
-									</div>
+    </div>
 
 
-									<!-- EMAIL ADDRESS -->
-									<div class="mb-4">
+    <!-- EMAIL ADDRESS -->
+    <div class="col-md-6">
 
-										<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-											<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-												  style="width:34px;height:34px;">
-												<i class="bi bi-envelope-fill text-success"></i>
-											</span>
+            <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-envelope-fill text-success"></i>
+            </span>
 
-											<span>Email Address</span>
+            <span>Email Address</span>
 
-										</label>
+        </label>
 
-										<input type="email"
-											   class="form-control rounded-3"
-											   name="client_email_address"
-											   id="client_email_address"
-											   placeholder="Enter Email Address"
-											   autocomplete="off">
+        <input type="email"
+               class="form-control rounded-3"
+               name="client_email_address"
+               id="client_email_address"
+               placeholder="Enter Email Address"
+               autocomplete="off">
 
-										<div class="invalid-feedback"
-											 id="client_email_address_error">
-										</div>
+        <div class="invalid-feedback"
+             id="client_email_address_error">
+        </div>
 
-									</div>
+    </div>
+
+</div>
+<!-- ADDRESS -->
+<div class="mb-4">
+
+    <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-3">
+
+        <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+              style="width:34px;height:34px;">
+            <i class="bi bi-geo-alt text-primary"></i>
+        </span>
+
+        <span>Address</span>
+
+    </label>
+
+
+    <!-- ROW 1: House Number + Street -->
+    <div class="row g-3 mb-3">
+
+        <!-- House Number -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">
+                House Number
+            </label>
+
+            <input type="text"
+                   class="form-control rounded-3"
+                   name="client_house_number"
+                   id="client_house_number"
+                   placeholder="House Number"
+                   autocomplete="off">
+
+            <div class="invalid-feedback"
+                 id="client_house_number_error">
+            </div>
+        </div>
+
+
+        <!-- Street -->
+        <div class="col-md-8">
+            <label class="form-label fw-semibold">
+                Street
+            </label>
+
+            <input type="text"
+                   class="form-control rounded-3"
+                   name="client_street"
+                   id="client_street"
+                   placeholder="Street"
+                   autocomplete="off">
+
+            <div class="invalid-feedback"
+                 id="client_street_error">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ROW 4: Subdivision -->
+    <div class="mb-3">
+
+        <label class="form-label fw-semibold">
+            Subdivision / Village
+        </label>
+
+        <input type="text"
+               class="form-control rounded-3"
+               name="client_subdivision"
+               id="client_subdivision"
+               placeholder="Subdivision / Village"
+               autocomplete="off">
+
+        <div class="invalid-feedback"
+             id="client_subdivision_error">
+        </div>
+
+    </div>
+	
+    <!-- ROW 2: Barangay + City -->
+    <div class="row g-3 mb-3">
+
+        <!-- Barangay -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">
+                Barangay <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-control rounded-3"
+                   name="client_barangay"
+                   id="client_barangay"
+                   placeholder="Barangay"
+                   autocomplete="off"
+                   required>
+
+            <div class="invalid-feedback"
+                 id="client_barangay_error">
+            </div>
+        </div>
+
+
+        <!-- City / Municipality -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">
+                City / Municipality <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-control rounded-3"
+                   name="client_city"
+                   id="client_city"
+                   placeholder="City / Municipality"
+                   autocomplete="off"
+                   required>
+
+            <div class="invalid-feedback"
+                 id="client_city_error">
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ROW 3: Province + Country -->
+    <div class="row g-3 mb-3">
+
+        <!-- Province -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">
+                Province <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-control rounded-3"
+                   name="client_province"
+                   id="client_province"
+                   placeholder="Province"
+                   autocomplete="off"
+                   required>
+
+            <div class="invalid-feedback"
+                 id="client_province_error">
+            </div>
+        </div>
+
+
+        <!-- Country -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">
+                Country <span class="text-danger">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-control rounded-3"
+                   name="client_country"
+                   id="client_country"
+                   value="Philippines"
+                   placeholder="Country"
+                   autocomplete="off"
+                   required>
+
+            <div class="invalid-feedback"
+                 id="client_country_error">
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <!-- COMPLETE ADDRESS -->
+    <div class="mb-3">
+
+        <label class="form-label fw-semibold">
+            Complete Address
+        </label>
+
+        <textarea class="form-control rounded-3"
+                  name="client_address"
+                  id="client_address"
+                  rows="2"
+                  placeholder="Complete address will be generated automatically"
+                  readonly></textarea>
+
+        <div class="invalid-feedback"
+             id="client_address_error">
+        </div>
+
+    </div>
+
+</div>
+
+
+
 
 								</div>
 
@@ -272,243 +443,241 @@
 						</div>
 					</div>
 
-<!-- ===================================== -->
-<!-- OWNER INFORMATION -->
-<!-- ===================================== -->
+					<!-- ===================================== -->
+					<!-- OWNER INFORMATION -->
+					<!-- ===================================== -->
 
-<div class="tab-pane fade"
-     id="owner-information-tab"
-     role="tabpanel">
+					<div class="tab-pane fade"
+						 id="owner-information-tab"
+						 role="tabpanel">
 
-    <div class="row">
+						<div class="row">
 
-        <div class="col-lg-8 mx-auto">
+							<div class="col-lg-12 mx-auto">
 
-            <!-- ================================= -->
-            <!-- TITLE -->
-            <!-- ================================= -->
+								<!-- TITLE + GENDER -->
+								<div class="row g-3 mb-4">
 
-            <div class="mb-4">
+									<!-- TITLE -->
+									<div class="col-md-4">
 
-                <label class="form-label fw-semibold">
-                    Title
-                </label>
+										<label class="form-label fw-semibold">
+											Title
+										</label>
 
-                <input type="text"
-                       class="form-control rounded-3"
-                       name="client_title"
-                       id="client_title"
-                       placeholder="Enter Title (Example: Dr., Engr.)"
-                       autocomplete="off"
-                       required>
+										<input type="text"
+											   class="form-control rounded-3"
+											   name="client_title"
+											   id="client_title"
+											   placeholder="Dr., Engr."
+											   autocomplete="off"
+											   required>
 
-                <div class="invalid-feedback"
-                     id="client_title_error">
-                </div>
+										<div class="invalid-feedback"
+											 id="client_title_error">
+										</div>
 
-            </div>
+									</div>
 
 
-            <!-- ================================= -->
-            <!-- GENDER -->
-            <!-- ================================= -->
+									<!-- GENDER -->
+									<div class="col-md-8">
 
-            <div class="mb-4">
+										<label class="form-label fw-semibold">
+											Gender
+										</label>
 
-                <label class="form-label fw-semibold">
-                    Gender
-                </label>
+										<select class="form-select rounded-3"
+												name="client_gender"
+												id="client_gender"
+												required>
 
-                <select class="form-select rounded-3"
-                        name="client_gender"
-                        id="client_gender"
-                        required>
+											<option value="">Select Gender</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
 
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
+										</select>
 
-                </select>
+										<div class="invalid-feedback"
+											 id="client_gender_error">
+										</div>
 
-                <div class="invalid-feedback"
-                     id="client_gender_error">
-                </div>
+									</div>
 
-            </div>
+								</div>
 
+								<!-- ================================= -->
+								<!-- FIRST NAME -->
+								<!-- ================================= -->
 
-            <!-- ================================= -->
-            <!-- FIRST NAME -->
-            <!-- ================================= -->
+								<div class="mb-4">
 
-            <div class="mb-4">
+									<label class="form-label fw-semibold">
+										First Name
+									</label>
 
-                <label class="form-label fw-semibold">
-                    First Name
-                </label>
+									<input type="text"
+										   class="form-control rounded-3"
+										   name="client_first_name"
+										   id="client_first_name"
+										   placeholder="Enter First Name"
+										   autocomplete="off"
+										   required>
 
-                <input type="text"
-                       class="form-control rounded-3"
-                       name="client_first_name"
-                       id="client_first_name"
-                       placeholder="Enter First Name"
-                       autocomplete="off"
-                       required>
+									<div class="invalid-feedback"
+										 id="client_first_name_error">
+									</div>
 
-                <div class="invalid-feedback"
-                     id="client_first_name_error">
-                </div>
+								</div>
 
-            </div>
 
+								<!-- ================================= -->
+								<!-- MIDDLE NAME -->
+								<!-- ================================= -->
 
-            <!-- ================================= -->
-            <!-- MIDDLE NAME -->
-            <!-- ================================= -->
+								<div class="mb-4">
 
-            <div class="mb-4">
+									<label class="form-label fw-semibold">
+										Middle Name
+									</label>
 
-                <label class="form-label fw-semibold">
-                    Middle Name
-                </label>
+									<input type="text"
+										   class="form-control rounded-3"
+										   name="client_middle_name"
+										   id="client_middle_name"
+										   placeholder="Enter Middle Name"
+										   autocomplete="off">
 
-                <input type="text"
-                       class="form-control rounded-3"
-                       name="client_middle_name"
-                       id="client_middle_name"
-                       placeholder="Enter Middle Name"
-                       autocomplete="off">
+									<div class="invalid-feedback"
+										 id="client_middle_name_error">
+									</div>
 
-                <div class="invalid-feedback"
-                     id="client_middle_name_error">
-                </div>
+								</div>
 
-            </div>
 
+								<!-- ================================= -->
+								<!-- LAST NAME -->
+								<!-- ================================= -->
 
-            <!-- ================================= -->
-            <!-- LAST NAME -->
-            <!-- ================================= -->
+								<div class="mb-4">
 
-            <div class="mb-4">
+									<label class="form-label fw-semibold">
+										Last Name
+									</label>
 
-                <label class="form-label fw-semibold">
-                    Last Name
-                </label>
+									<input type="text"
+										   class="form-control rounded-3"
+										   name="client_last_name"
+										   id="client_last_name"
+										   placeholder="Enter Last Name"
+										   autocomplete="off"
+										   required>
 
-                <input type="text"
-                       class="form-control rounded-3"
-                       name="client_last_name"
-                       id="client_last_name"
-                       placeholder="Enter Last Name"
-                       autocomplete="off"
-                       required>
+									<div class="invalid-feedback"
+										 id="client_last_name_error">
+									</div>
 
-                <div class="invalid-feedback"
-                     id="client_last_name_error">
-                </div>
+								</div>
 
-            </div>
 
+								<!-- ================================= -->
+								<!-- NAME EXTENSION -->
+								<!-- ================================= -->
 
-            <!-- ================================= -->
-            <!-- NAME EXTENSION -->
-            <!-- ================================= -->
+								<div class="mb-4">
 
-            <div class="mb-4">
+									<label class="form-label fw-semibold">
+										Name Extension
+									</label>
 
-                <label class="form-label fw-semibold">
-                    Name Extension
-                </label>
+									<select class="form-select rounded-3"
+											name="client_name_extension"
+											id="client_name_extension">
 
-                <select class="form-select rounded-3"
-                        name="client_name_extension"
-                        id="client_name_extension">
+										<option value="">None</option>
+										<option value="Jr.">Jr.</option>
+										<option value="Sr.">Sr.</option>
+										<option value="II">II</option>
+										<option value="III">III</option>
+										<option value="IV">IV</option>
+										<option value="V">V</option>
 
-                    <option value="">None</option>
-                    <option value="Jr.">Jr.</option>
-                    <option value="Sr.">Sr.</option>
-                    <option value="II">II</option>
-                    <option value="III">III</option>
-                    <option value="IV">IV</option>
-                    <option value="V">V</option>
+									</select>
 
-                </select>
+									<div class="invalid-feedback"
+										 id="client_name_extension_error">
+									</div>
 
-                <div class="invalid-feedback"
-                     id="client_name_extension_error">
-                </div>
+								</div>
 
-            </div>
 
+								<!-- ================================= -->
+								<!-- BIRTHDAY -->
+								<!-- ================================= -->
 
-            <!-- ================================= -->
-            <!-- BIRTHDAY -->
-            <!-- ================================= -->
+								<div class="mb-4">
 
-            <div class="mb-4">
+									<label class="form-label fw-semibold">
+										Birthday
+									</label>
 
-                <label class="form-label fw-semibold">
-                    Birthday
-                </label>
+									<input type="date"
+										   class="form-control rounded-3"
+										   name="client_birthday"
+										   id="client_birthday"
+										   required>
 
-                <input type="date"
-                       class="form-control rounded-3"
-                       name="client_birthday"
-                       id="client_birthday"
-                       required>
+									<div class="invalid-feedback"
+										 id="client_birthday_error">
+									</div>
 
-                <div class="invalid-feedback"
-                     id="client_birthday_error">
-                </div>
+								</div>
 
-            </div>
 
+								<!-- ================================= -->
+								<!-- REFERRED BY -->
+								<!-- ================================= -->
 
-            <!-- ================================= -->
-            <!-- REFERRED BY -->
-            <!-- ================================= -->
+								<div class="mb-4">
 
-            <div class="mb-4">
+									<label class="form-label fw-semibold">
+										Referred By
+									</label>
 
-                <label class="form-label fw-semibold">
-                    Referred By
-                </label>
+									<input class="form-control rounded-3"
+										   list="sales_agent_name"
+										   name="sales_agent_name"
+										   id="sales_agent_id"
+										   autocomplete="off"
+										   placeholder="Search Sales Agent">
 
-                <input class="form-control rounded-3"
-                       list="sales_agent_name"
-                       name="sales_agent_name"
-                       id="sales_agent_id"
-                       autocomplete="off"
-                       placeholder="Search Sales Agent">
+									<datalist id="sales_agent_name">
 
-                <datalist id="sales_agent_name">
+										@foreach ($sales_agent_data as $sales_agent_data_cols)
 
-                    @foreach ($sales_agent_data as $sales_agent_data_cols)
+											<option
+												label="{{ $sales_agent_data_cols->sales_agent_name }}"
+												data-id="{{ $sales_agent_data_cols->sales_agent_id }}"
+												value="{{ $sales_agent_data_cols->sales_agent_name }}">
+											</option>
 
-                        <option
-                            label="{{ $sales_agent_data_cols->sales_agent_name }}"
-                            data-id="{{ $sales_agent_data_cols->sales_agent_id }}"
-                            value="{{ $sales_agent_data_cols->sales_agent_name }}">
-                        </option>
+										@endforeach
 
-                    @endforeach
+									</datalist>
 
-                </datalist>
+									<div class="invalid-feedback"
+										 id="sales_agent_name_error">
+									</div>
 
-                <div class="invalid-feedback"
-                     id="sales_agent_name_error">
-                </div>
+								</div>
 
-            </div>
+							</div>
 
-        </div>
+						</div>
 
-    </div>
+					</div>
 
-</div>
-
-					
+										
 
 					<!-- ===================================== -->
 					<!-- TAX & PAYMENT SETTINGS -->
@@ -519,7 +688,7 @@
 
 						<div class="row">
 
-							<div class="col-lg-8 mx-auto">
+							<div class="col-lg-12 mx-auto">
 
 								<!-- TIN -->
 								<div class="mb-4">

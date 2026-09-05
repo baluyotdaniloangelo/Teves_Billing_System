@@ -50,6 +50,7 @@
 @include('pages.purchase_order_form.scripts.product_script')
 @include('pages.purchase_order_form.scripts.withdrawal_script')
 @include('pages.purchase_order_form.scripts.payment_script')
+@include('pages.purchase_order_form.scripts.validation_script')
 
 @endsection
 

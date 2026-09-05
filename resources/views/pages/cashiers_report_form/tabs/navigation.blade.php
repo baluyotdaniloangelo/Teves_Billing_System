@@ -2,40 +2,39 @@
     id="PurchaseOrderTab"
     role="tablist">
 
-    <!-- PURCHASE ORDER INFORMATION -->
+    <!-- PURCHASE ORDER INFORMATION
     <li class="nav-item" role="presentation">
 
         <button class="nav-link active rounded-3 py-3 fw-semibold shadow-sm"
-                id="purchase_order_info-tab"
+                id="cashiers_report_info-tab"
                 data-bs-toggle="tab"
-                data-bs-target="#purchase_order_info"
+                data-bs-target="#cashiers_report_info"
                 type="button"
                 role="tab"
-                aria-controls="purchase_order_info"
+                aria-controls="cashiers_report_info"
                 aria-selected="true">
 
             <i class="bi bi-file-earmark-text me-2"></i>
-            Purchase Order Information
+            Information
 
         </button>
 
     </li>
-
+	-->
     <!-- PRODUCT -->
     <li class="nav-item" role="presentation">
 
-        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
-                id="purchase_order_product_list-tab"
+        <button class="nav-link active rounded-3 py-3 fw-semibold shadow-sm"
+                id="cashiers_report_fuel-tab"
                 data-bs-toggle="tab"
-                data-bs-target="#purchase_order_product_list"
+                data-bs-target="#cashiers_report_fuel"
                 type="button"
                 role="tab"
-                aria-controls="purchase_order_product_list"
-                aria-selected="false"
-                onclick="LoadProduct()">
+                aria-controls="cashiers_report_fuel"
+                aria-selected="false">
 
             <i class="bi bi-box-seam me-2"></i>
-            Products
+            Fuel Report
 
         </button>
 
@@ -55,7 +54,7 @@
                 title="Product Withdrawal List, Create, Update and Delete Withdrawal">
 
             <i class="bi bi-truck me-2"></i>
-            Withdrawal
+            LPG Report
 
         </button>
 
@@ -74,7 +73,7 @@
                 aria-selected="false">
 
             <i class="bi bi-credit-card-2-front me-2"></i>
-            Payment
+            Cash Report
 
         </button>
 

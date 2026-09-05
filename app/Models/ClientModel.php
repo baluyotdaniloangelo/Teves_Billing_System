@@ -49,8 +49,17 @@ protected $fillable = [
     'client_name',
     'customer_type',
     'client_account_number',
+	
     'client_address',
-    'client_tin',
+    'client_house_number',
+	'client_street',
+	'client_subdivision',
+	'client_barangay',
+	'client_city',
+	'client_province',
+	'client_country',
+	
+	'client_tin',
     'client_email_address',
     'client_contact_number',
 
@@ -92,7 +101,16 @@ protected static $logAttributes = [
     'client_name',
     'customer_type',
     'client_account_number',
+	
     'client_address',
+    'client_house_number',
+	'client_street',
+	'client_subdivision',
+	'client_barangay',
+	'client_city',
+	'client_province',
+	'client_country',
+	
     'client_tin',
     'client_email_address',
     'client_contact_number',

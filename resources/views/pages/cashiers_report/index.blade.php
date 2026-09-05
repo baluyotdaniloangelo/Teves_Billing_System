@@ -64,7 +64,7 @@ div.dataTables_wrapper {
 						<div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3"
 							 style="width:55px;height:55px;">
 
-							<i class="bi bi-bank text-success fs-4"></i>
+							<i class="bi bi-receipt-cutoff text-success fs-4"></i>
 
 						</div>
 
@@ -74,11 +74,11 @@ div.dataTables_wrapper {
 							<h4 class="fw-bold mb-0">
 								{{ $title }}
 							</h4>
-							<!-- --> 
+							<!--
 							<small class="text-muted">
 								For LPG
 							</small>
-							
+							 --> 
 						</div>
 
 					</div>
@@ -91,7 +91,7 @@ div.dataTables_wrapper {
 						<button type="button"
 								class="btn btn-success rounded-3 shadow-sm px-3"
 								data-bs-toggle="modal"
-								data-bs-target="#CashierReportLPGModal">
+								data-bs-target="#CashierReportModal">
 
 							<i class="bi bi-plus-circle me-2"></i>
 							Create Report
@@ -372,8 +372,8 @@ div.dataTables_wrapper {
 	</div>
 	
 
-@include('pages.cashiers_report_lpg.modals.cashiers_report_lpg_create_edit_modal')	
-@include('pages.cashiers_report_lpg.modals.cashiers_report_lpg_delete_modal')	
+@include('pages.cashiers_report.modals.cashiers_report_create_edit_modal')	
+@include('pages.cashiers_report.modals.cashiers_report_delete_modal')	
 @include('pages.reminders.modals.reminder_modal')	
 @include('pages.user_account_settings.modals.logout_modal')	
     </section>
@@ -381,9 +381,9 @@ div.dataTables_wrapper {
 
 </main>
 
-@include('pages.cashiers_report_lpg.scripts.plugins_script')
-@include('pages.cashiers_report_lpg.scripts.customized_script')
-@include('pages.cashiers_report_lpg.scripts.cashiers_report_lpg_script')
+@include('pages.cashiers_report.scripts.plugins_script')
+@include('pages.cashiers_report.scripts.customized_script')
+@include('pages.cashiers_report.scripts.cashiers_report_script')
 
 @endsection
 

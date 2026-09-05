@@ -451,119 +451,194 @@ EDIT MODAL
 
 function openEditClientModal()
 {
-const clientID = $(this).data('id');
+    const clientID = $(this).data('id');
 
-resetClientForm();
-$('#clear-client').hide();
+    resetClientForm();
+    $('#clear-client').hide();
 
-$('#CreateClientModal').modal('show');
+    $('#CreateClientModal').modal('show');
 
-$.ajax({
-    url: '/client_info',
-    type: 'POST',
-    data: {
-        clientID: clientID,
-        _token: "{{ csrf_token() }}"
-    },
-    success: function(response)
-    {
-        console.log(response);
 
-        const data = response.data ?? response;
+    $.ajax({
+        url: '/client_info',
 
-        if (!data)
+        type: 'POST',
+
+        data: {
+            clientID: clientID,
+            _token: "{{ csrf_token() }}"
+        },
+
+
+        success: function(response)
         {
-            showDangerMessage('Client not found.');
-            return;
-        }
+            console.log(response);
 
-        /*
-        ==========================================
-        LOAD CLIENT ID
-        ==========================================
-        */
-
-        $('#client_id').val(clientID);
+            const data = response.data ?? response;
 
 
-        /*
-        ==========================================
-        ACCOUNT INFORMATION
-        ==========================================
-        */
-
-        $('#customer_type').val(data.customer_type);
-        $('#client_name').val(data.client_name);
-        $('#client_address').val(data.client_address);
-        $('#client_contact_number').val(data.client_contact_number);
-        $('#client_email_address').val(data.client_email_address);
+            if (!data)
+            {
+                showDangerMessage('Client not found.');
+                return;
+            }
 
 
-        /*
-        ==========================================
-        OWNER INFORMATION
-        ==========================================
-        */
+            /*
+            ==========================================
+            LOAD CLIENT ID
+            ==========================================
+            */
 
-        $('#client_title').val(data.client_title);
-        $('#client_gender').val(data.client_gender);
-        $('#client_first_name').val(data.client_first_name);
-        $('#client_middle_name').val(data.client_middle_name);
-        $('#client_last_name').val(data.client_last_name);
-        $('#client_name_extension').val(data.client_name_extension);
-        $('#client_birthday').val(data.client_birthday);
+            $('#client_id').val(clientID);
 
 
-        /*
-        ==========================================
-        TAX & PAYMENT SETTINGS
-        ==========================================
-        */
+            /*
+            ==========================================
+            ACCOUNT INFORMATION
+            ==========================================
+            */
 
-        $('#client_tin').val(data.client_tin);
-        $('#default_less_percentage').val(data.default_less_percentage);
-        $('#default_net_percentage').val(data.default_net_percentage);
-        $('#default_vat_percentage').val(data.default_vat_percentage);
-        $('#default_withholding_tax_percentage').val(
-            data.default_withholding_tax_percentage
-        );
-        $('#default_payment_terms').val(data.default_payment_terms);
+            $('#customer_type').val(data.customer_type);
 
+            $('#client_name').val(data.client_name);
 
-        /*
-        ==========================================
-        REFERRAL
-        ==========================================
-        */
+            $('#client_contact_number')
+                .val(data.client_contact_number);
 
-        if (data.sales_agent_idx)
-        {
-            $('#sales_agent_id').val(data.sales_agent_name);
-        }
-        else
-        {
-            $('#sales_agent_id').val('');
-        }
+            $('#client_email_address')
+                .val(data.client_email_address);
 
 
-        /*
-        ==========================================
-        UPDATE MODAL
-        ==========================================
-        */
+            /*
+            ==========================================
+            ADDRESS
+            ==========================================
+            */
 
-        $('#client_modal_title').text('Account Update');
+            $('#client_house_number')
+                .val(data.client_house_number);
 
-        $('#save-client').html(
-            `<i class="bi bi-check-circle-fill me-2"></i>Update`
-        );
+            $('#client_street')
+                .val(data.client_street);
 
-    },
+            $('#client_subdivision')
+                .val(data.client_subdivision);
+
+            $('#client_barangay')
+                .val(data.client_barangay);
+
+            $('#client_city')
+                .val(data.client_city);
+
+            $('#client_province')
+                .val(data.client_province);
+
+            $('#client_country')
+                .val(data.client_country || 'Philippines');
+
+
+            /*
+            Generate Complete Address
+            from the individual fields
+            */
+
+            generateCompleteAddress();
+
+
+            /*
+            ==========================================
+            OWNER INFORMATION
+            ==========================================
+            */
+
+            $('#client_title')
+                .val(data.client_title);
+
+            $('#client_gender')
+                .val(data.client_gender);
+
+            $('#client_first_name')
+                .val(data.client_first_name);
+
+            $('#client_middle_name')
+                .val(data.client_middle_name);
+
+            $('#client_last_name')
+                .val(data.client_last_name);
+
+            $('#client_name_extension')
+                .val(data.client_name_extension);
+
+            $('#client_birthday')
+                .val(data.client_birthday);
+
+
+            /*
+            ==========================================
+            TAX & PAYMENT SETTINGS
+            ==========================================
+            */
+
+            $('#client_tin')
+                .val(data.client_tin);
+
+            $('#default_less_percentage')
+                .val(data.default_less_percentage);
+
+            $('#default_net_percentage')
+                .val(data.default_net_percentage);
+
+            $('#default_vat_percentage')
+                .val(data.default_vat_percentage);
+
+            $('#default_withholding_tax_percentage')
+                .val(data.default_withholding_tax_percentage);
+
+            $('#default_payment_terms')
+                .val(data.default_payment_terms);
+
+
+            /*
+            ==========================================
+            REFERRAL
+            ==========================================
+            */
+
+            if (data.sales_agent_idx)
+            {
+                $('#sales_agent_id')
+                    .val(data.sales_agent_name);
+            }
+            else
+            {
+                $('#sales_agent_id').val('');
+            }
+
+
+            /*
+            ==========================================
+            UPDATE MODAL
+            ==========================================
+            */
+
+            $('#client_modal_title')
+                .text('Account Update');
+
+            $('#save-client').html(
+                `<i class="bi bi-check-circle-fill me-2"></i>Update`
+            );
+
+        },
+
 
         error: function(xhr)
         {
             console.log(xhr);
-            showDangerMessage('Unable to load client details.');
+
+            showDangerMessage(
+                'Unable to load client details.'
+            );
         }
 
     });
@@ -599,6 +674,7 @@ function saveClient(event)
 
         clientID: client_id,
 
+
         /*
         ==========================================
         ACCOUNT INFORMATION
@@ -607,9 +683,45 @@ function saveClient(event)
 
         client_name: $('#client_name').val(),
         customer_type: $('#customer_type').val(),
-        client_address: $('#client_address').val(),
-        client_contact_number: $('#client_contact_number').val(),
-        client_email_address: $('#client_email_address').val(),
+
+        client_contact_number:
+            $('#client_contact_number').val(),
+
+        client_email_address:
+            $('#client_email_address').val(),
+
+
+        /*
+        ==========================================
+        ADDRESS
+        ==========================================
+        */
+
+        client_house_number:
+            $('#client_house_number').val(),
+
+        client_street:
+            $('#client_street').val(),
+
+        client_subdivision:
+            $('#client_subdivision').val(),
+
+        client_barangay:
+            $('#client_barangay').val(),
+
+        client_city:
+            $('#client_city').val(),
+
+        client_province:
+            $('#client_province').val(),
+
+        client_country:
+            $('#client_country').val(),
+
+        // Generated complete address
+        client_address:
+            $('#client_address').val(),
+
 
         /*
         ==========================================
@@ -617,13 +729,27 @@ function saveClient(event)
         ==========================================
         */
 
-        client_gender: $('#client_gender').val(),
-        client_title: $('#client_title').val(),
-        client_first_name: $('#client_first_name').val(),
-        client_middle_name: $('#client_middle_name').val(),
-        client_last_name: $('#client_last_name').val(),
-        client_name_extension: $('#client_name_extension').val(),
-        client_birthday: $('#client_birthday').val(),
+        client_gender:
+            $('#client_gender').val(),
+
+        client_title:
+            $('#client_title').val(),
+
+        client_first_name:
+            $('#client_first_name').val(),
+
+        client_middle_name:
+            $('#client_middle_name').val(),
+
+        client_last_name:
+            $('#client_last_name').val(),
+
+        client_name_extension:
+            $('#client_name_extension').val(),
+
+        client_birthday:
+            $('#client_birthday').val(),
+
 
         /*
         ==========================================
@@ -633,20 +759,31 @@ function saveClient(event)
 
         sales_agent_idx: sales_agent_idx,
 
+
         /*
         ==========================================
         TAX & PAYMENT SETTINGS
         ==========================================
         */
 
-        client_tin: $('#client_tin').val(),
-        default_less_percentage: $('#default_less_percentage').val(),
-        default_net_percentage: $('#default_net_percentage').val(),
-        default_vat_percentage: $('#default_vat_percentage').val(),
+        client_tin:
+            $('#client_tin').val(),
+
+        default_less_percentage:
+            $('#default_less_percentage').val(),
+
+        default_net_percentage:
+            $('#default_net_percentage').val(),
+
+        default_vat_percentage:
+            $('#default_vat_percentage').val(),
+
         default_withholding_tax_percentage:
             $('#default_withholding_tax_percentage').val(),
+
         default_payment_terms:
             $('#default_payment_terms').val(),
+
 
         /*
         ==========================================
@@ -881,58 +1018,14 @@ function showSuccessModal(message)
 VALIDATION
 ==================================================*/
 
-function handleClientValidation_OLD(xhr)
-{
-    /*
-    GET ERRORS
-    */
-    const errors = xhr.responseJSON.errors;
-
-    /*
-    DEFAULT MESSAGE
-    */
-    let firstError = 'Invalid input detected.';
-
-    /*
-    CLIENT NAME
-    */
-    if(errors.client_name)
-    {
-        $('#client_name_error') .html(errors.client_name[0]) .show();
-        firstError = errors.client_name[0];
-    }
-
-    /*
-    ADDRESS
-    */
-    if(errors.client_address)
-    {
-        $('#client_address_error').html(errors.client_address[0]).show();
-        firstError = errors.client_address[0];
-    }
-
-    /*
-    TIN
-    */
-    if(errors.client_tin)
-    {
-        $('#client_tin_error').html(errors.client_tin[0]).show();
-        firstError = errors.client_tin[0];
-    }
-
-    /*
-    SHOW MODAL
-    */
-    showValidationErrorModal(firstError);
-}
-
 
 function handleClientValidation(xhr)
 {
     /*
     GET ERRORS
     */
-    const errors = xhr.responseJSON.errors;
+    const errors = xhr.responseJSON?.errors || {};
+
 
     /*
     DEFAULT MESSAGE
@@ -941,117 +1034,233 @@ function handleClientValidation(xhr)
 
 
     /*
-    CLIENT NAME
+    ==========================================
+    HELPER
+    ==========================================
     */
-    if(errors.client_name)
-    {
-        $('#client_name_error')
-            .html(errors.client_name[0])
-            .show();
 
-        firstError = errors.client_name[0];
+    function showFieldError(field, error)
+    {
+        if (errors[field])
+        {
+            $('#' + field + '_error')
+                .html(errors[field][0])
+                .show();
+
+            if (firstError === 'Invalid input detected.')
+            {
+                firstError = errors[field][0];
+            }
+        }
     }
 
 
     /*
+    ==========================================
+    ACCOUNT INFORMATION
+    ==========================================
+    */
+
+    // Customer Type
+    showFieldError(
+        'customer_type',
+        errors.customer_type
+    );
+
+
+    // Client Name
+    showFieldError(
+        'client_name',
+        errors.client_name
+    );
+
+
+    // Contact Number
+    showFieldError(
+        'client_contact_number',
+        errors.client_contact_number
+    );
+
+
+    // Email Address
+    showFieldError(
+        'client_email_address',
+        errors.client_email_address
+    );
+
+
+    /*
+    ==========================================
     ADDRESS
+    ==========================================
     */
-    if(errors.client_address)
-    {
-        $('#client_address_error')
-            .html(errors.client_address[0])
-            .show();
 
-        if(firstError === 'Invalid input detected.')
-        {
-            firstError = errors.client_address[0];
-        }
-    }
+    // Complete Address
+    showFieldError(
+        'client_address',
+        errors.client_address
+    );
+
+
+    // House Number - Optional
+    showFieldError(
+        'client_house_number',
+        errors.client_house_number
+    );
+
+
+    // Street - Optional
+    showFieldError(
+        'client_street',
+        errors.client_street
+    );
+
+
+    // Subdivision - Optional
+    showFieldError(
+        'client_subdivision',
+        errors.client_subdivision
+    );
+
+
+    // Barangay - Required
+    showFieldError(
+        'client_barangay',
+        errors.client_barangay
+    );
+
+
+    // City / Municipality - Required
+    showFieldError(
+        'client_city',
+        errors.client_city
+    );
+
+
+    // Province - Required
+    showFieldError(
+        'client_province',
+        errors.client_province
+    );
+
+
+    // Country - Required
+    showFieldError(
+        'client_country',
+        errors.client_country
+    );
 
 
     /*
-    TIN
+    ==========================================
+    OWNER INFORMATION
+    ==========================================
     */
-    if(errors.client_tin)
-    {
-        $('#client_tin_error')
-            .html(errors.client_tin[0])
-            .show();
 
-        if(firstError === 'Invalid input detected.')
-        {
-            firstError = errors.client_tin[0];
-        }
-    }
+    // Title
+    showFieldError(
+        'client_title',
+        errors.client_title
+    );
+
+
+    // Gender
+    showFieldError(
+        'client_gender',
+        errors.client_gender
+    );
+
+
+    // First Name
+    showFieldError(
+        'client_first_name',
+        errors.client_first_name
+    );
+
+
+    // Middle Name - Optional
+    showFieldError(
+        'client_middle_name',
+        errors.client_middle_name
+    );
+
+
+    // Last Name
+    showFieldError(
+        'client_last_name',
+        errors.client_last_name
+    );
+
+
+    // Name Extension - Optional
+    showFieldError(
+        'client_name_extension',
+        errors.client_name_extension
+    );
+
+
+    // Birthday
+    showFieldError(
+        'client_birthday',
+        errors.client_birthday
+    );
 
 
     /*
-    CONTACT NUMBER
+    ==========================================
+    TAX & PAYMENT SETTINGS
+    ==========================================
     */
-    if(errors.client_contact_number)
-    {
-        $('#client_contact_number_error')
-            .html(errors.client_contact_number[0])
-            .show();
 
-        if(firstError === 'Invalid input detected.')
-        {
-            firstError = errors.client_contact_number[0];
-        }
-    }
+    showFieldError(
+        'client_tin',
+        errors.client_tin
+    );
+
+    showFieldError(
+        'default_less_percentage',
+        errors.default_less_percentage
+    );
+
+    showFieldError(
+        'default_net_percentage',
+        errors.default_net_percentage
+    );
+
+    showFieldError(
+        'default_vat_percentage',
+        errors.default_vat_percentage
+    );
+
+    showFieldError(
+        'default_withholding_tax_percentage',
+        errors.default_withholding_tax_percentage
+    );
+
+    showFieldError(
+        'default_payment_terms',
+        errors.default_payment_terms
+    );
 
 
     /*
-    FIRST NAME
+    ==========================================
+    REFERRAL
+    ==========================================
     */
-    if(errors.client_first_name)
-    {
-        $('#client_first_name_error')
-            .html(errors.client_first_name[0])
-            .show();
 
-        if(firstError === 'Invalid input detected.')
-        {
-            firstError = errors.client_first_name[0];
-        }
-    }
+    showFieldError(
+        'sales_agent_name',
+        errors.sales_agent_idx
+    );
 
 
     /*
-    LAST NAME
+    ==========================================
+    SHOW VALIDATION MODAL
+    ==========================================
     */
-    if(errors.client_last_name)
-    {
-        $('#client_last_name_error')
-            .html(errors.client_last_name[0])
-            .show();
 
-        if(firstError === 'Invalid input detected.')
-        {
-            firstError = errors.client_last_name[0];
-        }
-    }
-
-
-    /*
-    BIRTHDAY
-    */
-    if(errors.client_birthday)
-    {
-        $('#client_birthday_error')
-            .html(errors.client_birthday[0])
-            .show();
-
-        if(firstError === 'Invalid input detected.')
-        {
-            firstError = errors.client_birthday[0];
-        }
-    }
-
-
-    /*
-    SHOW MODAL
-    */
     showValidationErrorModal(firstError);
 }
 
@@ -1067,4 +1276,66 @@ $(document).on('hidden.bs.modal', '.modal', function ()
     $('.modal-backdrop').remove();
     $('body').removeClass('modal-open');
 });
+
+
+
+// ============================================================
+// GENERATE COMPLETE ADDRESS
+// ============================================================
+function generateCompleteAddress() {
+
+    const houseNumber = $('#client_house_number').val().trim();
+    const street      = $('#client_street').val().trim();
+    const subdivision = $('#client_subdivision').val().trim();
+    const barangay    = $('#client_barangay').val().trim();
+    const city        = $('#client_city').val().trim();
+    const province    = $('#client_province').val().trim();
+    const country     = $('#client_country').val().trim();
+
+    let addressParts = [];
+
+    if (houseNumber) {
+        addressParts.push(houseNumber);
+    }
+
+    if (street) {
+        addressParts.push(street);
+    }
+
+    if (subdivision) {
+        addressParts.push(subdivision);
+    }
+
+    if (barangay) {
+        addressParts.push('' + barangay);
+    }
+
+    if (city) {
+        addressParts.push(city);
+    }
+
+    if (province) {
+        addressParts.push(province);
+    }
+
+    if (country) {
+        addressParts.push(country);
+    }
+
+    $('#client_address').val(addressParts.join(', '));
+}
+
+
+// ============================================================
+// UPDATE ADDRESS WHILE TYPING
+// ============================================================
+$(document).on(
+    'input change',
+    '#client_house_number, #client_street, #client_subdivision, #client_barangay, #client_city, #client_province, #client_country',
+    function () {
+
+        generateCompleteAddress();
+
+    }
+);
 </script>

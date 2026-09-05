@@ -1,7 +1,7 @@
-```html
+
 <!-- CREATE CASHIER REPORT LPG MODAL -->
 <div class="modal fade"
-     id="CashierReportLPGModal"
+     id="CashierReportModal"
      tabindex="-1"
      aria-hidden="true">
 

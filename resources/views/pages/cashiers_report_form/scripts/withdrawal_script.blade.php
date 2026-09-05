@@ -23,10 +23,6 @@
 		
 			let purchase_order_delivery_quantity 				= $("#purchase_order_delivery_quantity").val();
 			
-			//let purchase_order_delivery_withdrawal_reference 	= $("input[name=purchase_order_delivery_withdrawal_reference]").val();
-			//let purchase_order_delivery_hauler_details 			= $("input[name=purchase_order_delivery_hauler_details]").val();
-			//let purchase_order_delivery_remarks 				= $("input[name=purchase_order_delivery_remarks]").val();
-			
 			let purchase_order_delivery_withdrawal_reference 	= $("#purchase_order_delivery_withdrawal_reference").val();
 			let purchase_order_delivery_hauler_details 			= $("#purchase_order_delivery_hauler_details").val();
 			let purchase_order_delivery_remarks 				= $("#purchase_order_delivery_remarks").val();
@@ -121,7 +117,6 @@
 				}
 			   });	
 	});	
-	  
 	  
 	  
 	<!--Select Bill For Update-->

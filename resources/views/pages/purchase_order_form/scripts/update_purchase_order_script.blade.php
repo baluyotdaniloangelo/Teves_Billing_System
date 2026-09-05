@@ -62,16 +62,9 @@
 				success:function(response){
 				  console.log(response);
 				  if(response) {
-					  
-					//$('#switch_notice_on').show();
-					//$('#sw_on').html(response.success);
-					//setTimeout(function() { $('#switch_notice_on').fadeOut('fast'); },1000);
 					
 					showSuccessModal(response.success);
-					
-					//$('#update_purchase_supplier_nameError').text('');	
-					//LoadSuppliersPriceList();
-					//document.getElementById("AddPurchaseOrderProductBTN").disabled = false;
+
 				  }
 				},
 				beforeSend:function()
@@ -107,11 +100,9 @@
 							document.getElementById('supplier_idxError').className = "invalid-feedback";
 							
 					}
-				
 
-		  	  
 					console.log(error);
-					handlePurchaseOrderValidation(error);
+					handleValidation(error);
 					$('#action_error_message').text('Validation Error');
 					
 				}
@@ -149,76 +140,5 @@
 			   });	
 	}
 	
-function showDangerMessage(message)
-{
-	
-    $('#validation_error_message').text(message);
-    $('#ValidationErrorModal').modal('show');
 
-}
-
-function showSuccessModal(message)
-{
-
-    $('#success_modal_message').text(message);	
-    $('#SuccessModal').modal('show');
-
-    setTimeout(function ()
-    {
-        $('#SuccessModal').modal('hide');
-    }, 1500);
-}	
-
-
-function handlePurchaseOrderValidation(xhr)
-{
-    /*
-    GET ERRORS
-    */
-    const errors = xhr.responseJSON.errors;
-
-    /*
-    DEFAULT MESSAGE
-    */
-    let firstError = 'Invalid input detected.';
-
-    /*
-    Supplier Name
-    */
-    if(errors.supplier_idx)
-    {
-        $('#supplier_idxError') .html(errors.supplier_idx[0]) .show();
-        firstError = errors.supplier_idx[0];
-    }
-
-    /*
-    ADDRESS
-    */
-    if(errors.purchase_order_date)
-    {
-        $('#purchase_order_date_error').html(errors.purchase_order_date[0]).show();
-        firstError = errors.purchase_order_date[0];
-    }
-
-    /*
-    Purchase Order Type
-   */
-    if(errors.purchase_order_type)
-    {
-        $('#purchase_order_typeError').html(errors.purchase_order_type[0]).show();
-        firstError = errors.purchase_order_type[0];
-    }
- 
-    /*
-    SHOW MODAL
-    */
-    showValidationErrorModal(firstError);
-	
-}
-
-function showValidationErrorModal(message)
-{
-    $('#validation_error_message').text(message);
-    $('#ValidationErrorModal').modal('show');
-}
 </script>

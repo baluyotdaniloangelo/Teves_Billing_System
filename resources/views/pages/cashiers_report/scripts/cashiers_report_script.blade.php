@@ -56,7 +56,7 @@ function initializeCashierReportTable()
 
             ajax:
             {
-                url: "{{ route('getCashierReportLPG') }}",
+                url: "{{ route('getCashierReport') }}",
 
                 data: function (d)
                 {
@@ -487,7 +487,7 @@ function openCreateCashierReportModal()
         '<i class="bi bi-save-fill me-2"></i>Save Cashier\'s Report'
     );
 
-    $('#CashierReportLPGModal').modal('show');
+    $('#CashierReportModal').modal('show');
 }
 
 
@@ -495,7 +495,7 @@ function openCreateCashierReportModal()
 RESET MODAL ON CLOSE
 ==================================================*/
 
-$('#CashierReportLPGModal').on('hidden.bs.modal', function ()
+$('#CashierReportModal').on('hidden.bs.modal', function ()
 {
     resetCashierReportForm();
 
@@ -611,7 +611,7 @@ function saveCashierReport(event)
     $.ajax({
 
         url:
-            '/create_cashier_report_lpg_post',
+            '/create_cashier_report_post',
 
         type:
             'POST',
@@ -648,7 +648,7 @@ function saveCashierReport(event)
             ==============================================
             */
 
-            $('#CashierReportLPGModal')
+            $('#CashierReportModal')
                 .modal('hide');
 
 
@@ -1164,4 +1164,337 @@ $(document).on(
     }
 );
 
+
+/*==================================================
+DELETE CASHIER REPORT
+OPEN CONFIRMATION MODAL
+==================================================*/
+
+$('body').on(
+    'click',
+    '#deleteCashiersReport',
+    function(event)
+    {
+        event.preventDefault();
+
+
+        /*==================================================
+        GET REPORT ID
+        ==================================================*/
+
+        const CashiersReportID =
+            $(this).data('id');
+
+
+        /*==================================================
+        GET REPORT INFORMATION
+        ==================================================*/
+
+        $.ajax({
+
+            url:
+                '/cashiers_report_info',
+
+            type:
+                'POST',
+
+            data:
+            {
+                CashiersReportID:
+                    CashiersReportID,
+
+                _token:
+                    "{{ csrf_token() }}"
+            },
+
+
+            /*================================================
+            SUCCESS
+            =================================================*/
+
+            success: function(response)
+            {
+                console.log(response);
+
+
+                if(
+                    response &&
+                    response.length
+                )
+                {
+
+                    const report =
+                        response[0];
+
+
+                    /*========================================
+                    REPORT DATE
+                    ========================================*/
+
+                    $('#confirm_delete_report_date')
+                        .text(
+                            report.report_date || '-'
+                        );
+
+
+                    /*========================================
+                    BRANCH
+                    ========================================*/
+
+                    $('#confirm_delete_teves_branch')
+                        .text(
+                            report.branch_code || '-'
+                        );
+
+
+                    /*========================================
+                    CASHIER
+                    ========================================*/
+
+                    $('#confirm_delete_cashiers_name')
+                        .text(
+                            report.cashiers_name || '-'
+                        );
+
+
+                    /*========================================
+                    EMPLOYEE ON DUTY
+                    ========================================*/
+
+                    $('#confirm_delete_forecourt_attendant')
+                        .text(
+                            report.forecourt_attendant || '-'
+                        );
+
+
+                    /*========================================
+                    SHIFT
+                    ========================================*/
+
+                    $('#confirm_delete_shift')
+                        .text(
+                            report.shift || '-'
+                        );
+
+
+                    /*========================================
+                    STORE REPORT ID
+                    ========================================*/
+
+                    $('#deleteCashiersReportConfirmed')
+                        .val(
+                            CashiersReportID
+                        );
+
+
+                    /*========================================
+                    SHOW MODAL
+                    ========================================*/
+
+                    $('#CashiersReportDeleteModal')
+                        .modal('show');
+
+                }
+
+            },
+
+
+            /*================================================
+            ERROR
+            =================================================*/
+
+            error: function(xhr)
+            {
+                console.log(xhr);
+
+
+                showValidationErrorModal(
+                    'Unable to retrieve Cashier Report information.'
+                );
+
+            }
+
+        });
+
+    }
+);
+
+
+/*==================================================
+CONFIRM DELETE
+==================================================*/
+
+$('body').on(
+    'click',
+    '#deleteCashiersReportConfirmed',
+    function(event)
+    {
+        event.preventDefault();
+
+
+        /*==================================================
+        GET REPORT ID
+        ==================================================*/
+
+        const CashiersReportID =
+            $(this).val();
+
+
+        if(!CashiersReportID)
+        {
+            showValidationErrorModal(
+                "Invalid Cashier's Report."
+            );
+
+            return;
+        }
+
+
+        /*==================================================
+        DELETE BUTTON
+        ==================================================*/
+
+        const deleteButton =
+            $('#deleteCashiersReportConfirmed');
+
+
+        const originalButtonHTML =
+            deleteButton.html();
+
+
+        /*==================================================
+        DELETE REQUEST
+        ==================================================*/
+
+        $.ajax({
+
+            url:
+                '/delete_cashiers_report_info',
+
+            type:
+                'POST',
+
+            data:
+            {
+                CashiersReportID:
+                    CashiersReportID,
+
+                _token:
+                    "{{ csrf_token() }}"
+            },
+
+
+            /*================================================
+            BEFORE SEND
+            =================================================*/
+
+            beforeSend: function()
+            {
+                setButtonLoading(
+                    '#deleteCashiersReportConfirmed',
+                    true
+                );
+
+
+                deleteButton.html(
+                    '<span class="spinner-border spinner-border-sm me-2" role="status"></span>' +
+                    'Deleting...'
+                );
+
+            },
+
+
+            /*================================================
+            SUCCESS
+            =================================================*/
+
+            success: function(response)
+            {
+                console.log(response);
+
+
+                if(response)
+                {
+
+                    /*========================================
+                    CLOSE DELETE MODAL
+                    ========================================*/
+
+                    $('#CashiersReportDeleteModal')
+                        .modal('hide');
+
+
+                    /*========================================
+                    RELOAD TABLE
+                    ========================================*/
+
+                    reloadCashierReportTable();
+
+
+                    /*========================================
+                    SUCCESS MESSAGE
+                    ========================================*/
+
+                    showSuccessModal(
+                        response.success ||
+                        "Cashier's Report Deleted Successfully."
+                    );
+
+                }
+
+            },
+
+
+            /*================================================
+            ERROR
+            =================================================*/
+
+            error: function(xhr)
+            {
+                console.log(xhr);
+
+
+                let message =
+                    "Unable to delete Cashier's Report.";
+
+
+                if(
+                    xhr.responseJSON &&
+                    xhr.responseJSON.message
+                )
+                {
+                    message =
+                        xhr.responseJSON.message;
+                }
+
+
+                showValidationErrorModal(
+                    message
+                );
+
+            },
+
+
+            /*================================================
+            COMPLETE
+            =================================================*/
+
+            complete: function()
+            {
+                setButtonLoading(
+                    '#deleteCashiersReportConfirmed',
+                    false
+                );
+
+
+                deleteButton.html(
+                    originalButtonHTML
+                );
+
+            }
+
+        });
+
+    }
+);
 </script>

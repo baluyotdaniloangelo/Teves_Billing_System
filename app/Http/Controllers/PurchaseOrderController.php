@@ -105,155 +105,106 @@ class PurchaseOrderController extends Controller
                 })
 				
 				->addColumn('action', function($row){
-					/*
+			
 					$actionBtn = '
-					<div align="center" class="action_table_menu_Product">
-					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
-					<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->purchase_order_id.')" id="viewPaymentGalery"></a>
-					<a href="purchase_order_form/'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editCashiersReport"></a>
-					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deletePurchaseOrder"></a>
-					</div>';
-					
+					<div class="dropdown dropstart text-center">
+						<button class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle"
+								type="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false">
+							<i class="bi bi-three-dots"></i>
+						</button>
+
+						<ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+							<!-- PRINT -->
+							<li>
+								<a href="#"
+								   data-id="'.$row->purchase_order_id.'"
+								   class="dropdown-item"
+								   id="PrintPurchaseOrder">
+									<i class="bi bi-printer-fill text-warning me-2"></i>
+									Print Purchase Order
+								</a>
+							</li>
+
+							<!-- GALLERY -->
+							<li>
+								<a href="#"
+								   class="dropdown-item"
+								   onclick="ViewGalery('.$row->purchase_order_id.')"
+								   id="viewPaymentGalery">
+									<i class="bi bi-images text-primary me-2"></i>
+									View Payment Gallery
+								</a>
+							</li>
+
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+
+							<!-- EDIT -->
+							<li>
+								<a href="purchase_order_form/'.$row->purchase_order_id.'"
+								   class="dropdown-item">
+									<i class="bi bi-pencil-fill text-success me-2"></i>
+									Edit Purchase Order
+								</a>
+							</li>
+
+							<!-- DELETE -->
+							<li>
+								<a href="#"
+								   data-id="'.$row->purchase_order_id.'"
+								   class="dropdown-item text-danger"
+								   id="deletePurchaseOrder">
+									<i class="bi bi-trash3-fill me-2"></i>
+									Delete Purchase Order
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					';
+
+
 					$actionBtn_view_only = '
-					<div align="center" class="action_table_menu_Product">
-					<a href="#" data-id="'.$row->purchase_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintPurchaseOrder""></a>
-					<a href="#" class="btn-circle btn-sm bi bi-images btn_icon_table btn_icon_table_gallery" onclick="ViewGalery('.$row->purchase_order_id.')" id="viewPaymentGalery"></a>
-					</div>';
-					*/
-					$actionBtn = '
 
-<div class="dropdown dropstart text-center">
+					<div class="dropdown dropstart text-center">
+						<button class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle"
+								type="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false">
+							<i class="bi bi-three-dots"></i>
+						</button>
 
-    <button class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
+						<ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+							<!-- PRINT -->
+							<li>
+								<a href="#"
+								   data-id="'.$row->purchase_order_id.'"
+								   class="dropdown-item"
+								   id="PrintPurchaseOrder">
+									<i class="bi bi-printer-fill text-warning me-2"></i>
+									Print Purchase Order
+								</a>
+							</li>
 
-        <i class="bi bi-three-dots"></i>
+							<!-- GALLERY -->
+							<li>
 
-    </button>
+								<a href="#"
+								   class="dropdown-item"
+								   onclick="ViewGalery('.$row->purchase_order_id.')"
+								   id="viewPaymentGalery">
+									<i class="bi bi-images text-primary me-2"></i>
+									View Payment Gallery
+								</a>
 
-    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+							</li>
+						</ul>
+					</div>
 
-        <!-- PRINT -->
-        <li>
-
-            <a href="#"
-               data-id="'.$row->purchase_order_id.'"
-               class="dropdown-item"
-               id="PrintPurchaseOrder">
-
-                <i class="bi bi-printer-fill text-warning me-2"></i>
-                Print Purchase Order
-
-            </a>
-
-        </li>
-
-        <!-- GALLERY -->
-        <li>
-
-            <a href="#"
-               class="dropdown-item"
-               onclick="ViewGalery('.$row->purchase_order_id.')"
-               id="viewPaymentGalery">
-
-                <i class="bi bi-images text-primary me-2"></i>
-                View Payment Gallery
-
-            </a>
-
-        </li>
-
-        <li>
-            <hr class="dropdown-divider">
-        </li>
-
-        <!-- EDIT -->
-        <li>
-
-            <a href="purchase_order_form/'.$row->purchase_order_id.'"
-               class="dropdown-item">
-
-                <i class="bi bi-pencil-fill text-success me-2"></i>
-                Edit Purchase Order
-
-            </a>
-
-        </li>
-
-        <!-- DELETE -->
-        <li>
-
-            <a href="#"
-               data-id="'.$row->purchase_order_id.'"
-               class="dropdown-item text-danger"
-               id="deletePurchaseOrder">
-
-                <i class="bi bi-trash3-fill me-2"></i>
-                Delete Purchase Order
-
-            </a>
-
-        </li>
-
-    </ul>
-
-</div>
-
-';
-
-
-$actionBtn_view_only = '
-
-<div class="dropdown dropstart text-center">
-
-    <button class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
-
-        <i class="bi bi-three-dots"></i>
-
-    </button>
-
-    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
-
-        <!-- PRINT -->
-        <li>
-
-            <a href="#"
-               data-id="'.$row->purchase_order_id.'"
-               class="dropdown-item"
-               id="PrintPurchaseOrder">
-
-                <i class="bi bi-printer-fill text-warning me-2"></i>
-                Print Purchase Order
-
-            </a>
-
-        </li>
-
-        <!-- GALLERY -->
-        <li>
-
-            <a href="#"
-               class="dropdown-item"
-               onclick="ViewGalery('.$row->purchase_order_id.')"
-               id="viewPaymentGalery">
-
-                <i class="bi bi-images text-primary me-2"></i>
-                View Payment Gallery
-
-            </a>
-
-        </li>
-
-    </ul>
-
-</div>
-
-';
+					';
 
 						$startTimeStamp = strtotime($row->created_at);
 						$endTimeStamp = strtotime(date('y-m-d'));
@@ -807,8 +758,10 @@ $actionBtn_view_only = '
 							$PurchaseOrderUpdate->purchase_status 			= $PurchaseOrderstatus;
 							
 							$result_update = $PurchaseOrderUpdate->update();
-		return 'Deleted';
 		
+		return response()->json([
+        'success' => 'Purchase Order Payment Deleted'
+		]);
 		
 	}
 	

@@ -78,256 +78,190 @@
 
 	}	
  
+	/*==================================================
+	SAVE / UPDATE PAYMENT
+	==================================================*/
 
-/*==================================================
-SAVE / UPDATE PAYMENT
-==================================================*/
+	$('#AddPayment').on('submit', savePayment);
 
-$('#AddPayment').on('submit', savePayment);
+	function savePayment(event)
+	{
+		event.preventDefault();
 
-function savePayment(event)
-{
-    event.preventDefault();
+		const form = $('#AddPayment');
 
-    const form = $('#AddPayment');
+		resetPaymentValidation();
 
-    resetPaymentValidation();
+		form.addClass('was-validated');
 
-    form.addClass('was-validated');
+		$.ajax({
 
-    $.ajax({
+			url: form.attr('action'),
+			type: form.attr('method'),
+			data: new FormData(form[0]),
+			processData: false,
+			contentType: false,
+			dataType: 'json',
 
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: new FormData(form[0]),
-        processData: false,
-        contentType: false,
-        dataType: 'json',
+			beforeSend: function()
+			{
+				/* Disable Submit Button */
+				document.getElementById("save-payment").disabled = true;
 
-        beforeSend: function ()
-        {
-            setButtonLoading('#save-payment', true);
-        },
+				/* Show Loading */
+				$('#update_loading_data').show();
 
-        success: function (response)
-        {
-            console.log(response);
+				setButtonLoading('#save-payment', true);
+			},
 
-            $('#switch_notice_on').show();
-            $('#sw_on').html(response.success);
+			success: function(response)
+			{
+				console.log(response);
 
-            setTimeout(function ()
-            {
-                $('#switch_notice_on').fadeOut('fast');
-            }, 1500);
+				if (response)
+				{
+					showSuccessModal(response.success);
 
-            if ($('#purchase_order_payment_details_id').val() != 0)
-            {
-                $('#AddPaymentModal').modal('hide');
-            }
+					if ($('#purchase_order_payment_details_id').val() != 0)
+					{
+						$('#AddPaymentModal').modal('hide');
+					}
 
-            resetPaymentForm();
+					resetPaymentForm();
+					initializePurchaseOrderPaymentTable();
+					LoadProduct();
+				}
+			},
 
-            //LoadPayment();
+			complete: function()
+			{
+				/* Enable Submit Button */
+				document.getElementById("save-payment").disabled = false;
 
-            LoadProduct();
-        },
+				/* Hide Loading */
+				$('#update_loading_data').hide();
 
-        complete: function ()
-        {
-            setButtonLoading('#save-payment', false);
-        },
+				setButtonLoading('#save-payment', false);
+			},
 
-        error: function (xhr)
-        {
-            console.log(xhr);
+			error: function(error)
+			{
+				console.log(error);
 
-            handlePaymentValidation(xhr);
-        }
+				handleValidation(error);
 
-    });
+				$('#action_error_message').text('Validation Error');
+			}
 
-}
+		});
+	}
 
+	/*==================================================
+	RESET VALIDATION
+	==================================================*/
 
-/*==================================================
-VALIDATION
-==================================================*/
+	function resetPaymentValidation()
+	{
+		$('[id$="Error"]')
+			.html('')
+			.removeClass('d-block');
+	}
 
-function handlePaymentValidation(xhr)
-{
-    if (!xhr.responseJSON || !xhr.responseJSON.errors)
-    {
-        $('#validation_error_message')
-            .text('An unexpected error occurred.');
+	/*==================================================
+	RESET FORM
+	==================================================*/
 
-        $('#ValidationErrorModal').modal('show');
+	function resetPaymentForm()
+	{
+		$('#AddPayment')[0].reset();
 
-        return;
-    }
-	
-	
+		$('#purchase_order_payment_details_id').val(0);
 
-    const errors = xhr.responseJSON.errors;
+		$('#payment_preview')
+			.attr('src', '')
+			.hide();
+
+		$('#image_payment_div').empty();
+
+		resetPaymentValidation();
+
+		$('#AddPayment')
+			.removeClass('was-validated');
+	}
+
+	/*==================================================
+	IMAGE PREVIEW
+	==================================================*/
+
+	$('#payment_image_reference').on('change', function ()
+	{
+		const file = this.files[0];
+
+		if (!file)
+		{
+			$('#payment_preview')
+				.hide()
+				.attr('src', '');
+
+			$('#image_payment_div').empty();
+
+			return;
+		}
+
+		const extension =
+			file.name.split('.').pop().toLowerCase();
+
+		if (!['jpg', 'jpeg', 'png'].includes(extension))
+		{
+			$('#payment_preview')
+				.hide()
+				.attr('src', '');
+
+			$('#image_payment_div').empty();
+
+			return;
+		}
+
+		const reader = new FileReader();
+
+		reader.onload = function (e)
+		{
+			$('#payment_preview')
+				.attr('src', e.target.result)
+				.show();
+
+			$('#image_payment_div').empty();
+		};
+
+		reader.readAsDataURL(file);
+	});
+
+	/*==================================================
+	BUTTON LOADING
+	==================================================*/
+
+	function setButtonLoading(button, loading)
+	{
+		const $button = $(button);
+
+		if (loading)
+		{
+			$button
+				.prop('disabled', true)
+				.data('original-html', $button.html())
+				.html(`
+					<span class="spinner-border spinner-border-sm me-2"></span>
+					Saving...
+				`);
+		}
+		else
+		{
+			$button
+				.prop('disabled', false)
+				.html($button.data('original-html'));
+		}
+	}
 
-    let firstError = '';
-
-    /*
-    LOOP THROUGH LARAVEL ERRORS
-    */
-
-    Object.keys(errors).forEach(function(field)
-    {
-        const message = errors[field][0];
-
-        const errorElement = $('#' + field + 'Error');
-
-        if (errorElement.length)
-        {
-            errorElement
-                .html(message)
-                .addClass('invalid-feedback d-block');
-        }
-
-        if (!firstError)
-        {
-            firstError = message;
-        }
-    });
-
-    $('#validation_error_message')
-        .text(firstError);
-
-    $('#ValidationErrorModal')
-        .modal('show');
-}
-
-
-/*==================================================
-RESET VALIDATION
-==================================================*/
-
-function resetPaymentValidation()
-{
-    $('[id$="Error"]')
-        .html('')
-        .removeClass('d-block');
-}
-
-
-/*==================================================
-RESET FORM
-==================================================*/
-
-function resetPaymentForm()
-{
-    $('#AddPayment')[0].reset();
-
-    $('#purchase_order_payment_details_id').val(0);
-
-    $('#payment_preview')
-        .attr('src', '')
-        .hide();
-
-    $('#image_payment_div').empty();
-
-    resetPaymentValidation();
-
-    $('#AddPayment')
-        .removeClass('was-validated');
-}
-
-
-/*==================================================
-IMAGE PREVIEW
-==================================================*/
-
-$('#payment_image_reference').on('change', function ()
-{
-    const file = this.files[0];
-
-    if (!file)
-    {
-        $('#payment_preview')
-            .hide()
-            .attr('src', '');
-
-        $('#image_payment_div').empty();
-
-        return;
-    }
-
-    const extension =
-        file.name.split('.').pop().toLowerCase();
-
-    if (!['jpg', 'jpeg', 'png'].includes(extension))
-    {
-        $('#payment_preview')
-            .hide()
-            .attr('src', '');
-
-        $('#image_payment_div').empty();
-
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function (e)
-    {
-        $('#payment_preview')
-            .attr('src', e.target.result)
-            .show();
-
-        $('#image_payment_div').empty();
-    };
-
-    reader.readAsDataURL(file);
-});
-
-
-/*==================================================
-BUTTON LOADING
-==================================================*/
-
-function setButtonLoading(button, loading)
-{
-    const $button = $(button);
-
-    if (loading)
-    {
-        $button
-            .prop('disabled', true)
-            .data('original-html', $button.html())
-            .html(`
-                <span class="spinner-border spinner-border-sm me-2"></span>
-                Saving...
-            `);
-    }
-    else
-    {
-        $button
-            .prop('disabled', false)
-            .html($button.data('original-html'));
-    }
-}
-
-/*==================================================
-VALIDATION ERROR MODAL
-==================================================*/
-
-function showValidationErrorModal(message)
-{
-    $('#validation_error_message').text(message);
-
-    const modal = new bootstrap.Modal(
-        document.getElementById('ValidationErrorModal')
-    );
-
-    modal.show();
-}
-
-	
 	<!--Select For Update-->
 	$('body').on('click','#PurchaseOrderPayment_Edit',function(){
 			
@@ -374,5 +308,389 @@ function showValidationErrorModal(message)
 					alert(error);
 				}
 			   });	
-	});	  	
+	});	  
+
+
+
+/* ============================================================
+ * OPEN PAYMENT DELETE CONFIRMATION MODAL
+ * ============================================================
+ *
+ * Gets the selected payment information from the server and
+ * displays it in the Delete Payment modal.
+ * ============================================================ */
+
+$('body').on('click', '#deletePurchaseOrderPayment', function (event)
+{
+    event.preventDefault();
+
+    /* Get Payment ID from the clicked Delete button */
+    const purchase_order_payment_details_id = $(this).data('id');
+
+    /* Make sure a valid ID was supplied */
+    if (!purchase_order_payment_details_id)
+    {
+        console.error('Payment Details ID is missing.');
+        return;
+    }
+
+
+    /* ========================================================
+     * GET PAYMENT INFORMATION
+     * ======================================================== */
+
+    $.ajax({
+
+        url: "{{ route('PaymentInfo') }}",
+
+        type: "POST",
+
+        data: {
+            purchase_order_payment_details_id: purchase_order_payment_details_id,
+            _token: "{{ csrf_token() }}"
+        },
+
+        dataType: 'json',
+
+
+        /* ====================================================
+         * SUCCESS
+         * ==================================================== */
+
+        success: function (response)
+        {
+            console.log('Payment Information:', response);
+
+
+            /* ------------------------------------------------
+             * Validate server response
+             * ------------------------------------------------ */
+
+            if (!response || !response.length)
+            {
+                console.error('No payment information was returned.');
+                return;
+            }
+
+
+            /* Get the first payment record */
+            const payment = response[0];
+
+
+            /* ------------------------------------------------
+             * Set Payment ID
+             *
+             * This ID will be used by the actual Delete button.
+             * ------------------------------------------------ */
+
+            $('#deletePurchaseOrderPaymentConfirmed')
+                .val(payment.purchase_order_payment_details_id);
+
+
+            /* ------------------------------------------------
+             * Display Payment Details
+             * ------------------------------------------------ */
+
+            $('#delete_purchase_order_bank')
+                .text(payment.purchase_order_bank || '-');
+
+            $('#delete_purchase_order_date_of_payment')
+                .text(payment.purchase_order_date_of_payment || '-');
+
+            $('#delete_purchase_order_reference_no')
+                .text(payment.purchase_order_reference_no || '-');
+
+            $('#delete_purchase_order_payment_amount')
+                .text(payment.purchase_order_payment_amount || '-');
+
+
+            /* =================================================
+             * DISPLAY PAYMENT PROOF IMAGE
+             * ================================================= */
+
+            const imgHolder = $('.delete_img-holder');
+
+            /* Always clear the previous image first.
+             *
+             * This is important because the modal can be opened
+             * multiple times. Otherwise, an old image may remain
+             * when the next payment has no image.
+             */
+            imgHolder.empty();
+
+
+            if (payment.image_reference)
+            {
+                /*
+                 * Convert Base64 image data into an image source.
+                 *
+                 * If your database always stores JPG images,
+                 * image/jpeg can be used. If PNG is possible,
+                 * the server should ideally also return the
+                 * correct MIME type.
+                 */
+
+                const imageSrc =
+                    'data:image/jpeg;base64,' + payment.image_reference;
+
+
+                /* Create and display the image */
+                $('<img>', {
+                    src: imageSrc,
+                    class: 'img-fluid rounded-3 shadow-sm',
+                    alt: 'Payment Proof',
+                    style: 'max-width:400px; max-height:300px; object-fit:contain;'
+                }).appendTo(imgHolder);
+            }
+            else
+            {
+                /* Display message when no payment proof exists */
+                $('<div>', {
+                    class: 'text-muted small py-4',
+                    html: '<i class="bi bi-image me-1"></i> No payment proof available.'
+                }).appendTo(imgHolder);
+            }
+
+
+            /* =================================================
+             * SHOW DELETE CONFIRMATION MODAL
+             * =================================================
+             *
+             * Use "show" instead of "toggle".
+             *
+             * "toggle" can accidentally hide the modal if the
+             * modal is already open.
+             */
+
+            $('#PurchaseOrderPaymentDeleteModal').modal('show');
+
+        },
+
+
+        /* ====================================================
+         * ERROR
+         * ==================================================== */
+
+        error: function (xhr)
+        {
+            console.error('PaymentInfo Error:', xhr);
+
+            let errorMessage = 'Unable to retrieve payment information.';
+
+
+            /* Laravel validation/server error */
+            if (xhr.responseJSON)
+            {
+                if (xhr.responseJSON.message)
+                {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                else if (xhr.responseJSON.errors)
+                {
+                    errorMessage = 'Validation error occurred.';
+                }
+            }
+
+
+            /*
+             * Use your standard error modal instead of
+             * JavaScript alert().
+             */
+
+            $('#validation_error_message')
+                .text(errorMessage);
+
+            showValidationErrorModal(errorMessage);
+        }
+
+    });
+
+});
+
+
+
+/* ============================================================
+ * CONFIRM PAYMENT DELETION
+ * ============================================================
+ *
+ * Executes the actual deletion after the user confirms
+ * deletion from the Purchase Order Payment Delete Modal.
+ * ============================================================ */
+
+$('body').on('click', '#deletePurchaseOrderPaymentConfirmed', function (event)
+{
+    event.preventDefault();
+
+
+    /* ========================================================
+     * GET REQUIRED VALUES
+     * ======================================================== */
+
+    const purchase_order_id = {{ $PurchaseOrderID }};
+
+    const paymentitemID = $('#deletePurchaseOrderPaymentConfirmed').val();
+
+
+    /* ========================================================
+     * VALIDATE PAYMENT ID
+     * ======================================================== */
+
+    if (!paymentitemID)
+    {
+        console.error('Payment Item ID is missing.');
+
+        showValidationErrorModal(
+            'Unable to delete the payment. Payment information is missing.'
+        );
+
+        return;
+    }
+
+
+    /* ========================================================
+     * DELETE PAYMENT
+     * ======================================================== */
+
+    $.ajax({
+
+        url: "{{ route('DeletePayment') }}",
+
+        type: "POST",
+
+        data: {
+            purchase_order_idx: purchase_order_id,
+            paymentitemID: paymentitemID,
+            _token: "{{ csrf_token() }}"
+        },
+
+        dataType: 'json',
+
+
+        /* ====================================================
+         * BEFORE SEND
+         * ==================================================== */
+
+        beforeSend: function ()
+        {
+            /*
+             * Disable Delete button to prevent double-clicks
+             * and duplicate deletion requests.
+             */
+
+            $('#deletePurchaseOrderPaymentConfirmed')
+                .prop('disabled', true);
+
+
+            /*
+             * Optional loading state.
+             *
+             * If you already have setButtonLoading(), use it
+             * here so it follows the rest of your application.
+             */
+
+            setButtonLoading(
+                '#deletePurchaseOrderPaymentConfirmed',
+                true
+            );
+        },
+
+
+        /* ====================================================
+         * SUCCESS
+         * ==================================================== */
+
+        success: function (response)
+        {
+            console.log('Delete Payment Response:', response);
+
+
+            if (response)
+            {
+                /*
+                 * Close the confirmation modal first.
+                 *
+                 * This happens only after the server confirms
+                 * that the payment was successfully deleted.
+                 */
+
+                $('#PurchaseOrderPaymentDeleteModal')
+                    .modal('hide');
+
+
+                /*
+                 * Display standard success modal.
+                 */
+
+                showSuccessModal(
+                    response.success || 'Purchase Order Payment Deleted'
+                );
+
+
+                /*
+                 * Reload the payment table/list so the deleted
+                 * payment is immediately removed from the UI.
+                 */
+
+                initializePurchaseOrderPaymentTable();
+            }
+        },
+
+
+        /* ====================================================
+         * COMPLETE
+         * ==================================================== */
+
+        complete: function ()
+        {
+            /*
+             * Re-enable Delete button after the AJAX request
+             * finishes, whether successful or unsuccessful.
+             */
+
+            $('#deletePurchaseOrderPaymentConfirmed')
+                .prop('disabled', false);
+
+
+            /*
+             * Remove loading state.
+             */
+
+            setButtonLoading(
+                '#deletePurchaseOrderPaymentConfirmed',
+                false
+            );
+        },
+
+
+        /* ====================================================
+         * ERROR
+         * ==================================================== */
+
+        error: function (xhr)
+        {
+            console.error('Delete Payment Error:', xhr);
+
+
+            /*
+             * Send Laravel validation errors through the
+             * standard payment validation handler.
+             */
+
+            handleValidation(xhr);
+
+
+            /*
+             * Optional generic action error message.
+             */
+
+            $('#action_error_message')
+                .text('Unable to delete payment.');
+        }
+
+    });
+
+});
+
+   
+	
  </script>

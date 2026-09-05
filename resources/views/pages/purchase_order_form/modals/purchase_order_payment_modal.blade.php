@@ -142,12 +142,7 @@
                                                 Reference Number
 
                                             </label>
-											<!--
-                                            <input type="text"
-                                                   class="form-control rounded-3"
-                                                   id="purchase_order_reference_no"
-                                                   name="purchase_order_reference_no"
-                                                   placeholder="Transaction / Deposit Slip No.">-->
+
 											<textarea class="form-control rounded-3"
 											id="purchase_order_reference_no"
 											name="purchase_order_reference_no"
@@ -312,39 +307,163 @@
 
 </div>	
 	
-<!-- SUCCESS MODAL -->
+
+<!-- PAYMENT DELETE MODAL -->
 <div class="modal fade"
-     id="SuccessModal"
+     id="PurchaseOrderPaymentDeleteModal"
      tabindex="-1"
+     aria-labelledby="PurchaseOrderPaymentDeleteModalLabel"
      aria-hidden="true">
 
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
 
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
-            <div class="modal-body text-center p-4">
+            <!-- HEADER -->
+            <div class="modal-body p-4">
 
-                <!-- ICON -->
-                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                     style="width:80px;height:80px;">
+                <!-- WARNING ICON -->
+                <div class="text-center">
 
-                    <i class="bi bi-check-circle-fill text-success fs-1"></i>
+                    <div class="bg-warning bg-opacity-10 rounded-circle
+                                d-inline-flex align-items-center
+                                justify-content-center mb-3"
+                         style="width:80px;height:80px;">
+
+                        <i class="bi bi-exclamation-triangle-fill
+                                  text-warning fs-1"></i>
+
+                    </div>
+
+                    <!-- TITLE -->
+                    <h5 class="fw-bold mb-2"
+                        id="PurchaseOrderPaymentDeleteModalLabel">
+
+                        Delete Payment?
+
+                    </h5>
+
+                    <!-- MESSAGE -->
+                    <div class="text-muted mb-4">
+
+                        Are you sure you want to delete this payment?
+                        <br>
+                        <small>This action cannot be undone.</small>
+
+                    </div>
 
                 </div>
 
-                <!-- TITLE -->
-                <h5 class="fw-bold mb-2"
-                    id="success_modal_title">
 
-                    Success
+                <!-- PAYMENT INFORMATION -->
+                <div class="row g-3 mb-4">
 
-                </h5>
+                    <!-- PAYMENT DETAILS -->
+                    <div class="col-md-5">
 
-                <!-- MESSAGE -->
-                <div class="text-muted"
-                     id="success_modal_message">
+                        <div class="border rounded-3 p-3 h-100">
 
-                    Record saved successfully.
+                            <div class="fw-semibold mb-3">
+                                <i class="bi bi-receipt me-1"></i>
+                                Payment Details
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="small text-muted">
+                                    Bank
+                                </div>
+
+                                <div class="fw-semibold"
+                                     id="delete_purchase_order_bank">
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <div class="small text-muted">
+                                    Date of Payment
+                                </div>
+
+                                <div class="fw-semibold"
+                                     id="delete_purchase_order_date_of_payment">
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <div class="small text-muted">
+                                    Reference No.
+                                </div>
+
+                                <div class="fw-semibold"
+                                     id="delete_purchase_order_reference_no">
+                                </div>
+                            </div>
+
+
+                            <div>
+                                <div class="small text-muted">
+                                    Amount
+                                </div>
+
+                                <div class="fw-bold fs-5"
+                                     id="delete_purchase_order_payment_amount">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAYMENT IMAGE -->
+                    <div class="col-md-7">
+
+                        <div class="border rounded-3 p-3 h-100">
+
+                            <div class="fw-semibold mb-3">
+                                <i class="bi bi-image me-1"></i>
+                                Payment Proof
+                            </div>
+
+                            <div class="delete_img-holder
+                                        text-center
+                                        d-flex
+                                        align-items-center
+                                        justify-content-center"
+                                 style="min-height:180px;">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-center gap-2">
+
+                    <button type="button"
+                            class="btn btn-danger px-4"
+                            id="deletePurchaseOrderPaymentConfirmed"
+                            value="">
+
+                        <i class="bi bi-trash3 me-1"></i>
+                        Delete Payment
+
+                    </button>
+
+
+                    <button type="button"
+                            class="btn btn-secondary px-4"
+                            data-bs-dismiss="modal">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Cancel
+
+                    </button>
 
                 </div>
 
@@ -357,102 +476,6 @@
 </div>
 
 
-<!-- VALIDATION ERROR MODAL -->
-<div class="modal fade"
-     id="ValidationErrorModal"
-     tabindex="-1"
-     aria-hidden="true">
-
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-
-        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-
-            <!-- BODY -->
-            <div class="modal-body text-center p-4">
-
-                <!-- ICON -->
-                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                     style="width:80px;height:80px;">
-
-                    <i class="bi bi-exclamation-circle-fill text-danger fs-1"></i>
-
-                </div>
-
-                <!-- TITLE -->
-                <h5 class="fw-bold text-danger mb-2" id="action_error_message">
-
-                    Validation Error
-
-                </h5>
-
-                <!-- MESSAGE -->
-                <div class="text-muted"
-                     id="validation_error_message">
-
-                    Please check the Required Input.
-
-                </div> 
-
-            </div>
-
-            <!-- FOOTER -->
-            <div class="modal-footer border-0 justify-content-center pb-4">
-
-                <button type="button"
-                        class="btn btn-danger rounded-3 px-4"
-                        data-bs-dismiss="modal">
-
-                    <i class="bi bi-x-circle me-2"></i>
-                    Close
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>	
-	
-	
-	<!-- Bill Delete Modal-->
-    <div class="modal fade" id="PurchaseOrderPaymentDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header header_modal_bg">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
- 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
-                </div>
-				
-                <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Payment?<br>
-				</div>
-				<div class="row mb-2">
-				<div class="col-sm-4">
-				<div align="left"style="margin: 10px;">
-				
-				Bank: <span id="delete_purchase_order_bank"></span><br>
-				Date Of Payment: <span id="delete_purchase_order_date_of_payment"></span><br>	
-				Reference No.: <span id="delete_purchase_order_reference_no"></span><br>
-				Amount: <span id="delete_purchase_order_payment_amount"></span><br>
-				
-				</div>
-				</div>
-				<div class="col-sm-8">
-					<div class="delete_img-holder" align="center"></div>
-				</div>
-				</div>
-				
-                <div class="modal-footer footer_modal_bg">
-				
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deletePurchaseOrderPaymentConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
-                  
-                </div>
-            </div>
-        </div>
-    </div>	
 	
 	<!-- Bill Delete Modal-->
     <div class="modal fade" id="PurchaseOrderViewPaymentReferenceModal" tabindex="-1" role="dialog" aria-hidden="true">
