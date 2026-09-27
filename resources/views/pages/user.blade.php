@@ -140,6 +140,9 @@
 						  <div class="col-sm-9">
 								<select class="form-select form-control" required="" name="user_type" id="user_type" onchange="ChangeAccessType_Add()">
 								<option selected="" disabled="" value="">Choose...</option>
+								<?php if($data->user_type=="SUAdmin"){ ?>
+									<option value="SUAdmin">SUAdmin</option>
+								<?php } ?>
 								<option value="Admin">Admin</option>
 								<option value="Supervisor">Supervisor</option>
 								<option value="Accounting_Staff">Accounting Staff</option>
@@ -254,6 +257,9 @@
 						  <div class="col-sm-9">
 								<select class="form-select form-control" required="" name="update_user_type" id="update_user_type" onchange="ChangeAccessType_Update()">
 								<option selected="" disabled="" value="">Choose...</option>
+								<?php if($data->user_type=="SUAdmin"){ ?>
+									<option value="SUAdmin">SUAdmin</option>
+								<?php } ?>
 								<option value="Admin">Admin</option>
 								<option value="Supervisor">Supervisor</option>
 								<option value="Accounting_Staff">Accounting Staff</option>

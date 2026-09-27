@@ -371,7 +371,7 @@ class ClientController extends Controller
 				'client_province'     => 'required|string|max:255',
 				'client_country'      => 'required|string|max:100',
 	
-				'client_tin'            => 'required',
+				'client_tin'            => 'nullable|string|max:100',
 				'client_contact_number' => 'required|string|max:50',
 				'client_email_address'  => 'nullable|email|max:255',
 
@@ -578,7 +578,7 @@ class ClientController extends Controller
 				'client_province'     => 'required|string|max:255',
 				'client_country'      => 'required|string|max:100',
 				
-				'client_tin'            => 'required',
+				'client_tin'            => 'nullable|string|max:100',
 
 				'client_contact_number' => 'required',
 				'client_email_address'  => 'nullable|email|max:255',
