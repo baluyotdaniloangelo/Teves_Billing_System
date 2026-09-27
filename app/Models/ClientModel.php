@@ -59,6 +59,7 @@ protected $fillable = [
 	'client_province',
 	'client_country',
 	
+	'client_id_type',
 	'client_tin',
     'client_email_address',
     'client_contact_number',
@@ -111,6 +112,7 @@ protected static $logAttributes = [
 	'client_province',
 	'client_country',
 	
+	'client_id_type',
     'client_tin',
     'client_email_address',
     'client_contact_number',

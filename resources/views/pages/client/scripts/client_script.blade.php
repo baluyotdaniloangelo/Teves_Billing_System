@@ -580,6 +580,9 @@ function openEditClientModal()
             ==========================================
             */
 
+            $('#client_id_type')
+                .val(data.client_id_type);
+				
             $('#client_tin')
                 .val(data.client_tin);
 
@@ -681,8 +684,11 @@ function saveClient(event)
         ==========================================
         */
 
-        client_name: $('#client_name').val(),
-        customer_type: $('#customer_type').val(),
+        client_name:
+            $('#client_name').val(),
+
+        customer_type:
+            $('#customer_type').val(),
 
         client_contact_number:
             $('#client_contact_number').val(),
@@ -757,7 +763,8 @@ function saveClient(event)
         ==========================================
         */
 
-        sales_agent_idx: sales_agent_idx,
+        sales_agent_idx:
+            sales_agent_idx,
 
 
         /*
@@ -765,6 +772,9 @@ function saveClient(event)
         TAX & PAYMENT SETTINGS
         ==========================================
         */
+
+        client_id_type:
+            $('#client_id_type').val(),
 
         client_tin:
             $('#client_tin').val(),
@@ -840,7 +850,6 @@ function saveClient(event)
 
     });
 }
-
 
 /*==================================================
 DELETE MODAL

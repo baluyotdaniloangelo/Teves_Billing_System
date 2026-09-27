@@ -690,208 +690,283 @@
 
 							<div class="col-lg-12 mx-auto">
 
-								<!-- TIN -->
-								<div class="mb-4">
+<!-- ID TYPE + ID NUMBER -->
+<div class="row">
 
-									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+    <!-- ID TYPE -->
+    <div class="col-md-5 mb-4">
 
-										<span class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-											  style="width:34px;height:34px;">
-											<i class="bi bi-receipt text-warning"></i>
-										</span>
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-										<span>TIN Number</span>
+            <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-person-vcard text-primary"></i>
+            </span>
 
-									</label>
+            <span>ID Type</span>
 
-									<input type="text"
-										   class="form-control rounded-3"
-										   name="client_tin"
-										   id="client_tin"
-										   placeholder="000-000-000-000"
-										   autocomplete="off">
+        </label>
 
-									<div class="invalid-feedback"
-										 id="client_tin_error">
-									</div>
+        <select class="form-select rounded-3"
+                name="client_id_type"
+                id="client_id_type">
 
-								</div>
+            <option value="">Select ID Type</option>
 
+            <optgroup label="Tax / Business">
+                <option value="TIN_ID">TIN ID</option>
+                <option value="BIR_TIN">BIR TIN</option>
+                <option value="SEC_REGISTRATION">SEC Registration No.</option>
+                <option value="DTI_REGISTRATION">DTI Registration No.</option>
+                <option value="BUSINESS_PERMIT">Business Permit No.</option>
+                <option value="COMPANY_ID">Company ID</option>
+            </optgroup>
 
-								<!-- LESS / DISCOUNT -->
-								<div class="mb-4">
+            <optgroup label="Government-Issued ID">
+                <option value="NATIONAL_ID">Philippine National ID</option>
+                <option value="PASSPORT">Passport</option>
+                <option value="DRIVERS_LICENSE">Driver's License</option>
+                <option value="UMID">UMID</option>
+                <option value="POSTAL_ID">Postal ID</option>
+                <option value="PRC_ID">PRC ID</option>
+                <option value="SSS_ID">SSS ID</option>
+                <option value="PHILHEALTH_ID">PhilHealth ID</option>
+                <option value="PAGIBIG_ID">Pag-IBIG ID</option>
+                <option value="VOTERS_ID">Voter's ID</option>
+            </optgroup>
 
-									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+            <optgroup label="Other IDs">
+                <option value="SENIOR_CITIZEN_ID">Senior Citizen ID</option>
+                <option value="PWD_ID">PWD ID</option>
+                <option value="OTHER_ID">Other ID</option>
+            </optgroup>
 
-										<span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-											  style="width:34px;height:34px;">
-											<i class="bi bi-percent text-success"></i>
-										</span>
+        </select>
 
-										<span>Less / Discount</span>
+        <div class="invalid-feedback"
+             id="client_id_type_error">
+        </div>
 
-									</label>
+    </div>
 
-									<div class="input-group">
 
-										<input type="number"
-											   class="form-control rounded-start"
-											   name="default_less_percentage"
-											   id="default_less_percentage"
-											   step=".01"
-											   min="0"
-											   placeholder="0.00">
+    <!-- ID NUMBER -->
+    <div class="col-md-7 mb-4">
 
-										<span class="input-group-text">%</span>
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-									</div>
+            <span class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-receipt text-warning"></i>
+            </span>
 
-									<div class="invalid-feedback"
-										 id="default_less_percentage_error">
-									</div>
+            <span>ID Number</span>
 
-								</div>
+        </label>
 
+        <input type="text"
+               class="form-control rounded-3"
+               name="client_tin"
+               id="client_tin"
+               placeholder="Enter ID Number"
+               autocomplete="off">
 
-								<!-- NET -->
-								<div class="mb-4">
+        <div class="invalid-feedback"
+             id="client_tin_error">
+        </div>
 
-									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+    </div>
 
-										<span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-											  style="width:34px;height:34px;">
-											<i class="bi bi-calculator text-primary"></i>
-										</span>
+</div>
 
-										<span>Net Value</span>
 
-									</label>
+<!-- PAYMENT TERMS / LESS DISCOUNT -->
+<div class="row">
 
-									<div class="input-group">
+    <!-- PAYMENT TERMS -->
+    <div class="col-md-6 mb-4">
 
-										<input type="number"
-											   class="form-control rounded-start"
-											   name="default_net_percentage"
-											   id="default_net_percentage"
-											   step=".01"
-											   min="0"
-											   placeholder="0.00">
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-										<span class="input-group-text">%</span>
+            <span class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-calendar-check text-secondary"></i>
+            </span>
 
-									</div>
+            <span>Payment Terms</span>
 
-									<div class="invalid-feedback"
-										 id="default_net_percentage_error">
-									</div>
+        </label>
 
-								</div>
+        <select class="form-select rounded-3"
+                name="default_payment_terms"
+                id="default_payment_terms">
 
+            <option value="Not Set" selected>Not Set</option>
+            <option value="COD">COD</option>
+            <option value="7 Days">7 Days</option>
+            <option value="15 Days">15 Days</option>
+            <option value="30 Days">30 Days</option>
+            <option value="45 Days">45 Days</option>
+            <option value="60 Days">60 Days</option>
+            <option value="90 Days">90 Days</option>
 
-								<!-- VAT -->
-								<div class="mb-4">
+        </select>
 
-									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+        <div class="invalid-feedback"
+             id="default_payment_terms_error">
+        </div>
 
-										<span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-											  style="width:34px;height:34px;">
-											<i class="bi bi-receipt-cutoff text-info"></i>
-										</span>
+    </div>
 
-										<span>VAT Value</span>
 
-									</label>
+    <!-- LESS / DISCOUNT -->
+    <div class="col-md-6 mb-4">
 
-									<div class="input-group">
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-										<input type="number"
-											   class="form-control rounded-start"
-											   name="default_vat_percentage"
-											   id="default_vat_percentage"
-											   step=".01"
-											   min="0"
-											   placeholder="0.00">
+            <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-percent text-success"></i>
+            </span>
 
-										<span class="input-group-text">%</span>
+            <span>Less / Discount</span>
 
-									</div>
+        </label>
 
-									<div class="invalid-feedback"
-										 id="default_vat_percentage_error">
-									</div>
+        <div class="input-group">
 
-								</div>
+            <input type="number"
+                   class="form-control rounded-start"
+                   name="default_less_percentage"
+                   id="default_less_percentage"
+                   step=".01"
+                   min="0"
+                   placeholder="0.00">
 
+            <span class="input-group-text">%</span>
 
-								<!-- WITHHOLDING TAX -->
-								<div class="mb-4">
+        </div>
 
-									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+        <div class="invalid-feedback"
+             id="default_less_percentage_error">
+        </div>
 
-										<span class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-											  style="width:34px;height:34px;">
-											<i class="bi bi-cash-coin text-danger"></i>
-										</span>
+    </div>
 
-										<span>Withholding Tax</span>
+</div>
 
-									</label>
 
-									<div class="input-group">
+<!-- NET / VAT / WITHHOLDING TAX -->
+<div class="row">
 
-										<input type="number"
-											   class="form-control rounded-start"
-											   name="default_withholding_tax_percentage"
-											   id="default_withholding_tax_percentage"
-											   step=".01"
-											   min="0"
-											   placeholder="0.00">
+    <!-- NET -->
+    <div class="col-md-4 mb-4">
 
-										<span class="input-group-text">%</span>
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-									</div>
+            <span class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-calculator text-primary"></i>
+            </span>
 
-									<div class="invalid-feedback"
-										 id="default_withholding_tax_percentage_error">
-									</div>
+            <span>Net Value</span>
 
-								</div>
+        </label>
 
+        <div class="input-group">
 
-								<!-- PAYMENT TERMS -->
-								<div class="mb-4">
+            <input type="number"
+                   class="form-control rounded-start"
+                   name="default_net_percentage"
+                   id="default_net_percentage"
+                   step=".01"
+                   min="0"
+                   placeholder="0.00">
 
-									<label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+            <span class="input-group-text">%</span>
 
-										<span class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-											  style="width:34px;height:34px;">
-											<i class="bi bi-calendar-check text-secondary"></i>
-										</span>
+        </div>
 
-										<span>Payment Terms</span>
+        <div class="invalid-feedback"
+             id="default_net_percentage_error">
+        </div>
 
-									</label>
+    </div>
 
-									<select class="form-select rounded-3"
-											name="default_payment_terms"
-											id="default_payment_terms">
 
-										<option value="Not Set" selected>Not Set</option>
-										<option value="COD">COD</option>
-										<option value="7 Days">7 Days</option>
-										<option value="15 Days">15 Days</option>
-										<option value="30 Days">30 Days</option>
-										<option value="45 Days">45 Days</option>
-										<option value="60 Days">60 Days</option>
-										<option value="90 Days">90 Days</option>
+    <!-- VAT -->
+    <div class="col-md-4 mb-4">
 
-									</select>
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
 
-									<div class="invalid-feedback"
-										 id="default_payment_terms_error">
-									</div>
+            <span class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-receipt-cutoff text-info"></i>
+            </span>
 
-								</div>
+            <span>VAT Value</span>
+
+        </label>
+
+        <div class="input-group">
+
+            <input type="number"
+                   class="form-control rounded-start"
+                   name="default_vat_percentage"
+                   id="default_vat_percentage"
+                   step=".01"
+                   min="0"
+                   placeholder="0.00">
+
+            <span class="input-group-text">%</span>
+
+        </div>
+
+        <div class="invalid-feedback"
+             id="default_vat_percentage_error">
+        </div>
+
+    </div>
+
+
+    <!-- WITHHOLDING TAX -->
+    <div class="col-md-4 mb-4">
+
+        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+
+            <span class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:34px;height:34px;">
+                <i class="bi bi-cash-coin text-danger"></i>
+            </span>
+
+            <span>Withholding Tax</span>
+
+        </label>
+
+        <div class="input-group">
+
+            <input type="number"
+                   class="form-control rounded-start"
+                   name="default_withholding_tax_percentage"
+                   id="default_withholding_tax_percentage"
+                   step=".01"
+                   min="0"
+                   placeholder="0.00">
+
+            <span class="input-group-text">%</span>
+
+        </div>
+
+        <div class="invalid-feedback"
+             id="default_withholding_tax_percentage_error">
+        </div>
+
+    </div>
+
+</div>
+
+
+
 
 							</div>
 

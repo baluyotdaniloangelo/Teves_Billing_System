@@ -41,6 +41,7 @@ class ClientController extends Controller
 					'customer_type',
 					'client_account_number',
 					'client_address',
+					'client_id_type',
 					'client_tin',
 					'client_contact_number',
 					'client_email_address',
@@ -60,7 +61,7 @@ class ClientController extends Controller
 					'default_vat_percentage',
 					'default_withholding_tax_percentage',
 					'default_payment_terms',
-
+					
 					'sales_agent_idx',
 					'created_by_user_idx',
 					'created_at'
@@ -208,8 +209,9 @@ class ClientController extends Controller
 
 	}
 	
-	public function client_info(Request $request)
+	public function client_info_OLDsd(Request $request)
 	{
+		
 		$clientID = $request->clientID;
 
 		$data = ClientModel::with('referrer')
@@ -219,6 +221,7 @@ class ClientController extends Controller
 				'customer_type',
 				'client_account_number',
 				'client_address',
+				'client_id_type',
 				'client_tin',
 				'client_email_address',
 				'client_contact_number',
@@ -324,6 +327,9 @@ class ClientController extends Controller
 			|--------------------------------------------------------------------------
 			*/
 
+			'client_id_type' =>
+				$data->client_id_type,			
+				
 			'client_tin' =>
 				$data->client_tin,
 
@@ -353,6 +359,190 @@ class ClientController extends Controller
 		return 'Deleted';
 
 	} 
+
+
+public function client_info(Request $request)
+{
+    
+    $clientID = $request->clientID;
+
+    $data = ClientModel::with('referrer')
+        ->find($clientID, [
+
+            'client_id',
+            'client_name',
+            'customer_type',
+            'client_account_number',
+
+            // Address
+            'client_address',
+            'client_house_number',
+            'client_street',
+            'client_subdivision',
+            'client_barangay',
+            'client_city',
+            'client_province',
+            'client_country',
+
+            // ID Information
+            'client_id_type',
+            'client_tin',
+
+            'client_email_address',
+            'client_contact_number',
+
+            // Owner Information
+            'client_title',
+            'client_gender',
+            'client_first_name',
+            'client_middle_name',
+            'client_last_name',
+            'client_name_extension',
+            'client_birthday',
+
+            // Tax & Payment
+            'default_less_percentage',
+            'default_net_percentage',
+            'default_vat_percentage',
+            'default_withholding_tax_percentage',
+            'default_payment_terms',
+
+            // Referral
+            'sales_agent_idx'
+        ]);
+
+    if (!$data) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Client not found.'
+        ], 404);
+    }
+
+    return response()->json([
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACCOUNT INFORMATION
+        |--------------------------------------------------------------------------
+        */
+
+        'client_name' =>
+            $data->client_name,
+
+        'customer_type' =>
+            $data->customer_type,
+
+        'client_account_number' =>
+            $data->client_account_number,
+
+        'client_email_address' =>
+            $data->client_email_address,
+
+        'client_contact_number' =>
+            $data->client_contact_number,
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ADDRESS
+        |--------------------------------------------------------------------------
+        */
+
+        'client_address' =>
+            $data->client_address,
+
+        'client_house_number' =>
+            $data->client_house_number,
+
+        'client_street' =>
+            $data->client_street,
+
+        'client_subdivision' =>
+            $data->client_subdivision,
+
+        'client_barangay' =>
+            $data->client_barangay,
+
+        'client_city' =>
+            $data->client_city,
+
+        'client_province' =>
+            $data->client_province,
+
+        'client_country' =>
+            $data->client_country,
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | OWNER INFORMATION
+        |--------------------------------------------------------------------------
+        */
+
+        'client_title' =>
+            $data->client_title,
+
+        'client_gender' =>
+            $data->client_gender,
+
+        'client_first_name' =>
+            $data->client_first_name,
+
+        'client_middle_name' =>
+            $data->client_middle_name,
+
+        'client_last_name' =>
+            $data->client_last_name,
+
+        'client_name_extension' =>
+            $data->client_name_extension,
+
+        'client_birthday' =>
+            $data->client_birthday,
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | REFERRAL
+        |--------------------------------------------------------------------------
+        */
+
+        'sales_agent_idx' =>
+            $data->sales_agent_idx,
+
+        'sales_agent_name' =>
+            $data->referrer->sales_agent_name ?? null,
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TAX & PAYMENT SETTINGS
+        |--------------------------------------------------------------------------
+        */
+
+        'client_id_type' =>
+            $data->client_id_type,
+
+        'client_tin' =>
+            $data->client_tin,
+
+        'default_less_percentage' =>
+            $data->default_less_percentage,
+
+        'default_net_percentage' =>
+            $data->default_net_percentage,
+
+        'default_vat_percentage' =>
+            $data->default_vat_percentage,
+
+        'default_withholding_tax_percentage' =>
+            $data->default_withholding_tax_percentage,
+
+        'default_payment_terms' =>
+            $data->default_payment_terms
+
+    ]);
+}
 
 	public function create_client_post(Request $request)
 	{
@@ -461,8 +651,6 @@ class ClientController extends Controller
 		$client->client_account_number =
 			$client_account_number;
 
-		$client->client_address =
-			$request->client_address;
 
 		$client->client_contact_number =
 			$request->client_contact_number;
@@ -470,7 +658,36 @@ class ClientController extends Controller
 		$client->client_email_address =
 			$request->client_email_address;
 
+		/*
+		|--------------------------------------------------------------------------
+		| ADDRESS
+		|--------------------------------------------------------------------------
+		*/
 
+		$client->client_address =
+			$request->client_address;
+
+		$client->client_house_number =
+			$request->client_house_number;
+
+		$client->client_street =
+			$request->client_street;
+
+		$client->client_subdivision =
+			$request->client_subdivision;
+
+		$client->client_barangay =
+			$request->client_barangay;
+
+		$client->client_city =
+			$request->client_city;
+
+		$client->client_province =
+			$request->client_province;
+
+		$client->client_country =
+			$request->client_country;
+	
 		/*
 		|--------------------------------------------------------------------------
 		| OWNER INFORMATION
@@ -508,6 +725,9 @@ class ClientController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
+		$client->client_id_type =
+			$request->client_id_type;		
+			
 		$client->client_tin =
 			$request->client_tin;
 
@@ -680,9 +900,10 @@ class ClientController extends Controller
 		$client->customer_type =
 			$request->customer_type;
 
-		$client->client_address =
-			$request->client_address;
 
+		$client->client_id_type =
+			$request->client_id_type;	
+			
 		$client->client_tin =
 			$request->client_tin;
 
@@ -691,6 +912,36 @@ class ClientController extends Controller
 
 		$client->client_contact_number =
 			$request->client_contact_number;
+
+		/*
+		|--------------------------------------------------------------------------
+		| ADDRESS
+		|--------------------------------------------------------------------------
+		*/
+
+		$client->client_address =
+			$request->client_address;
+
+		$client->client_house_number =
+			$request->client_house_number;
+
+		$client->client_street =
+			$request->client_street;
+
+		$client->client_subdivision =
+			$request->client_subdivision;
+
+		$client->client_barangay =
+			$request->client_barangay;
+
+		$client->client_city =
+			$request->client_city;
+
+		$client->client_province =
+			$request->client_province;
+
+		$client->client_country =
+			$request->client_country;
 
 
 		/*
