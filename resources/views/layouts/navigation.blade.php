@@ -200,7 +200,7 @@
 			<a href="{{ route('report') }}" class="" title="Billing History">
               <i class="bi bi-file-earmark-text navbar_icon" title="Billing History"></i><span> Billing History</span>
             </a>
-			
+			<?php if($data->user_type=="Encoder" ){ ?>
 			<a href="{{ route('salesordersummary') }}" class="" title="Sales Summary">
               <i class="bi bi-bar-chart-line navbar_icon" title="Sales Order Summary"></i><span> Sales Order</span>
             </a>		
@@ -224,7 +224,7 @@
 			<a href="{{ route('sales_report') }}" class="" title="Sales Report">
               <i class="bi bi-bar-chart-line navbar_icon" title="Sales Report"></i><span> Sales Report</span>
             </a>
-			
+			<?php } ?>
 		  </li>
 		</ul>
       </li>
