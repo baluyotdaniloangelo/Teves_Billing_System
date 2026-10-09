@@ -693,7 +693,7 @@ function saveCashierReport(event)
                 setTimeout(function()
                 {
                     const url =
-                        "{{ URL::to('cashiers_report_form') }}";
+                        "{{ URL::to('cashiers_report_form_lpg') }}";
 
                     window.location.href =
                         url + '/' + cashier_report_id;
