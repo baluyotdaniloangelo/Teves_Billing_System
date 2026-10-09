@@ -279,11 +279,12 @@
 <!--For Revision-->
 @include('pages.cashiers_report_form.scripts.dipstick_inventory_script')
 @include('pages.cashiers_report_form.scripts.cash_on_hand_script')
-@include('pages.cashiers_report_form.scripts.non_cash_payment_script')
 
 
 
 @include('pages.validation.scripts.validation_script')
+
+@include('pages.cashiers_report_form.scripts.non_cash_payment_script')
 
 
 @endsection

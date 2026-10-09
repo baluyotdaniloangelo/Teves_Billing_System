@@ -411,16 +411,14 @@ class CashiersReportLPGController extends Controller
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
 											->where('shift', $request->shift)
-											->where('cashier_report_type', 'LPG')
-										->whereNull('deleted_at') // ignore deleted rows
+											->whereNull('deleted_at') // ignore deleted rows
 										)],
 			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
 										fn ($query) =>$query
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift) 
-											->where('cashier_report_type', 'LPG')
-										->whereNull('deleted_at') // ignore deleted rows
+											->whereNull('deleted_at') // ignore deleted rows
 										)],
 			'forecourt_attendant'   => 'required',
 			'cashiers_name'   		=> 'required',
@@ -429,8 +427,7 @@ class CashiersReportLPGController extends Controller
 											->where('report_date', $request->report_date)
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
-											->where('cashier_report_type', 'LPG')
-										->whereNull('deleted_at') // ignore deleted rows
+											->whereNull('deleted_at') // ignore deleted rows
 										)]
         ], 
         [
@@ -498,8 +495,7 @@ class CashiersReportLPGController extends Controller
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
 											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
-											->where('cashier_report_type', 'LPG')
-										->whereNull('deleted_at') // ignore deleted rows											
+											->whereNull('deleted_at') // ignore deleted rows											
 										)],
 			'teves_branch'   		=> ['required',Rule::unique('teves_cashiers_report')->where( 
 										fn ($query) =>$query
@@ -507,8 +503,7 @@ class CashiersReportLPGController extends Controller
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
 											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
-											->where('cashier_report_type', 'LPG')
-										->whereNull('deleted_at') // ignore deleted rows			
+											->whereNull('deleted_at') // ignore deleted rows			
 										)],
 			'forecourt_attendant'   => 'required',
 			'cashiers_name'   		=> 'required',
@@ -518,8 +513,7 @@ class CashiersReportLPGController extends Controller
 											->where('teves_branch', $request->teves_branch)
 											->where('shift', $request->shift)
 											->where('cashiers_report_id', '<>',  $request->CashiersReportId )
-											->where('cashier_report_type', 'LPG')
-										->whereNull('deleted_at') // ignore deleted rows			
+											->whereNull('deleted_at') // ignore deleted rows			
 										)]
         ], 
         [

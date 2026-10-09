@@ -183,17 +183,7 @@ else if (Request::is('purchase_order_form/*')){
 	<?php
 }
 
-else if (Request::is('cashiers_report_form/*')){
-?>
-<body class="">
-@include('layouts.footer')
-@include('layouts.cashier_report_form_script')
-@include('layouts.cashier_report_form_script_p1')
-@include('layouts.cashier_report_form_script_p7')
-@include('layouts.cashier_report_form_script_p8_v01212026')
-@include('layouts.cashier_report_form_script_p9')
-<?php
-}
+
 else if (Request::is('cashiers_report_form_fuel/*')){
 ?>
 <body class="">

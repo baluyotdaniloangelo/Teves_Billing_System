@@ -65,9 +65,21 @@ $(function () {
         if (!form) return;
         form.reset();
         form.classList.remove('was-validated');
+        $('#non_cash_payment_error').addClass('d-none').text('');
         $('#non_cash_payment_id').val('0');
         $('#nonCashPaymentModalTitle').text(isEdit ? 'Edit Non-Cash Payment' : 'Add Non-Cash Payment');
         $('#save_non_cash_payment span').text(isEdit ? 'Update Payment' : 'Save Payment');
+    }
+
+    function showSaveError(xhr) {
+        const response = xhr.responseJSON || {};
+        const validationErrors = response.errors || {};
+        const details = Object.values(validationErrors).flat().filter(Boolean).join(' ');
+        const message = [response.message, details].filter(Boolean).join(' ')
+            || `Unable to save payment (HTTP ${xhr.status || 'error'}). Check that all fields are valid, then try again.`;
+
+        $('#non_cash_payment_error').text(message).removeClass('d-none');
+        console.error('Non-Cash Payment save failed.', xhr);
     }
 
     function showModal(element) {
@@ -78,9 +90,21 @@ $(function () {
         }
     }
 
-    function savePayment() {
+    function savePayment(event) {
+        event.preventDefault();
+        console.debug('[Fuel non-cash] Form submit reached.');
         const form = document.getElementById('non_cash_payment_form');
-        if (!form || !form.reportValidity()) return;
+        if (!form) return;
+        if (!form.checkValidity()) {
+            console.debug('[Fuel non-cash] Submit blocked: required fields are incomplete or invalid.');
+            form.reportValidity();
+            $('#non_cash_payment_error')
+                .text('Please complete all required fields before saving.')
+                .removeClass('d-none');
+            return;
+        }
+        $('#non_cash_payment_error').addClass('d-none').text('');
+        console.debug('[Fuel non-cash] Sending save request.');
         $.ajax({
             url: "{{ route('cashiers_report_non_cash_payment.save') }}", type: 'POST',
             data: {
@@ -93,6 +117,10 @@ $(function () {
                 reference_number: $('#non_cash_payment_reference').val(),
                 _token: "{{ csrf_token() }}"
             },
+            beforeSend: function () {
+                $('#non_cash_payment_error').addClass('d-none').text('');
+                $('#save_non_cash_payment').prop('disabled', true).find('span').text('Saving...');
+            },
             success: function (response) {
                 bootstrap.Modal.getOrCreateInstance(paymentModal).hide();
                 const dt = getTable(); if (dt) dt.ajax.reload(null, false);
@@ -100,12 +128,41 @@ $(function () {
                 $('#switch_notice_on').show(); $('#sw_on').text(response.success || 'Payment saved.');
                 setTimeout(function () { $('#switch_notice_on').fadeOut('fast'); }, 1200);
             },
-            error: function (xhr) { console.error('Non-Cash Payment save failed.', xhr); }
+            error: showSaveError,
+            complete: function () {
+                $('#save_non_cash_payment').prop('disabled', false)
+                    .find('span').text(Number($('#non_cash_payment_id').val() || 0) > 0 ? 'Update Payment' : 'Save Payment');
+            }
         });
     }
 
     $('#add_non_cash_payment').on('click', function () { setMode(false); });
-    $('#save_non_cash_payment').on('click', savePayment);
+    // Delegate because the modal is rendered outside the report tab and the
+    // page loads/reloads jQuery in its layout footer.
+    $(document)
+        .off('submit.fuelNonCashPayment', '#non_cash_payment_form')
+        .on('submit.fuelNonCashPayment', '#non_cash_payment_form', savePayment);
+
+    // The submit button sits in the modal footer, outside the form element.
+    // Explicitly submit the associated form so the save path is reliable.
+    $(document)
+        .off('click.fuelNonCashPayment', '#save_non_cash_payment')
+        .on('click.fuelNonCashPayment', '#save_non_cash_payment', function (event) {
+            event.preventDefault();
+            console.debug('[Fuel non-cash] Save button clicked.');
+
+            const form = document.getElementById('non_cash_payment_form');
+            if (!form) {
+                console.error('[Fuel non-cash] Form #non_cash_payment_form was not found.');
+                return;
+            }
+
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+            } else {
+                savePayment(event);
+            }
+        });
     $('#confirm_delete_non_cash_payment').on('click', function () {
         const id = $(this).val();
         $.ajax({
