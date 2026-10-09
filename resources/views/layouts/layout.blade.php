@@ -194,6 +194,16 @@ else if (Request::is('cashiers_report_form/*')){
 @include('layouts.cashier_report_form_script_p9')
 <?php
 }
+else if (Request::is('cashiers_report_form_fuel/*')){
+?>
+<body class="">
+@include('layouts.footer')
+<!-- Re-attach DataTables to the jQuery instance loaded by the footer. -->
+<script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
+<script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
+<script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
+<?php
+}
 else if (Request::is('monthly_sales')){
 ?>
 <body class="">

@@ -16,6 +16,37 @@ use Illuminate\Validation\Rule;
 
 class CashiersReport_Payment_Controller extends Controller
 {
+    public function listNonCashPayments(Request $request)
+    {
+        $rows = CashiersReportModel_P8::where('cashiers_report_idx', $request->input('cash_report_id'))
+            ->orderBy('cashiers_report_p8_id')
+            ->get([
+                'cashiers_report_p8_id as non_cash_payment_id',
+                'payment_type', 'payment_amount', 'payer_name', 'payer_number', 'reference_number'
+            ]);
+        return response()->json($rows);
+    }
+
+    public function getNonCashPaymentInfo(Request $request)
+    {
+        $request->merge(['CRPH8_ID' => $request->input('non_cash_payment_id')]);
+        return $this->cashiers_report_p8_info($request);
+    }
+
+    public function saveNonCashPayment(Request $request)
+    {
+        $request->merge([
+            'CRPH8_ID' => $request->input('non_cash_payment_id'),
+            'CashiersReportId' => $request->input('cash_report_id'),
+        ]);
+        return $this->save_cash_payment_cashiers_report_p8($request);
+    }
+
+    public function deleteNonCashPayment(Request $request)
+    {
+        $request->merge(['CRPH8_ID' => $request->input('non_cash_payment_id')]);
+        return $this->delete_cash_payment_report($request);
+    }
     /* ================= SAVE / UPDATE ================= */
     public function save_cash_payment_cashiers_report_p8(Request $request)
     {

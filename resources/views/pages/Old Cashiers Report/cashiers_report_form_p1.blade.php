@@ -1,5 +1,13 @@
 	<!--Part 1-->
-	
+	<button type="button"
+                    class="btn btn-success rounded-3 shadow-sm "
+                    data-bs-toggle="modal"
+                    data-bs-target="#AddProductModal" 
+					id="AddPurchaseOrderProductBTN">
+
+                <i class="bi bi-plus-circle me-1"></i>
+                Add
+            </button>
 	<div align="right">
 			<button type="button" class="btn btn-success new_item bi bi-plus-circle" data-bs-toggle="modal" data-bs-target="#CRPH1_Modal" id="CRPH1_Modal_add"></button>
 	</div>

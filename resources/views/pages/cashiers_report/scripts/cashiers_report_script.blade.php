@@ -1497,4 +1497,19 @@ $('body').on(
 
     }
 );
+
+	function printCashierReportPDF(id){
+		
+		let CashiersReportId = id;
+		
+		var query = {
+			CashiersReportId:CashiersReportId,
+			_token: "{{ csrf_token() }}"
+		}
+
+		var url = "{{URL::to('generate_cashier_report_pdf')}}?" + $.param(query)
+		window.open(url);
+	  
+	}
+	
 </script>

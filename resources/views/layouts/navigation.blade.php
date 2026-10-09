@@ -168,23 +168,23 @@
 
 	  <li class="nav-item ">
 	  
-		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Cashier's Report">
+		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-cashiers_report" data-bs-toggle="collapse" href="#" title="Cashier's Report">
           <i class="bi bi-graph-up-arrow navbar_icon"></i>
           <span title="Cashier's Report">Cashier's Report</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
+		<ul id="components-nav-cashiers_report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
           <li>
 		  
 			<a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Cashier's Report for Fuel">
 			  <i class="bi bi-journal-text navbar_icon"></i>
-			  <span title="Create Cashier's Report">List</span>
+			  <span title="Create Cashier's Report">Fuel</span>
 			</a>
-			<!--
-			<a class="nav-link navbar_bg" href="" title="Create Cashier's Report for Fuel">
+			<!-- -->
+			<a class="nav-link navbar_bg" href="{{ route('cashierReportLPG') }}" title="Create Cashier's Report for Fuel">
 			  <i class="bi bi-journal-text navbar_icon"></i>
 			  <span title="Create Cashier's Report for Fuel">LPG</span>
 			</a>
-			-->
+			
 		  </li>
 		</ul>
       </li>

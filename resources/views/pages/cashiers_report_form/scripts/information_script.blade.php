@@ -4,6 +4,26 @@
 CASHIER REPORT INFORMATION
 ==================================================*/
 
+(function () {
+    const overview = document.getElementById('cashierReportOverview');
+    const label = document.getElementById('cashierReportOverviewLabel');
+    const icon = document.getElementById('cashierReportOverviewIcon');
+
+    if (!overview || !label || !icon) return;
+
+    overview.addEventListener('show.bs.collapse', function () {
+        label.textContent = 'Hide Report Details';
+        icon.classList.remove('bi-chevron-down');
+        icon.classList.add('bi-chevron-up');
+    });
+
+    overview.addEventListener('hide.bs.collapse', function () {
+        label.textContent = 'Show Report Details';
+        icon.classList.remove('bi-chevron-up');
+        icon.classList.add('bi-chevron-down');
+    });
+})();
+
 LoadCashierReportInfo();
 
 
@@ -138,7 +158,7 @@ function LoadCashierReportInfo()
 
             setValue(
                 'report_date',
-                report.report_date
+                report.report_date ? String(report.report_date).slice(0, 10) : ''
             );
 
 

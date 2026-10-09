@@ -1398,39 +1398,75 @@ class SalesOrderController extends Controller
 
 	}
 	
-public function get_product_list_selling_price(Request $request)
-{
-    $userId = Session::get('loginID');
+	public function get_product_list_selling_price(Request $request)
+	{
+		$userId = Session::get('loginID');
 
-    $clients_price_list = DB::table('teves_product_table as pt')
-        ->select([
-            'pt.product_id as product_idx',
-            'pt.product_name',
-            'pt.product_unit_measurement',
-            DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
-        ])
+		$clients_price_list = DB::table('teves_product_table as pt')
+			->select([
+				'pt.product_id as product_idx',
+				'pt.product_name',
+				'pt.product_unit_measurement',
+				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+			])
 
-        ->join('teves_user_product_category_access as upca', function ($join) use ($userId) {
-            $join->on('pt.category_idx', '=', 'upca.category_idx')
-                 ->where('upca.user_idx', $userId);
-        })
+			->join('teves_user_product_category_access as upca', function ($join) use ($userId) {
+				$join->on('pt.category_idx', '=', 'upca.category_idx')
+					 ->where('upca.user_idx', $userId);
+			})
 
-        ->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($request) {
-            $join->on('pt.product_id', '=', 'spt.product_idx')
-                 ->where('spt.branch_idx', $request->branch_idx)
-                 ->where('spt.client_idx', $request->client_idx);
-        })
+			->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($request) {
+				$join->on('pt.product_id', '=', 'spt.product_idx')
+					 ->where('spt.branch_idx', $request->branch_idx)
+					 ->where('spt.client_idx', $request->client_idx);
+			})
 
-        ->when($request->category_idx != 0, function ($query) use ($request) {
-            return $query->where('pt.category_idx', $request->category_idx);
-        })
+			->when($request->category_idx != 0, function ($query) use ($request) {
+				return $query->where('pt.category_idx', $request->category_idx);
+			})
 
-        ->whereNull('pt.deleted_at')
-        ->orderBy('pt.product_name')
-        ->get();
+			->whereNull('pt.deleted_at')
+			->orderBy('pt.product_name')
+			->get();
 
-    return response()->json([
-        'clients_price_list' => $clients_price_list
-    ]);
-}	
+		return response()->json([
+			'clients_price_list' => $clients_price_list
+		]);
+	}
+
+	public function get_product_list_selling_price_per_branch(Request $request)
+	{
+		$userId = Session::get('loginID');
+
+		$clients_price_list = DB::table('teves_product_table as pt')
+			->select([
+				'pt.product_id as product_idx',
+				'pt.product_name',
+				'pt.product_unit_measurement',
+				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+			])
+
+			->join('teves_user_product_category_access as upca', function ($join) use ($userId) {
+				$join->on('pt.category_idx', '=', 'upca.category_idx')
+					 ->where('upca.user_idx', $userId);
+			})
+
+			->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($request) {
+				$join->on('pt.product_id', '=', 'spt.product_idx')
+					 ->where('spt.branch_idx', $request->branch_idx);
+			})
+
+			->when($request->category_idx != 0, function ($query) use ($request) {
+				return $query->where('pt.category_idx', $request->category_idx);
+			})
+
+			->whereNull('pt.deleted_at')
+			->orderBy('pt.product_name')
+			->get();
+
+		return response()->json([
+			'clients_price_list' => $clients_price_list
+		]);
+	}	
+	
 }

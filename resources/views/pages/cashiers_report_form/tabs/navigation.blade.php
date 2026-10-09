@@ -21,7 +21,7 @@
 
     </li>
 	-->
-    <!-- PRODUCT -->
+    <!-- Fuel -->
     <li class="nav-item" role="presentation">
 
         <button class="nav-link active rounded-3 py-3 fw-semibold shadow-sm"
@@ -39,8 +39,27 @@
         </button>
 
     </li>
+	
+	<!-- Lube and Car Care, other products -->
+    <li class="nav-item" role="presentation">
 
-    <!-- WITHDRAWAL -->
+        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
+                id="cashiers_report_fuel-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#cashiers_report_car_care"
+                type="button"
+                role="tab"
+                aria-controls="cashiers_report_car_care"
+                aria-selected="false">
+
+            <i class="bi bi-droplet me-2"></i>
+            Lubricants & Car Care
+
+        </button>
+
+    </li>
+	
+    <!-- LPG
     <li class="nav-item" role="presentation">
 
         <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
@@ -59,8 +78,8 @@
         </button>
 
     </li>
-
-    <!-- PAYMENT -->
+	 -->
+    <!-- Cash -->
     <li class="nav-item" role="presentation">
 
         <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
@@ -73,7 +92,7 @@
                 aria-selected="false">
 
             <i class="bi bi-credit-card-2-front me-2"></i>
-            Cash Report
+            Cash Collection
 
         </button>
 

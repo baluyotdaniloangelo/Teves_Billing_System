@@ -18,6 +18,7 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderDeliveryController;
 use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
+use App\Http\Controllers\CashiersReportDipstickInventoryController;
 use App\Http\Controllers\CashiersReport_Payment_Controller;
 use App\Http\Controllers\CashiersReport_CashDeposit_Controller;
 use App\Http\Controllers\UserBranchAccessController;
@@ -35,6 +36,9 @@ use App\Services\SmsService;
 Route::get('/sms_blast', [SMSBlastController::class,'sms_blast'])->name('sms_blast')->middleware('isLoggedIn');
 Route::post('/send_sms_blast', [SMSBlastController::class,'send_sms_blast'])->name('send_sms_blast')->middleware('isLoggedIn');
 
+use App\Http\Controllers\CashiersReportFuelSalesController;
+use App\Http\Controllers\CashiersReportLubeAndCarCareController;
+use App\Http\Controllers\CashiersReportMiscellaneousItemsController;
 
 Route::get('/test-itexmo', function (SmsService $sms) {
  
@@ -410,6 +414,7 @@ Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::cl
 
 /*Get Product Selling Price of Client July 1, 2025*/
 Route::post('/get_product_list_selling_price', [SalesOrderController::class, 'get_product_list_selling_price'])->name('get_product_list_selling_price')->middleware('isLoggedIn');
+Route::post('/get_product_list_selling_price_per_branch', [SalesOrderController::class, 'get_product_list_selling_price_per_branch'])->name('get_product_list_selling_price_per_branch')->middleware('isLoggedIn');
 
 
 /*Sales Order Delivery*/
@@ -541,48 +546,44 @@ Route::post('/cashiers_report_info', [CashiersReportController::class, 'cashiers
 /**/
 Route::post('/delete_cashiers_report_info', [CashiersReportController::class, 'delete_cashiers_report_info'])->name('delete_cashiers_report_info')->middleware('isLoggedIn');
 
-/*Cashiers Report Part 1*/
+/*Cashiers Report - Load Form*/
 Route::get('/cashiers_report_form/{id}', [CashiersReportController::class, 'cashiers_report_form'])->name('cashiers_report_form')->middleware('isLoggedIn');
-Route::get('/cashiers_report_form_new/{id}', [CashiersReportController::class, 'cashiers_report_form_new'])->name('cashiers_report_form_new')->middleware('isLoggedIn');
-/*Save Cashier's Report Product*/
-Route::post('/save_product_cashiers_report_p1', [CashiersReportController::class,'save_product_cashiers_report_p1'])->name('SAVE_CHR_PH1')->middleware('isLoggedIn');
-/* Load Product P1 */
-Route::post('/get_cashiers_report_product_p1', [CashiersReportController::class,'get_cashiers_report_product_p1'])->name('GetCashiersProductP1')->middleware('isLoggedIn');
-/* Delete Product P1 */
-Route::post('/delete_cashiers_report_product_p1', [CashiersReportController::class,'delete_cashiers_report_product_p1'])->name('DeleteCashiersProductP1')->middleware('isLoggedIn');
-/*GET Cashiers report product P1*/
-Route::post('/cashiers_report_p1_info', [CashiersReportController::class, 'cashiers_report_p1_info'])->name('CRP1_info')->middleware('isLoggedIn');
+Route::get('/cashiers_report_form_fuel/{id}', [CashiersReportController::class, 'cashiers_report_form_fuel'])->name('cashiers_report_form_fuel')->middleware('isLoggedIn');
 
-/*Cashiers Report Part 2*/
-Route::post('/save_product_cashiers_report_PH2', [CashiersReportController::class,'save_product_cashiers_report_PH2'])->name('SAVE_CHR_PH2')->middleware('isLoggedIn');
+/*Save Cashier's Report Part 1 - Fuel Sales*/
+Route::post('/get_cashiers_report_fuel_products', [CashiersReportFuelSalesController::class, 'get_fuel_sales_products'])->name('GetFuelSalesProducts')->middleware('isLoggedIn');
+Route::post('/save_cashiers_report_fuel_sales', [CashiersReportFuelSalesController::class,'save_cashiers_report_fuel_sales'])->name('SaveFuelSales')->middleware('isLoggedIn');
+/* Load Product P1 */
+Route::post('/get_cashiers_report_fuel_sales', [CashiersReportFuelSalesController::class,'get_cashiers_report_fuel_sales'])->name('GetCashiersReportFuelSales')->middleware('isLoggedIn');
+/* Delete Product P1 */
+Route::post('/delete_cashiers_report_fuel_sales', [CashiersReportFuelSalesController::class,'delete_cashiers_report_fuel_sales'])->name('DeleteCashiersReportFuelSales')->middleware('isLoggedIn');
+/*GET Cashiers report product P1*/
+Route::post('/cashiers_report_fuel_sales_info', [CashiersReportFuelSalesController::class, 'cashiers_report_fuel_sales_info'])->name('FuelSalesInformation')->middleware('isLoggedIn');
+
+/*Cashiers Report Part 2 - Lubricants and Car Care*/
+Route::post('/save_lube_car_care', [CashiersReportLubeAndCarCareController::class,'save_lube_car_care'])->name('SaveLubeAndCarCareProducts')->middleware('isLoggedIn');
 /* Load Product P2 */
-Route::post('/get_cashiers_report_product_p2', [CashiersReportController::class,'get_cashiers_report_product_p2'])->name('GetCashiersProductP2')->middleware('isLoggedIn');
+Route::post('/get_cashiers_report_lube_car_care', [CashiersReportLubeAndCarCareController::class,'get_cashiers_report_lube_car_care'])->name('GetLubeAndCarCareProducts')->middleware('isLoggedIn');
 /* Delete Product P2 */
-Route::post('/delete_cashiers_report_product_p2', [CashiersReportController::class,'delete_cashiers_report_product_p2'])->name('DeleteCashiersProductP2')->middleware('isLoggedIn');
+Route::post('/delete_cashiers_report_lube_car_care', [CashiersReportLubeAndCarCareController::class,'delete_cashiers_report_lube_car_care'])->name('delete_cashiers_report_lube_car_care')->middleware('isLoggedIn');
 /*GET Cashiers report product P2*/
-Route::post('/cashiers_report_p2_info', [CashiersReportController::class, 'cashiers_report_p2_info'])->name('CRP2_info')->middleware('isLoggedIn');
+Route::post('/cashiers_report_lube_car_care_info', [CashiersReportLubeAndCarCareController::class, 'cashiers_report_lube_car_care_info'])->name('cashiers_report_lube_car_care_info')->middleware('isLoggedIn');
 
 /*Cashiers Report Part 3*/
-Route::post('/save_product_cashiers_report_PH3', [CashiersReportController::class,'save_product_cashiers_report_PH3'])->name('SAVE_CHR_PH3')->middleware('isLoggedIn');
-/* Load Product P3 */
-Route::post('/get_cashiers_report_product_p3_DISCOUNTS', [CashiersReportController::class,'get_cashiers_report_product_p3_DISCOUNTS'])->name('GetCashiersProductP3_DISCOUNTS')->middleware('isLoggedIn');
-/* Delete Product P3 */
-Route::post('/delete_cashiers_report_product_p3', [CashiersReportController::class,'delete_cashiers_report_product_p3'])->name('DeleteCashiersProductP3')->middleware('isLoggedIn');
-/*GET Cashiers report product P3*/
-Route::post('/cashiers_report_p3_info_SALES_CREDIT', [CashiersReportController::class, 'cashiers_report_p3_info_SALES_CREDIT'])->name('CRP3_info_SALES_CREDIT')->middleware('isLoggedIn');
-/*GET Cashiers report product P3*/
-Route::post('/cashiers_report_p3_info_OTHERS', [CashiersReportController::class, 'cashiers_report_p3_info_OTHERS'])->name('CRP3_info_OTHERS')->middleware('isLoggedIn');
-/*GET Cashiers report product P3*/
-Route::post('/cashiers_report_p3_info_DISCOUNT', [CashiersReportController::class, 'cashiers_report_p3_info_DISCOUNT'])->name('CRP3_info_DISCOUNT')->middleware('isLoggedIn');
+Route::post('/save_product_cashiers_report_PH3', [CashiersReportMiscellaneousItemsController::class,'save_product_cashiers_report_PH3'])->name('SAVE_CHR_PH3')->middleware('isLoggedIn');
+
+Route::post('/delete_cashiers_report_product_p3', [CashiersReportMiscellaneousItemsController::class,'delete_cashiers_report_product_p3'])->name('DeleteCashiersProductP3')->middleware('isLoggedIn');
+
+Route::post('/cashiers_report_p3_info_SALES_CREDIT', [CashiersReportMiscellaneousItemsController::class, 'cashiers_report_p3_info_SALES_CREDIT'])->name('CRP3_info_SALES_CREDIT')->middleware('isLoggedIn');
+Route::post('/cashiers_report_p3_info_OTHERS', [CashiersReportMiscellaneousItemsController::class, 'cashiers_report_p3_info_OTHERS'])->name('CRP3_info_OTHERS')->middleware('isLoggedIn');
+Route::post('/cashiers_report_p3_info_DISCOUNT', [CashiersReportMiscellaneousItemsController::class, 'cashiers_report_p3_info_DISCOUNT'])->name('CRP3_info_DISCOUNT')->middleware('isLoggedIn');
 
 Route::post('/so_reference_list', [SOBillingTransactionController::class, 'so_reference_list'])->name('so_reference_list')->middleware('isLoggedIn');
 
-
-/*Cashiers Report Part 3.1
-Route::post('/save_product_cashiers_report_PH3_1', [CashiersReportController::class,'save_product_cashiers_report_PH3_1'])->name('SAVE_CHR_PH3_1')->middleware('isLoggedIn');
-*//* Load Product P3 */
-Route::post('/get_cashiers_report_product_p3_SALES_CREDIT', [CashiersReportController::class,'get_cashiers_report_product_p3_SALES_CREDIT'])->name('GetCashiersProductP3_SALES_CREDIT')->middleware('isLoggedIn');
-Route::post('/get_cashiers_report_product_p3_OTHERS', [CashiersReportController::class,'get_cashiers_report_product_p3_OTHERS'])->name('GetCashiersProductP3_OTHERS')->middleware('isLoggedIn');
+/*Cashiers Report Part 3 - Miscellaneous Items*/
+Route::post('/get_cashiers_report_product_p3_SALES_CREDIT', [CashiersReportMiscellaneousItemsController::class,'get_cashiers_report_product_p3_SALES_CREDIT'])->name('GetCashiersProductP3_SALES_CREDIT')->middleware('isLoggedIn');
+Route::post('/get_cashiers_report_product_p3_DISCOUNTS', [CashiersReportMiscellaneousItemsController::class,'get_cashiers_report_product_p3_DISCOUNTS'])->name('GetCashiersProductP3_DISCOUNTS')->middleware('isLoggedIn');
+Route::post('/get_cashiers_report_product_p3_OTHERS', [CashiersReportMiscellaneousItemsController::class,'get_cashiers_report_product_p3_OTHERS'])->name('GetCashiersProductP3_OTHERS')->middleware('isLoggedIn');
 
 
 /*Cashiers Report Part 4*/
@@ -607,6 +608,13 @@ Route::post('/cashiers_report_summary_info', [CashiersReportController::class, '
 Route::post('/cashiers_report_update_summary_info', [CashiersReportController::class, 'cashiers_report_update_summary_info'])->name('CashiersReportUpdateSummary')->middleware('isLoggedIn');
 
 /*Cashiers Report Part 6*/
+/*Dipstick Inventory - descriptive routes for the Fuel report*/
+Route::post('/cashiers-report-dipstick-inventory/save', [CashiersReportDipstickInventoryController::class, 'saveDipstickInventory'])->name('cashiers_report_dipstick_inventory.save')->middleware('isLoggedIn');
+Route::post('/cashiers-report-dipstick-inventory/list', [CashiersReportDipstickInventoryController::class, 'getDipstickInventory'])->name('cashiers_report_dipstick_inventory.list')->middleware('isLoggedIn');
+Route::post('/cashiers-report-dipstick-inventory/info', [CashiersReportDipstickInventoryController::class, 'getDipstickInventoryInfo'])->name('cashiers_report_dipstick_inventory.info')->middleware('isLoggedIn');
+Route::post('/cashiers-report-dipstick-inventory/delete', [CashiersReportDipstickInventoryController::class, 'deleteDipstickInventory'])->name('cashiers_report_dipstick_inventory.delete')->middleware('isLoggedIn');
+
+/*Legacy routes retained for the older Cashiers Report page.*/
 Route::post('/save_product_cashiers_report_p6', [CashiersReport_Dipstick_Inventory_Controller::class,'save_product_cashiers_report_p6'])->name('SAVE_CHR_PH6')->middleware('isLoggedIn');
 /* Load P6 */
 Route::post('/get_product_inventory_list', [CashiersReport_Dipstick_Inventory_Controller::class,'get_product_dipstick_inventory_list'])->name('GetCashiersP6')->middleware('isLoggedIn');
@@ -624,6 +632,14 @@ Route::post('/get_cash_payment_inventory_list', [CashiersReport_Payment_Controll
 Route::post('/delete_cash_payment_report', [CashiersReport_Payment_Controller::class,'delete_cash_payment_report'])->name('DeleteCashiersProductP8')->middleware('isLoggedIn');
 Route::post('/cashiers_report_p8_info', [CashiersReport_Payment_Controller::class, 'cashiers_report_p8_info'])->name('CRP8_info')->middleware('isLoggedIn');
 
+/*Descriptive routes for the Fuel Cash Report UI; legacy routes above remain for the original report.*/
+Route::post('/cashiers-report/cash-on-hand/info', [CashiersReportController::class, 'getCashOnHand'])->name('cashiers_report_cash_on_hand.info')->middleware('isLoggedIn');
+Route::post('/cashiers-report/cash-on-hand/save', [CashiersReportController::class, 'saveCashOnHand'])->name('cashiers_report_cash_on_hand.save')->middleware('isLoggedIn');
+Route::post('/cashiers-report/non-cash-payments/list', [CashiersReport_Payment_Controller::class, 'listNonCashPayments'])->name('cashiers_report_non_cash_payment.list')->middleware('isLoggedIn');
+Route::post('/cashiers-report/non-cash-payments/info', [CashiersReport_Payment_Controller::class, 'getNonCashPaymentInfo'])->name('cashiers_report_non_cash_payment.info')->middleware('isLoggedIn');
+Route::post('/cashiers-report/non-cash-payments/save', [CashiersReport_Payment_Controller::class, 'saveNonCashPayment'])->name('cashiers_report_non_cash_payment.save')->middleware('isLoggedIn');
+Route::post('/cashiers-report/non-cash-payments/delete', [CashiersReport_Payment_Controller::class, 'deleteNonCashPayment'])->name('cashiers_report_non_cash_payment.delete')->middleware('isLoggedIn');
+
 /*Cashiers Report Part - Cash Deposit*/
 Route::post('/save_cash_deposit_cashiers_report_p9', [CashiersReport_CashDeposit_Controller::class,'save_cash_deposit_cashiers_report_p9'])->name('SAVE_CHR_PH9')->middleware('isLoggedIn');
 Route::post('/get_cash_deposit_list', [CashiersReport_CashDeposit_Controller::class,'get_cash_deposit_list'])->name('GetCashiersP9')->middleware('isLoggedIn');
@@ -632,20 +648,142 @@ Route::post('/cashiers_report_p9_info', [CashiersReport_CashDeposit_Controller::
 
 
 
-/*Dev Date August 23, 2026*/
+/*
+Dev Date August 23, 2026
+Some Routes are under Fuel Report Controller
+*/
 Route::get('/cashier_report_lpg', [CashiersReportLPGController::class,'cashierReportLPG'])->name('cashierReportLPG')->middleware('isLoggedIn'); 
 Route::get('cashier_report_lpg/list', [CashiersReportLPGController::class, 'getCashierReportLPG'])->name('getCashierReportLPG')->middleware('isLoggedIn');
-/*Create Cashier's Report Primary Information*/
 Route::post('/create_cashier_report_lpg_post', [CashiersReportLPGController::class,'create_cashier_report_lpg_post'])->name('create_cashier_report_lpg_post')->middleware('isLoggedIn');
-/*Update Cashier's Report Primary Information*/
-Route::post('/update_cashier_report_lpg_post', [CashiersReportLPGController::class,'update_cashier_report_lpg_post'])->name('update_cashier_report_lpg_post')->middleware('isLoggedIn');
-/*GET Cashier's Report Primary Information*/
-Route::post('/cashiers_report_lpg_info', [CashiersReportLPGController::class, 'cashiers_report_lpg_info'])->name('cashiers_report_lpg_info')->middleware('isLoggedIn');
 /**/
-Route::post('/delete_cashiers_report_lpg_info', [CashiersReportLPGController::class, 'delete_cashiers_report_lpg_info'])->name('delete_cashiers_report_lpg_info')->middleware('isLoggedIn');
+Route::get('/cashiers_report_form_lpg/{id}', [CashiersReportLPGController::class, 'cashiers_report_form_lpg'])->name('cashiers_report_form_lpg')->middleware('isLoggedIn');
+
+use App\Http\Controllers\CashiersReport_LPG_AR_Controller;
+
+
+Route::post(
+    '/cashiers-report/lpg-ar/list',
+    [CashiersReport_LPG_AR_Controller::class, 'get_lpg_ar_list']
+)->name('GetLpgArList');
+
+Route::post(
+    '/cashiers-report/lpg-ar/save',
+    [CashiersReport_LPG_AR_Controller::class, 'save_lpg_ar']
+)->name('SaveLpgAr');
+
+Route::post(
+    '/cashiers-report/lpg-ar/update',
+    [CashiersReport_LPG_AR_Controller::class, 'update_lpg_ar']
+)->name('UpdateLpgAr');
+
+Route::post(
+    '/cashiers-report/lpg-ar/information',
+    [CashiersReport_LPG_AR_Controller::class, 'cashiers_report_lpg_ar_info']
+)->name('LpgArInformation');
+
+Route::post(
+    '/cashiers-report/lpg-ar/delete',
+    [CashiersReport_LPG_AR_Controller::class, 'delete_lpg_ar']
+)->name('DeleteLpgAr');
+
+
+use App\Http\Controllers\CashiersReport_LPG_AR_SO_Controller;
+
+Route::post(
+    '/cashiers-report/lpg-ar-so/list',
+    [CashiersReport_LPG_AR_SO_Controller::class, 'get_lpg_ar_so_list']
+)->name('GetLpgArSoList');
+
+Route::post(
+    '/cashiers-report/lpg-ar-so/save',
+    [CashiersReport_LPG_AR_SO_Controller::class, 'save_lpg_ar_so']
+)->name('SaveLpgArSo');
+
+Route::post(
+    '/cashiers-report/lpg-ar-so/update',
+    [CashiersReport_LPG_AR_SO_Controller::class, 'update_lpg_ar_so']
+)->name('UpdateLpgArSo');
+
+Route::post(
+    '/cashiers-report/lpg-ar-so/information',
+    [CashiersReport_LPG_AR_SO_Controller::class, 'cashiers_report_lpg_ar_so_info']
+)->name('LpgArSoInformation');
+
+Route::post(
+    '/cashiers-report/lpg-ar-so/delete',
+    [CashiersReport_LPG_AR_SO_Controller::class, 'delete_lpg_ar_so']
+)->name('DeleteLpgArSo');
 
 
 
+
+use App\Http\Controllers\CashiersReport_LPG_Expenses_Controller;
+
+Route::post('/cashiers-report/lpg-expenses/list', [
+    CashiersReport_LPG_Expenses_Controller::class,
+    'get_lpg_expenses_list',
+])->name('GetLpgExpensesList');
+
+Route::post('/cashiers-report/lpg-expenses/info', [
+    CashiersReport_LPG_Expenses_Controller::class,
+    'cashiers_report_lpg_expense_info',
+])->name('LpgExpenseInfo');
+
+Route::post('/cashiers-report/lpg-expenses/save', [
+    CashiersReport_LPG_Expenses_Controller::class,
+    'save_lpg_expense',
+])->name('SaveLpgExpense');
+
+Route::post('/cashiers-report/lpg-expenses/update', [
+    CashiersReport_LPG_Expenses_Controller::class,
+    'update_lpg_expense',
+])->name('UpdateLpgExpense');
+
+Route::post('/cashiers-report/lpg-expenses/delete', [
+    CashiersReport_LPG_Expenses_Controller::class,
+    'delete_lpg_expense',
+])->name('DeleteLpgExpense');
+
+use App\Http\Controllers\CashiersReport_LPG_Non_Cash_Payment_Controller;
+
+
+Route::post('/cashiers-report/lpg-non-cash-payments/list', [
+    CashiersReport_LPG_Non_Cash_Payment_Controller::class,
+    'get_lpg_non_cash_payment_list',
+])->name('GetLpgNonCashPaymentList');
+
+Route::post('/cashiers-report/lpg-non-cash-payments/info', [
+    CashiersReport_LPG_Non_Cash_Payment_Controller::class,
+    'lpg_non_cash_payment_info',
+])->name('LpgNonCashPaymentInfo');
+
+Route::post('/cashiers-report/lpg-non-cash-payments/save', [
+    CashiersReport_LPG_Non_Cash_Payment_Controller::class,
+    'save_lpg_non_cash_payment',
+])->name('SaveLpgNonCashPayment');
+
+Route::post('/cashiers-report/lpg-non-cash-payments/update', [
+    CashiersReport_LPG_Non_Cash_Payment_Controller::class,
+    'update_lpg_non_cash_payment',
+])->name('UpdateLpgNonCashPayment');
+
+Route::post('/cashiers-report/lpg-non-cash-payments/delete', [
+    CashiersReport_LPG_Non_Cash_Payment_Controller::class,
+    'delete_lpg_non_cash_payment',
+])->name('DeleteLpgNonCashPayment');
+
+
+use App\Http\Controllers\CashiersReport_LPG_Cash_Controller;
+
+Route::post('/cashiers-report/lpg-cash/info', [
+    CashiersReport_LPG_Cash_Controller::class,
+    'get_lpg_cash_info',
+])->name('GetLpgCashInfo');
+
+Route::post('/cashiers-report/lpg-cash/save', [
+    CashiersReport_LPG_Cash_Controller::class,
+    'save_lpg_cash',
+])->name('SaveLpgCash');
 
 
 /*Dev Date Nov 30 2022*/

@@ -40,7 +40,7 @@
 			-->
 			
             <button type="button"
-                    class="btn btn-success rounded-3 shadow-sm"
+                    class="btn btn-success rounded-3 shadow-sm fuel-report-action-btn"
                     data-bs-toggle="modal"
                     data-bs-target="#AddProductDeliveryModal" 
 					onclick="ResetDeliveryForm()">
@@ -50,10 +50,10 @@
             </button>
 			
 			<button type="button" 
-			class="btn btn-success rounded-3 shadow-sm bi-printer-fill" 
+			class="btn btn-dark rounded-3 shadow-sm fuel-report-action-btn" 
 			id="PrintPurchaseOrderDeliveyStatus" 
 			title="Print Purchase Order Delivered Item / Status">
-				Print
+				<i class="bi bi-printer-fill"></i>Print
 			</button>
         </div>
 
@@ -67,13 +67,13 @@
 						<table class="table table-striped" id="">
 						<thead>
 						<tr class='report'>
-							<th style="text-align:center !important;" class="">Action</th>
-							<th style="text-align:center !important;">Item #</th>
-							<th style="text-align:center !important;">Date</th>
-							<th style="text-align:center !important;">Product</th>
-							<th style="text-align:center !important;">Quantity</th>
-							<th style="text-align:center !important;">Price</th>
-							<th style="text-align:center !important;">Amount</th>
+							<th style="text-align:center !important;" class=""><i class="bi bi-three-dots" aria-hidden="true"></i>Action</th>
+							<th style="text-align:center !important;"><i class="bi bi-hash" aria-hidden="true"></i>Item #</th>
+							<th style="text-align:center !important;"><i class="bi bi-calendar3" aria-hidden="true"></i>Date</th>
+							<th style="text-align:center !important;"><i class="bi bi-box-seam" aria-hidden="true"></i>Product</th>
+							<th style="text-align:center !important;"><i class="bi bi-cart3" aria-hidden="true"></i>Quantity</th>
+							<th style="text-align:center !important;"><i class="bi bi-tag" aria-hidden="true"></i>Price</th>
+							<th style="text-align:center !important;"><i class="bi bi-cash-stack" aria-hidden="true"></i>Amount</th>
 						</tr>
 						</thead>
 							<tbody id="product_list_delivery_data">
