@@ -293,3 +293,4 @@ div.dataTables_wrapper {
 
 @endsection
 
+@section('skip_default_footer', '1')

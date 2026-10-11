@@ -255,3 +255,7 @@
 </main>
 
 @endsection
+
+@push('page_scripts')
+    @include('layouts.branch_script')
+@endpush

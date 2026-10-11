@@ -134,3 +134,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.sales_report_script')
+@endpush

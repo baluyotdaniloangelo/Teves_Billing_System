@@ -455,7 +455,7 @@ FUEL CASHIER REPORT TABS
 
 			<thead>
 				<tr>
-					<th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
+					<th><i class="bi bi-hash" aria-hidden="true"></i></th>
 					<th><i class="bi bi-person" aria-hidden="true"></i>Account Name</th>
 					<th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>Reference No.</th>
 					<th><i class="bi bi-box-seam" aria-hidden="true"></i>Product / Description</th>
@@ -489,7 +489,7 @@ FUEL CASHIER REPORT TABS
 
 			<thead>
 				<tr>
-					<th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
+					<th><i class="bi bi-hash" aria-hidden="true"></i></th>
 					<th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>Reference No.</th>
 					<th><i class="bi bi-box-seam" aria-hidden="true"></i>Product / Description</th>
 					<th><i class="bi bi-cart3" aria-hidden="true"></i>Quantity</th>
@@ -524,7 +524,7 @@ FUEL CASHIER REPORT TABS
 
 			<thead>
 				<tr>
-					<th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
+					<th><i class="bi bi-hash" aria-hidden="true"></i></th>
 					<th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>Reference No.</th>
 					<th><i class="bi bi-box-seam" aria-hidden="true"></i>Item Description</th>
 					<th><i class="bi bi-cart3" aria-hidden="true"></i>Quantity</th>

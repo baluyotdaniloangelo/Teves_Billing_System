@@ -81,8 +81,8 @@
                             </div>
                         </div>
                         <div class="row g-2">
-                            <div class="col-md-6"><div class="d-flex align-items-center rounded-3 bg-light border-start border-3 border-primary px-3 py-2"><i class="bi bi-calculator-fill fs-4 text-primary me-3"></i><div><div class="small text-muted fw-semibold">BOOK STOCK</div><div class="fs-5 fw-bold"><span id="TotalBookStock_dipstick_inventory">0.00</span> <small class="fs-6">L</small></div></div></div></div>
-                            <div class="col-md-6"><div class="d-flex align-items-center rounded-3 bg-light border-start border-3 border-warning px-3 py-2"><i class="bi bi-activity fs-4 text-warning me-3"></i><div><div class="small text-muted fw-semibold">VARIANCE</div><div class="fs-5 fw-bold"><span id="TotalVariance_dipstick_inventory">0.00</span> <small class="fs-6">L</small></div></div></div></div>
+                            <div class="col-md-6"><div class="d-flex align-items-center rounded-3 bg-dark border-start border-3 border-warning px-3 py-2"><i class="bi bi-calculator-fill fs-4 text-primary me-3"></i><div><div class="small text-muted fw-semibold">BOOK STOCK</div><div class="fs-5 fw-bold"><span id="TotalBookStock_dipstick_inventory">0.00</span> <small class="fs-6">L</small></div></div></div></div>
+                            <div class="col-md-6"><div class="d-flex align-items-center rounded-3 bg-dark border-start border-3 border-warning px-3 py-2"><i class="bi bi-activity fs-4 text-warning me-3"></i><div><div class="small text-muted fw-semibold">VARIANCE</div><div class="fs-5 fw-bold"><span id="TotalVariance_dipstick_inventory">0.00</span> <small class="fs-6">L</small></div></div></div></div>
                         </div>
                     </section>
 

@@ -522,3 +522,7 @@
   </section>
 </main>
 @endsection
+
+@push('page_scripts')
+    @include('layouts.salesorder_script_v2')
+@endpush

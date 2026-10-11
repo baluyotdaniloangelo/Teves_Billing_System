@@ -187,3 +187,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.sales_order_summary_script')
+@endpush

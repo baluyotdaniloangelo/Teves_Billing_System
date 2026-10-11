@@ -876,3 +876,7 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.sales_order_form_delivery_script')
+    @include('layouts.sales_order_form_script')
+@endpush

@@ -619,3 +619,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.billing_script')
+@endpush

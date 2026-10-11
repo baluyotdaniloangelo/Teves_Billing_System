@@ -953,49 +953,63 @@ function input_settings_create_miscellaneous_sales()
     DISCOUNTS
     ==================================================*/
 
-    else if (miscellaneous_items_type == 'DISCOUNTS')
-    {
-        /*----------------------------------------------
-        DISABLE CLIENT
-        ----------------------------------------------*/
+else if (miscellaneous_items_type == 'DISCOUNTS')
+{
+    /*----------------------------------------------
+    DISABLE CLIENT
+    ----------------------------------------------*/
 
-        $("#sold_to_client_id")
-            .prop("disabled", true)
-            .val("");
+    $("#sold_to_client_id")
+        .prop("disabled", true)
+        .val("");
 
-        $("#sold_to_client_idError")
-            .text("")
-            .removeClass("d-block");
-
-
-        /*----------------------------------------------
-        DISABLE ORDER TIME
-        ----------------------------------------------*/
-
-        $("#order_time_miscellaneous_sales")
-            .prop("disabled", true)
-            .val("");
-
-        $("#order_time_miscellaneous_salesError")
-            .text("")
-            .removeClass("d-block");
+    $("#sold_to_client_idError")
+        .text("")
+        .removeClass("d-block");
 
 
-        /*----------------------------------------------
-        LABELS
-        ----------------------------------------------*/
+    /*----------------------------------------------
+    DISABLE ORDER TIME
+    ----------------------------------------------*/
 
-        $("#quantity_label_miscellaneous_sales")
-            .text("LITERS");
+    $("#order_time_miscellaneous_sales")
+        .prop("disabled", true)
+        .val("");
 
-        $("#manual_price_label_miscellaneous_sales")
-            .text("UNIT PRICE");
+    $("#order_time_miscellaneous_salesError")
+        .text("")
+        .removeClass("d-block");
 
-        $("#product_label_miscellaneous_sales")
-            .text("PRODUCT");
-			
-		LoadSellingPriceList_branch();
-    }
+
+    /*----------------------------------------------
+    CLEAR SALES ORDER REFERENCE LIST
+    ----------------------------------------------*/
+
+    $("#so_list_reference").empty();
+
+    $("#reference_no_miscellaneous_sales").val("");
+
+
+    /*----------------------------------------------
+    LABELS
+    ----------------------------------------------*/
+
+    $("#quantity_label_miscellaneous_sales")
+        .text("LITERS");
+
+    $("#manual_price_label_miscellaneous_sales")
+        .text("UNIT PRICE");
+
+    $("#product_label_miscellaneous_sales")
+        .text("PRODUCT");
+
+
+    /*----------------------------------------------
+    LOAD SELLING PRICE LIST
+    ----------------------------------------------*/
+
+    LoadSellingPriceList_branch();
+}
 
 
     /*==================================================

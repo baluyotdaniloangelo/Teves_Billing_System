@@ -314,3 +314,7 @@
 </main>
 
 @endsection
+
+@push('page_scripts')
+    @include('layouts.reminder_script')
+@endpush

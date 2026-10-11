@@ -7,52 +7,25 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
         <!-- HEADER -->
-<div class="card-header bg-white border-0 py-3 px-4">
+        <div class="card-header bg-white border-0 py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <small class="text-muted text-uppercase fw-semibold">LPG Cashier Report</small>
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-person-lines-fill text-success me-2" aria-hidden="true"></i>
+                        Accounts Receivable
+                    </h5>
+                </div>
 
-    <div class="d-flex justify-content-between align-items-center flex-wrap">
-
-        <!-- LEFT -->
-        <div>
-			<!--
-            <small class="text-muted text-uppercase fw-semibold">
-                Purchase Order
-            </small>
-			
-            <h5 class="fw-bold mb-0">
-                <i class="bi bi-receipt-cutoff text-success me-2"></i>
-                Control Number
-            </h5>
-			-->
+                <button type="button"
+                        class="btn btn-success rounded-3 shadow-sm lpg-report-action-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#CashierReportLpgArModal">
+                    <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                    Add
+                </button>
+            </div>
         </div>
-
-        <!-- RIGHT -->
-        <div class="d-flex align-items-center gap-2">
-			<!--
-			<h5 class="fw-bold mb-0">
-                <i class="bi bi-receipt-cutoff text-success me-2"></i>
-                Control Number
-            </h5>
-			
-            <span class="badge rounded-pill bg-success fs-6 px-4 py-2 shadow-sm"
-                  id="control_no">
-                
-            </span>
-			
-            <button type="button"
-					class="btn btn-success rounded-3 shadow-sm lpg-report-action-btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#AddProductModal" 
-					id="AddPurchaseOrderProductBTN">
-
-                <i class="bi bi-plus-circle me-1"></i>
-                Add
-            </button>
-			-->
-        </div>
-
-    </div>
-
-</div>
 
         <!-- BODY -->
 
@@ -62,17 +35,6 @@ FUEL CASHIER REPORT TABS
 
 <div class="card-body">
 
-			<div align="right">
-				<button type="button"
-					class="btn btn-success rounded-3 shadow-sm lpg-report-action-btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#CashierReportLpgArModal">
-
-                <i class="bi bi-plus-circle me-1"></i>
-                Add
-				</button>
-			</div>
-			<br>
 
 				<table  class="table table-hover align-middle dataTable display nowrap cell-border" id="LpgArTable">
 					<thead>

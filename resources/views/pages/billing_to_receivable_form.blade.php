@@ -704,3 +704,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.receivable_from_billing_form_script')
+@endpush

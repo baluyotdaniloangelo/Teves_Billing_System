@@ -373,3 +373,7 @@
 
 
 @endsection
+
+@push('page_scripts')
+    @include('layouts.update_so_billing_script')
+@endpush

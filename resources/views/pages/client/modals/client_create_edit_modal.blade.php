@@ -471,7 +471,7 @@
 											   id="client_title"
 											   placeholder="Dr., Engr."
 											   autocomplete="off"
-											   required>
+											   >
 
 										<div class="invalid-feedback"
 											 id="client_title_error">
@@ -1015,6 +1015,7 @@
 
 </div>
 
+@if($includeClientFeedbackModals ?? true)
 <!-- SUCCESS MODAL -->
 <div class="modal fade"
      id="SuccessModal"
@@ -1117,3 +1118,5 @@
     </div>
 
 </div>
+
+@endif

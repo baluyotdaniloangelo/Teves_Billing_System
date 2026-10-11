@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ClientModel;
+use App\Models\SalesAgentModel;
 use App\Models\CashiersReportModel;
 use App\Models\CashiersReportModel_P1;
 use App\Models\CashiersReportModel_P5;
@@ -600,6 +601,7 @@ class CashiersReportLPGController extends Controller
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$client_data = ClientModel::all();
+			$sales_agent_data = SalesAgentModel::all();
 			$bank_list = BankModel::all();
 			
 			if($data->user_branch_access_type=='ALL'){
@@ -654,7 +656,7 @@ class CashiersReportLPGController extends Controller
 			'teves_cashiers_report.created_at',
 			'teves_cashiers_report.updated_at']);
 			
-		return view("pages.cashiers_report_form_lpg.index", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch','client_data','bank_list'));	
+		return view("pages.cashiers_report_form_lpg.index", compact('data','title','CashiersReportData','product_data','CashiersReportId','teves_branch','client_data','bank_list','sales_agent_data'));
 		
 		}
 		

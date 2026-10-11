@@ -550,3 +550,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.create_recievable_script_v2')
+@endpush

@@ -1,17 +1,33 @@
 <script>
+/*==============================================================
+  NON-CASH PAYMENT SCRIPT
+  Purpose: Manage listing, adding, editing, deleting, validation,
+  notifications, and modal behavior for Fuel Non-Cash Payments.
+==============================================================*/
 $(function () {
+    // Cache frequently used elements so we do not query the DOM repeatedly.
     const table = $('#non_cash_payments_table');
     const paymentModal = document.getElementById('nonCashPaymentModal');
     const deleteModal = document.getElementById('deleteNonCashPaymentModal');
+    // Stores the success-notification timeout so an older timer can be cleared
+    // before starting a new one. This timer must never close the Add form.
+    let successModalCloseTimer = null;
 
+    /* Escape values before inserting them into HTML attributes. This helps
+       prevent user-supplied values from breaking the generated action buttons. */
     function escapeAttribute(value) {
         return $('<div>').text(value == null ? '' : String(value)).html().replace(/"/g, '&quot;');
     }
 
+    /* Make payment type labels easier to read in the table. */
     function formatPaymentType(value) {
         return String(value || '').replace(/_/g, ' ').toUpperCase();
     }
 
+    /*==============================================================
+      DATATABLE INITIALIZATION / ACCESS
+      Create the table only once; later calls return the existing instance.
+    ==============================================================*/
     function getTable() {
         if (!$.fn.DataTable || !$.fn.dataTable) {
             console.error('DataTables is not available for Non-Cash Payments.');
@@ -20,9 +36,11 @@ $(function () {
         if ($.fn.DataTable.isDataTable(table)) return table.DataTable();
 
         return table.DataTable({
+            // Show a processing indicator while DataTables loads data.
             processing: true,
             responsive: true,
             autoWidth: false,
+            // Request the payments belonging to the current Cashier's Report.
             ajax: {
                 url: "{{ route('cashiers_report_non_cash_payment.list') }}",
                 type: 'POST',
@@ -30,11 +48,13 @@ $(function () {
                     request.cash_report_id = {{ $CashiersReportId }};
                     request._token = "{{ csrf_token() }}";
                 },
+                // Support either a plain array response or a { data: [...] } response.
                 dataSrc: function (response) {
                     return Array.isArray(response) ? response : (response && Array.isArray(response.data) ? response.data : []);
                 },
                 error: function (xhr) { console.error('Non-Cash Payments load failed.', xhr); }
             },
+            // Map backend fields to table columns and format values for display.
             columns: [
                 { data: 'payment_type', render: function (value, type) { return type === 'display' ? $('<span>').text(formatPaymentType(value)).html() : value; } },
                 { data: 'payment_amount', className: 'text-end', render: function (value, type) { return type === 'display' ? '₱ ' + (Number(value) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value; } },
@@ -43,6 +63,7 @@ $(function () {
                 { data: 'reference_number', render: $.fn.dataTable.render.text() },
                 {
                     data: 'non_cash_payment_id', orderable: false, searchable: false, className: 'text-center',
+                    // Build the Edit/Delete dropdown for each payment row.
                     render: function (id, type, row) {
                         if (type !== 'display') return '';
                         const safeId = Number.parseInt(id, 10) || 0;
@@ -60,6 +81,10 @@ $(function () {
         });
     }
 
+    /*==============================================================
+      FORM MODE RESET
+      isEdit=true prepares the form for editing; false prepares a new record.
+    ==============================================================*/
     function setMode(isEdit) {
         const form = document.getElementById('non_cash_payment_form');
         if (!form) return;
@@ -71,6 +96,7 @@ $(function () {
         $('#save_non_cash_payment span').text(isEdit ? 'Update Payment' : 'Save Payment');
     }
 
+    /* Display server validation errors or a general save failure inside the form. */
     function showSaveError(xhr) {
         const response = xhr.responseJSON || {};
         const validationErrors = response.errors || {};
@@ -82,6 +108,7 @@ $(function () {
         console.error('Non-Cash Payment save failed.', xhr);
     }
 
+    /* Open a Bootstrap modal safely when Bootstrap's Modal API is available. */
     function showModal(element) {
         if (window.bootstrap && bootstrap.Modal) {
             bootstrap.Modal.getOrCreateInstance(element).show();
@@ -90,11 +117,60 @@ $(function () {
         }
     }
 
+
+    /*==============================================================
+      SUCCESS NOTIFICATION
+      Show a modal notification for 10 seconds. Only the notification modal is
+      hidden by the timer; it must not close the Add form.
+    ==============================================================*/
+    // Show the success modal for 10 seconds, then close ONLY the success modal.
+    // Add keeps the form open; Update closes the form after a successful save.
+    function showNonCashPaymentSuccessModal(message) {
+        if (typeof showSuccessModal !== 'function') {
+            window.alert(message);
+            return;
+        }
+
+        if (successModalCloseTimer) {
+            window.clearTimeout(successModalCloseTimer);
+            successModalCloseTimer = null;
+        }
+
+        // This function is expected to display the shared success modal.
+        showSuccessModal(message);
+
+        // Wait 10 seconds, then hide the topmost visible modal that is not
+        // the payment form or delete confirmation. The payment form is excluded.
+        successModalCloseTimer = window.setTimeout(function () {
+            if (window.bootstrap && bootstrap.Modal) {
+                // Find the topmost visible Bootstrap modal other than the form
+                // and delete-confirmation modals. This should be the success modal.
+                const visibleModals = Array.from(document.querySelectorAll('.modal.show'))
+                    .filter(function (modal) {
+                        return modal !== paymentModal && modal !== deleteModal;
+                    });
+
+                const successModal = visibleModals[visibleModals.length - 1];
+                if (successModal) {
+                    bootstrap.Modal.getOrCreateInstance(successModal).hide();
+                }
+            }
+
+            successModalCloseTimer = null;
+        }, 10000);
+    }
+
+    /*==============================================================
+      SAVE / UPDATE PAYMENT
+      Validate the form, send the request to Laravel, refresh the table/summary,
+      and apply the different modal behavior for Add versus Update.
+    ==============================================================*/
     function savePayment(event) {
         event.preventDefault();
         console.debug('[Fuel non-cash] Form submit reached.');
         const form = document.getElementById('non_cash_payment_form');
         if (!form) return;
+        // Stop here if browser-required fields are missing or invalid.
         if (!form.checkValidity()) {
             console.debug('[Fuel non-cash] Submit blocked: required fields are incomplete or invalid.');
             form.reportValidity();
@@ -104,11 +180,18 @@ $(function () {
             return;
         }
         $('#non_cash_payment_error').addClass('d-none').text('');
+
+        // A payment ID greater than zero means Update; zero means Add. Capture
+        // this before the AJAX request because the form state can change later.
+        const paymentId = Number($('#non_cash_payment_id').val() || 0);
+        const isEdit = paymentId > 0;
+
         console.debug('[Fuel non-cash] Sending save request.');
         $.ajax({
             url: "{{ route('cashiers_report_non_cash_payment.save') }}", type: 'POST',
+            // Keep the existing Laravel field names and CSRF token unchanged.
             data: {
-                non_cash_payment_id: $('#non_cash_payment_id').val() || 0,
+                non_cash_payment_id: paymentId,
                 cash_report_id: {{ $CashiersReportId }},
                 payment_type: $('#non_cash_payment_type').val(),
                 payment_amount: $('#non_cash_payment_amount').val(),
@@ -117,26 +200,58 @@ $(function () {
                 reference_number: $('#non_cash_payment_reference').val(),
                 _token: "{{ csrf_token() }}"
             },
+            // Clear stale errors and prevent duplicate submissions while saving.
             beforeSend: function () {
                 $('#non_cash_payment_error').addClass('d-none').text('');
                 $('#save_non_cash_payment').prop('disabled', true).find('span').text('Saving...');
             },
+            // The server confirmed the save/update succeeded.
             success: function (response) {
-                bootstrap.Modal.getOrCreateInstance(paymentModal).hide();
-                const dt = getTable(); if (dt) dt.ajax.reload(null, false);
+                // Refresh the payment table and report summary.
+                const dt = getTable();
+                if (dt) dt.ajax.reload(null, false);
                 if (typeof LoadCashiersReportSummary === 'function') LoadCashiersReportSummary();
-                $('#switch_notice_on').show(); $('#sw_on').text(response.success || 'Payment saved.');
-                setTimeout(function () { $('#switch_notice_on').fadeOut('fast'); }, 1200);
+
+                const successMessage = response.success ||
+                    (isEdit ? 'Payment updated successfully.' : 'Payment saved successfully.');
+
+                // Add: keep the form open. Update: close the form only after
+                // the server confirms success, then show the success notification.
+                if (isEdit && paymentModal && window.bootstrap && bootstrap.Modal) {
+                    // UPDATE ONLY: close the form, then show the success modal.
+                    // Waiting for hidden.bs.modal avoids overlapping Bootstrap modal transitions.
+                    $(paymentModal).one('hidden.bs.modal.nonCashPaymentSuccess', function () {
+                        showNonCashPaymentSuccessModal(successMessage);
+                    });
+                    bootstrap.Modal.getOrCreateInstance(paymentModal).hide();
+                } else {
+                    // ADD: keep the form open and show the success modal for 10 seconds.
+                    showNonCashPaymentSuccessModal(successMessage);
+                }
             },
+            // Reuse the common error handler for validation/server failures.
             error: showSaveError,
+            // Always restore the button after success or failure.
             complete: function () {
                 $('#save_non_cash_payment').prop('disabled', false)
-                    .find('span').text(Number($('#non_cash_payment_id').val() || 0) > 0 ? 'Update Payment' : 'Save Payment');
+                    .find('span').text(isEdit ? 'Update Payment' : 'Save Payment');
             }
         });
     }
 
-    $('#add_non_cash_payment').on('click', function () { setMode(false); });
+    /*==============================================================
+      ADD BUTTON
+      Reset the form to its default Add state when the user clicks Add.
+    ==============================================================*/
+    $('#add_non_cash_payment').on('click', function () {
+        setMode(false);
+    });
+
+    /*==============================================================
+      FORM SUBMISSION HANDLERS
+      Delegated handlers continue working if the form is outside the report tab
+      or if parts of the page are dynamically rendered.
+    ==============================================================*/
     // Delegate because the modal is rendered outside the report tab and the
     // page loads/reloads jQuery in its layout footer.
     $(document)
@@ -163,6 +278,12 @@ $(function () {
                 savePayment(event);
             }
         });
+
+    /*==============================================================
+      DELETE PAYMENT
+      Send the delete request, close the delete-confirmation modal, refresh data,
+      and show a success modal instead of an inline notice.
+    ==============================================================*/
     $('#confirm_delete_non_cash_payment').on('click', function () {
         const id = $(this).val();
         $.ajax({
@@ -172,13 +293,18 @@ $(function () {
                 bootstrap.Modal.getOrCreateInstance(deleteModal).hide();
                 const dt = getTable(); if (dt) dt.ajax.reload(null, false);
                 if (typeof LoadCashiersReportSummary === 'function') LoadCashiersReportSummary();
-                $('#switch_notice_off').show(); $('#sw_off').text('Deleted');
-                setTimeout(function () { $('#switch_notice_off').fadeOut('slow'); }, 1200);
+
+                // Use a modal notification instead of the inline delete notice.
+                showNonCashPaymentSuccessModal('Payment deleted successfully.');
             },
             error: function (xhr) { console.error('Non-Cash Payment delete failed.', xhr); }
         });
     });
 
+    /*==============================================================
+      EDIT ACTION
+      Copy the selected row's values into the form and open the payment modal.
+    ==============================================================*/
     $(document).on('click', '.edit-non-cash-payment', function () {
         const button = $(this);
         setMode(true);
@@ -191,11 +317,16 @@ $(function () {
         showModal(paymentModal);
     });
 
+    /* Open the delete confirmation modal and store the selected payment ID. */
     $(document).on('click', '.delete-non-cash-payment', function () {
         $('#confirm_delete_non_cash_payment').val($(this).data('id'));
         showModal(deleteModal);
     });
 
+    /*==============================================================
+      ACTION DROPDOWN BEHAVIOR
+      Manually toggle row action menus and close them when clicking elsewhere.
+    ==============================================================*/
     $(document).on('click', '.non-cash-payment-menu-toggle', function (event) {
         event.preventDefault(); event.stopPropagation();
         const button = $(this), menu = button.siblings('.dropdown-menu'), open = !menu.hasClass('show');
@@ -203,15 +334,18 @@ $(function () {
         $('.non-cash-payment-menu-toggle').attr('aria-expanded', 'false');
         menu.toggleClass('show', open); button.attr('aria-expanded', open ? 'true' : 'false');
     });
+    // Close any open action dropdown when the user clicks outside it.
     $(document).on('click', function () {
         $('.non-cash-payment-actions .dropdown-menu').removeClass('show');
         $('.non-cash-payment-menu-toggle').attr('aria-expanded', 'false');
     });
     $(document).on('click', '.non-cash-payment-actions .dropdown-menu', function (event) { event.stopPropagation(); });
+    /* Recalculate responsive table columns when the payment tab becomes visible. */
     $('#payment-tab, #fuel-non-cash-payment-tab').on('shown.bs.tab', function () {
         const dt = getTable(); if (dt) dt.columns.adjust().responsive.recalc();
     });
 
+    // Initialize/load the table when this script starts.
     getTable();
 });
 </script>

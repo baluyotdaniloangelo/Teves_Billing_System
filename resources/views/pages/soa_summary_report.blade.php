@@ -166,3 +166,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.soa_summary_report_script')
+@endpush

@@ -261,3 +261,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.billing_history_script')
+@endpush

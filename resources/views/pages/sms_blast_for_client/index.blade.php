@@ -43,3 +43,4 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 
+@section('skip_default_footer', '1')

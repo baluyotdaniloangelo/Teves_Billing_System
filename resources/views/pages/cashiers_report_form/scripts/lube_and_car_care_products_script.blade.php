@@ -309,9 +309,10 @@ $('#CashierReportLubeCarCareForm').on('submit', function (event)
 
             if (response)
             {
-                /* Close modal */
-                $('#CashierReportLubeCarCareModal').modal('hide');
-
+                /*
+                 * Keep the Add/Edit form modal open after a successful save.
+                 * The form is reset below so another product can be entered.
+                 */
 
                 /* Reset form */
                 resetLubeCarCareForm();
@@ -343,7 +344,10 @@ $('#CashierReportLubeCarCareForm').on('submit', function (event)
                 /* Success message */
                 if (typeof showSuccessModal === 'function')
                 {
-                    showSuccessModal(response.success);
+                    showSuccessModal(
+                    response.success ||
+                    'Lubricants & car care product saved successfully.'
+                );
                 }
             }
         },

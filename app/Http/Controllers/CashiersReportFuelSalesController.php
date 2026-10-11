@@ -293,7 +293,7 @@ class CashiersReportFuelSalesController extends Controller
 									$CashiersReportModel_P1 = new CashiersReportModel_P1();
 									$CashiersReportModel_P1 = CashiersReportModel_P1::find($CHPH1_ID);
 									
-									$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
+									//$CashiersReportModel_P1->cashiers_report_id 		= $CashiersReportId;
 									$CashiersReportModel_P1->product_idx 				= $product_idx;
 									$CashiersReportModel_P1->tank_idx 					= $tank_idx;
 									$CashiersReportModel_P1->pump_idx 					= $pump_idx;

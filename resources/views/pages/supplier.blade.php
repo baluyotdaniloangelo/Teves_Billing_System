@@ -258,3 +258,7 @@
 </main>
 
 @endsection
+
+@push('page_scripts')
+    @include('layouts.supplier_script')
+@endpush

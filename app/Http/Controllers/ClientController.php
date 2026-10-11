@@ -769,7 +769,12 @@ public function client_info(Request $request)
 		if ($result) {
 
 			return response()->json([
-				'success' => 'Client Information Successfully Created!'
+				'success' => 'Client Information Successfully Created!',
+				'client' => [
+					'client_id' => $client->client_id,
+					'client_name' => $client->client_name,
+					'client_account_number' => $client->client_account_number,
+				]
 			]);
 
 		} else {

@@ -698,6 +698,11 @@ FUEL SALES
 SAVE FUEL SALES
 ==================================================*/
 
+$('#CashierReportFuelSalesModalBTN').on('click', function ()
+{
+    resetFuelSalesForm();
+});
+
 $('#CashierReportFuelSalesForm').on('submit', function (event)
 {
     event.preventDefault();
@@ -720,14 +725,33 @@ $('#CashierReportFuelSalesForm').on('submit', function (event)
     CASHIER'S REPORT INFORMATION
     ==================================================*/
 
-    const CashiersReportId = {{ $CashiersReportId }};
+    //const CashiersReportId = {{ $CashiersReportId }};
+	const CashiersReportId = Number(
+		@json($CashiersReportId ?? null)
+	);
 
     const teves_branch  =
        {{ $CashiersReportData[0]['teves_branch'] }};	
 
 	const fuel_sales_id = 
 	    $('#fuel_sales_id').val();
-		
+
+    const isNewFuelSale = Number(fuel_sales_id || 0) === 0;
+	
+	// Prevent submission without a valid parent Cashier's Report ID.
+	if (
+		!Number.isInteger(CashiersReportId) ||
+		CashiersReportId <= 0
+	) {
+		console.error('Invalid CashiersReportId:', CashiersReportId);
+
+		showFuelSalesValidationModal(
+			"Cashier's Report ID is missing or invalid. Please reload the Cashier's Report."
+		);
+
+		return;
+	}
+	
     /*==================================================
     GET FUEL PRODUCT ID
     --------------------------------------------------
@@ -977,82 +1001,49 @@ $('#CashierReportFuelSalesForm').on('submit', function (event)
         SUCCESS
         ==================================================*/
 
-        success: function (response)
-        {
-            console.log(response);
+		success: function (response)
+		{
+			console.log(response);
 
+			const successMessage = response.success ||
+				(isNewFuelSale
+					? 'Fuel sales added successfully.'
+					: 'Fuel sales updated successfully.');
 
-            /*----------------------------------------------
-            CLOSE MODAL
-            ----------------------------------------------*/
+			// Reset the form but keep the Fuel Sales modal open.
+			resetFuelSalesForm();
 
-            $('#CashierReportFuelSalesModal')
-                .modal('hide');
+			// Reload Fuel Sales DataTable.
+			if (typeof reloadFuelSalesTable === 'function')
+			{
+				reloadFuelSalesTable();
+			}
+			else if (typeof LoadCashiersReportPH1 === 'function')
+			{
+				LoadCashiersReportPH1();
+			}
 
+			// Update Cashier's Report summary.
+			if (typeof UpdateCashiersReportSummary === 'function')
+			{
+				UpdateCashiersReportSummary();
+			}
 
-            /*----------------------------------------------
-            RESET FORM
-            ----------------------------------------------*/
+			if (typeof LoadCashiersReportSummary === 'function')
+			{
+				LoadCashiersReportSummary();
+			}
 
-            resetFuelSalesForm();
-
-
-            /*----------------------------------------------
-            RELOAD FUEL SALES DATATABLE
-            ----------------------------------------------*/
-
-            if (
-                typeof reloadFuelSalesTable === 'function'
-            )
-            {
-                reloadFuelSalesTable();
-            }
-            else if (
-                typeof LoadCashiersReportPH1 === 'function'
-            )
-            {
-                /*
-                Backward compatibility with old function.
-                */
-
-                LoadCashiersReportPH1();
-            }
-
-
-            /*----------------------------------------------
-            UPDATE CASHIER'S REPORT SUMMARY
-            ----------------------------------------------*/
-
-            if (
-                typeof UpdateCashiersReportSummary === 'function'
-            )
-            {
-                UpdateCashiersReportSummary();
-            }
-
-
-            if (
-                typeof LoadCashiersReportSummary === 'function'
-            )
-            {
-                LoadCashiersReportSummary();
-            }
-
-
-            /*----------------------------------------------
-            SUCCESS MESSAGE
-            ----------------------------------------------*/
-
-            if (
-                typeof showSuccessModal === 'function'
-            )
-            {
-                showSuccessModal(
-                    response.success ||
-                    'Fuel sales added successfully.'
-                );
-            }
-        },
+			// Show success notification for BOTH add and update.
+			if (typeof showSuccessModal === 'function')
+			{
+				showSuccessModal(successMessage);
+			}
+			else
+			{
+				window.alert(successMessage);
+			}
+		},
 
 
         /*==================================================
@@ -1071,13 +1062,41 @@ $('#CashierReportFuelSalesForm').on('submit', function (event)
         AJAX COMPLETE
         ==================================================*/
 
-        complete: function ()
-        {
-            setButtonLoading(
-                '#save-fuel-sales',
-                false
+complete: function () {
+
+    // Stop the loading state after the AJAX request.
+    setButtonLoading(
+        '#save-fuel-sales',
+        false
+    );
+
+    // Check the record ID after the request completes.
+    const fuelSalesId = Number(
+        $('#fuel_sales_id').val() || 0
+    );
+
+    // If the form was reset after a successful save/update,
+    // restore the button to Save Fuel Sales.
+    if (fuelSalesId === 0) {
+
+        $('#save-fuel-sales')
+            .prop('disabled', false)
+            .html(
+                '<i class="bi bi-save-fill me-2"></i>' +
+                'Save Fuel Sales'
             );
-        }
+
+    } else {
+
+        // If an update failed, retain Update mode.
+        $('#save-fuel-sales')
+            .prop('disabled', false)
+            .html(
+                '<i class="bi bi-check-circle-fill me-2"></i>' +
+                'Update Fuel Sales'
+            );
+    }
+}
     });
 });
 
@@ -1379,6 +1398,12 @@ function resetFuelSalesForm()
     $('#CashierReportFuelSalesModalLabel')
         .text('Add Fuel Sales');
 
+    $('#fuel_sales_id').val('0');
+
+    $('#fuelSalesSaveNotice')
+        .addClass('d-none')
+        .text('');
+
 
     /*----------------------------------------------
     RESET SAVE BUTTON
@@ -1386,10 +1411,7 @@ function resetFuelSalesForm()
 
     $('#save-fuel-sales')
         .prop('disabled', false)
-        .html(
-            '<i class="bi bi-save-fill me-2"></i>' +
-            'Save Fuel Sales'
-        );
+        .html('<i class="bi bi-save-fill me-2"></i>Save Fuel Sales');
 
 
     /*----------------------------------------------

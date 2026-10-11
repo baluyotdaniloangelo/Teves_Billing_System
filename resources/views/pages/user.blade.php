@@ -759,3 +759,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.user_script')
+@endpush

@@ -40,10 +40,44 @@
 				 <div  style="max-height: 300px;">
 					{!! $MonthlyChart->container() !!}
 				</div>
-					{!! $MonthlyChart->script() !!}
             </div>
           </div>
         </div>
                    
-            </div>
-          </div>
+      </div>
+    </section>
+</main>
+@endsection
+
+@section('page_footer')
+    @include('layouts.footer_chart')
+@endsection
+
+@push('page_scripts')
+{!! $MonthlyChart->script() !!}
+<script>
+    var original_api_url = {{ $MonthlyChart->id }}_api_url;
+
+    $(".select_year").on("change", function () {
+        var year = $(this).val();
+        {{ $MonthlyChart->id }}_refresh(original_api_url + "?year=" + year);
+    });
+
+    $("body").on("click", "#reloadMonthlyData", function (event) {
+        event.preventDefault();
+        var year = $("#select_year").val();
+
+        $.ajax({
+            url: "{{ route('ReloadMonthlySales') }}",
+            type: "POST",
+            data: { year: year, _token: "{{ csrf_token() }}" },
+            success: function () { reload_monthly_chart(year); },
+            error: function (error) { console.log(error); alert(error); }
+        });
+    });
+
+    function reload_monthly_chart(year) {
+        {{ $MonthlyChart->id }}_refresh(original_api_url + "?year=" + year);
+    }
+</script>
+@endpush

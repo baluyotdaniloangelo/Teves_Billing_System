@@ -188,3 +188,6 @@
 
 @endsection
 
+@push('page_scripts')
+    @include('layouts.daily_sales_script')
+@endpush

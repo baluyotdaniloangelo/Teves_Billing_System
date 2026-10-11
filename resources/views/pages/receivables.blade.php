@@ -266,3 +266,6 @@
 </main>
 @endsection
 
+@push('page_scripts')
+    @include('layouts.receivables_script')
+@endpush

@@ -20,7 +20,7 @@ class ProductController extends Controller
 {
 	
 	/*Load Product Interface*/
-	public function product(){
+	public function product(Request $request){
 		
 		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
 			
@@ -31,8 +31,15 @@ class ProductController extends Controller
 			
 			$product_data = ProductModel::all();
 			$product_category = ProductCategoryModel::all();/*May 23, 2026*/
+			$teves_branch = TevesBranchModel::all();
+			$supplier_data = SupplierModel::all();
+			$client_data = ClientModel::all();
+			$productID = $request->query('productID');
+			$tab = $request->query('tab', 'product-info');
 			
-			return view("pages.product", compact('data','title','product_category'));
+			return view("pages.product_information.index", compact(
+				'data', 'title', 'product_category', 'teves_branch', 'supplier_data', 'client_data', 'productID', 'tab'
+			));
 		
 		}
 		
@@ -44,19 +51,26 @@ class ProductController extends Controller
 		
 		if ($request->ajax()) {
 
-    	$data = ProductModel::select(
-		'product_id',
-		'product_name',
-		'product_price',
-		'product_unit_measurement');
+	    	$data = ProductModel::leftJoin(
+			'teves_product_category',
+			'teves_product_table.category_idx',
+			'=',
+			'teves_product_category.category_id'
+		)->select(
+			'teves_product_table.product_id',
+			'teves_product_table.product_name',
+			'teves_product_table.product_price',
+			'teves_product_table.product_unit_measurement',
+			'teves_product_category.category_name'
+		);
 		
 		return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('action', function($row){
 								
-					$actionBtn = '<div align="center" class="action_table_menu_Product">
-					<a href="update_product_information?productID='.$row->product_id.'&tab=branchprice" data-id="'.$row->product_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="" title="Edit Product Information, Add Price per branch and Tank"></a>
-					<a href="#" data-id="'.$row->product_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteProduct"></a>
+					$actionBtn = '<div class="d-flex justify-content-center gap-2 product-list-actions">
+					<button type="button" data-id="'.$row->product_id.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage product information" aria-label="Manage product information"><i class="bi bi-pencil-square text-primary" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$row->product_id.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-product" title="Delete product" aria-label="Delete product"><i class="bi bi-trash3 text-danger" aria-hidden="true"></i></button>
 					</div>';
 					
                     return $actionBtn;
@@ -419,26 +433,10 @@ class ProductController extends Controller
 	
 	/*Load Form Form Interface*/
 	public function update_product_information(Request $request){
-		
-		if(Session::has('loginID')){
-			
-			$productID = $request->productID;
-			$tab = $request->tab;
-			
-			$title = 'Update Product Information';
-			$data = array();
-			
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();/*User Data*/
-			
-			$teves_branch = TevesBranchModel::all();
-			$supplier_data = SupplierModel::all();/*June 9, 2025*/
-			$client_data = ClientModel::all();/*June 29, 2025*/
-			$product_category = ProductCategoryModel::all();/*May 23, 2026*/
-			
-			return view("pages.update_product_information_form", compact('data','title','teves_branch', 'tab', 'productID', 'supplier_data', 'client_data', 'product_category'));
-		
-		}
-		
+		return redirect()->route('product', [
+			'productID' => $request->query('productID'),
+			'tab' => $request->query('tab', 'product-info'),
+		]);
 	}  		
 	
 }

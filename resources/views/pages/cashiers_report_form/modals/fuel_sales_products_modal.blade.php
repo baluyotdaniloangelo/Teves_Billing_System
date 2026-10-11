@@ -81,6 +81,11 @@ ADD / EDIT MODAL
                       id="CashierReportFuelSalesForm"
                       novalidate>
 
+                    <div class="alert alert-success d-none py-2 mb-3"
+                         id="fuelSalesSaveNotice"
+                         role="status"
+                         aria-live="polite"></div>
+
                     <section class="rounded-4 border bg-white p-3 mb-4">
                         <div class="d-flex align-items-center mb-3">
                             <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-2" style="width:38px;height:38px"><i class="bi bi-fuel-pump-fill"></i></span>
@@ -472,8 +477,7 @@ ADD / EDIT MODAL
             <!-- HEADER -->
             <!-- ====================================== -->
 
-            <div class="modal-header border-0 px-4 py-3"
-                 style="background: linear-gradient(135deg, #dc3545, #b02a37);">
+            <div class="modal-header border-0 px-4 py-3">
 
                 <div class="d-flex align-items-center text-white">
 

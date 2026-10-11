@@ -1,9 +1,9 @@
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+<div class="card border-0 shadow-sm rounded-4 mb-3 lpg-report-info-card">
     <div class="card-header bg-white border-0 px-3 px-lg-4 py-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
                 <h5 class="fw-bold mb-1">
-                    <i class="bi bi-receipt-cutoff text-success me-2"></i>Cashier's Report
+                    <i class="bi bi-receipt-cutoff text-success me-2"></i>Cashier's Report for LPG
                 </h5>
                 <small class="text-muted">Report information and shift summary</small>
             </div>
@@ -18,6 +18,31 @@
                     <i class="bi bi-chevron-down me-1" id="cashierReportOverviewIcon"></i>
                     <span id="cashierReportOverviewLabel">Show Report Details</span>
                 </button>
+                @if(in_array(session('UserType'), ['Admin', 'SUAdmin', 'Encoder'], true))
+                <div class="dropdown">
+                    <button type="button"
+                            class="btn btn-outline-success dropdown-toggle shadow-sm lpg-report-action-btn"
+                            id="lpg_client_menu"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="bi bi-people-fill me-1"></i>Client
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3" aria-labelledby="lpg_client_menu">
+                        <li>
+                            <a class="dropdown-item py-2" href="{{ route('client') }}">
+                                <i class="bi bi-card-list me-2 text-success"></i>Client List
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <button class="dropdown-item py-2" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#CreateClientModal">
+                                <i class="bi bi-person-plus-fill me-2 text-success"></i>Add Client
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                @endif
                 <button type="button"
                         class="btn btn-success shadow-sm lpg-report-action-btn"
                         data-bs-toggle="modal"

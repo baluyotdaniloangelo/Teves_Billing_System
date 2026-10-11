@@ -17,8 +17,7 @@
             <!-- MODAL HEADER -->
             <!-- ========================================== -->
 
-            <div class="modal-header border-0 px-4 py-2"
-                 style="background: linear-gradient(135deg, #198754, #157347);">
+            <div class="modal-header border-0 px-4 py-2">
 
                 <div class="d-flex align-items-center text-white">
 
@@ -73,6 +72,8 @@
                       class="needs-validation"
                       novalidate>
 
+
+                    <section class="rounded-4 border bg-white p-3 mb-4">
 
                     <!-- ========================================== -->
                     <!-- MISCELLANEOUS TYPE -->
@@ -177,6 +178,11 @@
                     </div>
 
 
+                    </section>
+
+
+                    <section class="rounded-4 border bg-white p-3 mb-4">
+
                     <!-- ========================================== -->
                     <!-- REFERENCE NO + TIME -->
                     <!-- ========================================== -->
@@ -274,6 +280,11 @@
                     </div>
 
 
+                    </section>
+
+
+                    <section class="rounded-4 border bg-white p-3 mb-4">
+
                     <!-- ========================================== -->
                     <!-- QUANTITY + UNIT PRICE -->
                     <!-- ========================================== -->
@@ -367,7 +378,7 @@
 				<!-- PUMP PRICE -->
 				<div class="col-md-4">
 
-					<div class="card border-0 bg-light rounded-3 h-100">
+					<div class="card border-0 bg-dark rounded-3 h-100">
 
 						<div class="card-body py-2 px-3">
 
@@ -392,7 +403,7 @@
 				<!-- DISCOUNTED PRICE -->
 				<div class="col-md-4">
 
-					<div class="card border-0 bg-light rounded-3 h-100">
+					<div class="card border-0 bg-dark rounded-3 h-100">
 
 						<div class="card-body py-2 px-3">
 
@@ -417,7 +428,7 @@
 				<!-- TOTAL AMOUNT -->
 				<div class="col-md-4">
 
-					<div class="card border-0 bg-light rounded-3 h-100">
+					<div class="card border-0 bg-dark rounded-3 h-100">
 
 						<div class="card-body py-2 px-3">
 
@@ -440,6 +451,8 @@
 				</div>
 
 			</div>
+
+                    </section>
 
             </form>
 

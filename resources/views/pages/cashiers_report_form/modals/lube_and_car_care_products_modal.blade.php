@@ -14,8 +14,7 @@ LUBRICANTS & CAR CARE PRODUCTS MODAL
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
             <!-- MODAL HEADER -->
-            <div class="modal-header border-0 px-4 py-3"
-                 style="background: linear-gradient(135deg, #198754, #157347);">
+            <div class="modal-header border-0 px-4 py-3">
 
                 <div class="d-flex align-items-center text-white">
 
@@ -30,14 +29,9 @@ LUBRICANTS & CAR CARE PRODUCTS MODAL
                     <div>
                         <h5 class="modal-title fw-bold mb-0"
                             id="CashierReportLubeCarCareModalLabel">
-
-                            Lubricants & Car Care
-
+                            Lubricants &amp; Car Care
                         </h5>
-
-                        <small class="text-white-50">
-                            Add product sales
-                        </small>
+                        <small class="text-white-50">Add product sales</small>
                     </div>
 
                 </div>
@@ -47,13 +41,10 @@ LUBRICANTS & CAR CARE PRODUCTS MODAL
                         data-bs-dismiss="modal"
                         aria-label="Close"
                         style="width:36px;height:36px;">
-
                     <i class="bi bi-x-lg"></i>
-
                 </button>
 
             </div>
-
 
             <!-- MODAL BODY -->
             <div class="modal-body p-4">
@@ -62,190 +53,174 @@ LUBRICANTS & CAR CARE PRODUCTS MODAL
                       class="needs-validation"
                       novalidate>
 
+                    <!-- PRODUCT SECTION -->
+                    <section class="rounded-4 border bg-white p-3 mb-4">
 
-                    <!-- PRODUCT -->
-                    <div class="mb-4">
-
-                        <label for="lube_car_care_product"
-                               class="form-label fw-semibold">
-
-                            <i class="bi bi-box-seam me-2 text-success"></i>
-                            Product
-
-                        </label>
-
-                        <input type="text"
-                               class="form-control form-control-lg rounded-3"
-                               list="lubeCarCareProductList"
-                               name="lube_car_care_product"
-                               id="lube_car_care_product"
-                               placeholder="Select or enter product"
-                               autocomplete="off"
-                               required>
-
-                        <datalist id="lubeCarCareProductList">
-
-                            @foreach ($product_data as $product_data_cols)
-
-                                <option
-                                    label="&#8369; {{ number_format($product_data_cols->product_price, 2) }}"
-                                    data-id="{{ $product_data_cols->product_id }}"
-                                    data-price="{{ $product_data_cols->product_price }}"
-                                    value="{{ $product_data_cols->product_name }}">
-
-                            @endforeach
-
-                        </datalist>
-
-                        <div class="invalid-feedback"
-                             id="lube_car_care_productError">
-
-                            Please select a product.
-
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-2"
+                                  style="width:38px;height:38px;">
+                                <i class="bi bi-box-seam"></i>
+                            </span>
+                            <div>
+                                <h6 class="fw-bold mb-0">Product Details</h6>
+                                <small class="text-muted">Select the lubricant or car care product.</small>
+                            </div>
                         </div>
 
-                    </div>
-
-
-                    <!-- QUANTITY + UNIT PRICE -->
-                    <div class="row g-3 mb-4">
-
-                        <!-- QUANTITY -->
-                        <div class="col-md-6">
-
-                            <label for="lube_car_care_quantity"
-                                   class="form-label fw-semibold">
-
-                                <i class="bi bi-boxes me-2 text-success"></i>
-                                Quantity
-
+                        <div class="mb-0">
+                            <label for="lube_car_care_product" class="form-label fw-semibold">
+                                <i class="bi bi-box-seam me-2 text-success"></i>
+                                Product
                             </label>
 
-                            <input type="number"
+                            <input type="text"
                                    class="form-control form-control-lg rounded-3"
-                                   name="lube_car_care_quantity"
-                                   id="lube_car_care_quantity"
-                                   min="0.01"
-                                   step="0.01"
-                                   placeholder="0.00"
+                                   list="lubeCarCareProductList"
+                                   name="lube_car_care_product"
+                                   id="lube_car_care_product"
+                                   placeholder="Select or enter product"
+                                   autocomplete="off"
                                    required>
 
-                            <div class="invalid-feedback"
-                                 id="lube_car_care_quantityError">
+                            <datalist id="lubeCarCareProductList">
+                                @foreach ($product_data as $product_data_cols)
+                                    <option
+                                        label="&#8369; {{ number_format($product_data_cols->product_price, 2) }}"
+                                        data-id="{{ $product_data_cols->product_id }}"
+                                        data-price="{{ $product_data_cols->product_price }}"
+                                        value="{{ $product_data_cols->product_name }}">
+                                @endforeach
+                            </datalist>
 
-                                Please enter the quantity.
-
+                            <div class="invalid-feedback" id="lube_car_care_productError">
+                                Please select a product.
                             </div>
-
                         </div>
 
+                    </section>
 
-                        <!-- UNIT PRICE -->
-                        <div class="col-md-6">
+                    <!-- QUANTITY AND UNIT PRICE SECTION -->
+                    <section class="rounded-4 border bg-white p-3 mb-4">
 
-                            <label for="lube_car_care_unit_price"
-                                   class="form-label fw-semibold">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary me-2"
+                                  style="width:38px;height:38px;">
+                                <i class="bi bi-calculator"></i>
+                            </span>
+                            <div>
+                                <h6 class="fw-bold mb-0">Quantity &amp; Pricing</h6>
+                                <small class="text-muted">Enter the quantity and unit price.</small>
+                            </div>
+                        </div>
 
-                                <i class="bi bi-tag me-2 text-success"></i>
-                                Unit Price
+                        <div class="row g-3">
 
-                            </label>
-
-                            <div class="input-group input-group-lg">
-
-                                <span class="input-group-text rounded-start-3">
-                                    ₱
-                                </span>
+                            <!-- QUANTITY -->
+                            <div class="col-md-6">
+                                <label for="lube_car_care_quantity" class="form-label fw-semibold">
+                                    <i class="bi bi-boxes me-2 text-success"></i>
+                                    Quantity
+                                </label>
 
                                 <input type="number"
-                                       class="form-control rounded-end-3"
-                                       name="lube_car_care_unit_price"
-                                       id="lube_car_care_unit_price"
-                                       min="0"
+                                       class="form-control form-control-lg rounded-3"
+                                       name="lube_car_care_quantity"
+                                       id="lube_car_care_quantity"
+                                       min="0.01"
                                        step="0.01"
-                                       placeholder="0.00">
+                                       placeholder="0.00"
+                                       required>
 
+                                <div class="invalid-feedback" id="lube_car_care_quantityError">
+                                    Please enter the quantity.
+                                </div>
                             </div>
 
-                            <div class="invalid-feedback"
-                                 id="lube_car_care_unit_priceError">
+                            <!-- UNIT PRICE -->
+                            <div class="col-md-6">
+                                <label for="lube_car_care_unit_price" class="form-label fw-semibold">
+                                    <i class="bi bi-tag me-2 text-success"></i>
+                                    Unit Price
+                                </label>
 
-                                Please enter the unit price.
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text rounded-start-3">₱</span>
+                                    <input type="number"
+                                           class="form-control rounded-end-3"
+                                           name="lube_car_care_unit_price"
+                                           id="lube_car_care_unit_price"
+                                           min="0"
+                                           step="0.01"
+                                           placeholder="0.00">
+                                </div>
 
+                                <div class="invalid-feedback" id="lube_car_care_unit_priceError">
+                                    Please enter the unit price.
+                                </div>
                             </div>
 
                         </div>
 
-                    </div>
+                    </section>
 
+                    <!-- TOTAL AMOUNT SECTION -->
+                    <section class="rounded-4 border bg-white p-3 mb-2">
 
-                    <!-- TOTAL AMOUNT -->
-                    <div class="card border-0 bg-light rounded-4 mb-2">
-
-                        <div class="card-body p-4">
-
-                            <div class="d-flex justify-content-between
-                                        align-items-center">
-
-                                <div>
-
-                                    <div class="text-muted small fw-semibold">
-                                        TOTAL AMOUNT
-                                    </div>
-
-                                    <div class="text-muted small">
-                                        Quantity × Unit Price
-                                    </div>
-
-                                </div>
-
-                                <div class="text-end">
-
-                                    <div class="text-success fw-bold fs-3">
-
-                                        ₱ <span id="LubeCarCareTotalAmount">
-                                            0.00
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-2"
+                                  style="width:38px;height:38px;">
+                                <i class="bi bi-receipt"></i>
+                            </span>
+                            <div>
+                                <h6 class="fw-bold mb-0">Sales Summary</h6>
+                                <small class="text-muted">Calculated from quantity and unit price.</small>
                             </div>
-
                         </div>
 
-                    </div>
+                        <div class="card border-0 bg-light rounded-4 mb-0">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small fw-semibold">TOTAL AMOUNT</div>
+                                        <div class="text-muted small">Quantity × Unit Price</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-success fw-bold fs-3">
+                                            ₱ <span id="LubeCarCareTotalAmount">0.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
 
                 </form>
 
             </div>
 
-
             <!-- MODAL FOOTER -->
             <div class="modal-footer border-0 bg-light px-4 py-3">
 
                 <button type="reset"
+                        form="CashierReportLubeCarCareForm"
                         class="btn btn-light border rounded-3 px-4"
                         id="clear-lube-car-care">
-
                     <i class="bi bi-arrow-counterclockwise me-2"></i>
                     Reset
-
                 </button>
-				<input type="hidden"
-					   id="lube_car_care_id"
-					   name="lube_car_care_id"
-					   value="0">
-					   
+
+                <input type="hidden"
+                       id="lube_car_care_id"
+                       name="lube_car_care_id"
+                       value="0">
+
                 <button type="submit"
                         form="CashierReportLubeCarCareForm"
                         class="btn btn-success rounded-3 px-4 shadow-sm"
                         id="save-lube-car-care">
-
                     <i class="bi bi-save-fill me-2"></i>
                     Save Product
-
                 </button>
 
             </div>
@@ -255,6 +230,7 @@ LUBRICANTS & CAR CARE PRODUCTS MODAL
     </div>
 
 </div>
+
 
 
 <!--==================================================

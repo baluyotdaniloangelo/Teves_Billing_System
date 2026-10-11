@@ -298,3 +298,8 @@
 </main>
 
 @endsection
+
+@push('page_scripts')
+    @include('layouts.non-cash_report_script')
+    @include('layouts.cashdrop_report_script')
+@endpush

@@ -29,7 +29,7 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
                 <h5 class="fw-bold mb-1">
-                    <i class="bi bi-receipt-cutoff text-success me-2"></i>Cashier's Report
+                    <i class="bi bi-receipt-cutoff text-success me-2"></i>Cashier's Report for Fuel and Car Care Products
                 </h5>
                 <small class="text-muted">Report information and shift summary</small>
             </div>
