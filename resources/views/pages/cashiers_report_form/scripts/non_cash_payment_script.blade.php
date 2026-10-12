@@ -12,6 +12,7 @@ $(function () {
     // Stores the success-notification timeout so an older timer can be cleared
     // before starting a new one. This timer must never close the Add form.
     let successModalCloseTimer = null;
+    let errorModalCloseTimer = null;
 
     /* Escape values before inserting them into HTML attributes. This helps
        prevent user-supplied values from breaking the generated action buttons. */
@@ -85,26 +86,151 @@ $(function () {
       FORM MODE RESET
       isEdit=true prepares the form for editing; false prepares a new record.
     ==============================================================*/
+    const paymentFieldMap = {
+        payment_type: '#non_cash_payment_type',
+        payment_amount: '#non_cash_payment_amount',
+        payer_name: '#non_cash_payment_name',
+        payer_number: '#non_cash_payment_number',
+        reference_number: '#non_cash_payment_reference'
+    };
+    const paymentFieldDefaults = {
+        payment_type: 'Please select a payment mode.',
+        payment_amount: 'Please enter an amount greater than zero.',
+        payer_name: 'Please enter the payer name.',
+        payer_number: 'Please enter the account number.',
+        reference_number: 'Please enter the reference number.'
+    };
+
+    /* Clear inline validation states without changing the user's entered values. */
+    function clearFieldError(fieldSelector) {
+        const input = $(fieldSelector);
+        input.removeClass('is-invalid is-valid');
+        input.closest('.input-group').removeClass('is-invalid');
+        const container = input.closest('.input-group').length ? input.closest('.input-group').parent() : input.parent();
+        const feedback = container.find('> .invalid-feedback, > .field-error-message').first();
+        const fieldName = Object.keys(paymentFieldMap).find(function (key) { return paymentFieldMap[key] === fieldSelector; });
+        if (feedback.length && fieldName) feedback.text(paymentFieldDefaults[fieldName]).removeClass('d-block');
+    }
+
+    function clearAllFieldErrors() {
+        Object.values(paymentFieldMap).forEach(clearFieldError);
+        $('#non_cash_payment_error').addClass('d-none').text('');
+    }
+
+    /* Reset the form and title for Add or Edit mode. */
     function setMode(isEdit) {
         const form = document.getElementById('non_cash_payment_form');
         if (!form) return;
         form.reset();
         form.classList.remove('was-validated');
-        $('#non_cash_payment_error').addClass('d-none').text('');
+        clearAllFieldErrors();
         $('#non_cash_payment_id').val('0');
         $('#nonCashPaymentModalTitle').text(isEdit ? 'Edit Non-Cash Payment' : 'Add Non-Cash Payment');
         $('#save_non_cash_payment span').text(isEdit ? 'Update Payment' : 'Save Payment');
     }
 
-    /* Display server validation errors or a general save failure inside the form. */
+    /* Show a specific server/client error under its corresponding input. */
+    function showFieldError(fieldName, message) {
+        const selector = paymentFieldMap[fieldName];
+        if (!selector) return false;
+
+        const input = $(selector);
+        input.removeClass('is-valid').addClass('is-invalid');
+        const container = input.closest('.input-group').length ? input.closest('.input-group').parent() : input.parent();
+        let feedback = container.find('> .invalid-feedback').first();
+        if (!feedback.length) {
+            feedback = $('<div class="invalid-feedback field-error-message"></div>').appendTo(container);
+        }
+        feedback.text(message || 'Please check this field.').addClass('d-block');
+        return true;
+    }
+
+    /*
+     * Show an error popup for exactly 5 seconds without requiring extra Blade HTML.
+     * The modal is created once and reused. It appears above the form modal without
+     * adding a second backdrop, so the user can read the error and continue editing.
+     */
+    function showPaymentErrorModal(message) {
+        let modalElement = document.getElementById('nonCashPaymentErrorNoticeModal');
+
+        if (!modalElement) {
+            const modalHtml = `
+                <div class="modal fade" id="nonCashPaymentErrorNoticeModal" tabindex="-1"
+                     aria-labelledby="nonCashPaymentErrorNoticeTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content border-0 shadow-lg rounded-4">
+                            <div class="modal-body text-center p-4">
+                                <div class="text-danger mb-3"><i class="bi bi-exclamation-triangle-fill" style="font-size:2.5rem;"></i></div>
+                                <h5 class="modal-title fw-bold text-danger mb-2" id="nonCashPaymentErrorNoticeTitle">Unable to Complete</h5>
+                                <div id="nonCashPaymentErrorNoticeMessage" class="text-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            $('body').append(modalHtml);
+            modalElement = document.getElementById('nonCashPaymentErrorNoticeModal');
+
+            // Keep the existing payment form visible behind the short error notice.
+            modalElement.addEventListener('hidden.bs.modal', function () {
+                modalElement.setAttribute('aria-hidden', 'true');
+            });
+        }
+
+        $('#nonCashPaymentErrorNoticeMessage').text(message || 'Something went wrong. Please try again.');
+
+        if (errorModalCloseTimer) {
+            window.clearTimeout(errorModalCloseTimer);
+            errorModalCloseTimer = null;
+        }
+
+        if (window.bootstrap && bootstrap.Modal) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElement, {
+                backdrop: false,
+                keyboard: true,
+                focus: false
+            });
+            modal.show();
+            errorModalCloseTimer = window.setTimeout(function () {
+                modal.hide();
+                errorModalCloseTimer = null;
+            }, 5000);
+        } else {
+            // Bootstrap is expected on this page; this fallback avoids a blocking alert.
+            console.error(message);
+        }
+    }
+
+    /* Show general errors through the timed error popup. */
+    function showGeneralErrorNotice(message) {
+        showPaymentErrorModal(message);
+    }
+
+    /* Route Laravel validation errors to inputs and also show a 5-second error popup. */
     function showSaveError(xhr) {
         const response = xhr.responseJSON || {};
         const validationErrors = response.errors || {};
-        const details = Object.values(validationErrors).flat().filter(Boolean).join(' ');
-        const message = [response.message, details].filter(Boolean).join(' ')
-            || `Unable to save payment (HTTP ${xhr.status || 'error'}). Check that all fields are valid, then try again.`;
+        const popupMessages = [];
+        let hasFieldError = false;
 
-        $('#non_cash_payment_error').text(message).removeClass('d-none');
+        Object.keys(validationErrors).forEach(function (fieldName) {
+            const messages = validationErrors[fieldName];
+            const message = Array.isArray(messages) ? messages[0] : messages;
+            if (message) popupMessages.push(String(message));
+            if (showFieldError(fieldName, message)) hasFieldError = true;
+        });
+
+        // Compatibility with controllers returning { error: '...' }.
+        const errorText = String(response.error || response.message || '');
+        if (errorText && !popupMessages.length) popupMessages.push(errorText);
+        if (/reference number.*(exist|duplicate|already)/i.test(errorText)) {
+            showFieldError('reference_number', errorText);
+            hasFieldError = true;
+        }
+
+        const message = popupMessages.length
+            ? popupMessages.join(' ')
+            : (errorText || `Unable to save payment (HTTP ${xhr.status || 'error'}). Please try again.`);
+        showPaymentErrorModal(message);
         console.error('Non-Cash Payment save failed.', xhr);
     }
 
@@ -170,16 +296,23 @@ $(function () {
         console.debug('[Fuel non-cash] Form submit reached.');
         const form = document.getElementById('non_cash_payment_form');
         if (!form) return;
-        // Stop here if browser-required fields are missing or invalid.
-        if (!form.checkValidity()) {
-            console.debug('[Fuel non-cash] Submit blocked: required fields are incomplete or invalid.');
-            form.reportValidity();
-            $('#non_cash_payment_error')
-                .text('Please complete all required fields before saving.')
-                .removeClass('d-none');
+        // Validate each field inline; do not use a general form alert.
+        clearAllFieldErrors();
+        let isValid = true;
+        let firstValidationMessage = '';
+        Object.keys(paymentFieldMap).forEach(function (fieldName) {
+            const input = $(paymentFieldMap[fieldName])[0];
+            if (input && !input.checkValidity()) {
+                const fieldMessage = paymentFieldDefaults[fieldName] || 'Please check this field.';
+                showFieldError(fieldName, fieldMessage);
+                if (!firstValidationMessage) firstValidationMessage = fieldMessage;
+                isValid = false;
+            }
+        });
+        if (!isValid) {
+            showPaymentErrorModal(firstValidationMessage || 'Please complete all required fields.');
             return;
         }
-        $('#non_cash_payment_error').addClass('d-none').text('');
 
         // A payment ID greater than zero means Update; zero means Add. Capture
         // this before the AJAX request because the form state can change later.
@@ -202,7 +335,7 @@ $(function () {
             },
             // Clear stale errors and prevent duplicate submissions while saving.
             beforeSend: function () {
-                $('#non_cash_payment_error').addClass('d-none').text('');
+                clearAllFieldErrors();
                 $('#save_non_cash_payment').prop('disabled', true).find('span').text('Saving...');
             },
             // The server confirmed the save/update succeeded.
@@ -297,7 +430,11 @@ $(function () {
                 // Use a modal notification instead of the inline delete notice.
                 showNonCashPaymentSuccessModal('Payment deleted successfully.');
             },
-            error: function (xhr) { console.error('Non-Cash Payment delete failed.', xhr); }
+            error: function (xhr) {
+                const response = xhr.responseJSON || {};
+                showPaymentErrorModal(response.error || response.message || `Unable to delete payment (HTTP ${xhr.status || 'error'}). Please try again.`);
+                console.error('Non-Cash Payment delete failed.', xhr);
+            }
         });
     });
 
@@ -344,6 +481,15 @@ $(function () {
     $('#payment-tab, #fuel-non-cash-payment-tab').on('shown.bs.tab', function () {
         const dt = getTable(); if (dt) dt.columns.adjust().responsive.recalc();
     });
+
+    // Clear a field's inline error as soon as the user edits that field.
+    $(document).on('input.fuelNonCashPayment change.fuelNonCashPayment',
+        '#non_cash_payment_type, #non_cash_payment_amount, #non_cash_payment_name, #non_cash_payment_number, #non_cash_payment_reference',
+        function () {
+            const fieldSelector = '#' + this.id;
+            clearFieldError(fieldSelector);
+        }
+    );
 
     // Initialize/load the table when this script starts.
     getTable();

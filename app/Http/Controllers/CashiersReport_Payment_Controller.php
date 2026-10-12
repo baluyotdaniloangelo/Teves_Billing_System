@@ -48,67 +48,99 @@ class CashiersReport_Payment_Controller extends Controller
         return $this->delete_cash_payment_report($request);
     }
     /* ================= SAVE / UPDATE ================= */
-    public function save_cash_payment_cashiers_report_p8(Request $request)
-    {
-        $request->validate(
-            [
-                'payment_type'   => 'required|string',
-                'payment_amount' => 'required|numeric|min:0',
-				'payer_name'     => 'required|string',
-				'payer_number'   => 'required|string',
-				'reference_number' => 'required|string'
-            ],
-            [
-                'payment_type.required'   => 'Payment Type is required',
-                'payment_amount.required' => 'Payment Amount is required',
-                'payer_name.required' => 'Name is required',
-                'payer_number.required' => 'Account Number is required',
-                'reference_number.required' => 'Reference Number is required'
-            ]
-        );
 
-        $CashiersReportId = $request->CashiersReportId;
-        $CRPH8_ID         = $request->CRPH8_ID;
 
-        /* ============ CREATE ============ */
-        if (empty($CRPH8_ID) || $CRPH8_ID == 0) {
+public function save_cash_payment_cashiers_report_p8(Request $request)
+{
+    $request->validate(
+        [
+            'payment_type'     => 'required|string',
+            'payment_amount'   => 'required|numeric|min:0',
+            'payer_name'       => 'required|string',
+            'payer_number'     => 'required|string',
+            'reference_number' => 'required|string',
+        ],
+        [
+            'payment_type.required'     => 'Payment Type is required',
+            'payment_amount.required'   => 'Payment Amount is required',
+            'payer_name.required'       => 'Name is required',
+            'payer_number.required'     => 'Account Number is required',
+            'reference_number.required' => 'Reference Number is required',
+        ]
+    );
 
-            $CashiersReportModel_P8 = new CashiersReportModel_P8();
+    $CashiersReportId = $request->CashiersReportId;
+    $CRPH8_ID         = $request->CRPH8_ID;
 
-            $CashiersReportModel_P8->user_idx               = Session::get('loginID');
-            $CashiersReportModel_P8->cashiers_report_idx    = $CashiersReportId;
-            $CashiersReportModel_P8->payment_type           = $request->payment_type;
-            $CashiersReportModel_P8->payment_amount         = $request->payment_amount;
-			$CashiersReportModel_P8->payer_name     = $request->payer_name;
-			$CashiersReportModel_P8->payer_number   = $request->payer_number;
-			$CashiersReportModel_P8->reference_number = $request->reference_number;
-            $CashiersReportModel_P8->created_by_user_id     = Session::get('loginID');
+    /*
+    |--------------------------------------------------------------------------
+    | CHECK DUPLICATE REFERENCE NUMBER
+    |--------------------------------------------------------------------------
+    | CREATE: Check whether the reference number already exists.
+    | UPDATE: Ignore the current record when checking duplicates.
+    */
 
-            $result = $CashiersReportModel_P8->save();
+    $existingReference = CashiersReportModel_P8::where(
+        'reference_number',
+        trim($request->reference_number)
+    );
 
-            return $result
-                ? response()->json(['success' => 'Cash Payment Successfully Created!'])
-                : response()->json(['error' => 'Error creating Cash Payment'], 500);
-        }
+    if (!empty($CRPH8_ID) && $CRPH8_ID != 0) {
+        $existingReference->where('cashiers_report_p8_id', '!=', $CRPH8_ID);
+    }
 
-        /* ============ UPDATE ============ */
-        $CashiersReportModel_P8 = CashiersReportModel_P8::findOrFail($CRPH8_ID);
+    if ($existingReference->exists()) {
+        return response()->json([
+            'error' => 'Reference Number already exists. Please use a different Reference Number.'
+        ], 422);
+    }
 
-        $CashiersReportModel_P8->payment_type       = $request->payment_type;
-        $CashiersReportModel_P8->payment_amount     = $request->payment_amount;
-		
-		$CashiersReportModel_P8->payer_name     = $request->payer_name;
-		$CashiersReportModel_P8->payer_number   = $request->payer_number;
-		$CashiersReportModel_P8->reference_number = $request->reference_number;
-		
-        $CashiersReportModel_P8->updated_by_user_id = Session::get('loginID');
+    /* ============ CREATE ============ */
+    if (empty($CRPH8_ID) || $CRPH8_ID == 0) {
 
-        $result = $CashiersReportModel_P8->update();
+        $CashiersReportModel_P8 = new CashiersReportModel_P8();
+
+        $CashiersReportModel_P8->user_idx            = Session::get('loginID');
+        $CashiersReportModel_P8->cashiers_report_idx = $CashiersReportId;
+        $CashiersReportModel_P8->payment_type        = $request->payment_type;
+        $CashiersReportModel_P8->payment_amount      = $request->payment_amount;
+        $CashiersReportModel_P8->payer_name          = $request->payer_name;
+        $CashiersReportModel_P8->payer_number        = $request->payer_number;
+        $CashiersReportModel_P8->reference_number    = trim($request->reference_number);
+        $CashiersReportModel_P8->created_by_user_id  = Session::get('loginID');
+
+        $result = $CashiersReportModel_P8->save();
 
         return $result
-            ? response()->json(['success' => 'Cash Payment Successfully Updated!'])
-            : response()->json(['error' => 'Error updating Cash Payment'], 500);
+            ? response()->json([
+                'success' => 'Cash Payment Successfully Created!'
+            ])
+            : response()->json([
+                'error' => 'Error creating Cash Payment'
+            ], 500);
     }
+
+    /* ============ UPDATE ============ */
+    $CashiersReportModel_P8 = CashiersReportModel_P8::findOrFail($CRPH8_ID);
+
+    $CashiersReportModel_P8->payment_type        = $request->payment_type;
+    $CashiersReportModel_P8->payment_amount      = $request->payment_amount;
+    $CashiersReportModel_P8->payer_name          = $request->payer_name;
+    $CashiersReportModel_P8->payer_number        = $request->payer_number;
+    $CashiersReportModel_P8->reference_number    = trim($request->reference_number);
+    $CashiersReportModel_P8->updated_by_user_id  = Session::get('loginID');
+
+    $result = $CashiersReportModel_P8->save();
+
+    return $result
+        ? response()->json([
+            'success' => 'Cash Payment Successfully Updated!'
+        ])
+        : response()->json([
+            'error' => 'Error updating Cash Payment'
+        ], 500);
+}
+
 
     /* ================= LIST ================= */
 

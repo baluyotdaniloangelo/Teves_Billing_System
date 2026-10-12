@@ -35,24 +35,6 @@ $(function () {
         confirmDeleteDipstickInventory($(this).data('id'));
     });
     $('#delete_dipstick_inventory_confirmed').on('click', deleteDipstickInventory);
-    $(document).on('click.dipstickInventory', '.dipstick-inventory-menu-toggle', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        const button = $(this);
-        const menu = button.siblings('.dropdown-menu');
-        const willOpen = !menu.hasClass('show');
-        $('.dipstick-inventory-actions .dropdown-menu').removeClass('show');
-        $('.dipstick-inventory-menu-toggle').attr('aria-expanded', 'false');
-        menu.toggleClass('show', willOpen);
-        button.attr('aria-expanded', willOpen ? 'true' : 'false');
-    });
-    $(document).on('click.dipstickInventory', function () {
-        $('.dipstick-inventory-actions .dropdown-menu').removeClass('show');
-        $('.dipstick-inventory-menu-toggle').attr('aria-expanded', 'false');
-    });
-    $(document).on('click.dipstickInventory', '.dipstick-inventory-actions .dropdown-menu', function (event) {
-        event.stopPropagation();
-    });
 });
 
 let DipstickFuelProductsLoaded = false;
@@ -169,12 +151,13 @@ function loadDipstickInventory()
                     }
 
                     const itemId = Number.parseInt(item.dipstick_inventory_id, 10) || 0;
-                    return '<div class="dropdown dropstart text-center dipstick-inventory-actions">' +
-                        '<button type="button" class="btn btn-light btn-sm rounded-3 shadow-sm border dropdown-toggle dipstick-inventory-menu-toggle" aria-expanded="false" aria-label="Dipstick inventory actions"><i class="bi bi-three-dots"></i></button>' +
-                        '<ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">' +
-                            '<li><button type="button" class="dropdown-item dipstick-inventory-edit" data-id="' + itemId + '"><i class="bi bi-pencil-square me-2 text-primary"></i>Edit</button></li>' +
-                            '<li><button type="button" class="dropdown-item text-danger dipstick-inventory-delete" data-id="' + itemId + '"><i class="bi bi-trash3 me-2"></i>Delete</button></li>' +
-                        '</ul>' +
+                    return '<div class="text-center text-nowrap">' +
+                        '<button type="button" class="btn btn-sm btn-primary dipstick-inventory-edit" data-id="' + itemId + '" title="Edit" aria-label="Edit Dipstick Inventory">' +
+                            '<i class="bi bi-pencil-square"></i>' +
+                        '</button> ' +
+                        '<button type="button" class="btn btn-sm btn-danger dipstick-inventory-delete" data-id="' + itemId + '" title="Delete" aria-label="Delete Dipstick Inventory">' +
+                            '<i class="bi bi-trash3-fill"></i>' +
+                        '</button>' +
                     '</div>';
                 }
             }
@@ -378,10 +361,22 @@ function saveDipstickInventory(event)
         type: 'POST',
         data: requestData,
         success: function (response) {
-            $('#switch_notice_on').show();
-            $('#sw_on').text(response.success || 'Dipstick Inventory saved.');
-            setTimeout(function () { $('#switch_notice_on').fadeOut('fast'); }, 1200);
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('dipstickInventoryModal')).hide();
+            // Show success as a modal instead of an inline notice.
+            const successMessage =
+                (response && response.success) ||
+                'Dipstick Inventory saved successfully.';
+
+            // Clear the fields and return the form to Add mode,
+            // but keep dipstickInventoryModal open.
+            setDipstickInventoryFormMode('add');
+
+            if (typeof showSuccessModal === 'function') {
+                showSuccessModal(successMessage);
+            } else {
+                window.alert(successMessage);
+            }
+
+            // Refresh the table without closing the form modal.
             loadDipstickInventory();
         },
         error: function (xhr) {
@@ -422,6 +417,10 @@ function editDipstickInventory(id)
         },
         error: function (xhr) {
             console.error('Could not load Dipstick Inventory for editing.', xhr);
+            showDipstickInventoryValidationModal(
+                (xhr.responseJSON && xhr.responseJSON.message) ||
+                'Could not load Dipstick Inventory for editing.'
+            );
         }
     });
 }
@@ -445,6 +444,10 @@ function confirmDeleteDipstickInventory(id)
         },
         error: function (xhr) {
             console.error('Could not load Dipstick Inventory details.', xhr);
+            showDipstickInventoryValidationModal(
+                (xhr.responseJSON && xhr.responseJSON.message) ||
+                'Could not load Dipstick Inventory details.'
+            );
         }
     });
 }
@@ -458,15 +461,30 @@ function deleteDipstickInventory()
         url: "{{ route('cashiers_report_dipstick_inventory.delete') }}",
         type: 'POST',
         data: { dipstick_inventory_id: id, _token: "{{ csrf_token() }}" },
-        success: function () {
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('dipstick_inventoryDeleteModal')).hide();
-            $('#switch_notice_off').show();
-            $('#sw_off').text('Deleted');
-            setTimeout(function () { $('#switch_notice_off').fadeOut('slow'); }, 1200);
+        success: function (response) {
+            bootstrap.Modal.getOrCreateInstance(
+                document.getElementById('dipstick_inventoryDeleteModal')
+            ).hide();
+
+            // Show delete success as a modal instead of an inline notice.
+            const successMessage =
+                (response && response.success) ||
+                'Dipstick Inventory deleted successfully.';
+
+            if (typeof showSuccessModal === 'function') {
+                showSuccessModal(successMessage);
+            } else {
+                window.alert(successMessage);
+            }
+
             loadDipstickInventory();
         },
         error: function (xhr) {
             console.error('Could not delete Dipstick Inventory.', xhr);
+            showDipstickInventoryValidationModal(
+                (xhr.responseJSON && xhr.responseJSON.message) ||
+                'Could not delete Dipstick Inventory.'
+            );
         }
     });
 }

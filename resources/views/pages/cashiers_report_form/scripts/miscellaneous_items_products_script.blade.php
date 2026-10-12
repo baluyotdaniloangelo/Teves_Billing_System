@@ -987,7 +987,7 @@ else if (miscellaneous_items_type == 'DISCOUNTS')
 
     $("#so_list_reference").empty();
 
-    $("#reference_no_miscellaneous_sales").val("");
+    //$("#reference_no_miscellaneous_sales").val("");
 
 
     /*----------------------------------------------
@@ -1702,11 +1702,11 @@ $('#miscellaneous_sales_form').on('submit', function(event)
 
             /*----------------------------------------------
             CLOSE MODAL
-            ----------------------------------------------*/
+            ----------------------------------------------
 
             $('#miscellaneous_sales_Modal')
                 .modal('hide');
-
+			*/
 
             /*----------------------------------------------
             RESET FORM
@@ -2821,7 +2821,7 @@ $('body').on('click', '#CHPH3_Edit_DISCOUNT', function(event)
             $('#reference_no_miscellaneous_sales').val(
                 data.reference_no || ''
             );
-
+			
 
             /*==================================================
                 PRODUCT
