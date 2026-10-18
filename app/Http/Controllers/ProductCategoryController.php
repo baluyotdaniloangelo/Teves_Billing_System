@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\User;
 use App\Models\ProductCategoryModel;
 use Session;
 use Validator;
@@ -14,23 +13,15 @@ use Illuminate\Validation\Rule;
 class ProductCategoryController extends Controller
 {
 	
-	/*Load bank Interface*/
+	/* Keep the legacy URL pointing at the integrated Product Categories tab. */
 	public function product_category(){
 
-		
 		if(Session::has('loginID') && (Session::get('UserType')=="SUAdmin")){
-			
-			$title = 'Product Category';
-			$data = array();
-		
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			$client_data = ProductCategoryModel::all();		
-			
-			return view("pages.product_category.index", compact('data','title'));
+			return redirect()->route('product', ['tab' => 'product-category']);
 		}
-		
 
-	}   
+		abort(403);
+	}
 
 /*==================================================
 FETCH BANK LIST USING DATATABLE
@@ -79,7 +70,7 @@ public function getProductCategoryList(Request $request)
 
                                 <i class="bi bi-pencil-square text-warning me-2"></i>
 
-                                Edit Bank Details
+                                Edit Category
 
                             </a>
 
@@ -95,7 +86,7 @@ public function getProductCategoryList(Request $request)
 
                                 <i class="bi bi-trash3-fill me-2"></i>
 
-                                Delete Bank Details
+                                Delete Category
 
                             </a>
 

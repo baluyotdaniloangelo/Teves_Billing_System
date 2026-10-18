@@ -216,6 +216,14 @@ Route::post('/delete_bill_confirmed', [SOBillingTransactionController::class, 'd
 /*Load Product List*/
 Route::get('/product', [ProductController::class,'product'])->name('product')->middleware('isLoggedIn');
 Route::get('product/list', [ProductController::class, 'getProductList'])->name('getProductList')->middleware('isLoggedIn');
+Route::get('product/unassigned-list', [ProductController::class, 'getUnassignedProductList'])->name('getUnassignedProductList')->middleware('isLoggedIn');
+Route::get('product/main-variants', [ProductController::class, 'getMainProductVariants'])->name('getMainProductVariants')->middleware('isLoggedIn');
+Route::get('product/main-options', [ProductController::class, 'getMainProductOptions'])->name('getMainProductOptions')->middleware('isLoggedIn');
+Route::post('/create_product_main_post', [ProductController::class, 'create_product_main_post'])->name('create_product_main_post')->middleware('isLoggedIn');
+Route::post('/update_product_main_post', [ProductController::class, 'update_product_main_post'])->name('update_product_main_post')->middleware('isLoggedIn');
+Route::post('/delete_product_main_confirmed', [ProductController::class, 'delete_product_main_confirmed'])->name('delete_product_main_confirmed')->middleware('isLoggedIn');
+Route::post('/assign_product_variant', [ProductController::class, 'assign_product_variant'])->name('assign_product_variant')->middleware('isLoggedIn');
+Route::post('/unlink_product_variant', [ProductController::class, 'unlink_product_variant'])->name('unlink_product_variant')->middleware('isLoggedIn');
 /*Create Product*/
 Route::post('/create_product_post', [ProductController::class,'create_product_post'])->name('create_product_post')->middleware('isLoggedIn');
 /*GET Product Info*/
@@ -402,6 +410,7 @@ Route::post('/quotation_disapproved', [SalesOrderController::class, 'quotation_d
 /*Generate via Web Page View - For Sales Order Summary - April 7, 2025*/
 Route::get('/sales_order_summary', [SalesOrderController::class,'sales_order_summary'])->name('salesordersummary')->middleware('isLoggedIn');
 Route::post('/sales_order_summary_data', [SalesOrderController::class,'sales_order_summary_data'])->name('sales_order_summary_data')->middleware('isLoggedIn');
+Route::get('/generate_sales_order_summary_export_pdf', [SalesOrderController::class,'generate_sales_order_summary_export_pdf'])->name('generate_sales_order_summary_export_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_summary_report_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_pdf'])->name('generate_sales_order_summary_report_pdf')->middleware('isLoggedIn');
 Route::get('/generate_sales_order_summary_report_per_client_pdf', [SalesOrderController::class,'generate_sales_order_summary_report_per_client_pdf'])->name('generate_sales_order_summary_report_per_client_pdf')->middleware('isLoggedIn');
 
@@ -657,6 +666,7 @@ Route::get('cashier_report_lpg/list', [CashiersReportLPGController::class, 'getC
 Route::post('/create_cashier_report_lpg_post', [CashiersReportLPGController::class,'create_cashier_report_lpg_post'])->name('create_cashier_report_lpg_post')->middleware('isLoggedIn');
 /**/
 Route::get('/cashiers_report_form_lpg/{id}', [CashiersReportLPGController::class, 'cashiers_report_form_lpg'])->name('cashiers_report_form_lpg')->middleware('isLoggedIn');
+Route::get('/generate_lpg_cashier_report_pdf', [CashiersReportLPGController::class, 'generate_lpg_cashier_report_pdf'])->name('generate_lpg_cashier_report_pdf')->middleware('isLoggedIn');
 
 use App\Http\Controllers\CashiersReport_LPG_AR_Controller;
 
@@ -772,7 +782,47 @@ Route::post('/cashiers-report/lpg-non-cash-payments/delete', [
     'delete_lpg_non_cash_payment',
 ])->name('DeleteLpgNonCashPayment');
 
+use App\Http\Controllers\CashiersReport_LPG_Inventory_Controller;
 
+Route::post('/cashiers-report/lpg-inventory/list', [
+    CashiersReport_LPG_Inventory_Controller::class,
+    'get_lpg_inventory_list',
+])->name('GetLpgInventoryList')->middleware('isLoggedIn');
+
+Route::post('/cashiers-report/lpg-inventory/info', [
+    CashiersReport_LPG_Inventory_Controller::class,
+    'lpg_inventory_info',
+])->name('LpgInventoryInfo')->middleware('isLoggedIn');
+
+Route::post('/cashiers-report/lpg-inventory/save', [
+    CashiersReport_LPG_Inventory_Controller::class,
+    'save_lpg_inventory',
+])->name('SaveLpgInventory')->middleware('isLoggedIn');
+
+Route::post('/cashiers-report/lpg-inventory/update', [
+    CashiersReport_LPG_Inventory_Controller::class,
+    'update_lpg_inventory',
+])->name('UpdateLpgInventory')->middleware('isLoggedIn');
+
+Route::post('/cashiers-report/lpg-inventory/delete', [
+    CashiersReport_LPG_Inventory_Controller::class,
+    'delete_lpg_inventory',
+])->name('DeleteLpgInventory')->middleware('isLoggedIn');
+
+
+use App\Http\Controllers\CashiersReport_LPG_Container_Controller;
+
+Route::post('/cashiers-report/lpg-swapping/list', [CashiersReport_LPG_Container_Controller::class, 'get_lpg_swapping_list'])->name('GetLpgSwappingList')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-swapping/info', [CashiersReport_LPG_Container_Controller::class, 'lpg_swapping_info'])->name('LpgSwappingInfo')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-swapping/save', [CashiersReport_LPG_Container_Controller::class, 'save_lpg_swapping'])->name('SaveLpgSwapping')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-swapping/update', [CashiersReport_LPG_Container_Controller::class, 'update_lpg_swapping'])->name('UpdateLpgSwapping')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-swapping/delete', [CashiersReport_LPG_Container_Controller::class, 'delete_lpg_swapping'])->name('DeleteLpgSwapping')->middleware('isLoggedIn');
+
+Route::post('/cashiers-report/lpg-on-loan/list', [CashiersReport_LPG_Container_Controller::class, 'get_lpg_on_loan_list'])->name('GetLpgOnLoanList')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-on-loan/info', [CashiersReport_LPG_Container_Controller::class, 'lpg_on_loan_info'])->name('LpgOnLoanInfo')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-on-loan/save', [CashiersReport_LPG_Container_Controller::class, 'save_lpg_on_loan'])->name('SaveLpgOnLoan')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-on-loan/update', [CashiersReport_LPG_Container_Controller::class, 'update_lpg_on_loan'])->name('UpdateLpgOnLoan')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-on-loan/delete', [CashiersReport_LPG_Container_Controller::class, 'delete_lpg_on_loan'])->name('DeleteLpgOnLoan')->middleware('isLoggedIn');
 use App\Http\Controllers\CashiersReport_LPG_Cash_Controller;
 
 Route::post('/cashiers-report/lpg-cash/info', [
@@ -886,3 +936,4 @@ Route::get('chart-line', 'ChartController@chartLine');
 Route::get('chart-line-ajax', 'ChartController@chartLineAjax');
 
 */
+

@@ -277,9 +277,8 @@ $(function () {
         serverSide: true,
         responsive: true,
         autoWidth: false,
-        stateSave: true,
+        stateSave: false,
         scrollCollapse: true,
-        scrollY: '500px',
         searching: true,
         lengthChange: false,
         dom: 'rt<"d-flex justify-content-between align-items-center mt-3"ip>',
@@ -287,11 +286,31 @@ $(function () {
         info: true,
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center text-muted' },
-            { data: 'product_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold' },
+            { data: 'product_name', name: 'main.product_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold' },
+            { data: 'category_name', name: 'category.category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
+            { data: 'variants_count', orderable: false, searchable: false, className: 'text-center' },
+            { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
+        ]
+    });
+
+    window.UnassignedProductTable = $('#getUnassignedProductList').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        autoWidth: false,
+        searching: true,
+        lengthChange: false,
+        dom: 'rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+        ajax: "{{ route('getUnassignedProductList') }}",
+        info: true,
+        order: [[1, 'asc']],
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center text-muted' },
+            { data: 'product_name', name: 'teves_product_table.product_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold' },
             { data: 'category_name', name: 'teves_product_category.category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
             { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
             { data: 'product_unit_measurement', className: 'text-center' },
-            { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
+            { data: 'action', orderable: false, searchable: false, className: 'text-center' }
         ]
     });
 
@@ -323,6 +342,29 @@ $(function () {
         window.ProductListTable.search('');
         window.ProductListTable.column(2).search('');
         window.ProductListTable.page.len(10).draw();
+    });
+
+    let unassignedSearchTimer;
+    $('#unassigned_variant_search').on('input', function () {
+        const searchValue = this.value;
+        window.clearTimeout(unassignedSearchTimer);
+        unassignedSearchTimer = window.setTimeout(function () {
+            window.UnassignedProductTable.search(searchValue).draw();
+        }, 300);
+    });
+
+    $('#unassigned_variant_length').on('change', function () {
+        window.UnassignedProductTable.page.len(Number(this.value)).draw();
+    });
+
+    $('#productCatalogTabs button[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+        const target = $(this).attr('data-bs-target');
+        window.setTimeout(function () {
+            const table = target === '#productVariantsPane' ? window.UnassignedProductTable : window.ProductListTable;
+            if (!table) return;
+            table.columns.adjust();
+            if (table.responsive && typeof table.responsive.recalc === 'function') table.responsive.recalc();
+        }, 50);
     });
 
     $('#getProductList').on('click', '.select-product', function (event) {
@@ -413,6 +455,7 @@ $('#ProductformNew').on('submit', function (event) {
         data: {
             product_name: $('#product_name').val(),
             category_idx: $('#category_idx').val(),
+            product_main_idx: $('#product_main_idx').val() || '',
             product_price: $('#product_price').val(),
             product_unit_measurement: $('#product_unit_measurement').val(),
             _token: "{{ csrf_token() }}"
@@ -421,14 +464,17 @@ $('#ProductformNew').on('submit', function (event) {
             productForm.reset();
             window.ProductFormValidation.reset(productForm);
             if (window.ProductListTable) window.ProductListTable.ajax.reload(null, false);
+            if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
 
             if (response.productID) {
                 const createModal = document.getElementById('CreateProductModal');
                 const openNewProduct = function () {
                     selectProduct(response.productID, { newlyCreated: true });
+                    window.openingCreatedProductInformation = false;
                 };
 
                 if (createModal && createModal.classList.contains('show')) {
+                    window.openingCreatedProductInformation = true;
                     createModal.addEventListener('hidden.bs.modal', openNewProduct, { once: true });
                     $(createModal).modal('hide');
                 } else {
@@ -505,6 +551,8 @@ $(document).on('click', '#deleteProductConfirmed', function (event) {
     }).done(function () {
         $('#ProductDeleteModal').modal('hide');
         window.ProductListTable.ajax.reload(null, false);
+        if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
+        if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
         if (String(getSelectedProductId()) === String(productId)) {
             window.selectedProductId = null;
             $('#ProductInformationModal').modal('hide');

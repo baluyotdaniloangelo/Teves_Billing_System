@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use App\Models\ProductModel;
+use App\Models\ProductMainModel;
 use App\Models\TevesBranchModel;
 use App\Models\ProductPricePerBranchModel;
 use App\Models\ProductPricePerBranchHistoryModel;
@@ -29,7 +30,6 @@ class ProductController extends Controller
 			
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
-			$product_data = ProductModel::all();
 			$product_category = ProductCategoryModel::all();/*May 23, 2026*/
 			$teves_branch = TevesBranchModel::all();
 			$supplier_data = SupplierModel::all();
@@ -51,26 +51,36 @@ class ProductController extends Controller
 		
 		if ($request->ajax()) {
 
-	    	$data = ProductModel::leftJoin(
-			'teves_product_category',
-			'teves_product_table.category_idx',
-			'=',
-			'teves_product_category.category_id'
-		)->select(
-			'teves_product_table.product_id',
-			'teves_product_table.product_name',
-			'teves_product_table.product_price',
-			'teves_product_table.product_unit_measurement',
-			'teves_product_category.category_name'
-		);
+			$variantCounts = DB::table('teves_product_table')
+				->select('product_main_idx', DB::raw('COUNT(*) as variants_count'))
+				->whereNull('deleted_at')
+				->whereNotNull('product_main_idx')
+				->groupBy('product_main_idx');
+
+	    	$data = DB::table('teves_product_main_table as main')
+				->leftJoin('teves_product_category as category', 'main.category_idx', '=', 'category.category_id')
+				->leftJoinSub($variantCounts, 'variant_counts', function ($join) {
+					$join->on('main.product_main_id', '=', 'variant_counts.product_main_idx');
+				})
+				->whereNull('main.deleted_at')
+				->select(
+					'main.product_main_id',
+					'main.product_name',
+					'main.category_idx',
+					'category.category_name',
+					DB::raw('COALESCE(variant_counts.variants_count, 0) as variants_count')
+				);
 		
 		return DataTables::of($data)
 				->addIndexColumn()
                 ->addColumn('action', function($row){
-								
+					$mainId = (int) $row->product_main_id;
+					$hasVariants = (int) $row->variants_count > 0;
+					$deleteState = $hasVariants ? ' disabled title="Remove its variants before deleting"' : ' title="Delete main product"';
 					$actionBtn = '<div class="d-flex justify-content-center gap-2 product-list-actions">
-					<button type="button" data-id="'.$row->product_id.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage product information" aria-label="Manage product information"><i class="bi bi-pencil-square text-primary" aria-hidden="true"></i></button>
-					<button type="button" data-id="'.$row->product_id.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-product" title="Delete product" aria-label="Delete product"><i class="bi bi-trash3 text-danger" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border manage-main-product" title="Manage variants" aria-label="Manage variants"><i class="bi bi-boxes" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border edit-main-product" title="Edit main product" aria-label="Edit main product"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-main-product"'.$deleteState.' aria-label="Delete main product"><i class="bi bi-trash3" aria-hidden="true"></i></button>
 					</div>';
 					
                     return $actionBtn;
@@ -79,14 +89,178 @@ class ProductController extends Controller
 				
 				->rawColumns(['action'])
                 ->make(true);
-		}	
+		}
     }
+
+	public function getUnassignedProductList(Request $request)
+	{
+		if (!$request->ajax()) return response()->json(['data' => []]);
+
+		$data = ProductModel::query()
+			->leftJoin('teves_product_category', 'teves_product_table.category_idx', '=', 'teves_product_category.category_id')
+			->whereNull('teves_product_table.product_main_idx')
+			->select(
+				'teves_product_table.product_id',
+				'teves_product_table.product_name',
+				'teves_product_table.category_idx',
+				'teves_product_table.product_price',
+				'teves_product_table.product_unit_measurement',
+				'teves_product_category.category_name'
+			);
+
+		return DataTables::of($data)
+			->addIndexColumn()
+			->addColumn('action', function ($row) {
+				$productId = (int) $row->product_id;
+				return '<div class="d-flex justify-content-center gap-2 product-list-actions">
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage variant details" aria-label="Manage variant details"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border assign-product-variant" title="Assign to main product" aria-label="Assign to main product"><i class="bi bi-link-45deg" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-product" title="Delete product variant" aria-label="Delete product variant"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+				</div>';
+			})
+			->rawColumns(['action'])
+			->make(true);
+	}
+
+	public function getMainProductVariants(Request $request)
+	{
+		$request->validate(['product_main_idx' => 'required|integer|exists:teves_product_main_table,product_main_id']);
+
+		$data = ProductModel::query()
+			->leftJoin('teves_product_category', 'teves_product_table.category_idx', '=', 'teves_product_category.category_id')
+			->where('teves_product_table.product_main_idx', $request->product_main_idx)
+			->select(
+				'teves_product_table.product_id',
+				'teves_product_table.product_name',
+				'teves_product_table.product_price',
+				'teves_product_table.product_unit_measurement',
+				'teves_product_category.category_name'
+			);
+
+		return DataTables::of($data)
+			->addIndexColumn()
+			->addColumn('action', function ($row) {
+				$productId = (int) $row->product_id;
+				return '<div class="d-flex justify-content-center gap-2 product-list-actions">
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage variant details" aria-label="Manage variant details"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border unlink-product-variant" title="Remove from main product" aria-label="Remove from main product"><i class="bi bi-link-45deg" aria-hidden="true"></i></button>
+				</div>';
+			})
+			->rawColumns(['action'])
+			->make(true);
+	}
+
+	public function getMainProductOptions()
+	{
+		$options = ProductMainModel::query()
+			->leftJoin('teves_product_category', 'teves_product_main_table.category_idx', '=', 'teves_product_category.category_id')
+			->orderBy('teves_product_main_table.product_name')
+			->get([
+				'teves_product_main_table.product_main_id',
+				'teves_product_main_table.product_name',
+				'teves_product_main_table.category_idx',
+				'teves_product_category.category_name',
+			]);
+
+		return response()->json($options);
+	}
+
+	public function create_product_main_post(Request $request)
+	{
+		$request->validate([
+			'product_name' => 'required|string|max:255',
+			'category_idx' => 'required|integer|exists:teves_product_category,category_id',
+		]);
+
+		$mainProduct = ProductMainModel::create([
+			'product_name' => trim($request->product_name),
+			'category_idx' => $request->category_idx,
+			'created_by_user_idx' => Session::get('loginID'),
+			'updated_by_user_idx' => Session::get('loginID'),
+		]);
+
+		return response()->json(['success' => 'Main product created successfully.', 'productMainID' => $mainProduct->product_main_id]);
+	}
+
+	public function update_product_main_post(Request $request)
+	{
+		$request->validate([
+			'product_main_id' => 'required|integer|exists:teves_product_main_table,product_main_id',
+			'product_name' => 'required|string|max:255',
+			'category_idx' => 'required|integer|exists:teves_product_category,category_id',
+		]);
+
+		$mainProduct = ProductMainModel::findOrFail($request->product_main_id);
+		if ((int) $mainProduct->category_idx !== (int) $request->category_idx && $mainProduct->variants()->exists()) {
+			return response()->json(['errors' => ['category_idx' => ['Unlink its variants before changing the main product category.']]], 422);
+		}
+
+		$mainProduct->product_name = trim($request->product_name);
+		$mainProduct->category_idx = $request->category_idx;
+		$mainProduct->updated_by_user_idx = Session::get('loginID');
+		$mainProduct->save();
+
+		return response()->json(['success' => 'Main product updated successfully.']);
+	}
+
+	public function delete_product_main_confirmed(Request $request)
+	{
+		$request->validate(['product_main_id' => 'required|integer|exists:teves_product_main_table,product_main_id']);
+		$mainProduct = ProductMainModel::findOrFail($request->product_main_id);
+
+		if ($mainProduct->variants()->exists()) {
+			return response()->json(['message' => 'Remove or assign its variants before deleting this main product.'], 422);
+		}
+
+		$mainProduct->delete();
+		return response()->json(['success' => 'Main product deleted successfully.']);
+	}
+
+	public function assign_product_variant(Request $request)
+	{
+		$request->validate([
+			'product_id' => 'required|integer|exists:teves_product_table,product_id',
+			'product_main_idx' => 'required|integer|exists:teves_product_main_table,product_main_id',
+		]);
+
+		$variant = ProductModel::findOrFail($request->product_id);
+		$mainProduct = ProductMainModel::findOrFail($request->product_main_idx);
+
+		if ($variant->product_main_idx !== null) {
+			return response()->json(['message' => 'This variant is already assigned to a main product. Remove its current link before assigning it again.'], 422);
+		}
+
+		if ((int) $variant->category_idx !== (int) $mainProduct->category_idx) {
+			return response()->json(['message' => 'The variant category must match the main product category.'], 422);
+		}
+
+		$variant->product_main_idx = $mainProduct->product_main_id;
+		$variant->updated_by_user_idx = Session::get('loginID');
+		$variant->save();
+
+		return response()->json(['success' => 'Product variant assigned successfully.']);
+	}
+
+	public function unlink_product_variant(Request $request)
+	{
+		$request->validate([
+			'product_id' => 'required|integer|exists:teves_product_table,product_id',
+			'product_main_idx' => 'required|integer|exists:teves_product_main_table,product_main_id',
+		]);
+
+		$variant = ProductModel::where('product_main_idx', $request->product_main_idx)->findOrFail($request->product_id);
+		$variant->product_main_idx = null;
+		$variant->updated_by_user_idx = Session::get('loginID');
+		$variant->save();
+
+		return response()->json(['success' => 'Product variant removed from the main product.']);
+	}
 
 	/*Fetch Product Information*/
 	public function product_info(Request $request){
 
 		$productID = $request->productID;
-		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','category_idx']);
+		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','category_idx','product_main_idx']);
 		return response()->json($data);
 		
 	}
@@ -103,22 +277,34 @@ class ProductController extends Controller
 	public function create_product_post(Request $request){
 
 		$request->validate([
-          'product_name'      		=> 'required|unique:teves_product_table,product_name',
-		  'product_price'      		=> 'required'
+		  'product_name'      		=> 'required|string|max:255|unique:teves_product_table,product_name',
+		  'category_idx'      		=> 'required|integer|exists:teves_product_category,category_id',
+		  'product_price'      		=> 'required|numeric|min:0',
+		  'product_unit_measurement' => 'required|string|max:50',
+		  'product_main_idx'  		=> 'nullable|integer|exists:teves_product_main_table,product_main_id',
         ], 
         [
 			'product_name.required' => 'Product Name is required',
+			'category_idx.required' => 'Product category is required',
 			'product_price.required' => 'Price is Required'
         ]
 		);
 
+		if ($request->filled('product_main_idx')) {
+			$mainProduct = ProductMainModel::findOrFail($request->product_main_idx);
+			if ((int) $mainProduct->category_idx !== (int) $request->category_idx) {
+				return response()->json(['errors' => ['category_idx' => ['The variant category must match the main product category.']]], 422);
+			}
+		}
+
 			$Product = new ProductModel();
 			
-			$Product->product_name 						= $request->product_name;
+			$Product->product_main_idx 					= $request->product_main_idx ?: null;
+			$Product->product_name 						= trim($request->product_name);
 			$Product->category_idx 						= $request->category_idx;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
-			$Product->created_by_user_idx 				= Session::has('loginID');
+			$Product->created_by_user_idx 				= Session::get('loginID');
 			
 			$result = $Product->save();
 			
@@ -132,7 +318,7 @@ class ProductController extends Controller
 			WHERE b.product_id=?",[$last_transaction_id]);
 			
 			if($result){
-				return response()->json(array('success' => "Product Information Successfully Created!, System will proceed to Update the Pricing per Branch", 'productID' => $last_transaction_id), 200);
+				return response()->json(array('success' => "Product Information Successfully Created!, System will proceed to Update the Pricing per Branch", 'productID' => $last_transaction_id, 'productMainID' => $Product->product_main_idx), 200);
 		
 				return response()->json(['success'=>'Product Information Successfully Created!']);
 			}
@@ -144,8 +330,11 @@ class ProductController extends Controller
 	public function update_product_post(Request $request){
 		
 		$request->validate([
-          'product_name'      		=> 'required|unique:teves_product_table,product_name,'.$request->productID.',product_id',
-		  'product_price'      		=> 'required'
+          'productID'           	=> 'required|integer|exists:teves_product_table,product_id',
+          'product_name'      		=> 'required|string|max:255|unique:teves_product_table,product_name,'.$request->productID.',product_id',
+		  'category_idx'          	=> 'required|integer|exists:teves_product_category,category_id',
+		  'product_price'      		=> 'required|numeric|min:0',
+		  'product_unit_measurement' => 'required|string|max:50'
         ], 
         [
 			'product_name.required' => 'Product Name is required',
@@ -155,12 +344,21 @@ class ProductController extends Controller
 	
 			$Product = new ProductModel();
 			$Product = ProductModel::find($request->productID);
+			if (!$Product) {
+				return response()->json(['message' => 'Product not found.'], 404);
+			}
+			if ($Product->product_main_idx) {
+				$mainProduct = ProductMainModel::find($Product->product_main_idx);
+				if ($mainProduct && (int) $mainProduct->category_idx !== (int) $request->category_idx) {
+					return response()->json(['errors' => ['category_idx' => ['The variant category must match its main product category.']]], 422);
+				}
+			}
 			
 			$Product->product_name 						= $request->product_name;
 			$Product->category_idx 						= $request->category_idx;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
-			$Product->updated_by_user_idx 				= Session::has('loginID');
+			$Product->updated_by_user_idx 				= Session::get('loginID');
 						
 			$result = $Product->update();
 			

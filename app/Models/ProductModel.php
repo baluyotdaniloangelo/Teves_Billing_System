@@ -32,6 +32,7 @@ class ProductModel extends Model
 	protected $table = 'teves_product_table';
 	
 	protected $fillable = [
+        'product_main_idx',
         'product_name',
         'product_price',
 		'product_unit_measurement',
@@ -51,6 +52,7 @@ class ProductModel extends Model
 	protected static $logOnlyDirty = true;
 	
 	protected static $logAttributes = [
+		'product_main_idx',
 		'product_name',
         'product_price',
 		'product_unit_measurement',
@@ -62,5 +64,10 @@ class ProductModel extends Model
 		'deleted_at',
 		'deleted_by_user_id'
     ];
+
+	public function mainProduct()
+	{
+		return $this->belongsTo(ProductMainModel::class, 'product_main_idx', 'product_main_id');
+	}
     
 }

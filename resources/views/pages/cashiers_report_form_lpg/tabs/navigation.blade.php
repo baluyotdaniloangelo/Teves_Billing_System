@@ -17,6 +17,21 @@
         </button>
     </li>
 
+    <!-- Inventory -->
+    <li class="nav-item" role="presentation">
+        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
+                id="inventory-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#inventory_tab"
+                type="button"
+                role="tab"
+                aria-controls="inventory_tab"
+                aria-selected="false">
+            <i class="bi bi-cash-coin me-2"></i>
+            Inventory
+        </button>
+    </li>
+	
     <!-- Sales Order / AR / Returned -->
     <li class="nav-item" role="presentation">
         <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
@@ -47,7 +62,9 @@
         </button>
     </li>
 
-    <!-- Cash Collection -->
+
+	
+	<!-- Cash Collection -->
     <li class="nav-item" role="presentation">
         <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
                 id="collection_report-tab"

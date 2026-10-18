@@ -650,7 +650,7 @@ function resetCashiersReportSummary()
 			_token: "{{ csrf_token() }}"
 		}
 
-		var url = "{{URL::to('generate_cashier_report_pdf')}}?" + $.param(query)
+		var url = "{{ route('generate_lpg_cashier_report_pdf') }}?" + $.param(query)
 		window.open(url);
 	  
 	}

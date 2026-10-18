@@ -1,13 +1,34 @@
 <script type="text/javascript">
+(function ($) {
 
 /*==================================================
-BANK DETAILS MODULE
+PRODUCT CATEGORY MODULE
 ==================================================*/
 
 $(document).ready(function ()
 {
-    initializeProductCategoryDetailsTable();
     bindProductCategoryDetailsEvents();
+
+    const $categoryTab = $('#product-categories-tab');
+    const categoryTabExists = $categoryTab.length > 0;
+
+    if (categoryTabExists) {
+        $categoryTab.on('shown.bs.tab', function () {
+            initializeProductCategoryDetailsTable();
+
+            if (ProductCategoryDetailsTable) {
+                ProductCategoryDetailsTable.columns.adjust();
+            }
+        });
+
+        if (new URLSearchParams(window.location.search).get('tab') === 'product-category') {
+            $categoryTab.tab('show');
+        } else if ($('#productCategoriesPane').hasClass('show')) {
+            initializeProductCategoryDetailsTable();
+        }
+    } else {
+        initializeProductCategoryDetailsTable();
+    }
 });
 
 
@@ -19,8 +40,19 @@ let ProductCategoryDetailsTable;
 
 function initializeProductCategoryDetailsTable()
 {
+    const tableSelector = '#getProductCategoryDetailsList';
+
+    if (!$(tableSelector).length) {
+        return;
+    }
+
+    if ($.fn.DataTable.isDataTable(tableSelector)) {
+        ProductCategoryDetailsTable = $(tableSelector).DataTable();
+        return;
+    }
+
     ProductCategoryDetailsTable =
-        $('#getProductCategoryDetailsList').DataTable({
+        $(tableSelector).DataTable({
 
             processing: true,
             serverSide: true,
@@ -54,7 +86,9 @@ function initializeProductCategoryDetailsTable()
 
         });
 
-    autoAdjustColumns(ProductCategoryDetailsTable);
+    if (window.ResizeObserver) {
+        autoAdjustColumns(ProductCategoryDetailsTable);
+    }
 }
 
 
@@ -89,7 +123,7 @@ function bindProductCategoryDetailsEvents()
     $('body').on(
         'click',
         '#createProductCategoryDetails',
-        openCreateBankModal
+        openCreateProductCategoryModal
     );
 
     /*
@@ -133,7 +167,7 @@ function bindProductCategoryDetailsEvents()
 CREATE MODAL
 ==================================================*/
 
-function openCreateBankModal()
+function openCreateProductCategoryModal()
 {
     resetProductCategoryForm();
 
@@ -442,6 +476,10 @@ HELPERS
 
 function reloadProductCategoryDetailsTable()
 {
+    if (!ProductCategoryDetailsTable) {
+        return;
+    }
+
     ProductCategoryDetailsTable
         .ajax
         .reload(null, false);
@@ -450,7 +488,13 @@ function reloadProductCategoryDetailsTable()
 
 function resetProductCategoryForm()
 {
-    $('#ProductCategoryDetailsForm')[0].reset();
+    const form = $('#ProductCategoryDetailsForm')[0];
+
+    if (!form) {
+        return;
+    }
+
+    form.reset();
     $('#category_id').val('');
     $('.invalid-feedback').html('');
     $('#ProductCategoryDetailsForm').removeClass('was-validated');
@@ -508,4 +552,5 @@ function handleProductCategoryValidation(xhr)
     }
 
 }
+})(jQuery);
 </script>

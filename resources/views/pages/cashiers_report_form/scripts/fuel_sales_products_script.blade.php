@@ -1956,8 +1956,7 @@ $('body').on(
 
             /*------------------------------------------
             UPDATE SUMMARY
-            ------------------------------------------
-
+            ------------------------------------------*/
             if (
                 typeof UpdateCashiersReportSummary === 'function'
             )
@@ -1972,7 +1971,6 @@ $('body').on(
             {
                 LoadCashiersReportSummary();
             }
-*/
 
             /*------------------------------------------
             SUCCESS MESSAGE

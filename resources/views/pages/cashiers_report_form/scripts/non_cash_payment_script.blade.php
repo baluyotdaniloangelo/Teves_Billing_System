@@ -343,6 +343,7 @@ $(function () {
                 // Refresh the payment table and report summary.
                 const dt = getTable();
                 if (dt) dt.ajax.reload(null, false);
+                if (typeof UpdateCashiersReportSummary === 'function') UpdateCashiersReportSummary();
                 if (typeof LoadCashiersReportSummary === 'function') LoadCashiersReportSummary();
 
                 const successMessage = response.success ||
@@ -425,6 +426,7 @@ $(function () {
             success: function () {
                 bootstrap.Modal.getOrCreateInstance(deleteModal).hide();
                 const dt = getTable(); if (dt) dt.ajax.reload(null, false);
+                if (typeof UpdateCashiersReportSummary === 'function') UpdateCashiersReportSummary();
                 if (typeof LoadCashiersReportSummary === 'function') LoadCashiersReportSummary();
 
                 // Use a modal notification instead of the inline delete notice.

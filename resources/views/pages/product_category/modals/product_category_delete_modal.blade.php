@@ -1,5 +1,5 @@
 <!-- DELETE BANK DETAILS MODAL -->
-<div class="modal fade"
+<div class="modal fade product-information-modal-theme"
      id="ProductCategoryDetailsDeleteModal"
      tabindex="-1"
      aria-hidden="true">

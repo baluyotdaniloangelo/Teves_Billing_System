@@ -1,5 +1,5 @@
 <!-- CREATE BANK DETAILS MODAL -->
-<div class="modal fade"
+<div class="modal fade product-information-modal-theme"
      id="ProductCategoryDetailsModal"
      tabindex="-1"
      aria-hidden="true">
@@ -153,7 +153,7 @@
 </div>
 
 <!-- SUCCESS MODAL -->
-<div class="modal fade"
+<div class="modal fade product-information-modal-theme"
      id="SuccessModal"
      tabindex="-1"
      aria-hidden="true">
@@ -198,7 +198,7 @@
 
 
 <!-- VALIDATION ERROR MODAL -->
-<div class="modal fade"
+<div class="modal fade product-information-modal-theme"
      id="ValidationErrorModal"
      tabindex="-1"
      aria-hidden="true">

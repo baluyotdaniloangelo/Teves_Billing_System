@@ -20,7 +20,7 @@
     }
 
     .lpg-report-theme .card {
-        --bs-card-bg: #fff;
+        --bs-card-bg: #FFFFFF;
         --bs-card-border-color: var(--lpg-border);
     }
 
@@ -310,22 +310,26 @@
         border-color: var(--lpg-primary);
     }
 
-    .lpg-report-theme #lpgCollectionReportSubTabs {
+    .lpg-report-theme #lpgCollectionReportSubTabs,
+    .lpg-report-theme #lpgInventorySubTabs {
         border-bottom-color: var(--lpg-accent-border);
     }
 
-    .lpg-report-theme #lpgCollectionReportSubTabs .nav-link {
+    .lpg-report-theme #lpgCollectionReportSubTabs .nav-link,
+    .lpg-report-theme #lpgInventorySubTabs .nav-link {
         color: var(--lpg-muted);
         border-color: transparent;
         border-radius: .65rem .65rem 0 0;
     }
 
-    .lpg-report-theme #lpgCollectionReportSubTabs .nav-link:hover:not(.active) {
+    .lpg-report-theme #lpgCollectionReportSubTabs .nav-link:hover:not(.active),
+    .lpg-report-theme #lpgInventorySubTabs .nav-link:hover:not(.active) {
         color: var(--lpg-accent);
         background-color: var(--lpg-surface);
     }
 
-    .lpg-report-theme #lpgCollectionReportSubTabs .nav-link.active {
+    .lpg-report-theme #lpgCollectionReportSubTabs .nav-link.active,
+    .lpg-report-theme #lpgInventorySubTabs .nav-link.active {
         color: var(--lpg-surface);
         background-color: var(--lpg-accent);
         border-color: var(--lpg-accent) var(--lpg-accent) var(--lpg-surface);
@@ -340,8 +344,8 @@
     }
 /**/
     .lpg-report-theme .table thead th {
-        color: var(--lpg-surface) !important;
-        background-color: var(--lpg-dark) !important;
+        color: #ECECEC !important;
+        background-color: #DEDBDB !important;
         border-bottom: 1px solid rgba(222, 219, 219, .22);
         font-weight: 600;
         vertical-align: middle;
@@ -349,7 +353,7 @@
     }
 
     .lpg-report-theme .table thead th .bi {
-        color: var(--lpg-highlight);
+        color: #ECECEC;
         font-size: .85em;
         margin-right: .35rem;
         vertical-align: -.03em;
@@ -401,6 +405,7 @@
 
                 @include('pages.cashiers_report_form_lpg.tabs.lpg_accounts_receivable')
 				@include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_ar_so_tab')
+				@include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_inventory_tab')
 				@include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_expenses_tab')
 				@include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_collection_report_tab')
 
@@ -414,6 +419,10 @@
 
 	@include('pages.cashiers_report_form_lpg.modals.lpg_accounts_receivable_modal')
 
+	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_beginning_inventory_form_modal')
+	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_swapping_form_modal')
+	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_on_loan_form_modal')
+	
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_ar_so_form_modal')
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_ar_so_delete_modal')
 
@@ -440,6 +449,8 @@
 
 	@include('pages.cashiers_report_form_lpg.scripts.lpg_accounts_receivable_script')	
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_ar_so_script')
+	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_inventory_script')
+	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_container_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_expenses_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_non_cash_payment_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_cash_script')
@@ -453,3 +464,4 @@
 @endsection
 
 @section('skip_default_footer', '1')
+

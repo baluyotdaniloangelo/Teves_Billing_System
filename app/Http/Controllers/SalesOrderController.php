@@ -1160,111 +1160,28 @@ class SalesOrderController extends Controller
 	} 
 	
 	/*Load Product Interface*/
-	public function sales_order_summary(){
-		
-		$title = 'Sales Order Summary';
-		$data = array();
-		if(Session::has('loginID')){
-			
-			$client_data = ClientModel::all();
-			$product_data = ProductModel::all();
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
-			if($data->user_branch_access_type=='ALL'){
-				
-				$teves_branch = TevesBranchModel::all();
-			
-			}else{
-				
-				$userID = Session::get('loginID');
-				
-				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
-				{
-					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
-				})
-							
-							->where('teves_user_branch_access.user_idx', '=', $userID)
-							->get([
-							'teves_branch_table.branch_id',
-							'teves_user_branch_access.user_idx',
-							'teves_user_branch_access.branch_idx',
-							'teves_branch_table.branch_code',
-							'teves_branch_table.branch_name'
-							]);
-				
-			}	
-		return view("pages.sales_order_summary", compact('data','title','client_data','teves_branch'));
-		}
-
-		
-		
-	}  
-	
-	
-	public function sales_order_summary_data(Request $request)
+	    public function sales_order_summary()
     {
-		
-		if(Session::has('loginID')){
-			
-			$current_user = Session::get('loginID');
-			
-			$request->validate([
-			'company_header'      		=> 'required',
-			'start_date'      		=> 'required',
-			'end_date'      			=> 'required'
-			], 
-			[
-				'company_header.required' 	=> 'Please select a Branch',
-				'start_date.required' 	=> 'Please select a Start Date',
-				'end_date.required' 	=> 'Please select a End Date'
-			]
-			);
-
-			$company_header = $request->company_header;
-			$client_idx = $request->client_idx;
-			$start_date = $request->start_date;
-			$end_date = $request->end_date;
-			
-		if ($request->ajax()) {
-			
-			$data = SalesOrderModel::join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
-					->where('teves_sales_order_table.company_header',$company_header)
-					->whereBetween('teves_sales_order_table.sales_order_date', ["$start_date", "$end_date"])
-					->WHERE(function ($r) use($current_user) {
-							if (Session::get('user_branch_access_type')=="BYBRANCH") {
-									$r->whereRaw("teves_sales_order_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
-							}
-						})
-					->where('teves_sales_order_table.sales_order_quotation', '=', '0')
-					->WHERE(function ($r) use($client_idx) {
-							if ($client_idx!='All') {
-									
-									$r->where('sales_order_client_idx',$client_idx);
-							}
-						})
-              		->get([
-					'teves_sales_order_table.sales_order_id',
-					'teves_sales_order_table.sales_order_date',
-					'teves_client_table.client_name',
-					'teves_sales_order_table.sales_order_payment_term',	
-					'teves_sales_order_table.sales_order_gross_amount',	
-					'teves_sales_order_table.sales_order_net_amount',	
-					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.sales_order_control_number',			
-					'teves_sales_order_table.sales_order_payment_term',
-					'teves_sales_order_table.sales_order_total_due',
-					'teves_sales_order_table.sales_order_payment_status',
-					'teves_sales_order_table.sales_order_delivery_status',
-					'teves_sales_order_table.created_at']);
-	
-		return DataTables::of($data)
-				->addIndexColumn()
-                ->make(true);
-		}		
-		}
+        $data = User::where('user_id', Session::get('loginID'))->firstOrFail();
+        $title = 'Sales Order Summary';
+        $client_data = ClientModel::orderBy('client_name')->get();
+        $teves_branch = (new \App\Services\SalesOrderSummaryReport())->branches($data);
+        return view('pages.sales_order_summary', compact('data', 'title', 'client_data', 'teves_branch'));
     }
 
-	public function generate_sales_order_summary_report_pdf(Request $request){
+    public function sales_order_summary_data(Request $request)
+    {
+        $user = User::where('user_id', Session::get('loginID'))->firstOrFail();
+        $report = (new \App\Services\SalesOrderSummaryReport())->build($request, $user);
+        // Keep the existing DataTables data key while returning the branch totals.
+        return response()->json($report);
+    }
+
+    public function generate_sales_order_summary_report_pdf(Request $request){
+
+        if ($validation = $this->validateLegacySalesOrderPdf($request)) {
+            return $validation;
+        }
 
 		if(Session::has('loginID')){
 		$current_user = Session::get('loginID');
@@ -1296,7 +1213,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_delivery_status',
 					'teves_sales_order_table.created_at']);			
 					
-		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		$receivable_header = TevesBranchModel::findOrFail($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
@@ -1315,6 +1232,10 @@ class SalesOrderController extends Controller
 	}		
 	
 		public function generate_sales_order_summary_report_per_client_pdf(Request $request){
+
+        if ($validation = $this->validateLegacySalesOrderPdf($request, true)) {
+            return $validation;
+        }
 
 		if(Session::has('loginID')){
 		$current_user = Session::get('loginID');
@@ -1350,13 +1271,13 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_delivery_status',
 					'teves_sales_order_table.created_at']);			
 					
-		$receivable_header = TevesBranchModel::find($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
+		$receivable_header = TevesBranchModel::findOrFail($company_header, ['branch_code','branch_name','branch_tin','branch_address','branch_contact_number','branch_owner','branch_owner_title','branch_logo']);
 
 		/*USER INFO*/
 		$user_data = User::where('user_id', '=', Session::get('loginID'))->first();
 		
 		/*Client Information*/
-		$client_data = ClientModel::find($client_idx, ['client_name','client_address','client_tin']);			
+		$client_data = ClientModel::findOrFail($client_idx, ['client_name','client_address','client_tin']);
 		
 		$title = 'Sales Order - Summary';
 		
@@ -1370,6 +1291,67 @@ class SalesOrderController extends Controller
 	}		
 	
 	
+    public function generate_sales_order_summary_export_pdf(Request $request)
+    {
+        $user_data = User::where('user_id', Session::get('loginID'))->firstOrFail();
+        try {
+            $request->validate([
+                'layout' => ['required', Rule::in(['combined', 'per_branch'])],
+                'report_mode' => ['required', Rule::in(['summary', 'details'])],
+            ]);
+            $report = (new \App\Services\SalesOrderSummaryReport())->build($request, $user_data);
+        } catch (\Illuminate\Validation\ValidationException $error) {
+            return redirect()->route('salesordersummary')->with('sales_summary_error', $error->validator->errors()->first());
+        }
+        if (!$report['available_branch_count']) {
+            return redirect()->route('salesordersummary')->with('sales_summary_error', 'No branches are available for PDF export.');
+        }
+        $title = 'Sales Order Summary';
+        $report_mode = $request->report_mode;
+        if ($request->layout === 'per_branch') {
+            $pages = (new \App\Services\SalesOrderSummaryPdf())->branchPages($report, $user_data);
+            $pdf = PDF::loadView('printables.report_sales_order_summary_by_branch_pdf', $pages);
+            $filename = 'Sales_Order_Summary_Per_Branch.pdf';
+        } else {
+            // Match the existing Cash Report and Purchase Order All Branches logo.
+            $printable_header = $report['branch_header'] ?: TevesBranchModel::find(1, ['branch_logo']);
+            $pdf = PDF::loadView('printables.report_sales_order_summary_combined_pdf', compact('report', 'title', 'user_data', 'report_mode', 'printable_header'));
+            $filename = 'Sales_Order_Summary_Combined.pdf';
+        }
+        return $pdf->setPaper('legal', 'landscape')->stream($filename);
+    }
+
+    private function validateLegacySalesOrderPdf(Request $request, $perClient = false)
+    {
+        if ($request->company_header === 'All') {
+            return redirect()->route('salesordersummary')->with('sales_summary_error',
+                'PDF export is available for a single branch. Select one branch in Report Filters and generate the report again.');
+        }
+        $user = User::where('user_id', Session::get('loginID'))->firstOrFail();
+        $allowedBranches = (new \App\Services\SalesOrderSummaryReport())->branches($user)->pluck('branch_id')->all();
+        $rules = [
+            'company_header' => ['required', 'integer', Rule::in($allowedBranches)],
+            'start_date' => ['required', 'date_format:Y-m-d'],
+            'end_date' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_date'],
+        ];
+        if ($perClient) {
+            $rules['client_idx'] = ['required', 'integer', function ($attribute, $value, $fail) {
+                if (!ClientModel::where('client_id', $value)->exists()) {
+                    $fail('Please select a valid client for PDF export.');
+                }
+            }];
+        }
+        $validator = Validator::make($request->all(), $rules, [
+            'company_header.required' => 'Select a branch and generate the report before exporting PDF.',
+            'company_header.integer' => 'PDF export requires one selected branch.',
+            'company_header.in' => 'The selected branch is unavailable or is outside your branch access.',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->route('salesordersummary')->with('sales_summary_error', $validator->errors()->first());
+        }
+        return null;
+    }
+
 	public function get_product_list_selling_price_OLD(Request $request){
 
 		$clients_price_list = DB::table('teves_product_table as pt')

@@ -1,0 +1,426 @@
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center navbar_header_bg">
+
+    <div class="d-flex align-items-center justify-content-between">
+	<i class="bi bi-list toggle-sidebar-btn toggle_sidebar"></i>
+      <div class="logo d-flex align-items-center">
+		<img src="{{asset('client_logo/logo-2.png')}}" class="rounded" alt="..." style="width:80px;">
+        <span class="d-lg-block navbar_header_title">Billing System</span>
+      </div>
+      
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+		<li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">0</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" style="">
+            <li class="dropdown-header">
+              You have 0 new notifications
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4></h4>
+                <p></p>
+                <p></p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li>
+		
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <!--<img src="{{asset('NiceAdmin-pro/assets/img/profile-img.jpg')}}" alt="Profile" class="rounded-circle">-->
+			<span class="bi bi-person-circle rounded-circle" style="color: #c0ff00 !important; font-size: 30px;"></span>			
+            <span class="d-none d-md-block dropdown-toggle ps-2 navbar_white_text">{{$data->user_real_name}}</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{$data->user_name}}</h6>
+              <span>{{$data->user_type}}</span>
+            </li>
+           
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" id="accountUser" style="cursor: pointer;">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+           
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+			
+              <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar sidebar_bg">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+	   <?php if($data->user_type=="SUAdmin"){ ?>
+	   <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('dashboard') }}" title="Dashboard">
+          <i class="bi bi-speedometer2 navbar_icon"></i>
+          <span title="Dashboard">Dashboard</span>
+        </a>
+       </li>	   
+	   
+	   <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('sms_blast') }}" title="Dashboard">
+          <i class="bi bi-chat-left-text navbar_icon"></i>
+          <span title="SMS Blast">SMS Blast</span>
+        </a>
+       </li>
+	   
+	   <?php } ?>
+	  
+	   <li class="nav-item">
+        <a class="nav-link collapsed navbar_bg" data-bs-target="#billing-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
+          <i class="bi bi-receipt navbar_icon"></i><span title="Billing">Billing</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="billing-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        
+		<li>
+		
+		<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('so') }}" title="SO List">
+          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <span title="New Billing Transaction History">SO List</span>
+        </a>
+		
+		<a class="nav-link navbar_bg sidebar_li_a" href="{{ route('billing') }}" title="Billing Transaction">
+          <i class="bi bi-file-spreadsheet navbar_icon"></i>
+          <span title="iew Billing Transaction History">Billing Transaction</span>
+        </a>
+
+          </li>
+        </ul>
+      </li>
+	  
+	  <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('receivables') }}" title="Receivable List">
+          <i class="bi bi-cash-stack navbar_icon"></i>
+          <span title="Create Billing Transaction">Receivable</span>
+        </a>
+      </li>
+	  
+	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
+	   <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('salesorder') }}" title="Create Sales Order">
+          <i class="bi bi-cart-check navbar_icon"></i>
+          <span title="Create Sales Order">Sales Order</span>
+        </a>
+      </li>
+		
+	  
+		
+	  <li class="nav-item ">
+        <a class="nav-link navbar_bg" href="{{ route('purchaseorder') }}" title="Create Sales Order">
+          <i class="bi bi-bag-check navbar_icon"></i>
+          <span title="Create Purchases Order Order">Purchase Order</span>
+        </a>
+      </li>
+		<?php } ?>
+		
+
+
+	  <li class="nav-item ">
+	  
+		<a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav-cashiers_report" data-bs-toggle="collapse" href="#" title="Cashier's Report">
+          <i class="bi bi-graph-up-arrow navbar_icon"></i>
+          <span title="Cashier's Report">Cashier's Report</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+		<ul id="components-nav-cashiers_report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
+          <li>
+		  
+			<a class="nav-link navbar_bg" href="{{ route('cashierReport') }}" title="Create Cashier's Report for Fuel">
+			  <i class="bi bi-journal-text navbar_icon"></i>
+			  <span title="Create Cashier's Report">Fuel</span>
+			</a>
+			<!-- -->
+			<a class="nav-link navbar_bg" href="{{ route('cashierReportLPG') }}" title="Create Cashier's Report for Fuel">
+			  <i class="bi bi-journal-text navbar_icon"></i>
+			  <span title="Create Cashier's Report for Fuel">LPG</span>
+			</a>
+			
+		  </li>
+		</ul>
+      </li>
+	
+	  <li class="nav-item ">
+	  
+		<a class="nav-link collapsed " data-bs-target="#components-nav-report" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
+          <i class="bi bi-graph-up-arrow navbar_icon"></i>
+          <span title="Generate Billing History">Report</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+		<ul id="components-nav-report" class="nav-content collapse " data-bs-parent="#sidebar-nav-report">
+          <li>
+			<a href="{{ route('report') }}" class="" title="Billing History">
+              <i class="bi bi-file-earmark-text navbar_icon" title="Billing History"></i><span> Billing History</span>
+            </a>
+			<?php if($data->user_type!="Encoder" ){ ?>
+			<a href="{{ route('salesordersummary') }}" class="" title="Sales Summary">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Sales Order Summary"></i><span> Sales Order</span>
+            </a>		
+			
+			<a href="{{ route('purchaseordersummary') }}" class="" title="Purchase Order Summary">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Purchase Order Summary"></i><span> Purchase Order</span>
+            </a>
+			
+			<a href="{{ route('soa_summary_history') }}" class="" title="Statement of Account Summary">
+              <i class="bi bi-file-earmark-text navbar_icon" title="SOA Summary"></i><span> SOA Summary</span>
+            </a>
+			
+			<a href="{{ route('daily_sales') }}" class="" title="Daily Sales">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Daily Sales"></i><span> Daily Sales</span>
+            </a>
+			
+			<a href="{{ route('cash_report_page') }}" class="" title="Daily Sales">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Cash/Non-Cash Report"></i><span> Cash/Non-Cash</span>
+            </a>
+			
+			<a href="{{ route('sales_report') }}" class="" title="Sales Report">
+              <i class="bi bi-bar-chart-line navbar_icon" title="Sales Report"></i><span> Sales Report</span>
+            </a>
+			<?php } ?>
+		  </li>
+		</ul>
+      </li>
+	  
+	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff" || $data->user_type=="Encoder" ){ ?>
+      <li class="nav-item">
+        <a class="nav-link collapsed navbar_bg" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" title="Manage Product, Client and System User Account">
+          <i class="bi bi-gear-fill navbar_icon"></i><span title="Manage Product, Client and System User Account">Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+		
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
+			<a href="{{ route('product') }}" class="sidebar_li_a" title="Manage Product list">
+              <i class="bi bi-box-seam navbar_icon" title="Manage Product list"></i><span>Products & Services</span>
+            </a>
+			<a href="{{ route('product_category') }}" class="sidebar_li_a" title="Manage Bank list">
+              <i class="bi bi-tags navbar_icon" title="Manage Bank list"></i><span>Product Category</span>
+            </a>
+			<a href="{{ route('bank') }}" class="sidebar_li_a" title="Manage Bank list">
+              <i class="bi bi-bank2 navbar_icon" title="Manage Bank list"></i><span>Bank</span>
+            </a>
+			<?php } ?>
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
+
+				<a href="{{ route('branch') }}" class="sidebar_li_a" title="Manage Branch list">
+					<i class="bi bi-building navbar_icon"></i>
+					<span>Branch</span>
+				</a>
+
+			<?php } ?>
+
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Encoder"){ ?>
+
+				<a href="{{ route('client') }}" class="sidebar_li_a" title="Manage Client list">
+					<i class="bi bi-person-badge navbar_icon"></i>
+					<span>Client</span>
+				</a>
+
+			<?php } ?>
+
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
+
+				<a href="{{ route('supplier') }}" class="sidebar_li_a" title="Manage Supplier list">
+					<i class="bi bi-truck navbar_icon"></i>
+					<span>Supplier</span>
+				</a>
+
+				<a href="{{ route('salesagent') }}" class="sidebar_li_a" title="Sales Agent list">
+					<i class="bi bi-person-badge navbar_icon"></i>
+					<span>Sales Agent</span>
+				</a>
+
+				<a href="{{ route('reminder') }}" class="sidebar_li_a" title="Reminders">
+					<i class="bi bi-bell navbar_icon"></i>
+					<span>Reminders</span>
+				</a>
+
+				<a href="{{ route('user') }}" class="sidebar_li_a" title="Manage System User">
+					<i class="bi bi-people-fill navbar_icon"></i>
+					<span>User's Account</span>
+				</a>
+
+			<?php } ?>
+
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+	  <?php } ?>
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+	<!--Modal to User Profile-->
+	<div class="modal fade" id="UserProfileModal" tabindex="-1">
+           <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header modal-header_form">
+                      <h5 class="modal-title">Account Settings</h5>
+					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
+						<button type="button" class="btn btn-danger bi bi-x-circle navbar_icon" data-bs-dismiss="modal"></button>
+					  </div>
+                    </div>
+                    <div class="modal-body">
+
+					  <form class="g-2 needs-validation" id="AccountUserform">
+					  
+						<div class="row mb-2">
+						  <label for="account_user_real_name" class="col-sm-3 col-form-label" title="Switch Name">Name:</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control" name="account_user_real_name" id="account_user_real_name" value="" required>
+							<span class="valid-feedback" id="account_user_real_nameError" title="Required"></span>
+						  </div>
+						</div>
+						
+						<div class="row mb-2">
+						  <label for="account_user_name" class="col-sm-3 col-form-label">User Name:</label>
+						  <div class="col-sm-9">
+							<input type="text" class="form-control " name="account_user_name" id="account_user_name" value="" required>
+							<span class="valid-feedback" id="account_user_nameError"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="user_email_address" class="col-sm-3 col-form-label" title="You Valid Email Address">Email Address:</label>
+						  <div class="col-sm-9">
+							<input type="email" class="form-control " name="user_email_address" id="user_email_address" value="" placeholder="Email Address">
+							<span class="valid-feedback" id="user_email_addressError" title="Required"></span>
+						  </div>
+						</div>
+
+						<div class="row mb-2">
+						  <label for="account_user_password" class="col-sm-3 col-form-label">Password:</label>
+						  <div class="col-sm-9">
+							<input type="password" placeholder="Optional" class="form-control " name="account_user_password" id="account_user_password" value="">
+							<span class="valid-feedback" id="account_user_passwordError"></span>
+						  </div>
+						</div>
+						
+						</div>
+						
+                    <div class="modal-footer modal-footer_form">
+						
+						  <button type="submit" class="btn btn-success bi bi-save-fill navbar_icon form_button_icon" id="account-user"> Submit</button>
+						  <button type="reset" class="btn btn-primary bi bi-backspace-fill navbar_icon  form_button_icon" id="clear-user-account"> Clear Form</button>
+						  
+					</div>
+					</form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+    </div>
+	
+
+
+<div class="modal fade" id="viewReminderModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+
+      <!-- HEADER -->
+      <div class="modal-header text-white rounded-top-4" style="background: linear-gradient(135deg, #4e73df, #1cc88a);">
+        <h5 class="modal-title fw-bold" id="view_title"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- ICON + DATE -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3">
+            <i class="bi bi-bell-fill fs-2 text-primary"></i>
+          </div>
+          <div>
+            <small class="text-muted" id="view_date"></small>
+          </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="p-3 rounded-3 bg-light border">
+          <p id="view_content" style="white-space: pre-line;"></p>
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer justify-content-between">
+
+        <button class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+          Close
+        </button>
+		<!--
+        <button id="markAsDoneBtn" class="btn btn-success btn-sm">
+          ✔ Mark as Done
+        </button>
+		-->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.modal-content {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+</style>

@@ -609,6 +609,32 @@ function LoadCashiersReportSummary()
 
 
 /*==================================================
+PERSIST SUMMARY TO MAIN CASHIER REPORT
+==================================================*/
+function UpdateCashiersReportSummary()
+{
+    const CashiersReportId = {{ $CashiersReportId }};
+
+    return $.ajax({
+        url: "{{ route('CashiersReportUpdateSummary') }}",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            CashiersReportId: CashiersReportId,
+            _token: "{{ csrf_token() }}"
+        },
+        error: function (xhr, status, error) {
+            console.error('Cashier report summary update failed.', {
+                status: xhr.status,
+                response: xhr.responseText,
+                error: error
+            });
+        }
+    });
+}
+
+
+/*==================================================
 RESET SUMMARY
 ==================================================*/
 

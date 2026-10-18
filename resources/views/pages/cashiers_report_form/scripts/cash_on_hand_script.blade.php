@@ -148,6 +148,11 @@ $(function () {
                 // Fetch the saved values again so the form reflects server data.
                 load();
 
+                // Persist the recalculated totals to the main report record for Dashboard.
+                if (typeof UpdateCashiersReportSummary === 'function') {
+                    UpdateCashiersReportSummary();
+                }
+
                 // Refresh the report summary if this shared function exists.
                 if (typeof LoadCashiersReportSummary === 'function') {
                     LoadCashiersReportSummary();

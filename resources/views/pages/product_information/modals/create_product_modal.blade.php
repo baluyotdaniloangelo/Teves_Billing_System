@@ -43,6 +43,17 @@
                     <section class="rounded-4 border bg-white p-3">
                         <div class="row g-2 mb-2 justify-content-center">
                             <div class="col-12">
+                                <label for="product_main_idx" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Main Product
+                                </label>
+                                <select class="form-select form-select-sm rounded-3" name="product_main_idx" id="product_main_idx">
+                                    <option value="">Unassigned variant</option>
+                                </select>
+                                <div class="form-text">Choose a main product to group this variant. Leave blank to assign it later.</div>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-2 justify-content-center">
+                            <div class="col-12">
                                 <label for="category_idx" class="form-label small fw-semibold mb-1">
                                     <i class="bi bi-tag me-1 text-success" aria-hidden="true"></i>Product Category
                                 </label>

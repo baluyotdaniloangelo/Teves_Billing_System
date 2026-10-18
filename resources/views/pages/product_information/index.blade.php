@@ -365,6 +365,7 @@
 
         @include('pages.product_information.modals.product_information_modal')
         @include('pages.product_information.modals.create_product_modal')
+        @include('pages.product_information.modals.main_product_modals')
         @include('pages.product_information.modals.delete_product_modal')
         @include('pages.product_information.modals.tank_modals')
         @include('pages.product_information.modals.pricing_modals')
@@ -372,6 +373,10 @@
         @include('pages.product_information.modals.selling_price_modals')
         @include('pages.product_information.modals.pump_modals')
         @include('pages.product_information.modals.product_notice_modals')
+        @if(($data->user_type ?? null) === 'SUAdmin')
+            @include('pages.product_category.modals.product_category_create_edit_modal')
+            @include('pages.product_category.modals.product_category_delete_modal')
+        @endif
     </section>
 </main>
 @endsection
@@ -379,9 +384,13 @@
 @push('page_scripts')
     @include('pages.product_information.scripts.plugins_script')
     @include('pages.product_information.scripts.product_script')
+    @include('pages.product_information.scripts.main_product_script')
     @include('pages.product_information.scripts.product_info_script')
     @include('pages.product_information.scripts.tank_script')
     @include('pages.product_information.scripts.seller_price_script')
     @include('pages.product_information.scripts.selling_price_script')
     @include('pages.product_information.scripts.pump_script')
+    @if(($data->user_type ?? null) === 'SUAdmin')
+        @include('pages.product_category.scripts.product_category_script')
+    @endif
 @endpush
