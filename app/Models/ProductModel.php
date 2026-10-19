@@ -36,6 +36,8 @@ class ProductModel extends Model
         'product_name',
         'product_price',
 		'product_unit_measurement',
+		'product_capacity',
+		'product_capacity_unit',
 		'category_idx',
 		'created_at',
 		'created_by_user_idx',
@@ -46,6 +48,10 @@ class ProductModel extends Model
     ];
 	
 	protected $primaryKey = 'product_id';
+
+	protected $casts = [
+		'product_capacity' => 'decimal:3',
+	];
     
 	protected static $logName = 'Product Information';
 	
@@ -56,6 +62,8 @@ class ProductModel extends Model
 		'product_name',
         'product_price',
 		'product_unit_measurement',
+		'product_capacity',
+		'product_capacity_unit',
 		'category_idx',
 		'created_at',
 		'created_by_user_idx',

@@ -268,6 +268,7 @@ div.dataTables_wrapper {
                         <th><i class="bi bi-tag me-1" aria-hidden="true"></i>Category</th>
                         <th class="text-end"><i class="bi bi-currency-exchange me-1" aria-hidden="true"></i>Default Price</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Unit</th>
+                        <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Capacity</th>
                         <th class="text-center text-nowrap"><i class="bi bi-three-dots me-1" aria-hidden="true"></i>Actions</th>
                     </tr>
                 </thead>

@@ -68,6 +68,18 @@
             </div>
             <div class="row g-2 mb-2 justify-content-center">
                 <div class="col-12 col-md-4">
+                    <label for="update_product_main_idx" class="form-label small fw-semibold mb-1">
+                        <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Main Product (Variant Group)
+                    </label>
+                    <select class="form-select form-select-sm rounded-3" name="product_main_idx" id="update_product_main_idx">
+                        <option value="">No main product (unassigned)</option>
+                    </select>
+                    <div class="form-text">Choose a main product in the same category, or leave this unassigned.</div>
+                    <div class="invalid-feedback" id="update_product_main_idxError">Choose a main product in the selected category.</div>
+                </div>
+            </div>
+            <div class="row g-2 mb-2 justify-content-center">
+                <div class="col-12 col-md-4">
                     <label for="update_product_name" class="form-label small fw-semibold mb-1">
                         <i class="bi bi-box me-1 text-success" aria-hidden="true"></i>Product Name
                     </label>
@@ -104,6 +116,8 @@
                     <div class="invalid-feedback" id="update_product_unit_measurementError">Please select a unit.</div>
                 </div>
             </div>
+
+            @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => 'update_', 'capacityColumnClass' => 'col-12 col-md-4'])
 
             <div class="row justify-content-center mt-2">
                 <div class="col-12 col-md-4 d-flex justify-content-end">

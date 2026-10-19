@@ -1312,14 +1312,8 @@ $('#miscellaneous_sales_form').on('submit', function(event)
     ==================================================*/
 
     /*
-     * IMPORTANT:
-     *
-     * Edit scripts store CHPH3_ID using:
-     *
-     * $('#save-miscellaneous_sales')
-     *     .data('CHPH3_ID', CHPH3_ID);
-     *
-     * Therefore use .data() here instead of .val().
+     * Edit handlers store the selected row ID in the save
+     * button's value. The reset function clears it for new rows.
      */
 
     const CHPH3_ID =
@@ -2449,6 +2443,8 @@ function resetMiscellaneousSalesForm()
     ----------------------------------------------*/
 
     $('#save-miscellaneous_sales')
+        .val('0')
+        .removeData('CHPH3_ID')
         .prop('disabled', false)
         .html(
             '<i class="bi bi-save-fill me-1"></i>' +
@@ -2470,6 +2466,18 @@ function resetMiscellaneousSalesForm()
         );
     }
 }
+
+/*==================================================
+PREPARE A NEW MISCELLANEOUS ITEM
+==================================================*/
+$('body').on(
+    'click',
+    '.new_item[data-bs-target="#miscellaneous_sales_Modal"]',
+    function ()
+    {
+        resetMiscellaneousSalesForm();
+    }
+);
 
 
 

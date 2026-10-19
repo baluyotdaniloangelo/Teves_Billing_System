@@ -17,15 +17,25 @@
         return $.get("{{ route('getMainProductOptions') }}")
             .done(function (options) {
                 $select.empty();
-                $select.append(new Option(categoryId ? 'No main products in this category' : 'Select a main product', ''));
+                const isUpdateField = $select.attr('id') === 'update_product_main_idx';
+                $select.append(new Option(isUpdateField ? 'No main product (unassigned)' : 'Select a main product', ''));
+                let matchingOptions = 0;
                 (options || []).forEach(function (option) {
                     if (categoryId && String(option.category_idx) !== String(categoryId)) return;
                     const label = option.product_name + (option.category_name ? ' — ' + option.category_name : '');
                     const element = new Option(label, option.product_main_id);
                     element.dataset.categoryIdx = option.category_idx;
                     $select.append(element);
+                    matchingOptions += 1;
                 });
-                if (selectedId) $select.val(String(selectedId)).trigger('change');
+                if (categoryId && matchingOptions === 0) {
+                    const emptyOption = new Option('No main products in this category', '', false, false);
+                    emptyOption.disabled = true;
+                    $select.append(emptyOption);
+                }
+                if (selectedId && $select.find('option').filter(function () { return String(this.value) === String(selectedId); }).length) {
+                    $select.val(String(selectedId));
+                }
                 $select.prop('disabled', false);
             })
             .fail(function (xhr) {
@@ -33,6 +43,10 @@
                 window.showProductRequestError(xhr, 'Unable to load the main product list. Please try again.');
             });
     }
+
+    window.loadProductMainOptions = function (select, selectedId, categoryId) {
+        return loadMainOptions($(select), selectedId, categoryId);
+    };
 
     function syncVariantCategory() {
         const $main = $('#product_main_idx');
@@ -72,6 +86,7 @@
                 { data: 'category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
                 { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
                 { data: 'product_unit_measurement', className: 'text-center' },
+                { data: 'product_capacity', name: 'teves_product_table.product_capacity', defaultContent: '-', render: renderProductCapacity, className: 'text-center' },
                 { data: 'action', orderable: false, searchable: false, className: 'text-center' }
             ]
         });
@@ -220,6 +235,13 @@
 
         $('#product_main_idx').on('change', syncVariantCategory);
 
+        $('#update_category_idx').on('change', function () {
+            const selectedMainProduct = $('#update_product_main_idx').val();
+            const $saveButton = $('#update-product').prop('disabled', true);
+            loadMainOptions($('#update_product_main_idx'), selectedMainProduct, this.value || null)
+                .done(function () { $saveButton.prop('disabled', false); });
+        });
+
         $('#ProductInformationModal').on('hidden.bs.modal', function () {
             if (!window.returnToMainVariantsId || window.restoreProductInformationAfterChildModal) return;
             window.returnToMainVariantsId = null;
@@ -234,41 +256,6 @@
         $('#getUnassignedProductList').on('click', '.select-product', function () {
             const row = getProductRowData(this, window.UnassignedProductTable);
             if (row.product_id) selectProduct(row.product_id);
-        });
-
-        $('#getUnassignedProductList').on('click', '.assign-product-variant', function () {
-            const row = getProductRowData(this, window.UnassignedProductTable);
-            $('#assign_product_id').val(row.product_id || '');
-            $('#assign_product_category_idx').val(row.category_idx || '');
-            $('#assignVariantName').text(row.product_name ? 'Assign “' + row.product_name + '” to a main product.' : 'Choose a main product for this variant.');
-            $('#assign_product_main_idx').empty().append(new Option('Loading main products…', '')).prop('disabled', true);
-            $('#AssignProductVariantModal').modal('show');
-            loadMainOptions($('#assign_product_main_idx'), null, row.category_idx || null);
-        });
-
-        $('#AssignProductVariantForm').on('submit', function (event) {
-            event.preventDefault();
-            const form = this;
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-
-            const $button = $('#confirmAssignVariant');
-            const originalHtml = $button.html();
-            $button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Assigning…');
-            $.post("{{ route('assign_product_variant') }}", {
-                product_id: $('#assign_product_id').val(),
-                product_main_idx: $('#assign_product_main_idx').val(),
-                _token: "{{ csrf_token() }}"
-            }).done(function (response) {
-                refreshProductTables();
-                showProductSuccessAfterModalClose(document.getElementById('AssignProductVariantModal'), response.success || 'Product variant assigned successfully.');
-            }).fail(function (xhr) {
-                window.showProductRequestError(xhr, 'Unable to assign this variant. Confirm the categories match.', form);
-            }).always(function () {
-                $button.prop('disabled', false).html(originalHtml);
-            });
         });
 
         $('#ManageMainProductModal, #UnlinkProductVariantModal').on('click', '#MainProductVariantsTable .unlink-product-variant', function (event) {

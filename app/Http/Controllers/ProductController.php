@@ -105,6 +105,8 @@ class ProductController extends Controller
 				'teves_product_table.category_idx',
 				'teves_product_table.product_price',
 				'teves_product_table.product_unit_measurement',
+				'teves_product_table.product_capacity',
+				'teves_product_table.product_capacity_unit',
 				'teves_product_category.category_name'
 			);
 
@@ -114,7 +116,6 @@ class ProductController extends Controller
 				$productId = (int) $row->product_id;
 				return '<div class="d-flex justify-content-center gap-2 product-list-actions">
 					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage variant details" aria-label="Manage variant details"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
-					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border assign-product-variant" title="Assign to main product" aria-label="Assign to main product"><i class="bi bi-link-45deg" aria-hidden="true"></i></button>
 					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-product" title="Delete product variant" aria-label="Delete product variant"><i class="bi bi-trash3" aria-hidden="true"></i></button>
 				</div>';
 			})
@@ -134,6 +135,8 @@ class ProductController extends Controller
 				'teves_product_table.product_name',
 				'teves_product_table.product_price',
 				'teves_product_table.product_unit_measurement',
+				'teves_product_table.product_capacity',
+				'teves_product_table.product_capacity_unit',
 				'teves_product_category.category_name'
 			);
 
@@ -260,7 +263,7 @@ class ProductController extends Controller
 	public function product_info(Request $request){
 
 		$productID = $request->productID;
-		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','category_idx','product_main_idx']);
+		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','product_capacity','product_capacity_unit','category_idx','product_main_idx']);
 		return response()->json($data);
 		
 	}
@@ -282,6 +285,8 @@ class ProductController extends Controller
 		  'product_price'      		=> 'required|numeric|min:0',
 		  'product_unit_measurement' => 'required|string|max:50',
 		  'product_main_idx'  		=> 'nullable|integer|exists:teves_product_main_table,product_main_id',
+          'product_capacity'       => 'nullable|required_with:product_capacity_unit|numeric|min:0.001|max:9999999.999',
+          'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
         ], 
         [
 			'product_name.required' => 'Product Name is required',
@@ -305,6 +310,8 @@ class ProductController extends Controller
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 			$Product->created_by_user_idx 				= Session::get('loginID');
+			$Product->product_capacity = $request->filled('product_capacity') ? $request->input('product_capacity') : null;
+			$Product->product_capacity_unit = $request->filled('product_capacity_unit') ? $request->input('product_capacity_unit') : null;
 			
 			$result = $Product->save();
 			
@@ -334,7 +341,10 @@ class ProductController extends Controller
           'product_name'      		=> 'required|string|max:255|unique:teves_product_table,product_name,'.$request->productID.',product_id',
 		  'category_idx'          	=> 'required|integer|exists:teves_product_category,category_id',
 		  'product_price'      		=> 'required|numeric|min:0',
-		  'product_unit_measurement' => 'required|string|max:50'
+		  'product_unit_measurement' => 'required|string|max:50',
+		  'product_main_idx'         => 'sometimes|nullable|integer|exists:teves_product_main_table,product_main_id',
+          'product_capacity'       => 'nullable|required_with:product_capacity_unit|numeric|min:0.001|max:9999999.999',
+          'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
         ], 
         [
 			'product_name.required' => 'Product Name is required',
@@ -347,18 +357,28 @@ class ProductController extends Controller
 			if (!$Product) {
 				return response()->json(['message' => 'Product not found.'], 404);
 			}
-			if ($Product->product_main_idx) {
-				$mainProduct = ProductMainModel::find($Product->product_main_idx);
-				if ($mainProduct && (int) $mainProduct->category_idx !== (int) $request->category_idx) {
-					return response()->json(['errors' => ['category_idx' => ['The variant category must match its main product category.']]], 422);
+			$mainProductIdx = $request->has('product_main_idx')
+				? ($request->product_main_idx ?: null)
+				: $Product->product_main_idx;
+			if ($mainProductIdx) {
+				$mainProduct = ProductMainModel::find($mainProductIdx);
+				if (!$mainProduct || (int) $mainProduct->category_idx !== (int) $request->category_idx) {
+					return response()->json(['errors' => ['product_main_idx' => ['The main product must use the same category as this product variant.']]], 422);
 				}
 			}
 			
+			$Product->product_main_idx 					= $mainProductIdx;
 			$Product->product_name 						= $request->product_name;
 			$Product->category_idx 						= $request->category_idx;
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 			$Product->updated_by_user_idx 				= Session::get('loginID');
+
+			// Older callers omit capacity fields; preserve their saved capacity.
+			if ($request->has('product_capacity') || $request->has('product_capacity_unit')) {
+				$Product->product_capacity = $request->filled('product_capacity') ? $request->input('product_capacity') : null;
+				$Product->product_capacity_unit = $request->filled('product_capacity_unit') ? $request->input('product_capacity_unit') : null;
+			}
 						
 			$result = $Product->update();
 			

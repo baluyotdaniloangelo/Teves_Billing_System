@@ -4,6 +4,32 @@ window.initialProductTab = @json($tab ?? 'product-info');
 window.productInformationModalTemporarilyHidden = false;
 window.restoreProductInformationAfterChildModal = false;
 
+function renderProductCapacity(value, type, row) {
+    if (value === null || value === undefined || value === '' || !row.product_capacity_unit) {
+        return type === 'sort' || type === 'type' ? null : '-';
+    }
+    const capacity = Number(value);
+    if (!Number.isFinite(capacity)) return '-';
+    if (type === 'sort' || type === 'type') return capacity;
+    const unit = ['kg', 'g'].includes(row.product_capacity_unit) ? row.product_capacity_unit : '';
+    return capacity.toLocaleString('en-PH', { maximumFractionDigits: 3 }) + (unit ? ' ' + unit : '');
+}
+
+function syncProductCapacityFields(prefix) {
+    const capacity = document.getElementById(prefix + 'product_capacity');
+    const unit = document.getElementById(prefix + 'product_capacity_unit');
+    if (!capacity || !unit) return;
+    capacity.required = unit.value !== '';
+    unit.required = capacity.value !== '';
+}
+
+$('#product_capacity, #product_capacity_unit').on('input change', function () {
+    syncProductCapacityFields('');
+});
+$('#update_product_capacity, #update_product_capacity_unit').on('input change', function () {
+    syncProductCapacityFields('update_');
+});
+
 function getSelectedProductId() {
     return window.selectedProductId || null;
 }
@@ -310,6 +336,7 @@ $(function () {
             { data: 'category_name', name: 'teves_product_category.category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
             { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
             { data: 'product_unit_measurement', className: 'text-center' },
+            { data: 'product_capacity', name: 'teves_product_table.product_capacity', defaultContent: '-', render: renderProductCapacity, className: 'text-center' },
             { data: 'action', orderable: false, searchable: false, className: 'text-center' }
         ]
     });
@@ -438,6 +465,7 @@ $('#ProductformNew').on('submit', function (event) {
     const productForm = this;
     const saveButton = document.getElementById('save-product');
 
+    syncProductCapacityFields('');
     productForm.classList.add('was-validated');
     if (!productForm.checkValidity()) {
         productForm.reportValidity();
@@ -458,6 +486,8 @@ $('#ProductformNew').on('submit', function (event) {
             product_main_idx: $('#product_main_idx').val() || '',
             product_price: $('#product_price').val(),
             product_unit_measurement: $('#product_unit_measurement').val(),
+            product_capacity: $('#product_capacity').val(),
+            product_capacity_unit: $('#product_capacity_unit').val(),
             _token: "{{ csrf_token() }}"
         },
         success: function (response) {
@@ -506,6 +536,7 @@ $('#ProductformNew').on('reset', function () {
     const form = this;
     window.setTimeout(function () {
         window.ProductFormValidation.reset(form);
+        syncProductCapacityFields('');
     }, 0);
 });
 
@@ -514,6 +545,7 @@ $('#CreateProductModal').on('hidden.bs.modal', function () {
     if (form) {
         form.reset();
         window.ProductFormValidation.reset(form);
+        syncProductCapacityFields('');
     }
 });
 

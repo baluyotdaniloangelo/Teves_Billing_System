@@ -21,9 +21,25 @@ function ProductInfo(productId, options) {
             document.getElementById("update_product_name").value = response.product_name || '';
             document.getElementById("update_product_price").value = response.product_price || '';
             document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement || '';
+            document.getElementById("update_product_capacity").value = response.product_capacity ?? '';
+            document.getElementById("update_product_capacity_unit").value = response.product_capacity_unit || '';
+            syncProductCapacityFields('update_');
             document.getElementById("update_category_idx").value = response.category_idx || '';
 
             const isFuelProduct = updateFuelProductTabs();
+            const $saveProductButton = $('#update-product');
+            $saveProductButton.prop('disabled', true);
+            if (typeof window.loadProductMainOptions === 'function') {
+                window.loadProductMainOptions(
+                    $('#update_product_main_idx'),
+                    response.product_main_idx || null,
+                    response.category_idx || null
+                ).done(function () {
+                    $saveProductButton.prop('disabled', false);
+                });
+            } else {
+                $saveProductButton.prop('disabled', false);
+            }
             if (isFuelProduct) {
                 if (typeof LoadProductTank === 'function') LoadProductTank();
                 if (typeof LoadProductPump === 'function') LoadProductPump();
@@ -48,6 +64,7 @@ $('#ProductformEdit').on('submit', function (event) {
     const editForm = this;
     const updateButton = document.getElementById('update-product');
     const productID = getSelectedProductId();
+    syncProductCapacityFields('update_');
     editForm.classList.add('was-validated');
 
     if (!editForm.checkValidity()) {
@@ -72,9 +89,12 @@ $('#ProductformEdit').on('submit', function (event) {
         data: {
             productID: productID,
             category_idx: $('#update_category_idx').val(),
+            product_main_idx: $('#update_product_main_idx').val() || '',
             product_name: productName,
             product_price: $('#update_product_price').val(),
             product_unit_measurement: $('#update_product_unit_measurement').val(),
+            product_capacity: $('#update_product_capacity').val(),
+            product_capacity_unit: $('#update_product_capacity_unit').val(),
             _token: "{{ csrf_token() }}"
         },
         success: function (response) {
@@ -82,6 +102,8 @@ $('#ProductformEdit').on('submit', function (event) {
             $('#productInformationModalTitle').text(productName + ' — Product Information');
             $('#productInformationHeading').text('Manage product details for ' + productName + '.');
             if (window.ProductListTable) window.ProductListTable.ajax.reload(null, false);
+            if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
+            if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
             $('#productUpdateSuccessMessage').text(response.success || 'Product information updated successfully.');
             $('#productUpdateSuccessNotice').removeClass('d-none');
         },
@@ -92,7 +114,10 @@ $('#ProductformEdit').on('submit', function (event) {
                 product_name: 'update_product_name',
                 product_price: 'update_product_price',
                 category_idx: 'update_category_idx',
-                product_unit_measurement: 'update_product_unit_measurement'
+                product_main_idx: 'update_product_main_idx',
+                product_unit_measurement: 'update_product_unit_measurement',
+                product_capacity: 'update_product_capacity',
+                product_capacity_unit: 'update_product_capacity_unit'
             });
             if (!shownErrors) {
                 showProductValidationErrorModal(response.message || 'Unable to update product information. Please review the form and try again.');

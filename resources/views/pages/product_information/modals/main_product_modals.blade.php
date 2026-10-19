@@ -65,6 +65,7 @@
                                 <th>Category</th>
                                 <th class="text-end">Default Price</th>
                                 <th class="text-center">Unit</th>
+                                <th class="text-center">Capacity</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -75,39 +76,6 @@
             <div class="modal-footer product-settings-modal-footer">
                 <button type="button" class="btn btn-light border btn-sm rounded-3" data-bs-dismiss="modal">Close</button>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade product-information-modal-theme" id="AssignProductVariantModal" tabindex="-1" aria-labelledby="AssignProductVariantModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content product-settings-modal-content">
-            <div class="modal-header">
-                <div>
-                    <h5 class="modal-title fw-bold mb-1" id="AssignProductVariantModalLabel">Assign Product Variant</h5>
-                    <small class="text-white-50" id="assignVariantName">Choose a main product for this existing variant.</small>
-                </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="AssignProductVariantForm">
-                <input type="hidden" name="product_id" id="assign_product_id">
-                <input type="hidden" id="assign_product_category_idx">
-                <div class="modal-body product-settings-modal-body">
-                    <div class="product-settings-form-card">
-                        <label for="assign_product_main_idx" class="form-label small fw-semibold">Main Product</label>
-                        <select class="form-select" id="assign_product_main_idx" name="product_main_idx" required>
-                            <option value="">Select a main product</option>
-                        </select>
-                        <div class="form-text">Only a main product in the same category can be selected.</div>
-                    </div>
-                </div>
-                <div class="modal-footer product-settings-modal-footer">
-                    <button type="button" class="btn btn-light border btn-sm rounded-3" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm rounded-3" id="confirmAssignVariant">
-                        <i class="bi bi-link-45deg me-1" aria-hidden="true"></i>Assign Variant
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 </div>

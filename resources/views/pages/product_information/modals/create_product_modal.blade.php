@@ -87,6 +87,8 @@
                             </div>
                         </div>
 
+                        @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => '', 'capacityColumnClass' => 'col-12'])
+
                         <div class="row g-2 justify-content-center">
                             <div class="col-12">
                                 <label for="product_unit_measurement" class="form-label small fw-semibold mb-1">

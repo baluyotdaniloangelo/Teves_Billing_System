@@ -242,7 +242,7 @@
 
 			<?php if($data->user_type=="SUAdmin"){ ?>
 			<a href="{{ route('product', ['tab' => 'product-category']) }}" class="sidebar_li_a" title="Manage Product Categories">
-	              <i class="bi bi-tags navbar_icon" title="Manage Product Categories"></i><span>Product Categories</span>
+	              <i class="bi bi-tags navbar_icon" title="Manage Product Categories"></i><span>Products and Services</span>
 	            </a>
 			<?php } ?>
 			<a href="{{ route('bank') }}" class="sidebar_li_a" title="Manage Bank list">
