@@ -23,6 +23,10 @@
         .page-break { page-break-before: always; }
         .no-border td { border: 0; padding: 1px 4px; }
         .empty { color: #777; text-align: center; padding: 7px; }
+        .empty-inventory-print { font-size: 7px; }
+        .empty-inventory-print thead { display: table-header-group; }
+        .empty-inventory-print th { vertical-align: middle; }
+        .empty-inventory-print tr { page-break-inside: avoid; }
     </style>
 </head>
 <body>
@@ -160,6 +164,9 @@
         </tbody>
     </table>
 
+    @include('printables.partials.lpg_empty_inventory')
+
+    <div style="{{ $swappingRows->count() <= 8 ? 'page-break-inside: avoid;' : '' }}">
     <div class="section-title">SWAPPING</div>
     <table>
         <thead><tr><th>Customer Name</th><th>Received Item</th><th>Received Qty</th><th>Replaced Item</th><th>Replaced Qty</th><th>Remarks</th></tr></thead>
@@ -172,6 +179,8 @@
         </tbody>
     </table>
 
+    </div>
+    <div style="{{ $onLoanRows->count() <= 8 ? 'page-break-inside: avoid;' : '' }}">
     <div class="section-title">ON-LOAN</div>
     <table>
         <thead><tr><th>Customer Name</th><th>DR No.</th><th>Borrow</th><th>Return</th><th>Remarks</th></tr></thead>
@@ -184,6 +193,7 @@
         </tbody>
     </table>
 
+    </div>
     <div class="section-title">CURRENT PRINTED SUMMARY</div>
     <table class="summary">
         <tr><td class="label">Sales Order / AR / Return / Cash Sales</td><td class="num">{{ $money($summary['sales']) }}</td><td class="label">Discounts</td><td class="num">{{ $money($summary['discounts']) }}</td><td class="label">Expenses</td><td class="num">{{ $money($summary['expenses']) }}</td></tr>
@@ -192,7 +202,7 @@
 
     <div class="pending">
         <strong>PENDING INPUT MODULES — NOT INCLUDED IN SUMMARY OR VARIANCE</strong>
-        Kitchen Products &amp; Accessories inventory; Empty Cylinders / Canisters movement ledger; Swapped / Old Regulator inventory; LPG actual ending count; and the final theoretical-sales, inventory-variance, and cash-variance reconciliation.
+        Kitchen Products &amp; Accessories inventory; Swapped / Old Regulator inventory; LPG actual ending count; and the final theoretical-sales, inventory-variance, and cash-variance reconciliation.
     </div>
     <p class="note">Generated {{ now()->format('m/d/Y h:i A') }}. Amounts represent saved LPG report records only.</p>
 </body>

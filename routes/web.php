@@ -783,6 +783,13 @@ Route::post('/cashiers-report/lpg-non-cash-payments/delete', [
 ])->name('DeleteLpgNonCashPayment');
 
 use App\Http\Controllers\CashiersReport_LPG_Inventory_Controller;
+use App\Http\Controllers\CashiersReport_LPG_EmptyInventory_Controller;
+
+Route::post('/cashiers-report/lpg-empty-inventory/list', [CashiersReport_LPG_EmptyInventory_Controller::class, 'index'])->name('GetLpgEmptyInventoryList')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-empty-inventory/info', [CashiersReport_LPG_EmptyInventory_Controller::class, 'info'])->name('LpgEmptyInventoryInfo')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-empty-inventory/save', [CashiersReport_LPG_EmptyInventory_Controller::class, 'save'])->name('SaveLpgEmptyInventory')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-empty-inventory/update', [CashiersReport_LPG_EmptyInventory_Controller::class, 'update'])->name('UpdateLpgEmptyInventory')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-empty-inventory/delete', [CashiersReport_LPG_EmptyInventory_Controller::class, 'delete'])->name('DeleteLpgEmptyInventory')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-inventory/list', [
     CashiersReport_LPG_Inventory_Controller::class,

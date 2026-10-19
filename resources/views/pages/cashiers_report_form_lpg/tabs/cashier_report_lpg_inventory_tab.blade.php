@@ -8,6 +8,11 @@
         <div class="card-body">
             <ul class="nav nav-tabs mb-3" id="lpgInventorySubTabs" role="tablist">
                 <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="lpg-empty-inventory-tab" data-bs-toggle="tab" data-bs-target="#lpg-empty-inventory" type="button" role="tab" aria-controls="lpg-empty-inventory" aria-selected="false">
+                        <i class="bi bi-box-seam me-1" aria-hidden="true"></i>Empty Cylinders / Canisters
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="lpg-beginning-inventory-tab" data-bs-toggle="tab" data-bs-target="#lpg-beginning-inventory" type="button" role="tab" aria-controls="lpg-beginning-inventory" aria-selected="true">
                         <i class="bi bi-box-arrow-in-down me-1" aria-hidden="true"></i>Beginning Inventory
                     </button>
@@ -35,6 +40,7 @@
             </ul>
 
             <div class="tab-content">
+                @include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_empty_inventory_tab')
                 <div class="tab-pane fade show active" id="lpg-beginning-inventory" role="tabpanel" aria-labelledby="lpg-beginning-inventory-tab">
                     <div class="d-flex justify-content-end mb-3">
                         <button type="button" class="btn btn-success shadow-sm lpg-report-action-btn lpg-inventory-add" data-inventory-mode="BEGINNING">

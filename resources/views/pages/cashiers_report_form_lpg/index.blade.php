@@ -422,6 +422,7 @@
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_beginning_inventory_form_modal')
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_swapping_form_modal')
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_on_loan_form_modal')
+	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_empty_inventory_modal')
 	
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_ar_so_form_modal')
 	@include('pages.cashiers_report_form_lpg.modals.cashier_report_lpg_ar_so_delete_modal')
@@ -451,6 +452,7 @@
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_ar_so_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_inventory_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_container_script')
+	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_empty_inventory_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_expenses_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_non_cash_payment_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_cash_script')

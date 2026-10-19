@@ -769,9 +769,11 @@ class CashiersReportLPGController extends Controller
             'non_cash' => $nonCashPayments->sum('amount'),
         ];
 
+        $emptyInventoryRows = \App\Models\CashiersReportModel_LPG_EmptyInventory::forReport($reportId)->get();
+
         return PDF::loadView('printables.cashier_report_lpg_pdf', compact(
             'report', 'inventoryRows', 'arCollections', 'salesRows', 'expenses',
-            'nonCashPayments', 'cash', 'cashTotal', 'swappingRows', 'onLoanRows', 'summary'
+            'nonCashPayments', 'cash', 'cashTotal', 'swappingRows', 'onLoanRows', 'summary', 'emptyInventoryRows'
         ))->setPaper('legal', 'landscape')->stream('lpg-cashier-report-' . $reportId . '.pdf');
     }
 
