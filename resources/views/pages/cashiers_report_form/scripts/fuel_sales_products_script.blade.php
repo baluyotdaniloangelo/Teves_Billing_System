@@ -11,6 +11,8 @@ $(document).ready(function ()
 
     /* Load only Fuel-category products for the Fuel Sales form */
     loadFuelSalesProductList();
+
+    $('#fuel_product').on('input change', updateFuelProductCodePreview);
 });
 
 
@@ -85,14 +87,16 @@ function loadFuelSalesProductList()
             products.forEach(function (product)
             {
                 const price = Number(product.product_price || 0);
+                const productCode = String(product.product_code || '').trim();
                 $('<option>')
                     .val(product.product_name)
-                    .attr('label', '₱ ' + price.toLocaleString('en-PH', {
+                    .attr('label', (productCode ? 'Code: ' + productCode + ' | ' : '') + '₱ ' + price.toLocaleString('en-PH', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     }) + ' | ' + product.product_name)
                     .attr('data-id', product.product_id)
                     .attr('data-price', product.product_price)
+                    .attr('data-product-code', productCode)
                     .appendTo($productList);
             });
         }
@@ -124,6 +128,18 @@ function loadFuelSalesProductList()
     });
 
     return FuelSalesProductListRequest;
+}
+
+function updateFuelProductCodePreview(code)
+{
+    const selectedCode = code === undefined
+        ? String($('#fuelProductList option').filter(function () {
+            return $(this).val() === $('#fuel_product').val();
+        }).first().attr('data-product-code') || '').trim()
+        : String(code || '').trim();
+
+    $('#fuel_product_code_value').text(selectedCode);
+    $('#fuel_product_code_preview').toggleClass('d-none', selectedCode === '');
 }
 
 
@@ -246,7 +262,23 @@ function initializeCashiersReportFuelSalesTable()
 
                 {
                     data: 'product_name',
-                    className: 'text-start'
+                    className: 'text-start',
+                    render: function (data, type, row)
+                    {
+                        if (type !== 'display') {
+                            return (data || '') + ' ' + (row.product_code || '');
+                        }
+
+                        const escapeHtml = function (value) {
+                            return $('<div>').text(value == null ? '' : String(value)).html();
+                        };
+                        const productName = escapeHtml(data);
+                        const productCode = escapeHtml(row.product_code || '');
+
+                        return productCode
+                            ? '<div class="fw-semibold">' + productName + '</div><small class="text-muted"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Code: ' + productCode + '</small>'
+                            : productName;
+                    }
                 },
 
 
@@ -594,8 +626,9 @@ function calculateFuelSalesTotal()
     datalist option.
     ==================================================*/
 
-    const productOption =
-        $('#fuelProductList option[value="' + fuelProduct + '"]');
+    const productOption = $('#fuelProductList option').filter(function () {
+        return $(this).val() === fuelProduct;
+    }).first();
 
     const productPrice =
         parseFloat(productOption.attr('data-price')) || 0;
@@ -765,8 +798,9 @@ $('#CashierReportFuelSalesForm').on('submit', function (event)
     const fuelProduct =
         $('#fuel_product').val();
 
-    const productOption =
-        $('#fuelProductList option[value="' + fuelProduct + '"]');
+    const productOption = $('#fuelProductList option').filter(function () {
+        return $(this).val() === fuelProduct;
+    }).first();
 
     const product_idx =
         productOption.attr('data-id');
@@ -1372,6 +1406,8 @@ function resetFuelSalesForm()
         form.reset();
     }
 
+    updateFuelProductCodePreview('');
+
 
     /*----------------------------------------------
     CLEAR VALIDATION
@@ -1546,6 +1582,7 @@ $('body').on('click', '#EditFuelSales', function (event)
                 .val(
                     fuelSales.product_name || ''
                 );
+            updateFuelProductCodePreview(fuelSales.product_code || '');
 
 
             /*==================================================

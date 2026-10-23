@@ -33,7 +33,8 @@ public function getProductCategoryList(Request $request)
     {
         $data = ProductCategoryModel::select(
                     'category_id',
-                    'category_name'
+                    'category_name',
+                    'category_code'
                 )
                 ->orderBy('category_name', 'asc');
 
@@ -108,7 +109,7 @@ public function getProductCategoryList(Request $request)
 	public function product_category_info(Request $request){
 		
 		$categoryID = $request->category_id;
-		$data = ProductCategoryModel::find($categoryID, ['category_id', 'category_name']);
+		$data = ProductCategoryModel::find($categoryID, ['category_id', 'category_name', 'category_code']);
 		return response()->json($data);
 
 	}
@@ -126,19 +127,29 @@ public function getProductCategoryList(Request $request)
 	/*Create bank Information*/
 	public function create_product_category_post(Request $request){
 
+		$request->merge(['category_code' => strtoupper(trim((string) $request->input('category_code')))]);
 		$request->validate([
 			'category_name' => [
 				'required',
 				Rule::unique('teves_product_category', 'category_name')
 					->whereNull('deleted_at'),
 			],
+			'category_code' => [
+				'required',
+				'regex:/^[A-Z]{3}$/',
+				Rule::unique('teves_product_category', 'category_code'),
+			],
 		], [
 			'category_name.required' => 'Product Category Name is required',
 			'category_name.unique'   => 'Product Category Name already exists',
+			'category_code.required' => 'A three-letter category code is required',
+			'category_code.regex'    => 'The category code must contain exactly three letters',
+			'category_code.unique'   => 'This category code is already in use',
 		]);
 				
 			$bank = new ProductCategoryModel();
-			$bank->category_name 	= $request->category_name;
+			$bank->category_name 	= trim($request->category_name);
+			$bank->category_code 	= $request->category_code;
 			$bank->created_by_user_idx 	= Session::get('loginID');
 			
 			$result = $bank->save();
@@ -156,6 +167,7 @@ public function getProductCategoryList(Request $request)
 	/*Update bank Information*/
 	public function update_product_category_post(Request $request){
 
+		$request->merge(['category_code' => strtoupper(trim((string) $request->input('category_code')))]);
 		$request->validate([
 			'category_name' => [
 				'required',
@@ -163,14 +175,24 @@ public function getProductCategoryList(Request $request)
 					->ignore($request->category_id, 'category_id')
 					->whereNull('deleted_at'),
 			],
+			'category_code' => [
+				'required',
+				'regex:/^[A-Z]{3}$/',
+				Rule::unique('teves_product_category', 'category_code')
+					->ignore($request->category_id, 'category_id'),
+			],
 		], [
 			'category_name.required' => 'Product Category Name is required',
 			'category_name.unique'   => 'Product Category Name already exists',
+			'category_code.required' => 'A three-letter category code is required',
+			'category_code.regex'    => 'The category code must contain exactly three letters',
+			'category_code.unique'   => 'This category code is already in use',
 		]);
 			
 			$bank = new ProductCategoryModel();
 			$bank = ProductCategoryModel::find($request->category_id);
-			$bank->category_name 	= $request->category_name;
+			$bank->category_name 	= trim($request->category_name);
+			$bank->category_code 	= $request->category_code;
 			$bank->updated_by_user_idx 	= Session::get('loginID');
 			
 			$result = $bank->update();

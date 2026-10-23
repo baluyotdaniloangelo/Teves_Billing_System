@@ -270,6 +270,11 @@
                                required>
 						<datalist id="product_list_miscellaneous_sales">
 						</datalist>
+                        <div class="form-text d-none mt-1" id="miscellaneous_product_code_preview">
+                            <i class="bi bi-upc-scan text-success me-1" aria-hidden="true"></i>
+                            Product Code:
+                            <span class="badge bg-light text-dark border" id="miscellaneous_product_code_value"></span>
+                        </div>
                         <div class="invalid-feedback"
                              id="product_idx_miscellaneous_salesError">
 

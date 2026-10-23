@@ -80,7 +80,6 @@ function LoadCashiersReportPH3_SALES_CREDIT()
                     let order_total_amount =
                         parseFloat(item.order_total_amount) || 0;
 
-
                     tableData.push([
                         index + 1,
 
@@ -371,13 +370,19 @@ function LoadCashiersReportPH3_DISCOUNT()
                     let order_total_amount =
                         parseFloat(item.order_total_amount) || 0;
 
+                    const productName = String(item.product_name || '');
+                    const productCode = String(item.product_code || '');
+                    const productCell = productCode
+                        ? `<div class="fw-semibold">${escapeMiscTableText(productName)}</div><small class="text-muted"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Code: ${escapeMiscTableText(productCode)}</small>`
+                        : escapeMiscTableText(productName);
+
 
                     tableData.push([
                         index + 1,
 
                         item.reference_no ?? '',
 
-                        item.product_name ?? '',
+                        productCell,
 
                         order_quantity.toLocaleString(
                             "en-PH",
@@ -1067,6 +1072,40 @@ else if (miscellaneous_items_type == 'DISCOUNTS')
     }
 }
 
+function setMiscellaneousProductCode(code)
+{
+    const normalizedCode = String(code || '').trim();
+    $('#miscellaneous_product_code_value').text(normalizedCode);
+    $('#miscellaneous_product_code_preview')
+        .toggleClass('d-none', normalizedCode === '');
+}
+
+function updateMiscellaneousProductCodeDisplay()
+{
+    const productName = $('#product_idx_miscellaneous_sales').val();
+    const options = Array.from(
+        document.getElementById('product_list_miscellaneous_sales')?.options || []
+    );
+    const selectedOption = options.find(option => option.value === productName);
+
+    setMiscellaneousProductCode(
+        selectedOption?.getAttribute('data-product-code') || ''
+    );
+}
+
+function escapeMiscTableText(value)
+{
+    const element = document.createElement('span');
+    element.textContent = String(value ?? '');
+    return element.innerHTML;
+}
+
+$(document).on(
+    'input change',
+    '#product_idx_miscellaneous_sales',
+    updateMiscellaneousProductCodeDisplay
+);
+
 function LoadSellingPriceList(client_idx, callback)
 {
     const branch_idx =
@@ -1110,19 +1149,24 @@ function LoadSellingPriceList(client_idx, callback)
 
             list.forEach(function(item)
             {
+                const productCode = item.product_code || '';
+                const suggestionLabel = [
+                    productCode ? `Code: ${productCode}` : '',
+                    `₱ ${item.product_price}`,
+                    item.product_name
+                ].filter(Boolean).join(' | ');
 
-                $("#product_list_miscellaneous_sales").append(`
-
-                    <option
-                        value="${item.product_name}"
-                        data-id="${item.product_idx}"
-                        data-price="${item.product_price}"
-                        label="₱ ${item.product_price} | ${item.product_name}">
-                    </option>
-
-                `);
-
+                $("#product_list_miscellaneous_sales").append(
+                    $('<option>')
+                        .val(item.product_name)
+                        .attr('data-id', item.product_idx)
+                        .attr('data-price', item.product_price)
+                        .attr('data-product-code', productCode)
+                        .attr('label', suggestionLabel)
+                );
             });
+
+            updateMiscellaneousProductCodeDisplay();
 
 
             /*
@@ -1190,19 +1234,24 @@ function LoadSellingPriceList_branch()
 
             list.forEach(function(item)
             {
+                const productCode = item.product_code || '';
+                const suggestionLabel = [
+                    productCode ? `Code: ${productCode}` : '',
+                    `₱ ${item.product_price}`,
+                    item.product_name
+                ].filter(Boolean).join(' | ');
 
-                $("#product_list_miscellaneous_sales").append(`
-
-                    <option
-                        value="${item.product_name}"
-                        data-id="${item.product_idx}"
-                        data-price="${item.product_price}"
-                        label="₱ ${item.product_price} | ${item.product_name}">
-                    </option>
-
-                `);
-
+                $("#product_list_miscellaneous_sales").append(
+                    $('<option>')
+                        .val(item.product_name)
+                        .attr('data-id', item.product_idx)
+                        .attr('data-price', item.product_price)
+                        .attr('data-product-code', productCode)
+                        .attr('label', suggestionLabel)
+                );
             });
+
+            updateMiscellaneousProductCodeDisplay();
 
         },
 
@@ -2377,6 +2426,8 @@ function resetMiscellaneousSalesForm()
     $('#product_idx_miscellaneous_sales')
         .val('');
 
+    setMiscellaneousProductCode('');
+
 
     /*----------------------------------------------
     RESET QUANTITY
@@ -2838,6 +2889,8 @@ $('body').on('click', '#CHPH3_Edit_DISCOUNT', function(event)
             $('#product_idx_miscellaneous_sales').val(
                 data.product_name || ''
             );
+
+            setMiscellaneousProductCode(data.product_code || '');
 
 
             /*==================================================

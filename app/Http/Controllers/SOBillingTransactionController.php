@@ -29,6 +29,7 @@ class SOBillingTransactionController extends Controller
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			
 			$client_data = ClientModel::all();
+			$product_data = ProductModel::select('product_id', 'product_name')->orderBy('product_name')->get();
 			
 			if($data->user_branch_access_type=='ALL'){
 				
@@ -59,7 +60,7 @@ class SOBillingTransactionController extends Controller
 		
 		}
 
-		return view("pages.so_billing", compact('data','title','client_data','drivers_name','plate_no','teves_branch'));
+		return view("pages.so_billing", compact('data','title','client_data','product_data','drivers_name','plate_no','teves_branch'));
 		
 	}   
 
@@ -171,6 +172,12 @@ public function getSOBillingTransactionList(Request $request)
 						->where('user_idx', $current_user);
 				});
 			})
+			->when($request->filled('branch_filter'), function ($q) use ($request) {
+				$q->where('teves_billing_so_table.branch_idx', $request->input('branch_filter'));
+			})
+			->when($request->filled('client_filter'), function ($q) use ($request) {
+				$q->where('teves_billing_so_table.client_idx', $request->input('client_filter'));
+			})
 			->select([
 				'teves_branch_table.branch_code as branch_code',
 				'teves_billing_so_table.so_id as so_id',
@@ -186,47 +193,52 @@ public function getSOBillingTransactionList(Request $request)
 
         return DataTables::of($query)
             ->addIndexColumn()
-            ->addColumn('action', function ($row) {
+            ->addColumn('can_edit_information', function ($row) {
+                $numberDays = intval(abs(strtotime(date('Y-m-d')) - strtotime($row->created_at)) / 86400);
+                $userType = Session::get('UserType');
+                $isAdmin = in_array($userType, ['SUAdmin', 'Admin'], true);
+                $isOwner = (string) Session::get('loginID') === (string) $row->created_by_user_id;
 
+                return $isAdmin || ($numberDays < 3 && $isOwner);
+            })
+            ->addColumn('can_edit', function ($row) {
+                $startTimeStamp = strtotime($row->created_at);
+                $numberDays = intval(abs(strtotime(date('Y-m-d')) - $startTimeStamp) / 86400);
+                $userType = Session::get('UserType');
+                $isAdmin = in_array($userType, ['SUAdmin', 'Admin'], true);
+                $isOwner = (string) Session::get('loginID') === (string) $row->created_by_user_id;
+
+                return $isAdmin || (!$isAdmin && $numberDays < 3 && $isOwner);
+            })
+            ->addColumn('action', function ($row) {
                 $startTimeStamp = strtotime($row->created_at);
                 $endTimeStamp   = strtotime(date('Y-m-d'));
                 $numberDays     = intval(abs($endTimeStamp - $startTimeStamp) / 86400);
+                $userType = Session::get('UserType');
+                $isAdmin = in_array($userType, ['SUAdmin', 'Admin'], true);
+                $isOwner = (string) Session::get('loginID') === (string) $row->created_by_user_id;
+                $canEdit = $isAdmin
+                    || (!$isAdmin && $numberDays < 3 && $isOwner);
+                $canDelete = $userType === 'SUAdmin'
+                    || ($userType === 'Admin' && $numberDays < 3)
+                    || (!$isAdmin && $numberDays < 3 && $isOwner);
 
-                if (Session::get('UserType') == "SUAdmin") {
-
-                    return '
-                    <div align="center" class="action_table_menu_site">
-                        <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
-                        <a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
-                    </div>';
-
-                } elseif (Session::get('UserType') == "Admin") {
-
-                    if ($numberDays >= 3) {
-                        return '
-                        <div align="center" class="action_table_menu_site">
-                            <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
-                        </div>';
-                    } else {
-                        return '
-                        <div align="center" class="action_table_menu_site">
-                            <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
-                            <a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
-                        </div>';
-                    }
-
-                } else {
-
-                    if ($numberDays >= 3 || Session::get('loginID') != $row->created_by_user_id) {
-                        return '';
-                    } else {
-                        return '
-                        <div align="center" class="action_table_menu_site">
-                            <a href="so_add_product/'.$row->so_id.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="editSO"></a>
-                            <a href="#" data-id="'.$row->so_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSO"></a>
-                        </div>';
-                    }
+                if (!$canEdit && !$canDelete) {
+                    return '';
                 }
+
+                $orderNumber = e($row->so_number);
+                $actions = '<div class="action_table_menu_site" role="group" aria-label="Actions for sales order '.$orderNumber.'">';
+
+                if ($canEdit) {
+					$actions .= '<button type="button" data-id="'.e($row->so_id).'" data-can-edit="1" data-can-edit-information="1" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit js-open-so-products" title="Manage products" aria-label="Manage products for sales order '.$orderNumber.'"></button>';
+                }
+
+                if ($canDelete) {
+                    $actions .= '<button type="button" data-id="'.e($row->so_id).'" class="btn-danger btn-circle btn-sm bi bi-trash3-fill btn_icon_table btn_icon_table_delete js-delete-so" title="Delete sales order" aria-label="Delete sales order '.$orderNumber.'"></button>';
+                }
+
+                return $actions.'</div>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -236,10 +248,14 @@ public function getSOBillingTransactionList(Request $request)
 	public function so_info(Request $request){
 
 		$SOId = $request->so_id;
-		$data = SOBillingTransactionModel::where('so_id', $request->so_id)
-              		->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')	
+        $data = SOBillingTransactionModel::where('so_id', $request->so_id)
+				->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_billing_so_table.client_idx')
+				->leftJoin('teves_branch_table', 'teves_branch_table.branch_id', '=', 'teves_billing_so_table.branch_idx')
               		->get([
 					'teves_billing_so_table.branch_idx',
+					'teves_billing_so_table.cashiers_report_idx',
+					'teves_branch_table.branch_code',
+					'teves_billing_so_table.client_idx',
 					'teves_billing_so_table.so_id',
 					'teves_billing_so_table.so_number',
 					'teves_billing_so_table.drivers_name',
@@ -501,7 +517,7 @@ public function getSOBillingTransactionList(Request $request)
 			'order_quantity.required' => 'Quantity is Required'
         ]
 		);
-				
+
 					/*Product Details*/
 					$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
 					LEFT JOIN teves_product_branch_price_table b ON b.product_idx = a.product_id LEFT JOIN teves_branch_table c ON c.branch_id = b.branch_idx
@@ -614,18 +630,28 @@ public function getSOBillingTransactionList(Request $request)
 					$join->on('teves_receivable_table.receivable_id', '=', 'teves_billing_table.receivable_idx')
 						 ->whereNull('teves_receivable_table.deleted_at'); // Filter soft-deleted receivables
 				})
-				->leftJoin('teves_cashiers_report', 'teves_cashiers_report.cashiers_report_id', '=', 'teves_billing_table.cashiers_report_idx')
+				->leftJoinSub(
+					DB::table('teves_cashiers_report_p3')
+						->select('billing_idx')
+						->selectRaw('COUNT(*) as linked_count')
+						->whereNull('deleted_at')
+						->groupBy('billing_idx'),
+					'crp3',
+					fn ($join) => $join->on('crp3.billing_idx', '=', 'teves_billing_table.billing_id')
+				)
 				->orderBy('billing_id', 'asc')
 				->get([
 					'teves_receivable_table.control_number',
 					'teves_billing_table.cashiers_report_idx',
 					'teves_billing_table.receivable_idx',
+					'teves_billing_table.product_idx',
 					'teves_product_table.product_name',
 					'teves_billing_table.product_price',
 					'teves_billing_table.order_quantity',
 					'teves_billing_table.order_total_amount',
 					'teves_billing_table.billing_id',
-					'teves_billing_table.lock_billing_item'
+					'teves_billing_table.lock_billing_item',
+					'crp3.linked_count as cashiers_report_linked'
 				]);
 	
 			return response()->json($data);
@@ -642,6 +668,40 @@ public function getSOBillingTransactionList(Request $request)
 			'order_quantity.required' => 'Quantity is Required'
         ]
 		);
+
+		// The legacy update route must respect the billed-item lock as well as the modal route.
+		$billingToUpdate = BillingTransactionModel::where('billing_id', $request->billing_id)
+			->where('so_idx', $request->so_id)
+			->first();
+		if (!$billingToUpdate) {
+			return response()->json(['message' => 'The product line was not found on this sales order.'], 404);
+		}
+
+		$isLocked = (int) ($billingToUpdate->receivable_idx ?? 0) !== 0
+			|| ($billingToUpdate->lock_billing_item
+				&& !in_array(strtolower((string) $billingToUpdate->lock_billing_item), ['0', 'false', 'null', ''], true));
+		if ($isLocked) {
+			return response()->json(['message' => 'This product is already billed or locked and cannot be edited.'], 403);
+		}
+
+		$soForUpdate = SOBillingTransactionModel::find($request->so_id);
+		if (!$soForUpdate) {
+			return response()->json(['message' => 'Sales order not found.'], 404);
+		}
+		$currentUser = Session::get('loginID');
+		if (Session::get('user_branch_access_type') === 'BYBRANCH'
+			&& !DB::table('teves_user_branch_access')
+				->where('user_idx', $currentUser)
+				->where('branch_idx', $soForUpdate->branch_idx)
+				->exists()) {
+			return response()->json(['message' => 'You do not have access to this branch.'], 403);
+		}
+		$ageInDays = intval(abs(strtotime(date('Y-m-d')) - strtotime($soForUpdate->created_at)) / 86400);
+		$isAdmin = in_array(Session::get('UserType'), ['Admin', 'SUAdmin'], true);
+		$isOwner = (string) $currentUser === (string) $soForUpdate->created_by_user_id;
+		if (!$isAdmin && !($ageInDays < 3 && $isOwner)) {
+			return response()->json(['message' => 'You do not have permission to edit this sales order.'], 403);
+		}
 				
 					/*Product Details*/
 					$raw_query_product = "SELECT a.product_id, ifnull(b.branch_price,a.product_price) AS product_price FROM teves_product_table AS a
@@ -840,6 +900,334 @@ public function getSOBillingTransactionList(Request $request)
 					//	return response()->json(['success'=>'Error on Insert Bill Information']);
 					//}				
 	}		
+
+	/** Update one SO product line without writing to Cashier's Report records. */
+	public function create_so_product_from_list(Request $request)
+	{
+		$validated = $request->validate([
+			'so_id' => 'required|integer|exists:teves_billing_so_table,so_id',
+			'product_idx' => 'required|integer|exists:teves_product_table,product_id',
+			'order_quantity' => 'required|numeric|gt:0',
+			'product_manual_price' => 'nullable|numeric|min:0',
+		]);
+
+		$so = SOBillingTransactionModel::find($validated['so_id']);
+		if (!$so) {
+			return response()->json(['message' => 'Sales order not found.'], 404);
+		}
+
+		if ((int) ($so->cashiers_report_idx ?? 0) !== 0) {
+			return response()->json(['message' => 'Products cannot be added to a sales order linked to the Cashiers Report.'], 403);
+		}
+
+		$currentUser = Session::get('loginID');
+		$createdAt = strtotime($so->created_at);
+		$ageInDays = intval(abs(strtotime(date('Y-m-d')) - $createdAt) / 86400);
+		$userType = Session::get('UserType');
+		$isAdmin = in_array($userType, ['SUAdmin', 'Admin'], true);
+		$isOwner = (string) $currentUser === (string) $so->created_by_user_id;
+		if (!$isAdmin && !($ageInDays < 3 && $isOwner)) {
+			return response()->json(['message' => 'You do not have permission to add products to this sales order.'], 403);
+		}
+
+		if (Session::get('user_branch_access_type') === 'BYBRANCH') {
+			$hasBranchAccess = DB::table('teves_user_branch_access')
+				->where('user_idx', $currentUser)
+				->where('branch_idx', $so->branch_idx)
+				->exists();
+			if (!$hasBranchAccess) {
+				return response()->json(['message' => 'You do not have access to this branch.'], 403);
+			}
+		}
+
+		$product = DB::table('teves_product_table as pt')
+			->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($so, $validated) {
+				$join->on('pt.product_id', '=', 'spt.product_idx')
+					->where('spt.branch_idx', '=', $so->branch_idx)
+					->where('spt.client_idx', '=', $so->client_idx)
+					->where('spt.product_idx', '=', $validated['product_idx']);
+			})
+			->where('pt.product_id', $validated['product_idx'])
+			->whereNull('pt.deleted_at')
+			->selectRaw('COALESCE(spt.selling_price, pt.product_price) as product_price')
+			->first();
+
+		if (!$product) {
+			return response()->json(['message' => 'The selected product is no longer available.'], 422);
+		}
+
+		$manualPrice = (float) ($validated['product_manual_price'] ?? 0);
+		$price = $manualPrice > 0 ? $manualPrice : (float) $product->product_price;
+		$quantity = (float) $validated['order_quantity'];
+		$billing = new BillingTransactionModel();
+		$billing->so_idx = $so->so_id;
+		$billing->branch_idx = $so->branch_idx;
+		$billing->order_date = $so->order_date;
+		$billing->order_time = $so->order_time;
+		$billing->order_po_number = $so->so_number;
+		$billing->client_idx = $so->client_idx;
+		$billing->plate_no = $so->plate_no;
+		$billing->drivers_name = $so->drivers_name;
+		$billing->product_idx = $validated['product_idx'];
+		$billing->product_price = $price;
+		$billing->order_quantity = $quantity;
+		$billing->order_total_amount = $price * $quantity;
+		$billing->updated_by_user_idx = $currentUser;
+		$billing->save();
+
+		return response()->json(['success' => 'Product added successfully.', 'billing_id' => $billing->billing_id]);
+	}
+
+	/** Update an SO product line and optionally synchronize its linked Cashiers Report item. */
+	public function update_so_product_from_list(Request $request)
+	{
+		$validated = $request->validate([
+			'so_id' => 'required|integer',
+			'billing_id' => 'required|integer',
+			'product_idx' => 'required|integer|exists:teves_product_table,product_id',
+			'order_quantity' => 'required|numeric|gt:0',
+			'product_manual_price' => 'nullable|numeric|min:0',
+			'update_cashiers_report' => 'sometimes|boolean',
+		]);
+
+		$so = SOBillingTransactionModel::find($validated['so_id']);
+		if (!$so) {
+			return response()->json(['message' => 'Sales order not found.'], 404);
+		}
+
+		$currentUser = Session::get('loginID');
+		if (Session::get('user_branch_access_type') === 'BYBRANCH') {
+			$hasBranchAccess = DB::table('teves_user_branch_access')
+				->where('user_idx', $currentUser)
+				->where('branch_idx', $so->branch_idx)
+				->exists();
+			if (!$hasBranchAccess) {
+				return response()->json(['message' => 'You do not have access to this branch.'], 403);
+			}
+		}
+
+		$createdAt = strtotime($so->created_at);
+		$ageInDays = intval(abs(strtotime(date('Y-m-d')) - $createdAt) / 86400);
+		$userType = Session::get('UserType');
+		$isAdmin = in_array($userType, ['SUAdmin', 'Admin'], true);
+		$isOwner = (string) $currentUser === (string) $so->created_by_user_id;
+		if (!$isAdmin && !($ageInDays < 3 && $isOwner)) {
+			return response()->json(['message' => 'You do not have permission to edit this sales order.'], 403);
+		}
+
+		$billing = BillingTransactionModel::where('billing_id', $validated['billing_id'])
+			->where('so_idx', $so->so_id)
+			->first();
+		if (!$billing) {
+			return response()->json(['message' => 'The product line was not found on this sales order.'], 404);
+		}
+
+		$syncCashiersReport = filter_var($validated['update_cashiers_report'] ?? false, FILTER_VALIDATE_BOOLEAN);
+		$cashiersReportItemExists = CashiersReportModel_P3::where('billing_idx', $billing->billing_id)->exists();
+		if ($syncCashiersReport && !$cashiersReportItemExists) {
+			return response()->json(['message' => 'No linked Cashiers Report item was found to update.'], 422);
+		}
+
+		$isLocked = (int) ($billing->receivable_idx ?? 0) !== 0
+			|| ($billing->lock_billing_item
+				&& !in_array(strtolower((string) $billing->lock_billing_item), ['0', 'false', 'null', ''], true));
+		if ($isLocked) {
+			return response()->json(['message' => 'This product line is locked and cannot be edited.'], 403);
+		}
+
+		$product = DB::table('teves_product_table as pt')
+			->leftJoin('teves_product_selling_price_table as spt', function ($join) use ($so, $validated) {
+				$join->on('pt.product_id', '=', 'spt.product_idx')
+					->where('spt.branch_idx', '=', $so->branch_idx)
+					->where('spt.client_idx', '=', $so->client_idx)
+					->where('spt.product_idx', '=', $validated['product_idx']);
+			})
+			->where('pt.product_id', $validated['product_idx'])
+			->whereNull('pt.deleted_at')
+			->selectRaw('COALESCE(spt.selling_price, pt.product_price) as product_price')
+			->first();
+
+		if (!$product) {
+			return response()->json(['message' => 'The selected product is no longer available.'], 422);
+		}
+
+		$manualPrice = (float) ($validated['product_manual_price'] ?? 0);
+		$price = $manualPrice > 0 ? $manualPrice : (float) $product->product_price;
+		$quantity = (float) $validated['order_quantity'];
+		$amount = $price * $quantity;
+		$billing->product_idx = $validated['product_idx'];
+		$billing->product_price = $price;
+		$billing->order_quantity = $quantity;
+		$billing->order_total_amount = $amount;
+		$billing->branch_idx = $so->branch_idx;
+		$billing->order_date = $so->order_date;
+		$billing->order_time = $so->order_time;
+		$billing->order_po_number = $so->so_number;
+		$billing->client_idx = $so->client_idx;
+		$billing->plate_no = $so->plate_no;
+		$billing->drivers_name = $so->drivers_name;
+		$billing->updated_by_user_idx = $currentUser;
+		DB::transaction(function () use ($billing, $syncCashiersReport, $so, $validated, $price, $quantity, $amount, $currentUser) {
+			$billing->save();
+			if ($syncCashiersReport) {
+				CashiersReportModel_P3::where('billing_idx', $billing->billing_id)->update([
+					'so_idx' => $so->so_id,
+					'reference_no' => $so->so_number,
+					'client_idx' => $so->client_idx,
+					'product_idx' => $validated['product_idx'],
+					'order_quantity' => $quantity,
+					'pump_price' => $price,
+					'order_total_amount' => $amount,
+					'updated_by_user_id' => $currentUser,
+				]);
+			}
+		});
+
+		return response()->json([
+			'success' => $syncCashiersReport
+				? 'SO product and linked Cashiers Report item updated successfully.'
+				: 'SO product updated successfully.',
+		]);
+	}
+
+	/** Delete an SO product line only when it has no Cashiers Report link. */
+	public function delete_so_product_from_list(Request $request)
+	{
+		$validated = $request->validate([
+			'so_id' => 'required|integer|exists:teves_billing_so_table,so_id',
+			'billing_id' => 'required|integer|exists:teves_billing_table,billing_id',
+		]);
+
+		$so = SOBillingTransactionModel::find($validated['so_id']);
+		$billing = BillingTransactionModel::where('billing_id', $validated['billing_id'])
+			->where('so_idx', $validated['so_id'])
+			->first();
+		if (!$so || !$billing) {
+			return response()->json(['message' => 'The product line was not found on this sales order.'], 404);
+		}
+
+		$isCashiersReportLinked = (int) ($billing->cashiers_report_idx ?? 0) !== 0
+			|| CashiersReportModel_P3::where('billing_idx', $billing->billing_id)->exists();
+		if ($isCashiersReportLinked) {
+			return response()->json(['message' => 'This product is linked to the Cashiers Report and cannot be deleted here.'], 403);
+		}
+
+		$isLocked = (int) ($billing->receivable_idx ?? 0) !== 0
+			|| ($billing->lock_billing_item
+				&& !in_array(strtolower((string) $billing->lock_billing_item), ['0', 'false', 'null', ''], true));
+		if ($isLocked) {
+			return response()->json(['message' => 'This product line is locked and cannot be deleted.'], 403);
+		}
+
+		$currentUser = Session::get('loginID');
+		if (Session::get('user_branch_access_type') === 'BYBRANCH') {
+			$hasBranchAccess = DB::table('teves_user_branch_access')
+				->where('user_idx', $currentUser)
+				->where('branch_idx', $so->branch_idx)
+				->exists();
+			if (!$hasBranchAccess) {
+				return response()->json(['message' => 'You do not have access to this branch.'], 403);
+			}
+		}
+
+		$createdAt = strtotime($so->created_at);
+		$ageInDays = intval(abs(strtotime(date('Y-m-d')) - $createdAt) / 86400);
+		$userType = Session::get('UserType');
+		$isAdmin = in_array($userType, ['SUAdmin', 'Admin'], true);
+		$isOwner = (string) $currentUser === (string) $so->created_by_user_id;
+		if (!$isAdmin && !($ageInDays < 3 && $isOwner)) {
+			return response()->json(['message' => 'You do not have permission to delete products from this sales order.'], 403);
+		}
+
+		$billing->delete();
+		return response()->json(['success' => 'SO product deleted successfully.']);
+	}
+
+	/** Update SO header information and its billing rows without writing to Cashier's Report records. */
+	public function update_so_information_from_list(Request $request)
+	{
+		$validated = $request->validate([
+			'so_id' => 'required|integer|exists:teves_billing_so_table,so_id',
+			'branch_id' => 'required|integer|exists:teves_branch_table,branch_id',
+			'client_idx' => 'required|integer|exists:teves_client_table,client_id',
+			'so_number' => [
+				'required', 'string', 'max:100',
+				Rule::unique('teves_billing_so_table', 'so_number')->ignore($request->input('so_id'), 'so_id'),
+			],
+			'order_date' => 'required|date',
+			'order_time' => 'required|date_format:H:i',
+			'plate_no' => 'required|string|max:255',
+			'drivers_name' => 'required|string|max:255',
+		]);
+
+		$so = SOBillingTransactionModel::find($validated['so_id']);
+		if (!$so) {
+			return response()->json(['message' => 'Sales order not found.'], 404);
+		}
+
+		$currentUser = Session::get('loginID');
+		$createdAt = strtotime($so->created_at);
+		$ageInDays = intval(abs(strtotime(date('Y-m-d')) - $createdAt) / 86400);
+		$userType = Session::get('UserType');
+		$isAdmin = in_array($userType, ['Admin', 'SUAdmin'], true);
+		$isOwner = (string) $currentUser === (string) $so->created_by_user_id;
+		if (!$isAdmin && !($ageInDays < 3 && $isOwner)) {
+			return response()->json(['message' => 'You do not have permission to edit this sales order.'], 403);
+		}
+
+		$isCashiersReportSO = (int) ($so->cashiers_report_idx ?? 0) !== 0;
+		if ($isCashiersReportSO && (
+			(int) $validated['branch_id'] !== (int) $so->branch_idx
+			|| (int) $validated['client_idx'] !== (int) $so->client_idx
+		)) {
+			return response()->json([
+				'message' => 'Branch and Account / Client cannot be changed for a sales order linked to the Cashiers Report.',
+			], 403);
+		}
+
+		if (!$isAdmin && (string) $validated['order_date'] !== substr((string) $so->order_date, 0, 10)) {
+			return response()->json(['message' => 'Only Admin or SUAdmin can change the sales order date.'], 403);
+		}
+
+		if (Session::get('user_branch_access_type') === 'BYBRANCH') {
+			$hasCurrentBranchAccess = DB::table('teves_user_branch_access')
+				->where('user_idx', $currentUser)
+				->where('branch_idx', $so->branch_idx)
+				->exists();
+			$hasRequestedBranchAccess = DB::table('teves_user_branch_access')
+				->where('user_idx', $currentUser)
+				->where('branch_idx', $validated['branch_id'])
+				->exists();
+			if (!$hasCurrentBranchAccess || !$hasRequestedBranchAccess) {
+				return response()->json(['message' => 'You do not have access to this branch.'], 403);
+			}
+		}
+
+		DB::transaction(function () use ($so, $validated, $currentUser) {
+			$so->branch_idx = $validated['branch_id'];
+			$so->client_idx = $validated['client_idx'];
+			$so->so_number = $validated['so_number'];
+			$so->order_date = $validated['order_date'];
+			$so->order_time = $validated['order_time'];
+			$so->plate_no = $validated['plate_no'];
+			$so->drivers_name = $validated['drivers_name'];
+			$so->updated_by_user_id = $currentUser;
+			$so->save();
+
+			BillingTransactionModel::where('so_idx', $so->so_id)->update([
+				'branch_idx' => $validated['branch_id'],
+				'client_idx' => $validated['client_idx'],
+				'order_po_number' => $validated['so_number'],
+				'order_date' => $validated['order_date'],
+				'order_time' => $validated['order_time'],
+				'plate_no' => $validated['plate_no'],
+				'drivers_name' => $validated['drivers_name'],
+				'updated_by_user_idx' => $currentUser,
+			]);
+		});
+
+		return response()->json(['success' => 'SO information updated successfully.']);
+	}
 	
 	
 	/*Fetch Bill Information*/

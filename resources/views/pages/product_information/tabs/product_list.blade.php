@@ -57,6 +57,38 @@ div.dataTables_wrapper {
     transform: translateY(-1px);
 }
 
+.product-information-theme .product-qr-thumbnail {
+    width: 88px;
+    height: 88px;
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--product-info-border);
+    border-radius: .75rem;
+    background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.product-information-theme .product-qr-thumbnail:hover {
+    border-color: var(--product-info-sage);
+    box-shadow: 0 .2rem .55rem rgba(23, 62, 58, .16);
+    transform: translateY(-1px);
+}
+
+.product-information-theme .product-qr-inline {
+    display: block;
+    overflow: hidden;
+    width: 72px !important;
+    height: 72px !important;
+}
+
+.product-information-theme .product-qr-inline canvas,
+.product-information-theme .product-qr-inline img {
+    width: 72px !important;
+    height: 72px !important;
+}
+
 .product-information-theme .product-catalog-tabs {
     padding: .35rem;
     border: 1px solid var(--product-info-border);
@@ -232,43 +264,92 @@ div.dataTables_wrapper {
 <section class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
     <div class="card-header bg-white border-0 py-3 px-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div>
-                <h5 class="fw-bold mb-1"><i class="bi bi-link-45deg text-success me-2" aria-hidden="true"></i>Unassigned Product Variants</h5>
-                <small class="text-muted">Existing products stay here until you assign them to a main product.</small>
+            <div class="d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width:55px;height:55px;">
+                    <i class="bi bi-link-45deg text-success fs-4" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">Product Variants</h4>
+                    <small class="text-muted">Existing products stay here until you assign them to a main product.</small>
+                </div>
             </div>
             <div class="d-flex align-items-center flex-wrap gap-2">
-                <button type="button" class="btn btn-success btn-sm rounded-3 shadow-sm px-3 d-inline-flex align-items-center"
+                <button type="button" class="btn btn-outline-primary rounded-3 shadow-sm px-3 d-inline-flex align-items-center"
                         data-bs-toggle="modal" data-bs-target="#CreateProductModal">
                     <i class="bi bi-plus-circle me-2" aria-hidden="true"></i>
                     Add Product Variant
                 </button>
-                <label for="unassigned_variant_search" class="visually-hidden">Search unassigned variants</label>
-                <div class="input-group input-group-sm" style="max-width: 300px;">
-                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted" aria-hidden="true"></i></span>
-                    <input type="search" id="unassigned_variant_search" class="form-control" placeholder="Search variants..." autocomplete="off">
-                </div>
-                <label for="unassigned_variant_length" class="visually-hidden">Unassigned variants rows</label>
-                <select id="unassigned_variant_length" class="form-select form-select-sm" style="width: auto;">
-                    <option value="10">10 rows</option>
-                    <option value="20">20 rows</option>
-                    <option value="50">50 rows</option>
-                    <option value="100">100 rows</option>
-                    <option value="-1">All rows</option>
-                </select>
             </div>
         </div>
     </div>
     <div class="card-body p-3 p-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 mb-3">
+            <div class="card-body p-3">
+                <div class="row g-3 align-items-end">
+                    <div class="col-lg-5 col-md-6">
+                        <label for="unassigned_variant_search" class="form-label small fw-semibold mb-1">
+                            <i class="bi bi-search text-primary me-1" aria-hidden="true"></i>
+                            Search Product Variants
+                        </label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search text-muted" aria-hidden="true"></i>
+                            </span>
+                            <input type="search" id="unassigned_variant_search" class="form-control"
+                                   placeholder="Search product variant, code, or category..." autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <label for="unassigned_variant_category" class="form-label small fw-semibold mb-1">
+                            <i class="bi bi-tag text-success me-1" aria-hidden="true"></i>
+                            Category
+                        </label>
+                        <select id="unassigned_variant_category" class="form-select form-select-sm">
+                            <option value="">All Categories</option>
+                            @foreach ($product_category as $categoryOption)
+                                <option value="{{ $categoryOption->category_name }}">{{ $categoryOption->category_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                        <label for="unassigned_variant_length" class="form-label small fw-semibold mb-1">
+                            <i class="bi bi-list-ol text-secondary me-1" aria-hidden="true"></i>
+                            Rows to Display
+                        </label>
+                        <select id="unassigned_variant_length" class="form-select form-select-sm">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="-1">All</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6 d-flex justify-content-md-end">
+                        <button type="button" id="resetUnassignedVariantFilters" class="btn btn-light btn-sm rounded-3 px-3">
+                            <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>
+                            Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-hover align-middle dataTable display nowrap w-100 product-list-table" id="getUnassignedProductList" cellspacing="0">
                 <thead>
                     <tr>
                         <th class="text-center"><i class="bi bi-hash me-1" aria-hidden="true"></i>#</th>
+                        <th class="text-center"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Product Code</th>
                         <th><i class="bi bi-box me-1" aria-hidden="true"></i>Product Variant</th>
                         <th><i class="bi bi-tag me-1" aria-hidden="true"></i>Category</th>
                         <th class="text-end"><i class="bi bi-currency-exchange me-1" aria-hidden="true"></i>Default Price</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Unit</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Capacity</th>
+                        <th class="text-center"><i class="bi bi-qr-code me-1" aria-hidden="true"></i>QR Code</th>
                         <th class="text-center text-nowrap"><i class="bi bi-three-dots me-1" aria-hidden="true"></i>Actions</th>
                     </tr>
                 </thead>

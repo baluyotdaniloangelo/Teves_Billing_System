@@ -1,6 +1,8 @@
 <script type="text/javascript">
 (function ($) {
 
+let categoryCodeManuallyEdited = false;
+
 /*==================================================
 PRODUCT CATEGORY MODULE
 ==================================================*/
@@ -8,6 +10,17 @@ PRODUCT CATEGORY MODULE
 $(document).ready(function ()
 {
     bindProductCategoryDetailsEvents();
+
+    $('#category_code').on('input', function () {
+        categoryCodeManuallyEdited = true;
+        this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
+    });
+
+    $('#category_name').on('input', function () {
+        if ($('#category_id').val() || categoryCodeManuallyEdited) return;
+        const letters = this.value.toUpperCase().replace(/[^A-Z]/g, '');
+        $('#category_code').val(letters.slice(0, 3).padEnd(3, 'X'));
+    });
 
     const $categoryTab = $('#product-categories-tab');
     const categoryTabExists = $categoryTab.length > 0;
@@ -71,7 +84,8 @@ function initializeProductCategoryDetailsTable()
                     searchable: false
                 },
 
-                { data: 'category_name' },
+                { data: 'category_name', render: $.fn.dataTable.render.text() },
+                { data: 'category_code', className: 'text-center fw-semibold', render: $.fn.dataTable.render.text() },
 
                 {
                     data: 'action',
@@ -247,6 +261,7 @@ function openEditProductCategoryModal()
             */
             $('#category_id').val(data.category_id);
             $('#category_name').val(data.category_name);
+            $('#category_code').val(data.category_code || '');
 
             /*
             UPDATE MODAL
@@ -285,6 +300,7 @@ function saveProductCategoryDetails(event)
     const payload = {
         category_id: category_id,
         category_name: $('#category_name').val(),
+        category_code: $('#category_code').val(),
         _token: "{{ csrf_token() }}"
     };
 
@@ -495,6 +511,7 @@ function resetProductCategoryForm()
     }
 
     form.reset();
+    categoryCodeManuallyEdited = false;
     $('#category_id').val('');
     $('.invalid-feedback').html('');
     $('#ProductCategoryDetailsForm').removeClass('was-validated');
@@ -540,17 +557,21 @@ function showValidationErrorModal(message)
 
 function handleProductCategoryValidation(xhr)
 {
-    const errors = xhr.responseJSON.errors;
-	
-	showValidationErrorModal(errors.category_name[0]);
-    /*
-    CATEGORY NAME
-    */
-    if(errors.category_name)
-    {
-        $('#category_name_error').html(errors.category_name[0]).show();
-    }
+    const response = xhr.responseJSON || {};
+    const errors = response.errors || {};
+    const firstError = (errors.category_code && errors.category_code[0])
+        || (errors.category_name && errors.category_name[0])
+        || response.message
+        || 'Please review the category details.';
 
+    showValidationErrorModal(firstError);
+
+    if (errors.category_name) {
+        $('#category_name_error').text(errors.category_name[0]).show();
+    }
+    if (errors.category_code) {
+        $('#category_code_error').text(errors.category_code[0]).show();
+    }
 }
 })(jQuery);
 </script>

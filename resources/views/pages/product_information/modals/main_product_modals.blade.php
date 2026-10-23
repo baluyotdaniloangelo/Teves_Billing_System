@@ -61,11 +61,13 @@
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
+                                <th class="text-center">Product Code</th>
                                 <th>Product Variant</th>
                                 <th>Category</th>
                                 <th class="text-end">Default Price</th>
                                 <th class="text-center">Unit</th>
                                 <th class="text-center">Capacity</th>
+                                <th class="text-center"><i class="bi bi-qr-code me-1" aria-hidden="true"></i>QR Code</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>

@@ -1,5 +1,5 @@
 <div class="modal fade" id="CashierReportLpgInventoryModal" tabindex="-1" aria-labelledby="CashierReportLpgInventoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
             <div class="modal-header border-0 px-4 py-3">
                 <div class="d-flex align-items-center text-white">
@@ -26,10 +26,10 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <label for="lpg_inventory_product_idx" class="form-label fw-semibold"><i class="bi bi-box-seam me-2 text-success" aria-hidden="true"></i>Product / Item</label>
-                            <select class="form-select form-select-lg rounded-3" id="lpg_inventory_product_idx" name="product_idx" required>
-                                <option value="">Select LPG product</option>
+                            <select class="form-select form-select-sm rounded-3 lpg-product-picker" id="lpg_inventory_product_idx" name="product_idx" required>
+                                <option value="">Select product</option>
                                 @foreach ($product_data as $product)
-                                    <option value="{{ $product->product_id }}">{{ trim(($product->product_name ?? '') . ' ' . ($product->product_unit_measurement ?? '')) }}</option>
+                                    <option value="{{ $product->product_id }}" data-product-code="{{ $product->product_code ?? '' }}" data-price="{{ $product->product_price ?? 0 }}">{{ trim(($product->product_name ?? '') . ' ' . ($product->product_unit_measurement ?? '')) }}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback" id="product_idxError">Please select an LPG product.</div>
@@ -37,7 +37,7 @@
 
                         <div class="col-12 lpg-supplier-field d-none">
                             <label for="lpg_inventory_supplier_idx" class="form-label fw-semibold"><i class="bi bi-truck me-2 text-success" aria-hidden="true"></i>Supplier</label>
-                            <select class="form-select form-select-lg rounded-3" id="lpg_inventory_supplier_idx" name="supplier_idx">
+                            <select class="form-select form-select-sm rounded-3" id="lpg_inventory_supplier_idx" name="supplier_idx">
                                 <option value="">Select supplier</option>
                                 @foreach (($supplier_data ?? []) as $supplier)
                                     <option value="{{ $supplier->supplier_id }}">{{ $supplier->supplier_name }}</option>
@@ -46,15 +46,15 @@
                             <div class="invalid-feedback" id="supplier_idxError">Please select a supplier.</div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label for="lpg_inventory_quantity" class="form-label fw-semibold"><i class="bi bi-123 me-2 text-success" aria-hidden="true"></i>Quantity</label>
-                            <input type="number" min="0" step="0.01" class="form-control form-control-lg rounded-3" id="lpg_inventory_quantity" name="quantity" placeholder="Enter quantity" required>
+                            <input type="number" min="0" step="0.01" class="form-control form-control-sm rounded-3" id="lpg_inventory_quantity" name="quantity" placeholder="Enter quantity" required>
                             <div class="invalid-feedback" id="quantityError">Please enter a valid quantity.</div>
                         </div>
 
-                        <div class="col-md-6 lpg-supplier-field d-none">
+                        <div class="col-md-12 lpg-supplier-field d-none">
                             <label for="lpg_inventory_delivery_reference_no" class="form-label fw-semibold"><i class="bi bi-file-earmark-text me-2 text-success" aria-hidden="true"></i>DR / Reference No.</label>
-                            <input type="text" class="form-control form-control-lg rounded-3" id="lpg_inventory_delivery_reference_no" name="delivery_reference_no" maxlength="100" placeholder="Optional">
+                            <input type="text" class="form-control form-control-sm rounded-3" id="lpg_inventory_delivery_reference_no" name="delivery_reference_no" maxlength="100" placeholder="Optional">
                         </div>
 
                         <div class="col-12">

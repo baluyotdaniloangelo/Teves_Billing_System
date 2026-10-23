@@ -14,4 +14,18 @@
 	<script src="{{asset('Datatables/2.0.8/js/dataTables.js')}}"></script>
 	<script src="{{asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js')}}"></script>
 	<script src="{{asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js')}}"></script>
-	<script src="{{asset('template/assets/vendor/chart.js/chart.min.js')}}"></script>   
+	<script src="{{asset('template/assets/vendor/chart.js/chart.min.js')}}"></script>
+
+<script>
+// Preserve the page palette if a modal is moved outside the report container.
+document.querySelectorAll('.lpg-report-theme .modal').forEach(function (modal) {
+    modal.classList.add('lpg-report-modal-theme');
+});
+$(function () {
+    $(document).on('shown.bs.tab', '#LPGTab [data-bs-toggle="tab"], #lpgInventorySubTabs [data-bs-toggle="tab"]', function () {
+        const visibleTables = $.fn.dataTable.tables({visible: true, api: true});
+        visibleTables.columns.adjust();
+        if (visibleTables.responsive && visibleTables.responsive.recalc) visibleTables.responsive.recalc();
+    });
+});
+</script>

@@ -33,6 +33,7 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
     protected $primaryKey = 'cashiers_report_lpg_empty_inventory_id';
     protected $guarded = ['cashiers_report_lpg_empty_inventory_id'];
     protected $dates = ['deleted_at'];
+    protected $casts = ['auto_fields' => 'array'];
     protected $appends = ['ending_quantity', 'capacity_group'];
     protected static $logName = 'Cashiers Report LPG Empty Cylinders / Canisters';
     protected static $logOnlyDirty = true;
@@ -41,6 +42,7 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
         'return_quantity', 'swap_in_quantity', 'from_other_branch_quantity', 'sold_quantity',
         'swap_out_quantity', 'borrow_quantity', 'pull_out_branch_quantity', 'pull_out_truck_quantity',
         'remarks', 'created_by_user_idx', 'updated_by_user_idx', 'deleted_by_user_id', 'deleted_at',
+        'auto_fields',
     ];
 
     public function getEndingQuantityAttribute(): int
@@ -48,6 +50,7 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
         $ending = (int) $this->beginning_quantity;
         foreach (self::ADDITIONS as $field => $label) $ending += (int) $this->{$field};
         foreach (self::DEDUCTIONS as $field => $label) $ending -= (int) $this->{$field};
+        $ending -= (int) ($this->attributes['duplicate_received_quantity'] ?? 0);
         return $ending;
     }
 

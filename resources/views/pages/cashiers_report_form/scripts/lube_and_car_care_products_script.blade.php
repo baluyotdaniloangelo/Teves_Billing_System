@@ -54,7 +54,23 @@ function initializeCashiersReportLubeCarCareTable()
                 }, 
                 {
                     data: 'product_name',
-                    className: 'text-start'
+                    className: 'text-start',
+                    render: function (data, type, row)
+                    {
+                        if (type !== 'display') {
+                            return (data || '') + ' ' + (row.product_code || '');
+                        }
+
+                        const escapeHtml = function (value) {
+                            return $('<div>').text(value == null ? '' : String(value)).html();
+                        };
+                        const productName = escapeHtml(data);
+                        const productCode = escapeHtml(row.product_code || '');
+
+                        return productCode
+                            ? '<div class="fw-semibold">' + productName + '</div><small class="text-muted"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Code: ' + productCode + '</small>'
+                            : productName;
+                    }
                 },
                 {
                     data: 'order_quantity',
@@ -117,6 +133,22 @@ function initializeCashiersReportLubeCarCareTable()
 
     autoAdjustColumns(CashiersReportLubeCarCareTable);
 }
+
+function updateLubeCarCareProductCodePreview(code)
+{
+    const selectedCode = code === undefined
+        ? String($('#lubeCarCareProductList option').filter(function () {
+            return $(this).val() === $('#lube_car_care_product').val();
+        }).first().attr('data-product-code') || '').trim()
+        : String(code || '').trim();
+
+    $('#lube_car_care_product_code_value').text(selectedCode);
+    $('#lube_car_care_product_code_preview').toggleClass('d-none', selectedCode === '');
+}
+
+$(document).on('input change', '#lube_car_care_product', function () {
+    updateLubeCarCareProductCodePreview();
+});
 
 /*==================================================
 RELOAD LUBRICANTS & CAR CARE DATATABLE
@@ -513,6 +545,7 @@ $('body').on('click', '#editCashiersReportLubeCarCare', function (event)
 
                 $('#lube_car_care_product')
                     .val(product.product_name);
+                updateLubeCarCareProductCodePreview(product.product_code || '');
 
 
                 /*==================================================
@@ -810,6 +843,7 @@ function resetLubeCarCareForm()
     $('#lube_car_care_productError').text('');
     $('#lube_car_care_quantityError').text('');
     $('#lube_car_care_unit_priceError').text('');
+    updateLubeCarCareProductCodePreview('');
 
 
     /* Remove validation state */

@@ -51,7 +51,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="lpg_expense_type" class="form-label fw-semibold">Type</label>
-                            <select class="form-select form-select-lg rounded-3"
+                            <select class="form-select form-select-sm rounded-3"
                                     id="lpg_expense_type"
                                     name="expense_type"
                                     required>
@@ -65,7 +65,7 @@
                         <div class="col-md-6">
                             <label for="lpg_expense_client" class="form-label fw-semibold">Account Name <span class="text-muted fw-normal">(optional)</span></label>
                             <input type="text"
-                                   class="form-control form-control-lg rounded-3"
+                                   class="form-control form-control-sm rounded-3"
                                    id="lpg_expense_client"
                                    list="lpgExpenseClientList"
                                    autocomplete="off"
@@ -93,7 +93,7 @@
                         <div class="col-12">
                             <label for="lpg_expense_item" class="form-label fw-semibold">Item / Description <span class="text-muted fw-normal">(optional)</span></label>
                             <input type="text"
-                                   class="form-control form-control-lg rounded-3"
+                                   class="form-control form-control-sm rounded-3 lpg-product-search"
                                    id="lpg_expense_item"
                                    name="item_description"
                                    list="lpgExpenseProductList"
@@ -107,6 +107,7 @@
                                     <option label="{{ $lpgExpenseProductLabel }} | ₱ {{ number_format($product_data_cols->product_price ?? 0, 2) }}"
                                             data-id="{{ $product_data_cols->product_id }}"
                                             data-price="{{ $product_data_cols->product_price ?? 0 }}"
+                                            data-product-code="{{ $product_data_cols->product_code ?? '' }}"
                                             value="{{ $lpgExpenseProductLabel }}"></option>
                                 @endforeach
                             </datalist>
@@ -116,7 +117,7 @@
                         <div class="col-md-4">
                             <label for="lpg_expense_quantity" class="form-label fw-semibold">Quantity</label>
                             <input type="number"
-                                   class="form-control form-control-lg rounded-3"
+                                   class="form-control form-control-sm rounded-3"
                                    id="lpg_expense_quantity"
                                    name="order_quantity"
                                    min="0.01"
@@ -130,7 +131,7 @@
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text">₱</span>
                                 <input type="number"
-                                       class="form-control rounded-end-3"
+                                       class="form-control form-control-sm rounded-end-3"
                                        id="lpg_expense_unit_price"
                                        name="unit_price"
                                        min="0"
@@ -145,7 +146,7 @@
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text">₱</span>
                                 <input type="number"
-                                       class="form-control rounded-end-3"
+                                       class="form-control form-control-sm rounded-end-3"
                                        id="lpg_expense_amount"
                                        name="amount"
                                        min="0"

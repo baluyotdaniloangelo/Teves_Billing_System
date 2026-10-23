@@ -3,7 +3,7 @@
     $capacityColumnClass = $capacityColumnClass ?? 'col-6';
 @endphp
 <div class="row g-2 mb-2 justify-content-center">
-    <div class="{{ $capacityColumnClass }}">
+    <div class="{{ $capacityColumnClass }} product-capacity-field">
         <label for="{{ $capacityPrefix }}product_capacity" class="form-label small fw-semibold mb-1">
             <i class="bi bi-rulers me-1 text-success" aria-hidden="true"></i>Capacity (Optional)
         </label>
@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="row g-2 mb-2 justify-content-center">
-    <div class="{{ $capacityColumnClass }}">
+    <div class="{{ $capacityColumnClass }} product-capacity-field">
         <label for="{{ $capacityPrefix }}product_capacity_unit" class="form-label small fw-semibold mb-1">Capacity Unit</label>
         <select class="form-select form-select-sm rounded-3" name="{{ $capacityPrefix }}product_capacity_unit" id="{{ $capacityPrefix }}product_capacity_unit">
             <option value="">No capacity unit</option>

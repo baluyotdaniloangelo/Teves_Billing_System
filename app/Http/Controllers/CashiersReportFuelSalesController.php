@@ -42,6 +42,7 @@ class CashiersReportFuelSalesController extends Controller
 			->get([
 				'teves_product_table.product_id',
 				'teves_product_table.product_name',
+				'teves_product_table.product_code',
 				'teves_product_table.product_price'
 			]);
 
@@ -77,6 +78,7 @@ class CashiersReportFuelSalesController extends Controller
 					->get([
 						'teves_product_table.product_name',
 						'teves_product_table.product_id',
+						'teves_product_table.product_code',
 						DB::raw('IFNULL(teves_product_tank_table.tank_name, "Please Select a Tank") as tank_name'),
 						DB::raw('IFNULL(teves_product_pump_table.pump_name, "Please Select a Pump") as pump_name'),
 						'teves_cashiers_report_p1.cashiers_report_p1_id',
@@ -329,6 +331,7 @@ class CashiersReportFuelSalesController extends Controller
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					'teves_product_table.product_code',
 					DB::raw('IFNULL(teves_product_tank_table.tank_name, "No Tank selected") as tank_name'),
 					DB::raw('IFNULL(teves_product_pump_table.pump_name, "No Pump Selected") as pump_name'),
 					'teves_cashiers_report_p1.product_price',

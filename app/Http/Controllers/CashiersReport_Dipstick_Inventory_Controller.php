@@ -118,6 +118,7 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 					->get([
 						'teves_product_table.product_id',
 						'teves_product_table.product_name',
+						'teves_product_table.product_code',
 						'teves_product_tank_table.tank_id',
 						'teves_product_tank_table.tank_name',
 						'teves_product_tank_table.tank_capacity',
@@ -145,6 +146,7 @@ class CashiersReport_Dipstick_Inventory_Controller extends Controller
 					->get([
 						'teves_product_table.product_id',
 						'teves_product_table.product_name',
+						'teves_product_table.product_code',
 						'teves_product_tank_table.tank_id',
 						'teves_product_tank_table.tank_name',
 						'teves_product_tank_table.tank_capacity',

@@ -1,5 +1,5 @@
 <div class="section-title">EMPTY CYLINDERS / CANISTERS</div>
-<p class="note" style="margin:4px 0;">Quantities in pieces. Ending = Beginning + Additions - Deductions. These are the recorded empty-stock movement totals.</p>
+<p class="note" style="margin:4px 0;">Quantities in pieces. Ending = Beginning + Additions - Deductions - Linked receipt overlap. A refill receipt linked to Swapping appears in both columns and counts once in ending stock.</p>
 <table class="empty-inventory-print">
     @include('pages.cashiers_report_form_lpg.partials.empty_inventory_head', ['withActions' => false])
     <tbody>

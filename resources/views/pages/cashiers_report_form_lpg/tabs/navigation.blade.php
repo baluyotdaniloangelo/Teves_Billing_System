@@ -1,82 +1,27 @@
-<ul class="nav nav-pills nav-fill gap-2 p-3 bg-light rounded-4 shadow-sm mb-3"
-    id="LPGTab"
-    role="tablist">
-
-    <!-- Accounts Receivable -->
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active rounded-3 py-3 fw-semibold shadow-sm"
-                id="lpg_accounts_recievable-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#lpg_accounts_recievable"
-                type="button"
-                role="tab"
-                aria-controls="lpg_accounts_recievable"
-                aria-selected="true">
-            <i class="bi bi-person-lines-fill me-2"></i>
-            Accounts Receivable
-        </button>
-    </li>
-
-    <!-- Inventory -->
-    <li class="nav-item" role="presentation">
-        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
-                id="inventory-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#inventory_tab"
-                type="button"
-                role="tab"
-                aria-controls="inventory_tab"
-                aria-selected="false">
-            <i class="bi bi-cash-coin me-2"></i>
-            Inventory
-        </button>
-    </li>
-	
-    <!-- Sales Order / AR / Returned -->
-    <li class="nav-item" role="presentation">
-        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
-                id="lpg_ar_so-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#lpg_ar_so"
-                type="button"
-                role="tab"
-                aria-controls="lpg_ar_so"
-                aria-selected="false">
-            <i class="bi bi-receipt-cutoff me-2"></i>
-            Sales Order - Account Receivable / Returned / Cash Sales
-        </button>
-    </li>
-
-    <!-- Expenses -->
-    <li class="nav-item" role="presentation">
-        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
-                id="lpg_expenses-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#lpg_expenses"
-                type="button"
-                role="tab"
-                aria-controls="lpg_expenses"
-                aria-selected="false">
-            <i class="bi bi-cash-stack me-2"></i>
-            Expenses
-        </button>
-    </li>
-
-
-	
-	<!-- Cash Collection -->
-    <li class="nav-item" role="presentation">
-        <button class="nav-link rounded-3 py-3 fw-semibold shadow-sm"
-                id="collection_report-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#collection_report"
-                type="button"
-                role="tab"
-                aria-controls="collection_report"
-                aria-selected="false">
-            <i class="bi bi-cash-coin me-2"></i>
-            Cash Collection
-        </button>
-    </li>
-
+@php
+    $lpgMainTabs = [
+        ['id' => 'lpg-sell-out-tab', 'target' => 'lpg-sell-out', 'label' => 'LPG Sell-out', 'icon' => 'bi-table'],
+        ['id' => 'lpg-kitchen-tab', 'target' => 'lpg-kitchen', 'label' => 'Kitchen Products & Accessories', 'icon' => 'bi-shop'],
+        ['id' => 'lpg-empty-inventory-tab', 'target' => 'lpg-empty-inventory', 'label' => 'Empty Cylinders / Canisters', 'icon' => 'bi-box-seam'],
+        ['id' => 'lpg_accounts_recievable-tab', 'target' => 'lpg_accounts_recievable', 'label' => 'Accounts Receivable', 'icon' => 'bi-person-lines-fill'],
+        ['id' => 'lpg_expenses-tab', 'target' => 'lpg_expenses', 'label' => 'Expenses', 'icon' => 'bi-cash-stack'],
+        ['id' => 'collection_report-tab', 'target' => 'collection_report', 'label' => 'Cash Collection', 'icon' => 'bi-cash-coin'],
+        ['id' => 'inventory-tab', 'target' => 'inventory_tab', 'label' => 'Inventory & Transactions', 'icon' => 'bi-boxes'],
+    ];
+@endphp
+<ul class="nav nav-pills gap-2 p-3 bg-light rounded-4 shadow-sm mb-3" id="LPGTab" role="tablist">
+    @foreach($lpgMainTabs as $tab)
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ $loop->first ? 'active' : '' }} rounded-3 py-3 fw-semibold shadow-sm"
+                    id="{{ $tab['id'] }}"
+                    data-bs-toggle="tab"
+                    data-bs-target="#{{ $tab['target'] }}"
+                    type="button"
+                    role="tab"
+                    aria-controls="{{ $tab['target'] }}"
+                    aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                <i class="bi {{ $tab['icon'] }} me-2" aria-hidden="true"></i>{{ $tab['label'] }}
+            </button>
+        </li>
+    @endforeach
 </ul>

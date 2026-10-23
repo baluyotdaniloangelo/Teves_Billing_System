@@ -2,16 +2,11 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-header bg-white border-0 py-3 px-4">
             <small class="text-muted text-uppercase fw-semibold">LPG Cashier Report</small>
-            <h5 class="fw-bold mb-0"><i class="bi bi-boxes text-success me-2" aria-hidden="true"></i>Inventory and Delivery</h5>
+            <h5 class="fw-bold mb-0"><i class="bi bi-boxes text-success me-2" aria-hidden="true"></i>Inventory &amp; Transactions</h5>
         </div>
 
         <div class="card-body">
             <ul class="nav nav-tabs mb-3" id="lpgInventorySubTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="lpg-empty-inventory-tab" data-bs-toggle="tab" data-bs-target="#lpg-empty-inventory" type="button" role="tab" aria-controls="lpg-empty-inventory" aria-selected="false">
-                        <i class="bi bi-box-seam me-1" aria-hidden="true"></i>Empty Cylinders / Canisters
-                    </button>
-                </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="lpg-beginning-inventory-tab" data-bs-toggle="tab" data-bs-target="#lpg-beginning-inventory" type="button" role="tab" aria-controls="lpg-beginning-inventory" aria-selected="true">
                         <i class="bi bi-box-arrow-in-down me-1" aria-hidden="true"></i>Beginning Inventory
@@ -37,10 +32,15 @@
                         <i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i>On-Loan
                     </button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="lpg_ar_so-tab" data-bs-toggle="tab" data-bs-target="#lpg_ar_so" type="button" role="tab" aria-controls="lpg_ar_so" aria-selected="false">
+                        <i class="bi bi-receipt-cutoff me-1" aria-hidden="true"></i>Sales Order / AR / Returned / Cash Sales
+                    </button>
+                </li>
             </ul>
 
             <div class="tab-content">
-                @include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_empty_inventory_tab')
+                @include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_ar_so_tab')
                 <div class="tab-pane fade show active" id="lpg-beginning-inventory" role="tabpanel" aria-labelledby="lpg-beginning-inventory-tab">
                     <div class="d-flex justify-content-end mb-3">
                         <button type="button" class="btn btn-success shadow-sm lpg-report-action-btn lpg-inventory-add" data-inventory-mode="BEGINNING">
@@ -110,7 +110,13 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="lpg-swapping" role="tabpanel" aria-labelledby="lpg-swapping-tab">
-                    <div class="d-flex justify-content-end mb-3"><button type="button" class="btn btn-success shadow-sm lpg-report-action-btn" id="add-lpg-swapping"><i class="bi bi-plus-circle me-1"></i>Add Swapping</button></div>
+                    @include('pages.cashiers_report_form_lpg.partials.regulator_inventory')
+                    <h6 class="fw-bold mb-2">Swapping Transactions</h6>
+                    <p class="small text-muted mb-2">Grouped by customer and item. Received and replaced quantities are totaled separately; use View Entries to manage the individual records.</p>
+                    <div class="d-flex justify-content-end flex-wrap gap-2 mb-3">
+                        <button type="button" class="btn btn-success shadow-sm lpg-report-action-btn" id="add-lpg-swapping"><i class="bi bi-box-arrow-in-down me-1"></i>Add Received</button>
+                        <button type="button" class="btn btn-success shadow-sm lpg-report-action-btn" id="add-lpg-swapping-replaced"><i class="bi bi-box-arrow-up-right me-1"></i>Add Replaced / Issued</button>
+                    </div>
                     <div class="table-responsive"><table class="table table-hover align-middle dataTable display nowrap cell-border" id="LpgSwappingTable" style="width:100%;"><thead><tr class="report"><th>#</th><th>Customer</th><th>Received Item</th><th>Received Qty</th><th>Replaced Item</th><th>Replaced Qty</th><th>Remarks</th><th>Action</th></tr></thead><tbody></tbody></table></div>
                 </div>
                 <div class="tab-pane fade" id="lpg-on-loan" role="tabpanel" aria-labelledby="lpg-on-loan-tab">

@@ -1337,6 +1337,7 @@ public function save_product_cashiers_report_PH3(Request $request)
 				->orderBy('cashiers_report_p3_id', 'asc')
               	->get([
 					'teves_product_table.product_id as product_idx',
+					'teves_product_table.product_code',
 					'teves_product_table.product_name',
 					'teves_cashiers_report_p3.reference_no',
 					'teves_cashiers_report_p3.order_time',
@@ -1442,6 +1443,7 @@ public function save_product_cashiers_report_PH3(Request $request)
 				->get([
 					'teves_product_table.product_name',
 					'teves_product_table.product_id',
+					'teves_product_table.product_code',
 					'teves_cashiers_report_p3.reference_no',
 					'teves_cashiers_report_p3.order_time',
 					'teves_cashiers_report_p3.miscellaneous_items_type',

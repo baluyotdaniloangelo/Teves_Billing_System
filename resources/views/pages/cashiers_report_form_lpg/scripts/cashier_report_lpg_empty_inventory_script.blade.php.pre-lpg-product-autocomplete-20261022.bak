@@ -1,0 +1,207 @@
+<script>
+$(function () {
+    const reportId = {{ (int) ($CashiersReportId ?? ($cashiers_report_id ?? 0)) }};
+    const quantityFields = @json(array_keys(\App\Models\CashiersReportModel_LPG_EmptyInventory::QUANTITY_FIELDS));
+    const additionFields = @json(array_keys(\App\Models\CashiersReportModel_LPG_EmptyInventory::ADDITIONS));
+    const deductionFields = @json(array_keys(\App\Models\CashiersReportModel_LPG_EmptyInventory::DEDUCTIONS));
+    const modeFields = {BEGINNING: ['beginning_quantity'], ADDITIONS: additionFields, DEDUCTIONS: deductionFields};
+    const modeNames = {BEGINNING: 'Beginning Inventory', ADDITIONS: 'Additions (+)', DEDUCTIONS: 'Deductions (-)'};
+    const states = {};
+    let deleteId = 0;
+    const number = value => Number(value || 0).toLocaleString('en-PH');
+    const headers = {'X-CSRF-TOKEN': "{{ csrf_token() }}", 'Accept': 'application/json'};
+
+    const table = $('#LpgEmptyInventoryTable').DataTable({
+        processing: true,
+        paging: false,
+        searching: true,
+        ordering: false,
+        info: false,
+        autoWidth: false,
+        ajax: function (data, callback) {
+            $('#lpg_empty_table_error').addClass('d-none');
+            $.ajax({url: "{{ route('GetLpgEmptyInventoryList') }}", type: 'POST', headers: headers, data: {cashiers_report_id: reportId}})
+                .done(rows => callback({data: Array.isArray(rows) ? rows : (rows.data || [])}))
+                .fail(xhr => {
+                    $('#lpg_empty_table_error').text(xhr.responseJSON?.message || 'Unable to load empty-stock inventory.').removeClass('d-none');
+                    callback({data: []});
+                });
+        },
+        columns: [
+            {data: 'product_name', defaultContent: '-', render: $.fn.dataTable.render.text()},
+            ...quantityFields.map(field => ({data: field, className: 'text-end', render: number})),
+            {data: 'ending_quantity', className: 'text-end fw-bold', render: number},
+            {data: 'remarks', defaultContent: '-', render: $.fn.dataTable.render.text()},
+            {data: null, className: 'text-nowrap text-center', render: function (data, type, row) {
+                const id = Number(row.cashiers_report_lpg_empty_inventory_id);
+                return `<button type="button" class="btn btn-sm btn-primary edit-lpg-empty-inventory" data-id="${id}" data-entry-mode="BEGINNING" title="Edit beginning inventory" aria-label="Edit beginning inventory"><i class="bi bi-box-seam" aria-hidden="true"></i></button> <button type="button" class="btn btn-sm btn-primary edit-lpg-empty-inventory" data-id="${id}" data-entry-mode="ADDITIONS" title="Edit additions" aria-label="Edit additions"><i class="bi bi-plus-circle" aria-hidden="true"></i></button> <button type="button" class="btn btn-sm btn-danger edit-lpg-empty-inventory" data-id="${id}" data-entry-mode="DEDUCTIONS" title="Edit deductions" aria-label="Edit deductions"><i class="bi bi-dash-circle" aria-hidden="true"></i></button> <button type="button" class="btn btn-sm btn-danger delete-lpg-empty-inventory" data-id="${id}" title="Delete row" aria-label="Delete empty-stock row"><i class="bi bi-trash3" aria-hidden="true"></i></button>`;
+            }}
+        ],
+        language: {emptyTable: 'No empty-stock rows recorded. Add a product to begin.'},
+        drawCallback: function () {
+            const api = this.api();
+            $(api.table().body()).find('.lpg-empty-group-row, .lpg-empty-total-row').remove();
+            let group = null, totals = {}, lastNode = null;
+            function subtotal() {
+                const tr = $('<tr class="lpg-empty-total-row">').append($('<td>').text('Total'));
+                quantityFields.concat(['ending_quantity']).forEach(field => tr.append($('<td class="text-end">').text(number(totals[field]))));
+                return tr.append($('<td colspan="2">'));
+            }
+            api.rows({search: 'applied', order: 'applied'}).every(function () {
+                const row = this.data();
+                const node = this.node();
+                if (row.capacity_group !== group) {
+                    if (lastNode) $(lastNode).after(subtotal());
+                    group = row.capacity_group;
+                    totals = {};
+                    $(node).before($('<tr class="lpg-empty-group-row">').append($('<td colspan="14">').text(group)));
+                }
+                quantityFields.concat(['ending_quantity']).forEach(field => totals[field] = (totals[field] || 0) + Number(row[field] || 0));
+                lastNode = node;
+            });
+            if (lastNode) $(lastNode).after(subtotal());
+        }
+    });
+
+    function showModal(element) { bootstrap.Modal.getOrCreateInstance(element).show(); }
+    function hideModal(element) { bootstrap.Modal.getOrCreateInstance(element).hide(); }
+    function errorText(xhr, fallback) {
+        const errors = xhr.responseJSON?.errors || {};
+        return Object.values(errors).flat().join(' ') || xhr.responseJSON?.message || fallback;
+    }
+    function clearErrors(state) {
+        $(state.form).find('.is-invalid').removeClass('is-invalid');
+        $(state.form).find('.lpg-empty-form-error').text('').addClass('d-none');
+    }
+    function showFormError(state, message) {
+        $(state.form).find('.lpg-empty-form-error').text(message).removeClass('d-none');
+        $(state.modal).find('.modal-body').scrollTop(0);
+    }
+    function updateEnding(state) {
+        const quantities = {...state.saved};
+        modeFields[state.mode].forEach(field => quantities[field] = Number($(state.form).find('[name="' + field + '"]').val() || 0));
+        const beginning = Number(quantities.beginning_quantity || 0);
+        const additions = additionFields.reduce((sum, field) => sum + Number(quantities[field] || 0), 0);
+        const deductions = deductionFields.reduce((sum, field) => sum + Number(quantities[field] || 0), 0);
+        const ending = beginning + additions - deductions;
+        Object.entries({beginning, additions, deductions, ending}).forEach(([field, value]) => {
+            $(state.form).find('[data-summary-field="' + field + '"]').text(number(value));
+        });
+        $(state.form).find('[data-summary-field="ending"]').toggleClass('text-danger', ending < 0);
+        state.form.elements.namedItem(modeFields[state.mode][0]).setCustomValidity(ending < 0 ? 'Deductions cannot exceed beginning inventory plus additions.' : '');
+    }
+    function loadProduct(state) {
+        const version = ++state.version;
+        if (state.lookup) state.lookup.abort();
+        clearErrors(state);
+        state.saved = {};
+        state.loaded = false;
+        state.form.classList.remove('was-validated');
+        const form = $(state.form);
+        const product = form.find('[name="product_idx"]')[0];
+        form.find('[name="cashiers_report_lpg_empty_inventory_id"]').val(0);
+        form.find('[name="remarks"]').val('');
+        modeFields[state.mode].forEach(field => form.find('[name="' + field + '"]').val(0));
+        form.find('.lpg-empty-capacity-label').text(product.value ? (product.selectedOptions[0]?.dataset.capacity || 'Capacity not set') + ' — count quantities in pieces.' : 'Grouping follows the capacity set on the product.');
+        updateEnding(state);
+        if (!product.value) {
+            form.find('.lpg-empty-quantity, textarea').prop('disabled', false);
+            state.button.prop('disabled', false).text('Save ' + modeNames[state.mode]);
+            return;
+        }
+        form.find('.lpg-empty-quantity, textarea').prop('disabled', true);
+        state.button.prop('disabled', true).text('Loading saved totals...');
+        state.lookup = $.ajax({url: "{{ route('LpgEmptyInventoryInfo') }}", type: 'POST', headers: headers, data: {cashiers_report_id: reportId, product_idx: product.value}})
+            .done(response => {
+                if (version !== state.version) return;
+                const record = response.data;
+                state.saved = record || {};
+                form.find('[name="cashiers_report_lpg_empty_inventory_id"]').val(record?.cashiers_report_lpg_empty_inventory_id || 0);
+                modeFields[state.mode].forEach(field => form.find('[name="' + field + '"]').val(record?.[field] ?? 0));
+                form.find('[name="remarks"]').val(record?.remarks || '');
+                state.loaded = true;
+                form.find('.lpg-empty-quantity, textarea').prop('disabled', false);
+                state.button.prop('disabled', false);
+                updateEnding(state);
+            })
+            .fail((xhr, status) => {
+                if (version !== state.version || status === 'abort') return;
+                showFormError(state, errorText(xhr, 'Unable to load saved totals. Select the product again to retry.'));
+            })
+            .always(() => {
+                if (version !== state.version) return;
+                state.lookup = null;
+                state.button.text('Save ' + modeNames[state.mode]);
+            });
+    }
+    $('.lpg-empty-entry-form').each(function () {
+        const mode = this.dataset.entryMode;
+        const modal = this.closest('.modal');
+        const state = states[mode] = {mode, form: this, modal, saved: {}, loaded: false, version: 0, lookup: null, button: $(modal).find('.lpg-empty-save')};
+        $(this).on('input change', '.lpg-empty-quantity', () => updateEnding(state));
+        $(this).find('[name="product_idx"]').on('change', () => loadProduct(state));
+        $(this).on('submit', function (event) {
+            event.preventDefault();
+            clearErrors(state);
+            updateEnding(state);
+            if (!this.checkValidity()) {
+                this.classList.add('was-validated');
+                this.reportValidity();
+                return;
+            }
+            if (!state.loaded) { showFormError(state, 'Load the product totals before saving.'); return; }
+            const id = Number($(this).find('[name="cashiers_report_lpg_empty_inventory_id"]').val() || 0);
+            state.button.prop('disabled', true).text('Saving...');
+            const payload = $(this).serialize();
+            $(this).find('[name="product_idx"]').prop('disabled', true);
+            $.ajax({url: id ? "{{ route('UpdateLpgEmptyInventory') }}" : "{{ route('SaveLpgEmptyInventory') }}", type: 'POST', headers: headers, data: payload})
+                .done(response => {
+                    hideModal(modal);
+                    table.ajax.reload(null, false);
+                    if (typeof showSuccessModal === 'function') showSuccessModal(response.message);
+                })
+                .fail(xhr => {
+                    showFormError(state, errorText(xhr, 'Unable to save empty stock.'));
+                    Object.keys(xhr.responseJSON?.errors || {}).forEach(field => $(this).find('[name="' + field + '"]').addClass('is-invalid'));
+                })
+                .always(() => {
+                    state.button.prop('disabled', false).text('Save ' + modeNames[mode]);
+                    $(this).find('[name="product_idx"]').prop('disabled', false);
+                });
+        });
+    });
+    function openEntry(mode, productId) {
+        const state = states[mode];
+        state.form.reset();
+        $(state.form).find('[name="product_idx"]').prop('disabled', false).val(productId || '');
+        loadProduct(state);
+        showModal(state.modal);
+    }
+    $('.lpg-empty-open-form').on('click', function () { openEntry(this.dataset.entryMode); });
+    $('#LpgEmptyInventoryTable').on('click', '.edit-lpg-empty-inventory', function () {
+        const id = Number($(this).data('id'));
+        const row = table.rows().data().toArray().find(item => Number(item.cashiers_report_lpg_empty_inventory_id) === id);
+        if (row) openEntry(this.dataset.entryMode, row.product_idx);
+    });
+    $('#LpgEmptyInventoryTable').on('click', '.delete-lpg-empty-inventory', function () {
+        deleteId = Number($(this).data('id'));
+        const row = table.rows().data().toArray().find(item => Number(item.cashiers_report_lpg_empty_inventory_id) === deleteId);
+        $('#lpg_empty_delete_item').text(row?.product_name || 'this product');
+        $('#lpg_empty_delete_error').addClass('d-none');
+        showModal(document.getElementById('CashierReportLpgEmptyInventoryDeleteModal'));
+    });
+    $('#confirm-delete-lpg-empty-inventory').on('click', function () {
+        if (!deleteId) return;
+        const button = $(this).prop('disabled', true);
+        $.ajax({url: "{{ route('DeleteLpgEmptyInventory') }}", type: 'POST', headers: headers, data: {cashiers_report_id: reportId, cashiers_report_lpg_empty_inventory_id: deleteId}})
+            .done(response => {
+                hideModal(document.getElementById('CashierReportLpgEmptyInventoryDeleteModal'));
+                table.ajax.reload(null, false);
+                if (typeof showSuccessModal === 'function') showSuccessModal(response.message);
+            })
+            .fail(xhr => $('#lpg_empty_delete_error').text(errorText(xhr, 'Unable to delete empty stock.')).removeClass('d-none'))
+            .always(() => button.prop('disabled', false));
+    });
+    $('#lpg-empty-inventory-tab').on('shown.bs.tab', () => table.columns.adjust());
+});
+</script>

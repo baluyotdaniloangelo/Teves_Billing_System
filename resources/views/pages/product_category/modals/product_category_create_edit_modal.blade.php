@@ -95,6 +95,22 @@
 
                                 </div>
 
+                                <div class="col-md-6">
+                                    <label for="category_code" class="form-label fw-semibold mb-2">Category Code (3 letters)</label>
+                                    <input type="text"
+                                           class="form-control form-control-lg rounded-3 text-uppercase"
+                                           id="category_code"
+                                           name="category_code"
+                                           placeholder="e.g. FUE"
+                                           minlength="3"
+                                           maxlength="3"
+                                           pattern="[A-Za-z]{3}"
+                                           autocomplete="off"
+                                           required>
+                                    <div class="form-text">Suggested from the category name; used as the prefix for product codes.</div>
+                                    <span class="invalid-feedback" id="category_code_error"></span>
+                                </div>
+
 
                             </div>
 

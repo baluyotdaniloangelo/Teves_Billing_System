@@ -372,6 +372,7 @@ public function client_info(Request $request)
             'client_id',
             'client_name',
             'customer_type',
+            'client_line_of_business',
             'client_account_number',
 
             // Address
@@ -428,6 +429,8 @@ public function client_info(Request $request)
 
         'client_name' =>
             $data->client_name,
+
+        'client_line_of_business' => $data->client_line_of_business,
 
         'customer_type' =>
             $data->customer_type,
@@ -550,6 +553,7 @@ public function client_info(Request $request)
 			[
 				'client_name'           => 'required|unique:teves_client_table,client_name',
 				'customer_type'         => 'required',
+				'client_line_of_business' => 'nullable|string|max:255',
 				
 				'client_address'        => 'required',
 				
@@ -647,6 +651,8 @@ public function client_info(Request $request)
 
 		$client->customer_type =
 			$request->customer_type;
+
+		$client->client_line_of_business = $request->client_line_of_business;
 
 		$client->client_account_number =
 			$client_account_number;
@@ -792,6 +798,7 @@ public function client_info(Request $request)
 				'clientID'              => 'required|integer|exists:teves_client_table,client_id',
 				'client_name'           => 'required|unique:teves_client_table,client_name,' . $request->clientID . ',client_id',
 				'customer_type'         => 'required',
+				'client_line_of_business' => 'nullable|string|max:255',
 				
 				'client_address'        => 'required',
 						  				
@@ -904,6 +911,8 @@ public function client_info(Request $request)
 
 		$client->customer_type =
 			$request->customer_type;
+
+		$client->client_line_of_business = $request->client_line_of_business;
 
 
 		$client->client_id_type =

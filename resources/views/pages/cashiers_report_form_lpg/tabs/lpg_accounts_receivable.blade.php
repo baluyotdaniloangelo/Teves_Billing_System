@@ -1,8 +1,8 @@
 <!-- PRODUCT TAB -->
-<div class="tab-pane fade show active"
+<div class="tab-pane fade"
      id="lpg_accounts_recievable"
      role="tabpanel"
-     aria-labelledby="lpg_accounts_recievable">
+     aria-labelledby="lpg_accounts_recievable-tab">
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 

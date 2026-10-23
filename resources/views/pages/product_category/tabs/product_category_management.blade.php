@@ -116,6 +116,7 @@
 
 								<th class="all">#</th>
 								<th class="all">Category Name</th>
+								<th class="all">Category Code</th>
 								<th class="all">Action</th>
 
 							</tr>

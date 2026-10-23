@@ -33,6 +33,7 @@ class ProductCategoryModel extends Model
 	
 	protected $fillable = [
 		'category_name',
+		'category_code',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',
@@ -49,6 +50,7 @@ class ProductCategoryModel extends Model
 	
 	protected static $logAttributes = [
 		'category_name',
+		'category_code',
 		'created_at',
 		'created_by_user_idx',
 		'updated_at',

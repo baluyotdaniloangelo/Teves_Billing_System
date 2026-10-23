@@ -103,7 +103,10 @@ $('#ProductformEdit').on('submit', function (event) {
             $('#productInformationHeading').text('Manage product details for ' + productName + '.');
             if (window.ProductListTable) window.ProductListTable.ajax.reload(null, false);
             if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
-            if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
+            const variantsTable = window.productMainVariantsDataTable;
+            if (variantsTable && variantsTable.ajax && typeof variantsTable.ajax.reload === 'function') {
+                variantsTable.ajax.reload(null, false);
+            }
             $('#productUpdateSuccessMessage').text(response.success || 'Product information updated successfully.');
             $('#productUpdateSuccessNotice').removeClass('d-none');
         },

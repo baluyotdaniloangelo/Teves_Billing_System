@@ -165,6 +165,7 @@
     </table>
 
     @include('printables.partials.lpg_empty_inventory')
+    @include('printables.partials.lpg_regulator_inventory')
 
     <div style="{{ $swappingRows->count() <= 8 ? 'page-break-inside: avoid;' : '' }}">
     <div class="section-title">SWAPPING</div>
@@ -172,7 +173,14 @@
         <thead><tr><th>Customer Name</th><th>Received Item</th><th>Received Qty</th><th>Replaced Item</th><th>Replaced Qty</th><th>Remarks</th></tr></thead>
         <tbody>
         @forelse($swappingRows as $row)
-            <tr><td>{{ $row->client_name ?: '-' }}</td><td>{{ $row->received_product ?: '-' }}</td><td class="num">{{ $qty($row->received_quantity) }}</td><td>{{ $row->replaced_product ?: '-' }}</td><td class="num">{{ $qty($row->replaced_quantity) }}</td><td>{{ $row->remarks ?: '-' }}</td></tr>
+            <tr>
+                <td>{{ $row['client_name'] ?: '-' }}</td>
+                <td>{{ trim(($row['received_product_name'] ?? '') . ' ' . ($row['received_product_unit_measurement'] ?? '')) ?: '-' }}</td>
+                <td class="num">{{ $row['received_product_idx'] ? $qty($row['received_quantity']) : '-' }}</td>
+                <td>{{ trim(($row['replaced_product_name'] ?? '') . ' ' . ($row['replaced_product_unit_measurement'] ?? '')) ?: '-' }}</td>
+                <td class="num">{{ $row['replaced_product_idx'] ? $qty($row['replaced_quantity']) : '-' }}</td>
+                <td>{{ $row['remarks'] ?? '-' }}</td>
+            </tr>
         @empty
             <tr><td colspan="6" class="empty">No swapping records.</td></tr>
         @endforelse
@@ -202,7 +210,7 @@
 
     <div class="pending">
         <strong>PENDING INPUT MODULES — NOT INCLUDED IN SUMMARY OR VARIANCE</strong>
-        Kitchen Products &amp; Accessories inventory; Swapped / Old Regulator inventory; LPG actual ending count; and the final theoretical-sales, inventory-variance, and cash-variance reconciliation.
+        Kitchen Products &amp; Accessories inventory; LPG actual ending count; and the final theoretical-sales, inventory-variance, and cash-variance reconciliation.
     </div>
     <p class="note">Generated {{ now()->format('m/d/Y h:i A') }}. Amounts represent saved LPG report records only.</p>
 </body>

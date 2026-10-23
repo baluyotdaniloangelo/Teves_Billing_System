@@ -180,6 +180,21 @@
 
 									</div>
 
+<!-- LINE OF BUSINESS -->
+<div class="mb-4">
+    <label for="client_line_of_business" class="form-label fw-semibold d-flex align-items-center gap-2 mb-2">
+        <span class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+              style="width:34px;height:34px;">
+            <i class="bi bi-briefcase text-success"></i>
+        </span>
+        <span>Line of Business</span>
+    </label>
+    <input type="text" class="form-control rounded-3"
+           name="client_line_of_business" id="client_line_of_business"
+           placeholder="Enter Line of Business" maxlength="255" autocomplete="off">
+    <div class="invalid-feedback" id="client_line_of_business_error"></div>
+</div>
+
 <!-- CONTACT NUMBER + EMAIL ADDRESS -->
 <div class="row g-3 mb-4">
 

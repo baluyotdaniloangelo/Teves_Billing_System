@@ -112,6 +112,7 @@ class CashiersReportLubeAndCarCareController extends Controller
               	->get([
 					'teves_product_table.product_id as product_idx',
 					'teves_product_table.product_name',
+					'teves_product_table.product_code',
 					'teves_cashiers_report_p2.product_price',
 					'teves_cashiers_report_p2.cashiers_report_p2_id',
 					'teves_cashiers_report_p2.cashiers_report_id',
@@ -132,6 +133,7 @@ class CashiersReportLubeAndCarCareController extends Controller
 				->get([
 					'teves_product_table.product_name',
 					'teves_product_table.product_id',
+					'teves_product_table.product_code',
 					'teves_cashiers_report_p2.cashiers_report_p2_id',
 					'teves_cashiers_report_p2.order_quantity',
 					'teves_cashiers_report_p2.product_price',

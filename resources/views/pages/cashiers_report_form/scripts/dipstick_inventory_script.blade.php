@@ -17,6 +17,7 @@ $(function () {
         $('#product_tank_idx_dipstick_inventory').val('');
         loadDipstickInventoryTanks();
     });
+    $('#product_idx_dipstick_inventory').on('input change', updateDipstickProductCodePreview);
 
     $('#dipstickInventoryModal').on('input change', 'input[type="number"]', calculateDipstickInventory);
     $('#dipstickInventoryModal').on('input change', 'input', function () {
@@ -66,6 +67,8 @@ function loadDipstickFuelProducts()
             products.forEach(function (product) {
                 productList.append($('<option>')
                     .attr('data-id', product.product_id)
+                    .attr('data-product-code', product.product_code || '')
+                    .attr('label', (product.product_code ? 'Code: ' + product.product_code + ' | ' : '') + product.product_name)
                     .val(product.product_name));
             });
         }
@@ -130,7 +133,17 @@ function loadDipstickInventory()
             }
         },
         columns: [
-            { data: 'product_name', render: $.fn.dataTable.render.text() },
+            {
+                data: 'product_name',
+                render: function (data, type, row) {
+                    if (type !== 'display') return (data || '') + ' ' + (row.product_code || '');
+                    const productName = $('<div>').text(data == null ? '' : String(data)).html();
+                    const productCode = $('<div>').text(row.product_code == null ? '' : String(row.product_code)).html();
+                    return productCode
+                        ? '<div class="fw-semibold">' + productName + '</div><small class="text-muted"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Code: ' + productCode + '</small>'
+                        : productName;
+                }
+            },
             { data: 'tank_name', render: $.fn.dataTable.render.text() },
             { data: 'tank_capacity', render: $.fn.dataTable.render.text() },
             { data: 'beginning_inventory', className: 'text-end', render: function (value, type) { return type === 'display' ? formatDipstickValue(value) : value; } },
@@ -181,6 +194,18 @@ function resolveDipstickOptionId(listId, value)
     const option = Array.from(document.querySelectorAll('#' + listId + ' option'))
         .find(function (item) { return item.value === value; });
     return option ? option.dataset.id : '';
+}
+
+function updateDipstickProductCodePreview(code)
+{
+    const selectedCode = code === undefined
+        ? String($('#product_list_inventory option').filter(function () {
+            return $(this).val() === $('#product_idx_dipstick_inventory').val();
+        }).first().attr('data-product-code') || '').trim()
+        : String(code || '').trim();
+
+    $('#dipstick_product_code_value').text(selectedCode);
+    $('#dipstick_product_code_preview').toggleClass('d-none', selectedCode === '');
 }
 
 function loadDipstickInventoryTanks(selectedTank = '')
@@ -240,6 +265,7 @@ function resetDipstickInventoryFields(id)
 function clearDipstickInventoryFields(id = 0)
 {
     $('#product_idx_dipstick_inventory, #product_tank_idx_dipstick_inventory').val('');
+    updateDipstickProductCodePreview('');
     $('#beginning_dipstick_inventory, #sales_in_liters_dipstick_inventory, #ugt_pumping_dipstick_inventory, #delivery_dipstick_inventory, #ending_dipstick_inventory').val('');
     $('#dipstick_inventory_id').val(id);
     $('#product_tank_list').empty();
@@ -405,6 +431,7 @@ function editDipstickInventory(id)
 
             setDipstickInventoryFormMode('edit', item.dipstick_inventory_id);
             $('#product_idx_dipstick_inventory').val(item.product_name);
+            updateDipstickProductCodePreview(item.product_code || '');
             $('#beginning_dipstick_inventory').val(item.beginning_inventory);
             $('#sales_in_liters_dipstick_inventory').val(item.sales_in_liters);
             $('#ugt_pumping_dipstick_inventory').val(item.ugt_pumping);

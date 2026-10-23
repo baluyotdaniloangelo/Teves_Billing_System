@@ -502,6 +502,7 @@ function openEditClientModal()
             $('#customer_type').val(data.customer_type);
 
             $('#client_name').val(data.client_name);
+            $('#client_line_of_business').val(data.client_line_of_business ?? '');
 
             $('#client_contact_number')
                 .val(data.client_contact_number);
@@ -686,6 +687,9 @@ function saveClient(event)
 
         client_name:
             $('#client_name').val(),
+
+        client_line_of_business:
+            $('#client_line_of_business').val(),
 
         customer_type:
             $('#customer_type').val(),
@@ -1083,6 +1087,8 @@ function handleClientValidation(xhr)
         errors.client_name
     );
 
+
+    showFieldError('client_line_of_business', errors.client_line_of_business);
 
     // Contact Number
     showFieldError(

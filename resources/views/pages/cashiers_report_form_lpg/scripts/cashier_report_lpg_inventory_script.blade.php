@@ -188,7 +188,7 @@ function inventoryEmptyMessage(mode) {
     return 'No LPG deliveries recorded.';
 }
 
-function openLpgInventoryModal(mode, record) {
+function openLpgInventoryModal(mode, record, productId) {
     const form = document.getElementById('CashierReportLpgInventoryForm');
     form.reset();
     form.classList.remove('was-validated');
@@ -198,7 +198,7 @@ function openLpgInventoryModal(mode, record) {
     const modeLabel = mode === 'BO_REPLACEMENT' ? 'B.O. Replacement' : (mode === 'DELIVERY' ? 'Delivery' : 'Beginning Inventory');
     $('#cashiers_report_lpg_inventory_id').val(record?.cashiers_report_lpg_inventory_id || 0);
     $('#lpg_inventory_mode').val(mode);
-    $('#lpg_inventory_product_idx').val(record?.product_idx || '');
+    $('#lpg_inventory_product_idx').val(record?.product_idx || productId || '').trigger('change');
     $('#lpg_inventory_supplier_idx').val(record?.supplier_idx || '');
     $('#lpg_inventory_delivery_reference_no').val(record?.delivery_reference_no || '');
     $('#lpg_inventory_quantity').val(record?.quantity ?? '');
@@ -206,7 +206,7 @@ function openLpgInventoryModal(mode, record) {
     $('.lpg-supplier-field').toggleClass('d-none', !requiresSupplier);
     $('#lpg_inventory_supplier_idx').prop('required', requiresSupplier);
     $('#CashierReportLpgInventoryModalLabel').text(`${record ? 'Edit' : 'Add'} ${modeLabel}`);
-    $('#CashierReportLpgInventoryModalDescription').text(mode === 'BO_REPLACEMENT' ? 'Record stock received from a supplier as replacement for bad-order items.' : (mode === 'DELIVERY' ? 'Record the LPG quantity delivered by a supplier.' : 'Record the actual LPG stock available at the start of the report.'));
+    $('#CashierReportLpgInventoryModalDescription').text(mode === 'BO_REPLACEMENT' ? 'Record stock received from a supplier as replacement for bad-order items.' : (mode === 'DELIVERY' ? 'Record the quantity delivered by a supplier.' : 'Record the stock available at the start of the report.'));
     $('#save-lpg-inventory').html(`<i class="bi bi-save-fill me-2"></i>${record ? 'Update' : 'Save'} ${modeLabel}`);
     showLpgInventoryModal('#CashierReportLpgInventoryModal');
 }
@@ -215,6 +215,7 @@ function reloadLpgInventoryTables() {
     if (LpgBeginningInventoryTable) LpgBeginningInventoryTable.ajax.reload(null, false);
     if (LpgDeliveryTable) LpgDeliveryTable.ajax.reload(null, false);
     if (LpgBoReplacementTable) LpgBoReplacementTable.ajax.reload(null, false);
+    $(document).trigger('lpg:inventory-changed');
 }
 
 function showLpgInventoryModal(selector) {

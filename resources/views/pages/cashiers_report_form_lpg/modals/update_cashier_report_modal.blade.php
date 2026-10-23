@@ -30,7 +30,7 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <label for="teves_branch" class="form-label fw-semibold">Branch</label>
-                            <select class="form-select rounded-3" name="teves_branch" id="teves_branch" required>
+                            <select class="form-select form-select-sm rounded-3" name="teves_branch" id="teves_branch" required>
                                 @foreach ($teves_branch as $teves_branch_cols)
                                     <option value="{{ $teves_branch_cols->branch_id }}">
                                         {{ $teves_branch_cols->branch_code }}
@@ -49,7 +49,7 @@
 
                         <div class="col-12">
                             <label for="cashiers_name" class="form-label fw-semibold">Cashier's on Duty</label>
-                            <input type="text" class="form-control rounded-3"
+                            <input type="text" class="form-control form-control-sm rounded-3"
                                    name="cashiers_name" id="cashiers_name"
                                    placeholder="Enter cashier's name" autocomplete="off" required>
                             <div class="invalid-feedback" id="cashiers_nameError">Please enter the cashier's name.</div>
@@ -57,7 +57,7 @@
 
                         <div class="col-12">
                             <label for="forecourt_attendant" class="form-label fw-semibold">Employee's On-Duty</label>
-                            <input type="text" class="form-control rounded-3"
+                            <input type="text" class="form-control form-control-sm rounded-3"
                                    name="forecourt_attendant" id="forecourt_attendant"
                                    placeholder="Enter employee's name" autocomplete="off" required>
                             <div class="invalid-feedback" id="forecourt_attendantError">Please enter the employee's name.</div>
@@ -65,7 +65,7 @@
 
                         <div class="col-12">
                             <label for="shift" class="form-label fw-semibold">Shift</label>
-                            <select class="form-select rounded-3" name="shift" id="shift" required>
+                            <select class="form-select form-select-sm rounded-3" name="shift" id="shift" required>
                                 <option value="1st Shift">1st Shift</option>
                                 <option value="2nd Shift">2nd Shift</option>
                                 <option value="3rd Shift">3rd Shift</option>

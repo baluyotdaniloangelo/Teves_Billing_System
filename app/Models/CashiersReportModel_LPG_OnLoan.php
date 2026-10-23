@@ -16,11 +16,12 @@ class CashiersReportModel_LPG_OnLoan extends Model
     protected $table = 'teves_cashiers_report_lpg_on_loan';
     protected $primaryKey = 'cashiers_report_lpg_on_loan_id';
     protected $dates = ['deleted_at'];
+    protected $casts = ['borrow_stock_state' => 'string', 'return_stock_state' => 'string'];
 
     protected $fillable = [
         'cashiers_report_id', 'client_idx', 'dr_number', 'borrow_product_idx',
         'borrow_quantity', 'borrow_alum_quantity', 'return_product_idx',
-        'return_quantity', 'return_alum_quantity', 'remarks', 'created_at',
+        'return_quantity', 'return_alum_quantity', 'borrow_stock_state', 'return_stock_state', 'remarks', 'created_at',
         'created_by_user_idx', 'updated_at', 'updated_by_user_idx', 'deleted_at',
         'deleted_by_user_id',
     ];
@@ -30,7 +31,7 @@ class CashiersReportModel_LPG_OnLoan extends Model
     protected static $logAttributes = [
         'cashiers_report_id', 'client_idx', 'dr_number', 'borrow_product_idx',
         'borrow_quantity', 'borrow_alum_quantity', 'return_product_idx',
-        'return_quantity', 'return_alum_quantity', 'remarks', 'created_at',
+        'return_quantity', 'return_alum_quantity', 'borrow_stock_state', 'return_stock_state', 'remarks', 'created_at',
         'created_by_user_idx', 'updated_at', 'updated_by_user_idx', 'deleted_at',
         'deleted_by_user_id',
     ];

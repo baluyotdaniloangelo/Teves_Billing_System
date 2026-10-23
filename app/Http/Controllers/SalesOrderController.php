@@ -1357,6 +1357,7 @@ class SalesOrderController extends Controller
 		$clients_price_list = DB::table('teves_product_table as pt')
 			->select([
 				'pt.product_id as product_idx',
+				'pt.product_code',
 				'pt.product_name',
 				'pt.product_unit_measurement',
 				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
@@ -1387,6 +1388,7 @@ class SalesOrderController extends Controller
 		$clients_price_list = DB::table('teves_product_table as pt')
 			->select([
 				'pt.product_id as product_idx',
+				'pt.product_code',
 				'pt.product_name',
 				'pt.product_unit_measurement',
 				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')

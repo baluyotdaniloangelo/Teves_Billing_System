@@ -85,12 +85,19 @@ LUBRICANTS & CAR CARE PRODUCTS MODAL
                             <datalist id="lubeCarCareProductList">
                                 @foreach ($product_data as $product_data_cols)
                                     <option
-                                        label="&#8369; {{ number_format($product_data_cols->product_price, 2) }}"
+                                        label="{{ $product_data_cols->product_code ? 'Code: '.$product_data_cols->product_code.' | ' : '' }}&#8369; {{ number_format($product_data_cols->product_price, 2) }}"
                                         data-id="{{ $product_data_cols->product_id }}"
                                         data-price="{{ $product_data_cols->product_price }}"
+                                        data-product-code="{{ $product_data_cols->product_code }}"
                                         value="{{ $product_data_cols->product_name }}">
                                 @endforeach
                             </datalist>
+
+                            <div class="form-text d-none mt-1" id="lube_car_care_product_code_preview">
+                                <i class="bi bi-upc-scan text-success me-1" aria-hidden="true"></i>
+                                Product Code:
+                                <span class="badge bg-light text-dark border" id="lube_car_care_product_code_value"></span>
+                            </div>
 
                             <div class="invalid-feedback" id="lube_car_care_productError">
                                 Please select a product.

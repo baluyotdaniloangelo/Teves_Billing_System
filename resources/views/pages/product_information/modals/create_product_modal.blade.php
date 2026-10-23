@@ -13,6 +13,18 @@
     background: linear-gradient(115deg, var(--product-info-burgundy), var(--product-info-teal) 72%, var(--product-info-sage));
 }
 
+#CreateProductModal .product-capacity-field {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+}
+
+#CreateProductModal .product-capacity-field .form-control,
+#CreateProductModal .product-capacity-field .form-select {
+    width: 100%;
+    max-width: 100%;
+}
+
 @media (max-width: 575.98px) {
     #CreateProductModal .create-product-modal-header {
         padding: .75rem;

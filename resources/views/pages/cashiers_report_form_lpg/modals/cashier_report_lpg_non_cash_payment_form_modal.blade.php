@@ -39,7 +39,7 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <label for="lpg_non_cash_mode" class="form-label fw-semibold">Mode of Payment</label>
-                            <select class="form-select form-select-lg rounded-3"
+                            <select class="form-select form-select-sm rounded-3"
                                     id="lpg_non_cash_mode" name="mode_of_payment" required>
                                 <option value="" selected disabled>Select payment mode</option>
                                 <option value="limitless">Limitless Payment</option>
@@ -52,7 +52,7 @@
 
                         <div class="col-12">
                             <label for="lpg_non_cash_payer_name" class="form-label fw-semibold">Payer Name</label>
-                            <input type="text" class="form-control form-control-lg rounded-3"
+                            <input type="text" class="form-control form-control-sm rounded-3"
                                    id="lpg_non_cash_payer_name" name="payer_name"
                                    maxlength="255" placeholder="Enter payer name">
                             <div class="invalid-feedback" id="payer_nameError">Please check the payer name.</div>
@@ -60,7 +60,7 @@
 
                         <div class="col-12">
                             <label for="lpg_non_cash_payer_number" class="form-label fw-semibold">Account Number</label>
-                            <input type="text" class="form-control form-control-lg rounded-3"
+                            <input type="text" class="form-control form-control-sm rounded-3"
                                    id="lpg_non_cash_payer_number" name="payer_number"
                                    maxlength="100" placeholder="Enter account number">
                             <div class="invalid-feedback" id="payer_numberError">Please check the account number.</div>
@@ -68,7 +68,7 @@
 
                         <div class="col-12">
                             <label for="lpg_non_cash_reference_no" class="form-label fw-semibold">Reference Number</label>
-                            <input type="text" class="form-control form-control-lg rounded-3"
+                            <input type="text" class="form-control form-control-sm rounded-3"
                                    id="lpg_non_cash_reference_no" name="reference_no"
                                    maxlength="100" placeholder="Check number or transaction reference">
                             <div class="invalid-feedback" id="reference_noError">Please check the reference number.</div>
@@ -85,7 +85,7 @@
                             <label for="lpg_non_cash_amount" class="form-label fw-semibold">Amount</label>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text">₱</span>
-                                <input type="number" class="form-control rounded-end-3"
+                                <input type="number" class="form-control form-control-sm rounded-end-3"
                                        id="lpg_non_cash_amount" name="amount"
                                        min="0.01" step="0.01" required placeholder="0.00">
                             </div>

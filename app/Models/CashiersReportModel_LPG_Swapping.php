@@ -16,10 +16,11 @@ class CashiersReportModel_LPG_Swapping extends Model
     protected $table = 'teves_cashiers_report_lpg_swapping';
     protected $primaryKey = 'cashiers_report_lpg_swapping_id';
     protected $dates = ['deleted_at'];
+    protected $casts = ['received_stock_state' => 'string', 'replaced_stock_state' => 'string'];
 
     protected $fillable = [
         'cashiers_report_id', 'client_idx', 'received_product_idx', 'received_quantity',
-        'replaced_product_idx', 'replaced_quantity', 'remarks', 'created_at',
+        'replaced_product_idx', 'replaced_quantity', 'received_stock_state', 'replaced_stock_state', 'remarks', 'created_at',
         'created_by_user_idx', 'updated_at', 'updated_by_user_idx', 'deleted_at',
         'deleted_by_user_id',
     ];
@@ -28,7 +29,7 @@ class CashiersReportModel_LPG_Swapping extends Model
     protected static $logOnlyDirty = true;
     protected static $logAttributes = [
         'cashiers_report_id', 'client_idx', 'received_product_idx', 'received_quantity',
-        'replaced_product_idx', 'replaced_quantity', 'remarks', 'created_at',
+        'replaced_product_idx', 'replaced_quantity', 'received_stock_state', 'replaced_stock_state', 'remarks', 'created_at',
         'created_by_user_idx', 'updated_at', 'updated_by_user_idx', 'deleted_at',
         'deleted_by_user_id',
     ];

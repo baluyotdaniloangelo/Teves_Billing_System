@@ -29,6 +29,11 @@
                             <div class="col-md-8">
                                 <label for="product_idx_dipstick_inventory" class="form-label fw-semibold">Product</label>
                                 <input class="form-control rounded-3" list="product_list_inventory" name="product_name_dipstick_inventory" id="product_idx_dipstick_inventory" autocomplete="off" placeholder="Loading Fuel products..." required disabled>
+                                <div class="form-text d-none mt-1" id="dipstick_product_code_preview">
+                                    <i class="bi bi-upc-scan text-success me-1" aria-hidden="true"></i>
+                                    Product Code:
+                                    <span class="badge bg-light text-dark border" id="dipstick_product_code_value"></span>
+                                </div>
                                 <div class="invalid-feedback" id="product_idx_dipstick_inventoryError"></div>
                             </div>
                             <div class="col-md-4">

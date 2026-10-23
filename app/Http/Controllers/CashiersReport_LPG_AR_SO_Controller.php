@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\CashiersReportModel_LPG_AR_SO;
+use App\Services\LpgKitchenProducts;
+use App\Services\LpgRegulatorProducts;
+use App\Services\LpgEmptyReceipt;
+use App\Services\LpgEmptyInventorySummary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -42,6 +46,10 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
                 'teves_product_table.product_unit_measurement',
                 'teves_cashiers_report_lpg_ar_so.dr_number',
                 'teves_cashiers_report_lpg_ar_so.item_description',
+                'teves_cashiers_report_lpg_ar_so.sale_stock_type',
+                'teves_cashiers_report_lpg_ar_so.empty_received_product_idx',
+                'teves_cashiers_report_lpg_ar_so.empty_received_quantity',
+                'teves_cashiers_report_lpg_ar_so.empty_swapping_idx',
                 'teves_cashiers_report_lpg_ar_so.order_quantity',
                 'teves_cashiers_report_lpg_ar_so.unit_price',
                 'teves_cashiers_report_lpg_ar_so.discount_per_unit',
@@ -85,6 +93,10 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
                 'teves_product_table.product_unit_measurement',
                 'teves_cashiers_report_lpg_ar_so.dr_number',
                 'teves_cashiers_report_lpg_ar_so.item_description',
+                'teves_cashiers_report_lpg_ar_so.sale_stock_type',
+                'teves_cashiers_report_lpg_ar_so.empty_received_product_idx',
+                'teves_cashiers_report_lpg_ar_so.empty_received_quantity',
+                'teves_cashiers_report_lpg_ar_so.empty_swapping_idx',
                 'teves_cashiers_report_lpg_ar_so.order_quantity',
                 'teves_cashiers_report_lpg_ar_so.unit_price',
                 'teves_cashiers_report_lpg_ar_so.discount_per_unit',
@@ -99,16 +111,21 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
 
     public function save_lpg_ar_so(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $isKitchen = LpgKitchenProducts::isProduct((int) $request->input('product_idx'));
+        $isRegulator = LpgRegulatorProducts::isProduct((int) $request->input('product_idx'));
+        if ($isKitchen || $isRegulator) $request->merge(['sale_stock_type' => $request->item_description === 'Return' ? null : ($isRegulator ? 'REGULATOR' : 'KITCHEN_ITEM')]);
+        $validator = Validator::make($request->all(), array_merge([
             'cashiers_report_id' => ['required', 'integer'],
             'ar_date' => ['nullable', 'date'],
             'client_idx' => ['required', 'integer', 'exists:teves_client_table,client_id'],
             'product_idx' => ['required', 'integer', 'exists:teves_product_table,product_id'],
             'dr_number' => ['nullable', 'string', 'max:100'],
             'item_description' => ['required', 'in:Sales Order,Cash Sales,Return'],
+            'sale_stock_type' => ['required_if:item_description,Sales Order,Cash Sales', 'nullable', $isRegulator ? 'in:REGULATOR' : ($isKitchen ? 'in:KITCHEN_ITEM' : 'in:REFILL_SWAP,CYLINDER_WITH_CONTENT,EMPTY_CONTAINER')],
             'order_quantity' => ['required', 'numeric', 'min:0.01'],
             'discount_per_unit' => ['required', 'numeric', 'min:0'],
-        ]);
+        ], LpgEmptyReceipt::rules($request, $isKitchen || $isRegulator)));
+        $validator->after(function ($validator) use ($request) { LpgEmptyReceipt::validateQuantity($validator, $request); });
 
         if ($validator->fails()) {
             return response()->json([
@@ -118,7 +135,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         }
 
         $data = $validator->validated();
-        $unitPrice = (float) DB::table('teves_product_table')
+        $unitPrice = ($data['sale_stock_type'] ?? null) === 'EMPTY_CONTAINER' ? round((float) $data['unit_price'], 2) : (float) DB::table('teves_product_table')
             ->where('product_id', $data['product_idx'])
             ->value('product_price');
         $discountPerUnit = (float) $data['discount_per_unit'];
@@ -142,6 +159,8 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         $record->product_idx = $data['product_idx'];
         $record->dr_number = $data['dr_number'] ?? null;
         $record->item_description = $data['item_description'] ?? 'n/a';
+        $record->sale_stock_type = $data['item_description'] === 'Return' ? null : $data['sale_stock_type'];
+        LpgEmptyReceipt::fill($record, $data);
         $record->order_quantity = $data['order_quantity'];
         $record->unit_price = $unitPrice;
         $record->discount_per_unit = $discountPerUnit;
@@ -153,7 +172,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         $record->created_by_user_idx = $userId;
         $record->updated_at = $now;
         $record->updated_by_user_idx = $userId;
-        $record->save();
+        app(LpgEmptyInventorySummary::class)->saveSource('sale', $record);
 
         return response()->json([
             'status' => true,
@@ -164,7 +183,10 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
 
     public function update_lpg_ar_so(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $isKitchen = LpgKitchenProducts::isProduct((int) $request->input('product_idx'));
+        $isRegulator = LpgRegulatorProducts::isProduct((int) $request->input('product_idx'));
+        if ($isKitchen || $isRegulator) $request->merge(['sale_stock_type' => $request->item_description === 'Return' ? null : ($isRegulator ? 'REGULATOR' : 'KITCHEN_ITEM')]);
+        $validator = Validator::make($request->all(), array_merge([
             'cashiers_report_lpg_ar_so_id' => ['required', 'integer'],
             'cashiers_report_id' => ['required', 'integer'],
             'ar_date' => ['nullable', 'date'],
@@ -172,9 +194,11 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
             'product_idx' => ['required', 'integer', 'exists:teves_product_table,product_id'],
             'dr_number' => ['nullable', 'string', 'max:100'],
             'item_description' => ['required', 'in:Sales Order,Cash Sales,Return'],
+            'sale_stock_type' => ['required_if:item_description,Sales Order,Cash Sales', 'nullable', $isRegulator ? 'in:REGULATOR' : ($isKitchen ? 'in:KITCHEN_ITEM' : 'in:REFILL_SWAP,CYLINDER_WITH_CONTENT,EMPTY_CONTAINER')],
             'order_quantity' => ['required', 'numeric', 'min:0.01'],
             'discount_per_unit' => ['required', 'numeric', 'min:0'],
-        ]);
+        ], LpgEmptyReceipt::rules($request, $isKitchen || $isRegulator)));
+        $validator->after(function ($validator) use ($request) { LpgEmptyReceipt::validateQuantity($validator, $request); });
 
         if ($validator->fails()) {
             return response()->json([
@@ -184,10 +208,13 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         }
 
         $data = $validator->validated();
-
-        $unitPrice = (float) DB::table('teves_product_table')
-            ->where('product_id', $data['product_idx'])
-            ->value('product_price');
+        $record = CashiersReportModel_LPG_AR_SO::where('cashiers_report_lpg_ar_so_id', $data['cashiers_report_lpg_ar_so_id'])
+            ->where('cashiers_report_id', $data['cashiers_report_id'])->firstOrFail();
+        // Classifying an existing sale must retain its recorded price.
+        $unitPrice = ($data['sale_stock_type'] ?? null) === 'EMPTY_CONTAINER' ? round((float) $data['unit_price'], 2)
+            : ((int) $record->product_idx === (int) $data['product_idx'] && $record->sale_stock_type !== 'EMPTY_CONTAINER'
+                ? (float) $record->unit_price
+                : (float) DB::table('teves_product_table')->where('product_id', $data['product_idx'])->value('product_price'));
         $discountPerUnit = (float) $data['discount_per_unit'];
 
         if ($discountPerUnit > $unitPrice) {
@@ -199,17 +226,12 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
             ], 422);
         }
 
-        $record = CashiersReportModel_LPG_AR_SO::where(
-                'cashiers_report_lpg_ar_so_id',
-                $data['cashiers_report_lpg_ar_so_id']
-            )
-            ->where('cashiers_report_id', $data['cashiers_report_id'])
-            ->firstOrFail();
-
         $record->client_idx = $data['client_idx'];
         $record->product_idx = $data['product_idx'];
         $record->dr_number = $data['dr_number'] ?? null;
         $record->item_description = $data['item_description'] ?? 'n/a';
+        $record->sale_stock_type = $data['item_description'] === 'Return' ? null : $data['sale_stock_type'];
+        LpgEmptyReceipt::fill($record, $data);
         $record->order_quantity = $data['order_quantity'];
         $record->unit_price = $unitPrice;
         $record->discount_per_unit = $discountPerUnit;
@@ -219,7 +241,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         );
         $record->updated_at = now();
         $record->updated_by_user_idx = Session::get('loginID', 0);
-        $record->save();
+        app(LpgEmptyInventorySummary::class)->saveSource('sale', $record);
 
         return response()->json([
             'status' => true,
@@ -244,7 +266,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         $record = CashiersReportModel_LPG_AR_SO::findOrFail(
             $request->cashiers_report_lpg_ar_so_id
         );
-        $record->delete();
+        app(LpgEmptyInventorySummary::class)->deleteSource('sale', $record);
 
         return response()->json([
             'status' => true,

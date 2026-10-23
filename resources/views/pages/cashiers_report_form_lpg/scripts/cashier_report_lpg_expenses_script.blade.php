@@ -105,6 +105,7 @@ function formatLpgExpenseMoney(value) {
 
 function reloadLpgExpensesTable() {
     if (LpgExpensesTable) LpgExpensesTable.ajax.reload(null, false);
+    $(document).trigger('lpg:inventory-changed');
 }
 
 function showLpgExpenseModal(selector) {
@@ -284,8 +285,7 @@ $('#CashierReportLpgExpensesForm').on('submit', function (event) {
     });
 });
 
-$(document).on('click', '.EditLpgExpense', function () {
-    const id = $(this).data('id');
+function editLpgExpenseRecord(id) {
     $.ajax({
         url: "{{ route('LpgExpenseInfo') }}",
         type: 'POST',
@@ -322,6 +322,10 @@ $(document).on('click', '.EditLpgExpense', function () {
             }
         }
     });
+}
+
+$(document).on('click', '.EditLpgExpense', function () {
+    editLpgExpenseRecord($(this).data('id'));
 });
 
 $(document).on('click', '.DeleteLpgExpense', function () {

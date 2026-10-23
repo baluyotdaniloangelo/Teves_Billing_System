@@ -20,6 +20,42 @@ use DataTables;
 class ProductController extends Controller
 {
 	
+	/*Public read-only page opened by a product price QR code*/
+	public function product_price_lookup(Request $request)
+	{
+		$productCode = trim((string) $request->query('code', ''));
+		if ($productCode === '' || strlen($productCode) > 100) abort(404);
+
+		$product = ProductModel::query()
+			->leftJoin('teves_product_category', 'teves_product_table.category_idx', '=', 'teves_product_category.category_id')
+			->where('teves_product_table.product_code', $productCode)
+			->whereNull('teves_product_table.deleted_at')
+			->first([
+				'teves_product_table.product_id',
+				'teves_product_table.product_code',
+				'teves_product_table.product_name',
+				'teves_product_table.product_price',
+				'teves_product_table.product_unit_measurement',
+				'teves_product_category.category_name',
+			]);
+
+		if (!$product) abort(404);
+
+		$branchPrices = DB::table('teves_product_branch_price_table as product_branch_price')
+			->join('teves_branch_table as branch', 'branch.branch_id', '=', 'product_branch_price.branch_idx')
+			->where('product_branch_price.product_idx', $product->product_id)
+			->orderBy('branch.branch_name')
+			->get([
+				'branch.branch_name',
+				'branch.branch_code',
+				'product_branch_price.branch_price',
+			]);
+
+		return response()
+			->view('pages.product_information.qr_price_lookup', compact('product', 'branchPrices'))
+			->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+	}
+
 	/*Load Product Interface*/
 	public function product(Request $request){
 		
@@ -101,6 +137,7 @@ class ProductController extends Controller
 			->whereNull('teves_product_table.product_main_idx')
 			->select(
 				'teves_product_table.product_id',
+				'teves_product_table.product_code',
 				'teves_product_table.product_name',
 				'teves_product_table.category_idx',
 				'teves_product_table.product_price',
@@ -132,6 +169,7 @@ class ProductController extends Controller
 			->where('teves_product_table.product_main_idx', $request->product_main_idx)
 			->select(
 				'teves_product_table.product_id',
+				'teves_product_table.product_code',
 				'teves_product_table.product_name',
 				'teves_product_table.product_price',
 				'teves_product_table.product_unit_measurement',
@@ -313,7 +351,20 @@ class ProductController extends Controller
 			$Product->product_capacity = $request->filled('product_capacity') ? $request->input('product_capacity') : null;
 			$Product->product_capacity_unit = $request->filled('product_capacity_unit') ? $request->input('product_capacity_unit') : null;
 			
-			$result = $Product->save();
+            $result = $Product->save();
+            if ($result) {
+                $categoryCode = ProductCategoryModel::where('category_id', $Product->category_idx)->value('category_code') ?: 'UNK';
+                $categoryPrefix = strtoupper(substr((string) $categoryCode, 0, 3));
+                $transformedId = (int) strrev((string) ((int) $Product->product_id + 100)) + 1000;
+                $baseProductCode = $categoryPrefix . $transformedId;
+                $Product->product_code = $baseProductCode;
+                $collisionSuffix = 2;
+                while (DB::table('teves_product_table')->where('product_code', $Product->product_code)->exists()) {
+                    $Product->product_code = $baseProductCode . 'X' . $collisionSuffix;
+                    $collisionSuffix++;
+                }
+                DB::table('teves_product_table')->where('product_id', $Product->product_id)->update(['product_code' => $Product->product_code]);
+            }
 			
 			/*Get Last ID*/
 			$last_transaction_id = $Product->product_id;

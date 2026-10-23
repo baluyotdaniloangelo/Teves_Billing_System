@@ -332,11 +332,13 @@ $(function () {
         order: [[1, 'asc']],
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center text-muted' },
+            { data: 'product_code', name: 'teves_product_table.product_code', defaultContent: '—', render: $.fn.dataTable.render.text(), className: 'text-center fw-semibold' },
             { data: 'product_name', name: 'teves_product_table.product_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold' },
             { data: 'category_name', name: 'teves_product_category.category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
             { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
             { data: 'product_unit_measurement', className: 'text-center' },
             { data: 'product_capacity', name: 'teves_product_table.product_capacity', defaultContent: '-', render: renderProductCapacity, className: 'text-center' },
+            { data: null, orderable: false, searchable: false, className: 'text-center', render: function (data, type, row) { return window.renderProductQrColumn ? window.renderProductQrColumn(data, type, row) : ''; } },
             { data: 'action', orderable: false, searchable: false, className: 'text-center' }
         ]
     });
@@ -371,6 +373,10 @@ $(function () {
         window.ProductListTable.page.len(10).draw();
     });
 
+    $('#unassigned_variant_search').val(window.UnassignedProductTable.search());
+    $('#unassigned_variant_category').val(window.UnassignedProductTable.column(3).search());
+    $('#unassigned_variant_length').val(String(window.UnassignedProductTable.page.len()));
+
     let unassignedSearchTimer;
     $('#unassigned_variant_search').on('input', function () {
         const searchValue = this.value;
@@ -380,8 +386,21 @@ $(function () {
         }, 300);
     });
 
+    $('#unassigned_variant_category').on('change', function () {
+        window.UnassignedProductTable.column(3).search(this.value).draw();
+    });
+
     $('#unassigned_variant_length').on('change', function () {
         window.UnassignedProductTable.page.len(Number(this.value)).draw();
+    });
+
+    $('#resetUnassignedVariantFilters').on('click', function () {
+        $('#unassigned_variant_search').val('');
+        $('#unassigned_variant_category').val('');
+        $('#unassigned_variant_length').val('10');
+        window.UnassignedProductTable.search('');
+        window.UnassignedProductTable.column(3).search('');
+        window.UnassignedProductTable.page.len(10).draw();
     });
 
     $('#productCatalogTabs button[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
@@ -584,7 +603,10 @@ $(document).on('click', '#deleteProductConfirmed', function (event) {
         $('#ProductDeleteModal').modal('hide');
         window.ProductListTable.ajax.reload(null, false);
         if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
-        if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
+        const variantsTable = window.productMainVariantsDataTable;
+        if (variantsTable && variantsTable.ajax && typeof variantsTable.ajax.reload === 'function') {
+            variantsTable.ajax.reload(null, false);
+        }
         if (String(getSelectedProductId()) === String(productId)) {
             window.selectedProductId = null;
             $('#ProductInformationModal').modal('hide');

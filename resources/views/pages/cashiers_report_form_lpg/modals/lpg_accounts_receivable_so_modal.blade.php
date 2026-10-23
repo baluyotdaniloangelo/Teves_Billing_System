@@ -62,7 +62,7 @@ ADD / EDIT MODAL
                                 <i class="bi bi-calendar-event me-2 text-success"></i>Date
                             </label>
                             <input type="date"
-                                   class="form-control form-control-lg rounded-3"
+                                   class="form-control form-control-sm rounded-3"
                                    id="ar_date"
                                    name="ar_date"
                                    required>
@@ -76,7 +76,7 @@ ADD / EDIT MODAL
                                 <i class="bi bi-file-earmark-text me-2 text-success"></i>DR Number
                             </label>
                             <input type="text"
-                                   class="form-control form-control-lg rounded-3"
+                                   class="form-control form-control-sm rounded-3"
                                    id="dr_number"
                                    name="dr_number"
                                    maxlength="100"
@@ -92,7 +92,7 @@ ADD / EDIT MODAL
                                 <i class="bi bi-person-lines-fill me-2 text-success"></i>Account Name
                             </label>
                             <input type="text"
-                                   class="form-control form-control-lg rounded-3"
+                                   class="form-control form-control-sm rounded-3"
                                    list="lpgArClientNameList"
                                    id="ar_account_id"
                                    name="ar_account_id"
@@ -134,7 +134,7 @@ ADD / EDIT MODAL
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text">₱</span>
                                 <input type="number"
-                                       class="form-control rounded-end-3"
+                                       class="form-control form-control-sm rounded-end-3"
                                        id="amount_received"
                                        name="amount_received"
                                        min="0"

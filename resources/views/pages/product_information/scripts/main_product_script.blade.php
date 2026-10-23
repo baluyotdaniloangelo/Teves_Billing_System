@@ -6,10 +6,16 @@
     let activeMainProductName = '';
     let unlinkReturnAfterSuccess = false;
 
+    function reloadAjaxTable(table, resetPaging) {
+        if (!table || !table.ajax || typeof table.ajax.reload !== 'function') return false;
+        table.ajax.reload(null, resetPaging === true);
+        return true;
+    }
+
     function refreshProductTables() {
-        if (window.ProductListTable) window.ProductListTable.ajax.reload(null, false);
-        if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
-        if (window.MainProductVariantsTable && activeMainProductId) window.MainProductVariantsTable.ajax.reload(null, false);
+        reloadAjaxTable(window.ProductListTable, false);
+        reloadAjaxTable(window.UnassignedProductTable, false);
+        if (activeMainProductId) reloadAjaxTable(window.productMainVariantsDataTable, false);
     }
 
     function loadMainOptions($select, selectedId, categoryId) {
@@ -61,12 +67,12 @@
     }
 
     function initializeVariantsTable() {
-        if (window.MainProductVariantsTable) {
-            window.MainProductVariantsTable.ajax.reload(null, false);
+        if (window.productMainVariantsDataTable) {
+            reloadAjaxTable(window.productMainVariantsDataTable, false);
             return;
         }
 
-        window.MainProductVariantsTable = $('#MainProductVariantsTable').DataTable({
+        window.productMainVariantsDataTable = $('#MainProductVariantsTable').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
@@ -82,11 +88,13 @@
             },
             columns: [
                 { data: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center text-muted' },
+                { data: 'product_code', name: 'teves_product_table.product_code', defaultContent: '—', render: $.fn.dataTable.render.text(), className: 'text-center fw-semibold' },
                 { data: 'product_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold' },
                 { data: 'category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
                 { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
                 { data: 'product_unit_measurement', className: 'text-center' },
                 { data: 'product_capacity', name: 'teves_product_table.product_capacity', defaultContent: '-', render: renderProductCapacity, className: 'text-center' },
+                { data: null, orderable: false, searchable: false, className: 'text-center', render: function (data, type, row) { return window.renderProductQrColumn ? window.renderProductQrColumn(data, type, row) : ''; } },
                 { data: 'action', orderable: false, searchable: false, className: 'text-center' }
             ]
         });
@@ -196,12 +204,12 @@
         $('#ManageMainProductModal').on('shown.bs.modal', function () {
             initializeVariantsTable();
             window.setTimeout(function () {
-                if (window.MainProductVariantsTable) window.MainProductVariantsTable.columns.adjust();
+                if (window.productMainVariantsDataTable) window.productMainVariantsDataTable.columns.adjust();
             }, 50);
         });
 
         $('#ManageMainProductModal').on('click', '.select-product', function () {
-            const row = getProductRowData(this, window.MainProductVariantsTable);
+            const row = getProductRowData(this, window.productMainVariantsDataTable);
             if (!row.product_id) return;
             window.returnToMainVariantsId = activeMainProductId;
             $('#ProductInformationModal').one('shown.bs.modal', function () {
@@ -226,7 +234,7 @@
                 window.returnToMainVariantsId = null;
                 window.pendingProductMainID = null;
                 const reopen = function () {
-                    if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
+                    reloadAjaxTable(window.productMainVariantsDataTable, false);
                     $('#ManageMainProductModal').modal('show');
                 };
                 window.setTimeout(reopen, 0);
@@ -247,7 +255,7 @@
             window.returnToMainVariantsId = null;
             window.pendingProductMainID = null;
             const reopen = function () {
-                if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
+                reloadAjaxTable(window.productMainVariantsDataTable, false);
                 $('#ManageMainProductModal').modal('show');
             };
             window.setTimeout(reopen, 0);
@@ -260,7 +268,7 @@
 
         $('#ManageMainProductModal, #UnlinkProductVariantModal').on('click', '#MainProductVariantsTable .unlink-product-variant', function (event) {
             event.preventDefault();
-            const row = getProductRowData(this, window.MainProductVariantsTable);
+            const row = getProductRowData(this, window.productMainVariantsDataTable);
             window.returnToMainVariantsId = activeMainProductId;
             $('#unlink_product_id').val(row.product_id || '');
             $('#unlinkProductName').text(row.product_name || 'this variant');
@@ -289,8 +297,8 @@
                 product_main_idx: activeMainProductId,
                 _token: "{{ csrf_token() }}"
             }).done(function (response) {
-                if (window.ProductListTable) window.ProductListTable.ajax.reload(null, false);
-                if (window.UnassignedProductTable) window.UnassignedProductTable.ajax.reload(null, false);
+                reloadAjaxTable(window.ProductListTable, false);
+                reloadAjaxTable(window.UnassignedProductTable, false);
                 unlinkReturnAfterSuccess = true;
                 $('#UnlinkProductVariantModal').one('hidden.bs.modal', function () {
                     const successModal = document.getElementById('ProductSuccessModal');
@@ -298,7 +306,7 @@
                         successModal.addEventListener('hidden.bs.modal', function () {
                             window.returnToMainVariantsId = null;
                             $('#ManageMainProductModal').modal('show');
-                            if (window.MainProductVariantsTable) window.MainProductVariantsTable.ajax.reload(null, false);
+                            reloadAjaxTable(window.productMainVariantsDataTable, false);
                         }, { once: true });
                     }
                     showProductSuccessModal(response.success || 'Product variant removed from the main product.');
@@ -313,7 +321,7 @@
         });
 
         $('#ManageMainProductModal').on('hidden.bs.modal', function () {
-            if (!window.returnToMainVariantsId) activeMainProductId = null;
+            if (window.productQrParentModal !== this && !window.returnToMainVariantsId) activeMainProductId = null;
         });
     });
 })(jQuery);

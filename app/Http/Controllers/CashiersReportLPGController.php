@@ -741,7 +741,8 @@ class CashiersReportLPGController extends Controller
             ->leftJoin('teves_product_table as replaced', 'replaced.product_id', '=', 'swapping.replaced_product_idx')
             ->where('swapping.cashiers_report_id', $reportId)->whereNull('swapping.deleted_at')
             ->orderBy('swapping.cashiers_report_lpg_swapping_id')
-            ->get(['client.client_name', 'received.product_name as received_product', 'swapping.received_quantity', 'replaced.product_name as replaced_product', 'swapping.replaced_quantity', 'swapping.remarks']);
+            ->get(['swapping.*', 'client.client_name', 'received.product_name as received_product_name', 'received.product_unit_measurement as received_product_unit_measurement', 'replaced.product_name as replaced_product_name', 'replaced.product_unit_measurement as replaced_product_unit_measurement']);
+        $swappingRows = app(\App\Services\LpgSwappingGroups::class)->rows($swappingRows, $reportId);
 
         $onLoanRows = DB::table('teves_cashiers_report_lpg_on_loan as loan')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'loan.client_idx')
@@ -769,11 +770,12 @@ class CashiersReportLPGController extends Controller
             'non_cash' => $nonCashPayments->sum('amount'),
         ];
 
-        $emptyInventoryRows = \App\Models\CashiersReportModel_LPG_EmptyInventory::forReport($reportId)->get();
+        $emptyInventoryRows = app(\App\Services\LpgEmptyInventorySummary::class)->rows($reportId);
+        $regulatorInventoryRows = app(\App\Services\LpgRegulatorSummary::class)->rows($reportId);
 
         return PDF::loadView('printables.cashier_report_lpg_pdf', compact(
             'report', 'inventoryRows', 'arCollections', 'salesRows', 'expenses',
-            'nonCashPayments', 'cash', 'cashTotal', 'swappingRows', 'onLoanRows', 'summary', 'emptyInventoryRows'
+            'nonCashPayments', 'cash', 'cashTotal', 'swappingRows', 'onLoanRows', 'summary', 'emptyInventoryRows', 'regulatorInventoryRows'
         ))->setPaper('legal', 'landscape')->stream('lpg-cashier-report-' . $reportId . '.pdf');
     }
 
