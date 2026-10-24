@@ -134,11 +134,15 @@
                             <datalist id="lpgArSoProductList">
                                 @foreach ($product_data as $product_data_cols)
                                     @php
-                                        $lpgArSoProductLabel = trim(($product_data_cols->product_name ?? '') . ' ' . ($product_data_cols->product_unit_measurement ?? ''));
+                                        $lpgArSoCapacity = ($product_data_cols->product_capacity ?? null) !== null && $product_data_cols->product_capacity !== ''
+                                            ? rtrim(rtrim(number_format((float) $product_data_cols->product_capacity, 2, '.', ''), '0'), '.') . strtoupper($product_data_cols->product_capacity_unit ?? '')
+                                            : ($product_data_cols->product_unit_measurement ?? '');
+                                        $lpgArSoProductLabel = trim(($product_data_cols->product_name ?? '') . ' ' . $lpgArSoCapacity);
                                     @endphp
                                     <option label="{{ $lpgArSoProductLabel }} | ₱ {{ number_format($product_data_cols->product_price ?? 0, 2) }}"
                                             data-id="{{ $product_data_cols->product_id }}"
                                             data-kitchen="{{ in_array((int) $product_data_cols->category_idx, \App\Services\LpgKitchenProducts::categoryIds(), true) ? '1' : '0' }}"
+                                            data-lpg="{{ in_array((int) $product_data_cols->category_idx, \App\Services\LpgEmptyInventorySummary::categoryIds(), true) ? '1' : '0' }}"
                                             data-regulator="{{ in_array((int) $product_data_cols->product_id, $lpgRegulatorProductIds, true) ? '1' : '0' }}"
                                             data-price="{{ $product_data_cols->product_price ?? 0 }}"
                                             data-product-code="{{ $product_data_cols->product_code ?? '' }}"

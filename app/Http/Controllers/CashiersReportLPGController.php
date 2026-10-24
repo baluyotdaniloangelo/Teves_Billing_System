@@ -681,102 +681,269 @@ class CashiersReportLPGController extends Controller
                 'report.cashiers_report_id', 'report.cashiers_report_no', 'report.report_date',
                 'report.cashiers_name', 'report.forecourt_attendant', 'report.shift',
                 'report.cashier_report_remarks', 'encoder.user_real_name as encoder_name',
-                'branch.branch_code', 'branch.branch_name', 'branch.branch_address',
+                'report.teves_branch', 'branch.branch_code', 'branch.branch_name', 'branch.branch_address',
             ])
             ->first();
 
         abort_if(!$report, 404, 'LPG cashier report not found.');
 
-        $inventoryRows = DB::table('teves_cashiers_report_lpg_inventory as inventory')
-            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'inventory.product_idx')
-            ->leftJoin('teves_supplier_table as supplier', 'supplier.supplier_id', '=', 'inventory.supplier_idx')
-            ->where('inventory.cashiers_report_id', $reportId)
-            ->whereNull('inventory.deleted_at')
-            ->orderBy('inventory.inventory_mode')
-            ->orderBy('product.product_name')
-            ->get([
-                'inventory.inventory_mode', 'inventory.quantity', 'inventory.delivery_reference_no', 'inventory.remarks',
-                'product.product_name', 'product.product_unit_measurement', 'supplier.supplier_name',
-            ]);
+        $sellOut = app(\App\Services\LpgSellOutSummary::class);
+        $lpgCategoryIds = array_map('intval', config('lpg_inventory.empty_container_category_ids', [2]));
+        $lpgRecords = $sellOut->records($reportId)->whereIn('category_idx', $lpgCategoryIds)->values();
+        $sellOutRows = app(\App\Services\LpgActualInventorySummary::class)
+            ->rows($reportId, $sellOut->rows($lpgRecords));
 
-        $arCollections = DB::table('teves_cashiers_report_lpg_ar as ar')
+        // Include every active product in the LPG category, even with no report entries.
+        $productCatalog = DB::table('teves_product_table as product')
+            ->leftJoin('teves_product_main_table as main', function ($join) {
+                $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
+            })
+            ->whereIn('product.category_idx', $lpgCategoryIds)->whereNull('product.deleted_at')
+            ->orderBy('main.product_name')->orderBy('product.product_name')
+            ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
+                'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
+                'main.product_name as group_name']);
+        $rowsByProduct = $sellOutRows->keyBy('product_idx');
+        foreach ($productCatalog as $product) {
+            $row = $rowsByProduct->get((int) $product->product_id);
+            if (!$row) {
+                $row = [
+                    'product_idx' => (int) $product->product_id, 'product_name' => $product->product_name,
+                    'product_unit_measurement' => $product->product_unit_measurement,
+                    'product_capacity' => $product->product_capacity, 'product_capacity_unit' => $product->product_capacity_unit,
+                ];
+                foreach (\App\Services\LpgSellOutSummary::MODES as $mode) {
+                    $key = strtolower($mode);
+                    $row[$key . '_quantity'] = 0;
+                    $row[$key . '_count'] = 0;
+                    if (in_array($mode, ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'], true)) {
+                        $row[$key . '_unit_price'] = null;
+                        $row[$key . '_mixed_prices'] = false;
+                        $row[$key . '_amount'] = 0;
+                    }
+                }
+                $row['total_sales'] = 0;
+                $row['net_sales'] = 0;
+                $row['ending_quantity'] = null;
+                $row['theoretical_ending_quantity'] = null;
+                $row['actual_quantity'] = null;
+                $row['variance_quantity'] = null;
+            }
+            $row['print_group_key'] = $product->product_main_idx
+                ? 'main:' . $product->product_main_idx : 'ungrouped';
+            $row['print_group_name'] = $product->group_name ?? '';
+            $rowsByProduct->put((int) $product->product_id, $row);
+        }
+        $sellOutRows = $rowsByProduct->sortBy(function ($row) {
+            return ($row['print_group_name'] ?? '') . ' ' . $row['product_name'];
+        }, SORT_NATURAL | SORT_FLAG_CASE)->values();
+
+        // The Kitchen section uses its own source summary, but prints every active
+        // Kitchen-category item so the printable matches the full inventory sheet.
+        $kitchenSummary = app(\App\Services\LpgKitchenSummary::class);
+        $kitchenRows = $kitchenSummary->rows($kitchenSummary->records($reportId));
+        $kitchenCategoryIds = \App\Services\LpgKitchenProducts::categoryIds();
+        $kitchenCatalog = DB::table('teves_product_table as product')
+            ->leftJoin('teves_product_main_table as main', function ($join) {
+                $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
+            })
+            ->leftJoin('teves_product_branch_price_table as branch_price', function ($join) use ($report) {
+                $join->on('branch_price.product_idx', '=', 'product.product_id')
+                    ->where('branch_price.branch_idx', '=', $report->teves_branch);
+            })
+            ->whereIn('product.category_idx', $kitchenCategoryIds)->whereNull('product.deleted_at')
+            ->orderBy('main.product_name')->orderBy('product.product_name')
+            ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
+                'product.product_unit_measurement', 'main.product_name as group_name',
+                DB::raw('COALESCE(branch_price.branch_price, product.product_price) as catalog_unit_price')]);
+        $kitchenRowsByProduct = $kitchenRows->keyBy('product_idx');
+        foreach ($kitchenCatalog as $product) {
+            $row = $kitchenRowsByProduct->get((int) $product->product_id);
+            if (!$row) {
+                $row = [
+                    'product_idx' => (int) $product->product_id,
+                    'product_name' => $product->product_name,
+                    'product_unit_measurement' => $product->product_unit_measurement,
+                ];
+                foreach (array_diff(\App\Services\LpgKitchenSummary::MODES, ['TOTAL_SOLD']) as $mode) {
+                    $key = strtolower($mode);
+                    $row[$key . '_quantity'] = 0;
+                    $row[$key . '_count'] = 0;
+                }
+                $row['total_sold_quantity'] = 0;
+                $row['total_sales'] = 0;
+                $row['net_sales'] = 0;
+                $row['unit_price'] = null;
+                $row['mixed_prices'] = false;
+                $row['ending_quantity'] = null;
+            }
+            $row['product_name'] = $product->product_name;
+            $row['product_unit_measurement'] = $product->product_unit_measurement;
+            if (($row['unit_price'] ?? null) === null && empty($row['mixed_prices'])) {
+                $row['unit_price'] = $product->catalog_unit_price;
+            }
+            $row['print_group_name'] = $product->group_name ?: 'Kitchen Products & Accessories';
+            $row['print_group_key'] = 'group:' . mb_strtolower($row['print_group_name']);
+            $kitchenRowsByProduct->put((int) $product->product_id, $row);
+        }
+        $kitchenRows = $kitchenRowsByProduct->sortBy(function ($row) {
+            return ($row['print_group_name'] ?? 'Kitchen Products & Accessories') . ' ' . $row['product_name'];
+        }, SORT_NATURAL | SORT_FLAG_CASE)->values();
+        $kitchenRows = app(\App\Services\LpgActualInventorySummary::class)->rows($reportId, $kitchenRows);
+
+        // Supporting sections from the cashier's report workbook.
+        $arCollectionRows = DB::table('teves_cashiers_report_lpg_ar as ar')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'ar.client_idx')
             ->where('ar.cashiers_report_id', $reportId)->whereNull('ar.deleted_at')
             ->orderBy('ar.cashiers_report_lpg_ar_id')
-            ->get(['ar.ar_date', 'client.client_name', 'ar.dr_number', 'ar.remarks', 'ar.amount_received']);
+            ->get(['client.client_name', 'client.client_account_number', 'ar.dr_number', 'ar.remarks', 'ar.amount_received']);
 
-        $salesRows = DB::table('teves_cashiers_report_lpg_ar_so as sales')
-            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sales.client_idx')
-            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sales.product_idx')
-            ->where('sales.cashiers_report_id', $reportId)->whereNull('sales.deleted_at')
-            ->orderBy('sales.cashiers_report_lpg_ar_so_id')
-            ->get([
-                'client.client_name', 'sales.dr_number', 'sales.item_description', 'sales.order_quantity',
-                'sales.unit_price', 'sales.discount_per_unit', 'sales.order_total_amount',
-                'product.product_name', 'product.product_unit_measurement',
-            ]);
+        $miscellaneousRows = DB::table('teves_cashiers_report_lpg_ar_so as sale')
+            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
+            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
+            ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
+            ->whereIn('sale.item_description', ['Sales Order', 'Return'])
+            ->orderBy('sale.cashiers_report_lpg_ar_so_id')
+            ->get(['client.client_name', 'client.client_account_number', 'sale.dr_number', 'sale.item_description',
+                'product.product_name', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
+                'sale.order_quantity', 'sale.unit_price', 'sale.order_total_amount']);
 
-        $expenses = DB::table('teves_cashiers_report_lpg_expenses as expense')
+        $expenseRows = DB::table('teves_cashiers_report_lpg_expenses as expense')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'expense.client_idx')
             ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'expense.product_idx')
             ->where('expense.cashiers_report_id', $reportId)->whereNull('expense.deleted_at')
             ->orderBy('expense.cashiers_report_lpg_expenses_id')
-            ->get([
-                'client.client_name', 'expense.expense_type', 'expense.purpose', 'expense.item_description',
-                'expense.order_quantity', 'expense.unit_price', 'expense.amount', 'expense.remarks',
-                'product.product_name', 'product.product_unit_measurement',
-            ]);
+            ->get(['client.client_name', 'expense.expense_type', 'expense.purpose',
+                'product.product_name', 'product.product_unit_measurement', 'expense.item_description',
+                'expense.order_quantity', 'expense.unit_price', 'expense.amount']);
 
-        $nonCashPayments = DB::table('teves_cashiers_report_lpg_non_cash_payments')
-            ->where('cashiers_report_id', $reportId)->whereNull('deleted_at')
-            ->orderBy('cashiers_report_lpg_non_cash_payment_id')
-            ->get(['mode_of_payment', 'payer_name', 'payer_number', 'reference_no', 'check_expiry_date', 'amount']);
+        $discountRows = DB::table('teves_cashiers_report_lpg_ar_so as sale')
+            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
+            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
+            ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
+            ->where('sale.discount_per_unit', '>', 0)
+            ->orderBy('sale.cashiers_report_lpg_ar_so_id')
+            ->get(['client.client_name', 'client.client_account_number', 'sale.dr_number', 'sale.item_description',
+                'product.product_name', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
+                'sale.order_quantity', 'sale.unit_price', 'sale.discount_per_unit',
+                DB::raw('(sale.unit_price - sale.discount_per_unit) as discounted_unit_price'),
+                DB::raw('(sale.order_quantity * sale.discount_per_unit) as total_discount')]);
 
-        $cash = DB::table('teves_cashiers_report_lpg_cash')
+        $cashDenominations = [
+            ['label' => '1,000.00', 'value' => 1000, 'field' => 'one_thousand_deno'],
+            ['label' => '500.00', 'value' => 500, 'field' => 'five_hundred_deno'],
+            ['label' => '200.00', 'value' => 200, 'field' => 'two_hundred_deno'],
+            ['label' => '100.00', 'value' => 100, 'field' => 'one_hundred_deno'],
+            ['label' => '50.00', 'value' => 50, 'field' => 'fifty_deno'],
+            ['label' => '20.00', 'value' => 20, 'field' => 'twenty_deno'],
+            ['label' => '10.00', 'value' => 10, 'field' => 'ten_deno'],
+            ['label' => '5.00', 'value' => 5, 'field' => 'five_deno'],
+            ['label' => '1.00', 'value' => 1, 'field' => 'one_deno'],
+            ['label' => '0.25', 'value' => 0.25, 'field' => 'twenty_five_cent_deno'],
+        ];
+        $cashRecord = DB::table('teves_cashiers_report_lpg_cash')
             ->where('cashiers_report_id', $reportId)->whereNull('deleted_at')->first();
+        $cashOnHand = collect($cashDenominations)->sum(function ($denomination) use ($cashRecord) {
+            return $denomination['value'] * (int) ($cashRecord->{$denomination['field']} ?? 0);
+        });
+        $cashDrop = round((float) ($cashRecord->cash_drop ?? 0), 2);
+        $actualCash = round($cashOnHand + $cashDrop, 2);
 
-        $swappingRows = DB::table('teves_cashiers_report_lpg_swapping as swapping')
-            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'swapping.client_idx')
-            ->leftJoin('teves_product_table as received', 'received.product_id', '=', 'swapping.received_product_idx')
-            ->leftJoin('teves_product_table as replaced', 'replaced.product_id', '=', 'swapping.replaced_product_idx')
-            ->where('swapping.cashiers_report_id', $reportId)->whereNull('swapping.deleted_at')
-            ->orderBy('swapping.cashiers_report_lpg_swapping_id')
-            ->get(['swapping.*', 'client.client_name', 'received.product_name as received_product_name', 'received.product_unit_measurement as received_product_unit_measurement', 'replaced.product_name as replaced_product_name', 'replaced.product_unit_measurement as replaced_product_unit_measurement']);
-        $swappingRows = app(\App\Services\LpgSwappingGroups::class)->rows($swappingRows, $reportId);
+        $nonCashRows = DB::table('teves_cashiers_report_lpg_non_cash_payments')
+            ->where('cashiers_report_id', $reportId)->whereNull('deleted_at')
+            ->orderBy('cashiers_report_lpg_non_cash_payment_id')->get();
+        $nonCashTotals = [
+            'gcash' => round((float) $nonCashRows->where('mode_of_payment', 'gcash')->sum('amount'), 2),
+            'limitless' => round((float) $nonCashRows->where('mode_of_payment', 'limitless')->sum('amount'), 2),
+            'bank_transfer' => round((float) $nonCashRows->where('mode_of_payment', 'credit_debit')->sum('amount'), 2),
+            'check' => round((float) $nonCashRows->where('mode_of_payment', 'check')->sum('amount'), 2),
+        ];
+        $nonCashTotal = round((float) $nonCashRows->sum('amount'), 2);
+        $arCollectionsTotal = round((float) $arCollectionRows->sum('amount_received'), 2);
+        $lpgSalesTotal = round((float) $sellOutRows->sum('total_sales'), 2);
+        $kitchenSalesTotal = round((float) $kitchenRows->sum('total_sales'), 2);
+        $totalSales = round($lpgSalesTotal + $kitchenSalesTotal, 2);
+        $miscellaneousTotal = round((float) $miscellaneousRows->sum('order_total_amount'), 2);
+        $expensesTotal = round((float) $expenseRows->sum('amount'), 2);
+        $discountsTotal = round((float) $discountRows->sum('total_discount'), 2);
+        $theoreticalSales = round($totalSales - $miscellaneousTotal - $expensesTotal - $discountsTotal, 2);
+        $totalCashAndNonCash = round($actualCash + $nonCashTotal, 2);
+        $cashBeforeArCollections = round($totalCashAndNonCash - $arCollectionsTotal, 2);
+        $salesVariance = round($cashBeforeArCollections - $theoreticalSales, 2);
+
+        $emptyInventorySummary = app(\App\Services\LpgEmptyInventorySummary::class);
+        $emptyInventoryRowsByProduct = $emptyInventorySummary->rows($reportId)->keyBy('product_idx');
+        $emptyInventorySources = $emptyInventorySummary->sources($reportId);
+        $emptyProductCatalog = DB::table('teves_product_table as product')
+            ->whereIn('product.category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
+            ->whereNotIn('product.product_id', \App\Services\LpgRegulatorProducts::ids())
+            ->whereNull('product.deleted_at')
+            ->orderByRaw("CASE product.product_capacity_unit WHEN 'kg' THEN 0 WHEN 'g' THEN 1 ELSE 2 END")
+            ->orderBy('product.product_capacity')->orderBy('product.product_name')
+            ->get(['product.product_id', 'product.product_name', 'product.product_capacity', 'product.product_capacity_unit']);
+        foreach ($emptyProductCatalog as $product) {
+            $row = $emptyInventoryRowsByProduct->get((int) $product->product_id);
+            if (!$row) {
+                $row = new \App\Models\CashiersReportModel_LPG_EmptyInventory([
+                    'cashiers_report_id' => $reportId, 'product_idx' => (int) $product->product_id,
+                    'beginning_quantity' => 0, 'refill_sell_out_quantity' => 0, 'return_quantity' => 0,
+                    'swap_in_quantity' => 0, 'from_other_branch_quantity' => 0, 'sold_quantity' => 0,
+                    'swap_out_quantity' => 0, 'borrow_quantity' => 0, 'pull_out_branch_quantity' => 0,
+                    'pull_out_truck_quantity' => 0, 'remarks' => null,
+                ]);
+                $row->cashiers_report_lpg_empty_inventory_id = 0;
+            }
+            $row->product_name = $product->product_name;
+            $row->product_capacity = $product->product_capacity;
+            $row->product_capacity_unit = $product->product_capacity_unit;
+            $emptyInventoryRowsByProduct->put((int) $product->product_id, $emptyInventorySummary->decorate($row, $emptyInventorySources));
+        }
+        $emptyInventoryRows = $emptyInventoryRowsByProduct->values()->sortBy(function ($row) {
+            $unit = $row->product_capacity_unit === 'kg' ? 0 : ($row->product_capacity_unit === 'g' ? 1 : 2);
+            return sprintf('%d:%012.3f:%s', $unit, (float) $row->product_capacity, $row->product_name);
+        }, SORT_NATURAL | SORT_FLAG_CASE)->values();
+        $emptyInventoryGroups = $emptyInventoryRows->groupBy('capacity_group');
+
+        $swappingRows = DB::table('teves_cashiers_report_lpg_swapping as swap')
+            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'swap.client_idx')
+            ->leftJoin('teves_product_table as received', 'received.product_id', '=', 'swap.received_product_idx')
+            ->leftJoin('teves_product_table as replaced', 'replaced.product_id', '=', 'swap.replaced_product_idx')
+            ->where('swap.cashiers_report_id', $reportId)->whereNull('swap.deleted_at')
+            ->where(function ($query) { $query->where('swap.received_quantity', '>', 0)->orWhere('swap.replaced_quantity', '>', 0); })
+            ->orderBy('swap.cashiers_report_lpg_swapping_id')
+            ->get(['client.client_name', 'swap.received_quantity', 'swap.received_stock_state',
+                'received.product_name as received_product_name', 'received.product_capacity as received_product_capacity',
+                'received.product_capacity_unit as received_product_capacity_unit', 'received.product_unit_measurement as received_product_unit_measurement',
+                'swap.replaced_quantity', 'swap.replaced_stock_state', 'replaced.product_name as replaced_product_name',
+                'replaced.product_capacity as replaced_product_capacity', 'replaced.product_capacity_unit as replaced_product_capacity_unit',
+                'replaced.product_unit_measurement as replaced_product_unit_measurement', 'swap.remarks']);
 
         $onLoanRows = DB::table('teves_cashiers_report_lpg_on_loan as loan')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'loan.client_idx')
             ->leftJoin('teves_product_table as borrowed', 'borrowed.product_id', '=', 'loan.borrow_product_idx')
             ->leftJoin('teves_product_table as returned', 'returned.product_id', '=', 'loan.return_product_idx')
             ->where('loan.cashiers_report_id', $reportId)->whereNull('loan.deleted_at')
+            ->where(function ($query) {
+                $query->where('loan.borrow_quantity', '>', 0)->orWhere('loan.borrow_alum_quantity', '>', 0)
+                    ->orWhere('loan.return_quantity', '>', 0)->orWhere('loan.return_alum_quantity', '>', 0);
+            })
             ->orderBy('loan.cashiers_report_lpg_on_loan_id')
-            ->get(['client.client_name', 'loan.dr_number', 'borrowed.product_name as borrow_product', 'loan.borrow_quantity', 'loan.borrow_alum_quantity', 'returned.product_name as return_product', 'loan.return_quantity', 'loan.return_alum_quantity', 'loan.remarks']);
-
-        $cashTotal = $cash ? (
-            (($cash->one_thousand_deno ?? 0) * 1000) + (($cash->five_hundred_deno ?? 0) * 500) +
-            (($cash->two_hundred_deno ?? 0) * 200) + (($cash->one_hundred_deno ?? 0) * 100) +
-            (($cash->fifty_deno ?? 0) * 50) + (($cash->twenty_deno ?? 0) * 20) +
-            (($cash->ten_deno ?? 0) * 10) + (($cash->five_deno ?? 0) * 5) + (($cash->one_deno ?? 0) * 1) +
-            (($cash->twenty_five_cent_deno ?? 0) * .25)
-        ) : 0;
-
-        $summary = [
-            'sales' => $salesRows->sum('order_total_amount'),
-            'discounts' => $salesRows->sum(fn ($row) => ($row->order_quantity ?? 0) * ($row->discount_per_unit ?? 0)),
-            'expenses' => $expenses->sum('amount'),
-            'ar_collections' => $arCollections->sum('amount_received'),
-            'cash_on_hand' => $cashTotal,
-            'cash_drop' => $cash->cash_drop ?? 0,
-            'non_cash' => $nonCashPayments->sum('amount'),
-        ];
-
-        $emptyInventoryRows = app(\App\Services\LpgEmptyInventorySummary::class)->rows($reportId);
-        $regulatorInventoryRows = app(\App\Services\LpgRegulatorSummary::class)->rows($reportId);
+            ->get(['client.client_name', 'loan.dr_number', 'loan.borrow_quantity', 'loan.borrow_stock_state',
+                'borrowed.product_name as borrow_product_name', 'borrowed.product_capacity as borrow_product_capacity',
+                'borrowed.product_capacity_unit as borrow_product_capacity_unit', 'borrowed.product_unit_measurement as borrow_product_unit_measurement',
+                'loan.borrow_alum_quantity', 'loan.return_quantity', 'loan.return_stock_state',
+                'returned.product_name as return_product_name', 'returned.product_capacity as return_product_capacity',
+                'returned.product_capacity_unit as return_product_capacity_unit', 'returned.product_unit_measurement as return_product_unit_measurement',
+                'loan.return_alum_quantity', 'loan.remarks']);
 
         return PDF::loadView('printables.cashier_report_lpg_pdf', compact(
-            'report', 'inventoryRows', 'arCollections', 'salesRows', 'expenses',
-            'nonCashPayments', 'cash', 'cashTotal', 'swappingRows', 'onLoanRows', 'summary', 'emptyInventoryRows', 'regulatorInventoryRows'
-        ))->setPaper('legal', 'landscape')->stream('lpg-cashier-report-' . $reportId . '.pdf');
+            'report', 'sellOutRows', 'kitchenRows', 'arCollectionRows', 'miscellaneousRows', 'expenseRows', 'discountRows',
+            'cashDenominations', 'cashRecord', 'cashOnHand', 'cashDrop', 'actualCash', 'nonCashRows', 'nonCashTotals',
+            'nonCashTotal', 'arCollectionsTotal', 'lpgSalesTotal', 'kitchenSalesTotal', 'totalSales',
+            'miscellaneousTotal', 'expensesTotal', 'discountsTotal', 'theoreticalSales', 'totalCashAndNonCash',
+            'cashBeforeArCollections', 'salesVariance', 'emptyInventoryRows', 'emptyInventoryGroups', 'swappingRows', 'onLoanRows'
+        ))
+            ->setPaper([0, 0, 612, 936], 'portrait')->stream('lpg-cashier-report-' . $reportId . '.pdf');
     }
 
 

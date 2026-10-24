@@ -334,6 +334,7 @@ $(function () {
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center text-muted' },
             { data: 'product_code', name: 'teves_product_table.product_code', defaultContent: '—', render: $.fn.dataTable.render.text(), className: 'text-center fw-semibold' },
             { data: 'product_name', name: 'teves_product_table.product_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold' },
+            { data: 'main_product_name', name: 'main_product.product_name', defaultContent: 'Unassigned', render: $.fn.dataTable.render.text(), className: 'text-center' },
             { data: 'category_name', name: 'teves_product_category.category_name', defaultContent: 'Uncategorized', render: $.fn.dataTable.render.text(), className: 'text-center' },
             { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
             { data: 'product_unit_measurement', className: 'text-center' },
@@ -374,7 +375,7 @@ $(function () {
     });
 
     $('#unassigned_variant_search').val(window.UnassignedProductTable.search());
-    $('#unassigned_variant_category').val(window.UnassignedProductTable.column(3).search());
+    $('#unassigned_variant_category').val(window.UnassignedProductTable.column(4).search());
     $('#unassigned_variant_length').val(String(window.UnassignedProductTable.page.len()));
 
     let unassignedSearchTimer;
@@ -387,7 +388,7 @@ $(function () {
     });
 
     $('#unassigned_variant_category').on('change', function () {
-        window.UnassignedProductTable.column(3).search(this.value).draw();
+        window.UnassignedProductTable.column(4).search(this.value).draw();
     });
 
     $('#unassigned_variant_length').on('change', function () {
@@ -399,7 +400,7 @@ $(function () {
         $('#unassigned_variant_category').val('');
         $('#unassigned_variant_length').val('10');
         window.UnassignedProductTable.search('');
-        window.UnassignedProductTable.column(3).search('');
+        window.UnassignedProductTable.column(4).search('');
         window.UnassignedProductTable.page.len(10).draw();
     });
 

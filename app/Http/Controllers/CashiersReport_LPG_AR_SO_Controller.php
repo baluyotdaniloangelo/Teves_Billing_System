@@ -113,6 +113,9 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
     {
         $isKitchen = LpgKitchenProducts::isProduct((int) $request->input('product_idx'));
         $isRegulator = LpgRegulatorProducts::isProduct((int) $request->input('product_idx'));
+        $allowedProductCategories = array_values(array_unique(array_merge(
+            LpgEmptyInventorySummary::categoryIds(), LpgKitchenProducts::categoryIds()
+        )));
         if ($isKitchen || $isRegulator) $request->merge(['sale_stock_type' => $request->item_description === 'Return' ? null : ($isRegulator ? 'REGULATOR' : 'KITCHEN_ITEM')]);
         $validator = Validator::make($request->all(), array_merge([
             'cashiers_report_id' => ['required', 'integer'],
@@ -125,7 +128,14 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
             'order_quantity' => ['required', 'numeric', 'min:0.01'],
             'discount_per_unit' => ['required', 'numeric', 'min:0'],
         ], LpgEmptyReceipt::rules($request, $isKitchen || $isRegulator)));
-        $validator->after(function ($validator) use ($request) { LpgEmptyReceipt::validateQuantity($validator, $request); });
+        $validator->after(function ($validator) use ($request, $allowedProductCategories) {
+            if ($request->filled('product_idx') && !DB::table('teves_product_table')
+                ->where('product_id', $request->input('product_idx'))
+                ->whereIn('category_idx', $allowedProductCategories)->whereNull('deleted_at')->exists()) {
+                $validator->errors()->add('product_idx', 'Select an LPG or Kitchen product.');
+            }
+            LpgEmptyReceipt::validateQuantity($validator, $request);
+        });
 
         if ($validator->fails()) {
             return response()->json([
@@ -185,6 +195,9 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
     {
         $isKitchen = LpgKitchenProducts::isProduct((int) $request->input('product_idx'));
         $isRegulator = LpgRegulatorProducts::isProduct((int) $request->input('product_idx'));
+        $allowedProductCategories = array_values(array_unique(array_merge(
+            LpgEmptyInventorySummary::categoryIds(), LpgKitchenProducts::categoryIds()
+        )));
         if ($isKitchen || $isRegulator) $request->merge(['sale_stock_type' => $request->item_description === 'Return' ? null : ($isRegulator ? 'REGULATOR' : 'KITCHEN_ITEM')]);
         $validator = Validator::make($request->all(), array_merge([
             'cashiers_report_lpg_ar_so_id' => ['required', 'integer'],
@@ -198,7 +211,14 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
             'order_quantity' => ['required', 'numeric', 'min:0.01'],
             'discount_per_unit' => ['required', 'numeric', 'min:0'],
         ], LpgEmptyReceipt::rules($request, $isKitchen || $isRegulator)));
-        $validator->after(function ($validator) use ($request) { LpgEmptyReceipt::validateQuantity($validator, $request); });
+        $validator->after(function ($validator) use ($request, $allowedProductCategories) {
+            if ($request->filled('product_idx') && !DB::table('teves_product_table')
+                ->where('product_id', $request->input('product_idx'))
+                ->whereIn('category_idx', $allowedProductCategories)->whereNull('deleted_at')->exists()) {
+                $validator->errors()->add('product_idx', 'Select an LPG or Kitchen product.');
+            }
+            LpgEmptyReceipt::validateQuantity($validator, $request);
+        });
 
         if ($validator->fails()) {
             return response()->json([

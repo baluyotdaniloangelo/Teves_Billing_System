@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 use App\Models\User;
 use App\Models\ProductModel;
@@ -134,11 +135,12 @@ class ProductController extends Controller
 
 		$data = ProductModel::query()
 			->leftJoin('teves_product_category', 'teves_product_table.category_idx', '=', 'teves_product_category.category_id')
-			->whereNull('teves_product_table.product_main_idx')
+                        ->leftJoin('teves_product_main_table as main_product', 'teves_product_table.product_main_idx', '=', 'main_product.product_main_id')
 			->select(
 				'teves_product_table.product_id',
 				'teves_product_table.product_code',
 				'teves_product_table.product_name',
+                                'main_product.product_name as main_product_name',
 				'teves_product_table.category_idx',
 				'teves_product_table.product_price',
 				'teves_product_table.product_unit_measurement',
@@ -316,9 +318,28 @@ class ProductController extends Controller
 	} 
 
 	public function create_product_post(Request $request){
+		if (is_string($request->input('product_name'))) {
+			$request->merge(['product_name' => trim($request->input('product_name'))]);
+		}
+		$productCapacity = $request->input('product_capacity');
+		$productCapacityUnit = $request->input('product_capacity_unit');
+		$productNameRule = Rule::unique('teves_product_table', 'product_name')
+			->where(function ($query) use ($productCapacity, $productCapacityUnit) {
+				if ($productCapacity === null || $productCapacity === '') {
+					$query->whereNull('product_capacity');
+				} else {
+					$query->where('product_capacity', $productCapacity);
+				}
+
+				if ($productCapacityUnit === null || $productCapacityUnit === '') {
+					$query->whereNull('product_capacity_unit');
+				} else {
+					$query->where('product_capacity_unit', $productCapacityUnit);
+				}
+			});
 
 		$request->validate([
-		  'product_name'      		=> 'required|string|max:255|unique:teves_product_table,product_name',
+		  'product_name'      		=> ['required', 'string', 'max:255', $productNameRule],
 		  'category_idx'      		=> 'required|integer|exists:teves_product_category,category_id',
 		  'product_price'      		=> 'required|numeric|min:0',
 		  'product_unit_measurement' => 'required|string|max:50',
@@ -328,6 +349,7 @@ class ProductController extends Controller
         ], 
         [
 			'product_name.required' => 'Product Name is required',
+			'product_name.unique' => 'A product with this name and capacity already exists.',
 			'category_idx.required' => 'Product category is required',
 			'product_price.required' => 'Price is Required'
         ]
@@ -386,10 +408,44 @@ class ProductController extends Controller
 	}
 
 	public function update_product_post(Request $request){
-		
+		if (is_string($request->input('product_name'))) {
+			$request->merge(['product_name' => trim($request->input('product_name'))]);
+		}
+		$request->validate([
+			'productID' => 'required|integer|exists:teves_product_table,product_id',
+		]);
+
+		$Product = ProductModel::find($request->productID);
+		if (!$Product) {
+			return response()->json(['message' => 'Product not found.'], 404);
+		}
+
+		$hasCapacityInput = $request->has('product_capacity') || $request->has('product_capacity_unit');
+		$productCapacity = $hasCapacityInput
+			? ($request->filled('product_capacity') ? $request->input('product_capacity') : null)
+			: $Product->product_capacity;
+		$productCapacityUnit = $hasCapacityInput
+			? ($request->filled('product_capacity_unit') ? $request->input('product_capacity_unit') : null)
+			: $Product->product_capacity_unit;
+		$productNameRule = Rule::unique('teves_product_table', 'product_name')
+			->where(function ($query) use ($productCapacity, $productCapacityUnit) {
+				if ($productCapacity === null || $productCapacity === '') {
+					$query->whereNull('product_capacity');
+				} else {
+					$query->where('product_capacity', $productCapacity);
+				}
+
+				if ($productCapacityUnit === null || $productCapacityUnit === '') {
+					$query->whereNull('product_capacity_unit');
+				} else {
+					$query->where('product_capacity_unit', $productCapacityUnit);
+				}
+			})
+			->ignore($Product->product_id, 'product_id');
+
 		$request->validate([
           'productID'           	=> 'required|integer|exists:teves_product_table,product_id',
-          'product_name'      		=> 'required|string|max:255|unique:teves_product_table,product_name,'.$request->productID.',product_id',
+		  'product_name'      		=> ['required', 'string', 'max:255', $productNameRule],
 		  'category_idx'          	=> 'required|integer|exists:teves_product_category,category_id',
 		  'product_price'      		=> 'required|numeric|min:0',
 		  'product_unit_measurement' => 'required|string|max:50',
@@ -399,15 +455,11 @@ class ProductController extends Controller
         ], 
         [
 			'product_name.required' => 'Product Name is required',
+			'product_name.unique' => 'A product with this name and capacity already exists.',
 			'product_price.required' => 'Price is Required'
         ]
 		);
 	
-			$Product = new ProductModel();
-			$Product = ProductModel::find($request->productID);
-			if (!$Product) {
-				return response()->json(['message' => 'Product not found.'], 404);
-			}
 			$mainProductIdx = $request->has('product_main_idx')
 				? ($request->product_main_idx ?: null)
 				: $Product->product_main_idx;
@@ -421,6 +473,24 @@ class ProductController extends Controller
 			$Product->product_main_idx 					= $mainProductIdx;
 			$Product->product_name 						= $request->product_name;
 			$Product->category_idx 						= $request->category_idx;
+			if ((int) $Product->getOriginal('category_idx') !== (int) $request->category_idx) {
+				$categoryCode = ProductCategoryModel::where('category_id', $request->category_idx)->value('category_code') ?: 'UNK';
+				$categoryPrefix = strtoupper(substr((string) $categoryCode, 0, 3));
+				$transformedId = (int) strrev((string) ((int) $Product->product_id + 100)) + 1000;
+				$baseProductCode = $categoryPrefix . $transformedId;
+				$productCode = $baseProductCode;
+				$collisionSuffix = 2;
+
+				while (DB::table('teves_product_table')
+					->where('product_code', $productCode)
+					->where('product_id', '<>', $Product->product_id)
+					->exists()) {
+					$productCode = $baseProductCode . 'X' . $collisionSuffix;
+					$collisionSuffix++;
+				}
+
+				$Product->product_code = $productCode;
+			}
 			$Product->product_price 					= $request->product_price;
 			$Product->product_unit_measurement 			= $request->product_unit_measurement;
 			$Product->updated_by_user_idx 				= Session::get('loginID');

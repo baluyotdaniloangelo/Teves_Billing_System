@@ -270,7 +270,7 @@ div.dataTables_wrapper {
                 </div>
                 <div>
                     <h4 class="fw-bold mb-0">Product Variants</h4>
-                    <small class="text-muted">Existing products stay here until you assign them to a main product.</small>
+                    <small class="text-muted">Browse all product variants and see which main product each one belongs to.</small>
                 </div>
             </div>
             <div class="d-flex align-items-center flex-wrap gap-2">
@@ -296,7 +296,7 @@ div.dataTables_wrapper {
                                 <i class="bi bi-search text-muted" aria-hidden="true"></i>
                             </span>
                             <input type="search" id="unassigned_variant_search" class="form-control"
-                                   placeholder="Search product variant, code, or category..." autocomplete="off">
+                                   placeholder="Search variant, code, main product, or category..." autocomplete="off">
                         </div>
                     </div>
 
@@ -345,6 +345,7 @@ div.dataTables_wrapper {
                         <th class="text-center"><i class="bi bi-hash me-1" aria-hidden="true"></i>#</th>
                         <th class="text-center"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Product Code</th>
                         <th><i class="bi bi-box me-1" aria-hidden="true"></i>Product Variant</th>
+                        <th><i class="bi bi-boxes me-1" aria-hidden="true"></i>Main Product</th>
                         <th><i class="bi bi-tag me-1" aria-hidden="true"></i>Category</th>
                         <th class="text-end"><i class="bi bi-currency-exchange me-1" aria-hidden="true"></i>Default Price</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Unit</th>

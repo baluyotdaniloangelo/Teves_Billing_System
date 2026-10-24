@@ -19,7 +19,17 @@ $(function () {
     const escape = value => $('<div>').text(value == null ? '' : String(value)).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const quantity = value => Number(value || 0).toLocaleString('en-PH', { maximumFractionDigits: 2 });
     const money = value => Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const productLabel = row => [row.product_name || 'Unavailable product', row.product_unit_measurement].filter(Boolean).join(' ');
+    const productCapacityLabel = row => {
+        if (row.product_capacity !== null && row.product_capacity !== undefined && row.product_capacity !== '') {
+            const value = Number(row.product_capacity);
+            const capacity = Number.isFinite(value)
+                ? value.toLocaleString('en-PH', { maximumFractionDigits: 2 })
+                : String(row.product_capacity);
+            return capacity + (row.product_capacity_unit || '');
+        }
+        return row.product_unit_measurement || '';
+    };
+    const productLabel = row => [row.product_name || 'Unavailable product', productCapacityLabel(row)].filter(Boolean).join(' ');
 
     function sourceCell(row, mode, value) {
         const id = Number(row.product_idx);
@@ -86,7 +96,10 @@ $(function () {
                 .done(r => afterSourcesClose(() => openLpgInventoryModal(r.data.inventory_mode, r.data)))
                 .fail(xhr => showError('#lpg-sell-out-source-error', xhr, 'Unable to load inventory record.'));
         } else afterSourcesClose(function () {
-            if (row.kind === 'sales') editLpgArSoRecord(row.record_id);
+            if (row.kind === 'sales') {
+                $('#ar_so_product').attr('data-product-category-filter', 'lpg');
+                editLpgArSoRecord(row.record_id);
+            }
             else if (row.kind === 'expense') editLpgExpenseRecord(row.record_id);
             else if (row.kind === 'loan') window.LpgOnLoanEditor.edit(row.record_id);
         });
@@ -112,8 +125,9 @@ $(function () {
         afterSourcesClose(function () {
             if (salesModes.includes(mode)) {
                 resetLpgArSoForm();
+                $('#ar_so_product').attr('data-product-category-filter', 'lpg');
                 $('#ar_so_type').val(mode === 'RETURN' ? 'Return' : 'Sales Order').trigger('change');
-                $('#ar_so_stock_type').val(['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'].includes(mode) ? mode : '');
+                $('#ar_so_stock_type').val(['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'].includes(mode) ? mode : '').trigger('change');
                 fillProduct('#ar_so_product', '#lpgArSoProductList', productId);
                 lpgArSoShowModal('#CashierReportLpgArSoModal');
             } else if (mode === 'ON_LOAN') window.LpgOnLoanEditor.add(productId);

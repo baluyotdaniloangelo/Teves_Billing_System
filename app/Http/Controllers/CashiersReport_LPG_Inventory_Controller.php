@@ -6,6 +6,7 @@ use App\Models\CashiersReportModel_LPG_Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CashiersReport_LPG_Inventory_Controller extends Controller
 {
@@ -215,6 +216,13 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         $validator->after(function ($validator) use ($request) {
+            if ($request->filled('product_idx') && !DB::table('teves_product_table')
+                ->where('product_id', $request->input('product_idx'))
+                ->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
+                ->whereNull('deleted_at')
+                ->exists()) {
+                $validator->errors()->add('product_idx', 'Select a product from the LPG category.');
+            }
             if ($request->input('inventory_mode') === 'DELIVERY' && !$request->filled('supplier_idx')) {
                 $validator->errors()->add('supplier_idx', 'Supplier is required for a delivery.');
             }

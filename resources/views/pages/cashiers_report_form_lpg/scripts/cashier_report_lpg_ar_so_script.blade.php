@@ -400,6 +400,7 @@ $(document).on('click', '#EditLpgArSo', function (event) {
 
 function syncLpgSaleStockType() {
     const isReturn = $('#ar_so_type').val() === 'Return';
+    const productInput = $('#ar_so_product');
     const product = findLpgArSoDatalistOption('lpgArSoProductList', $('#ar_so_product').val());
     const isKitchen = product?.attr('data-kitchen') === '1';
     const isRegulator = product?.attr('data-regulator') === '1';
@@ -408,6 +409,30 @@ function syncLpgSaleStockType() {
     else if (['KITCHEN_ITEM', 'REGULATOR'].includes($('#ar_so_stock_type').val())) $('#ar_so_stock_type').val('');
     $('#ar-so-stock-type-field').toggleClass('d-none', isReturn || isKitchen || isRegulator);
     $('#ar_so_stock_type').prop('required', !isReturn && !isKitchen && !isRegulator).prop('disabled', isReturn);
+    const forcedCategory = productInput.attr('data-product-category-filter');
+    const stockType = $('#ar_so_stock_type').val();
+    $('#lpgArSoProductList option').each(function () {
+        const option = $(this);
+        if (!option.attr('data-id')) return;
+        const isLpg = option.attr('data-lpg') === '1';
+        const isKitchenProduct = option.attr('data-kitchen') === '1';
+        const isAllowed = forcedCategory === 'lpg' ? isLpg
+            : (forcedCategory === 'kitchen' ? isKitchenProduct
+            : (stockType === 'KITCHEN_ITEM' ? isKitchenProduct
+            : (['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'EMPTY_CONTAINER', 'UNCLASSIFIED'].includes(stockType)
+                ? isLpg : (isLpg || isKitchenProduct))));
+        option.prop('hidden', !isAllowed);
+    });
+    if (product && productInput.val() && product.attr('data-id')) {
+        const selectedIsLpg = product.attr('data-lpg') === '1';
+        const selectedIsKitchen = product.attr('data-kitchen') === '1';
+        if ((forcedCategory === 'lpg' && !selectedIsLpg) ||
+            (forcedCategory === 'kitchen' && !selectedIsKitchen) ||
+            (!forcedCategory && stockType !== 'KITCHEN_ITEM' && stockType !== 'REGULATOR' &&
+                !isReturn && ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'EMPTY_CONTAINER', 'UNCLASSIFIED'].includes(stockType) && !selectedIsLpg)) {
+            productInput.val('');
+        }
+    }
     const emptyOnly = !isReturn && $('#ar_so_stock_type').val() === 'EMPTY_CONTAINER';
     $('#ar_so_quantity').attr('step', emptyOnly ? '1' : '0.01');
     $('#ar_so_unit_price').prop('readonly', !emptyOnly);
@@ -416,6 +441,10 @@ function syncLpgSaleStockType() {
 }
 $('#ar_so_type').on('change', syncLpgSaleStockType);
 $('#ar_so_stock_type').on('change', syncLpgSaleStockType);
+$('#CashierReportLpgArSoModal').on('hidden.bs.modal', function () {
+    $('#ar_so_product').removeAttr('data-product-category-filter');
+    syncLpgSaleStockType();
+});
 
 function formatLpgArSoMoney(value) {
     return Number(value || 0).toLocaleString('en-PH', {
