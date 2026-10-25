@@ -187,7 +187,7 @@ class DashboardController extends Controller
 		
 		if(Session::has('loginID')){
 			
-			$title = 'Dashboard';
+			$title = 'Cashier Dashboard';
 			$data = array();
 			
 			$user_info = User::where('user_id', '=', Session::get('loginID'))->first();

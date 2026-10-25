@@ -27,14 +27,20 @@
     <div class="fuel-title-row">
         <div>
             <p class="fuel-eyebrow">STATION PERFORMANCE</p>
-            <h1><span>Fuel</span></h1>
-            <p class="fuel-subtitle">A clearer picture of your sales, collections, and cash position based on Cashiers Report for Fuel</p>
+            <h1><span>Cashier Dashboard</span></h1>
+            <p class="fuel-subtitle">Sales, cash position, and report activity by cashier report type.</p>
         </div>
         <div class="fuel-actions">
             <button type="button" class="fuel-button" id="fuel-print"><i class="bi bi-printer" aria-hidden="true"></i> Print report</button>
             <button type="button" class="fuel-button fuel-button-primary" id="fuel-export"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</button>
         </div>
     </div>
+
+    <nav class="fuel-dashboard-tabs" aria-label="Cashier dashboard type">
+        <a class="fuel-dashboard-tab is-active" href="{{ route('dashboard') }}" aria-current="page"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Fuel</a>
+        <button class="fuel-dashboard-tab fuel-dashboard-tab-disabled" type="button" disabled aria-describedby="lpg-dashboard-status"><i class="bi bi-fire" aria-hidden="true"></i> LPG <span>Coming next</span></button>
+    </nav>
+    <span id="lpg-dashboard-status" class="visually-hidden">The LPG cashier dashboard will be added next.</span>
 
     @if($errors->any())
     <div class="fuel-alert" role="alert"><strong>Please check your filters.</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>

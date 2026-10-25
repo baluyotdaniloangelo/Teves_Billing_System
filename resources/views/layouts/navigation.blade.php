@@ -141,8 +141,8 @@
 	   <?php if($data->user_type=="SUAdmin"){ ?>
 	   <li class="fuel-nav-section" role="presentation">DASHBOARDS</li>
 	   <li class="nav-item">
-        <a class="nav-link navbar_bg {{ $workspaceNavClass('dashboard') }}" href="{{ route('dashboard') }}" title="Fuel Cashier Dashboard" @if($workspaceNavActive('dashboard')) aria-current="page" @endif>
-          <i class="bi bi-speedometer2 navbar_icon"></i><span>Fuel Cashier Dashboard</span>
+        <a class="nav-link navbar_bg {{ $workspaceNavClass('dashboard') }}" href="{{ route('dashboard') }}" title="Cashier Dashboard" @if($workspaceNavActive('dashboard')) aria-current="page" @endif>
+          <i class="bi bi-speedometer2 navbar_icon"></i><span>Cashier Dashboard</span>
         </a>
        </li>
 	   <li class="nav-item">
