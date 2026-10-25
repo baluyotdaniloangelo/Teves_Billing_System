@@ -35,6 +35,10 @@ use App\Services\SmsService;
 
 Route::get('/sms_blast', [SMSBlastController::class,'sms_blast'])->name('sms_blast')->middleware('isLoggedIn');
 Route::post('/send_sms_blast', [SMSBlastController::class,'send_sms_blast'])->name('send_sms_blast')->middleware('isLoggedIn');
+Route::get('/sms_blast/recipient-count', [SMSBlastController::class,'recipient_count'])->name('sms_recipient_count')->middleware('isLoggedIn');
+Route::post('/sms_blast/templates', [\App\Http\Controllers\SMSTemplateController::class, 'store'])->name('sms_templates.store')->middleware('isLoggedIn');
+Route::put('/sms_blast/templates/{key}', [\App\Http\Controllers\SMSTemplateController::class, 'update'])->name('sms_templates.update')->middleware('isLoggedIn');
+Route::patch('/sms_blast/templates/{key}/status', [\App\Http\Controllers\SMSTemplateController::class, 'status'])->name('sms_templates.status')->middleware('isLoggedIn');
 
 use App\Http\Controllers\CashiersReportFuelSalesController;
 use App\Http\Controllers\CashiersReportLubeAndCarCareController;
@@ -181,6 +185,10 @@ Route::get('/dashboard', [DashboardController::class,'dashboard'])->name('dashbo
 Route::post('/dashboard', [DashboardController::class,'dashboard'])->name('dashboard.filter')->middleware('isLoggedIn');
 Route::get('/sales_receivables_dashboard', [DashboardController::class, 'salesReceivables'])->name('sales_receivables_dashboard')->middleware('isLoggedIn');
 Route::post('/sales_receivables_dashboard', [DashboardController::class, 'salesReceivables'])->name('sales_receivables_dashboard.filter')->middleware('isLoggedIn');
+Route::get('/fuel_sales_volume_dashboard', [DashboardController::class, 'fuelSalesVolume'])->name('fuel_sales_volume_dashboard')->middleware('isLoggedIn');
+Route::post('/fuel_sales_volume_dashboard', [DashboardController::class, 'fuelSalesVolume'])->name('fuel_sales_volume_dashboard.filter')->middleware('isLoggedIn');
+Route::get('/procurement_expenses_dashboard', [DashboardController::class, 'procurementExpenses'])->name('procurement_expenses_dashboard')->middleware('isLoggedIn');
+Route::post('/procurement_expenses_dashboard', [DashboardController::class, 'procurementExpenses'])->name('procurement_expenses_dashboard.filter')->middleware('isLoggedIn');
 
 
 /*Load Billing Transaction*/
@@ -323,6 +331,11 @@ Route::get('/generate_receivable_covered_bill_pdf', [ReportController::class,'ge
 
 /*Load User Account List for Admin Only*/
 Route::get('/user', [UserController::class,'user'])->name('user')->middleware('isLoggedIn');
+Route::post('/user/presence/heartbeat', [\App\Http\Controllers\UserPresenceController::class, 'heartbeat'])->name('user.presence.heartbeat')->middleware('isLoggedIn');
+Route::get('/user/presence/online', [\App\Http\Controllers\UserPresenceController::class, 'online'])->name('user.presence.online')->middleware('isLoggedIn');
+Route::get('/user/activity', [\App\Http\Controllers\UserActivityController::class, 'index'])->name('user.activity')->middleware('isLoggedIn');
+Route::get('/user/activity/list', [\App\Http\Controllers\UserActivityController::class, 'listing'])->name('user.activity.list')->middleware('isLoggedIn');
+Route::get('/user/activity/{activityId}', [\App\Http\Controllers\UserActivityController::class, 'detail'])->whereNumber('activityId')->name('user.activity.detail')->middleware('isLoggedIn');
 /*Get List of User*/
 Route::post('user_list', [UserController::class, 'getUserList'])->name('UserList')->middleware('isLoggedIn');
 /*Create User*/
@@ -683,27 +696,27 @@ use App\Http\Controllers\CashiersReport_LPG_AR_Controller;
 Route::post(
     '/cashiers-report/lpg-ar/list',
     [CashiersReport_LPG_AR_Controller::class, 'get_lpg_ar_list']
-)->name('GetLpgArList');
+)->name('GetLpgArList')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar/save',
     [CashiersReport_LPG_AR_Controller::class, 'save_lpg_ar']
-)->name('SaveLpgAr');
+)->name('SaveLpgAr')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar/update',
     [CashiersReport_LPG_AR_Controller::class, 'update_lpg_ar']
-)->name('UpdateLpgAr');
+)->name('UpdateLpgAr')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar/information',
     [CashiersReport_LPG_AR_Controller::class, 'cashiers_report_lpg_ar_info']
-)->name('LpgArInformation');
+)->name('LpgArInformation')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar/delete',
     [CashiersReport_LPG_AR_Controller::class, 'delete_lpg_ar']
-)->name('DeleteLpgAr');
+)->name('DeleteLpgAr')->middleware('isLoggedIn');
 
 
 use App\Http\Controllers\CashiersReport_LPG_AR_SO_Controller;
@@ -711,27 +724,27 @@ use App\Http\Controllers\CashiersReport_LPG_AR_SO_Controller;
 Route::post(
     '/cashiers-report/lpg-ar-so/list',
     [CashiersReport_LPG_AR_SO_Controller::class, 'get_lpg_ar_so_list']
-)->name('GetLpgArSoList');
+)->name('GetLpgArSoList')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar-so/save',
     [CashiersReport_LPG_AR_SO_Controller::class, 'save_lpg_ar_so']
-)->name('SaveLpgArSo');
+)->name('SaveLpgArSo')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar-so/update',
     [CashiersReport_LPG_AR_SO_Controller::class, 'update_lpg_ar_so']
-)->name('UpdateLpgArSo');
+)->name('UpdateLpgArSo')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar-so/information',
     [CashiersReport_LPG_AR_SO_Controller::class, 'cashiers_report_lpg_ar_so_info']
-)->name('LpgArSoInformation');
+)->name('LpgArSoInformation')->middleware('isLoggedIn');
 
 Route::post(
     '/cashiers-report/lpg-ar-so/delete',
     [CashiersReport_LPG_AR_SO_Controller::class, 'delete_lpg_ar_so']
-)->name('DeleteLpgArSo');
+)->name('DeleteLpgArSo')->middleware('isLoggedIn');
 
 
 
@@ -741,27 +754,27 @@ use App\Http\Controllers\CashiersReport_LPG_Expenses_Controller;
 Route::post('/cashiers-report/lpg-expenses/list', [
     CashiersReport_LPG_Expenses_Controller::class,
     'get_lpg_expenses_list',
-])->name('GetLpgExpensesList');
+])->name('GetLpgExpensesList')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-expenses/info', [
     CashiersReport_LPG_Expenses_Controller::class,
     'cashiers_report_lpg_expense_info',
-])->name('LpgExpenseInfo');
+])->name('LpgExpenseInfo')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-expenses/save', [
     CashiersReport_LPG_Expenses_Controller::class,
     'save_lpg_expense',
-])->name('SaveLpgExpense');
+])->name('SaveLpgExpense')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-expenses/update', [
     CashiersReport_LPG_Expenses_Controller::class,
     'update_lpg_expense',
-])->name('UpdateLpgExpense');
+])->name('UpdateLpgExpense')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-expenses/delete', [
     CashiersReport_LPG_Expenses_Controller::class,
     'delete_lpg_expense',
-])->name('DeleteLpgExpense');
+])->name('DeleteLpgExpense')->middleware('isLoggedIn');
 
 use App\Http\Controllers\CashiersReport_LPG_Non_Cash_Payment_Controller;
 
@@ -769,27 +782,27 @@ use App\Http\Controllers\CashiersReport_LPG_Non_Cash_Payment_Controller;
 Route::post('/cashiers-report/lpg-non-cash-payments/list', [
     CashiersReport_LPG_Non_Cash_Payment_Controller::class,
     'get_lpg_non_cash_payment_list',
-])->name('GetLpgNonCashPaymentList');
+])->name('GetLpgNonCashPaymentList')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-non-cash-payments/info', [
     CashiersReport_LPG_Non_Cash_Payment_Controller::class,
     'lpg_non_cash_payment_info',
-])->name('LpgNonCashPaymentInfo');
+])->name('LpgNonCashPaymentInfo')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-non-cash-payments/save', [
     CashiersReport_LPG_Non_Cash_Payment_Controller::class,
     'save_lpg_non_cash_payment',
-])->name('SaveLpgNonCashPayment');
+])->name('SaveLpgNonCashPayment')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-non-cash-payments/update', [
     CashiersReport_LPG_Non_Cash_Payment_Controller::class,
     'update_lpg_non_cash_payment',
-])->name('UpdateLpgNonCashPayment');
+])->name('UpdateLpgNonCashPayment')->middleware('isLoggedIn');
 
 Route::post('/cashiers-report/lpg-non-cash-payments/delete', [
     CashiersReport_LPG_Non_Cash_Payment_Controller::class,
     'delete_lpg_non_cash_payment',
-])->name('DeleteLpgNonCashPayment');
+])->name('DeleteLpgNonCashPayment')->middleware('isLoggedIn');
 
 use App\Http\Controllers\CashiersReport_LPG_Inventory_Controller;
 use App\Http\Controllers\CashiersReport_LPG_EmptyInventory_Controller;

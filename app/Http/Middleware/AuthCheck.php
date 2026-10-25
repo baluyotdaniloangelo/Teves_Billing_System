@@ -20,6 +20,8 @@ class AuthCheck
 		{
 			return redirect('/')->with('fail', "You Have to Login First");
 		}
+        app(\App\Services\UserPresenceService::class)->touch($request);
+
         return $next($request);
     }
 }

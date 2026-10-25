@@ -2,373 +2,192 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use App\Models\User;
-use App\Models\UserAccountModel;
-use Hash;
-use Session;
-use Validator;
-use DataTables;
-use Illuminate\Support\Facades\Storage;
-
-/*Email Function*/
+use App\Http\Requests\SaveUserRequest;
 use App\Mail\ResetPassword;
+use App\Models\UserAccountModel;
+use App\Services\UserPresenceService;
+use App\Support\UserManagementAccess;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-	
-	/*Load UserList Interface*/
-	public function user(){
-		
-			
-			if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin")){
-			
-				$title = 'User List';
-				$data = array();
-				$data = User::where('user_id', '=', Session::get('loginID'))->first();
-				return view("pages.user", compact('data','title'));
-			
-			}
-		
-	}   
-	
-	/*Fetch Site List using Datatable*/
-	public function getUserList(Request $request)
+    private $presence;
+
+    public function __construct(UserPresenceService $presence)
     {
-
-		if ($request->ajax()) {
-		
-			if(Session::has('loginID') && (Session::get('UserType')=="Admin")){
-			
-				$data = UserAccountModel::WHERE('user_type', '<>', 'SUAdmin')	
-				->get([
-				'user_id',
-				'user_job_title',
-				'user_real_name',
-				'user_name',
-				'user_type',
-				'user_status',
-				'user_email_address',
-				'user_branch_access_type',
-				'created_at',
-				'updated_at'
-				]);
-
-			}else{
-			
-				$data = UserAccountModel::select(
-				'user_id',
-				'user_job_title',
-				'user_real_name',
-				'user_name',
-				'user_type',
-				'user_status',
-				'user_email_address',
-				'user_branch_access_type',
-				'created_at',
-				'updated_at'
-				);		
-				
-			}
-		return DataTables::of($data)
-				->addIndexColumn()
-				->addColumn('action', function($row){	
-					
-					//if($row->user_type=='Encoder'){
-						$product_access_button = '<a href="#" data-id="'.$row->user_id.'" class="bi bi-box-seam btn_icon_table btn_icon_table_view" id="UserAccess" onclick="UpdateUserProductAccess('.$row->user_id.')" title="Add User Ptoduct Access"></a>';
-					//}else{
-					//	$product_access_button = '';
-					//}
-					
-					if($row->user_branch_access_type=='ALL'){
-						
-						$actionBtn = '
-						<div class="action_table_menu_switch">
-						<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
-						<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
-						'.$product_access_button.'
-						</div>';
-						
-					}
-					
-					else{
-					
-						$actionBtn = '
-						<div class="action_table_menu_switch">
-						<a href="#" data-id="'.$row->user_id.'" class="ri-edit-circle-fill btn_icon_table btn_icon_table_edit" id="editUser"></a>
-						<a href="#" data-id="'.$row->user_id.'" class="ri-delete-bin-2-fill btn_icon_table btn_icon_table_delete" id="deleteUser"></a>
-						<a href="#" data-id="'.$row->user_id.'" class="bi bi-building btn_icon_table btn_icon_table_view" id="UserAccess" onclick="UpdateUserAccess('.$row->user_id.')" title="Add User Site Access"></a>
-						'.$product_access_button.'
-						</div>';
-					
-					}
-					
-                    return $actionBtn;
-                
-				})
-				->addColumn('created_at_dt_format', function($row){						
-                    return $row->created_at;
-				})
-				
-				->addColumn('updated_at_dt_format', function($row){		
-				
-                    if($row->updated_at=="0000-00-00 00:00:00"){
-						return "$row->updated_at";
-					}else{
-						return "0000-00-00 00:00:00";
-					}
-				})
-				
-				->rawColumns(['action','created_at_dt_format','updated_at_dt_format'])
-                ->make(true);
-				
-		}	
+        $this->presence = $presence;
     }
 
+    public function user()
+    {
+        $data = UserManagementAccess::manager();
+        $summary = $this->summary();
 
-	/*Fetch UserList Information*/
-	public function user_info(Request $request){
+        return view('pages.user', compact('data', 'summary'))->with('title', 'User Management');
+    }
 
-		$UserID = $request->UserID;
-		$data = UserAccountModel::find($UserID, ['user_name', 'user_real_name', 'user_type', 'user_status', 'user_job_title', 'user_email_address', 'user_branch_access_type']);
-		return response()->json($data);
-		
-	}
+    public function getUserList(Request $request)
+    {
+        $canMonitorPresence = UserManagementAccess::manager()->user_type === 'SUAdmin';
+        abort_if(!$canMonitorPresence && $request->filled('presence'), 403, 'Super administrator access is required.');
+        $query = UserManagementAccess::visibleUsers()->select([
+            'user_id', 'user_job_title', 'user_real_name', 'user_name', 'user_type',
+            'user_status', 'user_email_address', 'user_branch_access_type', 'created_at', 'updated_at',
+        ]);
+        if ($canMonitorPresence) $this->presence->attach($query);
+        $request->validate([
+            'role' => ['nullable', Rule::in(['SUAdmin', 'Admin', 'Supervisor', 'Accounting_Staff', 'Encoder'])],
+            'status' => ['nullable', Rule::in(['Active', 'Inactive'])],
+            'presence' => ['nullable', Rule::in(['online', 'offline'])],
+        ]);
+        $query->when($request->filled('role'), function ($query) use ($request) {
+            $query->where('user_type', $request->role);
+        })->when($request->filled('status'), function ($query) use ($request) {
+            $query->where('user_status', $request->status);
+        });
+        if ($canMonitorPresence) $this->presence->filter($query, $request->presence);
 
-	/*Delete UserList Information*/
-	public function delete_user_confirmed(Request $request){
-		
-			$userID = $request->userID;
-			UserAccountModel::find($userID)->delete();
-			return 'Deleted';
-		
-	} 
+        $table = DataTables::of($query)->addIndexColumn()
+            ->addColumn('action', function ($user) use ($canMonitorPresence) {
+                return view('pages.user.partials.actions', compact('user'))->with('canViewActivity', $canMonitorPresence)->render();
+            })
+            ->addColumn('created_at_dt_format', function ($user) { return $user->getRawOriginal('created_at'); })
+            ->addColumn('updated_at_dt_format', function ($user) { return $user->getRawOriginal('updated_at'); })
+            // Text columns are escaped by the client renderer; only the action partial is HTML.
+            ->escapeColumns([])->rawColumns(['action'])->with('summary', $this->summary());
+        if ($canMonitorPresence) {
+            $table->editColumn('is_online', function ($user) { return $user->is_online === null ? null : (bool) $user->is_online; })
+                ->editColumn('last_seen_at', function ($user) { return $this->presence->isoTimestamp($user->last_seen_at); })
+                ->with('presence', ['available' => $this->presence->available(), 'window_seconds' => $this->presence->windowSeconds()]);
+        }
 
-	public function create_user_post(Request $request){
-		
-		$request->validate([
-		  'user_real_name'  		=> 'required|unique:user_tb,user_real_name',
-		  'user_name'      			=> 'required|unique:user_tb,user_name',
-		  'user_password'			=> 'required|min:6|max:20',
-		  'user_type'    			=> 'required',
-		  'user_email_address'   	=> ['required',Rule::unique('user_tb')->where( 
-												fn ($query) =>$query
-													->where('user_email_address', $request->user_email_address)
-													->where('user_email_address', '!=', '')
-												)]
-        ], 
-        [
-			'user_real_name.required'	 	=> 'Name is required',
-			'user_name.required' 			=> 'User Name is Required',
-			'user_password.required' 		=> 'Password is Required',
-			'user_email_address.required' 	=> 'Email Address is Required',
-			'user_type.required' 			=> 'User Type is Required'
-        ]
-		);
-					
-			$UserList = new UserAccountModel();
-			$UserList->user_real_name 			= $request->user_real_name;
-			$UserList->user_job_title 			= $request->user_job_title;
-			$UserList->user_name 				= $request->user_name;
-			$UserList->user_email_address 		= $request->user_email_address;
-			$UserList->user_password 			= hash::make($request->user_password);
-			$UserList->user_type 				= $request->user_type;
-			$UserList->user_status 				= $request->user_status;
-			$UserList->user_branch_access_type 	= $request->user_access;
-			$UserList->created_by_user_idx 		= Session::has('loginID');
-			
-			$result = $UserList->save();
-			
-			/*Get Last ID*/
-			$last_transaction_id = $UserList->user_id;
-				
-			if($result){
-				
-						/*Call Email Function to Send Mail*/
-						if($request->user_email_address!=''){
-						
-							$title 			= 'Teves Billing System Portal:User Account Created';
-							$body 			= 'Your User Account has been successfully created. Please use the provided Credentials below.';
-							$name 			= $request->user_real_name;
-							$user_id 		= $last_transaction_id;
-							$user_name 		= $request->user_name;
-							$user_password 	= $request->user_password;
-							
-							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
-						}
-				
-				return response()->json(array('success' => "User Information successfully created!", 'user_id' => $last_transaction_id), 200);
-				
-			}
-			else{
-				return response()->json(['success'=>'Error on Insert User Information']);
-			}
-			
-	}
-	
-	public function update_user_post(Request $request){
-			
-			if($request->user_password!=''){		
-					$request->validate([
-					  'user_real_name'  		=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      			=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_email_address'   	=> ['required',Rule::unique('user_tb')->where( 
-												fn ($query) =>$query
-													->where('user_email_address', $request->user_email_address)
-													->where('user_email_address', '!=', '')
-													->where('user_id','!=', $request->userID) 
-												)],
-					  'user_password'   		=> 'required|min:6|max:20',
-					  'user_type'    			=> 'required',
-					], 
-					[
-						'user_real_name.required' 		=> 'Name is Required',
-						'user_name.required' 			=> 'User Name is Required',
-						'user_password.required' 		=> 'Password is Required',
-						'user_email_address.required' 	=> 'Email Address is Required',
-						'user_type.required' 			=> 'User Type is Required'
-					]
-					);
-			}
-			else{
-					$request->validate([
-					  'user_real_name'  		=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      			=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_email_address'   	=> ['required',Rule::unique('user_tb')->where( 
-												fn ($query) =>$query
-													->where('user_email_address', $request->user_email_address)
-													->where('user_email_address', '!=', '')
-													->where('user_id','!=', $request->userID) 
-												)],
-					  'user_type'    			=> 'required',
-					], 
-					[
-						'user_real_name.required' 		=> 'Name is Required',
-						'user_name.required' 			=> 'User Name is Required',
-						'user_email_address.required' 	=> 'Email Address is Required',
-						'user_type.required' 			=> 'User Type is Required'
-					]
-					);
-			}			
-			
-			
-			$UserList = new UserAccountModel();
-			$UserList = UserAccountModel::find($request->userID);
-			$UserList->user_job_title 					= $request->user_job_title;
-			$UserList->user_real_name 					= $request->user_real_name;
-			$UserList->user_name 						= $request->user_name;
-			if($request->user_password!=''){ $UserList->user_password 	= hash::make($request->user_password); }/*Kung BInago Lang Password saka ma update*/
-			$UserList->user_type 						= $request->user_type;
-			$UserList->user_status 						= $request->user_status;
-			$UserList->user_email_address 				= $request->user_email_address;
-			$UserList->user_branch_access_type 			= $request->user_access;
-			$UserList->updated_by_user_idx 				= Session::get('loginID');
-			
-			$result = $UserList->update();
-			
-			if($request->user_password!=''){ 
-			
-				$UserList->user_password 	= hash::make($request->user_password); 
-						
-						/*Call Email Function*/
-						if($request->user_email_address!=''){
-						
-							$title 			= 'Teves Billing System Portal:Reset Password';
-							$body 			= 'Your Password has been changed successfully. Please use below password to log in.';
-							$name 			= $request->user_real_name;
-							$user_id 		= $request->userID;
-							$user_name 		= $request->user_name;
-							$user_password 	= $request->user_password;
+        return $table->make(true)->header('Cache-Control', 'no-store, private');
+    }
 
-							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
-							
-						}
-						
-			}/*Kung BInago Lang Password saka ma update*/
-			
-			if($result){
-				return response()->json(['success'=>'User Information successfully updated!']);
-				/*Send Email*/
-			}
-			else{
-				return response()->json(['success'=>'Error on Update User Information']);
-			}
-	
-	}
+    public function user_info(Request $request)
+    {
+        $request->validate(['UserID' => 'required|integer']);
+        $actor = UserManagementAccess::actor();
+        $user = (int) $request->UserID === (int) $actor->user_id
+            ? $actor : UserManagementAccess::target($request->UserID);
 
-	public function user_account_post(Request $request){
+        return response()->json($user->only([
+            'user_id', 'user_name', 'user_real_name', 'user_type', 'user_status',
+            'user_job_title', 'user_email_address', 'user_branch_access_type',
+        ]));
+    }
 
-			if($request->user_password!=''){		
-					$request->validate([
-					
-					  'user_real_name'  		=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      			=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_password'   		=> 'required|min:6|max:20',
-					  'user_email_address'   	=> 'unique:user_tb,user_email_address,'.$request->userID.',user_id',
-					  
-					], 
-					[
-					
-					 'user_real_name.required' => 'Name is required',
-					 'user_name.required' => 'User Name is Required',
-					 'user_password.required' => 'Password is Required'
-					
-					]
-					);
-			}
-			else{
-					$request->validate([
-					  'user_real_name'  	=> 'required|unique:user_tb,user_real_name,'.$request->userID.',user_id',
-					  'user_name'      		=> 'required|unique:user_tb,user_name,'.$request->userID.',user_id',
-					  'user_email_address'  => 'unique:user_tb,user_email_address,'.$request->userID.',user_id',
-					], 
-					[
-						'user_real_name.required' => 'Name is required',
-						'user_name.required' => 'User Name is Required'
-					]
-					);
-			}		
-				
-			$UserList = new UserAccountModel();
-			$UserList = UserAccountModel::find($request->userID);
-			
-			$UserList->user_real_name 			= $request->user_real_name;
-			$UserList->user_name 				= $request->user_name;
-			$UserList->user_email_address 		= $request->user_email_address;
-			
-			/*Kung Binago Lang Password saka ma update*/
-			if($request->user_password!=''){ 
-						
-						$UserList->user_password 	= hash::make($request->user_password); 
-						
-						/*Call Email Function*/
-						if($request->user_email_address!=''){
-				
-							$title 			= 'Teves Billing System Portal: Password Reset';
-							$body 			= 'Your password has been changed successfully. Please use below password to log in.';
-							$name 			= $request->user_real_name;
-							$user_id 		= $request->userID;
-							$user_name 		= $request->user_name;
-							$user_password 	= $request->user_password;
-							
-							Mail::to($request->user_email_address)->send(new ResetPassword($title, $body, $name, $user_id, $user_name, $user_password));
-							
-						}
-				
-			}
-			
-			$UserList->updated_by_user_id 	= Session::get('loginID');
-			$result = $UserList->update();
-			
-			if($result){
-				return response()->json(['success'=>'Account Information Successfully Updated!']);
-			}
-			else{
-				return response()->json(['success'=>'Error on Account User Information']);
-			}
-	
-	}
+    public function create_user_post(SaveUserRequest $request)
+    {
+        $user = new UserAccountModel();
+        $this->fillUser($user, $request->validated());
+        $user->created_by_user_idx = session('loginID');
+        $user->save();
+        $warning = $this->sendCredentials($user, $request->user_password, true);
 
+        return response()->json([
+            'success' => 'User account created successfully.', 'user_id' => $user->user_id, 'warning' => $warning,
+        ], 201);
+    }
+
+    public function update_user_post(SaveUserRequest $request)
+    {
+        $user = UserManagementAccess::target($request->userID);
+        if ((int) $user->user_id === (int) session('loginID') &&
+            ($request->user_status !== 'Active' || $request->user_type !== $user->user_type)) {
+            throw ValidationException::withMessages(['user_type' => 'Keep your own role and active status to retain administrator access.']);
+        }
+        $this->fillUser($user, $request->validated());
+        $user->updated_by_user_idx = session('loginID');
+        $user->save();
+        if ((int) $user->user_id === (int) session('loginID')) {
+            session(['UserType' => $user->user_type, 'user_branch_access_type' => $user->user_branch_access_type]);
+        }
+        $warning = $request->filled('user_password') ? $this->sendCredentials($user, $request->user_password) : null;
+
+        return response()->json(['success' => 'User account updated successfully.', 'warning' => $warning]);
+    }
+
+    public function delete_user_confirmed(Request $request)
+    {
+        $request->validate(['userID' => 'required|integer']);
+        $user = UserManagementAccess::target($request->userID);
+        abort_if((int) $user->user_id === (int) session('loginID'), 422, 'You cannot delete your own account.');
+        $user->delete();
+
+        return response()->json(['success' => 'User account deleted successfully.']);
+    }
+
+    public function user_account_post(Request $request)
+    {
+        $user = UserManagementAccess::actor();
+        $request->validate(['userID' => 'required|integer']);
+        abort_unless((int) $request->userID === (int) $user->user_id, 403);
+        $values = $request->validate([
+            'user_real_name' => ['required', 'string', 'max:255', Rule::unique('user_tb', 'user_real_name')->ignore($user->user_id, 'user_id')],
+            'user_name' => ['required', 'string', 'max:255', Rule::unique('user_tb', 'user_name')->ignore($user->user_id, 'user_id')],
+            'user_email_address' => ['nullable', 'email', 'max:100', Rule::unique('user_tb', 'user_email_address')->ignore($user->user_id, 'user_id')],
+            'user_password' => ['nullable', 'string', 'min:6', 'max:20'],
+        ]);
+        foreach (['user_real_name', 'user_name', 'user_email_address'] as $field) {
+            $user->$field = $values[$field] ?? '';
+        }
+        if ($request->filled('user_password')) $user->user_password = Hash::make($values['user_password']);
+        $user->updated_by_user_idx = session('loginID');
+        $user->save();
+        $warning = $request->filled('user_password') ? $this->sendCredentials($user, $values['user_password']) : null;
+
+        return response()->json(['success' => 'Account information updated successfully.', 'warning' => $warning]);
+    }
+
+    private function fillUser(UserAccountModel $user, array $values): void
+    {
+        foreach (['user_real_name', 'user_name', 'user_job_title', 'user_email_address', 'user_type', 'user_status'] as $field) {
+            $user->$field = $values[$field] ?? '';
+        }
+        $user->user_branch_access_type = $values['user_access'];
+        if (!empty($values['user_password'])) $user->user_password = Hash::make($values['user_password']);
+    }
+
+    private function summary(): array
+    {
+        $users = UserManagementAccess::visibleUsers();
+
+        $summary = [
+            'total' => (clone $users)->count(),
+            'active' => (clone $users)->where('user_status', 'Active')->count(),
+            'administrators' => (clone $users)->whereIn('user_type', ['Admin', 'SUAdmin'])->count(),
+            'by_branch' => (clone $users)->where('user_branch_access_type', 'BYBRANCH')->count(),
+        ];
+        if (UserManagementAccess::manager()->user_type === 'SUAdmin') {
+            $summary['online'] = $this->presence->onlineCount($users);
+            $summary['online_window_minutes'] = (int) ceil($this->presence->windowSeconds() / 60);
+        }
+
+        return $summary;
+    }
+
+    private function sendCredentials(UserAccountModel $user, string $password, bool $created = false): ?string
+    {
+        if (!$user->user_email_address) return null;
+        try {
+            Mail::to($user->user_email_address)->send(new ResetPassword(
+                'Teves Billing System Portal: ' . ($created ? 'User Account Created' : 'Password Reset'),
+                $created ? 'Your user account has been created. Please use the credentials below.' : 'Your password has been changed. Please use the credentials below.',
+                $user->user_real_name, $user->user_id, $user->user_name, $password
+            ));
+        } catch (\Throwable $exception) {
+            Log::warning('User credential notification failed.', ['user_id' => $user->user_id]);
+
+            return 'The account was saved, but the notification email could not be sent.';
+        }
+
+        return null;
+    }
 }

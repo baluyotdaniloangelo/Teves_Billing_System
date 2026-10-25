@@ -49,3 +49,4 @@
   ======================================================== -->
 
 @stack('page_styles')
+@include('layouts.user_presence')

@@ -55,11 +55,17 @@
 
             if (root.FuelDashboard) root.FuelDashboard.destroy();
             if (root.SalesReceivablesDashboard) root.SalesReceivablesDashboard.destroy();
+            if (root.FuelSalesVolumeDashboard) root.FuelSalesVolumeDashboard.destroy();
+            if (root.ProcurementExpensesDashboard) root.ProcurementExpensesDashboard.destroy();
             const oldMain = dashboardRoot();
             if (oldMain) oldMain.replaceWith(next);
 
             if (next.classList.contains('sr-dashboard')) {
                 if (root.SalesReceivablesDashboard) root.SalesReceivablesDashboard.init();
+            } else if (next.classList.contains('fsv-dashboard')) {
+                if (root.FuelSalesVolumeDashboard) root.FuelSalesVolumeDashboard.init();
+            } else if (next.classList.contains('pe-dashboard')) {
+                if (root.ProcurementExpensesDashboard) root.ProcurementExpensesDashboard.init();
             } else if (root.FuelDashboard) {
                 root.FuelDashboard.init();
             }

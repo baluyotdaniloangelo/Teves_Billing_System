@@ -24,6 +24,10 @@ class Kernel extends ConsoleKernel
      */
 	protected function schedule(Schedule $schedule)
 	{
+        $schedule->command('sms:birthday --send')
+            ->dailyAt(config('sms.birthday_time', '08:00'))->timezone(config('sms.timezone', 'Asia/Manila'))
+            ->when(function () { return (bool) config('sms.birthday_enabled'); })->withoutOverlapping(1440);
+
 		// ✅ Daily unbilled report
 		$schedule->call(function () {
 			app(\App\Http\Controllers\EmailController::class)->sendUnbilledReport();

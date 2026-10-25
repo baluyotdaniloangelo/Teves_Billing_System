@@ -1391,7 +1391,7 @@ class SalesOrderController extends Controller
 				'pt.product_code',
 				'pt.product_name',
 				'pt.product_unit_measurement',
-				DB::raw('COALESCE(spt.selling_price, pt.product_price) AS product_price')
+				DB::raw('COALESCE(spt.selling_price, bp.branch_price, pt.product_price) AS product_price')
 			])
 
 			->join('teves_user_product_category_access as upca', function ($join) use ($userId) {
@@ -1403,6 +1403,11 @@ class SalesOrderController extends Controller
 				$join->on('pt.product_id', '=', 'spt.product_idx')
 					 ->where('spt.branch_idx', $request->branch_idx)
 					 ->where('spt.client_idx', $request->client_idx);
+			})
+
+			->leftJoin('teves_product_branch_price_table as bp', function ($join) use ($request) {
+				$join->on('pt.product_id', '=', 'bp.product_idx')
+					 ->where('bp.branch_idx', $request->branch_idx);
 			})
 
 			->when($request->category_idx != 0, function ($query) use ($request) {

@@ -383,7 +383,7 @@
         @include('pages.product_information.modals.selling_price_modals')
         @include('pages.product_information.modals.pump_modals')
         @include('pages.product_information.modals.product_notice_modals')
-        @if(($data->user_type ?? null) === 'SUAdmin')
+        @if(in_array($data->user_type ?? null, ['SUAdmin', 'Admin']))
             @include('pages.product_category.modals.product_category_create_edit_modal')
             @include('pages.product_category.modals.product_category_delete_modal')
         @endif
@@ -402,7 +402,7 @@
     @include('pages.product_information.scripts.seller_price_script')
     @include('pages.product_information.scripts.selling_price_script')
     @include('pages.product_information.scripts.pump_script')
-    @if(($data->user_type ?? null) === 'SUAdmin')
+    @if(in_array($data->user_type ?? null, ['SUAdmin', 'Admin']))
         @include('pages.product_category.scripts.product_category_script')
     @endif
 @endpush

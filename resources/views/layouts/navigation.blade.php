@@ -2,12 +2,14 @@
     // Edit sidebar labels, icons, link targets and menu order in the SIDEBAR MENU below.
     // This map keeps a menu item selected on its related detail/form pages as well.
     $workspaceNavRoutes = [
+        'user_activity' => ['user.activity'],
         'so' => ['so', 'create_so_billing', 'so_add_product'],
         'receivables' => ['receivables', 'create_recievable', 'receivable_from_billing_form'],
         'salesorder' => ['salesorder', 'sales_order_form'],
         'purchaseorder' => ['purchaseorder', 'purchase_order_form', 'purchase_order_forms'],
         'cashierReport' => ['cashierReport', 'cashiers_report_form', 'cashiers_report_form_fuel'],
         'cashierReportLPG' => ['cashierReportLPG', 'cashiers_report_form_lpg'],
+        'fuel_sales_volume_dashboard' => ['fuel_sales_volume_dashboard', 'fuel_sales_volume_dashboard.filter'],
         'product' => ['product', 'product_category', 'update_product_information'],
     ];
     $workspaceNavActive = function ($item) use ($workspaceNavRoutes) {
@@ -27,7 +29,7 @@
     $workspaceBillingReportsOpen = $workspaceNavGroupOpen(['report', 'soa_summary_history']);
     $workspaceSalesReportsOpen = $workspaceNavGroupOpen(['salesordersummary', 'daily_sales', 'cash_report_page', 'sales_report', 'MonthlySalesSummary']);
     $workspacePurchaseReportsOpen = $workspaceNavGroupOpen(['purchaseordersummary']);
-    $workspaceMaintenanceOpen = $workspaceNavGroupOpen(['product', 'bank', 'branch', 'client', 'supplier', 'salesagent', 'reminder', 'user']);
+    $workspaceMaintenanceOpen = $workspaceNavGroupOpen(['product', 'bank', 'branch', 'client', 'supplier', 'salesagent', 'reminder', 'user', 'user_activity']);
     $workspacePageTitle = $workspaceNavActive('product') ? 'Products & services' : ($title ?? 'Billing System');
 @endphp
 
@@ -44,6 +46,10 @@
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
+
+        @if(($data->user_type ?? null) === 'SUAdmin')
+            @include('layouts.partials.online_users_shortcut')
+        @endif
 
 		<li class="nav-item dropdown">
 
@@ -148,6 +154,16 @@
 	   <li class="nav-item">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('sales_receivables_dashboard') }}" href="{{ route('sales_receivables_dashboard') }}" title="Sales &amp; Receivables Dashboard" @if($workspaceNavActive('sales_receivables_dashboard')) aria-current="page" @endif>
           <i class="bi bi-bar-chart-line navbar_icon"></i><span>Sales &amp; Receivables</span>
+        </a>
+       </li>
+       <li class="nav-item">
+        <a class="nav-link navbar_bg {{ $workspaceNavClass('fuel_sales_volume_dashboard') }}" href="{{ route('fuel_sales_volume_dashboard') }}" title="Fuel Sales Volume Dashboard" @if($workspaceNavActive('fuel_sales_volume_dashboard')) aria-current="page" @endif>
+          <i class="bi bi-fuel-pump navbar_icon"></i><span>Fuel Sales Volume</span>
+        </a>
+       </li>
+	   <li class="nav-item">
+        <a class="nav-link navbar_bg {{ $workspaceNavClass('procurement_expenses_dashboard') }}" href="{{ route('procurement_expenses_dashboard') }}" title="Procurement &amp; Expenses Dashboard" @if($workspaceNavActive('procurement_expenses_dashboard')) aria-current="page" @endif>
+          <i class="bi bi-bag-check navbar_icon"></i><span>Procurement &amp; Expenses</span>
         </a>
        </li>
 	   <?php } ?>
@@ -267,7 +283,7 @@
 			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 
 
-			<?php if($data->user_type=="SUAdmin"){ ?>
+			<?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin"){ ?>
 			<a href="{{ route('product', ['tab' => 'product-variants-tab']) }}" class="sidebar_li_a {{ $workspaceNavClass('product') }}" title="Manage Product Categories" @if($workspaceNavActive('product')) aria-current="page" @endif>
 	              <i class="bi bi-tags navbar_icon" title="Manage Product Categories"></i><span>Products and Services</span>
 	            </a>
@@ -315,6 +331,9 @@
 					<i class="bi bi-people-fill navbar_icon"></i>
 					<span>User's Account</span>
 				</a>
+                @if($data->user_type === 'SUAdmin')
+                <a href="{{ route('user.activity') }}" class="sidebar_li_a {{ $workspaceNavClass('user_activity') }}" title="User activity history" @if($workspaceNavActive('user_activity')) aria-current="page" @endif><i class="bi bi-clock-history navbar_icon" aria-hidden="true"></i><span>User Activity</span></a>
+                @endif
 
 			<?php } ?>
 

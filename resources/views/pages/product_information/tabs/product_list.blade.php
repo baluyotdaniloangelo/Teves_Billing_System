@@ -151,7 +151,7 @@ div.dataTables_wrapper {
                 <i class="bi bi-boxes me-2" aria-hidden="true"></i>Product Variants
             </button>
         </li>
-        @if(($data->user_type ?? null) === 'SUAdmin')
+        @if(in_array($data->user_type ?? null, ['SUAdmin', 'Admin']))
         <li class="nav-item flex-fill" role="presentation">
             <button class="nav-link w-100" id="product-categories-tab" data-bs-toggle="tab" data-bs-target="#productCategoriesPane" type="button" role="tab" aria-controls="productCategoriesPane" aria-selected="false">
                 <i class="bi bi-tags me-2" aria-hidden="true"></i>Product Categories
@@ -360,7 +360,7 @@ div.dataTables_wrapper {
     </div>
 </section>
 </div>
-@if(($data->user_type ?? null) === 'SUAdmin')
+@if(in_array($data->user_type ?? null, ['SUAdmin', 'Admin']))
 <div class="tab-pane fade" id="productCategoriesPane" role="tabpanel" aria-labelledby="product-categories-tab" tabindex="0">
     @include('pages.product_category.tabs.product_category_management')
 </div>

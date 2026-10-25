@@ -12,7 +12,7 @@
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td align="center">
   <table role="presentation" width="680" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:680px;background:#ffffff;border:1px solid #e2e9e5;border-radius:9px;overflow:hidden;">
     <tr><td style="padding:21px 28px;background:#17363a;color:#ffffff;">
-      <div style="font-size:17px;font-weight:bold;letter-spacing:2px;"><span style="color:#f2a16b;">.</span></div>
+      <div style="font-size:17px;font-weight:bold;letter-spacing:2px;"><span style="color:#f2a16b;"></span></div>
       <div style="padding-top:4px;color:#b7c9c3;font-size:9px;letter-spacing:2px;text-transform:uppercase;">Billing &amp; Operations</div>
     </td></tr>
     <tr><td style="padding:26px 28px 8px;">

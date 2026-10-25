@@ -181,7 +181,298 @@ class DashboardController extends Controller
 			'trend' => $trend, 'recent_activity' => $recentActivity,
 		]);
 	}
+
+	public function fuelSalesVolume(Request $request)
+	{
+		if (!Session::has('loginID')) return redirect('/login');
+		$userId = Session::get('loginID');
+		$user = User::where('user_id', $userId)->first();
+		if (!$user || $user->user_type !== 'SUAdmin') return redirect('/billing');
+
+		$request->validate([
+			'start_date' => 'nullable|date_format:Y-m-d',
+			'end_date' => 'nullable|date_format:Y-m-d',
+			'company_header' => 'nullable|string|max:32',
+			'product_id' => 'nullable|integer|exists:teves_product_table,product_id',
+		]);
+		$endDate = $request->input('end_date') ?: now()->toDateString();
+		$startDate = $request->input('start_date') ?: \Carbon\Carbon::parse($endDate)->subDays(29)->toDateString();
+		if ($startDate > $endDate) {
+			throw \Illuminate\Validation\ValidationException::withMessages(['end_date' => 'The end date must be on or after the start date.']);
+		}
+
+		$branches = TevesBranchModel::query()
+			->when(Session::get('user_branch_access_type') === 'BYBRANCH', function ($query) use ($userId) {
+				$query->whereIn('branch_id', function ($access) use ($userId) {
+					$access->select('branch_idx')->from('teves_user_branch_access')->where('user_idx', $userId);
+				});
+			})
+			->orderBy('branch_code')->get(['branch_id', 'branch_code', 'branch_name']);
+		$branchId = $request->input('company_header') ?: 'All';
+		if ($branchId !== 'All' && !$branches->contains(fn ($branch) => (string) $branch->branch_id === (string) $branchId)) {
+			throw \Illuminate\Validation\ValidationException::withMessages(['company_header' => 'Choose an accessible branch.']);
+		}
+
+		$fuelProducts = DB::table('teves_product_table as product')
+			->join('teves_product_category as category', 'category.category_id', '=', 'product.category_idx')
+			->whereNull('product.deleted_at')->whereNull('category.deleted_at')
+			->whereRaw('LOWER(TRIM(category.category_name)) LIKE ?', ['%fuel%'])
+			->orderBy('product.product_name')
+			->get(['product.product_id', 'product.product_name']);
+		$productId = $request->input('product_id') ?: 'All';
+		if ($productId !== 'All' && !$fuelProducts->contains(fn ($product) => (string) $product->product_id === (string) $productId)) {
+			throw \Illuminate\Validation\ValidationException::withMessages(['product_id' => 'Choose a Fuel product.']);
+		}
+
+		$deliveryQuery = function () use ($userId, $branchId, $productId, $startDate, $endDate) {
+			$query = DB::table('teves_sales_order_delivery_details as delivery')
+				->join('teves_sales_order_table as so', 'so.sales_order_id', '=', 'delivery.sales_order_idx')
+				->join('teves_product_table as product', 'product.product_id', '=', 'delivery.sales_order_component_product_idx')
+				->join('teves_product_category as category', 'category.category_id', '=', 'product.category_idx')
+				->leftJoin('teves_client_table as client', 'client.client_id', '=', 'so.sales_order_client_idx')
+				->leftJoin('teves_branch_table as branch', 'branch.branch_id', '=', 'so.company_header')
+				->whereNull('so.deleted_at')->whereNull('product.deleted_at')->whereNull('category.deleted_at')
+				->where('so.sales_order_quotation', 0)
+				->whereBetween('delivery.sales_order_delivery_date', [$startDate, $endDate])
+				->whereRaw('LOWER(TRIM(category.category_name)) LIKE ?', ['%fuel%']);
+			$this->applyDashboardBranchAccess($query, 'so.company_header', $userId);
+			return $query
+				->when($branchId !== 'All', fn ($q) => $q->where('so.company_header', $branchId))
+				->when($productId !== 'All', fn ($q) => $q->where('product.product_id', $productId));
+		};
+
+		$retailQuery = function () use ($userId, $branchId, $productId, $startDate, $endDate) {
+			$query = DB::table('teves_cashiers_report_p1 as sale')
+				->join('teves_cashiers_report as report', 'report.cashiers_report_id', '=', 'sale.cashiers_report_id')
+				->join('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
+				->join('teves_product_category as category', 'category.category_id', '=', 'product.category_idx')
+				->leftJoin('teves_branch_table as branch', 'branch.branch_id', '=', 'report.teves_branch')
+				->where('report.cashier_report_type', 'FUEL')->whereNull('report.deleted_at')
+				->whereNull('product.deleted_at')->whereNull('category.deleted_at')
+				->whereBetween('report.report_date', [$startDate, $endDate])
+				->whereRaw('LOWER(TRIM(category.category_name)) LIKE ?', ['%fuel%']);
+			$this->applyDashboardBranchAccess($query, 'report.teves_branch', $userId);
+			return $query
+				->when($branchId !== 'All', fn ($q) => $q->where('report.teves_branch', $branchId))
+				->when($productId !== 'All', fn ($q) => $q->where('product.product_id', $productId));
+		};
+
+		$orderLiters = (float) $deliveryQuery()->sum('delivery.sales_order_delivery_quantity');
+		$orderCount = (int) $deliveryQuery()->distinct()->count('so.sales_order_id');
+		$activeCustomers = (int) $deliveryQuery()->whereNotNull('so.sales_order_client_idx')->distinct()->count('so.sales_order_client_idx');
+		$retailLiters = (float) $retailQuery()->sum('sale.order_quantity');
+		$retailEntryCount = (int) $retailQuery()->count('sale.cashiers_report_p1_id');
+
+		$customerSales = $deliveryQuery()
+			->selectRaw('so.sales_order_client_idx as client_id, COALESCE(client.client_name, "Unassigned customer") as client_name, COUNT(DISTINCT so.sales_order_id) as order_count, SUM(delivery.sales_order_delivery_quantity) as delivered_liters, MAX(delivery.sales_order_delivery_date) as last_delivery')
+			->groupBy('so.sales_order_client_idx', 'client.client_name')
+			->orderByDesc('delivered_liters')->limit(25)->get();
+		$customerProductRows = $deliveryQuery()
+			->selectRaw('so.sales_order_client_idx as client_id, product.product_name, SUM(delivery.sales_order_delivery_quantity) as delivered_liters')
+			->groupBy('so.sales_order_client_idx', 'product.product_name')->orderByDesc('delivered_liters')->get();
+		$topProductByClient = [];
+		foreach ($customerProductRows as $row) {
+			$key = $row->client_id === null ? 'unassigned' : (string) $row->client_id;
+			if (!array_key_exists($key, $topProductByClient)) $topProductByClient[$key] = $row->product_name;
+		}
+		foreach ($customerSales as $customer) {
+			$key = $customer->client_id === null ? 'unassigned' : (string) $customer->client_id;
+			$customer->top_product = $topProductByClient[$key] ?? '—';
+		}
+
+		$retailByBranch = $retailQuery()
+			->selectRaw('report.teves_branch as branch_id, COALESCE(branch.branch_code, "Branch") as branch_code, COALESCE(branch.branch_name, "") as branch_name, COUNT(DISTINCT report.cashiers_report_id) as report_count, SUM(sale.order_quantity) as sold_liters')
+			->groupBy('report.teves_branch', 'branch.branch_code', 'branch.branch_name')->orderByDesc('sold_liters')->get();
+		$retailByProduct = $retailQuery()
+			->selectRaw('product.product_id, product.product_name, SUM(sale.order_quantity) as sold_liters')
+			->groupBy('product.product_id', 'product.product_name')->orderByDesc('sold_liters')->get();
+		$orderByProduct = $deliveryQuery()
+			->selectRaw('product.product_id, product.product_name, SUM(delivery.sales_order_delivery_quantity) as sold_liters')
+			->groupBy('product.product_id', 'product.product_name')->orderByDesc('sold_liters')->get();
+		$productMix = [];
+		foreach ($orderByProduct as $row) {
+			$productMix[$row->product_id] = ['product_name' => $row->product_name, 'sales_order_liters' => (float) $row->sold_liters, 'retail_liters' => 0.0];
+		}
+		foreach ($retailByProduct as $row) {
+			if (!isset($productMix[$row->product_id])) $productMix[$row->product_id] = ['product_name' => $row->product_name, 'sales_order_liters' => 0.0, 'retail_liters' => 0.0];
+			$productMix[$row->product_id]['retail_liters'] = (float) $row->sold_liters;
+		}
+		$productMix = collect(array_values($productMix))
+			->map(function ($row) { $row['total_liters'] = $row['sales_order_liters'] + $row['retail_liters']; return $row; })
+			->sortByDesc('total_liters')->values();
+
+		$orderTrend = $deliveryQuery()
+			->selectRaw('delivery.sales_order_delivery_date as day, SUM(delivery.sales_order_delivery_quantity) as liters')
+			->groupBy('delivery.sales_order_delivery_date')->orderBy('day')->get();
+		$retailTrend = $retailQuery()
+			->selectRaw('report.report_date as day, SUM(sale.order_quantity) as liters')
+			->groupBy('report.report_date')->orderBy('day')->get();
+		$trendByDay = [];
+		foreach ($orderTrend as $row) $trendByDay[$row->day]['sales_order'] = (float) $row->liters;
+		foreach ($retailTrend as $row) $trendByDay[$row->day]['retail'] = (float) $row->liters;
+		$trend = [];
+		foreach (\Carbon\CarbonPeriod::create($startDate, $endDate) as $day) {
+			$key = $day->toDateString();
+			$trend[] = ['date' => $key, 'sales_order' => $trendByDay[$key]['sales_order'] ?? 0, 'retail' => $trendByDay[$key]['retail'] ?? 0];
+		}
+
+		return view('dashboard.fuel_sales_volume', [
+			'data' => $user, 'title' => 'Fuel Sales Volume Dashboard', 'branches' => $branches,
+			'fuel_products' => $fuelProducts, 'branch_id' => $branchId, 'product_id' => $productId,
+			'start_date' => $startDate, 'end_date' => $endDate,
+			'order_liters' => $orderLiters, 'order_count' => $orderCount, 'active_customers' => $activeCustomers,
+			'retail_liters' => $retailLiters, 'retail_entry_count' => $retailEntryCount,
+			'customer_sales' => $customerSales, 'product_mix' => $productMix,
+			'retail_by_branch' => $retailByBranch, 'trend' => $trend,
+		]);
+	}
 	
+	public function procurementExpenses(Request $request)
+	{
+		if (!Session::has('loginID')) return redirect('/login');
+		$user = User::where('user_id', Session::get('loginID'))->first();
+		if (!$user || $user->user_type !== 'SUAdmin') return redirect('/billing');
+
+		$request->validate([
+			'start_date' => 'nullable|date_format:Y-m-d',
+			'end_date' => 'nullable|date_format:Y-m-d',
+			'company_header' => 'nullable|string|max:32',
+			'source' => 'nullable|in:All,Fuel,LPG',
+		]);
+
+		$endDate = $request->input('end_date') ?: now()->toDateString();
+		$startDate = $request->input('start_date') ?: \Carbon\Carbon::parse($endDate)->subDays(29)->toDateString();
+		if ($startDate > $endDate) {
+			throw \Illuminate\Validation\ValidationException::withMessages(['end_date' => 'The end date must be on or after the start date.']);
+		}
+
+		$userId = Session::get('loginID');
+		$branches = TevesBranchModel::query()
+			->when(Session::get('user_branch_access_type') === 'BYBRANCH', function ($q) use ($userId) {
+				$q->whereIn('branch_id', function ($access) use ($userId) {
+					$access->select('branch_idx')->from('teves_user_branch_access')->where('user_idx', $userId);
+				});
+			})
+			->orderBy('branch_code')->get(['branch_id', 'branch_code', 'branch_name']);
+		$branchId = $request->input('company_header') ?: 'All';
+		if ($branchId !== 'All' && !$branches->contains(fn ($branch) => (string) $branch->branch_id === (string) $branchId)) {
+			throw \Illuminate\Validation\ValidationException::withMessages(['company_header' => 'Choose an accessible branch.']);
+		}
+		$source = $request->input('source') ?: 'All';
+		$showFuel = $source === 'All' || $source === 'Fuel';
+		$showLpg = $source === 'All' || $source === 'LPG';
+
+		$purchaseOrderQuery = function () use ($userId, $branchId, $startDate, $endDate) {
+			$query = DB::table('teves_purchase_order_table as po')
+				->leftJoin('teves_supplier_table as supplier', 'supplier.supplier_id', '=', 'po.purchase_order_supplier_idx')
+				->leftJoin('teves_branch_table as branch', 'branch.branch_id', '=', 'po.company_header');
+			$this->applyDashboardBranchAccess($query, 'po.company_header', $userId);
+			return $query->whereBetween('po.purchase_order_date', [$startDate, $endDate])
+				->when($branchId !== 'All', fn ($q) => $q->where('po.company_header', $branchId));
+		};
+		$purchaseOrderCount = (int) $purchaseOrderQuery()->count('po.purchase_order_id');
+		$purchaseOrderAmount = (float) $purchaseOrderQuery()->sum('po.purchase_order_total_payable');
+
+		$purchaseOrderMetrics = function () use ($purchaseOrderQuery) {
+			return $purchaseOrderQuery()
+				->leftJoin(DB::raw('(SELECT purchase_order_idx, SUM(order_quantity) as ordered_quantity FROM teves_purchase_order_component_table GROUP BY purchase_order_idx) as po_components'), 'po_components.purchase_order_idx', '=', 'po.purchase_order_id')
+				->leftJoin(DB::raw('(SELECT purchase_order_idx, SUM(purchase_order_delivery_quantity) as delivered_quantity FROM teves_purchase_order_delivery_details GROUP BY purchase_order_idx) as po_deliveries'), 'po_deliveries.purchase_order_idx', '=', 'po.purchase_order_id');
+		};
+		$deliveryBucketSql = "CASE WHEN COALESCE(po_components.ordered_quantity, 0) <= 0 THEN 'Not tracked' WHEN COALESCE(po_deliveries.delivered_quantity, 0) <= 0 THEN 'Pending' WHEN COALESCE(po_deliveries.delivered_quantity, 0) >= COALESCE(po_components.ordered_quantity, 0) THEN 'Received' ELSE 'Partial' END";
+		$purchaseOrderPipeline = $purchaseOrderMetrics()
+			->selectRaw($deliveryBucketSql . ' as delivery_bucket, COUNT(*) as order_count, SUM(COALESCE(po.purchase_order_total_payable, 0)) as amount')
+			->groupBy(DB::raw($deliveryBucketSql))->get()->keyBy('delivery_bucket');
+		$openToReceive = $purchaseOrderMetrics()->where('po_components.ordered_quantity', '>', 0)
+			->whereRaw('COALESCE(po_deliveries.delivered_quantity, 0) < po_components.ordered_quantity');
+		$openToReceiveCount = (int) (clone $openToReceive)->count('po.purchase_order_id');
+		$openToReceiveAmount = (float) (clone $openToReceive)->sum('po.purchase_order_total_payable');
+		$recentPurchaseOrders = $purchaseOrderMetrics()
+			->orderByDesc('po.purchase_order_date')->orderByDesc('po.purchase_order_id')->limit(8)
+			->get([
+				'po.purchase_order_id', 'po.purchase_order_control_number', 'po.purchase_order_date',
+				'po.purchase_order_total_payable', 'po.purchase_status', 'supplier.supplier_name',
+				'branch.branch_code', 'branch.branch_name', 'po_components.ordered_quantity', 'po_deliveries.delivered_quantity',
+			]);
+		foreach ($recentPurchaseOrders as $order) {
+			$ordered = (float) ($order->ordered_quantity ?? 0);
+			$delivered = (float) ($order->delivered_quantity ?? 0);
+			$order->delivery_bucket = $ordered <= 0 ? 'Not tracked' : ($delivered <= 0 ? 'Pending' : ($delivered >= $ordered ? 'Received' : 'Partial'));
+		}
+
+		$fuelExpenseQuery = function () use ($userId, $branchId, $startDate, $endDate, $showFuel) {
+			$query = DB::table('teves_cashiers_report_p3 as expense')
+				->join('teves_cashiers_report as report', 'report.cashiers_report_id', '=', 'expense.cashiers_report_id')
+				->whereNull('expense.deleted_at')->whereNull('report.deleted_at')
+				->where('report.cashier_report_type', 'FUEL')->whereBetween('report.report_date', [$startDate, $endDate]);
+			$this->applyDashboardBranchAccess($query, 'report.teves_branch', $userId);
+			return $query->when($branchId !== 'All', fn ($q) => $q->where('report.teves_branch', $branchId))
+				->when(!$showFuel, fn ($q) => $q->whereRaw('1 = 0'));
+		};
+		$lpgExpenseQuery = function () use ($userId, $branchId, $startDate, $endDate, $showLpg) {
+			$query = DB::table('teves_cashiers_report_lpg_expenses as expense')
+				->join('teves_cashiers_report as report', 'report.cashiers_report_id', '=', 'expense.cashiers_report_id')
+				->whereNull('expense.deleted_at')->whereNull('report.deleted_at')
+				->where('report.cashier_report_type', 'LPG')->whereBetween('report.report_date', [$startDate, $endDate]);
+			$this->applyDashboardBranchAccess($query, 'report.teves_branch', $userId);
+			return $query->when($branchId !== 'All', fn ($q) => $q->where('report.teves_branch', $branchId))
+				->when(!$showLpg, fn ($q) => $q->whereRaw('1 = 0'));
+		};
+
+		$fuelCashOutQuery = $fuelExpenseQuery()->where('expense.miscellaneous_items_type', 'CASHOUT');
+		$fuelOtherQuery = $fuelExpenseQuery()->where('expense.miscellaneous_items_type', 'OTHERS');
+		$lpgExpensesQuery = $lpgExpenseQuery()->whereIn('expense.expense_type', ['OPEX', 'NON-OPEX']);
+		$fuelCashOut = (float) (clone $fuelCashOutQuery)->sum('expense.order_total_amount');
+		$fuelOther = (float) (clone $fuelOtherQuery)->sum('expense.order_total_amount');
+		$fuelCashOutCount = (int) (clone $fuelCashOutQuery)->count('expense.cashiers_report_p3_id');
+		$lpgByType = (clone $lpgExpensesQuery)->selectRaw('expense.expense_type, COUNT(*) as entry_count, SUM(expense.amount) as amount')
+			->groupBy('expense.expense_type')->get()->keyBy('expense_type');
+		$lpgOpex = (float) ($lpgByType->get('OPEX')->amount ?? 0);
+		$lpgNonOpex = (float) ($lpgByType->get('NON-OPEX')->amount ?? 0);
+		$lpgExpenseCount = (int) $lpgByType->sum('entry_count');
+		$lpgExpenses = $lpgOpex + $lpgNonOpex;
+
+		$fuelTrend = (clone $fuelCashOutQuery)->selectRaw('report.report_date as day, SUM(expense.order_total_amount) as amount')
+			->groupBy('report.report_date')->orderBy('report.report_date')->get();
+		$lpgTrend = (clone $lpgExpensesQuery)->selectRaw('report.report_date as day, expense.expense_type, SUM(expense.amount) as amount')
+			->groupBy('report.report_date', 'expense.expense_type')->orderBy('report.report_date')->get();
+		$trendByDay = [];
+		foreach ($fuelTrend as $row) $trendByDay[$row->day]['fuel'] = (float) $row->amount;
+		foreach ($lpgTrend as $row) {
+			$key = $row->expense_type === 'NON-OPEX' ? 'lpg_non_opex' : 'lpg_opex';
+			$trendByDay[$row->day][$key] = (float) $row->amount;
+		}
+		$trend = [];
+		foreach (\Carbon\CarbonPeriod::create($startDate, $endDate) as $day) {
+			$key = $day->toDateString();
+			$trend[] = [
+				'date' => $key,
+				'fuel' => $trendByDay[$key]['fuel'] ?? 0,
+				'lpg_opex' => $trendByDay[$key]['lpg_opex'] ?? 0,
+				'lpg_non_opex' => $trendByDay[$key]['lpg_non_opex'] ?? 0,
+			];
+		}
+
+		$expenseBreakdown = [];
+		if ($showFuel) $expenseBreakdown[] = ['label' => 'Fuel cash out', 'source' => 'Fuel', 'amount' => $fuelCashOut, 'entries' => $fuelCashOutCount, 'excluded' => false];
+		if ($showLpg) {
+			$expenseBreakdown[] = ['label' => 'LPG OPEX', 'source' => 'LPG', 'amount' => $lpgOpex, 'entries' => (int) ($lpgByType->get('OPEX')->entry_count ?? 0), 'excluded' => false];
+			$expenseBreakdown[] = ['label' => 'LPG Non-OPEX', 'source' => 'LPG', 'amount' => $lpgNonOpex, 'entries' => (int) ($lpgByType->get('NON-OPEX')->entry_count ?? 0), 'excluded' => false];
+		}
+		if ($showFuel) $expenseBreakdown[] = ['label' => 'Fuel OTHERS', 'source' => 'Fuel', 'amount' => $fuelOther, 'entries' => (int) (clone $fuelOtherQuery)->count('expense.cashiers_report_p3_id'), 'excluded' => true];
+
+		return view('dashboard.procurement_expenses', [
+			'data' => $user, 'title' => 'Procurement & Expenses', 'branches' => $branches,
+			'branch_id' => $branchId, 'source' => $source, 'start_date' => $startDate, 'end_date' => $endDate,
+			'purchase_order_count' => $purchaseOrderCount, 'purchase_order_amount' => $purchaseOrderAmount,
+			'open_to_receive_count' => $openToReceiveCount, 'open_to_receive_amount' => $openToReceiveAmount,
+			'purchase_order_pipeline' => $purchaseOrderPipeline, 'recent_purchase_orders' => $recentPurchaseOrders,
+			'fuel_cash_out' => $fuelCashOut, 'fuel_cash_out_count' => $fuelCashOutCount,
+			'fuel_other' => $fuelOther, 'lpg_opex' => $lpgOpex, 'lpg_non_opex' => $lpgNonOpex,
+			'lpg_expenses' => $lpgExpenses, 'lpg_expense_count' => $lpgExpenseCount,
+			'expense_breakdown' => $expenseBreakdown, 'trend' => $trend,
+		]);
+	}
+
 	/*Load Site Interface*/
 	public function dashboard(Request $request){
 		
