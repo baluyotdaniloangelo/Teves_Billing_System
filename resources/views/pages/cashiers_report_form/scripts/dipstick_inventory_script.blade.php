@@ -58,7 +58,10 @@ function loadDipstickFuelProducts()
         url: "{{ route('GetFuelSalesProducts') }}",
         type: 'POST',
         dataType: 'json',
-        data: { _token: "{{ csrf_token() }}" }
+        data: {
+            branch_idx: {{ (int) ($CashiersReportData[0]['teves_branch'] ?? 0) }},
+            _token: "{{ csrf_token() }}"
+        }
     }).done(function (products) {
         const productList = $('#product_list_inventory').empty();
         const hasProducts = Array.isArray(products) && products.length > 0;

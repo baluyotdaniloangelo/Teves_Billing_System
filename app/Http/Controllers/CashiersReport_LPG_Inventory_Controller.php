@@ -215,13 +215,21 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
         }
 
         $validator = Validator::make($request->all(), $rules);
-        $validator->after(function ($validator) use ($request) {
+        $allowedProductIds = DB::table('teves_product_table')
+            ->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
+            ->whereNull('deleted_at')->pluck('product_id')->map(function ($id) { return (int) $id; })->all();
+        $allowedProductIds = array_values(array_unique(array_merge(
+            $allowedProductIds,
+            \App\Services\LpgKitchenProducts::ids(),
+            \App\Services\LpgRegulatorProducts::ids()
+        )));
+
+        $validator->after(function ($validator) use ($request, $allowedProductIds) {
             if ($request->filled('product_idx') && !DB::table('teves_product_table')
                 ->where('product_id', $request->input('product_idx'))
-                ->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
-                ->whereNull('deleted_at')
-                ->exists()) {
-                $validator->errors()->add('product_idx', 'Select a product from the LPG category.');
+                ->whereIn('product_id', $allowedProductIds)
+                ->whereNull('deleted_at')->exists()) {
+                $validator->errors()->add('product_idx', 'Select a product from the LPG or Kitchen inventory list.');
             }
             if ($request->input('inventory_mode') === 'DELIVERY' && !$request->filled('supplier_idx')) {
                 $validator->errors()->add('supplier_idx', 'Supplier is required for a delivery.');

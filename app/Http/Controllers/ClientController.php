@@ -17,7 +17,7 @@ class ClientController extends Controller
 		
 		if(Session::has('loginID') && (Session::get('UserType')=="Admin" || Session::get('UserType')=="SUAdmin" || Session::get('UserType')=="Encoder")){
 		
-			$title = 'Account';
+			$title = 'Client Accounts';
 			$data = array();
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
@@ -39,6 +39,7 @@ class ClientController extends Controller
 					'client_id',
 					'client_name',
 					'customer_type',
+					'client_line_of_business',
 					'client_account_number',
 					'client_address',
 					'client_id_type',
@@ -61,6 +62,8 @@ class ClientController extends Controller
 					'default_vat_percentage',
 					'default_withholding_tax_percentage',
 					'default_payment_terms',
+					'client_credit_limit',
+					'client_lpg_discount_amount',
 					
 					'sales_agent_idx',
 					'created_by_user_idx',
@@ -69,6 +72,30 @@ class ClientController extends Controller
 
 			if (Session::get('UserType') == "Encoder") {
 				$query->where('created_by_user_idx', Session::get('loginID'));
+			}
+
+			$customerType = trim((string) $request->input('customer_type', ''));
+			$allowedCustomerTypes = [
+				'Commercial Account', 'Vendor', 'Household', 'Outlet', 'Fuel Retail Bulk',
+				'Industrial – Fuel', 'Industrial – LPG',
+			];
+			if (in_array($customerType, $allowedCustomerTypes, true)) {
+				$query->where('customer_type', $customerType);
+			}
+
+			$searchValue = trim((string) $request->input('search.value', ''));
+			if ($searchValue !== '') {
+				$searchTerm = '%' . $searchValue . '%';
+				$query->where(function ($search) use ($searchTerm) {
+					foreach ([
+						'client_name', 'client_line_of_business', 'customer_type',
+						'client_account_number', 'client_tin', 'client_contact_number',
+						'client_email_address', 'client_address', 'client_first_name',
+						'client_middle_name', 'client_last_name',
+					] as $column) {
+						$search->orWhere($column, 'like', $searchTerm);
+					}
+				});
 			}
 
 			$data = $query->get();
@@ -373,6 +400,8 @@ public function client_info(Request $request)
             'client_name',
             'customer_type',
             'client_line_of_business',
+            'client_credit_limit',
+            'client_lpg_discount_amount',
             'client_account_number',
 
             // Address
@@ -407,6 +436,8 @@ public function client_info(Request $request)
             'default_vat_percentage',
             'default_withholding_tax_percentage',
             'default_payment_terms',
+            'client_credit_limit',
+            'client_lpg_discount_amount',
 
             // Referral
             'sales_agent_idx'
@@ -431,6 +462,8 @@ public function client_info(Request $request)
             $data->client_name,
 
         'client_line_of_business' => $data->client_line_of_business,
+        'client_credit_limit' => $data->client_credit_limit,
+        'client_lpg_discount_amount' => $data->client_lpg_discount_amount,
 
         'customer_type' =>
             $data->customer_type,
@@ -542,7 +575,10 @@ public function client_info(Request $request)
             $data->default_withholding_tax_percentage,
 
         'default_payment_terms' =>
-            $data->default_payment_terms
+            $data->default_payment_terms,
+
+        'client_credit_limit' => $data->client_credit_limit,
+        'client_lpg_discount_amount' => $data->client_lpg_discount_amount
 
     ]);
 }
@@ -554,6 +590,8 @@ public function client_info(Request $request)
 				'client_name'           => 'required|unique:teves_client_table,client_name',
 				'customer_type'         => 'required',
 				'client_line_of_business' => 'nullable|string|max:255',
+				'client_credit_limit' => 'nullable|numeric|min:0',
+				'client_lpg_discount_amount' => 'nullable|numeric|min:0',
 				
 				'client_address'        => 'required',
 				
@@ -653,6 +691,8 @@ public function client_info(Request $request)
 			$request->customer_type;
 
 		$client->client_line_of_business = $request->client_line_of_business;
+		$client->client_credit_limit = $request->client_credit_limit;
+		$client->client_lpg_discount_amount = $request->client_lpg_discount_amount;
 
 		$client->client_account_number =
 			$client_account_number;
@@ -799,6 +839,8 @@ public function client_info(Request $request)
 				'client_name'           => 'required|unique:teves_client_table,client_name,' . $request->clientID . ',client_id',
 				'customer_type'         => 'required',
 				'client_line_of_business' => 'nullable|string|max:255',
+				'client_credit_limit' => 'nullable|numeric|min:0',
+				'client_lpg_discount_amount' => 'nullable|numeric|min:0',
 				
 				'client_address'        => 'required',
 						  				
@@ -913,6 +955,8 @@ public function client_info(Request $request)
 			$request->customer_type;
 
 		$client->client_line_of_business = $request->client_line_of_business;
+		$client->client_credit_limit = $request->client_credit_limit;
+		$client->client_lpg_discount_amount = $request->client_lpg_discount_amount;
 
 
 		$client->client_id_type =

@@ -61,7 +61,7 @@ class LpgSwappingGroups
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'movement.client_idx')
             ->where('movement.cashiers_report_id', $reportId)->whereNull('movement.deleted_at')
             ->where('movement.movement_type', 'DAMAGED')->whereNotNull('movement.client_idx')
-            ->whereIn('product.category_idx', LpgKitchenProducts::categoryIds())
+            ->whereIn('product.product_id', LpgKitchenProducts::ids())
             ->whereNotIn('product.product_id', LpgRegulatorProducts::ids())
             ->orderBy('movement.cashiers_report_lpg_kitchen_movement_id')
             ->get(['movement.*', 'client.client_name', 'product.product_name', 'product.product_unit_measurement'])

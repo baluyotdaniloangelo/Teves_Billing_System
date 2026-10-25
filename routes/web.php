@@ -178,6 +178,9 @@ Route::post('/reset-password', [EmailController::class, 'sendTemporaryPasswordto
 
 /*Load Billing Transaction*/
 Route::get('/dashboard', [DashboardController::class,'dashboard'])->name('dashboard')->middleware('isLoggedIn');
+Route::post('/dashboard', [DashboardController::class,'dashboard'])->name('dashboard.filter')->middleware('isLoggedIn');
+Route::get('/sales_receivables_dashboard', [DashboardController::class, 'salesReceivables'])->name('sales_receivables_dashboard')->middleware('isLoggedIn');
+Route::post('/sales_receivables_dashboard', [DashboardController::class, 'salesReceivables'])->name('sales_receivables_dashboard.filter')->middleware('isLoggedIn');
 
 
 /*Load Billing Transaction*/
@@ -566,6 +569,7 @@ Route::get('/cashiers_report_form_fuel/{id}', [CashiersReportController::class, 
 
 /*Save Cashier's Report Part 1 - Fuel Sales*/
 Route::post('/get_cashiers_report_fuel_products', [CashiersReportFuelSalesController::class, 'get_fuel_sales_products'])->name('GetFuelSalesProducts')->middleware('isLoggedIn');
+Route::post('/initialize_cashiers_report_fuel_sales', [CashiersReportFuelSalesController::class, 'initializeFuelSalesRows'])->name('InitializeFuelSalesRows')->middleware('isLoggedIn');
 Route::post('/save_cashiers_report_fuel_sales', [CashiersReportFuelSalesController::class,'save_cashiers_report_fuel_sales'])->name('SaveFuelSales')->middleware('isLoggedIn');
 /* Load Product P1 */
 Route::post('/get_cashiers_report_fuel_sales', [CashiersReportFuelSalesController::class,'get_cashiers_report_fuel_sales'])->name('GetCashiersReportFuelSales')->middleware('isLoggedIn');

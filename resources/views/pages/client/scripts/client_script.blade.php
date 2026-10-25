@@ -24,11 +24,17 @@ function initializeClientTable()
         processing: true,
         serverSide: true,
         responsive: true,
-        stateSave: true,
-        scrollY: "550px",
+        stateSave: false,
         pageLength: 10,
+        searchDelay: 250,
+        dom: 'rt<"fuel-client-pagination"ip>',
 
-        ajax: "{{ route('getClientList') }}",
+        ajax: {
+            url: "{{ route('getClientList') }}",
+            data: function (request) {
+                request.customer_type = $('#client-customer-type').val() || '';
+            }
+        },
 
         columns: [
 
@@ -43,7 +49,8 @@ function initializeClientTable()
 
                 data: null,
                 name: 'client_name',
-render: function(data) {
+                searchable: false,
+                render: function(data) {
 
     /*
     ==========================================
@@ -90,9 +97,9 @@ render: function(data) {
             <!-- HEADER -->
             <!-- ================================= -->
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-start client-card-top">
 
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center client-card-main">
 
                     <!-- AVATAR -->
                     <div class="me-4 flex-shrink-0">
@@ -168,8 +175,29 @@ render: function(data) {
 
                         </div>
 
+                        <div class="client-contact-grid">
+                            <div class="client-sub"><small><i class="bi bi-telephone-fill text-primary me-1"></i><strong>Contact #:</strong> ${data.client_contact_number || '-'}</small></div>
+                            <div class="client-sub"><small><i class="bi bi-envelope-fill text-primary me-1"></i><strong>Email:</strong> ${data.client_email_address || '-'}</small></div>
+                        </div>
+                        <div class="client-sub"><i class="bi bi-calendar-heart text-info me-1"></i><strong>Birthday:</strong> ${birthday}</div>
+                        <div class="client-sub"><i class="bi bi-person-check-fill text-secondary me-1"></i><strong>Referred By:</strong> ${data.referred_by_name ?? 'None'}</div>
+
                     </div>
 
+
+                    <!-- ACCOUNT SETTINGS SUMMARY -->
+                    <aside class="client-settings-summary" aria-label="Client payment settings">
+                        <div class="client-settings-label">PAYMENT PROFILE</div>
+                        <div class="client-settings-badges">
+                            <span class="client-setting-chip chip-less">Less ${data.default_less_percentage ?? 0}%</span>
+                            <span class="client-setting-chip chip-net">Net ${data.default_net_percentage ?? 0}</span>
+                            <span class="client-setting-chip chip-vat">VAT ${data.default_vat_percentage ?? 0}%</span>
+                            <span class="client-setting-chip chip-wht">WHT ${data.default_withholding_tax_percentage ?? 0}%</span>
+                        </div>
+                        <div class="client-setting-line"><i class="bi bi-calendar-check"></i><span><strong>Terms</strong> ${data.default_payment_terms ?? 'Not Set'}</span></div>
+                        <div class="client-setting-line"><i class="bi bi-wallet2"></i><span><strong>Credit limit</strong> ${data.client_credit_limit ? '₱' + Number(data.client_credit_limit).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : 'Not Set'}</span></div>
+                        <div class="client-setting-line"><i class="bi bi-fire"></i><span><strong>LPG discount</strong> ${data.client_lpg_discount_amount ? '₱' + Number(data.client_lpg_discount_amount).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : 'Not Set'}</span></div>
+                    </aside>
 
                     <!-- ACTION BUTTONS -->
                     <div class="client-actions">
@@ -183,147 +211,7 @@ render: function(data) {
             </div>
 
 
-            <hr>
 
-
-            <!-- ================================= -->
-            <!-- CONTACT INFORMATION -->
-            <!-- ================================= -->
-
-            <div class="row">
-
-                <!-- CONTACT NUMBER -->
-                <div class="col-lg-6">
-
-                    <div class="client-sub">
-
-                        <small>
-
-                            <i class="bi bi-telephone-fill text-primary me-1"></i>
-
-                            <strong>Contact #:</strong>
-
-                            ${data.client_contact_number || '-'}
-
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <!-- EMAIL -->
-                <div class="col-lg-6">
-
-                    <div class="client-sub">
-
-                        <small>
-
-                            <i class="bi bi-envelope-fill text-primary me-1"></i>
-
-                            <strong>Email:</strong>
-
-                            ${data.client_email_address || '-'}
-
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <hr>
-
-
-            <!-- ================================= -->
-            <!-- OWNER / BIRTHDAY -->
-            <!-- ================================= -->
-
-            <div class="row">
-
-                <div class="col-lg-6">
-
-                    <div class="client-sub">
-
-                        <i class="bi bi-calendar-heart text-info me-1"></i>
-
-                        <strong>Birthday:</strong>
-
-                        ${birthday}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ================================= -->
-            <!-- TAX SETTINGS -->
-            <!-- ================================= -->
-
-            <div class="mt-3">
-
-                <span class="badge bg-danger">
-
-                    Less: ${data.default_less_percentage ?? 0}%
-
-                </span>
-
-                <span class="badge bg-success">
-
-                    Net: ${data.default_net_percentage ?? 0}
-
-                </span>
-
-                <span class="badge bg-info text-dark">
-
-                    VAT: ${data.default_vat_percentage ?? 0}%
-
-                </span>
-
-                <span class="badge bg-warning text-dark">
-
-                    WHT: ${data.default_withholding_tax_percentage ?? 0}%
-
-                </span>
-
-            </div>
-
-
-            <!-- ================================= -->
-            <!-- PAYMENT TERMS -->
-            <!-- ================================= -->
-
-            <div class="mt-3">
-
-                <i class="bi bi-calendar-check me-1 text-secondary"></i>
-
-                <strong>Payment Terms:</strong>
-
-                ${data.default_payment_terms ?? 'Not Set'}
-
-            </div>
-
-
-            <hr>
-
-
-            <!-- ================================= -->
-            <!-- REFERRED BY -->
-            <!-- ================================= -->
-
-            <div class="mt-2">
-
-                <i class="bi bi-person-check-fill me-1 text-secondary"></i>
-
-                <strong>Referred By:</strong>
-
-                ${data.referred_by_name ?? 'None'}
-
-            </div>
 
         </div>
 
@@ -370,6 +258,29 @@ EVENT BINDINGS
 
 function bindClientEvents()
 {
+    $('#client-search').on('input', function ()
+    {
+        ClientTable.search(this.value).draw();
+    });
+
+    $('#client-customer-type').on('change', function ()
+    {
+        ClientTable.ajax.reload(null, true);
+    });
+
+    $('#client-page-size').on('change', function ()
+    {
+        ClientTable.page.len(Number(this.value)).draw();
+    });
+
+    $('#client-reset-filters').on('click', function ()
+    {
+        $('#client-search').val('');
+        $('#client-customer-type').val('');
+        $('#client-page-size').val('10');
+        ClientTable.page.len(10).search('').ajax.reload(null, true);
+    });
+
     /*
     CREATE
     */
@@ -503,6 +414,8 @@ function openEditClientModal()
 
             $('#client_name').val(data.client_name);
             $('#client_line_of_business').val(data.client_line_of_business ?? '');
+            $('#client_credit_limit').val(data.client_credit_limit ?? '');
+            $('#client_lpg_discount_amount').val(data.client_lpg_discount_amount ?? '');
 
             $('#client_contact_number')
                 .val(data.client_contact_number);
@@ -782,6 +695,12 @@ function saveClient(event)
 
         client_tin:
             $('#client_tin').val(),
+
+        client_credit_limit:
+            $('#client_credit_limit').val(),
+
+        client_lpg_discount_amount:
+            $('#client_lpg_discount_amount').val(),
 
         default_less_percentage:
             $('#default_less_percentage').val(),
@@ -1089,6 +1008,8 @@ function handleClientValidation(xhr)
 
 
     showFieldError('client_line_of_business', errors.client_line_of_business);
+    showFieldError('client_credit_limit', errors.client_credit_limit);
+    showFieldError('client_lpg_discount_amount', errors.client_lpg_discount_amount);
 
     // Contact Number
     showFieldError(

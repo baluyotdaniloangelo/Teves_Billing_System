@@ -8,16 +8,25 @@
     }
 
     function optionDetails(option, label) {
-        const code = option.getAttribute('data-product-code') || '';
         const capacity = option.getAttribute('data-capacity') || '';
+        if (option.getAttribute('data-capacity-only') === '1') return capacity ? 'Capacity: ' + capacity : 'Capacity not set';
+        if (capacity) return 'Capacity: ' + capacity;
+
+        const code = option.getAttribute('data-product-code') || '';
         const details = [];
         if (code) details.push('Code: ' + code);
-        if (capacity && !label.toLowerCase().includes(capacity.toLowerCase())) details.push(capacity);
         const price = option.getAttribute('data-price');
         if (price !== null && price !== '') {
             details.push('₱ ' + Number(price || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         }
         return details.join(' · ');
+    }
+
+    function selectionLabel(option, label) {
+        const capacity = option?.getAttribute('data-capacity') || '';
+        return capacity && !label.toLocaleLowerCase().includes(capacity.toLocaleLowerCase())
+            ? label + ' — ' + capacity
+            : label;
     }
 
     function makeMenu() {
@@ -148,7 +157,7 @@
     function syncFromSelect(state) {
         if (!state.select || state.suppressSync) return;
         const selected = state.select.selectedOptions[0];
-        state.input.value = selected?.value ? selected.textContent.trim() : '';
+        state.input.value = selected?.value ? selectionLabel(selected, selected.textContent.trim()) : '';
         syncControlState(state);
     }
 
@@ -167,7 +176,7 @@
             state.select.value = item.value;
             dispatchInputEvent(state.select, 'change');
             state.suppressSync = false;
-            state.input.value = item.label;
+            state.input.value = selectionLabel(item.option, item.label);
             updateValidation(state);
         } else {
             state.input.value = item.value;

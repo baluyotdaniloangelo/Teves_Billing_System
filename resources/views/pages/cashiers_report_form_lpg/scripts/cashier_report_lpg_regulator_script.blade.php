@@ -51,7 +51,7 @@ $(function () {
     function edit(row, selector) {
         if (row.kind === 'inventory') {
             return $.ajax({url: "{{ route('LpgInventoryInfo') }}", type: 'POST', headers, data: {cashiers_report_lpg_inventory_id: row.record_id}})
-                .done(response => afterClose(() => openLpgInventoryModal(response.data.inventory_mode, response.data)))
+                .done(response => afterClose(() => openLpgInventoryModal(response.data.inventory_mode, response.data, null, 'REGULATOR')))
                 .fail(xhr => error(selector, xhr, 'Unable to load inventory entry.'));
         }
         afterClose(() => {
@@ -75,7 +75,7 @@ $(function () {
             const button = $(this).prop('disabled', true);
             sources(mode, productId).done(response => {
                 if (productId && response.data?.length) edit(response.data[0], '#lpg-regulator-error');
-                else withRegulators('#CashierReportLpgInventoryModal', 'lpg_inventory_product_idx', () => openLpgInventoryModal('BEGINNING', null, productId));
+                else openLpgInventoryModal('BEGINNING', null, productId, 'REGULATOR');
             }).fail(xhr => error('#lpg-regulator-error', xhr, 'Unable to load beginning inventory.')).always(() => button.prop('disabled', false));
         } else if (mode === 'SWAP_IN' || mode === 'SWAP_OUT') {
             const prefix = mode === 'SWAP_IN' ? 'received' : 'replaced';

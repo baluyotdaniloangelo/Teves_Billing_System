@@ -70,39 +70,9 @@
                         </h6>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item px-3 py-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary flex-shrink-0" style="width:34px;height:34px;">
-                                    <i class="bi bi-calendar-event"></i>
-                                </span>
-                                <div class="min-w-0">
-                                    <small class="text-muted d-block">Report Date</small>
-                                    <div class="fw-semibold text-break" id="cashier_info_date">-</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item px-3 py-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success flex-shrink-0" style="width:34px;height:34px;">
-                                    <i class="bi bi-building"></i>
-                                </span>
-                                <div class="min-w-0">
-                                    <small class="text-muted d-block">Branch</small>
-                                    <div class="fw-semibold text-break" id="cashier_info_branch_name">-</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item px-3 py-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-info bg-opacity-10 text-info flex-shrink-0" style="width:34px;height:34px;">
-                                    <i class="bi bi-person-badge"></i>
-                                </span>
-                                <div class="min-w-0">
-                                    <small class="text-muted d-block">Cashier's on Duty</small>
-                                    <div class="fw-semibold text-break" id="cashier_info_cashiers_name">-</div>
-                                </div>
-                            </div>
-                        </li>
+
+
+
                         <li class="list-group-item px-3 py-2">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-info bg-opacity-10 text-info flex-shrink-0" style="width:34px;height:34px;">
@@ -114,17 +84,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="list-group-item px-3 py-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-warning bg-opacity-10 text-warning flex-shrink-0" style="width:34px;height:34px;">
-                                    <i class="bi bi-clock"></i>
-                                </span>
-                                <div class="min-w-0">
-                                    <small class="text-muted d-block">Shift</small>
-                                    <div class="fw-semibold text-break" id="cashier_info_shift">-</div>
-                                </div>
-                            </div>
-                        </li>
+
                         <li class="list-group-item px-3 py-2">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-secondary bg-opacity-10 text-secondary flex-shrink-0" style="width:34px;height:34px;">
@@ -202,8 +162,8 @@
                                     <div class="min-w-0"><small class="text-muted d-block">Total Cash Payment</small><div class="fw-bold text-success" id="total_cash_payment">0.00</div></div>
                                 </div>
                             </div>
-                        
-						
+
+
                             <div class="col-12 border-bottom">
                                 <div class="d-flex align-items-center gap-2 bg-primary bg-opacity-10 px-3 py-2 h-100">
                                     <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-white text-primary flex-shrink-0" style="width:34px;height:34px;"><i class="bi bi-graph-up-arrow"></i></span>
@@ -217,9 +177,9 @@
                                 </div>
                             </div>
                         </div>
-						
+
                     </div>
-					
+
                 </div>
             </section>
         </div>

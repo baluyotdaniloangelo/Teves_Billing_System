@@ -3,7 +3,8 @@
 </head>
 <!--
 Use to automatically hide the Side Nav Bar-->
-<body class="toggle-sidebar">
+<body class="fuel-app-shell toggle-sidebar @yield('body_class')">
+@include('layouts.navigation')
 
 @yield('content')
 

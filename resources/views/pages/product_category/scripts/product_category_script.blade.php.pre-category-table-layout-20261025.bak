@@ -1,0 +1,577 @@
+<script type="text/javascript">
+(function ($) {
+
+let categoryCodeManuallyEdited = false;
+
+/*==================================================
+PRODUCT CATEGORY MODULE
+==================================================*/
+
+$(document).ready(function ()
+{
+    bindProductCategoryDetailsEvents();
+
+    $('#category_code').on('input', function () {
+        categoryCodeManuallyEdited = true;
+        this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
+    });
+
+    $('#category_name').on('input', function () {
+        if ($('#category_id').val() || categoryCodeManuallyEdited) return;
+        const letters = this.value.toUpperCase().replace(/[^A-Z]/g, '');
+        $('#category_code').val(letters.slice(0, 3).padEnd(3, 'X'));
+    });
+
+    const $categoryTab = $('#product-categories-tab');
+    const categoryTabExists = $categoryTab.length > 0;
+
+    if (categoryTabExists) {
+        $categoryTab.on('shown.bs.tab', function () {
+            initializeProductCategoryDetailsTable();
+
+            if (ProductCategoryDetailsTable) {
+                ProductCategoryDetailsTable.columns.adjust();
+            }
+        });
+
+        if (new URLSearchParams(window.location.search).get('tab') === 'product-category') {
+            $categoryTab.tab('show');
+        } else if ($('#productCategoriesPane').hasClass('show')) {
+            initializeProductCategoryDetailsTable();
+        }
+    } else {
+        initializeProductCategoryDetailsTable();
+    }
+});
+
+
+/*==================================================
+DATATABLE
+==================================================*/
+
+let ProductCategoryDetailsTable;
+
+function initializeProductCategoryDetailsTable()
+{
+    const tableSelector = '#getProductCategoryDetailsList';
+
+    if (!$(tableSelector).length) {
+        return;
+    }
+
+    if ($.fn.DataTable.isDataTable(tableSelector)) {
+        ProductCategoryDetailsTable = $(tableSelector).DataTable();
+        return;
+    }
+
+    ProductCategoryDetailsTable =
+        $(tableSelector).DataTable({
+
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            scrollY: '500px',
+            stateSave: true,
+
+            ajax:
+                "{{ route('getProductCategoryDetailsList') }}",
+
+            columns: [
+
+                {
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+
+                { data: 'category_name', render: $.fn.dataTable.render.text() },
+                { data: 'category_code', className: 'text-center fw-semibold', render: $.fn.dataTable.render.text() },
+
+                {
+                    data: 'action',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center'
+                }
+
+            ],
+
+            order: [[1, 'asc']]
+
+        });
+
+    if (window.ResizeObserver) {
+        autoAdjustColumns(ProductCategoryDetailsTable);
+    }
+}
+
+
+/*==================================================
+AUTO ADJUST TABLE
+==================================================*/
+
+function autoAdjustColumns(table)
+{
+    const container =
+        table.table().container();
+
+    const resizeObserver =
+        new ResizeObserver(function ()
+        {
+            table.columns.adjust();
+        });
+
+    resizeObserver.observe(container);
+}
+
+
+/*==================================================
+EVENT BINDINGS
+==================================================*/
+
+function bindProductCategoryDetailsEvents()
+{
+    /*
+    CREATE
+    */
+    $('body').on(
+        'click',
+        '#createProductCategoryDetails',
+        openCreateProductCategoryModal
+    );
+
+    /*
+    EDIT
+    */
+    $('body').on(
+        'click',
+        '#editProductCategoryDetails',
+        openEditProductCategoryModal
+    );
+
+    /*
+    SAVE / UPDATE
+    */
+    $('#save-category').on(
+        'click',
+        saveProductCategoryDetails
+    );
+
+    /*
+    DELETE MODAL
+    */
+    $('body').on(
+        'click',
+        '#deleteProductCategoryDetails',
+        showDeleteCategoryModal
+    );
+
+    /*
+    DELETE CONFIRM
+    */
+    $('body').on(
+        'click',
+        '#deleteProductCategoryDetailsConfirmed',
+        deleteProductCategoryDetailsConfirmed
+    );
+}
+
+
+/*==================================================
+CREATE MODAL
+==================================================*/
+
+function openCreateProductCategoryModal()
+{
+    resetProductCategoryForm();
+
+    $('#category_id').val('');
+
+    $('#product_category_modal_title').text('Create Product Category Details');
+	
+	$('#reset-category-form').show();
+	
+    $('#save-category').html("<i class='bi bi-save-fill me-2'></i>Save Product Category Details");
+
+    $('#ProductCategoryDetailsModal')
+        .modal('show');
+}
+
+/*==================================================
+RESET MODAL ON CLOSE
+==================================================*/
+
+$('#ProductCategoryDetailsModal').on('hidden.bs.modal', function ()
+{
+    /*
+    RESET FORM
+    */
+    resetProductCategoryForm();
+
+    /*
+    RESET TITLE
+    */
+    $('#product_category_modal_title').text('Create Product Category Details');
+
+    /*
+    RESET BUTTON
+    */
+    $('#save-category').html("<i class='bi bi-save-fill me-2'></i>Save Product Category Details");
+
+    /*
+    SHOW RESET BUTTON
+    */
+    $('#reset-category-form').show();
+});
+
+/*==================================================
+EDIT MODAL
+==================================================*/
+
+function openEditProductCategoryModal()
+{
+    const category_id = $(this).data('id');
+
+    resetProductCategoryForm();
+	
+	$('#reset-category-form').hide();
+    $('#loading_data').show();
+    $('#ProductCategoryDetailsModal').modal('show');
+
+    $.ajax({
+        url: '/product_category_info',
+        type: 'POST',
+        data: {
+            category_id: category_id,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(response)
+        {
+            console.log(response);
+            const data = response.data ?? response;
+
+            if(!data)
+            {
+                showDangerMessage('Product Category details not found.');
+                return;
+            }
+
+            /*
+            LOAD VALUES
+            */
+            $('#category_id').val(data.category_id);
+            $('#category_name').val(data.category_name);
+            $('#category_code').val(data.category_code || '');
+
+            /*
+            UPDATE MODAL
+            */
+            $('#product_category_modal_title').text('Update Product Category Details');
+            $('#save-category').html("<i class='bi bi-check-circle-fill me-2'></i>Update Product Category Details");
+			
+        },
+        complete: function()
+        {
+            $('#loading_data').hide();
+        },
+        error: function(xhr)
+        {
+            console.log(xhr);
+            showDangerMessage('Unable to load Product Category details.');
+        }
+    });
+}
+
+
+/*==================================================
+SAVE / UPDATE
+==================================================*/
+
+function saveProductCategoryDetails(event)
+{
+    event.preventDefault();
+
+    const form = $('#ProductCategoryDetailsForm');
+
+    form.addClass('was-validated');
+
+    const category_id = $('#category_id').val();
+
+    const payload = {
+        category_id: category_id,
+        category_name: $('#category_name').val(),
+        category_code: $('#category_code').val(),
+        _token: "{{ csrf_token() }}"
+    };
+
+    $.ajax({
+        url:
+            category_id
+            ? '/update_product_category_post'
+            : '/create_product_category_post',
+        type: 'POST',
+        data: payload,
+        beforeSend: function()
+        {
+            setButtonLoading(
+                '#save-category',
+                true
+            );
+        },
+        success: function(response)
+        {
+            console.log(response);
+			
+            $('#ProductCategoryDetailsModal').modal('hide');
+
+            reloadProductCategoryDetailsTable();
+			showSuccessModal(response.success);
+            resetProductCategoryForm();
+			
+			$('#product_category_modal_title').text('Create Product CategoryDetails');
+			$('#save-category').html("<i class='bi bi-save-fill me-2'></i>Save Product CategoryDetails");
+	
+        },
+        complete: function()
+        {
+            setButtonLoading(
+                '#save-category',
+                false
+            );
+        },
+
+        error: function(xhr)
+        {
+            console.log(xhr);
+            handleProductCategoryValidation(xhr);
+			$('#action_error_message').text('Validation Error');
+        }
+
+    });
+}
+
+function showSuccessModal(message)
+{
+    /*
+    SET MESSAGE
+    */
+    $('#success_modal_message').text(message);
+
+    /*
+    SHOW MODAL
+    */
+    $('#SuccessModal').modal('show');
+
+    /*
+    AUTO CLOSE
+    */
+    setTimeout(function ()
+    {
+        $('#SuccessModal').modal('hide');
+    }, 1500);
+}
+
+/*==================================================
+SHOW DELETE MODAL
+==================================================*/
+
+function showDeleteCategoryModal(event)
+{
+    event.preventDefault();
+
+    const category_id = $(this).data('id');
+
+    resetDeleteCategoryModal();
+
+    $('#ProductCategoryDetailsDeleteModal').modal('show');
+
+    $('#deleteProductCategoryDetailsConfirmed').prop('disabled', true);
+
+    $.ajax({
+        url: '/product_category_info',
+        type: 'POST',
+        data: {
+            category_id: category_id,
+            _token:
+                "{{ csrf_token() }}"
+        },
+        success: function(response)
+        {
+            console.log(response);
+            const data = response.data ?? response;
+
+            if(!data)
+            {
+                showDangerMessage('Product Category details not found.');
+                $('#ProductCategoryDetailsDeleteModal').modal('hide');
+                return;
+            }
+
+            /*
+            SET BUTTON VALUE
+            */
+            $('#deleteProductCategoryDetailsConfirmed').val(data.category_id);
+
+            /*
+            LOAD DETAILS
+            */
+            $('#confirm_delete_category_name').text(data.category_name || '-');
+
+            /*
+            ENABLE BUTTON
+            */
+            $('#deleteProductCategoryDetailsConfirmed').prop('disabled', false);
+			
+        },
+
+        error: function(xhr)
+        {
+            console.log(xhr);
+            showDangerMessage('Unable to load Product Category details.');
+            $('#ProductCategoryDetailsDeleteModal').modal('hide');
+        }
+
+    });
+}
+
+
+/*==================================================
+DELETE CONFIRMED
+==================================================*/
+
+function deleteProductCategoryDetailsConfirmed()
+{
+    const category_id = $('#deleteProductCategoryDetailsConfirmed').val();
+
+    $('#deleteProductCategoryDetailsConfirmed').prop('disabled', true);
+
+    $.ajax({
+
+        url: '/delete_product_category_confirmed',
+        type: 'POST',
+        data: {
+            category_id: category_id,
+            _token: "{{ csrf_token() }}"
+        },
+
+        success: function(response)
+        {
+            console.log(response);
+
+            $('#ProductCategoryDetailsDeleteModal').modal('hide');
+
+            reloadProductCategoryDetailsTable();
+			
+			$('#action_error_message').text('');
+			
+            showDangerMessage(
+                'Product Category Details Deleted'
+            );
+        },
+
+        complete: function()
+        {
+            $('#deleteProductCategoryDetailsConfirmed').prop('disabled', false);
+        },
+
+        error: function(xhr)
+        {
+            console.log(xhr);
+            showDangerMessage(
+                'Unable to delete Product Category details.'
+            );
+        }
+
+    });
+}
+
+
+/*==================================================
+HELPERS
+==================================================*/
+
+function reloadProductCategoryDetailsTable()
+{
+    if (!ProductCategoryDetailsTable) {
+        return;
+    }
+
+    ProductCategoryDetailsTable
+        .ajax
+        .reload(null, false);
+}
+
+
+function resetProductCategoryForm()
+{
+    const form = $('#ProductCategoryDetailsForm')[0];
+
+    if (!form) {
+        return;
+    }
+
+    form.reset();
+    categoryCodeManuallyEdited = false;
+    $('#category_id').val('');
+    $('.invalid-feedback').html('');
+    $('#ProductCategoryDetailsForm').removeClass('was-validated');
+}
+
+
+function resetDeleteCategoryModal()
+{
+    $('#confirm_delete_category_name').text('-');
+    $('#deleteProductCategoryDetailsConfirmed').val('');
+}
+
+
+function setButtonLoading(button, loading)
+{
+    $(button).prop('disabled', loading);
+
+    if (loading)
+    {
+        $('#loading_data').show();
+    }
+    else
+    {
+        $('#loading_data').hide();
+    }
+}
+
+function showDangerMessage(message)
+{
+    $('#validation_error_message').text(message);
+    $('#ValidationErrorModal').modal('show');
+}
+
+/*==================================================
+VALIDATION ERROR MODAL
+==================================================*/
+
+function showValidationErrorModal(message)
+{
+    $('#validation_error_message').text(message);
+    $('#ValidationErrorModal').modal('show');
+}
+
+function handleProductCategoryValidation(xhr)
+{
+    const response = xhr.responseJSON || {};
+    const errors = response.errors || {};
+    const firstError = (errors.category_code && errors.category_code[0])
+        || (errors.category_name && errors.category_name[0])
+        || response.message
+        || 'Please review the category details.';
+
+    showValidationErrorModal(firstError);
+
+    if (errors.category_name) {
+        $('#category_name_error').text(errors.category_name[0]).show();
+    }
+    if (errors.category_code) {
+        $('#category_code_error').text(errors.category_code[0]).show();
+    }
+}
+})(jQuery);
+</script>

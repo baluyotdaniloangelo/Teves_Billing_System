@@ -1,0 +1,138 @@
+/* Shared sidebar, header and page spacing for layouts.layout and layouts.layout_new. */
+body.fuel-app-shell {
+    --fuel-ink: #20332f;
+    --fuel-muted: #859087;
+    --fuel-border: #e4e9e1;
+    --fuel-orange: #e66b3e;
+    --fuel-green: #20836d;
+    --fuel-red: #c95a57;
+    --fuel-navy: #172d32;
+    --fuel-table-font-size: 12px;
+    background: #f6f7f4;
+}
+/* Shared table text size, including nested labels and responsive detail rows.
+   Buttons and icons retain their own sizing. */
+body.fuel-app-shell table,
+body.fuel-app-shell table :is(th, td, caption),
+body.fuel-app-shell table :is(th, td) :where(a, b, strong, em, small, span, div, p, label, li):not(.bi, .btn, .btn *) {
+    font-size: var(--fuel-table-font-size) !important;
+}
+/* Shared table palette; preserve semantic status colors and action buttons. */
+body.fuel-app-shell table {
+    --bs-table-color: #141a11 !important;
+    --bs-table-striped-color: var(--bs-table-color) !important;
+    --bs-table-hover-color: var(--bs-table-color) !important;
+    --bs-table-active-color: var(--bs-table-color) !important;
+    color: var(--bs-table-color) !important;
+}
+body.fuel-app-shell table tbody :is(th, td):not(.text-danger, .text-success, .text-warning, .fuel-negative, .fuel-positive),
+body.fuel-app-shell #main table tbody :is(th, td):not(.text-danger, .text-success, .text-warning, .fuel-negative, .fuel-positive),
+body.fuel-app-shell table tbody :is(th, td) :where(a, b, strong, em, small, span, div, p, label, li):not(.bi, .fuel-branch-icon, .btn, .btn *, .badge, .badge *, .text-danger, .text-success, .text-warning, .fuel-negative, .fuel-positive, .fuel-red, .fuel-green),
+body.fuel-app-shell #main table tbody :is(th, td) :where(a, b, strong, em, small, span, div, p, label, li):not(.bi, .fuel-branch-icon, .btn, .btn *, .badge, .badge *, .text-danger, .text-success, .text-warning, .fuel-negative, .fuel-positive, .fuel-red, .fuel-green) {
+    color: inherit !important;
+}
+body.fuel-app-shell table thead :is(th, td),
+body.fuel-app-shell #main table thead :is(th, td),
+body.fuel-app-shell .modal table.table thead :is(th, td) {
+    --bs-table-color: var(--bs-highlight-bg) !important;
+    --bs-table-bg: #172d32 !important;
+    background: #172d32 !important;
+    color: var(--bs-highlight-bg) !important;
+}
+body.fuel-app-shell table thead :is(th, td) :where(a, b, strong, em, small, span, div, p, button, i):not(.btn, .btn *),
+body.fuel-app-shell #main table thead :is(th, td) :where(a, b, strong, em, small, span, div, p, button, i):not(.btn, .btn *) {
+    color: var(--bs-highlight-bg) !important;
+}
+/* Content typography is opt-in; other pages retain their existing form styles. */
+body.fuel-dashboard-shell, body.fuel-products-shell {
+    color: var(--fuel-ink) !important;
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+.fuel-app-shell #header {
+    left: 224px; right: 0; height: 76px; padding: 0 36px;
+    border-bottom: 1px solid var(--fuel-border);
+    box-shadow: none !important;
+    transition: left .3s;
+}
+.fuel-app-shell #header .toggle-sidebar-btn { font-size: 21px; color: #839086 !important; padding-right: 20px; cursor: pointer; }
+.fuel-app-shell #header .fuel-sidebar-toggle { border: 0; background: transparent; padding-left: 0; }
+.fuel-app-shell #header .fuel-sidebar-toggle:focus-visible { outline: 2px solid #e5a07c; outline-offset: 3px; border-radius: 3px; }
+.fuel-app-shell #header > .d-flex { min-width: 0; }
+.fuel-app-shell #header .logo { min-width: 0; overflow: hidden; }
+.fuel-app-shell #header .header-nav { flex-shrink: 0; margin-left: auto !important; padding-left: 16px; }
+.fuel-app-shell .logo .fuel-header-context { color: #8d978f; font-size: 12px; font-weight: 500; letter-spacing: 0; white-space: nowrap; display: flex; align-items: center; min-width: 0; }
+.fuel-header-context > span { margin: 0 14px; color: #c0c8be; }
+.fuel-header-context strong { color: #4d5d51; font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.fuel-app-shell .header-nav .nav-icon { color: #799085; font-size: 20px; }
+.fuel-app-shell .header-nav .nav-profile { color: #647764 !important; font-size: 11px; }
+.fuel-app-shell .header-nav .nav-profile > span.bi { color: #8c9e7b !important; }
+.fuel-app-shell #header .navbar_white_text { color: #647764 !important; }
+.fuel-app-shell #sidebar {
+    top: 0; bottom: 0; left: 0; width: 224px; padding: 32px 20px 22px;
+    display: flex; flex-direction: column; background: var(--fuel-navy) !important;
+    box-shadow: none; scrollbar-color: #496165 var(--fuel-navy);
+}
+.fuel-app-shell #sidebar::-webkit-scrollbar { background: var(--fuel-navy); }
+.fuel-app-shell #sidebar::-webkit-scrollbar-thumb { background: #496165; }
+.fuel-brand { display: flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 11px; color: #fff3cd !important; font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+.fuel-brand-logo { width: 64px; height: 60px; flex-shrink: 0; display: grid; place-items: center; background: #fff; border-radius: 10px; padding: 6px; }
+.fuel-brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+.fuel-brand-dot { color: var(--fuel-orange); }
+.fuel-workspace-label { color: #fff3cd !important; font-size: 9px; letter-spacing: 1.6px; margin: 30px 8px 14px; }
+.fuel-app-shell .sidebar-nav .nav-item { margin-bottom: 4px; }
+.fuel-app-shell .sidebar-nav .fuel-nav-section { color: #fff3cd !important; font-size: 8px; font-weight: 700; letter-spacing: 1.4px; padding: 10px 11px 7px; }
+.fuel-app-shell .sidebar-nav .nav-link,
+.fuel-app-shell .sidebar-nav .nav-link.collapsed {
+    background: transparent !important; color: #fff3cd !important;
+    border-radius: 6px !important; font-size: 12px; font-weight: 600; padding: 9px 11px;
+}
+.fuel-app-shell .sidebar-nav .nav-link i,
+.fuel-app-shell .sidebar-nav .nav-content a i { color: var(--bs-cyan) !important; font-size: 15px !important; }
+.fuel-app-shell .sidebar-nav .nav-link:hover { background: #253e42 !important; color: #fff3cd !important; }
+.fuel-app-shell .sidebar-nav .nav-link.fuel-nav-active { background: #2b4144 !important; color: #fff3cd !important; box-shadow: inset 3px 0 var(--fuel-orange); }
+.fuel-app-shell .sidebar-nav .nav-link.fuel-nav-active i { color: var(--bs-cyan) !important; }
+.fuel-app-shell .sidebar-nav .nav-content { padding: 2px 0 6px 10px; }
+.fuel-app-shell .sidebar-nav .nav-content a { color: #fff3cd !important; padding: 9px 6px 9px 14px !important; font-size: 11px; background: transparent !important; }
+.fuel-app-shell .sidebar-nav .nav-content a:hover { color: #fff3cd !important; background: #253e42 !important; }
+.fuel-sidebar-note { margin-top: auto; padding: 34px 8px 0; color: #fff3cd !important; }
+.fuel-sidebar-note > i { display: block; font-size: 33px; color: var(--bs-cyan) !important; margin-bottom: 16px; }
+.fuel-sidebar-note strong { display: block; font-size: 11px; color: #fff3cd !important; }
+.fuel-sidebar-note p { font-size: 11px; color: #fff3cd !important; line-height: 1.8; margin: 10px 0 24px; }
+.fuel-sidebar-note small { font-size: 8px; color: #fff3cd !important; letter-spacing: 1.4px; }
+.fuel-app-shell #main { margin: 76px 0 0 224px; padding: 34px 36px 0; min-height: calc(100vh - 76px); }
+.fuel-app-shell #footer { margin-left: 224px; }
+.fuel-app-shell.toggle-sidebar #sidebar { left: -224px; }
+.fuel-app-shell.toggle-sidebar #header { left: 0; }
+.fuel-app-shell.toggle-sidebar #main, .fuel-app-shell.toggle-sidebar #footer { margin-left: 0; }
+
+.fuel-app-shell .sidebar-nav .nav-content a.fuel-nav-active { background: #2b4144 !important; color: #fff3cd !important; box-shadow: inset 3px 0 var(--fuel-orange); }
+.fuel-app-shell .sidebar-nav .nav-content a.fuel-nav-active i { color: var(--bs-cyan) !important; }
+.fuel-page :is(button, a, input, select):focus-visible { outline: 3px solid #e5a07c; outline-offset: 3px; }
+@media (max-width: 1300px) {
+    .fuel-app-shell #header { padding-inline: 25px; }
+    .fuel-app-shell #main { padding-inline: 25px; }
+}
+@media (max-width: 1199px) {
+    .fuel-app-shell #sidebar { top: 76px; left: -224px; }
+    .fuel-app-shell #header { left: 0; }
+    .fuel-app-shell #main, .fuel-app-shell #footer { margin-left: 0; }
+    .fuel-app-shell.toggle-sidebar #sidebar { left: 0; box-shadow: 8px 0 30px #172d3230; }
+    .fuel-sidebar-note { padding-top: 22px; }
+}
+@media (max-width: 760px) {
+    .fuel-app-shell #header { padding-inline: 18px; height: 64px; }
+    .fuel-app-shell #sidebar { top: 64px; }
+    .fuel-app-shell .logo .fuel-header-context { font-size: 10px; }
+    .fuel-header-context > span { margin-inline: 8px; }
+    .fuel-app-shell #header .toggle-sidebar-btn { padding-right: 12px; }
+    .fuel-app-shell #main { margin-top: 64px; padding: 25px 16px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .fuel-app-shell :is(#sidebar, #header), .fuel-app-shell :is(#sidebar, #header) * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+@media print {
+    body.fuel-app-shell { background: white; }
+    .fuel-app-shell #sidebar, .fuel-app-shell #header, .fuel-app-shell .modal, .fuel-app-shell .back-to-top { display: none !important; }
+    .fuel-app-shell #main { margin: 0; padding: 0; }
+}

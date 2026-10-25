@@ -11,6 +11,8 @@ use App\Models\SOBillingTransactionModel;
 use App\Models\BillingTransactionModel;
 
 use App\Models\ProductModel;
+use App\Models\ProductPricePerBranchModel;
+use App\Models\ProductPricePerBranchHistoryModel;
 use App\Models\TevesBranchModel;
 use Session;
 use Validator;
@@ -23,15 +25,173 @@ use Carbon\Carbon;
 
 class CashiersReportFuelSalesController extends Controller
 {
-	public function get_fuel_sales_products()
+	/**
+	 * Ensure each configured fuel pump has a Fuel Sales row for this report.
+	 * This is safe to call on every report load: rows are keyed by report and pump.
+	 */
+	public function initializeFuelSalesRows(Request $request)
+	{
+		$request->validate([
+			'CashiersReportId' => 'required|integer|exists:teves_cashiers_report,cashiers_report_id',
+		]);
+
+		$userId = Session::get('loginID');
+		$report = CashiersReportModel::findOrFail($request->CashiersReportId);
+		$user = User::where('user_id', $userId)->first();
+
+		if (!$userId || !$user) {
+			return response()->json(['message' => 'Unauthenticated.'], 401);
+		}
+
+		if ($user->user_branch_access_type !== 'ALL') {
+			$hasBranchAccess = DB::table('teves_user_branch_access')
+				->where('user_idx', $userId)
+				->where('branch_idx', $report->teves_branch)
+				->exists();
+
+			if (!$hasBranchAccess) {
+				return response()->json(['message' => 'You do not have access to this branch report.'], 403);
+			}
+		}
+
+		$created = 0;
+		$skipped = [];
+		$alreadyInitialized = false;
+
+		DB::transaction(function () use ($report, $userId, &$created, &$skipped, &$alreadyInitialized) {
+			// Serialize initialization for this report so parallel page requests do not duplicate rows.
+			CashiersReportModel::where('cashiers_report_id', $report->cashiers_report_id)
+				->lockForUpdate()
+				->first();
+
+			// Seed only an empty report. This prevents deleted rows from being recreated
+			// on refresh and leaves all manually entered rows untouched.
+			if (CashiersReportModel_P1::where('cashiers_report_id', $report->cashiers_report_id)->exists()) {
+				$alreadyInitialized = true;
+				return;
+			}
+
+			$pumps = DB::table('teves_product_pump_table as pump')
+				->join('teves_product_table as product', 'product.product_id', '=', 'pump.product_idx')
+				->join('teves_product_category as category', 'category.category_id', '=', 'product.category_idx')
+				->join('teves_user_product_category_access as access', function ($join) use ($userId) {
+					$join->on('access.category_idx', '=', 'product.category_idx')
+						->where('access.user_idx', '=', $userId);
+				})
+				->where('pump.branch_idx', $report->teves_branch)
+				->whereNull('pump.deleted_at')
+				->whereNull('product.deleted_at')
+				->whereNull('category.deleted_at')
+				->whereRaw('LOWER(TRIM(category.category_name)) LIKE ?', ['%fuel%'])
+				->orderBy('pump.pump_id')
+				->get([
+					'pump.pump_id', 'pump.product_idx', 'pump.initial_reading',
+					'product.product_price', 'product.product_name', 'product.product_code',
+				]);
+
+			$previousRows = DB::table('teves_cashiers_report_p1 as fuel_sales')
+				->join('teves_cashiers_report as previous_report', 'previous_report.cashiers_report_id', '=', 'fuel_sales.cashiers_report_id')
+				->where('previous_report.teves_branch', $report->teves_branch)
+				->whereNull('previous_report.deleted_at')
+				->where(function ($query) use ($report) {
+					$query->where('previous_report.report_date', '<', $report->report_date)
+						->orWhere(function ($sameDate) use ($report) {
+							$sameDate->where('previous_report.report_date', $report->report_date)
+								->where('previous_report.cashiers_report_id', '<', $report->cashiers_report_id);
+						});
+				})
+				->orderByDesc('previous_report.report_date')
+				->orderByDesc('previous_report.cashiers_report_id')
+				->get([
+					'fuel_sales.pump_idx', 'fuel_sales.tank_idx',
+					'fuel_sales.closing_reading', 'fuel_sales.product_price',
+				]);
+
+			$lastByPump = [];
+			foreach ($previousRows as $previousRow) {
+				if ($previousRow->pump_idx && !array_key_exists($previousRow->pump_idx, $lastByPump)) {
+					$lastByPump[$previousRow->pump_idx] = $previousRow;
+				}
+			}
+
+			foreach ($pumps as $pump) {
+				$alreadyExists = CashiersReportModel_P1::where('cashiers_report_id', $report->cashiers_report_id)
+					->where('pump_idx', $pump->pump_id)
+					->exists();
+
+				if ($alreadyExists) {
+					continue;
+				}
+
+				$tanks = DB::table('teves_product_tank_table')
+					->where('product_idx', $pump->product_idx)
+					->where('branch_idx', $report->teves_branch)
+					->orderBy('tank_id')
+					->get(['tank_id', 'tank_name']);
+
+				$previous = $lastByPump[$pump->pump_id] ?? null;
+				$selectedTankId = $previous && $tanks->contains('tank_id', $previous->tank_idx)
+					? $previous->tank_idx
+					: ($tanks->count() === 1 ? $tanks->first()->tank_id : null);
+
+				// There is no pump-to-tank mapping in the existing schema. Do not guess
+				// when multiple tanks serve this product; report it for manual resolution.
+				if (!$selectedTankId) {
+					$skipped[] = [
+						'product' => $pump->product_name,
+						'pump_id' => $pump->pump_id,
+					'reason' => $tanks->isEmpty() ? 'No tank is assigned.' : 'Multiple tanks are assigned and no previous tank mapping exists.',
+					];
+					continue;
+				}
+
+				$branchPrice = DB::table('teves_product_branch_price_table')
+					->where('product_idx', $pump->product_idx)
+					->where('branch_idx', $report->teves_branch)
+					->value('branch_price');
+				$price = $branchPrice !== null
+					? (float) $branchPrice
+					: (float) $pump->product_price;
+
+				$sale = new CashiersReportModel_P1();
+				$sale->user_idx = $userId;
+				$sale->cashiers_report_id = $report->cashiers_report_id;
+				$sale->product_idx = $pump->product_idx;
+				$sale->tank_idx = $selectedTankId;
+				$sale->pump_idx = $pump->pump_id;
+				$sale->beginning_reading = 0;
+				$sale->closing_reading = 0;
+				$sale->calibration = 0;
+				$sale->order_quantity = 0;
+				$sale->product_price = $price;
+				$sale->order_total_amount = 0;
+				$sale->save();
+				$created++;
+			}
+		});
+
+		return response()->json([
+			'success' => true,
+			'created' => $created,
+			'already_initialized' => $alreadyInitialized,
+			'skipped' => $skipped,
+		]);
+	}
+
+	public function get_fuel_sales_products(Request $request)
 	{
 		$userId = Session::get('loginID');
+		$branchId = $request->input('branch_idx');
 
 		if (!$userId) {
 			return response()->json(['message' => 'Unauthenticated.'], 401);
 		}
 
 		$products = ProductModel::query()
+			->leftJoin('teves_product_branch_price_table as product_branch_price', function ($join) use ($branchId) {
+				$join->on('product_branch_price.product_idx', '=', 'teves_product_table.product_id')
+					->where('product_branch_price.branch_idx', $branchId);
+			})
 			->join('teves_product_category as product_category', 'product_category.category_id', '=', 'teves_product_table.category_idx')
 			->join('teves_user_product_category_access as user_category_access', 'user_category_access.category_idx', '=', 'teves_product_table.category_idx')
 			->where('user_category_access.user_idx', $userId)
@@ -43,7 +203,7 @@ class CashiersReportFuelSalesController extends Controller
 				'teves_product_table.product_id',
 				'teves_product_table.product_name',
 				'teves_product_table.product_code',
-				'teves_product_table.product_price'
+				DB::raw('COALESCE(product_branch_price.branch_price, teves_product_table.product_price) as product_price')
 			]);
 
 		return response()->json($products);
@@ -98,6 +258,7 @@ class CashiersReportFuelSalesController extends Controller
 	public function save_cashiers_report_fuel_sales(Request $request){	
 
 		$CHPH1_ID 				= $request->fuel_sales_id;
+		$updateBranchPrice = $request->boolean('update_branch_price');
 		
     $request->validate([
         'product_idx' => 'required',
@@ -225,6 +386,17 @@ class CashiersReportFuelSalesController extends Controller
 					'Closing Reading is Required',
 
 			]);
+
+		if ($updateBranchPrice) {
+			if (!in_array(Session::get('UserType'), ['Admin', 'SUAdmin'], true)) {
+				return response()->json(['message' => 'Only administrators can update branch fuel prices.'], 403);
+			}
+
+			$request->validate([
+				'branch_idx' => 'required|integer|exists:teves_branch_table,branch_id',
+				'product_manual_price' => 'required|numeric|min:0',
+			]);
+		}
 			
 			/*Get Last ID*/
 			$CashiersReportId = $request->CashiersReportId;
@@ -281,7 +453,13 @@ class CashiersReportFuelSalesController extends Controller
 									$CashiersReportModel_P1->product_price 				= $product_price;
 									$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
 									
-									$result = $CashiersReportModel_P1->save();
+									$result = DB::transaction(function () use ($CashiersReportModel_P1, $request, $product_idx, $product_price, $updateBranchPrice) {
+										$saved = $CashiersReportModel_P1->save();
+										if ($saved && $updateBranchPrice) {
+											$this->updateFuelProductBranchPrice($product_idx, $request->branch_idx, $product_price);
+										}
+										return $saved;
+									});
 									
 									if($result){
 										return response()->json(['success'=>'Product Successfully Created!']);
@@ -306,7 +484,13 @@ class CashiersReportFuelSalesController extends Controller
 									$CashiersReportModel_P1->product_price 				= $product_price;
 									$CashiersReportModel_P1->order_total_amount 		= $peso_sales;
 									
-									$result = $CashiersReportModel_P1->update();
+									$result = DB::transaction(function () use ($CashiersReportModel_P1, $request, $product_idx, $product_price, $updateBranchPrice) {
+										$updated = $CashiersReportModel_P1->update();
+										if ($updated && $updateBranchPrice) {
+											$this->updateFuelProductBranchPrice($product_idx, $request->branch_idx, $product_price);
+										}
+										return $updated;
+									});
 									
 									if($result){
 										return response()->json(['success'=>'Product Successfully Updated!']);
@@ -318,6 +502,57 @@ class CashiersReportFuelSalesController extends Controller
 								}
 								
 	}	
+
+	private function updateFuelProductBranchPrice($productId, $branchId, $sellingPrice)
+	{
+		$sellingPrice = round((float) $sellingPrice, 2);
+		$branchPrice = ProductPricePerBranchModel::where('product_idx', $productId)
+			->where('branch_idx', $branchId)
+			->first();
+		$isNewPrice = !$branchPrice;
+
+		if ($isNewPrice) {
+			$branchPrice = new ProductPricePerBranchModel();
+			$branchPrice->product_idx = $productId;
+			$branchPrice->branch_idx = $branchId;
+			$branchPrice->buying_price = 0;
+			$branchPrice->profit_margin_type = 'Peso';
+			$branchPrice->profit_margin = $sellingPrice;
+			$branchPrice->profit_margin_in_peso = $sellingPrice;
+			$branchPrice->created_by_user_idx = Session::get('loginID');
+		} else {
+			$buyingPrice = (float) ($branchPrice->buying_price ?? 0);
+			$marginInPeso = round($sellingPrice - $buyingPrice, 2);
+			$marginType = $branchPrice->profit_margin_type === 'Percentage' && $buyingPrice > 0
+				? 'Percentage'
+				: 'Peso';
+
+			$branchPrice->buying_price = $buyingPrice;
+			$branchPrice->profit_margin_type = $marginType;
+			$branchPrice->profit_margin = $marginType === 'Percentage'
+				? round(($marginInPeso / $buyingPrice) * 100, 2)
+				: $marginInPeso;
+			$branchPrice->profit_margin_in_peso = $marginInPeso;
+		}
+
+		$branchPrice->branch_price = $sellingPrice;
+		$branchPrice->modified_by_user_idx = Session::get('loginID');
+		$branchPrice->save();
+
+		$history = new ProductPricePerBranchHistoryModel();
+		$history->branch_price_idx = $branchPrice->branch_price_id;
+		$history->product_idx = $productId;
+		$history->branch_idx = $branchId;
+		$history->date_of_changes = Carbon::now()->toDateString();
+		$history->time_of_changes = Carbon::now()->format('H:i:s');
+		$history->branch_price = $sellingPrice;
+		$history->buying_price = $branchPrice->buying_price;
+		$history->profit_margin_type = $branchPrice->profit_margin_type;
+		$history->profit_margin = $branchPrice->profit_margin;
+		$history->profit_margin_in_peso = $branchPrice->profit_margin_in_peso;
+		$history->created_by_user_idx = Session::get('loginID');
+		$history->save();
+	}
 	
 	public function get_cashiers_report_fuel_sales(Request $request){		
 	

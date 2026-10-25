@@ -218,6 +218,20 @@
             showProductInformationChildModal('#ProductInformationModal');
         });
 
+        $('#ManageMainProductModal').on('click', '.manage-variant-branch-pricing', function () {
+            const row = getProductRowData(this, window.productMainVariantsDataTable);
+            if (!row.product_id) return;
+
+            window.returnToMainVariantsId = activeMainProductId;
+            $('#ProductInformationModal').one('shown.bs.modal', function () {
+                selectProduct(row.product_id);
+                window.setTimeout(function () {
+                    $('#branchprice-tab').tab('show');
+                }, 0);
+            });
+            showProductInformationChildModal('#ProductInformationModal');
+        });
+
         $('#addVariantToMainProduct').on('click', function () {
             window.returnToMainVariantsId = activeMainProductId;
             window.pendingProductMainID = activeMainProductId;

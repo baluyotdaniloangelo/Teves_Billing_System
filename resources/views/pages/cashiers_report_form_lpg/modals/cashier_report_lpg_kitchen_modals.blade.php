@@ -41,7 +41,7 @@
                         <label class="form-label" for="lpg_kitchen_product_idx">Product / Item</label>
                         <select class="form-select form-select-sm lpg-product-picker" id="lpg_kitchen_product_idx" name="product_idx" required>
                             <option value="">Select kitchen product</option>
-                            @foreach($product_data->whereIn('category_idx', \App\Services\LpgKitchenProducts::categoryIds())->unique('product_id') as $product)
+                            @foreach($product_data->whereIn('product_id', \App\Services\LpgKitchenProducts::ids())->unique('product_id') as $product)
                                 <option value="{{ $product->product_id }}" data-product-code="{{ $product->product_code ?? '' }}">{{ trim(($product->product_name ?? '') . ' ' . ($product->product_unit_measurement ?? '')) }}</option>
                             @endforeach
                         </select>

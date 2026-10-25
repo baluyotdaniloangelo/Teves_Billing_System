@@ -186,6 +186,7 @@ class ProductController extends Controller
 				$productId = (int) $row->product_id;
 				return '<div class="d-flex justify-content-center gap-2 product-list-actions">
 					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage variant details" aria-label="Manage variant details"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border manage-variant-branch-pricing" title="Manage price per branch" aria-label="Manage price per branch"><i class="bi bi-building-gear text-success" aria-hidden="true"></i></button>
 					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border unlink-product-variant" title="Remove from main product" aria-label="Remove from main product"><i class="bi bi-link-45deg" aria-hidden="true"></i></button>
 				</div>';
 			})

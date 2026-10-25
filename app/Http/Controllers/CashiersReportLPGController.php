@@ -742,7 +742,7 @@ class CashiersReportLPGController extends Controller
         // Kitchen-category item so the printable matches the full inventory sheet.
         $kitchenSummary = app(\App\Services\LpgKitchenSummary::class);
         $kitchenRows = $kitchenSummary->rows($kitchenSummary->records($reportId));
-        $kitchenCategoryIds = \App\Services\LpgKitchenProducts::categoryIds();
+        $kitchenProductIds = \App\Services\LpgKitchenProducts::ids();
         $kitchenCatalog = DB::table('teves_product_table as product')
             ->leftJoin('teves_product_main_table as main', function ($join) {
                 $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
@@ -751,7 +751,7 @@ class CashiersReportLPGController extends Controller
                 $join->on('branch_price.product_idx', '=', 'product.product_id')
                     ->where('branch_price.branch_idx', '=', $report->teves_branch);
             })
-            ->whereIn('product.category_idx', $kitchenCategoryIds)->whereNull('product.deleted_at')
+            ->whereIn('product.product_id', $kitchenProductIds)->whereNull('product.deleted_at')
             ->orderBy('main.product_name')->orderBy('product.product_name')
             ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
                 'product.product_unit_measurement', 'main.product_name as group_name',

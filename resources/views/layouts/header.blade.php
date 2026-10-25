@@ -39,6 +39,7 @@
 	
   <link href="{{asset('style/custom_style_common.css')}}" rel="stylesheet">
   <link href="{{asset('style/custom_style_teves.css')}}" rel="stylesheet">
+  <link href="{{ asset('style/fuel-workspace.css') }}?v={{ filemtime(public_path('style/fuel-workspace.css')) }}" rel="stylesheet">
  
   <!-- =======================================================
   * Template Name: NiceAdmin-pro - v2.3.1
@@ -47,4 +48,4 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
-@include('layouts.navigation')
+@stack('page_styles')

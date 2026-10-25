@@ -29,6 +29,11 @@ class Kernel extends ConsoleKernel
 			app(\App\Http\Controllers\EmailController::class)->sendUnbilledReport();
 		})->dailyAt('10:00');
 
+		// Daily rolling 30-day sales and collections report for SUAdmins.
+		$schedule->call(function () {
+			app(\App\Http\Controllers\EmailController::class)->sendSalesCollectionsReport();
+		})->dailyAt('15:00')->timezone('Asia/Manila');
+
 		// ✅ Reminder emails every minute
 		$schedule->call(function () {
 			app(\App\Http\Controllers\EmailController::class)->sendReminderEmails();

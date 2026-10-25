@@ -6,13 +6,56 @@ FUEL SALES
 
 $(document).ready(function ()
 {
-    /* Initialize Fuel Sales DataTable */
-    initializeCashiersReportFuelSalesTable();
-
     /* Load only Fuel-category products for the Fuel Sales form */
     loadFuelSalesProductList();
 
-    $('#fuel_product').on('input change', updateFuelProductCodePreview);
+    /*
+     * Seed configured fuel pump rows once for an empty report. The endpoint is
+     * idempotent, so refreshes preserve existing edits and deleted rows.
+     */
+    $.ajax({
+        url: "{{ route('InitializeFuelSalesRows') }}",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            CashiersReportId: {{ (int) $CashiersReportId }},
+            _token: "{{ csrf_token() }}"
+        }
+    }).done(function (response) {
+        if (response.skipped && response.skipped.length) {
+            const skippedRows = response.skipped.map(function (item) {
+                return (item.product || 'Fuel') + ' / Pump #' + item.pump_id + ': ' + item.reason;
+            });
+
+            $('#fuelSalesAutoSetupNotice')
+                .removeClass('d-none')
+                .text('Some Fuel Sales rows need a tank assignment before they can be created automatically: ' + skippedRows.join(' '));
+        }
+    }).fail(function (xhr) {
+        const serverMessage = xhr.responseJSON && xhr.responseJSON.message
+            ? xhr.responseJSON.message
+            : 'Please refresh or add the missing rows manually.';
+
+        $('#fuelSalesAutoSetupNotice')
+            .removeClass('d-none')
+            .text('Fuel Sales could not be prepared automatically. ' + serverMessage);
+    }).always(function () {
+        /* Load saved and newly prepared rows after initialization completes. */
+        initializeCashiersReportFuelSalesTable();
+    });
+
+    $('#fuel_product').on('input change', function () {
+        updateFuelProductCodePreview();
+
+        const selectedProduct = $('#fuelProductList option').filter(function () {
+            return $(this).val() === $('#fuel_product').val();
+        }).first();
+
+        $('#fuel_pump_price').val(selectedProduct.length
+            ? (parseFloat(selectedProduct.attr('data-price')) || 0).toFixed(2)
+            : '');
+        calculateFuelSalesTotal();
+    });
 });
 
 
@@ -75,6 +118,7 @@ function loadFuelSalesProductList()
         type: 'POST',
         dataType: 'json',
         data: {
+            branch_idx: {{ (int) ($CashiersReportData[0]['teves_branch'] ?? 0) }},
             _token: "{{ csrf_token() }}"
         }
     }).done(function (products)
@@ -1012,6 +1056,9 @@ $('#CashierReportFuelSalesForm').on('submit', function (event)
             product_manual_price:
                 product_manual_price,
 
+            update_branch_price:
+                $('#fuel_update_branch_price').is(':checked') ? 1 : 0,
+
             _token:
                 "{{ csrf_token() }}"
         },
@@ -1039,10 +1086,25 @@ $('#CashierReportFuelSalesForm').on('submit', function (event)
 		{
 			console.log(response);
 
-			const successMessage = response.success ||
+			const branchPriceWasUpdated = $('#fuel_update_branch_price').is(':checked');
+			const successMessage = (response.success ||
 				(isNewFuelSale
 					? 'Fuel sales added successfully.'
-					: 'Fuel sales updated successfully.');
+					: 'Fuel sales updated successfully.')) +
+				(branchPriceWasUpdated ? ' Branch price updated for future Fuel Sales.' : '');
+
+			if (branchPriceWasUpdated) {
+				const selectedProduct = $('#fuelProductList option').filter(function () {
+					return $(this).attr('data-id') === String(product_idx);
+				}).first();
+				const updatedPrice = parseFloat(product_manual_price) || 0;
+				const productCode = selectedProduct.attr('data-product-code') || '';
+				const productName = selectedProduct.val() || '';
+				selectedProduct.attr('data-price', updatedPrice);
+				selectedProduct.attr('label', (productCode ? 'Code: ' + productCode + ' | ' : '') +
+					'₱ ' + updatedPrice.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+					' | ' + productName);
+			}
 
 			// Reset the form but keep the Fuel Sales modal open.
 			resetFuelSalesForm();

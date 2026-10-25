@@ -3,6 +3,7 @@
 <!-- ========================================== -->
 @php
     $lpgRegulatorProductIds = \App\Services\LpgRegulatorProducts::ids();
+    $lpgKitchenProductIds = \App\Services\LpgKitchenProducts::ids();
 @endphp
 
 <div class="modal fade"
@@ -141,7 +142,7 @@
                                     @endphp
                                     <option label="{{ $lpgArSoProductLabel }} | ₱ {{ number_format($product_data_cols->product_price ?? 0, 2) }}"
                                             data-id="{{ $product_data_cols->product_id }}"
-                                            data-kitchen="{{ in_array((int) $product_data_cols->category_idx, \App\Services\LpgKitchenProducts::categoryIds(), true) ? '1' : '0' }}"
+                                            data-kitchen="{{ in_array((int) $product_data_cols->product_id, $lpgKitchenProductIds, true) ? '1' : '0' }}"
                                             data-lpg="{{ in_array((int) $product_data_cols->category_idx, \App\Services\LpgEmptyInventorySummary::categoryIds(), true) ? '1' : '0' }}"
                                             data-regulator="{{ in_array((int) $product_data_cols->product_id, $lpgRegulatorProductIds, true) ? '1' : '0' }}"
                                             data-price="{{ $product_data_cols->product_price ?? 0 }}"

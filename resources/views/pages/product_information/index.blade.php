@@ -1,4 +1,9 @@
 @extends('layouts.layout')
+@section('body_class', 'fuel-products-shell')
+
+@push('page_styles')
+<link href="{{ asset('style/fuel-products.css') }}?v={{ filemtime(public_path('style/fuel-products.css')) }}" rel="stylesheet">
+@endpush
 
 @section('content')
 <style>
@@ -355,7 +360,11 @@
         }
     }
 </style>
-<main id="main" class="main">
+<main id="main" class="main fuel-page fuel-products">
+    <div class="fuel-products-heading">
+        <div><p class="fuel-products-eyebrow"></p><h1><span>Product Management</span></h1><p class="fuel-products-subtitle">Manage your main products, variants, and categories in one place.</p></div>
+        <span class="fuel-catalog-label"><i class="bi bi-grid" aria-hidden="true"></i> Products &amp; services</span>
+    </div>
     <section class="section product-information-theme">
         <div class="row g-3">
             <div class="col-12">
@@ -379,6 +388,7 @@
             @include('pages.product_category.modals.product_category_delete_modal')
         @endif
     </section>
+    <div class="fuel-products-footer"><span>Products &amp; services</span></div>
 </main>
 @endsection
 

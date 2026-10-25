@@ -4,7 +4,7 @@
      tabindex="-1"
      aria-hidden="true">
 
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
@@ -55,7 +55,7 @@
                 <!-- BODY -->
                 <div class="modal-body p-4">
 
-                    <div class="row g-4">
+                    <div class="row g-0">
 
 					<ul class="nav nav-tabs mb-3" id="PurchaseOrderTabs" role="tablist">
 
@@ -137,6 +137,7 @@
 												Commercial Account
 											</option>
 
+											<option value="Vendor">Vendor</option>
 											<option value="Household">Household</option>
 											<option value="Outlet">Outlet</option>
 											<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
@@ -794,6 +795,25 @@
 
 </div>
 
+
+<!-- CLIENT CREDIT / LPG SETTINGS -->
+<div class="fuel-client-settings-block">
+    <div class="fuel-client-settings-heading"><span class="fuel-client-settings-icon"><i class="bi bi-wallet2"></i></span><div><strong>Client Credit & LPG Discount</strong><small>Account-specific payment and LPG pricing settings</small></div></div>
+    <div class="row g-3 mt-1">
+        <div class="col-md-6">
+            <label class="form-label fw-semibold" for="client_credit_limit">Credit Limit</label>
+            <div class="input-group"><span class="input-group-text">₱</span><input type="number" class="form-control" name="client_credit_limit" id="client_credit_limit" min="0" step="0.01" placeholder="0.00"></div>
+            <div class="form-text">Maximum unpaid balance allowed for this client.</div>
+            <div class="invalid-feedback" id="client_credit_limit_error"></div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label fw-semibold" for="client_lpg_discount_amount">LPG Discount Amount</label>
+            <div class="input-group"><span class="input-group-text">₱</span><input type="number" class="form-control" name="client_lpg_discount_amount" id="client_lpg_discount_amount" min="0" step="0.01" placeholder="0.00"></div>
+            <div class="form-text">Discount amount to apply to this client’s LPG sales.</div>
+            <div class="invalid-feedback" id="client_lpg_discount_amount_error"></div>
+        </div>
+    </div>
+</div>
 
 <!-- PAYMENT TERMS / LESS DISCOUNT -->
 <div class="row">

@@ -139,11 +139,11 @@ div.dataTables_wrapper {
 }
 </style>
 
-<div class="card border-0 shadow-sm rounded-4 p-2 mb-3">
+<div class="card border-0 shadow-sm rounded-4 p-2 mb-3 fuel-catalog-tabs-card">
     <ul class="nav nav-pills product-catalog-tabs" id="productCatalogTabs" role="tablist" aria-label="Product catalog views">
         <li class="nav-item flex-fill" role="presentation">
             <button class="nav-link active w-100" id="main-products-tab" data-bs-toggle="tab" data-bs-target="#mainProductsPane" type="button" role="tab" aria-controls="mainProductsPane" aria-selected="true">
-                <i class="bi bi-box-seam me-2" aria-hidden="true"></i>Main
+                <i class="bi bi-box-seam me-2" aria-hidden="true"></i>Main Products
             </button>
         </li>
         <li class="nav-item flex-fill" role="presentation">
@@ -171,7 +171,7 @@ div.dataTables_wrapper {
                     <i class="bi bi-box-seam text-success fs-4" aria-hidden="true"></i>
                 </div>
                 <div>
-                    <h4 class="fw-bold mb-0">Products</h4>
+                    <h4 class="fw-bold mb-0">Main products</h4>
                     <small class="text-muted">Manage product information, pricing, and equipment.</small>
                 </div>
             </div>

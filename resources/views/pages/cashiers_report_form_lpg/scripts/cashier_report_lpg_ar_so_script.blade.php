@@ -190,6 +190,17 @@ function findLpgArSoDatalistOption(listId, selectedValue) {
     return selected;
 }
 
+function findLpgArSoDatalistOptionById(listId, selectedId) {
+    let selected = null;
+    $('#' + listId + ' option').each(function () {
+        if (String($(this).attr('data-id')) === String(selectedId)) {
+            selected = $(this);
+            return false;
+        }
+    });
+    return selected;
+}
+
 function updateLpgArSoAmount() {
     const quantity = parseFloat($('#ar_so_quantity').val()) || 0;
     const unitPrice = parseFloat($('#ar_so_unit_price').val()) || 0;
@@ -317,12 +328,16 @@ $('#CashierReportLpgArSoForm').on('submit', function (event) {
                         ? 'product_idxError'
                         : field + 'Error';
                 const errorElement = document.getElementById(errorId);
+                const input = field === 'client_idx' ? $('#ar_so_account_id')
+                    : field === 'product_idx' ? $('#ar_so_product')
+                    : $(form).find('[name="' + field + '"]');
                 if (errorElement) {
                     errorElement.textContent = Array.isArray(errors[field])
                         ? errors[field][0]
                         : errors[field];
                     errorElement.classList.add('d-block');
                 }
+                input.addClass('is-invalid');
             });
             if (!Object.keys(errors).length && typeof showValidationErrorModal === 'function') {
                 showValidationErrorModal(xhr.responseJSON?.message || 'Unable to save item.');
@@ -336,6 +351,15 @@ $('#CashierReportLpgArSoForm').on('submit', function (event) {
             );
         }
     });
+});
+
+$('#CashierReportLpgArSoForm').on('input change', ':input', function () {
+    if (!this.checkValidity()) return;
+    this.classList.remove('is-invalid');
+    const feedbackId = this.id === 'ar_so_account_id' ? 'client_idxError'
+        : this.id === 'ar_so_product' ? 'product_idxError'
+        : this.name + 'Error';
+    document.getElementById(feedbackId)?.classList.remove('d-block');
 });
 
 function loadLpgArSoInformation(recordId, callback) {
@@ -368,9 +392,7 @@ function editLpgArSoRecord(recordId) {
     if (!recordId) return;
 
     loadLpgArSoInformation(recordId, function (row) {
-        const productLabel = [row.product_name, row.product_unit_measurement]
-            .filter(Boolean)
-            .join(' ');
+        const productOption = findLpgArSoDatalistOptionById('lpgArSoProductList', row.product_idx);
 
         $('#CashierReportLpgArSoForm')[0].classList.remove('was-validated');
         $('#cashiers_report_lpg_ar_so_id').val(row.cashiers_report_lpg_ar_so_id);
@@ -379,7 +401,7 @@ function editLpgArSoRecord(recordId) {
         $('#ar_so_type').val(row.item_description || '');
         $('#ar_so_stock_type').val(row.sale_stock_type || '');
         $('#ar_so_account_id').val(row.client_name || '').get(0).setCustomValidity('');
-        $('#ar_so_product').val(productLabel).get(0).setCustomValidity('');
+        $('#ar_so_product').val(productOption?.val() || '').get(0).setCustomValidity('');
         syncLpgSaleStockType();
         $('#ar_so_quantity').val(row.order_quantity ?? '');
         $('#ar_so_unit_price').val(row.unit_price ?? '');
@@ -434,7 +456,12 @@ function syncLpgSaleStockType() {
         }
     }
     const emptyOnly = !isReturn && $('#ar_so_stock_type').val() === 'EMPTY_CONTAINER';
-    $('#ar_so_quantity').attr('step', emptyOnly ? '1' : '0.01');
+    // Use 1 as the step base for piece counts; min 0.01 with step 1 rejects integer quantities.
+    const quantityInput = $('#ar_so_quantity')
+        .attr('min', emptyOnly ? '1' : '0.01')
+        .attr('step', emptyOnly ? '1' : '0.01');
+    if (emptyOnly) quantityInput.attr('max', '2147483647');
+    else quantityInput.removeAttr('max');
     $('#ar_so_unit_price').prop('readonly', !emptyOnly);
     $('#ar_so_unit_price').closest('.col-md-6').find('.form-text').text(emptyOnly ? 'Enter the unit price charged for the empty cylinder / canister.' : "Filled from the selected product's price.");
     if (window.LpgEmptyReceiptForm) window.LpgEmptyReceiptForm.sync();

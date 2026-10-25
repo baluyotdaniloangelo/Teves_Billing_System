@@ -2,7 +2,7 @@
 $(function () {
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" } });
     const reportId = {{ $CashiersReportId ?? ($cashiers_report_id ?? 0) }};
-    const nonContainerProductIds = @json($product_data->whereIn('category_idx', \App\Services\LpgKitchenProducts::categoryIds())->pluck('product_id')->merge(\App\Services\LpgRegulatorProducts::ids())->map(fn($id) => (int) $id)->unique()->values());
+    const nonContainerProductIds = @json(\App\Services\LpgKitchenProducts::ids());
     const swappingEntriesModal = document.getElementById('LpgSwappingEntriesModal');
     const escapeText = value => $('<div>').text(value == null ? '' : String(value)).html();
 
@@ -118,7 +118,7 @@ $(function () {
     function indexColumn(){ return {data:null,orderable:false,className:'text-center',render:(d,t,r,m)=>m.row+1}; }
     function productColumn(prefix){ return {data:null,render:(r,t)=>{const value=[r[prefix+'_product_name'],r[prefix+'_product_unit_measurement']].filter(Boolean).join(' ')||'-'; return t === 'display' ? escapeText(value) : value; }}; }
     function quantityColumn(field){ return {data:field,className:'text-end fw-semibold',render:(v,t,r)=>r[field.replace('_quantity','_product_idx')] ? formatQty(v) : '—'}; }
-    function movementColumn(prefix){ return {data:null,render:r=>{const product=[r[prefix+'_product_name'],r[prefix+'_product_unit_measurement']].filter(Boolean).join(' ') || '-'; return `${product}<br><small>Qty: ${formatQty(r[prefix+'_quantity'])} &nbsp; Alum: ${formatQty(r[prefix+'_alum_quantity'])}</small>`;}}; }
+    function movementColumn(prefix){ return {data:null,render:r=>{const capacity = r[prefix+'_product_capacity']; const unit = r[prefix+'_product_capacity_unit']; const description = capacity !== null && capacity !== undefined && capacity !== '' && unit ? Number(capacity).toLocaleString('en-PH', {maximumFractionDigits:3}) + ' ' + unit : r[prefix+'_product_unit_measurement']; const product=[r[prefix+'_product_name'],description].filter(Boolean).join(' ') || '-'; return `${escapeText(product)}<br><small>Qty: ${formatQty(r[prefix+'_quantity'])} &nbsp; Alum: ${formatQty(r[prefix+'_alum_quantity'])}</small>`;}}; }
     function swappingRecordActions(row) {
         if (row.source_kind === 'kitchen_damaged') {
             const id = Number(row.source_id);

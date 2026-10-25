@@ -9,7 +9,6 @@ $(function () {
     const modeFields = {BEGINNING: ['beginning_quantity'], ADDITIONS: additionFields, DEDUCTIONS: deductionFields};
     const modeNames = {BEGINNING: 'Beginning Inventory', ADDITIONS: 'Additions (+)', DEDUCTIONS: 'Deductions (-)'};
     const states = {};
-    let deleteId = 0;
     const number = value => Number(value || 0).toLocaleString('en-PH');
     const headers = {'X-CSRF-TOKEN': "{{ csrf_token() }}", 'Accept': 'application/json'};
     const escape = value => $('<div>').text(value == null ? '' : String(value)).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -55,12 +54,7 @@ $(function () {
             {data: 'product_name', defaultContent: '-', render: $.fn.dataTable.render.text()},
             ...quantityFields.map(field => ({data: field, className: 'text-end', render: (value, type, row) => quantityCell(field, value, type, row)})),
             {data: 'ending_quantity', className: 'text-end fw-bold', render: (value, type, row) => type === 'display' ? '<span class="' + (Number(value) < 0 ? 'text-danger' : '') + '" title="Linked receipt overlap: ' + number(row.duplicate_received_quantity) + ' pcs">' + number(value) + '</span>' : Number(value)},
-            {data: 'remarks', defaultContent: '-', render: $.fn.dataTable.render.text()},
-            {data: null, className: 'text-nowrap text-center', render: function (data, type, row) {
-                const id = Number(row.cashiers_report_lpg_empty_inventory_id);
-                if (!id) return '';
-                return `<button type="button" class="btn btn-sm btn-danger delete-lpg-empty-inventory" data-id="${id}" title="Delete row" aria-label="Delete empty-stock row"><i class="bi bi-trash3" aria-hidden="true"></i></button>`;
-            }}
+            {data: 'remarks', defaultContent: '-', render: $.fn.dataTable.render.text()}
         ],
         language: {emptyTable: 'No empty-stock rows recorded. Add a product to begin.'},
         drawCallback: function () {
@@ -70,7 +64,7 @@ $(function () {
             function subtotal() {
                 const tr = $('<tr class="lpg-empty-total-row">').append($('<td>').text('Total'));
                 quantityFields.concat(['ending_quantity']).forEach(field => tr.append($('<td class="text-end">').text(number(totals[field]))));
-                return tr.append($('<td colspan="2">'));
+                return tr.append($('<td>'));
             }
             api.rows({search: 'applied', order: 'applied'}).every(function () {
                 const row = this.data();
@@ -79,7 +73,7 @@ $(function () {
                     if (lastNode) $(lastNode).after(subtotal());
                     group = row.capacity_group;
                     totals = {};
-                    $(node).before($('<tr class="lpg-empty-group-row">').append($('<td colspan="14">').text(group)));
+                    $(node).before($('<tr class="lpg-empty-group-row">').append($('<td colspan="13">').text(group)));
                 }
                 quantityFields.concat(['ending_quantity']).forEach(field => totals[field] = (totals[field] || 0) + Number(row[field] || 0));
                 lastNode = node;
@@ -242,8 +236,8 @@ $(function () {
             resetLpgArSoForm();
             $('#ar_so_type').val('Sales Order').trigger('change');
             $('#ar_so_stock_type').val(field === 'sold_quantity' ? 'EMPTY_CONTAINER' : 'REFILL_SWAP').trigger('change');
-            if (field === 'sold_quantity') fillSaleProduct(productId);
-            else $('#ar_so_empty_received_product_idx').val(productId || '').trigger('change');
+            fillSaleProduct(productId);
+            if (field === 'refill_sell_out_quantity') $('#ar_so_empty_received_product_idx').val(productId || '').trigger('change');
             lpgArSoShowModal('#CashierReportLpgArSoModal');
         } else if (field === 'swap_in_quantity' || field === 'swap_out_quantity') {
             window.LpgSwappingEditor.add(productId, field === 'swap_in_quantity' ? 'RECEIVED' : 'REPLACED');
@@ -311,25 +305,6 @@ $(function () {
     });
     $(sourceModal).on('hidden.bs.modal', function () { ++sourceVersion; if (sourceRequest) sourceRequest.abort(); sourceRequest = null; });
     $('#refresh-lpg-empty-inventory').on('click', () => table.ajax.reload(null, false));
-    $('#LpgEmptyInventoryTable').on('click', '.delete-lpg-empty-inventory', function () {
-        deleteId = Number($(this).data('id'));
-        const row = table.rows().data().toArray().find(item => Number(item.cashiers_report_lpg_empty_inventory_id) === deleteId);
-        $('#lpg_empty_delete_item').text(row?.product_name || 'this product');
-        $('#lpg_empty_delete_error').addClass('d-none');
-        showModal(document.getElementById('CashierReportLpgEmptyInventoryDeleteModal'));
-    });
-    $('#confirm-delete-lpg-empty-inventory').on('click', function () {
-        if (!deleteId) return;
-        const button = $(this).prop('disabled', true);
-        $.ajax({url: "{{ route('DeleteLpgEmptyInventory') }}", type: 'POST', headers: headers, data: {cashiers_report_id: reportId, cashiers_report_lpg_empty_inventory_id: deleteId}})
-            .done(response => {
-                hideModal(document.getElementById('CashierReportLpgEmptyInventoryDeleteModal'));
-                table.ajax.reload(null, false);
-                if (typeof showSuccessModal === 'function') showSuccessModal(response.message);
-            })
-            .fail(xhr => $('#lpg_empty_delete_error').text(errorText(xhr, 'Unable to delete empty stock.')).removeClass('d-none'))
-            .always(() => button.prop('disabled', false));
-    });
     $('#lpg-empty-inventory-tab').on('shown.bs.tab', () => table.columns.adjust());
     let sourceReloadTimer;
     $(document).on('lpg:inventory-changed', () => { clearTimeout(sourceReloadTimer); sourceReloadTimer = setTimeout(() => table.ajax.reload(null, false), 150); });

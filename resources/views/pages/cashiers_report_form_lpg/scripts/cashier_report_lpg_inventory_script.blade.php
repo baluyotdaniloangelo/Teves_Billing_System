@@ -1,6 +1,12 @@
 <script>
 $(function () {
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" } });
+    const inventorySelect = document.getElementById('lpg_inventory_product_idx');
+    LpgInventoryProductOptionOrder = Array.from(inventorySelect.options);
+    $('#CashierReportLpgInventoryModal').on('hidden.bs.modal', function () {
+        LpgInventoryProductOptionOrder.forEach(option => inventorySelect.appendChild(option));
+        window.LpgProductAutocomplete?.sync(inventorySelect);
+    });
 
     initLpgInventoryTables();
 
@@ -9,7 +15,7 @@ $(function () {
     });
 
     $('#clear-lpg-inventory').on('click', function () {
-        openLpgInventoryModal($('#lpg_inventory_mode').val());
+        openLpgInventoryModal($('#lpg_inventory_mode').val(), null, null, LpgCurrentInventoryProductScope);
     });
 
     $('#CashierReportLpgInventoryForm').on('submit', function (event) {
@@ -100,6 +106,13 @@ $(function () {
 let LpgBeginningInventoryTable;
 let LpgDeliveryTable;
 let LpgBoReplacementTable;
+let LpgInventoryProductOptionOrder = [];
+let LpgCurrentInventoryProductScope = 'LPG';
+const LpgInventoryProductScopes = {
+    LPG: new Set(@json($product_data->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())->pluck('product_id')->map(fn($id) => (int) $id)->values())),
+    KITCHEN: new Set(@json(\App\Services\LpgKitchenProducts::ids())),
+    REGULATOR: new Set(@json(\App\Services\LpgRegulatorProducts::ids()))
+};
 
 function initLpgInventoryTables() {
     LpgBeginningInventoryTable = createLpgInventoryTable('#LpgBeginningInventoryTable', 'BEGINNING', [
@@ -188,8 +201,15 @@ function inventoryEmptyMessage(mode) {
     return 'No LPG deliveries recorded.';
 }
 
-function openLpgInventoryModal(mode, record, productId) {
+function openLpgInventoryModal(mode, record, productId, productScope) {
     const form = document.getElementById('CashierReportLpgInventoryForm');
+    const select = document.getElementById('lpg_inventory_product_idx');
+    LpgCurrentInventoryProductScope = productScope || 'LPG';
+    const scopeProducts = LpgInventoryProductScopes[LpgCurrentInventoryProductScope] || LpgInventoryProductScopes.LPG;
+    LpgInventoryProductOptionOrder.forEach(option => select.appendChild(option));
+    LpgInventoryProductOptionOrder.forEach(option => {
+        if (option.value && !scopeProducts.has(Number(option.value))) option.remove();
+    });
     form.reset();
     form.classList.remove('was-validated');
     clearLpgInventoryErrors();

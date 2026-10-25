@@ -2,6 +2,7 @@
 (function ($) {
 
 let categoryCodeManuallyEdited = false;
+let productCategorySearchTimer;
 
 /*==================================================
 PRODUCT CATEGORY MODULE
@@ -61,6 +62,7 @@ function initializeProductCategoryDetailsTable()
 
     if ($.fn.DataTable.isDataTable(tableSelector)) {
         ProductCategoryDetailsTable = $(tableSelector).DataTable();
+        bindProductCategoryTableControls();
         return;
     }
 
@@ -70,8 +72,10 @@ function initializeProductCategoryDetailsTable()
             processing: true,
             serverSide: true,
             responsive: true,
-            scrollY: '500px',
+            autoWidth: false,
             stateSave: true,
+            lengthChange: false,
+            dom: 'rt<"d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3"ip>',
 
             ajax:
                 "{{ route('getProductCategoryDetailsList') }}",
@@ -81,17 +85,20 @@ function initializeProductCategoryDetailsTable()
                 {
                     data: 'DT_RowIndex',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    className: 'text-center text-muted',
+                    width: '8%'
                 },
 
-                { data: 'category_name', render: $.fn.dataTable.render.text() },
-                { data: 'category_code', className: 'text-center fw-semibold', render: $.fn.dataTable.render.text() },
+                { data: 'category_name', render: $.fn.dataTable.render.text(), className: 'fw-semibold', width: '54%' },
+                { data: 'category_code', className: 'text-center fw-semibold', render: $.fn.dataTable.render.text(), width: '20%' },
 
                 {
                     data: 'action',
                     orderable: false,
                     searchable: false,
-                    className: 'text-center'
+                    className: 'text-center text-nowrap',
+                    width: '18%'
                 }
 
             ],
@@ -103,6 +110,33 @@ function initializeProductCategoryDetailsTable()
     if (window.ResizeObserver) {
         autoAdjustColumns(ProductCategoryDetailsTable);
     }
+
+    bindProductCategoryTableControls();
+}
+
+function bindProductCategoryTableControls()
+{
+    if (!ProductCategoryDetailsTable) {
+        return;
+    }
+
+    $('#product_category_search')
+        .val(ProductCategoryDetailsTable.search())
+        .off('input.productCategoryTable')
+        .on('input.productCategoryTable', function () {
+            const searchValue = this.value;
+            window.clearTimeout(productCategorySearchTimer);
+            productCategorySearchTimer = window.setTimeout(function () {
+                ProductCategoryDetailsTable.search(searchValue).draw();
+            }, 250);
+        });
+
+    $('#product_category_length')
+        .val(String(ProductCategoryDetailsTable.page.len()))
+        .off('change.productCategoryTable')
+        .on('change.productCategoryTable', function () {
+            ProductCategoryDetailsTable.page.len(Number(this.value)).draw();
+        });
 }
 
 

@@ -303,6 +303,7 @@ FUEL CASHIER REPORT TABS
 				</button>
 			</div>
 			<br>
+				<div class="alert alert-warning d-none mb-3" id="fuelSalesAutoSetupNotice" role="alert" aria-live="polite"></div>
 
 				<table  class="table table-hover align-middle dataTable display nowrap cell-border" id="FuelSales">
 					<thead>

@@ -21,7 +21,7 @@ class LpgSwappingBalance
             ->join('teves_product_table as product', 'product.product_id', '=', 'movement.product_idx')
             ->where('movement.cashiers_report_id', $reportId)->whereNull('movement.deleted_at')
             ->where('movement.movement_type', 'DAMAGED')->whereNotNull('movement.client_idx')
-            ->whereIn('product.category_idx', LpgKitchenProducts::categoryIds())
+            ->whereIn('product.product_id', LpgKitchenProducts::ids())
             ->whereNotIn('product.product_id', LpgRegulatorProducts::ids());
         if ($excludeKitchenId) $damaged->where('movement.cashiers_report_lpg_kitchen_movement_id', '<>', $excludeKitchenId);
         foreach ($damaged->get(['movement.client_idx', 'movement.product_idx', 'movement.quantity']) as $row) {

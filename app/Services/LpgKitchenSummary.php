@@ -24,7 +24,7 @@ class LpgKitchenSummary
             ->join('teves_product_table as product', 'product.product_id', '=', 'swap.replaced_product_idx')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'swap.client_idx')
             ->where('swap.cashiers_report_id', $reportId)->whereNull('swap.deleted_at')
-            ->whereIn('product.category_idx', LpgKitchenProducts::categoryIds())
+            ->whereIn('product.product_id', LpgKitchenProducts::ids())
             ->whereNotIn('product.product_id', LpgRegulatorProducts::ids())
             ->orderBy('swap.cashiers_report_lpg_swapping_id')->get(['swap.*', 'client.client_name']);
         foreach ($swaps as $row) {
@@ -35,7 +35,7 @@ class LpgKitchenSummary
             ->join('teves_product_table as product', 'product.product_id', '=', 'movement.product_idx')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'movement.client_idx')
             ->where('movement.cashiers_report_id', $reportId)->whereNull('movement.deleted_at')
-            ->whereIn('product.category_idx', LpgKitchenProducts::categoryIds())
+            ->whereIn('product.product_id', LpgKitchenProducts::ids())
             ->whereNotIn('product.product_id', LpgRegulatorProducts::ids())
             ->orderBy('movement.cashiers_report_lpg_kitchen_movement_id')->get(['movement.*', 'client.client_name']);
         foreach ($movements as $row) {

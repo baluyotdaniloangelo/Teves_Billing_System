@@ -1,5 +1,5 @@
 @php
-    $showEmptyColumnActions = ($withColumnActions ?? false) && ($withActions ?? false);
+    $showEmptyColumnActions = $withColumnActions ?? false;
     $emptyHeaderRows = $showEmptyColumnActions ? 4 : 3;
 @endphp
 <thead>
@@ -10,7 +10,6 @@
         <th colspan="5">Less (-)</th>
         <th rowspan="{{ $emptyHeaderRows }}">Ending<br>Inventory</th>
         <th rowspan="{{ $emptyHeaderRows }}">Remarks</th>
-        @if($withActions ?? false)<th rowspan="{{ $emptyHeaderRows }}">Action</th>@endif
     </tr>
     <tr>
         <th colspan="4">Empty From</th>

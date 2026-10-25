@@ -1,4 +1,9 @@
 @extends('layouts.layout')
+@section('body_class', 'fuel-client-shell')
+
+@push('page_styles')
+<link href="{{ asset('style/fuel-client.css') }}?v={{ filemtime(public_path('style/fuel-client.css')) }}" rel="stylesheet">
+@endpush
 
 @section('content')
 <style>
@@ -11,109 +16,74 @@ div.dataTables_wrapper {
     overflow-y: visible !important;
 }
 </style>
-<main id="main" class="main">
+<main id="main" class="main fuel-page fuel-client-page">
+    <div class="fuel-client-page-heading">
+        <div>
+            <p class="fuel-client-page-eyebrow">Account Management</p>
+            <h1>{{ $title }}</h1>
+            <p class="fuel-client-page-subtitle">Manage client profiles, payment terms, and account settings.</p>
+        </div>
+        <span class="fuel-client-page-chip"><i class="bi bi-people" aria-hidden="true"></i> Client accounts</span>
+    </div>
 
-    <section class="section">
+    <section class="section fuel-client-section">
 		<!-- PURCHASE ORDER LIST -->
-		<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+		<div class="card border-0 shadow-sm rounded-4 overflow-hidden fuel-client-panel">
 
 			<!-- HEADER -->
-			<div class="card-header bg-white border-0 py-3 px-4">
-
+			<div class="card-header bg-white border-0 fuel-client-heading">
 				<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-
-					<!-- TITLE -->
 					<div class="d-flex align-items-center">
-
-						<!-- ICON -->
-						<div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3"
-							 style="width:55px;height:55px;">
-
-							<i class="bi bi-people-fill text-success fs-4"></i>
-
-						</div>
-
-						<!-- TEXT -->
-						<div>
-
-							<h4 class="fw-bold mb-0">
-								{{ $title }}
-							</h4>
-							
-							<small class="text-muted">
-								Manage Account List
-							</small>
-
-						</div>
-
+						<span class="fuel-client-heading-icon me-3"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+						<h2 class="fuel-client-heading-title mb-0">Account directory</h2>
 					</div>
-
-				   <!-- ACTIONS -->
-					<div class="d-flex align-items-center gap-2 flex-wrap"
-						 id="client_option">
-
-						<!-- CREATE BUTTON -->
+					<div class="d-flex align-items-center gap-2 flex-wrap" id="client_option">
 						<button type="button"
-								class="btn btn-success rounded-3 shadow-sm px-3"
+								class="btn btn-success rounded-3 shadow-sm px-3 fuel-button fuel-button-primary"
 								data-bs-toggle="modal"
 								data-bs-target="#CreateClientModal">
-
 							<i class="bi bi-plus-circle me-2"></i>
 							New Account
-
 						</button>
-
 					</div>
-
 				</div>
-
 			</div>
-
 			<!-- BODY -->
-			<div class="card-body p-4">
+			<div class="card-body p-4 fuel-client-body">
 
-				<!-- TOOLBAR -->
-				<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-
-					<!-- LEFT
-					<div>
-
-						<h6 class="fw-semibold mb-0">
-							Purchase Order List
-						</h6>
-
-						<small class="text-muted">
-							Monitor and manage purchase order transactions
-						</small>
-
-					</div> -->
-
-					<!-- RIGHT -->
-					<div class="d-flex align-items-center gap-2">
-
-						<!-- OPTIONAL FILTER -->
-						<!--
-						<button class="btn btn-outline-success btn-sm rounded-3">
-
-							<i class="bi bi-funnel me-1"></i>
-							Filter
-
-						</button>
-						-->
-
-						<!-- OPTIONAL EXPORT -->
-						<!--
-						<button class="btn btn-outline-primary btn-sm rounded-3">
-
-							<i class="bi bi-download me-1"></i>
-							Export
-
-						</button>
-						-->
-
+				<div class="fuel-client-toolbar">
+					<div class="fuel-client-toolbar-copy">
+						<span class="fuel-client-toolbar-kicker">DIRECTORY FILTERS</span>
+						<strong>Find an account</strong>
+						<small>Search client details or filter the list by customer type.</small>
 					</div>
-
+					<div class="fuel-client-toolbar-controls">
+						<label class="fuel-client-control fuel-client-page-size" for="client-page-size">
+							<span>SHOW</span>
+							<select id="client-page-size" aria-label="Accounts per page"><option value="10">10</option><option value="25">25</option><option value="50">50</option></select>
+						</label>
+						<label class="fuel-client-search" for="client-search">
+							<i class="bi bi-search" aria-hidden="true"></i>
+							<input type="search" id="client-search" placeholder="Search name, TIN, address…" aria-label="Search client information">
+						</label>
+						<label class="fuel-client-type-filter" for="client-customer-type">
+							<i class="bi bi-funnel" aria-hidden="true"></i>
+							<select id="client-customer-type" aria-label="Filter by customer type">
+								<option value="">All customer types</option>
+								<option value="Commercial Account">Commercial Account</option>
+								<option value="Vendor">Vendor</option>
+								<option value="Household">Household</option>
+								<option value="Outlet">Outlet</option>
+								<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
+								<option value="Industrial – Fuel">Industrial – Fuel</option>
+								<option value="Industrial – LPG">Industrial – LPG</option>
+							</select>
+						</label>
+						<button type="button" class="fuel-client-reset" id="client-reset-filters">Reset</button>
+					</div>
 				</div>
+
+
 <style>
 
 
@@ -261,9 +231,9 @@ div.dataTables_wrapper {
 }
 </style>
 				<!-- TABLE -->
-				<div class="table-responsive">
+				<div class="table-responsive fuel-client-table-scroll">
 
-					<table class="table table-hover align-middle" id="getclientList" width="100%">
+					<table class="table table-hover align-middle fuel-client-table" id="getclientList" width="100%">
     <thead>
         <tr>
             <th width="5%">#</th>

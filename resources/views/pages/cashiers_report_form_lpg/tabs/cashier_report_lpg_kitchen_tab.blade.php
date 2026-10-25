@@ -17,7 +17,7 @@
                     <th rowspan="3" style="min-width:190px;">Item</th>
                     <th rowspan="2">Beginning Inventory</th>
                     <th colspan="3">Add (+)</th>
-                    <th colspan="5">Less (-)</th>
+                    <th colspan="4">Less (-)</th>
                     <th rowspan="3" title="Automatically calculated: Sales Order quantity plus Cash Sales quantity">Total Sold</th>
                     <th rowspan="3">Unit Price</th>
                     <th rowspan="3">Total Sales<br>in Peso</th>
@@ -26,19 +26,19 @@
                     <th rowspan="3" title="Actual Ending Inventory minus Theoretical Ending Inventory">Variance</th>
                 </tr>
                 <tr>
-                    @foreach(['DELIVERY' => 'Delivery', 'DAMAGED' => 'Damaged', 'BO_REPLACEMENT' => 'B.O. Replacement', 'SWAP' => 'Swap', 'ON_LOAN' => 'On-loan', 'CONSIGNMENT' => 'Consignment', 'RAFFLE' => 'Raffle / Product Expenses', 'WALK_IN' => 'Walk-in'] as $sourceMode => $sourceLabel)
+                    @foreach(['DELIVERY' => 'Delivery', 'DAMAGED' => 'Damaged', 'BO_REPLACEMENT' => 'B.O. Replacement', 'SWAP' => 'Swap', 'ON_LOAN' => 'On-loan', 'RAFFLE' => 'Raffle / Product Expenses', 'WALK_IN' => 'Walk-in'] as $sourceMode => $sourceLabel)
                         <th>{{ $sourceLabel }}</th>
                     @endforeach
                 </tr>
                 <tr class="lpg-summary-actions" data-dt-order="disable">
-                    @foreach(['BEGINNING', 'DELIVERY', 'DAMAGED', 'BO_REPLACEMENT', 'SWAP', 'ON_LOAN', 'CONSIGNMENT', 'RAFFLE', 'WALK_IN'] as $sourceMode)
+                    @foreach(['BEGINNING', 'DELIVERY', 'DAMAGED', 'BO_REPLACEMENT', 'SWAP', 'ON_LOAN', 'RAFFLE', 'WALK_IN'] as $sourceMode)
                         <th>
                             @include('pages.cashiers_report_form_lpg.partials.kitchen_source_buttons', ['sourceMode' => $sourceMode])
                         </th>
                     @endforeach
                 </tr>
             </thead>
-            <tbody><tr><td colspan="16" class="text-center text-muted py-4">Loading kitchen stock...</td></tr></tbody>
+            <tbody><tr><td colspan="15" class="text-center text-muted py-4">Loading kitchen stock...</td></tr></tbody>
         </table>
     </div>
 </div>

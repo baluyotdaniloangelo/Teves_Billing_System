@@ -1,14 +1,25 @@
 @extends('layouts.layout')
+@section('body_class', 'fuel-cashiers-shell fuel-lpg-cashiers-shell fuel-lpg-cashiers-form-shell')
+
+@push('page_styles')
+<link href="{{ asset('style/fuel-cashiers.css') }}?v={{ filemtime(public_path('style/fuel-cashiers.css')) }}" rel="stylesheet">
+<link href="{{ asset('style/fuel-lpg-cashiers.css') }}?v={{ filemtime(public_path('style/fuel-lpg-cashiers.css')) }}" rel="stylesheet">
+@endpush
 
 @section('content')
 
 @include('pages.cashiers_report_form_lpg.partials.report_theme')
 
-<main id="main" class="main lpg-report-theme">
+<main id="main" class="main lpg-report-theme fuel-page fuel-cashiers-page">
+    <div class="fuel-cashiers-heading">
+        <div><p class="fuel-cashiers-eyebrow"></p><h1><span>Cashiers Report - LPG</span></h1><p class="fuel-cashiers-subtitle">Keep sales, stock movements, and collections in one clear view.</p></div>
+        <a class="fuel-report-back" href="{{ route('cashierReportLPG') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> All LPG reports</a>
+    </div>
+    @include('pages.cashiers_report_form_lpg.partials.workspace_summary')
 
     <section class="section">
 
-        <div class="card rounded-4 p-3">
+        <div class="card rounded-4 p-3 fuel-report-editor">
 
 			@include('pages.cashiers_report_form_lpg.tabs.information')
 			
@@ -61,6 +72,7 @@
     </section>
 
 
+    <div class="fuel-cashiers-footer"><span><strong>TEVES.</strong> Clarity for every collection.</span><span>LPG cashier report</span></div>
 </main>
 
 	@include('pages.cashiers_report_form_lpg.scripts.plugins_script')

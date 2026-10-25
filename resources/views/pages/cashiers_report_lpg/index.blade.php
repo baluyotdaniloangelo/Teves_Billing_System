@@ -1,4 +1,10 @@
 @extends('layouts.layout')
+@section('body_class', 'fuel-cashiers-shell fuel-lpg-cashiers-shell fuel-lpg-cashiers-list-shell')
+
+@push('page_styles')
+<link href="{{ asset('style/fuel-cashiers.css') }}?v={{ filemtime(public_path('style/fuel-cashiers.css')) }}" rel="stylesheet">
+<link href="{{ asset('style/fuel-lpg-cashiers.css') }}?v={{ filemtime(public_path('style/fuel-lpg-cashiers.css')) }}" rel="stylesheet">
+@endpush
 
 @section('content')
 <style>
@@ -46,11 +52,19 @@ div.dataTables_wrapper {
 }
 
 </style>
-<main id="main" class="main">
+<main id="main" class="main fuel-page fuel-cashiers-page">
+    <div class="fuel-cashiers-heading">
+        <div><p class="fuel-cashiers-eyebrow">LPG OPERATIONS</p>
+		<h1>
+		<span>Cashiers Reports - LPG</span>
+		</h1>
+		<p class="fuel-cashiers-subtitle">Review sales, inventory, and collections for every station.</p></div>
+        <span class="fuel-cashiers-chip"><i class="bi bi-box-seam" aria-hidden="true"></i> LPG cashier reports</span>
+    </div>
 
     <section class="section">
 		<!-- PURCHASE ORDER LIST -->
-		<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+		<div class="card border-0 shadow-sm rounded-4 overflow-hidden fuel-report-list-panel">
 
 			<!-- HEADER -->
 			<div class="card-header bg-white border-0 py-3 px-4">
@@ -72,7 +86,7 @@ div.dataTables_wrapper {
 						<div>
 
 							<h4 class="fw-bold mb-0">
-								{{ $title }}
+								Report history
 							</h4>
 							<!--
 							<small class="text-muted">
@@ -115,7 +129,7 @@ div.dataTables_wrapper {
 					CASHIER REPORT FILTER TOOLBAR
 					========================================================= -->
 
-					<div class="card border-0 shadow-sm rounded-4 mb-3">
+					<div class="card border-0 shadow-sm rounded-4 mb-3 fuel-cashier-filters">
 
 						<div class="card-body p-3">
 
@@ -379,6 +393,7 @@ div.dataTables_wrapper {
     </section>
 
 
+    <div class="fuel-cashiers-footer"><span><strong>TEVES.</strong> Clarity for every collection.</span><span>LPG cashier reports</span></div>
 </main>
 
 @include('pages.cashiers_report_lpg.scripts.plugins_script')

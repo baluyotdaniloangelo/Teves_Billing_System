@@ -185,42 +185,22 @@
                                     <div class="min-w-0"><small class="text-muted d-block">Theoretical Sales</small><div class="fw-bold text-body" id="theoretical_sales">0.00</div></div>
                                 </div>
                             </div>
-                            <div class="col-12 border-bottom">
-                                <div class="d-flex align-items-center gap-2 px-3 py-2 h-100">
-                                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success flex-shrink-0" style="width:34px;height:34px;"><i class="bi bi-cash-stack"></i></span>
-                                    <div class="min-w-0"><small class="text-muted d-block">Cash on Hand</small><div class="fw-bold text-success" id="cash_on_hand">0.00</div></div>
-                                </div>
-                            </div>
-                            <div class="col-12 border-bottom">
-                                <div class="d-flex align-items-center gap-2 px-3 py-2 h-100">
-                                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-primary bg-opacity-10 text-primary flex-shrink-0" style="width:34px;height:34px;"><i class="bi bi-credit-card"></i></span>
-                                    <div class="min-w-0"><small class="text-muted d-block">Non-Cash Payment</small><div class="fw-bold text-body" id="total_non_cash_payment">0.00</div></div>
-                                </div>
-                            </div>
+
+
                             <div class="col-12 border-bottom">
                                 <div class="d-flex align-items-center gap-2 px-3 py-2 h-100">
                                     <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success flex-shrink-0" style="width:34px;height:34px;"><i class="bi bi-wallet2"></i></span>
                                     <div class="min-w-0"><small class="text-muted d-block">Total Cash Payment</small><div class="fw-bold text-success" id="total_cash_payment">0.00</div></div>
                                 </div>
                             </div>
-                        
-						
-                            <div class="col-12 border-bottom">
-                                <div class="d-flex align-items-center gap-2 bg-primary bg-opacity-10 px-3 py-2 h-100">
-                                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-white text-primary flex-shrink-0" style="width:34px;height:34px;"><i class="bi bi-graph-up-arrow"></i></span>
-                                    <div class="min-w-0"><small class="text-primary d-block">Total Sales</small><div class="fw-bold fs-5 text-primary" id="total_sales">0.00</div></div>
-                                </div>
-                            </div>
-                            <div class="col-12 border-bottom">
-                                <div class="d-flex align-items-center gap-2 bg-light px-3 py-2 h-100">
-                                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-warning bg-opacity-10 text-warning flex-shrink-0" style="width:34px;height:34px;"><i class="bi bi-clipboard-data"></i></span>
-                                    <div class="min-w-0"><small class="text-muted d-block">Cash Short / Over</small><div class="fw-bold fs-5" id="cash_short_or_over">0.00</div></div>
-                                </div>
-                            </div>
+
+
+
+
                         </div>
-						
+
                     </div>
-					
+
                 </div>
             </section>
         </div>

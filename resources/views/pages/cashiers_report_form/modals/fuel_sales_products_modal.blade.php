@@ -396,6 +396,15 @@ ADD / EDIT MODAL
                             <span class="input-group-text">₱</span>
                             <input type="number" class="form-control rounded-end-3" name="fuel_pump_price" id="fuel_pump_price" min="0" step="0.01" placeholder="0.00">
                         </div>
+                        @if(in_array(Session::get('UserType'), ['Admin', 'SUAdmin'], true))
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" value="1" id="fuel_update_branch_price">
+                                <label class="form-check-label fw-semibold" for="fuel_update_branch_price">
+                                    Update this branch's fuel price
+                                </label>
+                                <div class="form-text">When checked, this Pump Price will also be saved as the product price for this branch's future Fuel Sales.</div>
+                            </div>
+                        @endif
                         <div class="invalid-feedback" id="fuel_pump_priceError">Please enter the pump price.</div>
                     </section>
 

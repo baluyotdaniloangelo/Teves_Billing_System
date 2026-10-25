@@ -1,7 +1,7 @@
 <script>
 $(function () {
     const reportId = {{ (int) ($CashiersReportId ?? ($cashiers_report_id ?? 0)) }};
-    const kitchenProductIds = @json($product_data->whereIn('category_idx', \App\Services\LpgKitchenProducts::categoryIds())->pluck('product_id')->unique()->values());
+    const kitchenProductIds = @json(\App\Services\LpgKitchenProducts::ids());
     const modes = {BEGINNING:'Beginning Inventory', DELIVERY:'Delivery', BO_REPLACEMENT:'B.O. Replacement', RETURN:'Return', DAMAGED:'Damaged', SWAP:'Swap', ON_LOAN:'On-loan', CONSIGNMENT:'Consignment', RAFFLE:'Raffle / Product Expenses', WALK_IN:'Walk-in', TOTAL_SOLD:'Total Sold'};
     const inventoryModes = ['BEGINNING', 'DELIVERY', 'BO_REPLACEMENT'];
     const sourceModal = document.getElementById('LpgKitchenSourcesModal');
@@ -40,16 +40,16 @@ $(function () {
                     let html = '';
                     if (row.main_product_name !== group) {
                         group = row.main_product_name;
-                        html += '<tr><td colspan="16" class="fw-bold">' + escape(group) + '</td></tr>';
+                        html += '<tr><td colspan="15" class="fw-bold">' + escape(group) + '</td></tr>';
                     }
                     html += '<tr><td>' + escape(label(row)) + '</td>' + sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null);
-                    ['DELIVERY','DAMAGED','BO_REPLACEMENT','SWAP','ON_LOAN','CONSIGNMENT','RAFFLE','WALK_IN'].forEach(mode => html += sourceCell(row, mode, row[mode.toLowerCase() + '_quantity']));
+                    ['DELIVERY','DAMAGED','BO_REPLACEMENT','SWAP','ON_LOAN','RAFFLE','WALK_IN'].forEach(mode => html += sourceCell(row, mode, row[mode.toLowerCase() + '_quantity']));
                     html += '<td class="text-end fw-semibold" title="Sales Order quantity plus Cash Sales quantity">' + quantity(row.total_sold_quantity) + '</td>';
                     return html + '<td class="text-end">' + (row.mixed_prices ? 'Mixed' : (row.unit_price == null ? '—' : money(row.unit_price))) + '</td><td class="text-end" title="Net after discounts: ' + money(row.net_sales) + '">' + money(row.total_sales) + '</td><td class="text-end fw-bold ' + (row.ending_quantity < 0 ? 'text-danger' : '') + '">' + (row.ending_quantity == null ? 'Set beginning stock' : quantity(row.ending_quantity)) + '</td>' + window.LpgActualInventoryUI.cells(row) + '</tr>';
-                }).join('') : '<tr><td colspan="16" class="text-center text-muted py-4">No kitchen stock records yet. Use Add to select a kitchen product.</td></tr>');
+                }).join('') : '<tr><td colspan="15" class="text-center text-muted py-4">No kitchen stock records yet. Use Add to select a kitchen product.</td></tr>');
             }).fail((xhr, status) => {
                 if (version !== summaryVersion || status === 'abort') return;
-                $('#LpgKitchenTable tbody').html('<tr><td colspan="16" class="text-center py-4">Kitchen stock could not be loaded.</td></tr>');
+                $('#LpgKitchenTable tbody').html('<tr><td colspan="15" class="text-center py-4">Kitchen stock could not be loaded.</td></tr>');
                 error('#lpg-kitchen-error', xhr, 'Unable to load kitchen stock.');
             }).always(() => { if (version === summaryVersion) { summaryRequest = null; $('#refresh-lpg-kitchen').prop('disabled', false); } });
     }
@@ -79,7 +79,7 @@ $(function () {
     function edit(row) {
         if (row.kind === 'inventory') {
             return $.ajax({url:"{{ route('LpgInventoryInfo') }}", type:'POST', headers, data:{cashiers_report_lpg_inventory_id:row.record_id}})
-                .done(response => afterSourceClose(() => openLpgInventoryModal(response.data.inventory_mode, response.data)))
+                .done(response => afterSourceClose(() => openLpgInventoryModal(response.data.inventory_mode, response.data, null, 'KITCHEN')))
                 .fail(xhr => error(sourceModal.classList.contains('show') ? '#lpg-kitchen-source-error' : '#lpg-kitchen-error', xhr, 'Unable to load inventory record.'));
         } else if (row.kind === 'kitchen') {
             return $.ajax({url:"{{ route('LpgKitchenMovementInfo') }}", type:'POST', headers, data:{cashiers_report_id:reportId, cashiers_report_lpg_kitchen_movement_id:row.record_id}})
@@ -97,12 +97,12 @@ $(function () {
             button.prop('disabled', true);
             fetchSources(mode, productId).then(response => {
                 if (response.data[0]) return edit(response.data[0]);
-                afterSourceClose(() => kitchenOptions('#CashierReportLpgInventoryModal', '#lpg_inventory_product_idx', () => openLpgInventoryModal(mode, null, productId)));
+                afterSourceClose(() => openLpgInventoryModal(mode, null, productId, 'KITCHEN'));
             }).fail(xhr => error('#lpg-kitchen-error', xhr, 'Unable to load beginning stock.')).always(() => button.prop('disabled', false));
             return;
         }
         afterSourceClose(() => {
-            if (inventoryModes.includes(mode)) kitchenOptions('#CashierReportLpgInventoryModal', '#lpg_inventory_product_idx', () => openLpgInventoryModal(mode, null, productId));
+            if (inventoryModes.includes(mode)) openLpgInventoryModal(mode, null, productId, 'KITCHEN');
             else if (['DAMAGED','CONSIGNMENT'].includes(mode)) openMovement(mode, productId);
             else if (['WALK_IN','TOTAL_SOLD','RETURN'].includes(mode)) kitchenOptions('#CashierReportLpgArSoModal', '#lpgArSoProductList', () => {
                 resetLpgArSoForm();

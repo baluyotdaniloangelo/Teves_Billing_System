@@ -1,6 +1,7 @@
 @include('layouts.header')
 </head>
-<body class="">
+<body class="fuel-app-shell @yield('body_class')">
+@include('layouts.navigation')
 @yield('content')
 
 @hasSection('page_footer')

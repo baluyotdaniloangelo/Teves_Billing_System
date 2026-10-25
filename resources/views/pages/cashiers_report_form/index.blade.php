@@ -1,4 +1,9 @@
 @extends('layouts.layout')
+@section('body_class', 'fuel-cashiers-shell fuel-cashiers-form-shell')
+
+@push('page_styles')
+<link href="{{ asset('style/fuel-cashiers.css') }}?v={{ filemtime(public_path('style/fuel-cashiers.css')) }}" rel="stylesheet">
+@endpush
 
 @section('content')
 
@@ -404,11 +409,16 @@
     }
 </style>
 
-<main id="main" class="main fuel-report-theme">
+<main id="main" class="main fuel-page fuel-report-theme fuel-cashiers-page">
+    <div class="fuel-cashiers-heading">
+        <div><p class="fuel-cashiers-eyebrow"></p><h1><span>Cashiers Report - Fuel</span></h1><p class="fuel-cashiers-subtitle">Record fuel sales, review collections, and keep every amount in view.</p></div>
+        <a class="fuel-report-back" href="{{ route('cashierReport') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> All fuel reports</a>
+    </div>
+    @include('pages.cashiers_report_form.tabs.workspace_summary')
 
     <section class="section">
 
-        <div class="card rounded-4 p-3">
+        <div class="card rounded-4 p-3 fuel-report-editor">
 
 			@include('pages.cashiers_report_form.tabs.information')
 			
@@ -450,6 +460,7 @@
     </section>
 
 
+    <div class="fuel-cashiers-footer"><span><strong>TEVES.</strong> Clarity for every collection.</span><span>FUEL cashier report</span></div>
 </main>
 
 
@@ -481,4 +492,5 @@
 
 @section('page_footer')
     <script src="{{ asset('NiceAdmin-pro/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('NiceAdmin-pro/assets/js/main.js') }}"></script>
 @endsection

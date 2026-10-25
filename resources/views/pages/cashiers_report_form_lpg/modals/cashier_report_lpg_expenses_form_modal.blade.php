@@ -128,7 +128,7 @@
 
                         <div class="col-md-4">
                             <label for="lpg_expense_unit_price" class="form-label fw-semibold">SRP / Unit Price</label>
-                            <div class="input-group input-group-lg">
+                            <div class="input-group input-group-sm">
                                 <span class="input-group-text">₱</span>
                                 <input type="number"
                                        class="form-control form-control-sm rounded-end-3"
@@ -143,7 +143,7 @@
 
                         <div class="col-md-4">
                             <label for="lpg_expense_amount" class="form-label fw-semibold">Amount</label>
-                            <div class="input-group input-group-lg">
+                            <div class="input-group input-group-sm">
                                 <span class="input-group-text">₱</span>
                                 <input type="number"
                                        class="form-control form-control-sm rounded-end-3"

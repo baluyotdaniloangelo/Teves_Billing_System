@@ -41,7 +41,7 @@ class CashiersReport_LPG_Kitchen_Controller extends Controller
             'cashiers_report_lpg_kitchen_movement_id' => ['nullable', 'integer', 'min:0'],
             'movement_type' => ['required', 'in:DAMAGED,CONSIGNMENT'],
             'product_idx' => ['required', 'integer', Rule::exists('teves_product_table', 'product_id')->where(function ($query) {
-                $query->whereIn('category_idx', LpgKitchenProducts::categoryIds())->whereNull('deleted_at');
+                $query->whereIn('product_id', LpgKitchenProducts::ids())->whereNull('deleted_at');
             })],
             'client_idx' => ['required', 'integer', 'exists:teves_client_table,client_id'],
             'reference_no' => ['nullable', 'string', 'max:100'],

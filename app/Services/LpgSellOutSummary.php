@@ -64,6 +64,7 @@ class LpgSellOutSummary
         $products = DB::table('teves_product_table')->whereIn('product_id', $records->pluck('product_idx')->unique()->all())
             ->get(['product_id', 'product_name', 'category_idx', 'product_unit_measurement', 'product_capacity', 'product_capacity_unit'])->keyBy('product_id');
         $regulatorIds = LpgRegulatorProducts::ids();
+        $kitchenProductIds = LpgKitchenProducts::ids();
         return $records->map(function ($entry) use ($products) {
             $product = $products->get($entry['product_idx']);
             $entry['product_name'] = $product->product_name ?? 'Unavailable product';
@@ -72,9 +73,11 @@ class LpgSellOutSummary
             $entry['product_capacity'] = $product->product_capacity ?? null;
             $entry['product_capacity_unit'] = $product->product_capacity_unit ?? null;
             return $entry;
-        })->filter(function ($entry) use ($kitchen, $regulatorIds) {
-            return !in_array($entry['product_idx'], $regulatorIds, true)
-                && in_array($entry['category_idx'], LpgKitchenProducts::categoryIds(), true) === $kitchen;
+        })->filter(function ($entry) use ($kitchen, $regulatorIds, $kitchenProductIds) {
+            if (in_array($entry['product_idx'], $regulatorIds, true)) return false;
+            return $kitchen
+                ? in_array($entry['product_idx'], $kitchenProductIds, true)
+                : in_array($entry['category_idx'], LpgEmptyInventorySummary::categoryIds(), true);
         })->values();
     }
 

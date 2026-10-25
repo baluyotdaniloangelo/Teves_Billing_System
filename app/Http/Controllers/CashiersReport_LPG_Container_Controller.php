@@ -111,8 +111,12 @@ class CashiersReport_LPG_Container_Controller extends Controller
                     'teves_client_table.client_name',
                     'borrow_product.product_name as borrow_product_name',
                     'borrow_product.product_unit_measurement as borrow_product_unit_measurement',
+                    'borrow_product.product_capacity as borrow_product_capacity',
+                    'borrow_product.product_capacity_unit as borrow_product_capacity_unit',
                     'return_product.product_name as return_product_name',
                     'return_product.product_unit_measurement as return_product_unit_measurement',
+                    'return_product.product_capacity as return_product_capacity',
+                    'return_product.product_capacity_unit as return_product_capacity_unit',
                 ])
         );
     }

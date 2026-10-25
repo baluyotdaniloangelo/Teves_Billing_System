@@ -49,6 +49,8 @@ protected $fillable = [
     'client_name',
     'customer_type',
     'client_line_of_business',
+    'client_credit_limit',
+    'client_lpg_discount_amount',
     'client_account_number',
 	
     'client_address',
@@ -103,6 +105,8 @@ protected static $logAttributes = [
     'client_name',
     'customer_type',
     'client_line_of_business',
+    'client_credit_limit',
+    'client_lpg_discount_amount',
     'client_account_number',
 	
     'client_address',

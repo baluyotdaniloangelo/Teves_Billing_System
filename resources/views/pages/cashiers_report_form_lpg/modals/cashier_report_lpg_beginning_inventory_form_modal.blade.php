@@ -26,18 +26,22 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <label for="lpg_inventory_product_idx" class="form-label fw-semibold"><i class="bi bi-box-seam me-2 text-success" aria-hidden="true"></i>Product / Item</label>
+                    @php
+                        $lpgInventoryKitchenProductIds = \App\Services\LpgKitchenProducts::ids();
+                        $lpgInventoryRegulatorProductIds = \App\Services\LpgRegulatorProducts::ids();
+                    @endphp
                             <select class="form-select form-select-sm rounded-3 lpg-product-picker" id="lpg_inventory_product_idx" name="product_idx" required>
                                 <option value="">Select product</option>
-                                @foreach ($product_data->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())->unique('product_id') as $product)
+                                @foreach ($product_data->filter(function ($product) use ($lpgInventoryKitchenProductIds, $lpgInventoryRegulatorProductIds) { return in_array((int) $product->category_idx, \App\Services\LpgEmptyInventorySummary::categoryIds(), true) || in_array((int) $product->product_id, $lpgInventoryKitchenProductIds, true) || in_array((int) $product->product_id, $lpgInventoryRegulatorProductIds, true); })->unique('product_id') as $product)
                                     @php
                                         $capacityLabel = ($product->product_capacity ?? null) !== null && $product->product_capacity !== ''
                                             ? rtrim(rtrim(number_format((float) $product->product_capacity, 2, '.', ''), '0'), '.') . strtoupper($product->product_capacity_unit ?? '')
                                             : ($product->product_unit_measurement ?? '');
                                     @endphp
-                                    <option value="{{ $product->product_id }}" data-product-code="{{ $product->product_code ?? '' }}" data-price="{{ $product->product_price ?? 0 }}">{{ trim(($product->product_name ?? '') . ' ' . $capacityLabel) }}</option>
+                                    <option value="{{ $product->product_id }}" data-product-code="{{ $product->product_code ?? '' }}" data-price="{{ $product->product_price ?? 0 }}" data-lpg="{{ in_array((int) $product->category_idx, \App\Services\LpgEmptyInventorySummary::categoryIds(), true) ? '1' : '0' }}" data-kitchen="{{ in_array((int) $product->product_id, $lpgInventoryKitchenProductIds, true) ? '1' : '0' }}" data-regulator="{{ in_array((int) $product->product_id, $lpgInventoryRegulatorProductIds, true) ? '1' : '0' }}">{{ trim(($product->product_name ?? '') . ' ' . $capacityLabel) }}</option>
                                 @endforeach
                             </select>
-                            <div class="invalid-feedback" id="product_idxError">Please select an LPG product.</div>
+                            <div class="invalid-feedback" id="product_idxError">Please select a product in this inventory category.</div>
                         </div>
 
                         <div class="col-12 lpg-supplier-field d-none">

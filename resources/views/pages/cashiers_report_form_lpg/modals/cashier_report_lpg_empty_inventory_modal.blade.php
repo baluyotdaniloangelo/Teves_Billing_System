@@ -91,10 +91,3 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="CashierReportLpgEmptyInventoryDeleteModal" tabindex="-1" aria-labelledby="LpgEmptyInventoryDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4">
-        <div class="modal-header"><h5 class="modal-title" id="LpgEmptyInventoryDeleteLabel">Delete Empty-stock Row</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
-        <div class="modal-body"><p>Delete the manual empty-stock totals for <strong id="lpg_empty_delete_item"></strong> from this report? Quantities from source transactions remain automatic.</p><div class="alert alert-danger d-none" id="lpg_empty_delete_error" role="alert"></div></div>
-        <div class="modal-footer"><button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-danger" id="confirm-delete-lpg-empty-inventory">Delete</button></div>
-    </div></div>
-</div>
