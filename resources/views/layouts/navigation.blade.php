@@ -49,7 +49,7 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        @if(($data->user_type ?? null) === 'SUAdmin' && config('ui_visibility.online_status', true))
+        @if(($data->user_type ?? null) === 'SUAdmin' && config('ui_visibility.online_status', false))
             @include('layouts.partials.online_users_shortcut')
         @endif
 
@@ -153,21 +153,21 @@
           <i class="bi bi-speedometer2 navbar_icon"></i><span>Cashier Dashboard</span>
         </a>
        </li>
-	   @if(config('ui_visibility.dashboards.sales_receivables', true))
+	   @if(config('ui_visibility.dashboards.sales_receivables', false))
        <li class="nav-item">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('sales_receivables_dashboard') }}" href="{{ route('sales_receivables_dashboard') }}" title="Sales &amp; Receivables Dashboard" @if($workspaceNavActive('sales_receivables_dashboard')) aria-current="page" @endif>
           <i class="bi bi-bar-chart-line navbar_icon"></i><span>Sales &amp; Receivables</span>
         </a>
        </li>
        @endif
-       @if(config('ui_visibility.dashboards.fuel_sales_volume', true))
+       @if(config('ui_visibility.dashboards.fuel_sales_volume', false))
        <li class="nav-item">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('fuel_sales_volume_dashboard') }}" href="{{ route('fuel_sales_volume_dashboard') }}" title="Fuel Sales Volume Dashboard" @if($workspaceNavActive('fuel_sales_volume_dashboard')) aria-current="page" @endif>
           <i class="bi bi-fuel-pump navbar_icon"></i><span>Fuel Sales Volume</span>
         </a>
        </li>
        @endif
-	   @if(config('ui_visibility.dashboards.procurement_expenses', true))
+	   @if(config('ui_visibility.dashboards.procurement_expenses', false))
        <li class="nav-item">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('procurement_expenses_dashboard') }}" href="{{ route('procurement_expenses_dashboard') }}" title="Procurement &amp; Expenses Dashboard" @if($workspaceNavActive('procurement_expenses_dashboard')) aria-current="page" @endif>
           <i class="bi bi-bag-check navbar_icon"></i><span>Procurement &amp; Expenses</span>
@@ -349,7 +349,7 @@
 					<i class="bi bi-people-fill navbar_icon"></i>
 					<span>User's Account</span>
 				</a>
-                @if($data->user_type === 'SUAdmin' && config('ui_visibility.activity_center', true))
+                @if($data->user_type === 'SUAdmin' && config('ui_visibility.activity_center', false))
                 <a href="{{ route('user.activity') }}" class="sidebar_li_a {{ $workspaceNavClass('user_activity') }}" title="User activity history" @if($workspaceNavActive('user_activity')) aria-current="page" @endif><i class="bi bi-clock-history navbar_icon" aria-hidden="true"></i><span>User Activity</span></a>
                 @endif
 
