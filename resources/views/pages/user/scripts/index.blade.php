@@ -1,6 +1,6 @@
 @php
     $userManagementUrls = [
-        'canMonitorPresence' => $data->user_type === 'SUAdmin',
+        'canMonitorPresence' => $data->user_type === 'SUAdmin' && config('ui_visibility.online_status', true),
         'list' => route('UserList'), 'info' => route('user_info'),
         'timezone' => config('app.timezone'),
         'create' => route('create_user_post'), 'update' => route('update_user_post'),

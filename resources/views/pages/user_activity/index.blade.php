@@ -23,7 +23,7 @@
         </article>
         <article class="fuel-stat ua-stat-users">
             <span class="ua-stat-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
-            <div class="ua-stat-copy"><div class="fuel-stat-label" title="Users with recorded activity within the selected filters">Active users</div><div class="ua-stat-user-value"><div class="fuel-stat-value" data-activity-count="users">—</div><a class="ua-online-state" href="{{ route('user', ['presence' => 'online']) }}" id="activity-online-state"><span class="ua-online-dot" aria-hidden="true"></span><span id="activity-online-count">Checking online status</span></a></div></div>
+            <div class="ua-stat-copy"><div class="fuel-stat-label" title="Users with recorded activity within the selected filters">Active users</div><div class="ua-stat-user-value"><div class="fuel-stat-value" data-activity-count="users">—</div>@if(config('ui_visibility.online_status', true))<a class="ua-online-state" href="{{ route('user', ['presence' => 'online']) }}" id="activity-online-state"><span class="ua-online-dot" aria-hidden="true"></span><span id="activity-online-count">Checking online status</span></a>@endif</div></div>
         </article>
         <article class="fuel-stat ua-stat-changes">
             <span class="ua-stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 8c3 3 13 3 16 0v4c0 1.7-3.6 3-8 3s-8-1.3-8-3V8Zm0 7c3 3 13 3 16 0v4c0 1.7-3.6 3-8 3s-8-1.3-8-3v-4Z"/></svg></span>

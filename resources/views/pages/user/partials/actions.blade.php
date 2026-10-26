@@ -1,5 +1,5 @@
 <div class="um-row-actions">
-    @if($canViewActivity ?? false)
+    @if(($canViewActivity ?? false) && config('ui_visibility.activity_center', true))
     <a href="{{ route('user.activity', ['user_id' => $user->user_id]) }}" class="um-history-link" title="Activity history" aria-label="Activity history for {{ $user->user_real_name }}"><i class="bi bi-clock-history" aria-hidden="true"></i></a>
     @endif
     <button type="button" data-user-action="edit" data-id="{{ $user->user_id }}" title="Edit user" aria-label="Edit {{ $user->user_real_name }}"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
