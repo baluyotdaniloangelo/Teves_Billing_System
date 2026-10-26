@@ -44,7 +44,7 @@
 
 <div class="tab-content pt-2" id="myTabContent">
     <div class="tab-pane fade @if($tab === 'product-info') show active @endif" id="product-info" role="tabpanel" aria-labelledby="product-info-tab" tabindex="0">
-        <form class="needs-validation" id="ProductformEdit" novalidate>
+        <form class="needs-validation" id="ProductformEdit" enctype="multipart/form-data" novalidate>
             <div class="product-update-success-notice d-none mb-3" id="productUpdateSuccessNotice" role="status" aria-live="polite">
                 <div class="d-flex align-items-center">
                     <i class="bi bi-check-circle-fill text-success me-2" aria-hidden="true"></i>
@@ -53,74 +53,114 @@
                 <button type="button" class="btn-close" id="dismissProductUpdateSuccessNotice" aria-label="Dismiss success message"></button>
             </div>
 
-            <div class="row g-2 mb-2 justify-content-center">
-                <div class="col-12 col-md-4">
-                    <label for="update_category_idx" class="form-label small fw-semibold mb-1">
-                        <i class="bi bi-tag me-1 text-success" aria-hidden="true"></i>Product Category
-                    </label>
-                    <select class="form-select form-select-sm rounded-3" required name="update_category_idx" id="update_category_idx">
-                        @foreach ($product_category as $product_category_cols)
-                            <option value="{{ $product_category_cols->category_id }}">{{ $product_category_cols->category_name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="invalid-feedback" id="update_category_idxError">Please select a product category.</div>
+            <div class="row g-3 align-items-stretch">
+                <div class="col-12 col-lg-7">
+                    <section class="rounded-4 border bg-white p-3 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-2" style="width:38px;height:38px;">
+                                <i class="bi bi-card-text" aria-hidden="true"></i>
+                            </span>
+                            <div>
+                                <h6 class="fw-bold mb-0">Product Information</h6>
+                                <small class="text-muted">Edit the product and variant details.</small>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-12">
+                                <label for="update_category_idx" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-tag me-1 text-success" aria-hidden="true"></i>Product Category
+                                </label>
+                                <select class="form-select form-select-sm rounded-3" required name="update_category_idx" id="update_category_idx">
+                                    @foreach ($product_category as $product_category_cols)
+                                        <option value="{{ $product_category_cols->category_id }}">{{ $product_category_cols->category_name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback" id="update_category_idxError">Please select a product category.</div>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-12">
+                                <label for="update_product_main_idx" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Main Product (Variant Group)
+                                </label>
+                                <select class="form-select form-select-sm rounded-3" name="product_main_idx" id="update_product_main_idx">
+                                    <option value="">No main product (unassigned)</option>
+                                </select>
+                                <div class="form-text">Choose a main product in the same category, or leave this unassigned.</div>
+                                <div class="invalid-feedback" id="update_product_main_idxError">Choose a main product in the selected category.</div>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-12">
+                                <label for="update_product_name" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-box me-1 text-success" aria-hidden="true"></i>Product Name
+                                </label>
+                                <input type="text" class="form-control form-control-sm rounded-3" name="update_product_name" id="update_product_name" required autocomplete="off">
+                                <div class="invalid-feedback" id="update_product_nameError">Product name is required.</div>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-12">
+                                <label for="update_product_price" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-currency-exchange me-1 text-success" aria-hidden="true"></i>Default Price
+                                </label>
+                                <input type="number" class="form-control form-control-sm rounded-3" name="update_product_price" id="update_product_price" required step="0.01" min="0">
+                                <div class="invalid-feedback" id="update_product_priceError">Please enter a valid price.</div>
+                            </div>
+                        </div>
+                        @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => 'update_', 'capacityColumnClass' => 'col-12'])
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <label for="update_product_unit_measurement" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-rulers me-1 text-success" aria-hidden="true"></i>Unit of Measurement
+                                </label>
+                                <select class="form-select form-select-sm rounded-3" name="update_product_unit_measurement" id="update_product_unit_measurement" required>
+                                    <option value="L">Liter | L</option>
+                                    <option value="mL">Milliliter | mL</option>
+                                    <option value="g">Gram | g</option>
+                                    <option value="kg">Kilo | kg</option>
+                                    <option value="PC">Pieces | PC</option>
+                                    <option value="oz">Ounce | oz</option>
+                                    <option value="Pail">Pail</option>
+                                    <option value="Drum">Drum</option>
+                                    <option value="Case">Case</option>
+                                </select>
+                                <div class="invalid-feedback" id="update_product_unit_measurementError">Please select a unit.</div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </div>
-            <div class="row g-2 mb-2 justify-content-center">
-                <div class="col-12 col-md-4">
-                    <label for="update_product_main_idx" class="form-label small fw-semibold mb-1">
-                        <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Main Product (Variant Group)
-                    </label>
-                    <select class="form-select form-select-sm rounded-3" name="product_main_idx" id="update_product_main_idx">
-                        <option value="">No main product (unassigned)</option>
-                    </select>
-                    <div class="form-text">Choose a main product in the same category, or leave this unassigned.</div>
-                    <div class="invalid-feedback" id="update_product_main_idxError">Choose a main product in the selected category.</div>
-                </div>
-            </div>
-            <div class="row g-2 mb-2 justify-content-center">
-                <div class="col-12 col-md-4">
-                    <label for="update_product_name" class="form-label small fw-semibold mb-1">
-                        <i class="bi bi-box me-1 text-success" aria-hidden="true"></i>Product Name
-                    </label>
-                    <input type="text" class="form-control form-control-sm rounded-3" name="update_product_name" id="update_product_name" required autocomplete="off">
-                    <div class="invalid-feedback" id="update_product_nameError">Product name is required.</div>
+
+                <div class="col-12 col-lg-5">
+                    <section class="product-photo-panel">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-success bg-opacity-10 text-success me-2" style="width:38px;height:38px;">
+                                <i class="bi bi-image" aria-hidden="true"></i>
+                            </span>
+                            <div>
+                                <h6 class="fw-bold mb-0">Product Photo</h6>
+                                <small class="text-muted">Upload or replace the product image.</small>
+                            </div>
+                        </div>
+                        <img id="update_product_photo_preview" class="product-photo-form-preview d-none mb-3" alt="Current product photo">
+                        <span id="update_product_photo_placeholder" class="product-photo-form-placeholder mb-3" aria-hidden="true"><i class="bi bi-image"></i></span>
+                        <label for="update_product_photo" class="form-label small fw-semibold mb-1">
+                            Upload Product Photo <span class="text-muted fw-normal">(Optional)</span>
+                        </label>
+                        <input type="file" class="form-control form-control-sm rounded-3" name="product_photo" id="update_product_photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                        <div class="form-text">JPG, PNG, or WEBP up to 5 MB.</div>
+                        <div class="invalid-feedback" id="update_product_photoError">Choose a JPG, PNG, or WEBP image under 5 MB.</div>
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" value="1" id="remove_product_photo">
+                            <label class="form-check-label small" for="remove_product_photo">Remove current photo</label>
+                        </div>
+                    </section>
                 </div>
             </div>
 
-            <div class="row g-2 mb-2 justify-content-center">
-                <div class="col-12 col-md-4">
-                    <label for="update_product_price" class="form-label small fw-semibold mb-1">
-                        <i class="bi bi-currency-exchange me-1 text-success" aria-hidden="true"></i>Default Price
-                    </label>
-                    <input type="number" class="form-control form-control-sm rounded-3" name="update_product_price" id="update_product_price" required step="0.01" min="0">
-                    <div class="invalid-feedback" id="update_product_priceError">Please enter a valid price.</div>
-                </div>
-            </div>
-            <div class="row g-2 mb-2 justify-content-center">
-                <div class="col-12 col-md-4">
-                    <label for="update_product_unit_measurement" class="form-label small fw-semibold mb-1">
-                        <i class="bi bi-rulers me-1 text-success" aria-hidden="true"></i>Unit of Measurement
-                    </label>
-                    <select class="form-select form-select-sm rounded-3" name="update_product_unit_measurement" id="update_product_unit_measurement" required>
-                        <option value="L">Liter | L</option>
-                        <option value="mL">Milliliter | mL</option>
-                        <option value="g">Gram | g</option>
-                        <option value="kg">Kilo | kg</option>
-                        <option value="PC">Pieces | PC</option>
-                        <option value="oz">Ounce | oz</option>
-                        <option value="Pail">Pail</option>
-                        <option value="Drum">Drum</option>
-                        <option value="Case">Case</option>
-                    </select>
-                    <div class="invalid-feedback" id="update_product_unit_measurementError">Please select a unit.</div>
-                </div>
-            </div>
-
-            @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => 'update_', 'capacityColumnClass' => 'col-12 col-md-4'])
-
-            <div class="row justify-content-center mt-2">
-                <div class="col-12 col-md-4 d-flex justify-content-end">
+            <div class="row justify-content-end mt-3">
+                <div class="col-auto">
                     <button type="submit" class="btn btn-success btn-sm rounded-3 px-3" id="update-product">
                         <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Save Changes
                     </button>

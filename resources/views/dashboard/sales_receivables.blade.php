@@ -40,7 +40,7 @@
     <div class="fuel-period-note"><i class="bi bi-calendar3" aria-hidden="true"></i><span>{{ \Carbon\Carbon::parse($start_date)->format('M d, Y') }} – {{ \Carbon\Carbon::parse($end_date)->format('M d, Y') }}</span><span class="sr-current-balance-note">Open AR is a current balance; invoice age is measured from billing date.</span></div>
 
     <section class="fuel-stats sr-stats" aria-label="Sales and receivables overview">
-        <article class="fuel-stat"><div class="fuel-stat-label">Sales Orders <i class="bi bi-cart-check" aria-hidden="true"></i></div><div class="fuel-stat-value">{{ $money($order_sales) }}</div><div class="fuel-stat-foot"><i class="fuel-dot fuel-orange"></i>{{ number_format($order_count) }} approved orders in range</div></article>
+        <article class="fuel-stat"><div class="fuel-stat-label">Ship To <i class="bi bi-cart-check" aria-hidden="true"></i></div><div class="fuel-stat-value">{{ $money($order_sales) }}</div><div class="fuel-stat-foot"><i class="fuel-dot fuel-orange"></i>{{ number_format($order_count) }} approved orders in range</div></article>
         <article class="fuel-stat"><div class="fuel-stat-label">Direct Billing <i class="bi bi-receipt" aria-hidden="true"></i></div><div class="fuel-stat-value">{{ $money($direct_billing_amount) }}</div><div class="fuel-stat-foot">{{ number_format($direct_billing_count) }} standalone billing records · excludes SO-linked billing</div></article>
         <article class="fuel-stat sr-stat-alert"><div class="fuel-stat-label">Unbilled Balance <i class="bi bi-hourglass-split" aria-hidden="true"></i></div><div class="fuel-stat-value">{{ $money($unbilled_amount) }}</div><div class="fuel-stat-foot">{{ number_format($unbilled_count) }} direct billing records not yet attached to a receivable</div></article>
         <article class="fuel-stat sr-stat-ar"><div class="fuel-stat-label">Open Receivables <i class="bi bi-wallet2" aria-hidden="true"></i></div><div class="fuel-stat-value">{{ $money($open_ar_amount) }}</div><div class="fuel-stat-foot">{{ number_format($open_ar_count) }} unpaid or partially paid invoices · current balance</div></article>
@@ -74,7 +74,7 @@
     </section>
 
     <section class="fuel-panel sr-pipeline-panel">
-        <div class="fuel-panel-head"><div><h2>Sales Order pipeline</h2><p>Approved orders only; quotations remain separate from order sales.</p></div><span class="sr-pipeline-total">{{ number_format($totalPipeline) }} approved orders</span></div>
+        <div class="fuel-panel-head"><div><h2>Ship To pipeline</h2><p>Approved orders only; quotations remain separate from order sales.</p></div><span class="sr-pipeline-total">{{ number_format($totalPipeline) }} approved orders</span></div>
         <div class="sr-pipeline-grid">
             <article class="sr-pipeline-step sr-pending"><span class="sr-pipeline-icon"><i class="bi bi-truck" aria-hidden="true"></i></span><div><small>Pending delivery</small><strong>{{ number_format((int) ($pipelineAmounts->get('Pending')->order_count ?? 0)) }} orders</strong><span>{{ $money($pipelineAmounts->get('Pending')->amount ?? 0) }}</span></div></article>
             <article class="sr-pipeline-step sr-partial"><span class="sr-pipeline-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span><div><small>Partially delivered</small><strong>{{ number_format((int) ($pipelineAmounts->get('Partially delivered')->order_count ?? 0)) }} orders</strong><span>{{ $money($pipelineAmounts->get('Partially delivered')->amount ?? 0) }}</span></div></article>

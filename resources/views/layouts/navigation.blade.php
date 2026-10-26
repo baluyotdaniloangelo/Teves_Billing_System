@@ -9,6 +9,8 @@
         'purchaseorder' => ['purchaseorder', 'purchase_order_form', 'purchase_order_forms'],
         'cashierReport' => ['cashierReport', 'cashiers_report_form', 'cashiers_report_form_fuel'],
         'cashierReportLPG' => ['cashierReportLPG', 'cashiers_report_form_lpg'],
+        'lpgStartingAudits' => ['lpg.starting-audits.index', 'lpg.starting-audits.show'],
+        'lpgAuditNotifications' => ['lpg.starting-audits.notifications'],
         'fuel_sales_volume_dashboard' => ['fuel_sales_volume_dashboard', 'fuel_sales_volume_dashboard.filter'],
         'product' => ['product', 'product_category', 'update_product_information'],
     ];
@@ -200,9 +202,9 @@
 	  
 	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 	   <li class="nav-item ">
-        <a class="nav-link navbar_bg {{ $workspaceNavClass('salesorder') }}" href="{{ route('salesorder') }}" title="Create Sales Order" @if($workspaceNavActive('salesorder')) aria-current="page" @endif>
+        <a class="nav-link navbar_bg {{ $workspaceNavClass('salesorder') }}" href="{{ route('salesorder') }}" title="Ship To" @if($workspaceNavActive('salesorder')) aria-current="page" @endif>
           <i class="bi bi-cart-check navbar_icon"></i>
-          <span title="Create Sales Order">Sales Order</span>
+          <span title="Ship To">Ship To</span>
         </a>
       </li>
 		
@@ -262,6 +264,16 @@
 			<a href="{{ route('purchaseordersummary') }}" class="{{ $workspaceNavClass('purchaseordersummary') }}" title="Purchase Order Summary" @if($workspaceNavActive('purchaseordersummary')) aria-current="page" @endif><i class="bi bi-bar-chart-line navbar_icon"></i><span>Purchase Order</span></a>
 		</li></ul>
 	  </li>
+	  <?php } ?>
+
+      <li class="fuel-nav-section" role="presentation">LPG AUDIT</li>
+      <li class="nav-item">
+        <a class="nav-link navbar_bg {{ $workspaceNavClass('lpgAuditNotifications') }}" href="{{ route('lpg.starting-audits.notifications') }}" title="LPG Audit Notifications" @if($workspaceNavActive('lpgAuditNotifications')) aria-current="page" @endif><i class="bi bi-bell navbar_icon"></i><span>Audit Notifications</span></a>
+      </li>
+	  <?php if(in_array($data->user_type, ['Admin', 'SUAdmin', 'Accounting_Staff'], true)){ ?>
+      <li class="nav-item">
+        <a class="nav-link navbar_bg {{ $workspaceNavClass('lpgStartingAudits') }}" href="{{ route('lpg.starting-audits.index') }}" title="LPG Starting Audit Approvals" @if($workspaceNavActive('lpgStartingAudits')) aria-current="page" @endif><i class="bi bi-clipboard-check navbar_icon"></i><span>Starting Audit Approvals</span></a>
+      </li>
 	  <?php } ?>
 
 	  <?php if($data->user_type=="SUAdmin"){ ?>

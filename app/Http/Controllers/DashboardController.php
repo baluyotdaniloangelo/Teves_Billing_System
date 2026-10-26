@@ -77,7 +77,11 @@ class DashboardController extends Controller
 		$pipeline = (clone $authorizedOrders)
 			->selectRaw("CASE WHEN so.sales_order_delivery_status = 'Pending' THEN 'Pending' WHEN so.sales_order_delivery_status LIKE '100%' THEN 'Delivered' ELSE 'Partially delivered' END as status, COUNT(*) as order_count, SUM(so.sales_order_total_due) as amount")
 			->groupBy('status')->orderBy('status')->get();
-		$approvalQuery = (clone $periodOrders)->where('so.sales_order_quotation', 1);
+		$approvalQuery = (clone $periodOrders)->where('so.sales_order_quotation', 1)
+			->where(function ($query) {
+				$query->whereNull('so.sales_order_quotation_status')
+					->orWhere('so.sales_order_quotation_status', 'Pending');
+			});
 		$approvalCount = (int) (clone $approvalQuery)->count('so.sales_order_id');
 		$approvalAmount = (float) (clone $approvalQuery)->sum('so.sales_order_total_due');
 

@@ -14,7 +14,7 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
     {
         $validator = Validator::make($request->all(), [
             'CashiersReportId' => ['required', 'integer'],
-            'inventory_mode' => ['required', 'in:BEGINNING,DELIVERY,BO_REPLACEMENT'],
+            'inventory_mode' => ['required', 'in:BEGINNING,DELIVERY,BO_REPLACEMENT,BO_FROM_CUSTOMER,BO_DURING_DELIVERY,BO_RETURNED_TO_SUPPLIER'],
         ]);
 
         if ($validator->fails()) {
@@ -57,6 +57,9 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
                 'teves_supplier_table.supplier_name',
                 'teves_cashiers_report_lpg_inventory.delivery_reference_no',
                 'teves_cashiers_report_lpg_inventory.quantity',
+                'teves_cashiers_report_lpg_inventory.bo_returned_customer_quantity',
+                'teves_cashiers_report_lpg_inventory.bo_during_delivery_quantity',
+                'teves_cashiers_report_lpg_inventory.audit_date',
                 'teves_cashiers_report_lpg_inventory.remarks',
             ]);
 
@@ -103,28 +106,24 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
 
         $data = $validator->validated();
         $isBeginning = $data['inventory_mode'] === 'BEGINNING';
-
-        $record = $isBeginning
-            ? CashiersReportModel_LPG_Inventory::where('cashiers_report_id', $data['cashiers_report_id'])
-                ->where('product_idx', $data['product_idx'])
-                ->where('inventory_mode', 'BEGINNING')
-                ->first()
-            : null;
-
-        $isNewRecord = !$record;
-        $record = $record ?: new CashiersReportModel_LPG_Inventory();
-        $this->fillRecord($record, $data, $isNewRecord);
-        $record->save();
+        $result = DB::transaction(function () use ($data, $isBeginning) {
+            $record = $isBeginning
+                ? CashiersReportModel_LPG_Inventory::where('cashiers_report_id', $data['cashiers_report_id'])
+                    ->where('product_idx', $data['product_idx'])->where('inventory_mode', 'BEGINNING')->first()
+                : null;
+            $isNewRecord = !$record;
+            $record = $record ?: new CashiersReportModel_LPG_Inventory();
+            if ($isBeginning) $this->assertAuditEditable((int) $data['cashiers_report_id'], $data['audit_date']);
+            $this->fillRecord($record, $data, $isNewRecord);
+            $record->save();
+            if ($isBeginning) $this->syncAuditItem($record, $data['audit_date']);
+            return [$record, $isNewRecord];
+        });
+        [$record, $isNewRecord] = $result;
 
         return response()->json([
             'status' => true,
-            'message' => $isBeginning && !$isNewRecord
-                ? 'Beginning inventory updated successfully.'
-                : ($isBeginning
-                    ? 'Beginning inventory saved successfully.'
-                    : ($data['inventory_mode'] === 'BO_REPLACEMENT'
-                        ? 'B.O. replacement saved successfully.'
-                        : 'LPG delivery saved successfully.')),
+            'message' => $this->modeMessage($data['inventory_mode'], $isNewRecord ? 'saved' : 'updated'),
             'data' => $record,
         ]);
     }
@@ -159,16 +158,23 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
             }
         }
 
-        $this->fillRecord($record, $data, false);
-        $record->save();
+        DB::transaction(function () use ($record, $data) {
+            if ($data['inventory_mode'] === 'BEGINNING') $this->assertAuditEditable((int) $data['cashiers_report_id'], $data['audit_date']);
+            $previousProductId = (int) $record->product_idx;
+            $this->fillRecord($record, $data, false);
+            $record->save();
+            if ($data['inventory_mode'] === 'BEGINNING') {
+                if ($previousProductId !== (int) $record->product_idx) {
+                    $audit = DB::table('teves_cashiers_report_lpg_starting_audits')->where('report_id', $record->cashiers_report_id)->first();
+                    if ($audit) DB::table('teves_cashiers_report_lpg_starting_audit_items')->where('audit_id', $audit->audit_id)->where('product_idx', $previousProductId)->delete();
+                }
+                $this->syncAuditItem($record, $data['audit_date']);
+            }
+        });
 
         return response()->json([
             'status' => true,
-            'message' => $data['inventory_mode'] === 'BEGINNING'
-                ? 'Beginning inventory updated successfully.'
-                : ($data['inventory_mode'] === 'BO_REPLACEMENT'
-                    ? 'B.O. replacement updated successfully.'
-                    : 'LPG delivery updated successfully.'),
+            'message' => $this->modeMessage($data['inventory_mode'], 'updated'),
             'data' => $record,
         ]);
     }
@@ -186,15 +192,18 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
         $record = CashiersReportModel_LPG_Inventory::findOrFail(
             $request->cashiers_report_lpg_inventory_id
         );
-        $record->delete();
+        DB::transaction(function () use ($record) {
+            if ($record->inventory_mode === 'BEGINNING') {
+                $this->assertAuditEditable((int) $record->cashiers_report_id);
+                $audit = DB::table('teves_cashiers_report_lpg_starting_audits')->where('report_id', $record->cashiers_report_id)->first();
+                if ($audit) DB::table('teves_cashiers_report_lpg_starting_audit_items')->where('audit_id', $audit->audit_id)->where('product_idx', $record->product_idx)->delete();
+            }
+            $record->delete();
+        });
 
         return response()->json([
             'status' => true,
-            'message' => $record->inventory_mode === 'BEGINNING'
-                ? 'Beginning inventory deleted successfully.'
-                : ($record->inventory_mode === 'BO_REPLACEMENT'
-                    ? 'B.O. replacement deleted successfully.'
-                    : 'LPG delivery deleted successfully.'),
+            'message' => $this->modeMessage($record->inventory_mode, 'deleted'),
         ]);
     }
 
@@ -202,11 +211,15 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
     {
         $rules = [
             'cashiers_report_id' => ['required', 'integer'],
-            'inventory_mode' => ['required', 'in:BEGINNING,DELIVERY,BO_REPLACEMENT'],
+            'inventory_mode' => ['required', 'in:BEGINNING,DELIVERY,BO_REPLACEMENT,BO_FROM_CUSTOMER,BO_DURING_DELIVERY,BO_RETURNED_TO_SUPPLIER'],
             'product_idx' => ['required', 'integer', 'exists:teves_product_table,product_id'],
             'supplier_idx' => ['nullable', 'integer', 'exists:teves_supplier_table,supplier_id'],
+            'client_idx' => ['nullable', 'integer', 'exists:teves_client_table,client_id'],
             'delivery_reference_no' => ['nullable', 'string', 'max:100'],
             'quantity' => ['required', 'numeric', 'min:0'],
+            'bo_returned_customer_quantity' => ['required_if:inventory_mode,BEGINNING', 'nullable', 'numeric', 'min:0'],
+            'bo_during_delivery_quantity' => ['required_if:inventory_mode,BEGINNING', 'nullable', 'numeric', 'min:0'],
+            'audit_date' => ['required_if:inventory_mode,BEGINNING', 'nullable', 'date'],
             'remarks' => ['nullable', 'string'],
         ];
 
@@ -231,11 +244,11 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
                 ->whereNull('deleted_at')->exists()) {
                 $validator->errors()->add('product_idx', 'Select a product from the LPG or Kitchen inventory list.');
             }
-            if ($request->input('inventory_mode') === 'DELIVERY' && !$request->filled('supplier_idx')) {
+            if (in_array($request->input('inventory_mode'), ['DELIVERY', 'BO_REPLACEMENT', 'BO_DURING_DELIVERY', 'BO_RETURNED_TO_SUPPLIER'], true) && !$request->filled('supplier_idx')) {
                 $validator->errors()->add('supplier_idx', 'Supplier is required for a delivery.');
             }
-            if ($request->input('inventory_mode') === 'BO_REPLACEMENT' && !$request->filled('supplier_idx')) {
-                $validator->errors()->add('supplier_idx', 'Supplier is required for a B.O. replacement.');
+            if ($request->input('inventory_mode') === 'BO_FROM_CUSTOMER' && !$request->filled('client_idx')) {
+                $validator->errors()->add('client_idx', 'Customer is required for a B.O. returned by a customer.');
             }
         });
 
@@ -244,19 +257,22 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
 
     private function fillRecord(CashiersReportModel_LPG_Inventory $record, array $data, bool $isNewRecord): void
     {
-        $isDelivery = $data['inventory_mode'] === 'DELIVERY';
-        $isBoReplacement = $data['inventory_mode'] === 'BO_REPLACEMENT';
+        $supplierModes = ['DELIVERY', 'BO_REPLACEMENT', 'BO_DURING_DELIVERY', 'BO_RETURNED_TO_SUPPLIER'];
+        $isBeginning = $data['inventory_mode'] === 'BEGINNING';
         $userId = Session::get('loginID', 0);
 
         $record->cashiers_report_id = $data['cashiers_report_id'];
         $record->inventory_mode = $data['inventory_mode'];
         $record->product_idx = $data['product_idx'];
-        $record->client_idx = null;
-        $record->supplier_idx = ($isDelivery || $isBoReplacement) ? $data['supplier_idx'] : null;
-        $record->delivery_reference_no = ($isDelivery || $isBoReplacement)
+        $record->client_idx = $data['inventory_mode'] === 'BO_FROM_CUSTOMER' ? ($data['client_idx'] ?? null) : null;
+        $record->supplier_idx = in_array($data['inventory_mode'], $supplierModes, true) ? ($data['supplier_idx'] ?? null) : null;
+        $record->delivery_reference_no = (in_array($data['inventory_mode'], $supplierModes, true))
             ? ($data['delivery_reference_no'] ?? null)
             : null;
         $record->quantity = $data['quantity'];
+        $record->bo_returned_customer_quantity = $isBeginning ? ($data['bo_returned_customer_quantity'] ?? 0) : 0;
+        $record->bo_during_delivery_quantity = $isBeginning ? ($data['bo_during_delivery_quantity'] ?? 0) : 0;
+        $record->audit_date = $isBeginning ? ($data['audit_date'] ?? null) : null;
         $record->remarks = $data['remarks'] ?? null;
         $record->updated_at = now();
         $record->updated_by_user_idx = $userId;
@@ -265,5 +281,55 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
             $record->created_at = now();
             $record->created_by_user_idx = $userId;
         }
+    }
+
+    private function assertAuditEditable(int $reportId, ?string $auditDate = null): object
+    {
+        $report = DB::table('teves_cashiers_report')->where('cashiers_report_id', $reportId)
+            ->where('cashier_report_type', 'LPG')->whereNull('deleted_at')->first();
+        abort_unless($report, 404, 'LPG report not found.');
+        if (Session::get('user_branch_access_type') !== 'ALL') {
+            $hasAccess = DB::table('teves_user_branch_access')->where('user_idx', Session::get('loginID'))
+                ->where('branch_idx', $report->teves_branch)->exists();
+            abort_unless($hasAccess, 403, 'You do not have access to this branch.');
+        }
+        $audit = DB::table('teves_cashiers_report_lpg_starting_audits')->where('report_id', $reportId)->lockForUpdate()->first();
+        if ($audit && !in_array($audit->status, ['DRAFT', 'RETURNED'], true)) {
+            abort(422, 'This starting audit is already submitted or approved and cannot be edited.');
+        }
+        if ($audit && $auditDate && $audit->audit_date !== $auditDate) {
+            abort(422, 'All items in one starting audit must use the same audit date.');
+        }
+        return $audit ?: (object) [];
+    }
+
+    private function syncAuditItem(CashiersReportModel_LPG_Inventory $record, string $auditDate): void
+    {
+        $audit = DB::table('teves_cashiers_report_lpg_starting_audits')->where('report_id', $record->cashiers_report_id)->lockForUpdate()->first();
+        if (!$audit) {
+            $auditId = DB::table('teves_cashiers_report_lpg_starting_audits')->insertGetId([
+                'report_id' => $record->cashiers_report_id, 'audit_date' => $auditDate, 'status' => 'DRAFT',
+                'created_at' => now(), 'updated_at' => now(),
+            ]);
+        } else {
+            $auditId = $audit->audit_id;
+        }
+        DB::table('teves_cashiers_report_lpg_starting_audit_items')->updateOrInsert(
+            ['audit_id' => $auditId, 'product_idx' => $record->product_idx],
+            ['filled_quantity' => $record->quantity, 'bo_returned_customer_quantity' => $record->bo_returned_customer_quantity ?? 0,
+                'bo_during_delivery_quantity' => $record->bo_during_delivery_quantity ?? 0, 'remarks' => $record->remarks,
+                'updated_at' => now(), 'created_at' => now()]
+        );
+    }
+
+    private function modeMessage(string $mode, string $verb): string
+    {
+        $labels = [
+            'BEGINNING' => 'Starting audit', 'DELIVERY' => 'Supplier delivery', 'BO_REPLACEMENT' => 'B.O. replacement',
+            'BO_FROM_CUSTOMER' => 'Customer B.O. return', 'BO_DURING_DELIVERY' => 'Delivery B.O.',
+            'BO_RETURNED_TO_SUPPLIER' => 'B.O. returned to supplier',
+        ];
+        $pastVerb = ['saved' => 'saved', 'updated' => 'updated', 'deleted' => 'deleted'][$verb] ?? $verb;
+        return ($labels[$mode] ?? 'Inventory record') . ' ' . $pastVerb . ' successfully.';
     }
 }

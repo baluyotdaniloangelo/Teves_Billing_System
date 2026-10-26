@@ -691,7 +691,8 @@ class CashiersReportLPGController extends Controller
         $lpgCategoryIds = array_map('intval', config('lpg_inventory.empty_container_category_ids', [2]));
         $lpgRecords = $sellOut->records($reportId)->whereIn('category_idx', $lpgCategoryIds)->values();
         $sellOutRows = app(\App\Services\LpgActualInventorySummary::class)
-            ->rows($reportId, $sellOut->rows($lpgRecords));
+            ->rows($reportId, $sellOut->rows($lpgRecords, $reportId));
+        $openingBalances = $sellOut->openingBalances($reportId);
 
         // Include every active product in the LPG category, even with no report entries.
         $productCatalog = DB::table('teves_product_table as product')
@@ -728,6 +729,18 @@ class CashiersReportLPGController extends Controller
                 $row['theoretical_ending_quantity'] = null;
                 $row['actual_quantity'] = null;
                 $row['variance_quantity'] = null;
+                $opening = $openingBalances->get((int) $product->product_id);
+                if ($opening) {
+                    $row['beginning_count'] = 1;
+                    $row['beginning_quantity'] = $row['beginning_filled_quantity'] = $opening['filled'];
+                    $row['beginning_bo_returned_customer_quantity'] = $opening['bo_customer'];
+                    $row['beginning_bo_during_delivery_quantity'] = $opening['bo_delivery'];
+                    $row['audit_date'] = $opening['audit_date'];
+                    $row['ending_quantity'] = $row['theoretical_ending_quantity'] = $opening['filled'];
+                    $row['actual_quantity'] = $opening['filled'];
+                    $row['theoretical_bo_returned_customer_quantity'] = $opening['bo_customer'];
+                    $row['theoretical_bo_during_delivery_quantity'] = $opening['bo_delivery'];
+                }
             }
             $row['print_group_key'] = $product->product_main_idx
                 ? 'main:' . $product->product_main_idx : 'ungrouped';

@@ -64,6 +64,48 @@ window.renderProductQrCodes = function (root) {
 };
 
 $(function () {
+    const photoModal = document.getElementById('ProductPhotoPreviewModal');
+    const photoPreviewImage = document.getElementById('productPhotoPreviewImage');
+    let photoParentModal = null;
+
+    $(document).on('click', '#getUnassignedProductList .product-photo-preview-trigger, #MainProductVariantsTable .product-photo-preview-trigger', function (event) {
+        event.preventDefault();
+        const photoUrl = this.getAttribute('data-photo-url') || '';
+        const productName = this.getAttribute('data-product-name') || 'Product';
+        if (!photoModal || !photoPreviewImage || !photoUrl) return;
+
+        $('#ProductPhotoPreviewModalLabel').text(productName);
+        $('#productPhotoPreviewError').addClass('d-none');
+        photoPreviewImage.classList.remove('d-none');
+        photoPreviewImage.alt = productName + ' photo';
+        photoPreviewImage.onerror = function () {
+            this.classList.add('d-none');
+            $('#productPhotoPreviewError').removeClass('d-none');
+        };
+        photoPreviewImage.src = photoUrl;
+
+        photoParentModal = Array.from(document.querySelectorAll('.modal.show'))
+            .filter(function (modal) { return modal !== photoModal; })
+            .pop() || null;
+        if (photoParentModal) {
+            photoParentModal.addEventListener('hidden.bs.modal', function () {
+                $(photoModal).modal('show');
+            }, { once: true });
+            $(photoParentModal).modal('hide');
+        } else {
+            $(photoModal).modal('show');
+        }
+    });
+
+    if (photoModal) {
+        $(photoModal).on('hidden.bs.modal', function () {
+            photoPreviewImage.removeAttribute('src');
+            photoParentModal = photoParentModal && document.body.contains(photoParentModal) ? photoParentModal : null;
+            if (photoParentModal) $(photoParentModal).modal('show');
+            photoParentModal = null;
+        });
+    }
+
     const qrModal = document.getElementById('ProductQrModal');
     const qrCanvas = document.getElementById('productQrCanvas');
     if (!qrModal || !qrCanvas) return;

@@ -23,6 +23,16 @@ function ProductInfo(productId, options) {
             document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement || '';
             document.getElementById("update_product_capacity").value = response.product_capacity ?? '';
             document.getElementById("update_product_capacity_unit").value = response.product_capacity_unit || '';
+            const updatePhotoInput = document.getElementById('update_product_photo');
+            updatePhotoInput.value = '';
+            updatePhotoInput.dataset.currentPhotoPath = response.product_photo_path || '';
+            $('#remove_product_photo').prop('checked', false);
+            window.setProductPhotoPreview(
+                updatePhotoInput,
+                document.getElementById('update_product_photo_preview'),
+                document.getElementById('update_product_photo_placeholder'),
+                response.product_photo_path || null
+            );
             syncProductCapacityFields('update_');
             document.getElementById("update_category_idx").value = response.category_idx || '';
 
@@ -83,22 +93,38 @@ $('#ProductformEdit').on('submit', function (event) {
     updateButton.disabled = true;
     updateButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Updating...';
 
+    const formData = new FormData();
+    formData.append('productID', productID);
+    formData.append('category_idx', $('#update_category_idx').val());
+    formData.append('product_main_idx', $('#update_product_main_idx').val() || '');
+    formData.append('product_name', productName);
+    formData.append('product_price', $('#update_product_price').val());
+    formData.append('product_unit_measurement', $('#update_product_unit_measurement').val());
+    formData.append('product_capacity', $('#update_product_capacity').val());
+    formData.append('product_capacity_unit', $('#update_product_capacity_unit').val());
+    const selectedProductPhoto = document.getElementById('update_product_photo').files[0];
+    if (selectedProductPhoto) formData.append('product_photo', selectedProductPhoto);
+    formData.append('remove_product_photo', $('#remove_product_photo').is(':checked') ? '1' : '0');
+    formData.append('_token', "{{ csrf_token() }}");
+
     $.ajax({
         url: "/update_product_post",
         type: "POST",
-        data: {
-            productID: productID,
-            category_idx: $('#update_category_idx').val(),
-            product_main_idx: $('#update_product_main_idx').val() || '',
-            product_name: productName,
-            product_price: $('#update_product_price').val(),
-            product_unit_measurement: $('#update_product_unit_measurement').val(),
-            product_capacity: $('#update_product_capacity').val(),
-            product_capacity_unit: $('#update_product_capacity_unit').val(),
-            _token: "{{ csrf_token() }}"
-        },
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
             window.ProductFormValidation.reset(editForm);
+            const photoInput = document.getElementById('update_product_photo');
+            photoInput.value = '';
+            photoInput.dataset.currentPhotoPath = response.product_photo_path || '';
+            $('#remove_product_photo').prop('checked', false);
+            window.setProductPhotoPreview(
+                photoInput,
+                document.getElementById('update_product_photo_preview'),
+                document.getElementById('update_product_photo_placeholder'),
+                response.product_photo_path || null
+            );
             $('#productInformationModalTitle').text(productName + ' — Product Information');
             $('#productInformationHeading').text('Manage product details for ' + productName + '.');
             if (window.ProductListTable) window.ProductListTable.ajax.reload(null, false);
@@ -120,7 +146,8 @@ $('#ProductformEdit').on('submit', function (event) {
                 product_main_idx: 'update_product_main_idx',
                 product_unit_measurement: 'update_product_unit_measurement',
                 product_capacity: 'update_product_capacity',
-                product_capacity_unit: 'update_product_capacity_unit'
+                product_capacity_unit: 'update_product_capacity_unit',
+                product_photo: 'update_product_photo'
             });
             if (!shownErrors) {
                 showProductValidationErrorModal(response.message || 'Unable to update product information. Please review the form and try again.');

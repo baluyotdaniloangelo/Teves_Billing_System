@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 use App\Models\User;
@@ -37,6 +38,7 @@ class ProductController extends Controller
 				'teves_product_table.product_name',
 				'teves_product_table.product_price',
 				'teves_product_table.product_unit_measurement',
+				'teves_product_table.product_photo_path',
 				'teves_product_category.category_name',
 			]);
 
@@ -146,6 +148,7 @@ class ProductController extends Controller
 				'teves_product_table.product_unit_measurement',
 				'teves_product_table.product_capacity',
 				'teves_product_table.product_capacity_unit',
+				'teves_product_table.product_photo_path',
 				'teves_product_category.category_name'
 			);
 
@@ -177,6 +180,7 @@ class ProductController extends Controller
 				'teves_product_table.product_unit_measurement',
 				'teves_product_table.product_capacity',
 				'teves_product_table.product_capacity_unit',
+				'teves_product_table.product_photo_path',
 				'teves_product_category.category_name'
 			);
 
@@ -304,7 +308,7 @@ class ProductController extends Controller
 	public function product_info(Request $request){
 
 		$productID = $request->productID;
-		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','product_capacity','product_capacity_unit','category_idx','product_main_idx']);
+		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','product_capacity','product_capacity_unit','product_photo_path','category_idx','product_main_idx']);
 		return response()->json($data);
 		
 	}
@@ -347,6 +351,7 @@ class ProductController extends Controller
 		  'product_main_idx'  		=> 'nullable|integer|exists:teves_product_main_table,product_main_id',
           'product_capacity'       => 'nullable|required_with:product_capacity_unit|numeric|min:0.001|max:9999999.999',
           'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
+                  'product_photo'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ], 
         [
 			'product_name.required' => 'Product Name is required',
@@ -373,6 +378,13 @@ class ProductController extends Controller
 			$Product->created_by_user_idx 				= Session::get('loginID');
 			$Product->product_capacity = $request->filled('product_capacity') ? $request->input('product_capacity') : null;
 			$Product->product_capacity_unit = $request->filled('product_capacity_unit') ? $request->input('product_capacity_unit') : null;
+			$Product->product_photo_path = null;
+			if ($request->hasFile('product_photo')) {
+				$Product->product_photo_path = $request->file('product_photo')->store('products', 'public');
+				if (!$Product->product_photo_path) {
+					return response()->json(['message' => 'Unable to save the product photo. Please try again.'], 500);
+				}
+			}
 			
             $result = $Product->save();
             if ($result) {
@@ -387,6 +399,8 @@ class ProductController extends Controller
                     $collisionSuffix++;
                 }
                 DB::table('teves_product_table')->where('product_id', $Product->product_id)->update(['product_code' => $Product->product_code]);
+            } elseif ($Product->product_photo_path) {
+                Storage::disk('public')->delete($Product->product_photo_path);
             }
 			
 			/*Get Last ID*/
@@ -453,6 +467,8 @@ class ProductController extends Controller
 		  'product_main_idx'         => 'sometimes|nullable|integer|exists:teves_product_main_table,product_main_id',
           'product_capacity'       => 'nullable|required_with:product_capacity_unit|numeric|min:0.001|max:9999999.999',
           'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
+          'product_photo'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+          'remove_product_photo'   => 'sometimes|boolean',
         ], 
         [
 			'product_name.required' => 'Product Name is required',
@@ -501,11 +517,31 @@ class ProductController extends Controller
 				$Product->product_capacity = $request->filled('product_capacity') ? $request->input('product_capacity') : null;
 				$Product->product_capacity_unit = $request->filled('product_capacity_unit') ? $request->input('product_capacity_unit') : null;
 			}
+
+			$oldProductPhotoPath = $Product->product_photo_path;
+			$newProductPhotoPath = null;
+			if ($request->hasFile('product_photo')) {
+				$newProductPhotoPath = $request->file('product_photo')->store('products', 'public');
+				if (!$newProductPhotoPath) {
+					return response()->json(['message' => 'Unable to save the product photo. Please try again.'], 500);
+				}
+				$Product->product_photo_path = $newProductPhotoPath;
+			} elseif ($request->boolean('remove_product_photo')) {
+				$Product->product_photo_path = null;
+			}
 						
 			$result = $Product->update();
+			if ($result && $oldProductPhotoPath && $oldProductPhotoPath !== $Product->product_photo_path) {
+				Storage::disk('public')->delete($oldProductPhotoPath);
+			} elseif (!$result && $newProductPhotoPath) {
+				Storage::disk('public')->delete($newProductPhotoPath);
+			}
 			
 			if($result){
-				return response()->json(['success'=>'Product Information Successfully Updated!']);
+				return response()->json([
+					'success' => 'Product Information Successfully Updated!',
+					'product_photo_path' => $Product->product_photo_path,
+				]);
 			}
 			else{
 				return response()->json(['success'=>'Error on Update Product Information']);

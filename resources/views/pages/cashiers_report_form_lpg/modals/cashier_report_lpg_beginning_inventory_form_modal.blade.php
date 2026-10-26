@@ -22,6 +22,7 @@
                     <input type="hidden" id="cashiers_report_lpg_inventory_id" name="cashiers_report_lpg_inventory_id" value="0">
                     <input type="hidden" id="lpg_inventory_report_id" name="cashiers_report_id" value="{{ $CashiersReportId ?? ($cashiers_report_id ?? 0) }}">
                     <input type="hidden" id="lpg_inventory_mode" name="inventory_mode" value="BEGINNING">
+                    <input type="hidden" id="lpg_inventory_audit_date" name="audit_date" value="{{ optional($CashiersReportData->first())->report_date ? \Illuminate\Support\Carbon::parse($CashiersReportData->first()->report_date)->format('Y-m-d') : '' }}">
 
                     <div class="row g-3">
                         <div class="col-12">
@@ -55,13 +56,40 @@
                             <div class="invalid-feedback" id="supplier_idxError">Please select a supplier.</div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label for="lpg_inventory_quantity" class="form-label fw-semibold"><i class="bi bi-123 me-2 text-success" aria-hidden="true"></i>Quantity</label>
-                            <input type="number" min="0" step="0.01" class="form-control form-control-sm rounded-3" id="lpg_inventory_quantity" name="quantity" placeholder="Enter quantity" required>
-                            <div class="invalid-feedback" id="quantityError">Please enter a valid quantity.</div>
+                        <div class="col-12 lpg-client-field d-none">
+                            <label for="lpg_inventory_client_idx" class="form-label fw-semibold"><i class="bi bi-person me-2 text-success" aria-hidden="true"></i>Customer / Client</label>
+                            <select class="form-select form-select-sm rounded-3" id="lpg_inventory_client_idx" name="client_idx">
+                                <option value="">Select customer</option>
+                                @foreach (($client_data ?? []) as $client)
+                                    <option value="{{ $client->client_id }}">{{ $client->client_name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback" id="client_idxError">Please select a customer.</div>
                         </div>
 
-                        <div class="col-md-12 lpg-supplier-field d-none">
+                        <div class="col-md-12 lpg-beginning-audit-field">
+                            <label for="lpg_inventory_quantity" class="form-label fw-semibold"><i class="bi bi-123 me-2 text-success" aria-hidden="true"></i>Filled Cylinders</label>
+                            <input type="number" min="0" step="0.01" class="form-control form-control-sm rounded-3" id="lpg_inventory_quantity" name="quantity" placeholder="Enter quantity" required>
+                            <div class="invalid-feedback" id="quantityError">Please enter the filled cylinder count.</div>
+                        </div>
+
+                        <div class="col-md-6 lpg-beginning-audit-field">
+                            <label for="lpg_inventory_bo_returned_customer_quantity" class="form-label fw-semibold">B.O. Returned from Customers</label>
+                            <input type="number" min="0" step="0.01" class="form-control form-control-sm rounded-3" id="lpg_inventory_bo_returned_customer_quantity" name="bo_returned_customer_quantity" placeholder="Enter count" required>
+                        </div>
+
+                        <div class="col-md-6 lpg-beginning-audit-field">
+                            <label for="lpg_inventory_bo_during_delivery_quantity" class="form-label fw-semibold">B.O. During Delivery</label>
+                            <input type="number" min="0" step="0.01" class="form-control form-control-sm rounded-3" id="lpg_inventory_bo_during_delivery_quantity" name="bo_during_delivery_quantity" placeholder="Enter count" required>
+                        </div>
+
+                        <div class="col-12 lpg-beginning-audit-field">
+                            <label for="lpg_inventory_audit_date_display" class="form-label fw-semibold">Starting Audit Date</label>
+                            <input type="date" class="form-control form-control-sm rounded-3" id="lpg_inventory_audit_date_display" value="{{ optional($CashiersReportData->first())->report_date ? \Illuminate\Support\Carbon::parse($CashiersReportData->first()->report_date)->format('Y-m-d') : '' }}" disabled>
+                            <small class="form-text">This audit becomes the Beginning Inventory from this date forward.</small>
+                        </div>
+
+                        <div class="col-md-12 lpg-reference-field d-none">
                             <label for="lpg_inventory_delivery_reference_no" class="form-label fw-semibold"><i class="bi bi-file-earmark-text me-2 text-success" aria-hidden="true"></i>DR / Reference No.</label>
                             <input type="text" class="form-control form-control-sm rounded-3" id="lpg_inventory_delivery_reference_no" name="delivery_reference_no" maxlength="100" placeholder="Optional">
                         </div>

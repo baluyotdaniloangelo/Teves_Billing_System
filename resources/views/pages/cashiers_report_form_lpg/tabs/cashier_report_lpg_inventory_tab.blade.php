@@ -42,9 +42,14 @@
             <div class="tab-content">
                 @include('pages.cashiers_report_form_lpg.tabs.cashier_report_lpg_ar_so_tab')
                 <div class="tab-pane fade show active" id="lpg-beginning-inventory" role="tabpanel" aria-labelledby="lpg-beginning-inventory-tab">
+                    <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between gap-3" id="lpg-starting-audit-status" data-report-id="{{ $CashiersReportId ?? ($cashiers_report_id ?? 0) }}">
+                        <span><i class="bi bi-info-circle me-2"></i><strong>Starting Audit:</strong> <span class="lpg-audit-status-label">Checking status…</span></span>
+                        <button type="button" class="btn btn-sm btn-primary d-none" id="lpg-submit-starting-audit"><i class="bi bi-send me-1"></i>Submit for Approval</button>
+                    </div>
+                    <div class="alert alert-warning d-none" id="lpg-starting-audit-return-reason"></div>
                     <div class="d-flex justify-content-end mb-3">
                         <button type="button" class="btn btn-success shadow-sm lpg-report-action-btn lpg-inventory-add" data-inventory-mode="BEGINNING">
-                            <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Add Beginning Inventory
+                            <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Starting Audit
                         </button>
                     </div>
                     <div class="table-responsive">
@@ -53,7 +58,10 @@
                                 <tr class="report">
                                     <th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
                                     <th><i class="bi bi-box-seam" aria-hidden="true"></i>Item</th>
-                                    <th><i class="bi bi-123" aria-hidden="true"></i>Beginning Quantity</th>
+                                    <th><i class="bi bi-123" aria-hidden="true"></i>Filled Cylinders</th>
+                                    <th>B.O. Returned from Customers</th>
+                                    <th>B.O. During Delivery</th>
+                                    <th>Audit Date</th>
                                     <th><i class="bi bi-chat-left-text" aria-hidden="true"></i>Remarks</th>
                                     <th><i class="bi bi-three-dots" aria-hidden="true"></i>Action</th>
                                 </tr>

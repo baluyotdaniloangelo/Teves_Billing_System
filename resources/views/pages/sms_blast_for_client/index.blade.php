@@ -13,7 +13,7 @@
 @endphp
 <main id="main" class="main fuel-page fuel-dashboard sms-page">
     <div class="fuel-title-row">
-        <div><p class="fuel-eyebrow">CUSTOMER COMMUNICATIONS</p><h1><span>SMS Broadcast</span></h1><p class="fuel-subtitle">Send updates to your customers and follow every campaign in one place.</p></div>
+        <div><p class="fuel-eyebrow">CUSTOMER COMMUNICATIONS</p><h1><span>Client SMS</span></h1><p class="fuel-subtitle">Send an individual message or a customer broadcast and follow the results in one place.</p></div>
         <a class="fuel-button" href="{{ route('sms_blast', ['tab' => $library ? 'templates' : ($history ? 'history' : 'compose')]) }}"><i class="bi bi-arrow-clockwise"></i> Refresh</a>
     </div>
     <nav class="fuel-dashboard-tabs" aria-label="SMS pages">
@@ -31,14 +31,23 @@
     @include('pages.sms_blast_for_client.templates.library')
     @elseif(!$history)
     <div class="sms-compose-grid">
-        <section class="fuel-panel"><div class="fuel-panel-head"><div><h2>Compose a message</h2><p>Choose a customer type, then review your broadcast.</p></div><i class="bi bi-chat-left-text"></i></div>
-            <form id="SmsBlastForm" class="sms-body" action="{{ route('send_sms_blast') }}" data-count-url="{{ route('sms_recipient_count') }}" method="post">
+        <section class="fuel-panel"><div class="fuel-panel-head"><div><h2>Compose a message</h2><p>Choose your recipient, write a message, and review before sending.</p></div><i class="bi bi-chat-left-text"></i></div>
+            <form id="SmsBlastForm" class="sms-body" action="{{ route('send_sms_blast') }}" data-count-url="{{ route('sms_recipient_count') }}" data-clients-url="{{ route('sms_client_search') }}" method="post">
                 @csrf
                 <label for="template_key">SMS template</label>
                 <select id="template_key" name="template_key"><option value="">Write a custom message</option>@foreach($templates as $key => $template)@if($template['scope'] !== 'order')<option value="{{ $key }}" {{ request('template') === $key ? 'selected' : '' }}>{{ $template['name'] }}</option>@endif @endforeach</select>
                 <p class="sms-help">Choose a ready message and edit it before sending. See SMS templates for LPG follow-up drafts.</p>
                 <label for="audience">Send to</label>
-                <select id="audience" name="audience"><option value="customer_type">Selected customer type</option><option value="birthday">Birthday today only</option></select>
+                <select id="audience" name="audience"><option value="customer_type">Selected customer type</option><option value="individual">Individual client</option><option value="birthday">Birthday today only</option></select>
+                <div id="sms-individual-fields" hidden>
+                    <label for="sms-client-search">Find client</label>
+                    <input id="sms-client-search" type="search" maxlength="100" placeholder="Type at least 2 letters of the client name" autocomplete="off" aria-controls="sms-client-results">
+                    <p class="sms-help" id="sms-client-search-status" role="status">Search by client name, then select one result below.</p>
+                    <label for="sms-client-results">Matching clients</label>
+                    <select id="sms-client-results" size="5" disabled aria-describedby="sms-client-search-status"></select>
+                    <input type="hidden" name="client_id" id="sms-client-id">
+                    <div id="sms-selected-client" class="sms-selected-client" aria-live="polite">No client selected.</div>
+                </div>
                 <p class="sms-help" id="birthday-info">Birthday greetings use the saved birthday and first name. Automatic birthday sending: {{ $birthdayEnabled ? 'enabled' : 'not active' }}. {{ !$birthdayReady ? 'Birthday tracking migration is required before sending.' : '' }}</p>
                 <label for="customer_type">Customer type</label>
                 <select id="customer_type" name="customer_type" required><option value="">Select customer type</option>@foreach($types as $type)<option value="{{ $type }}">{{ $type }}</option>@endforeach</select>
@@ -46,14 +55,14 @@
                 <label for="sms_content">Message</label>
                 <textarea id="sms_content" name="sms_content" rows="8" maxlength="1000" required placeholder="Write your customer update here…"></textarea>
                 <div class="sms-counter"><span><b id="sms_count">0</b> / 1,000 characters</span><span><b id="sms_parts">0</b> SMS parts · <span id="sms_encoding">GSM-7</span></span></div>
-                <p class="sms-help">Unicode characters can use more SMS parts. Preview uses a sample first name; actual parts can vary per client. Supported fields: {client_name}, {client_first_name}, {salutation}, {business_name}, {business_signature}, {contact_number}.</p>
+                <p class="sms-help" id="sms-preview-note">Preview uses a sample client for broadcasts and the selected client's saved information for individual messages. SMS parts can vary with message length and Unicode. Supported fields: {client_name}, {client_first_name}, {salutation}, {business_name}, {business_signature}, {contact_number}.</p>
                 <div id="sms-feedback" role="status" aria-live="polite"></div>
-                <button class="fuel-button fuel-button-primary" id="send_sms_btn" type="submit" disabled><i class="bi bi-send"></i> Review broadcast</button>
+                <button class="fuel-button fuel-button-primary" id="send_sms_btn" type="submit" disabled><i class="bi bi-send"></i> Review SMS</button>
             </form>
         </section>
         <aside class="fuel-panel"><div class="fuel-panel-head"><div><h2>Message preview</h2><p>A quick look before you send.</p></div><i class="bi bi-phone"></i></div><div class="sms-body"><div class="sms-phone"><small>CUSTOMER MESSAGE</small><p id="sms-preview">Your message will appear here.</p><span>SMS · ITEXMO</span></div><div class="sms-note"><i class="bi bi-info-circle"></i><p>One message per unique, valid Philippine mobile number. “Provider accepted” does not confirm delivery to the customer's phone.</p></div></div></aside>
     </div>
-    <dialog id="sms-confirm"><form method="dialog"><h2>Review broadcast</h2><p id="sms-confirm-summary"></p><p class="sms-confirm-message" id="sms-confirm-message"></p><p>Sending will use your SMS credits.</p><div class="sms-dialog-actions"><button class="fuel-button" value="cancel">Back to editing</button><button class="fuel-button fuel-button-primary" value="send">Send broadcast</button></div></form></dialog>
+    <dialog id="sms-confirm"><form method="dialog"><h2>Review SMS</h2><p id="sms-confirm-summary"></p><p class="sms-confirm-message" id="sms-confirm-message"></p><p>Sending will use your SMS credits.</p><div class="sms-dialog-actions"><button class="fuel-button" value="cancel">Back to editing</button><button class="fuel-button fuel-button-primary" value="send">Send SMS</button></div></form></dialog>
     @else
     <form class="fuel-filterbar sms-filters" method="get" action="{{ route('sms_blast') }}">
         <input type="hidden" name="tab" value="history">

@@ -17,6 +17,10 @@
 .sms-recipient-message { display: block; min-width: 250px; max-width: 420px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; line-height: 1.6; }
 .sms-template-grid .sms-full-message { margin-bottom: 18px; }
 .sms-body { padding: 24px; }
+.sms-selected-client { border: 1px solid #dce7d5; background: #f3f8ef; color: #56734a; padding: 12px; margin: 12px 0 20px; border-radius: 6px; font-size: 12px; overflow-wrap: anywhere; }
+#sms-individual-fields[hidden] { display: none; }
+.sms-page #sms-client-results { min-height: 150px; white-space: normal; }
+.sms-page #sms-client-results option { padding: 8px; }
 .sms-page label { display: block; color: #53654d; font-size: 12px; font-weight: 800; margin-bottom: 8px; }
 .sms-page :is(input:not([type=hidden]),select,textarea) { display: block; width: 100%; border: 1px solid #dce3d7; border-radius: 6px; background: #fff; color: #344b3e; padding: 11px 12px; font: 400 13px 'Nunito',sans-serif; }
 .sms-page textarea { resize: vertical; min-height: 180px; }

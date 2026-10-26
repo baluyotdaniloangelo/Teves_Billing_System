@@ -15,6 +15,7 @@
         h1 { margin: 8px 0 4px; font-size: clamp(1.35rem, 5vw, 1.8rem); line-height: 1.2; }
         .product-meta { color: rgba(255,255,255,.78); font-size: .9rem; }
         .content { padding: 22px 24px 24px; }
+        .product-photo { display: block; width: 100%; max-height: 260px; margin: 0 auto 18px; padding: 10px; border: 1px solid #e4e8e4; border-radius: 16px; background: #f8f9f7; object-fit: contain; }
         .price-card { border-radius: 18px; padding: 20px; background: var(--teal); color: #fff; text-align: center; }
         .price-label { color: rgba(255,255,255,.72); font-size: .82rem; }
         .price-value { margin-top: 4px; font-size: clamp(2rem, 10vw, 2.8rem); font-weight: 800; line-height: 1.1; }
@@ -40,6 +41,9 @@
             <div class="product-meta">{{ $product->category_name ?: 'Uncategorized' }}</div>
         </header>
         <div class="content">
+            @if($product->product_photo_path)
+                <img class="product-photo" src="{{ asset('storage/' . ltrim($product->product_photo_path, '/')) }}" alt="{{ $product->product_name }}" loading="lazy">
+            @endif
             <section class="price-card" aria-label="Default product price">
                 <div class="price-label">Default Price</div>
                 <div class="price-value"><span aria-hidden="true">&#8369;</span>{{ number_format((float) $product->product_price, 2) }}</div>

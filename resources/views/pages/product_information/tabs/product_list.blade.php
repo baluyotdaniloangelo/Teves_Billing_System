@@ -70,6 +70,52 @@ div.dataTables_wrapper {
     transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
 }
 
+.product-information-theme .product-photo-preview-trigger {
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: .2rem;
+    border: 1px solid var(--product-info-border);
+    border-radius: .65rem;
+    background: #fff;
+    cursor: zoom-in;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.product-information-theme .product-photo-preview-trigger:hover,
+.product-information-theme .product-photo-preview-trigger:focus-visible {
+    border-color: var(--product-info-sage);
+    box-shadow: 0 .2rem .55rem rgba(23, 62, 58, .16);
+    transform: translateY(-1px);
+}
+
+.product-information-theme .product-photo-thumbnail,
+.product-information-theme .product-photo-thumbnail {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-information-theme .product-photo-placeholder {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--product-info-border);
+    border-radius: .65rem;
+    color: var(--product-info-sage);
+    background-color: var(--product-info-cream-soft);
+}
+
+.product-information-theme .product-photo-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--product-info-sage);
+    background-color: var(--product-info-cream-soft);
+}
+
 .product-information-theme .product-qr-thumbnail:hover {
     border-color: var(--product-info-sage);
     box-shadow: 0 .2rem .55rem rgba(23, 62, 58, .16);
@@ -350,6 +396,7 @@ div.dataTables_wrapper {
                         <th class="text-end"><i class="bi bi-currency-exchange me-1" aria-hidden="true"></i>Default Price</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Unit</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Capacity</th>
+                        <th class="text-center"><i class="bi bi-image me-1" aria-hidden="true"></i>Photo</th>
                         <th class="text-center"><i class="bi bi-qr-code me-1" aria-hidden="true"></i>QR Code</th>
                         <th class="text-center text-nowrap"><i class="bi bi-three-dots me-1" aria-hidden="true"></i>Actions</th>
                     </tr>

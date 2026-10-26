@@ -1,15 +1,15 @@
 <script>
 $(function () {
     const reportId = {{ $CashiersReportId ?? ($cashiers_report_id ?? 0) }};
-    const showUnclassifiedSales = @json((bool) config('lpg_inventory.show_unclassified_sales', false));
-    const columnCount = showUnclassifiedSales ? 18 : 17;
+    const columnCount = 23;
     const modes = {
-        BEGINNING: 'Beginning Inventory', DELIVERY: 'Delivery', BO_REPLACEMENT: 'B.O. Replacement',
-        RETURN: 'Return', ON_LOAN: 'On-Loan', REFILL_SWAP: 'Refill / Swap',
-        CYLINDER_WITH_CONTENT: 'Cylinder Sold with Content', UNCLASSIFIED: 'Unclassified Sales',
-        EXPENSE: 'Other Stock-Out / Product Expenses'
+        BEGINNING: 'Starting Audit', DELIVERY: 'Suppliers Delivery', BO_REPLACEMENT: 'B.O. Replacement',
+        BO_FROM_CUSTOMER: 'B.O. From Customer/s', BO_DURING_DELIVERY: 'B.O. During Delivery',
+        BO_RETURNED_TO_SUPPLIER: 'B.O. Returned to Supplier', RETURN: 'Return', ON_LOAN: 'On-Loan',
+        REFILL_SWAP: 'Refill / Swap', CYLINDER_WITH_CONTENT: 'Cylinder Sold with Content',
+        UNCLASSIFIED: 'Unclassified Sales', EXPENSE: 'Product Expenses'
     };
-    const inventoryModes = ['BEGINNING', 'DELIVERY', 'BO_REPLACEMENT'];
+    const inventoryModes = ['BEGINNING', 'DELIVERY', 'BO_REPLACEMENT', 'BO_FROM_CUSTOMER', 'BO_DURING_DELIVERY', 'BO_RETURNED_TO_SUPPLIER'];
     const salesModes = ['RETURN', 'REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'];
     const summaryBody = $('#LpgSellOutTable tbody');
     const modalElement = document.getElementById('LpgSellOutSourcesModal');
@@ -53,18 +53,21 @@ $(function () {
             .done(function (response) {
                 if (version !== summaryVersion) return;
                 const rows = response.data || [];
-                $('#lpg-sell-out-unclassified').toggleClass('d-none', !rows.some(row => row.unclassified_count > 0));
                 summaryBody.html(rows.length ? rows.map(function (row) {
-                    const ending = row.ending_quantity == null ? 'Set beginning stock' : quantity(row.ending_quantity);
                     return '<tr><td>' + escape(productLabel(row)) + '</td>' +
-                        sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null) +
-                        sourceCell(row, 'DELIVERY', row.delivery_quantity) + sourceCell(row, 'RETURN', row.return_quantity) +
-                        sourceCell(row, 'BO_REPLACEMENT', row.bo_replacement_quantity) + sourceCell(row, 'ON_LOAN', row.on_loan_quantity) +
+                        sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_filled_quantity : null) +
+                        sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_bo_returned_customer_quantity : null) +
+                        sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_bo_during_delivery_quantity : null) +
+                        sourceCell(row, 'DELIVERY', row.delivery_quantity) + sourceCell(row, 'BO_REPLACEMENT', row.bo_replacement_quantity) +
+                        sourceCell(row, 'BO_FROM_CUSTOMER', row.bo_from_customer_quantity) + sourceCell(row, 'BO_DURING_DELIVERY', row.bo_during_delivery_quantity) +
+                        sourceCell(row, 'BO_RETURNED_TO_SUPPLIER', row.bo_returned_to_supplier_quantity) + sourceCell(row, 'ON_LOAN', row.on_loan_quantity) +
                         saleCells(row, 'REFILL_SWAP') + saleCells(row, 'CYLINDER_WITH_CONTENT') +
-                        (showUnclassifiedSales ? sourceCell(row, 'UNCLASSIFIED', row.unclassified_quantity) : '') + sourceCell(row, 'EXPENSE', row.expense_quantity) +
-                        '<td class="text-end" title="Net after discounts: ' + money(row.net_sales) + '">' + money(row.total_sales) + '</td>' +
-                        '<td class="text-end fw-semibold ' + (row.ending_quantity < 0 ? 'text-danger' : '') + '">' + ending + '</td>' + window.LpgActualInventoryUI.cells(row) + '</tr>';
-                }).join('') : '<tr><td colspan="' + columnCount + '" class="text-center text-muted py-4">No records yet. Use Add in a source column to select an item.</td></tr>');
+                        '<td class="text-end fw-semibold">' + (row.theoretical_filled_quantity == null ? '—' : quantity(row.theoretical_filled_quantity)) + '</td>' +
+                        '<td class="text-end fw-semibold">' + quantity(row.theoretical_bo_returned_customer_quantity) + '</td>' +
+                        '<td class="text-end fw-semibold">' + quantity(row.theoretical_bo_during_delivery_quantity) + '</td>' +
+                        window.LpgActualInventoryUI.cells(row) +
+                        '<td class="text-end" title="Net after discounts: ' + money(row.net_sales) + '">' + money(row.total_sales) + '</td></tr>';
+            }).join('') : '<tr><td colspan="' + columnCount + '" class="text-center text-muted py-4">No records yet. Use Starting Audit or Add in a source column.</td></tr>');
             }).fail(function (xhr, status) {
                 if (status === 'abort' || version !== summaryVersion) return;
                 summaryBody.html('<tr><td colspan="' + columnCount + '" class="text-center py-4">Summary could not be loaded.</td></tr>');
@@ -114,7 +117,7 @@ $(function () {
             button.prop('disabled', true);
             fetchSource(mode, productId).then(function (response) {
                 const row = response.data[0];
-                if (row) {
+                if (row && row.kind === 'inventory') {
                     return $.post("{{ route('LpgInventoryInfo') }}", { cashiers_report_lpg_inventory_id: row.record_id })
                         .done(r => afterSourcesClose(() => openLpgInventoryModal(mode, r.data)));
                 } else afterSourcesClose(() => openLpgInventoryModal(mode, null, productId));
@@ -161,9 +164,13 @@ $(function () {
             sourceState.rows = rows;
             if (productId && rows.length) $('#lpg-sell-out-source-item').text(productLabel(rows[0]));
             $('#lpg-sell-out-source-rows').html(rows.length ? rows.map(function (row, index) {
-                return '<tr><td>' + escape(productLabel(row)) + '</td><td>' + escape(row.account || '—') + '</td><td>' + escape(row.reference || '—') + '</td><td class="text-end">' + quantity(row.quantity) + '</td><td class="text-end">' + (row.unit_price == null ? '—' : money(row.unit_price)) + '</td><td class="text-end">' + (row.amount == null ? '—' : money(row.amount)) + '</td><td>' + escape(row.remarks || '—') + '</td><td><button type="button" class="btn btn-sm btn-primary lpg-sell-out-source-edit" data-row-index="' + index + '"><i class="bi bi-pencil-square me-1" aria-hidden="true"></i>Edit</button></td></tr>';
+                const action = row.kind === 'audit_carry_forward' ? '—' : '<button type="button" class="btn btn-sm btn-primary lpg-sell-out-source-edit" data-row-index="' + index + '"><i class="bi bi-pencil-square me-1" aria-hidden="true"></i>Edit</button>';
+                const auditDetails = row.mode === 'BEGINNING' ? 'B.O. returned from customers: ' + quantity(row.bo_returned_customer_quantity || 0) + '; B.O. during delivery: ' + quantity(row.bo_during_delivery_quantity || 0) : '';
+                const remarks = [auditDetails, row.remarks].filter(Boolean).join(' · ') || '—';
+                return '<tr><td>' + escape(productLabel(row)) + '</td><td>' + escape(row.account || '—') + '</td><td>' + escape(row.reference || '—') + '</td><td class="text-end">' + quantity(row.quantity) + '</td><td class="text-end">' + (row.unit_price == null ? '—' : money(row.unit_price)) + '</td><td class="text-end">' + (row.amount == null ? '—' : money(row.amount)) + '</td><td>' + escape(remarks) + '</td><td>' + action + '</td></tr>';
             }).join('') : '<tr><td colspan="8" class="text-center text-muted py-3">No source records for this selection.</td></tr>');
-            $('#lpg-sell-out-source-total').text(quantity(rows.reduce((total, row) => total + Number(row.quantity || 0), 0)));
+            const sourceTotal = rows.reduce((total, row) => total + Number(row.quantity || 0) + (mode === 'BEGINNING' ? Number(row.bo_returned_customer_quantity || 0) + Number(row.bo_during_delivery_quantity || 0) : 0), 0);
+            $('#lpg-sell-out-source-total').text(quantity(sourceTotal));
             $('#lpg-sell-out-source-add').prop('disabled', false);
         }).fail(function (xhr, status) {
             if (status === 'abort' || version !== sourceVersion) return;

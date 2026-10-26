@@ -15,6 +15,53 @@ function renderProductCapacity(value, type, row) {
     return capacity.toLocaleString('en-PH', { maximumFractionDigits: 3 }) + (unit ? ' ' + unit : '');
 }
 
+window.productPhotoUrl = function (photoPath) {
+    const cleanPath = String(photoPath || '').replace(/^\/+/, '');
+    if (!cleanPath) return '';
+    const encodedPath = cleanPath.split('/').map(encodeURIComponent).join('/');
+    return window.location.origin + '/storage/' + encodedPath;
+};
+
+window.setProductPhotoPreview = function (input, image, placeholder, photoPath) {
+    if (!image || !placeholder) return;
+
+    if (image.dataset.previewObjectUrl) {
+        URL.revokeObjectURL(image.dataset.previewObjectUrl);
+        delete image.dataset.previewObjectUrl;
+    }
+
+    const selectedFile = input && input.files ? input.files[0] : null;
+    const imageUrl = selectedFile
+        ? URL.createObjectURL(selectedFile)
+        : window.productPhotoUrl(photoPath);
+
+    if (selectedFile) image.dataset.previewObjectUrl = imageUrl;
+    image.onerror = null;
+    image.onerror = function () {
+        image.classList.add('d-none');
+        placeholder.classList.remove('d-none');
+    };
+    if (imageUrl) image.src = imageUrl;
+    else image.removeAttribute('src');
+    image.classList.toggle('d-none', !imageUrl);
+    placeholder.classList.toggle('d-none', Boolean(imageUrl));
+};
+
+window.renderProductPhotoColumn = function (_data, type, row) {
+    const photoPath = row && row.product_photo_path;
+    if (type !== 'display') return photoPath || '';
+    if (!photoPath) {
+        return '<span class="product-photo-placeholder" title="No product photo" aria-label="No product photo"><i class="bi bi-image" aria-hidden="true"></i></span>';
+    }
+
+    const photoUrl = window.productPhotoUrl(photoPath)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;');
+    const photoAlt = $.fn.dataTable.render.text().display((row && row.product_name) || 'Product photo');
+    return '<button type="button" class="product-photo-preview-trigger" data-photo-url="' + photoUrl + '" data-product-name="' + photoAlt + '" title="Preview product photo" aria-label="Preview photo of ' + photoAlt + '"><img class="product-photo-thumbnail" src="' + photoUrl + '" alt="" loading="lazy"></button>';
+};
+
 function syncProductCapacityFields(prefix) {
     const capacity = document.getElementById(prefix + 'product_capacity');
     const unit = document.getElementById(prefix + 'product_capacity_unit');
@@ -339,6 +386,7 @@ $(function () {
             { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
             { data: 'product_unit_measurement', className: 'text-center' },
             { data: 'product_capacity', name: 'teves_product_table.product_capacity', defaultContent: '-', render: renderProductCapacity, className: 'text-center' },
+            { data: null, orderable: false, searchable: false, className: 'text-center', render: function (data, type, row) { return window.renderProductPhotoColumn(data, type, row); } },
             { data: null, orderable: false, searchable: false, className: 'text-center', render: function (data, type, row) { return window.renderProductQrColumn ? window.renderProductQrColumn(data, type, row) : ''; } },
             { data: 'action', orderable: false, searchable: false, className: 'text-center' }
         ]
@@ -497,19 +545,15 @@ $('#ProductformNew').on('submit', function (event) {
     saveButton.disabled = true;
     saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Saving...';
 
+    const formData = new FormData(productForm);
+    formData.append('_token', "{{ csrf_token() }}");
+
     $.ajax({
         url: "{{ route('create_product_post') }}",
         type: 'POST',
-        data: {
-            product_name: $('#product_name').val(),
-            category_idx: $('#category_idx').val(),
-            product_main_idx: $('#product_main_idx').val() || '',
-            product_price: $('#product_price').val(),
-            product_unit_measurement: $('#product_unit_measurement').val(),
-            product_capacity: $('#product_capacity').val(),
-            product_capacity_unit: $('#product_capacity_unit').val(),
-            _token: "{{ csrf_token() }}"
-        },
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
             productForm.reset();
             window.ProductFormValidation.reset(productForm);
@@ -557,7 +601,43 @@ $('#ProductformNew').on('reset', function () {
     window.setTimeout(function () {
         window.ProductFormValidation.reset(form);
         syncProductCapacityFields('');
+        window.setProductPhotoPreview(
+            document.getElementById('product_photo'),
+            document.getElementById('product_photo_preview'),
+            document.getElementById('product_photo_placeholder'),
+            null
+        );
     }, 0);
+});
+
+$('#product_photo').on('change', function () {
+    window.setProductPhotoPreview(
+        this,
+        document.getElementById('product_photo_preview'),
+        document.getElementById('product_photo_placeholder'),
+        null
+    );
+});
+
+$('#update_product_photo').on('change', function () {
+    $('#remove_product_photo').prop('checked', false);
+    window.setProductPhotoPreview(
+        this,
+        document.getElementById('update_product_photo_preview'),
+        document.getElementById('update_product_photo_placeholder'),
+        null
+    );
+});
+
+$('#remove_product_photo').on('change', function () {
+    const photoInput = document.getElementById('update_product_photo');
+    if (this.checked && photoInput) photoInput.value = '';
+    window.setProductPhotoPreview(
+        photoInput,
+        document.getElementById('update_product_photo_preview'),
+        document.getElementById('update_product_photo_placeholder'),
+        this.checked ? null : (photoInput ? photoInput.dataset.currentPhotoPath : null)
+    );
 });
 
 $('#CreateProductModal').on('hidden.bs.modal', function () {

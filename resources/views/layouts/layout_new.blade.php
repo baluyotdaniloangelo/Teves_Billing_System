@@ -208,6 +208,15 @@ Use to automatically hide the Side Nav Bar-->
 <script>
 // run immediately on load
 loadReminders();
+loadLpgAuditUnreadCount();
+setInterval(loadLpgAuditUnreadCount, 60000);
+
+let lpgAuditUnread = 0;
+let reminderUnread = 0;
+function updateNotificationBadge(){ $('.badge-number').text(Number(lpgAuditUnread || 0) + Number(reminderUnread || 0)); }
+function loadLpgAuditUnreadCount(){
+    $.get('/lpg-audit-notifications/count', function(res){ lpgAuditUnread = Number(res.unread || 0); updateNotificationBadge(); });
+}
 
 function loadReminders(){
 
@@ -216,7 +225,8 @@ function loadReminders(){
         let data = res.reminders;
         let unread = res.unread;
 
-        $('.badge-number').text(unread);
+        reminderUnread = Number(unread || 0);
+        updateNotificationBadge();
 
         let html = '';
 
@@ -284,6 +294,12 @@ data.forEach(reminder => {
             <li class="dropdown-footer text-center">
                 <a href="/reminder" class="text-primary fw-semibold">
                     Show all notifications
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li class="dropdown-footer text-center">
+                <a href="/lpg-audit-notifications" class="text-primary fw-semibold">
+                    LPG audit notifications
                 </a>
             </li>
         `;

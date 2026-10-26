@@ -1,6 +1,6 @@
 <!-- CREATE SALES ORDER MODAL -->
 <div class="modal fade"
-     id="UpdateSalesOrderModal"
+     id="so-editor-UpdateSalesOrderModal"
      tabindex="-1"
      aria-hidden="true">
 
@@ -49,18 +49,18 @@
 
             <!-- FORM -->
             <form class="needs-validation"
-                  id="UpdateSalesOrderformUpdate"
+                  id="so-editor-UpdateSalesOrderformUpdate"
                   novalidate>
 
                 <!-- BODY -->
                 <div class="modal-body p-4">
 
-					<ul class="nav nav-tabs mb-3" id="SalesOrderTabs" role="tablist">
+					<ul class="nav nav-tabs mb-3" id="so-editor-SalesOrderTabs" role="tablist">
 
 						<li class="nav-item">
 							<button class="nav-link active"
 									data-bs-toggle="tab"
-									data-bs-target="#general-tab" type="button" role="tab" >
+									data-bs-target="#so-editor-general-tab" type="button" role="tab" >
 								<i class="bi bi-info-circle me-1"></i>
 								General
 							</button>
@@ -69,7 +69,7 @@
 						<li class="nav-item">
 							<button class="nav-link"
 									data-bs-toggle="tab"
-									data-bs-target="#billing-tab" type="button" role="tab" >
+									data-bs-target="#so-editor-billing-tab" type="button" role="tab" >
 								<i class="bi bi-receipt me-1"></i>
 								Billing
 							</button>
@@ -78,7 +78,7 @@
 						<li class="nav-item">
 							<button class="nav-link"
 									data-bs-toggle="tab"
-									data-bs-target="#delivery-tab" type="button" role="tab" >
+									data-bs-target="#so-editor-information-delivery-panel" type="button" role="tab" >
 								<i class="bi bi-truck me-1"></i>
 								Delivery
 							</button>
@@ -87,7 +87,7 @@
 						<li class="nav-item">
 							<button class="nav-link"
 									data-bs-toggle="tab"
-									data-bs-target="#notes-tab" type="button" role="tab" >
+									data-bs-target="#so-editor-notes-tab" type="button" role="tab" >
 								<i class="bi bi-journal-text me-1"></i>
 								Notes
 							</button>
@@ -96,19 +96,19 @@
 						<li class="nav-item">
 							<button class="nav-link"
 									data-bs-toggle="tab"
-									data-bs-target="#additional-tab" type="button" role="tab" >
+									data-bs-target="#so-editor-additional-tab" type="button" role="tab" >
 								<i class="bi bi-sliders me-1"></i>
 								Options
 							</button>
 						</li>
-						
-					</ul>                   
 
-                
+					</ul>
+
+
 					<div class="tab-content">
 
 						<div class="tab-pane fade show active"
-							 id="general-tab">
+							 id="so-editor-general-tab">
 
 							<!-- General Information -->
 							<!-- ===========================================================
@@ -133,7 +133,7 @@
 
 									<!-- DATE + BRANCH -->
 									<div class="row">
-										
+
 										<!-- SALES ORDER TYPE -->
 										<div class="col-md-4 mb-3">
 
@@ -148,7 +148,7 @@
 											<select class="form-select rounded-3"
 													required
 													name="sales_order_type"
-													id="sales_order_type">
+													id="so-editor-sales_order_type">
 
 												<?php $category_idx_so = $sales_order_data[0]['category_idx']; ?>
 												<option value="">Please select Type</option>
@@ -166,12 +166,12 @@
 												@endforeach
 
 											</select>
-											
+
 											<span class="text-danger small"
-											  id="sales_order_typeError"></span>
-											  
+											  id="so-editor-sales_order_typeError"></span>
+
 										</div>
-										
+
 										<!-- DATE -->
 										<div class="col-md-4 mb-3">
 
@@ -185,7 +185,7 @@
 
 											<input type="date"
 												   class="form-control rounded-3"
-												   id="sales_order_date"
+												   id="so-editor-sales_order_date"
 												   name="sales_order_date"
 												   value="{{ $sales_order_data[0]['sales_order_date'] }}"
 												   required
@@ -193,7 +193,7 @@
 
 										</div>
 
-										
+
 										<!-- BRANCH -->
 										<div class="col-md-4 mb-3">
 
@@ -208,7 +208,7 @@
 											<select class="form-select rounded-3"
 													required
 													name="company_header"
-													id="company_header"
+													id="so-editor-company_header"
 													onchange="UpdateBranch()">
 
 												<?php $branch_idx = $sales_order_data[0]['company_header']; ?>
@@ -241,15 +241,15 @@
 										</label>
 
 										<input class="form-control rounded-3"
-											   list="client_name"
+											   list="so-editor-client_name"
 											   name="client_name"
-											   id="client_id"
+											   id="so-editor-client_id"
 											   autocomplete="off"
 											   required
 											   value="{{ $sales_order_data[0]['client_name'] }}"
-											   onchange="ClientInfo()">
+											   onchange="salesOrderEditorClientInfo()">
 
-										<datalist id="client_name">
+										<datalist id="so-editor-client_name">
 
 											@foreach($client_data as $client_data_cols)
 
@@ -264,7 +264,7 @@
 										</datalist>
 
 										<span class="text-danger small"
-											  id="client_idxError"></span>
+											  id="so-editor-client_idxError"></span>
 
 									</div>
 
@@ -281,7 +281,7 @@
 											<?php $sales_order_payment_type = $sales_order_data[0]->sales_order_payment_type; ?>
 
 											<select class="form-select rounded-3"
-													id="sales_order_payment_type"
+													id="so-editor-sales_order_payment_type"
 													name="sales_order_payment_type"
 													required>
 
@@ -307,9 +307,9 @@
 											</label>
 
 											<select class="form-select rounded-3"
-													id="sales_order_invoice"
+													id="so-editor-sales_order_invoice"
 													name="sales_order_invoice"
-													onchange="check_withholding_tax()"
+													onchange="salesOrderEditorCheckWithholdingTax()"
 													required>
 
 												<option value="1"
@@ -340,7 +340,7 @@
 
 											<input type="number"
 												   class="form-control rounded-3 bg-light"
-												   id="sales_order_net_percentage"
+												   id="so-editor-sales_order_net_percentage"
 												   name="sales_order_net_percentage"
 												   value="{{ $sales_order_data[0]['sales_order_net_percentage'] }}"
 												   readonly>
@@ -356,25 +356,25 @@
 
 											<input type="number"
 												   class="form-control rounded-3 bg-light"
-												   id="sales_order_withholding_tax"
+												   id="so-editor-sales_order_withholding_tax"
 												   name="sales_order_withholding_tax"
 												   value="{{ $sales_order_data[0]['sales_order_withholding_tax'] }}"
 												   readonly>
 
 										</div>
-										
-										
+
+
 
 									</div>
 
 								</div>
 
-							</div>							
+							</div>
 
 						</div>
 
 						<div class="tab-pane fade"
-							 id="billing-tab">
+							 id="so-editor-billing-tab">
 
 							<!-- Billing -->
 						<!-- ===========================================================
@@ -415,7 +415,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="dr_number"
+										   id="so-editor-dr_number"
 										   name="dr_number"
 										   value="{{ $sales_order_data[0]['sales_order_dr_number'] }}"
 										   placeholder="Enter Delivery Receipt Number">
@@ -435,7 +435,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="sales_order_po_number"
+										   id="so-editor-sales_order_po_number"
 										   name="sales_order_po_number"
 										   value="{{ $sales_order_data[0]['sales_order_po_number'] }}"
 										   placeholder="Enter Purchase Order Number">
@@ -455,7 +455,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="sales_order_or_number"
+										   id="so-editor-sales_order_or_number"
 										   name="sales_order_or_number"
 										   value="{{ $sales_order_data[0]['sales_order_or_number'] }}"
 										   placeholder="Enter Sales Invoice Number">
@@ -475,7 +475,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="sales_order_charge_invoice"
+										   id="so-editor-sales_order_charge_invoice"
 										   name="sales_order_charge_invoice"
 										   value="{{ $sales_order_data[0]['sales_order_charge_invoice'] }}"
 										   placeholder="Enter Charge Invoice">
@@ -495,7 +495,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="sales_order_collection_receipt"
+										   id="so-editor-sales_order_collection_receipt"
 										   name="sales_order_collection_receipt"
 										   value="{{ $sales_order_data[0]['sales_order_collection_receipt'] }}"
 										   placeholder="Enter Collection Receipt">
@@ -515,7 +515,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="payment_term"
+										   id="so-editor-payment_term"
 										   name="payment_term"
 										   value="{{ $sales_order_data[0]['sales_order_payment_term'] }}"
 										   placeholder="Enter Payment Term">
@@ -528,7 +528,7 @@
 						</div>
 
 						<div class="tab-pane fade"
-							 id="delivery-tab">
+							 id="so-editor-information-delivery-panel">
 
 							<!-- Delivery -->
 						<!-- ===========================================================
@@ -569,13 +569,13 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="delivered_to"
+										   id="so-editor-delivered_to"
 										   name="delivered_to"
-										   list="sales_order_delivered_to_list"
+										   list="so-editor-sales_order_delivered_to_list"
 										   value="{{ $sales_order_data[0]['sales_order_delivered_to'] }}"
 										   placeholder="Enter Recipient">
 
-									<datalist id="sales_order_delivered_to_list">
+									<datalist id="so-editor-sales_order_delivered_to_list">
 
 										@foreach ($sales_order_delivered_to as $sales_order_delivered_to_cols)
 
@@ -599,7 +599,7 @@
 									</label>
 
 									<textarea class="form-control rounded-3"
-											  id="delivered_to_address"
+											  id="so-editor-delivered_to_address"
 											  name="delivered_to_address"
 											  rows="3"
 											  placeholder="Enter Complete Delivery Address">{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</textarea>
@@ -619,7 +619,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="delivery_method"
+										   id="so-editor-delivery_method"
 										   name="delivery_method"
 										   value="{{ $sales_order_data[0]['sales_order_delivery_method'] }}"
 										   placeholder="e.g. Company Truck, Pick-up">
@@ -639,7 +639,7 @@
 
 									<input type="text"
 										   class="form-control rounded-3"
-										   id="hauler"
+										   id="so-editor-hauler"
 										   name="hauler"
 										   value="{{ $sales_order_data[0]['sales_order_hauler'] }}"
 										   placeholder="Enter Hauler">
@@ -659,7 +659,7 @@
 
 									<input type="date"
 										   class="form-control rounded-3"
-										   id="required_date"
+										   id="so-editor-required_date"
 										   name="required_date"
 										   value="{{ $sales_order_data[0]['sales_order_required_date'] }}">
 
@@ -671,7 +671,7 @@
 						</div>
 
 						<div class="tab-pane fade"
-							 id="notes-tab">
+							 id="so-editor-notes-tab">
 
 							<!-- Notes -->
 							<!-- ===========================================================
@@ -712,7 +712,7 @@
 
 										<textarea
 											class="form-control rounded-3"
-											id="instructions"
+											id="so-editor-instructions"
 											name="instructions"
 											rows="4"
 											placeholder="Enter delivery or processing instructions...">{{ $sales_order_data[0]['sales_order_instructions'] }}</textarea>
@@ -732,7 +732,7 @@
 
 										<textarea
 											class="form-control rounded-3"
-											id="note"
+											id="so-editor-note"
 											name="note"
 											rows="4"
 											placeholder="Enter additional notes or remarks...">{{ $sales_order_data[0]['sales_order_note'] }}</textarea>
@@ -743,9 +743,9 @@
 
 							</div>
 						</div>
-						
+
 						<div class="tab-pane fade"
-							 id="additional-tab">
+							 id="so-editor-additional-tab">
 
 							<!-- additional -->
 							<!-- ===========================================================
@@ -801,7 +801,7 @@
 												<input
 													class="form-check-input sales_order_quotation"
 													type="checkbox"
-													id="sales_order_quotation"
+													id="so-editor-sales_order_quotation"
 													name="sales_order_quotation"
 													<?=$sales_order_quotation_check;?>>
 
@@ -839,7 +839,7 @@
 												<input
 													class="form-check-input sales_order_quotation_hide_volume"
 													type="checkbox"
-													id="sales_order_quotation_hide_volume"
+													id="so-editor-sales_order_quotation_hide_volume"
 													name="sales_order_quotation_hide_volume"
 													<?=$sales_order_quotation_hide_volume_check;?>>
 
@@ -853,9 +853,9 @@
 
 							</div>
 						</div>
-						
-						
-					</div>        
+
+
+					</div>
 
 
                 </div>
@@ -864,7 +864,7 @@
                 <div class="modal-footer border-0 px-4 pb-4">
 
                     <!-- LOADING -->
-                    <div id="loading_data_create"
+                    <div id="so-editor-loading_data_create"
                          style="display:none;">
 
                         <div class="spinner-border spinner-border-sm text-success"
@@ -878,9 +878,9 @@
 
                     </div>
 
-                    <!-- RESET 
+                    <!-- RESET
                     <button type="reset"
-                            class="btn btn-light btn-sm rounded-3 px-3" id="clear-sales-order">
+                            class="btn btn-light btn-sm rounded-3 px-3" id="so-editor-clear-sales-order">
 
                         <i class="bi bi-arrow-counterclockwise me-1"></i>
                         Reset
@@ -890,10 +890,10 @@
                     <!-- SUBMIT -->
                     <button type="submit"
                             class="btn btn-success btn-sm rounded-3 shadow-sm px-3"
-                            id="update-sales-order">
+                            id="so-editor-update-sales-order">
 
                         <i class="bi bi-save-fill me-1"></i>
-                        Save Purchase Order
+                        Save Sales Order
 
                     </button>
 

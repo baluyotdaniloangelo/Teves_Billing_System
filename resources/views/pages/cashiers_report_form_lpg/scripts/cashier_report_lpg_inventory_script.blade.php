@@ -9,6 +9,7 @@ $(function () {
     });
 
     initLpgInventoryTables();
+    loadLpgStartingAuditStatus();
 
     $(document).on('click', '.lpg-inventory-add', function () {
         openLpgInventoryModal($(this).data('inventory-mode'));
@@ -23,8 +24,16 @@ $(function () {
         clearLpgInventoryErrors();
 
         const mode = $('#lpg_inventory_mode').val();
-        const supplierRequired = ['DELIVERY', 'BO_REPLACEMENT'].includes(mode);
+        const supplierRequired = ['DELIVERY', 'BO_REPLACEMENT', 'BO_DURING_DELIVERY', 'BO_RETURNED_TO_SUPPLIER'].includes(mode);
+        const clientRequired = mode === 'BO_FROM_CUSTOMER';
+        const auditRequired = mode === 'BEGINNING';
+        if (auditRequired && LpgStartingAuditLocked) {
+            showLpgInventoryErrors({inventory_mode: ['This Starting Audit is already submitted or approved and cannot be edited.']});
+            return;
+        }
         $('#lpg_inventory_supplier_idx').prop('required', supplierRequired);
+        $('#lpg_inventory_client_idx').prop('required', clientRequired);
+        $('#lpg_inventory_bo_returned_customer_quantity, #lpg_inventory_bo_during_delivery_quantity').prop('required', auditRequired);
 
         if (!this.checkValidity()) {
             this.classList.add('was-validated');
@@ -46,6 +55,7 @@ $(function () {
             success: function (response) {
                 hideLpgInventoryModal('#CashierReportLpgInventoryModal');
                 reloadLpgInventoryTables();
+                if (mode === 'BEGINNING') loadLpgStartingAuditStatus();
                 if (typeof showSuccessModal === 'function') {
                     showSuccessModal(response.message || 'Inventory saved successfully.');
                 }
@@ -101,6 +111,21 @@ $(function () {
                 button.prop('disabled', false).html('<i class="bi bi-trash3-fill me-2"></i>Delete');
             });
     });
+
+    $('#lpg-submit-starting-audit').on('click', function () {
+        const button = $(this);
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Submitting…');
+        $.post("{{ route('lpg.starting-audits.submit') }}", { report_id: $('#lpg-starting-audit-status').data('report-id') })
+            .done(function (response) {
+                if (typeof showSuccessModal === 'function') showSuccessModal(response.message);
+                loadLpgStartingAuditStatus();
+                reloadLpgInventoryTables();
+            })
+            .fail(function (xhr) {
+                if (typeof showValidationErrorModal === 'function') showValidationErrorModal(xhr.responseJSON?.message || 'Unable to submit the Starting Audit.');
+                button.prop('disabled', false).html('<i class="bi bi-send me-1"></i>Submit for Approval');
+            });
+    });
 });
 
 let LpgBeginningInventoryTable;
@@ -108,6 +133,8 @@ let LpgDeliveryTable;
 let LpgBoReplacementTable;
 let LpgInventoryProductOptionOrder = [];
 let LpgCurrentInventoryProductScope = 'LPG';
+let LpgStartingAuditLocked = false;
+let LpgStartingAuditStatus = null;
 const LpgInventoryProductScopes = {
     LPG: new Set(@json($product_data->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())->pluck('product_id')->map(fn($id) => (int) $id)->values())),
     KITCHEN: new Set(@json(\App\Services\LpgKitchenProducts::ids())),
@@ -119,8 +146,11 @@ function initLpgInventoryTables() {
         { data: null, className: 'text-center', orderable: false, render: function (data, type, row, meta) { return meta.row + 1; } },
         { data: null, render: function (data, type, row) { return lpgInventoryProductLabel(row); } },
         { data: 'quantity', className: 'text-end fw-semibold', render: lpgInventoryQuantity },
+        { data: 'bo_returned_customer_quantity', className: 'text-end', render: lpgInventoryQuantity },
+        { data: 'bo_during_delivery_quantity', className: 'text-end', render: lpgInventoryQuantity },
+        { data: 'audit_date', className: 'text-center', defaultContent: '-' },
         { data: 'remarks', defaultContent: '-' },
-        lpgInventoryActionColumn()
+        lpgInventoryActionColumn('BEGINNING')
     ]);
 
     LpgDeliveryTable = createLpgInventoryTable('#LpgDeliveryTable', 'DELIVERY', [
@@ -173,7 +203,7 @@ function createLpgInventoryTable(selector, mode, columns) {
     return table;
 }
 
-function lpgInventoryActionColumn() {
+function lpgInventoryActionColumn(mode) {
     return {
         data: null,
         orderable: false,
@@ -181,6 +211,7 @@ function lpgInventoryActionColumn() {
         className: 'text-center text-nowrap',
         render: function (data, type, row) {
             const item = lpgInventoryProductLabel(row).replace(/"/g, '&quot;');
+            if (mode === 'BEGINNING' && LpgStartingAuditLocked) return '<span class="badge text-bg-secondary">' + (LpgStartingAuditStatus || 'Locked') + '</span>';
             return `<button type="button" class="btn btn-sm btn-primary EditLpgInventory" data-id="${row.cashiers_report_lpg_inventory_id}" title="Edit"><i class="bi bi-pencil-square"></i></button>
                     <button type="button" class="btn btn-sm btn-danger DeleteLpgInventory" data-id="${row.cashiers_report_lpg_inventory_id}" data-item="${item}" title="Delete"><i class="bi bi-trash3-fill"></i></button>`;
         }
@@ -202,6 +233,10 @@ function inventoryEmptyMessage(mode) {
 }
 
 function openLpgInventoryModal(mode, record, productId, productScope) {
+    if (mode === 'BEGINNING' && LpgStartingAuditLocked) {
+        if (typeof showValidationErrorModal === 'function') showValidationErrorModal('This Starting Audit is already submitted or approved and cannot be edited.');
+        return;
+    }
     const form = document.getElementById('CashierReportLpgInventoryForm');
     const select = document.getElementById('lpg_inventory_product_idx');
     LpgCurrentInventoryProductScope = productScope || 'LPG';
@@ -214,21 +249,55 @@ function openLpgInventoryModal(mode, record, productId, productScope) {
     form.classList.remove('was-validated');
     clearLpgInventoryErrors();
 
-    const requiresSupplier = ['DELIVERY', 'BO_REPLACEMENT'].includes(mode);
-    const modeLabel = mode === 'BO_REPLACEMENT' ? 'B.O. Replacement' : (mode === 'DELIVERY' ? 'Delivery' : 'Beginning Inventory');
+    const requiresSupplier = ['DELIVERY', 'BO_REPLACEMENT', 'BO_DURING_DELIVERY', 'BO_RETURNED_TO_SUPPLIER'].includes(mode);
+    const requiresClient = mode === 'BO_FROM_CUSTOMER';
+    const modeLabels = {BEGINNING: 'Starting Audit', DELIVERY: 'Suppliers Delivery', BO_REPLACEMENT: 'B.O. Replacement', BO_FROM_CUSTOMER: 'B.O. From Customer/s', BO_DURING_DELIVERY: 'B.O. During Delivery', BO_RETURNED_TO_SUPPLIER: 'B.O. Returned to Supplier'};
+    const modeLabel = modeLabels[mode] || 'Inventory';
     $('#cashiers_report_lpg_inventory_id').val(record?.cashiers_report_lpg_inventory_id || 0);
     $('#lpg_inventory_mode').val(mode);
     $('#lpg_inventory_product_idx').val(record?.product_idx || productId || '').trigger('change');
     $('#lpg_inventory_supplier_idx').val(record?.supplier_idx || '');
+    $('#lpg_inventory_client_idx').val(record?.client_idx || '');
     $('#lpg_inventory_delivery_reference_no').val(record?.delivery_reference_no || '');
     $('#lpg_inventory_quantity').val(record?.quantity ?? '');
+    $('#lpg_inventory_bo_returned_customer_quantity').val(record?.bo_returned_customer_quantity ?? '');
+    $('#lpg_inventory_bo_during_delivery_quantity').val(record?.bo_during_delivery_quantity ?? '');
+    $('#lpg_inventory_audit_date').val(record?.audit_date || $('#lpg_inventory_audit_date_display').val() || '');
+    $('#lpg_inventory_audit_date_display').val(record?.audit_date || $('#lpg_inventory_audit_date').val() || '');
     $('#lpg_inventory_remarks').val(record?.remarks || '');
+    $('.lpg-beginning-audit-field').toggleClass('d-none', mode !== 'BEGINNING');
+    $('#CashierReportLpgInventoryForm label[for="lpg_inventory_quantity"]').html('<i class="bi bi-123 me-2 text-success" aria-hidden="true"></i>' + (mode === 'BEGINNING' ? 'Filled Cylinders' : 'Quantity'));
     $('.lpg-supplier-field').toggleClass('d-none', !requiresSupplier);
+    $('.lpg-reference-field').toggleClass('d-none', !(requiresSupplier || requiresClient));
+    $('.lpg-client-field').toggleClass('d-none', !requiresClient);
     $('#lpg_inventory_supplier_idx').prop('required', requiresSupplier);
+    $('#lpg_inventory_client_idx').prop('required', requiresClient);
+    $('#lpg_inventory_bo_returned_customer_quantity, #lpg_inventory_bo_during_delivery_quantity').prop('required', mode === 'BEGINNING');
     $('#CashierReportLpgInventoryModalLabel').text(`${record ? 'Edit' : 'Add'} ${modeLabel}`);
-    $('#CashierReportLpgInventoryModalDescription').text(mode === 'BO_REPLACEMENT' ? 'Record stock received from a supplier as replacement for bad-order items.' : (mode === 'DELIVERY' ? 'Record the quantity delivered by a supplier.' : 'Record the stock available at the start of the report.'));
+    const descriptions = {BEGINNING: 'Count Filled Cylinders and both B.O. balances. This audit sets Beginning Inventory from its date.', DELIVERY: 'Record usable filled stock received from a supplier.', BO_REPLACEMENT: 'Add the replacement cylinder to Filled stock and reduce the B.O. balance.', BO_FROM_CUSTOMER: 'Record B.O. stock returned by a customer.', BO_DURING_DELIVERY: 'Record B.O. stock identified during supplier delivery inspection.', BO_RETURNED_TO_SUPPLIER: 'Record B.O. stock returned to the supplier.'};
+    $('#CashierReportLpgInventoryModalDescription').text(descriptions[mode] || 'Record LPG inventory movement.');
     $('#save-lpg-inventory').html(`<i class="bi bi-save-fill me-2"></i>${record ? 'Update' : 'Save'} ${modeLabel}`);
     showLpgInventoryModal('#CashierReportLpgInventoryModal');
+}
+
+function loadLpgStartingAuditStatus() {
+    const panel = $('#lpg-starting-audit-status');
+    if (!panel.length) return;
+    $.post("{{ route('lpg.starting-audits.status') }}", { report_id: panel.data('report-id') })
+        .done(function (response) {
+            const audit = response.audit;
+            LpgStartingAuditStatus = audit?.status || 'NOT_STARTED';
+            LpgStartingAuditLocked = ['PENDING', 'APPROVED'].includes(LpgStartingAuditStatus);
+            const labels = {NOT_STARTED: 'No starting audit has been encoded yet.', DRAFT: 'Draft — only this report can use these counts until submitted and approved.', PENDING: 'Pending approval — future reports will continue using the latest approved audit.', APPROVED: 'Approved — this audit carries forward from ' + (audit?.audit_date || ''), RETURNED: 'Returned for correction — edit the counts and submit again.'};
+            panel.find('.lpg-audit-status-label').text(labels[LpgStartingAuditStatus] || LpgStartingAuditStatus);
+            panel.removeClass('alert-info alert-warning alert-success').addClass(LpgStartingAuditStatus === 'APPROVED' ? 'alert-success' : (LpgStartingAuditStatus === 'RETURNED' ? 'alert-warning' : 'alert-info'));
+            $('.lpg-inventory-add[data-inventory-mode="BEGINNING"]').prop('disabled', LpgStartingAuditLocked).attr('title', LpgStartingAuditLocked ? 'Submitted audits are read-only until returned for correction.' : '');
+            $('#lpg-submit-starting-audit').toggleClass('d-none', !audit || !['DRAFT', 'RETURNED'].includes(LpgStartingAuditStatus)).prop('disabled', false).html('<i class="bi bi-send me-1"></i>' + (LpgStartingAuditStatus === 'RETURNED' ? 'Resubmit for Approval' : 'Submit for Approval'));
+            const reason = audit?.return_reason;
+            $('#lpg-starting-audit-return-reason').toggleClass('d-none', !(LpgStartingAuditStatus === 'RETURNED' && reason)).text(reason ? 'Returned for correction: ' + reason : '');
+            if (LpgBeginningInventoryTable) LpgBeginningInventoryTable.ajax.reload(null, false);
+        })
+        .fail(function () { panel.find('.lpg-audit-status-label').text('Unable to load audit approval status.'); });
 }
 
 function reloadLpgInventoryTables() {

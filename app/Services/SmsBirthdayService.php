@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class SmsBirthdayService
 {
-    public function recipients(Carbon $date)
+    public function recipients(Carbon $date, ?int $clientId = null)
     {
         return DB::table('teves_client_table')
             ->select('client_id', 'client_name', 'client_first_name', 'client_gender', 'client_contact_number', 'customer_type')
             ->whereNull('deleted_at')->whereNotNull('client_birthday')
+            ->when($clientId !== null, function ($query) use ($clientId) { $query->where('client_id', $clientId); })
             ->whereMonth('client_birthday', $date->month)->whereDay('client_birthday', $date->day)
             ->orderBy('client_id')->get()->map(function ($client) {
                 $recipient = (array) $client;
@@ -21,16 +22,16 @@ class SmsBirthdayService
             })->filter()->unique('mobile_number')->values();
     }
 
-    public function prepare(Carbon $date, string $message, $createdBy = null): ?SmsCampaign
+    public function prepare(Carbon $date, string $message, $createdBy = null, ?int $clientId = null): ?SmsCampaign
     {
         $templates = app(SmsTemplateService::class);
         $templates->validateMessage($message, 'birthday');
         // Pre-render everything before reserving events or creating a campaign.
-        $recipients = $this->recipients($date)->map(function ($recipient) use ($templates, $message) {
+        $recipients = $this->recipients($date, $clientId)->map(function ($recipient) use ($templates, $message) {
             $recipient['sms_message'] = $templates->render($message, $recipient);
             return $recipient;
         });
-        return DB::transaction(function () use ($date, $message, $createdBy, $recipients) {
+        return DB::transaction(function () use ($date, $message, $createdBy, $recipients, $clientId) {
             $campaign = null;
             foreach ($recipients as $recipient) {
                 // Two unique keys prevent duplicate client/year AND shared-mobile/year sends.
@@ -42,7 +43,7 @@ class SmsBirthdayService
                 if (!$claimed) continue;
                 if (!$campaign) {
                     $campaign = SmsCampaign::create([
-                        'campaign_title' => 'Birthday greetings - '.$date->toDateString(), 'customer_type' => 'Birthday',
+                        'campaign_title' => ($clientId !== null ? 'Birthday greeting (individual) - ' : 'Birthday greetings - ').$date->toDateString(), 'customer_type' => 'Birthday',
                         'sms_message' => $message, 'total_recipients' => 0, 'total_sent' => 0, 'total_failed' => 0,
                         'provider' => 'ITEXMO', 'campaign_status' => 'Pending', 'created_by' => $createdBy,
                     ]);

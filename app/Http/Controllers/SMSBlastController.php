@@ -80,12 +80,46 @@ class SMSBlastController extends Controller
             })->filter()->unique('mobile_number')->values();
     }
 
+    public function search_clients(Request $request)
+    {
+        $input = $request->validate(['q' => 'required|string|min:2|max:100']);
+        $clients = DB::table('teves_client_table')->whereNull('deleted_at')
+            ->where('client_name', 'like', '%'.trim($input['q']).'%')
+            ->orderBy('client_name')->orderBy('client_id')->limit(20)
+            ->get(['client_id', 'client_name', 'customer_type', 'client_contact_number'])
+            ->map(function ($client) {
+                return [
+                    'client_id' => $client->client_id, 'client_name' => $client->client_name,
+                    'customer_type' => $client->customer_type,
+                    'mobile_number' => SmsTemplateService::normalizeMobile($client->client_contact_number),
+                ];
+            });
+        return response()->json(['clients' => $clients]);
+    }
+
+    private function individualRecipient(int $clientId): array
+    {
+        $client = DB::table('teves_client_table')->whereNull('deleted_at')->where('client_id', $clientId)
+            ->first(['client_id', 'client_name', 'client_first_name', 'client_gender', 'client_contact_number', 'customer_type']);
+        if (!$client || !($number = SmsTemplateService::normalizeMobile($client->client_contact_number))) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['client_id' => 'Select an active client with a valid Philippine mobile number.']);
+        }
+        return array_merge((array) $client, ['mobile_number' => $number]);
+    }
+
     public function recipient_count(Request $request)
     {
+        $request->merge(['audience' => $request->input('audience') ?: 'customer_type']);
         $input = $request->validate([
-            'audience' => 'nullable|in:customer_type,birthday',
-            'customer_type' => ['required_unless:audience,birthday', 'nullable', Rule::in(self::CUSTOMER_TYPES)],
+            'audience' => 'required|in:customer_type,birthday,individual',
+            'customer_type' => ['required_if:audience,customer_type', 'nullable', Rule::in(self::CUSTOMER_TYPES)],
+            'client_id' => 'required_if:audience,individual|nullable|integer|min:1',
         ]);
+        if ($input['audience'] === 'individual') {
+            $recipient = $this->individualRecipient($input['client_id']);
+            unset($recipient['client_contact_number']);
+            return response()->json(['count' => 1, 'recipient' => $recipient]);
+        }
         $birthday = ($input['audience'] ?? '') === 'birthday';
         $recipients = $birthday ? app(SmsBirthdayService::class)->recipients(now(config('sms.timezone'))) : $this->recipients($input['customer_type']);
         return response()->json(['count' => $recipients->count()]);
@@ -93,21 +127,29 @@ class SMSBlastController extends Controller
 
     public function send_sms_blast(Request $request)
     {
-        $request->merge(['sms_content' => trim((string) $request->input('sms_content'))]);
+        $request->merge(['sms_content' => trim((string) $request->input('sms_content')), 'audience' => $request->input('audience') ?: 'customer_type']);
         $input = $request->validate([
-            'audience' => 'nullable|in:customer_type,birthday',
+            'audience' => 'required|in:customer_type,birthday,individual',
             'template_key' => ['nullable', Rule::in(array_keys(app(SmsTemplateService::class)->all()))],
-            'customer_type' => ['required_unless:audience,birthday', 'nullable', Rule::in(self::CUSTOMER_TYPES)],
+            'customer_type' => ['required_if:audience,customer_type', 'nullable', Rule::in(self::CUSTOMER_TYPES)],
+            'client_id' => 'required_if:audience,individual|nullable|integer|min:1',
+            'confirmed_mobile' => 'required_if:audience,individual|nullable|regex:/^639\d{9}$/',
             'sms_content' => 'required|string|max:1000',
             'request_id' => 'required|uuid',
         ]);
-        $birthday = ($input['audience'] ?? '') === 'birthday';
+        $individual = $input['audience'] === 'individual';
         $template = app(SmsTemplateService::class)->all()[$input['template_key'] ?? ''] ?? null;
+        $birthdayTemplate = $template && $template['scope'] === 'birthday';
+        $birthday = $input['audience'] === 'birthday' || ($individual && $birthdayTemplate);
         if ($template && $template['scope'] === 'order') {
             return response()->json(['message' => 'This template needs an LPG order and follow-up timing. Use the template library to preview it.'], 422);
         }
-        if (($template && $template['scope'] === 'birthday') !== $birthday) {
+        if ($birthdayTemplate !== $birthday) {
             return response()->json(['message' => 'Select the birthday template together with the Birthday today audience.'], 422);
+        }
+        $individualRecipient = $individual ? $this->individualRecipient($input['client_id']) : null;
+        if ($individual && $individualRecipient['mobile_number'] !== $input['confirmed_mobile']) {
+            return response()->json(['message' => 'This client mobile number changed. Select the client again and review the new number before sending.'], 422);
         }
         if ($birthday && !Schema::hasTable('teves_sms_birthday_events')) {
             return response()->json(['message' => 'Birthday tracking is not installed yet. Run the birthday events migration first.'], 422);
@@ -120,13 +162,13 @@ class SMSBlastController extends Controller
         }
         try {
             if ($birthday) {
-                $campaign = app(SmsBirthdayService::class)->prepare(now(config('sms.timezone')), $input['sms_content'], Session::get('loginID'));
+                $campaign = app(SmsBirthdayService::class)->prepare(now(config('sms.timezone')), $input['sms_content'], Session::get('loginID'), $individual ? (int) $input['client_id'] : null);
                 if (!$campaign) {
                     Cache::forget($key);
-                    return response()->json(['message' => 'No new birthday recipients. Today clients may already have a reserved or sent greeting this year.'], 422);
+                    return response()->json(['message' => $individual ? 'This client does not have a birthday today, or already has a reserved or sent greeting this year.' : 'No new birthday recipients. Today clients may already have a reserved or sent greeting this year.'], 422);
                 }
             } else {
-                $recipients = $this->recipients($input['customer_type'])->map(function ($recipient) use ($input) {
+                $recipients = ($individual ? collect([$individualRecipient]) : $this->recipients($input['customer_type']))->map(function ($recipient) use ($input) {
                     $recipient['sms_message'] = app(SmsTemplateService::class)->render($input['sms_content'], $recipient);
                     return $recipient;
                 });
@@ -134,10 +176,13 @@ class SMSBlastController extends Controller
                     Cache::forget($key);
                     return response()->json(['message' => 'No valid mobile numbers found for this customer type.'], 422);
                 }
-                $campaign = DB::transaction(function () use ($input, $recipients, $template) {
+                $campaign = DB::transaction(function () use ($input, $recipients, $template, $individual) {
+                    $title = $individual
+                        ? \Illuminate\Support\Str::limit('Individual SMS - '.$recipients->first()['client_name'], 230, '').' - '.now()->format('Y-m-d H:i')
+                        : ($template['name'] ?? 'SMS Broadcast').' ('.$input['customer_type'].') - '.now()->format('Y-m-d H:i');
                     $campaign = SmsCampaign::create([
-                        'campaign_title' => ($template['name'] ?? 'SMS Broadcast').' ('.$input['customer_type'].') - '.now()->format('Y-m-d H:i'),
-                        'customer_type' => $input['customer_type'], 'sms_message' => $input['sms_content'],
+                        'campaign_title' => $title,
+                        'customer_type' => $individual ? $recipients->first()['customer_type'] : $input['customer_type'], 'sms_message' => $input['sms_content'],
                         'total_recipients' => $recipients->count(), 'total_sent' => 0, 'total_failed' => 0,
                         'provider' => 'ITEXMO', 'campaign_status' => 'Pending', 'created_by' => Session::get('loginID'),
                     ]);

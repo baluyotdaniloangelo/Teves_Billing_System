@@ -238,4 +238,86 @@ class SmsTemplatesTest extends TestCase
         $this->put('/sms_blast/templates/birthday', [])->assertRedirect('/');
         $this->patch('/sms_blast/templates/birthday/status', [])->assertRedirect('/');
     }
+
+    public function test_individual_sending_targets_only_selected_client_with_its_own_saved_number()
+    {
+        $this->client(1);
+        $this->client(2, ['client_name' => 'Maria Santos', 'client_first_name' => 'Maria', 'client_contact_number' => '+63 918 123 4567']);
+        $payload = ['audience' => 'individual', 'client_id' => 2, 'confirmed_mobile' => '639181234567',
+            'customer_type' => 'Household', 'sms_content' => 'Hello {client_first_name}! - {business_name}', 'request_id' => (string) Str::uuid(),
+            'mobile_number' => '639171234567']; // Forged number must never override the client record.
+        $this->withSession(['loginID' => 1])->postJson('/send_sms_blast', $payload)->assertOk()->assertJson(['total_sent' => 1]);
+        $this->assertSame(1, DB::table('teves_sms_logs_table')->count());
+        $log = DB::table('teves_sms_logs_table')->first();
+        $this->assertSame(2, $log->client_id);
+        $this->assertSame('639181234567', $log->mobile_number);
+        $this->assertSame('Hello Maria! - Teves Gas', $log->sms_message);
+        $this->assertStringContainsString('Individual SMS - Maria Santos', DB::table('teves_sms_campaign_table')->value('campaign_title'));
+        $this->withSession(['loginID' => 1])->postJson('/send_sms_blast', $payload)->assertStatus(409);
+        Http::assertSentCount(1);
+    }
+
+    public function test_client_search_is_bounded_excludes_deleted_and_flags_invalid_numbers()
+    {
+        $this->client(1, ['client_name' => 'Maria Santos']);
+        $this->client(2, ['client_name' => 'Maria Deleted', 'deleted_at' => now()]);
+        $this->client(3, ['client_name' => 'Maria Invalid', 'client_contact_number' => '123']);
+        for ($id = 4; $id <= 26; $id++) $this->client($id, ['client_name' => 'Maria '.$id]);
+        $response = $this->withSession(['loginID' => 1])->getJson('/sms_blast/clients?q=Maria')->assertOk();
+        $clients = collect($response->json('clients'));
+        $this->assertSame(20, $clients->count());
+        $this->assertFalse($clients->contains('client_id', 2));
+        $this->withSession(['loginID' => 1])->getJson('/sms_blast/clients?q=Invalid')->assertOk()->assertJsonPath('clients.0.mobile_number', null);
+        Http::assertNothingSent();
+    }
+
+    public function test_individual_count_returns_actual_client_preview_fields_without_sending()
+    {
+        $this->client(1, ['client_name' => 'Sample Business', 'client_first_name' => 'Maria', 'client_gender' => 'Female']);
+        $this->withSession(['loginID' => 1])->getJson('/sms_blast/recipient-count?audience=individual&client_id=1')->assertOk()
+            ->assertJson(['count' => 1, 'recipient' => ['client_id' => 1, 'client_first_name' => 'Maria', 'client_gender' => 'Female', 'mobile_number' => '639171234567']]);
+        Http::assertNothingSent();
+    }
+
+    public function test_invalid_deleted_missing_or_changed_individual_recipients_cannot_send()
+    {
+        $this->client(1, ['client_contact_number' => '123']);
+        $this->client(2, ['deleted_at' => now()]);
+        $this->client(3, ['client_contact_number' => '09181234567']);
+        foreach ([null, 1, 2, 3, 999] as $id) {
+            $payload = ['audience' => 'individual', 'client_id' => $id, 'confirmed_mobile' => '639171234567', 'sms_content' => 'Hello', 'request_id' => (string) Str::uuid()];
+            $this->withSession(['loginID' => 1])->postJson('/send_sms_blast', $payload)->assertStatus(422);
+        }
+        $this->assertSame(0, DB::table('teves_sms_campaign_table')->count());
+        Http::assertNothingSent();
+    }
+
+    public function test_individual_birthday_only_sends_selected_client_and_preserves_yearly_reservation()
+    {
+        $this->client(1);
+        $this->client(2, ['client_contact_number' => '09181234567', 'client_first_name' => 'Maria']);
+        $payload = $this->birthdayPayload();
+        $payload['audience'] = 'individual'; $payload['client_id'] = 2; $payload['confirmed_mobile'] = '639181234567';
+        $this->withSession(['loginID' => 1])->postJson('/send_sms_blast', $payload)->assertOk()->assertJson(['total_sent' => 1]);
+        $this->assertSame([2], DB::table('teves_sms_logs_table')->pluck('client_id')->all());
+        $payload['request_id'] = (string) Str::uuid();
+        $this->withSession(['loginID' => 1])->postJson('/send_sms_blast', $payload)->assertStatus(422);
+        Http::assertSentCount(1);
+    }
+
+    public function test_individual_birthday_template_cannot_send_to_client_with_other_birthday()
+    {
+        $this->client(1, ['client_birthday' => '1990-10-26']);
+        $payload = $this->birthdayPayload();
+        $payload['audience'] = 'individual'; $payload['client_id'] = 1; $payload['confirmed_mobile'] = '639171234567';
+        $this->withSession(['loginID' => 1])->postJson('/send_sms_blast', $payload)->assertStatus(422);
+        $this->assertSame(0, DB::table('teves_sms_logs_table')->count());
+        Http::assertNothingSent();
+    }
+
+    public function test_individual_controls_render_and_client_search_requires_login()
+    {
+        $this->get('/sms_blast/clients?q=Maria')->assertRedirect('/');
+        $this->withSession(['loginID' => 1])->get('/sms_blast')->assertOk()->assertSee('Individual client')->assertSee('sms-client-search', false)->assertSee('sms-client-results', false);
+    }
 }

@@ -1,53 +1,63 @@
-@php
-    $showUnclassifiedSales = (bool) config('lpg_inventory.show_unclassified_sales', false);
-@endphp
 <div class="tab-pane fade show active" id="lpg-sell-out" role="tabpanel" aria-labelledby="lpg-sell-out-tab">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
         <div>
             <h6 class="fw-bold mb-1">LPG Sell-out</h6>
-            <small class="text-muted">Quantities come from this report's source records. Use Add or View under each linked column.</small>
+            <small class="text-muted">Beginning Inventory is set by a starting audit. Later shifts carry forward the previous ending balance.</small>
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-lpg-sell-out"><i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>Refresh</button>
     </div>
-    <p class="small text-muted mb-2">Ending Inventory = Beginning + Delivery + Return + B.O. − On-Loan − all Sales − product Expenses. Automatically updated from source records. Sales amounts use SRP before discounts.</p>
-    <p class="small text-muted mb-2">Actual Ending Inventory = Beginning + Add − Less, calculated automatically. Variance = Actual − Theoretical.</p>
-    <div class="alert alert-warning small d-none" id="lpg-sell-out-unclassified">Some older sales have no sale classification. Their quantities are included in sales deductions. Edit these records under Inventory &amp; Transactions → Sales Order / AR / Returned / Cash Sales to classify them.</div>
+    <p class="small text-muted mb-2">Filled stock and B.O. stock are tracked separately. B.O. Replacement and B.O. Returned to Supplier reduce the combined B.O. balance; delivery B.O. is reduced first.</p>
+    <p class="small text-muted mb-2">Refill / Swap, Cylinder Sold with Content, and On-Loan are deducted from Filled Cylinders. Sales amounts use SRP before discounts.</p>
     <div class="alert alert-danger d-none" role="alert" id="lpg-sell-out-error"></div>
     <div class="table-responsive">
-        <table class="table table-sm table-bordered align-middle mb-0" id="LpgSellOutTable" style="min-width:2250px;">
+        <table class="table table-sm table-bordered align-middle mb-0" id="LpgSellOutTable" style="min-width:3100px;">
             <thead class="text-center">
                 <tr>
-                    <th rowspan="4" style="min-width:200px;">Item</th>
-                    <th rowspan="3">Beginning Inventory</th>
-                    <th colspan="3">Add (+)</th>
-                    <th colspan="{{ $showUnclassifiedSales ? 9 : 8 }}">Less (-)</th>
-                    <th rowspan="4">Total Sales<br>in Peso</th>
-                    <th rowspan="4">Theoretical Ending<br>Inventory</th>
-                    <th rowspan="4">Actual Ending<br>Inventory</th>
-                    <th rowspan="4" title="Actual Ending Inventory minus Theoretical Ending Inventory">Variance</th>
+                    <th rowspan="4" style="min-width:230px;">Item / Capacity</th>
+                    <th colspan="3">Beginning Inventory</th>
+                    <th colspan="4">Add (+)</th>
+                    <th colspan="8">Less (-)</th>
+                    <th colspan="3">Theoretical Ending Inventory</th>
+                    <th colspan="3">Actual Ending Inventory</th>
+                    <th rowspan="4">Total Sales<br>in Pesos</th>
                 </tr>
                 <tr>
-                    <th rowspan="2">Delivery</th>
-                    <th rowspan="2">Return</th>
-                    <th rowspan="2">B.O. Replacement</th>
+                    <th rowspan="2">Filled Cylinders</th>
+                    <th rowspan="2">B.O. Returned<br>from Customers</th>
+                    <th rowspan="2">B.O. During<br>Delivery</th>
+                    <th rowspan="2">Suppliers<br>Delivery</th>
+                    <th rowspan="2">B.O.<br>Replacement</th>
+                    <th rowspan="2">B.O. From<br>Customer/s</th>
+                    <th rowspan="2">B.O. During<br>Delivery</th>
+                    <th rowspan="2">B.O. Returned<br>to Supplier</th>
                     <th rowspan="2">On-Loan</th>
                     <th colspan="3">Total Refill / Swap</th>
-                    <th colspan="3">Cylinder Sold with Content</th>
-                    @if($showUnclassifiedSales)<th rowspan="2">Unclassified Sales<br><small>Qty</small></th>@endif
-                    <th rowspan="2">Other Stock-Out<br><small>Product Expenses / Free Items</small></th>
+                    <th colspan="3">Total Cylinder Sold with Content</th>
+                    <th rowspan="2">Filled Cylinders</th>
+                    <th rowspan="2">B.O. Returned<br>from Customers</th>
+                    <th rowspan="2">B.O. During<br>Delivery</th>
+                    <th rowspan="2">Filled Cylinders</th>
+                    <th rowspan="2">B.O. Returned<br>from Customers</th>
+                    <th rowspan="2">B.O. During<br>Delivery</th>
                 </tr>
-                <tr><th>Qty</th><th>Unit Price</th><th>Amount</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr>
+                <tr>
+                    <th>Qty</th><th>Unit Price</th><th>Amount</th>
+                    <th>Qty</th><th>Unit Price</th><th>Amount</th>
+                </tr>
                 <tr class="lpg-summary-actions" data-dt-order="disable">
-                    @foreach(['BEGINNING' => 1, 'DELIVERY' => 1, 'RETURN' => 1, 'BO_REPLACEMENT' => 1, 'ON_LOAN' => 1, 'REFILL_SWAP' => 3, 'CYLINDER_WITH_CONTENT' => 3, 'UNCLASSIFIED' => 1, 'EXPENSE' => 1] as $sourceMode => $columnSpan)
-                        @if($showUnclassifiedSales || $sourceMode !== 'UNCLASSIFIED')
-                            <th colspan="{{ $columnSpan }}">
-                                @include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => $sourceMode])
-                            </th>
-                        @endif
-                    @endforeach
+                    <th colspan="3">@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'BEGINNING'])</th>
+                    <th>@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'DELIVERY'])</th>
+                    <th>@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'BO_REPLACEMENT'])</th>
+                    <th>@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'BO_FROM_CUSTOMER'])</th>
+                    <th>@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'BO_DURING_DELIVERY'])</th>
+                    <th>@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'BO_RETURNED_TO_SUPPLIER'])</th>
+                    <th>@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'ON_LOAN'])</th>
+                    <th colspan="3">@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'REFILL_SWAP'])</th>
+                    <th colspan="3">@include('pages.cashiers_report_form_lpg.partials.sell_out_source_buttons', ['sourceMode' => 'CYLINDER_WITH_CONTENT'])</th>
+                    <th colspan="7" class="bg-body-secondary"></th>
                 </tr>
             </thead>
-            <tbody><tr><td colspan="{{ $showUnclassifiedSales ? 18 : 17 }}" class="text-center text-muted py-4">Loading sell-out summary...</td></tr></tbody>
+            <tbody><tr><td colspan="23" class="text-center text-muted py-4">Loading sell-out summary...</td></tr></tbody>
         </table>
     </div>
 </div>

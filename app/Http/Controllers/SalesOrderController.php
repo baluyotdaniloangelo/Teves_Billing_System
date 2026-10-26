@@ -27,7 +27,7 @@ class SalesOrderController extends Controller
 	/*Load Product Interface*/
 	public function salesorder(){
 		
-		$title = 'Sales Order';
+		$title = 'Ship To';
 		$data = array();
 		if(Session::has('loginID')){
 			
@@ -60,12 +60,28 @@ class SalesOrderController extends Controller
 				
 			}	
 			
+			$salesOrderScope = SalesOrderModel::query()->whereNull('deleted_at');
+			if ($data->user_branch_access_type !== 'ALL') {
+				$salesOrderScope->whereIn('company_header', function ($access) {
+					$access->select('branch_idx')
+						->from('teves_user_branch_access')
+						->where('user_idx', Session::get('loginID'));
+				});
+			}
+			$salesOrderCounts = [
+				'orders' => (clone $salesOrderScope)->where('sales_order_delivery_status', 'Pending')
+					->where(function ($query) {
+						$query->where('sales_order_quotation', '0')->orWhereNull('sales_order_quotation');
+					})->count(),
+				'quotations' => (clone $salesOrderScope)->where('sales_order_quotation', '<>', '0')->count(),
+				'delivered' => (clone $salesOrderScope)->where('sales_order_delivery_status', '<>', 'Pending')->count(),
+			];
 			$sales_order_delivered_to = SalesOrderModel::select('sales_order_delivered_to')->distinct()->get();
 			$sales_order_delivered_to_address = SalesOrderModel::select('sales_order_delivered_to_address')->distinct()->get();
 		
 		}
 
-		return view("pages.sales_order_v2", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch','product_category_data'));
+		return view("pages.sales_order_v2", compact('data','title','client_data','product_data','sales_order_delivered_to','sales_order_delivered_to_address','teves_branch','product_category_data','salesOrderCounts'));
 		
 	}   
 	
@@ -80,7 +96,10 @@ class SalesOrderController extends Controller
 		if ($request->ajax()) {
 
 			$data = SalesOrderModel::where('sales_order_delivery_status', '=', 'Pending')
-					->where('sales_order_quotation', '=', '0')
+					->where(function ($quotation) {
+						$quotation->where('sales_order_quotation', '=', '0')
+							->orWhereNull('sales_order_quotation');
+					})
 					->whereNull('teves_sales_order_table.deleted_at') 
 					->join('teves_client_table', function ($join) {
 							$join->on('teves_client_table.client_id', '=', 'teves_sales_order_table.sales_order_client_idx')
@@ -105,12 +124,14 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
 					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_control_number',
+					'teves_sales_order_table.sales_order_quotation_reference',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',
 					'teves_sales_order_table.sales_order_delivery_status',
 					'teves_sales_order_table.sales_order_quotation',
+					'teves_sales_order_table.sales_order_quotation_status',
 					'teves_sales_order_table.created_at']);
 
 		return DataTables::of($data)
@@ -131,22 +152,13 @@ class SalesOrderController extends Controller
 						$receivable_lock_items = str_split((string)$receivable_lock_status);
 						$lock_billing_information 		= $receivable_lock_items[0];
 						
-						$sales_order_quotation = $row->sales_order_quotation;
-						if($sales_order_quotation==1){
-							$sales_order_quotation_btn = '<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle bi bi-hand-thumbs-up-fill btn_icon_table btn_icon_table_approval_status" id="approveSalesOrder" title="Click to Approve"></a>';
-						}else{
-							$sales_order_quotation_btn = '<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle bi bi-hand-thumbs-down-fill btn_icon_table btn_icon_table_approval_status" id="disapproveSalesOrder" title="Click to Disapprove"></a>';
-						
-						}
-						
 						if($lock_billing_information!=1){
 							
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
-						'.$sales_order_quotation_btn.'
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" data-control-number="'.$row->sales_order_control_number.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder" title="Edit Sales Order"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
@@ -235,12 +247,14 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
 					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_control_number',
+					'teves_sales_order_table.sales_order_quotation_reference',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',
 					'teves_sales_order_table.sales_order_delivery_status',
 					'teves_sales_order_table.sales_order_quotation',
+					'teves_sales_order_table.sales_order_quotation_status',
 					'teves_sales_order_table.created_at']);
 
 		return DataTables::of($data)
@@ -261,12 +275,10 @@ class SalesOrderController extends Controller
 						$receivable_lock_items = str_split((string)$receivable_lock_status);
 						$lock_billing_information 		= $receivable_lock_items[0];
 						
-						$sales_order_quotation = $row->sales_order_quotation;
-						if($sales_order_quotation==1){
-							$sales_order_quotation_btn = '<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle bi bi-hand-thumbs-up-fill btn_icon_table btn_icon_table_approval_status" id="approveSalesOrder" title="Click to Approve"></a>';
-						}else{
-							$sales_order_quotation_btn = '<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle bi bi-hand-thumbs-down-fill btn_icon_table btn_icon_table_approval_status" id="disapproveSalesOrder" title="Click to Disapprove"></a>';
-						
+						$quotationStatus = $row->sales_order_quotation_status ?: 'Pending';
+						$decisionButtons = '<a href="#" data-id="'.$row->sales_order_id.'" class="so-action so-action-approve" id="approveSalesOrder" title="Approve quotation"><i class="bi bi-check2" aria-hidden="true"></i> Approve</a>';
+						if ($quotationStatus !== 'Rejected') {
+							$decisionButtons .= '<a href="#" data-id="'.$row->sales_order_id.'" class="so-action so-action-reject" id="disapproveSalesOrder" title="Reject quotation"><i class="bi bi-x-lg" aria-hidden="true"></i> Reject</a>';
 						}
 						
 						
@@ -274,10 +286,10 @@ class SalesOrderController extends Controller
 							
 						$actionBtn = '
 						<div align="center" class="action_table_menu_Product">
-						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						'.$sales_order_quotation_btn.'
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						'.$decisionButtons.'
+						<a href="#" data-id="'.$row->sales_order_id.'" data-control-number="'.$row->sales_order_control_number.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder" title="Edit Sales Order"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder"></a>
 						</div>';
 					
 						$actionBtn_view_only = '
@@ -364,7 +376,8 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
 					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_control_number',
+					'teves_sales_order_table.sales_order_quotation_reference',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',
@@ -395,7 +408,7 @@ class SalesOrderController extends Controller
 						<div align="center" class="action_table_menu_Product">
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-eye-fill btn_icon_table btn_icon_table_gallery" id="SalesOrderPreview"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-warning btn-circle btn-sm bi bi-printer-fill btn_icon_table btn_icon_table_view" id="PrintSalesOrder""></a>
-						<a href="sales_order_form?sales_order_id='.$row->sales_order_id.'&tab=product" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder"></a>
+						<a href="#" data-id="'.$row->sales_order_id.'" data-control-number="'.$row->sales_order_control_number.'" class="btn-warning btn-circle btn-sm bi bi-pencil-fill btn_icon_table btn_icon_table_edit" id="EditSalesOrder" title="Edit Sales Order"></a>
 						<a href="#" data-id="'.$row->sales_order_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteSalesOrder"></a>
 						</div>';
 					
@@ -491,33 +504,34 @@ class SalesOrderController extends Controller
 
 	/*Quotation Approval*/
 	public function quotation_approved(Request $request){
+		$request->validate(['sales_order_id' => 'required|integer']);
+		$Salesorder = SalesOrderModel::findOrFail($request->sales_order_id);
+		if ((int) $Salesorder->sales_order_quotation !== 1) {
+			return response('Only quotations can be approved.', 422);
+		}
 
-		/*Delete on Sales Order Table*/
-		/*sales_order_quotation = 1 if quotation, 0 is approved*/
-		
-				$Salesorder = new SalesOrderModel();
-				$Salesorder = SalesOrderModel::find($request->sales_order_id);
-				$Salesorder->sales_order_quotation					= 0;/*7/26/2025*/
-				$Salesorder->updated_by_user_idx 					= Session::get('loginID');
-				$result = $Salesorder->update();
-		
+		$Salesorder->sales_order_quotation_reference = $Salesorder->sales_order_quotation_reference
+			?: $Salesorder->sales_order_control_number;
+		$Salesorder->sales_order_quotation = 0;
+		$Salesorder->sales_order_quotation_status = 'Approved';
+		$Salesorder->updated_by_user_idx = Session::get('loginID');
+		$Salesorder->save();
+
 		return 'Approved';
-		
 	} 
 	/*Quotation Disapproval*/
 	public function quotation_disapproved(Request $request){
+		$request->validate(['sales_order_id' => 'required|integer']);
+		$Salesorder = SalesOrderModel::findOrFail($request->sales_order_id);
+		if ((int) $Salesorder->sales_order_quotation !== 1) {
+			return response('Only quotations can be rejected.', 422);
+		}
 
-		/*Delete on Sales Order Table*/
-		/*sales_order_quotation = 1 if quotation, 0 is approved*/
-		
-				$Salesorder = new SalesOrderModel();
-				$Salesorder = SalesOrderModel::find($request->sales_order_id);
-				$Salesorder->sales_order_quotation					= 1;/*7/26/2025*/
-				$Salesorder->updated_by_user_idx 					= Session::get('loginID');
-				$result = $Salesorder->update();
-		
-		return 'Approved';
-		
+		$Salesorder->sales_order_quotation_status = 'Rejected';
+		$Salesorder->updated_by_user_idx = Session::get('loginID');
+		$Salesorder->save();
+
+		return 'Rejected';
 	} 
 
 
@@ -575,6 +589,7 @@ class SalesOrderController extends Controller
 			$Salesorder->category_idx 						= $request->sales_order_type;
 			$Salesorder->sales_order_invoice 				= $request->sales_order_invoice;
 			$Salesorder->sales_order_quotation				= $request->sales_order_quotation;/*7/26/2025*/
+			$Salesorder->sales_order_quotation_status		= (int) $request->sales_order_quotation === 1 ? 'Pending' : null;
 			$Salesorder->sales_order_quotation_hide_volume	= $request->sales_order_quotation_hide_volume;/*8/2/2025*/
 			$Salesorder->created_by_user_idx 				= Session::get('loginID');
 			
@@ -676,6 +691,9 @@ class SalesOrderController extends Controller
 				$Salesorder->sales_order_payment_type 				= $request->sales_order_payment_type;
 				$Salesorder->sales_order_invoice 					= $request->sales_order_invoice;
 				$Salesorder->sales_order_quotation					= $request->sales_order_quotation;/*7/26/2025*/
+				if ((int) $request->sales_order_quotation === 1) {
+					$Salesorder->sales_order_quotation_status = 'Pending';
+				}
 				$Salesorder->sales_order_quotation_hide_volume		= $request->sales_order_quotation_hide_volume;/*8/2/2025*/
 				$Salesorder->updated_by_user_idx 					= Session::get('loginID');
 				$result = $Salesorder->update();
@@ -828,7 +846,8 @@ class SalesOrderController extends Controller
 		if(Session::has('loginID')){
 
 		$SalesOrderID = $request->sales_order_id;
-		$tab = $request->tab;
+		$tab = in_array($request->tab, ['sales_order_information', 'product', 'delivery', 'payment', 'receivable'], true)
+			? $request->tab : 'product';
 		
 		$title = 'Sales Order Form';
 		$data = array();
@@ -939,12 +958,17 @@ class SalesOrderController extends Controller
 						$Receivables->company_header 					= $sales_order_data[0]->company_header;
 						$Receivables->created_by_user_id 				= Session::get('loginID');
 						$result = $Receivables->save();
+						$receivables_details = ReceivablesModel::where('sales_order_idx', '=', $SalesOrderID)->first();
 					
 				}	
 		
 		$category_idx = $sales_order_data[0]->category_idx;
 		
-		return view("pages.sales_order_form", compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','category_idx','sales_order_data','receivables_payment_suggestion','receivables_details','tab','product_category_data'));
+		$formView = $request->boolean('modal')
+			? 'pages.sales_order_v2.editor.content'
+			: 'pages.sales_order_form';
+
+		return view($formView, compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','category_idx','sales_order_data','receivables_payment_suggestion','receivables_details','tab','product_category_data'));
 		
 		}
 		
@@ -1206,7 +1230,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
 					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',
@@ -1264,7 +1288,7 @@ class SalesOrderController extends Controller
 					'teves_sales_order_table.sales_order_gross_amount',	
 					'teves_sales_order_table.sales_order_net_amount',	
 					'teves_sales_order_table.sales_order_withholding_tax',
-					'teves_sales_order_table.sales_order_control_number',			
+					'teves_sales_order_table.sales_order_control_number',
 					'teves_sales_order_table.sales_order_payment_term',
 					'teves_sales_order_table.sales_order_total_due',
 					'teves_sales_order_table.sales_order_payment_status',

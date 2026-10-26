@@ -94,6 +94,7 @@
                 { data: 'product_price', orderable: false, render: $.fn.dataTable.render.number(',', '.', 2, ''), className: 'text-end' },
                 { data: 'product_unit_measurement', className: 'text-center' },
                 { data: 'product_capacity', name: 'teves_product_table.product_capacity', defaultContent: '-', render: renderProductCapacity, className: 'text-center' },
+                { data: null, orderable: false, searchable: false, className: 'text-center', render: function (data, type, row) { return window.renderProductPhotoColumn(data, type, row); } },
                 { data: null, orderable: false, searchable: false, className: 'text-center', render: function (data, type, row) { return window.renderProductQrColumn ? window.renderProductQrColumn(data, type, row) : ''; } },
                 { data: 'action', orderable: false, searchable: false, className: 'text-center' }
             ]

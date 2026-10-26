@@ -28,3 +28,21 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade product-information-modal-theme" id="ProductPhotoPreviewModal" tabindex="-1" aria-labelledby="ProductPhotoPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
+            <div class="modal-header text-white border-0" style="background: linear-gradient(120deg, #471323, #173e3a);">
+                <div>
+                    <span class="small text-uppercase opacity-75">Product photo</span>
+                    <h5 class="modal-title fw-bold mb-0" id="ProductPhotoPreviewModalLabel">Product</h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center align-items-center p-3" style="min-height: 260px; background: #f8f9f7;">
+                <img id="productPhotoPreviewImage" class="img-fluid rounded-3" alt="" style="max-height: min(70vh, 680px); object-fit: contain;">
+                <div id="productPhotoPreviewError" class="text-muted d-none">Product photo could not be loaded.</div>
+            </div>
+        </div>
+    </div>
+</div>
