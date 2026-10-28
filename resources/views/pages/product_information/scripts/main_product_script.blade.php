@@ -61,6 +61,9 @@
 
         if ($main.val() && categoryId) {
             $category.val(String(categoryId)).prop('disabled', true);
+            if (window.ProductFormValidation) {
+                window.ProductFormValidation.clearField($category[0]);
+            }
         } else {
             $category.prop('disabled', false);
         }

@@ -546,6 +546,8 @@ $('#ProductformNew').on('submit', function (event) {
     saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Saving...';
 
     const formData = new FormData(productForm);
+    // Disabled controls are omitted from FormData, but category is disabled when a main product sets it.
+    formData.set('category_idx', $('#category_idx').val() || '');
     formData.append('_token', "{{ csrf_token() }}");
 
     $.ajax({
