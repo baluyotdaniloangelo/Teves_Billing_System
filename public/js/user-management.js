@@ -173,7 +173,7 @@
             { data: 'user_name', render: value => escape(value), responsivePriority: 6 },
             { data: 'user_type', render: (value, type) => type === 'display' ? '<span class="um-pill">' + escape(roles[value] || value) + '</span>' : value, responsivePriority: 4 },
             { data: 'user_status', render: (value, type) => type === 'display' ? '<span class="um-pill um-status-' + (value === 'Active' ? 'active' : 'inactive') + '">' + escape(value) + '</span>' : value, responsivePriority: 7 },
-            { data: 'is_online', render: presenceCell, orderable: false, searchable: false, responsivePriority: 3 },
+            { data: 'is_online', render: presenceCell, orderable: false, searchable: false, className: 'all', responsivePriority: 3 },
             { data: 'last_seen_at', render: lastSeenCell, orderable: false, searchable: false, responsivePriority: 5 },
             { data: 'user_email_address', render: value => escape(value || '—'), responsivePriority: 9 },
             { data: 'created_at_dt_format', name: 'created_at', render: dateCell, searchable: false, className: 'none' },
