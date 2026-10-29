@@ -16,7 +16,10 @@ class CashiersReport_LPG_Kitchen_Controller extends Controller
     public function index(Request $request, LpgKitchenSummary $summary, LpgActualInventorySummary $actual)
     {
         $reportId = $this->reportId($request);
-        return response()->json(['data' => $actual->rows($reportId, $summary->rows($summary->records($reportId)))]);
+        $rows = $summary->rows($summary->records($reportId));
+        $setSales = app(\App\Services\LpgSetComponentSales::class)->forReport($reportId);
+        return response()->json(['data' => $actual->rows($reportId, $summary->withCatalog($reportId, $rows)),
+            'unknown_set_sale_snapshots' => $setSales['unknown_sales']]);
     }
 
     public function sources(Request $request, LpgKitchenSummary $summary)

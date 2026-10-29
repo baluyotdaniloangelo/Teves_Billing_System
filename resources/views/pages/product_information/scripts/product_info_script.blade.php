@@ -1,4 +1,101 @@
 <script type="text/javascript">
+let productComponentOptions = null;
+
+function fetchProductComponentOptions() {
+    if (productComponentOptions) return $.Deferred().resolve(productComponentOptions).promise();
+    return $.getJSON("{{ route('product_component_options') }}").then(function (options) {
+        productComponentOptions = options || [];
+        return productComponentOptions;
+    });
+}
+
+function productComponentLabel(product) {
+    const capacity = product.product_capacity
+        ? ` — ${product.product_capacity} ${product.product_capacity_unit || ''}`.trim()
+        : '';
+    return `${product.product_name || 'Unnamed product'}${capacity} (${product.product_unit_measurement || 'unit'})`;
+}
+
+function renderProductComponentRows(parentProductId, components) {
+    const rows = document.getElementById('productComponentsRows');
+    const empty = document.getElementById('productComponentsEmpty');
+    const wrap = document.getElementById('productComponentsTableWrap');
+    const error = document.getElementById('productComponentsError');
+    if (!rows || !empty || !wrap) return;
+    rows.replaceChildren();
+    if (error) { error.textContent = ''; error.classList.add('d-none'); }
+
+    const optionsRequest = fetchProductComponentOptions();
+    optionsRequest.done(function (options) {
+        if (String(getSelectedProductId()) !== String(parentProductId)) return;
+        (components || []).forEach(function (component) {
+            const row = document.createElement('tr');
+            const productCell = document.createElement('td');
+            const select = document.createElement('select');
+            select.className = 'form-select form-select-sm product-component-product';
+            select.required = true;
+            select.innerHTML = '<option value="">Select component product</option>';
+            options.filter(product => Number(product.product_id) !== Number(parentProductId)).forEach(function (product) {
+                const option = document.createElement('option');
+                option.value = product.product_id;
+                option.textContent = productComponentLabel(product);
+                select.appendChild(option);
+            });
+            select.value = component.product_idx || '';
+            productCell.appendChild(select);
+
+            const quantityCell = document.createElement('td');
+            const quantity = document.createElement('input');
+            quantity.type = 'number';
+            quantity.className = 'form-control form-control-sm product-component-quantity';
+            quantity.min = '0.001';
+            quantity.step = '0.001';
+            quantity.required = true;
+            quantity.value = component.quantity || '';
+            quantity.setAttribute('aria-label', 'Quantity per set');
+            quantityCell.appendChild(quantity);
+
+            const actionCell = document.createElement('td');
+            actionCell.className = 'text-end';
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'btn btn-outline-danger btn-sm remove-product-component';
+            remove.innerHTML = '<i class="bi bi-trash" aria-hidden="true"></i><span class="visually-hidden">Remove component</span>';
+            actionCell.appendChild(remove);
+            row.append(productCell, quantityCell, actionCell);
+            rows.appendChild(row);
+        });
+        const hasRows = rows.children.length > 0;
+        empty.classList.toggle('d-none', hasRows);
+        wrap.classList.toggle('d-none', !hasRows);
+    }).fail(function () {
+        empty.textContent = 'Unable to load component products. Please refresh the page and try again.';
+    });
+    return optionsRequest;
+}
+
+$('#addProductComponent').on('click', function () {
+    $('#productComponentsSuccess').addClass('d-none');
+    const rows = document.getElementById('productComponentsRows');
+    if (!rows) return;
+    const components = Array.from(rows.querySelectorAll('tr')).map(function (row) {
+        return {
+            product_idx: row.querySelector('.product-component-product').value,
+            quantity: row.querySelector('.product-component-quantity').value
+        };
+    });
+    components.push({ product_idx: '', quantity: '' });
+    renderProductComponentRows(getSelectedProductId(), components);
+});
+
+$('#productComponentsRows').on('click', '.remove-product-component', function () {
+    $('#productComponentsSuccess').addClass('d-none');
+    $(this).closest('tr').remove();
+    const hasRows = document.getElementById('productComponentsRows').children.length > 0;
+    $('#productComponentsEmpty').toggleClass('d-none', hasRows);
+    $('#productComponentsTableWrap').toggleClass('d-none', !hasRows);
+});
+
 function hideProductUpdateSuccessNotice() {
     const notice = document.getElementById('productUpdateSuccessNotice');
     if (notice) notice.classList.add('d-none');
@@ -11,18 +108,23 @@ function ProductInfo(productId, options) {
     hideProductUpdateSuccessNotice();
 
     window.selectedProductId = productID;
+    $('#saveProductComponents, #addProductComponent').prop('disabled', true);
+    $('#productComponentsRows').empty();
+    $('#productComponentsTableWrap, #productComponentsSuccess, #productComponentsError').addClass('d-none');
+    $('#productComponentsEmpty').removeClass('d-none').text('Loading components...');
     $.ajax({
         url: "/product_info",
         type: "POST",
         data: { productID: productID, _token: "{{ csrf_token() }}" },
         success: function (response) {
-            if (!response) return;
+            if (!response || String(getSelectedProductId()) !== String(productID)) return;
 
             document.getElementById("update_product_name").value = response.product_name || '';
             document.getElementById("update_product_price").value = response.product_price || '';
             document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement || '';
             document.getElementById("update_product_capacity").value = response.product_capacity ?? '';
             document.getElementById("update_product_capacity_unit").value = response.product_capacity_unit || '';
+            const componentOptionsRequest = renderProductComponentRows(productID, response.components || []);
             const updatePhotoInput = document.getElementById('update_product_photo');
             updatePhotoInput.value = '';
             updatePhotoInput.dataset.currentPhotoPath = response.product_photo_path || '';
@@ -39,17 +141,29 @@ function ProductInfo(productId, options) {
             const isFuelProduct = updateFuelProductTabs();
             const $saveProductButton = $('#update-product');
             $saveProductButton.prop('disabled', true);
+            let mainOptionsRequest = $.Deferred().resolve().promise();
             if (typeof window.loadProductMainOptions === 'function') {
-                window.loadProductMainOptions(
+                mainOptionsRequest = window.loadProductMainOptions(
                     $('#update_product_main_idx'),
                     response.product_main_idx || null,
                     response.category_idx || null
-                ).done(function () {
-                    $saveProductButton.prop('disabled', false);
-                });
-            } else {
-                $saveProductButton.prop('disabled', false);
+                );
             }
+            mainOptionsRequest.always(function () {
+                if (String(getSelectedProductId()) === String(productID)) {
+                    $saveProductButton.prop('disabled', false);
+                }
+            });
+            componentOptionsRequest.done(function () {
+                if (String(getSelectedProductId()) === String(productID)) {
+                    $('#saveProductComponents, #addProductComponent').prop('disabled', false);
+                    $('#productComponentsEmpty').text('No components added. Add components if this product is an assembled set.');
+                }
+            }).fail(function () {
+                if (String(getSelectedProductId()) === String(productID)) {
+                    $('#productComponentsEmpty').text('Unable to load component products. Please refresh the page and try again.');
+                }
+            });
             if (isFuelProduct) {
                 if (typeof LoadProductTank === 'function') LoadProductTank();
                 if (typeof LoadProductPump === 'function') LoadProductPump();
@@ -158,6 +272,57 @@ $('#ProductformEdit').on('submit', function (event) {
             updateButton.innerHTML = originalButtonHtml;
         }
     });
+});
+
+$('#productComponentsForm').on('submit', function (event) {
+    event.preventDefault();
+    const productID = getSelectedProductId();
+    const $error = $('#productComponentsError');
+    const $button = $('#saveProductComponents');
+    $('#productComponentsSuccess').addClass('d-none');
+    $error.addClass('d-none').text('');
+    if (!productID) {
+        $error.text('Select a product before saving components.').removeClass('d-none');
+        return;
+    }
+    if (!this.checkValidity()) {
+        this.reportValidity();
+        return;
+    }
+    const components = Array.from(document.querySelectorAll('#productComponentsRows tr')).map(function (row) {
+        return { product_idx: row.querySelector('.product-component-product').value, quantity: row.querySelector('.product-component-quantity').value };
+    });
+    if (new Set(components.map(item => item.product_idx)).size !== components.length) {
+        $error.text('Each component product can only be listed once.').removeClass('d-none');
+        return;
+    }
+    $button.prop('disabled', true);
+    $('#addProductComponent, #productComponentsRows input, #productComponentsRows select, #productComponentsRows button').prop('disabled', true);
+    $.ajax({
+        url: "{{ route('product_components_save') }}",
+        type: 'POST',
+        data: { productID: productID, components: JSON.stringify(components), _token: "{{ csrf_token() }}" },
+        success: function () {
+            if (String(getSelectedProductId()) === String(productID)) $('#productComponentsSuccess').removeClass('d-none');
+        },
+        error: function (xhr) {
+            if (String(getSelectedProductId()) !== String(productID)) return;
+            const response = xhr.responseJSON || {};
+            const errors = response.errors || {};
+            const firstError = Object.values(errors).flat()[0];
+            $error.text(firstError || response.message || 'Unable to save components. Please try again.').removeClass('d-none');
+        },
+        complete: function () {
+            if (String(getSelectedProductId()) === String(productID)) {
+                $button.prop('disabled', false);
+                $('#addProductComponent, #productComponentsRows input, #productComponentsRows select, #productComponentsRows button').prop('disabled', false);
+            }
+        }
+    });
+});
+
+$('#productComponentsForm').on('input change', 'input, select', function () {
+    $('#productComponentsSuccess, #productComponentsError').addClass('d-none');
 });
 
 $('#ProductformEdit').on('input change', 'input, select, textarea', hideProductUpdateSuccessNotice);

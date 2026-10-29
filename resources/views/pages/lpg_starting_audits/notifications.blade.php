@@ -11,7 +11,7 @@
                             <div class="small text-secondary mt-2">{{ $notification->branch_name ?? 'LPG branch' }} · Report {{ $notification->report_date }} · Shift {{ $notification->shift }} · {{ \Carbon\Carbon::parse($notification->created_at)->format('M d, Y h:i A') }}</div>
                             @if(in_array($notification->notification_type, ['SUBMITTED'], true) && in_array($data->user_type, ['Admin', 'SUAdmin', 'Accounting_Staff'], true))
                                 <a class="btn btn-sm btn-outline-primary mt-2" href="{{ route('lpg.starting-audits.show', $notification->audit_id) }}">Review audit</a>
-                            @elseif(in_array($notification->notification_type, ['APPROVED', 'RETURNED'], true))
+                            @elseif(in_array($notification->notification_type, ['APPROVED', 'RETURNED', 'REVOKED'], true))
                                 <a class="btn btn-sm btn-outline-primary mt-2" href="{{ route('cashiers_report_form_lpg', $notification->report_id) }}">Open LPG report</a>
                             @endif
                         </div>

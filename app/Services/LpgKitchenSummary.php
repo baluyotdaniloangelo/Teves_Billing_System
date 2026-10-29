@@ -84,6 +84,85 @@ class LpgKitchenSummary
         })->sortBy(function ($row) { return $row['main_product_name'] . ' ' . $row['product_name']; }, SORT_NATURAL | SORT_FLAG_CASE)->values();
     }
 
+    /** Include configured kitchen products even before any movement has been encoded. */
+    public function withCatalog(int $reportId, Collection $rows): Collection
+    {
+        $configuredIds = LpgKitchenProducts::ids();
+        $setSales = app(LpgSetComponentSales::class)->forReport($reportId);
+        $componentIds = DB::table('teves_product_table')
+            ->whereIn('product_id', array_keys($setSales['quantities']))
+            ->whereIn('category_idx', LpgKitchenProducts::categoryIds())
+            ->whereNotIn('product_id', LpgRegulatorProducts::ids())
+            ->whereNull('deleted_at')->pluck('product_id')->map(function ($id) { return (int) $id; })->all();
+        $productIds = array_values(array_unique(array_merge($configuredIds, $componentIds)));
+        if (!$productIds) return collect();
+
+        $branchId = DB::table('teves_cashiers_report')->where('cashiers_report_id', $reportId)->value('teves_branch');
+        $prices = DB::table('teves_product_branch_price_table')
+            ->where('branch_idx', $branchId)->whereIn('product_idx', $productIds)
+            ->get(['product_idx', 'branch_price'])->groupBy('product_idx');
+        $catalog = DB::table('teves_product_table as product')
+            ->leftJoin('teves_product_main_table as main', function ($join) {
+                $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
+            })
+            ->whereIn('product.product_id', $productIds)->whereNull('product.deleted_at')
+            ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
+                'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
+                'product.product_price', 'main.product_name as main_product_name']);
+        $components = DB::table('teves_product_component_table as component')
+            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'component.component_product_idx')
+            ->whereIn('component.product_idx', $productIds)
+            ->orderBy('product.product_name')->orderBy('component.component_product_idx')
+            ->get(['component.product_idx as parent_product_idx', 'component.component_product_idx', 'component.quantity',
+                'product.product_name', 'product.product_capacity', 'product.product_capacity_unit',
+                'product.product_unit_measurement', 'product.deleted_at'])->groupBy('parent_product_idx');
+
+        $rowsByProduct = $rows->keyBy('product_idx');
+        return $catalog->map(function ($product) use ($rowsByProduct, $components, $prices, $configuredIds, $setSales) {
+            $productId = (int) $product->product_id;
+            $row = $rowsByProduct->get($productId);
+            if (!$row) {
+                $row = ['product_idx' => $productId];
+                foreach (array_diff(self::MODES, ['TOTAL_SOLD']) as $mode) {
+                    $key = strtolower($mode);
+                    $row[$key . '_quantity'] = 0;
+                    $row[$key . '_count'] = 0;
+                }
+                $row += ['total_sold_quantity' => 0, 'total_sales' => 0, 'net_sales' => 0,
+                    'unit_price' => null, 'mixed_prices' => false, 'ending_quantity' => null];
+            }
+            $branchPrices = $prices->get($productId, collect())->pluck('branch_price')
+                ->filter(function ($price) { return $price !== null; })
+                ->map(function ($price) { return (float) $price; })->unique()->values();
+            $catalogPrice = $branchPrices->count() === 1 ? $branchPrices->first() : $product->product_price;
+            $row['product_name'] = $product->product_name;
+            $row['main_product_name'] = $product->main_product_name ?: 'Kitchen Products & Accessories';
+            $row['product_main_idx'] = $product->product_main_idx;
+            $row['product_unit_measurement'] = $product->product_unit_measurement;
+            $row['product_capacity'] = $product->product_capacity;
+            $row['product_capacity_unit'] = $product->product_capacity_unit;
+            $row['catalog_unit_price'] = $catalogPrice;
+            $row['report_only'] = !in_array($productId, $configuredIds, true);
+            $row['sold_per_set_quantity'] = round((float) ($setSales['quantities'][$productId] ?? 0), 5);
+            if (($row['unit_price'] ?? null) === null && empty($row['mixed_prices'])) $row['unit_price'] = $catalogPrice;
+            $row['template_ending_quantity'] = !empty($row['beginning_count'])
+                ? round((float) $row['beginning_quantity'] + (float) $row['delivery_quantity'] - (float) $row['total_sold_quantity'], 2)
+                : null;
+            $row['template_actual_quantity'] = $row['template_ending_quantity'];
+            $row['components'] = $components->get($productId, collect())->map(function ($component) {
+                return ['product_idx' => (int) $component->component_product_idx,
+                    'product_name' => $component->product_name ?: 'Unavailable product',
+                    'product_capacity' => $component->product_capacity,
+                    'product_capacity_unit' => $component->product_capacity_unit,
+                    'product_unit_measurement' => $component->product_unit_measurement,
+                    'quantity' => (float) $component->quantity,
+                    'is_active' => $component->product_name !== null && $component->deleted_at === null];
+            })->values()->all();
+            $row['is_set'] = count($row['components']) > 0;
+            return $row;
+        })->sortBy(function ($row) { return $row['main_product_name'] . ' ' . $row['product_name']; }, SORT_NATURAL | SORT_FLAG_CASE)->values();
+    }
+
     private function entry($mode, $kind, $id, $productId, $quantity, $account, $reference, $remarks): array
     {
         return ['mode' => $mode, 'kind' => $kind, 'record_id' => (int) $id, 'product_idx' => (int) $productId,

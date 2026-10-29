@@ -83,34 +83,35 @@ $(function () {
             });
     });
 
-    $(document).on('click', '.DeleteLpgInventory', function () {
-        $('#lpg_inventory_delete_id').val($(this).data('id'));
-        $('#lpg_inventory_delete_item').text($(this).data('item') || 'this inventory record');
-        showLpgInventoryModal('#CashierReportLpgInventoryDeleteModal');
+    $(document).on('click', '.RequestRevokeLpgInventory', function () {
+        $('#lpg_inventory_revoke_id').val($(this).data('id'));
+        $('#lpg_inventory_revoke_number').text($(this).data('number'));
+        $('#lpg_inventory_revoke_item').text($(this).data('item'));
+        $('#lpg_inventory_revoke_reason').val('');
+        showLpgInventoryModal('#CashierReportLpgInventoryRevokeModal');
     });
 
-    $('#confirm-delete-lpg-inventory').on('click', function () {
-        const id = $('#lpg_inventory_delete_id').val();
+    $('#submit-lpg-inventory-revoke').on('click', function () {
         const button = $(this);
-        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Deleting...');
-
-        $.post("{{ route('DeleteLpgInventory') }}", { cashiers_report_lpg_inventory_id: id })
-            .done(function (response) {
-                hideLpgInventoryModal('#CashierReportLpgInventoryDeleteModal');
-                reloadLpgInventoryTables();
-                if (typeof showSuccessModal === 'function') {
-                    showSuccessModal(response.message || 'Inventory record deleted successfully.');
-                }
-            })
-            .fail(function (xhr) {
-                if (typeof showValidationErrorModal === 'function') {
-                    showValidationErrorModal(xhr.responseJSON?.message || 'Unable to delete the inventory record.');
-                }
-            })
-            .always(function () {
-                button.prop('disabled', false).html('<i class="bi bi-trash3-fill me-2"></i>Delete');
-            });
+        const reason = $('#lpg_inventory_revoke_reason').val().trim();
+        if (!reason) {
+            $('#lpg_inventory_revoke_reason').addClass('is-invalid');
+            return;
+        }
+        button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Submitting...');
+        $.post("{{ route('lpg.inventory.revoke-request') }}", {
+            cashiers_report_lpg_inventory_id: $('#lpg_inventory_revoke_id').val(), reason: reason
+        }).done(function (response) {
+            hideLpgInventoryModal('#CashierReportLpgInventoryRevokeModal');
+            reloadLpgInventoryTables();
+            if (typeof showSuccessModal === 'function') showSuccessModal(response.message);
+        }).fail(function (xhr) {
+            if (typeof showValidationErrorModal === 'function') showValidationErrorModal(xhr.responseJSON?.message || 'Unable to submit the revoke request.');
+        }).always(function () {
+            button.prop('disabled', false).html('<i class="bi bi-send me-2"></i>Request Revoke');
+        });
     });
+    $('#lpg_inventory_revoke_reason').on('input', function () { $(this).removeClass('is-invalid'); });
 
     $('#lpg-submit-starting-audit').on('click', function () {
         const button = $(this);
@@ -144,6 +145,7 @@ const LpgInventoryProductScopes = {
 function initLpgInventoryTables() {
     LpgBeginningInventoryTable = createLpgInventoryTable('#LpgBeginningInventoryTable', 'BEGINNING', [
         { data: null, className: 'text-center', orderable: false, render: function (data, type, row, meta) { return meta.row + 1; } },
+        { data: 'transaction_no', className: 'text-nowrap fw-semibold' },
         { data: null, render: function (data, type, row) { return lpgInventoryProductLabel(row); } },
         { data: 'quantity', className: 'text-end fw-semibold', render: lpgInventoryQuantity },
         { data: 'bo_returned_customer_quantity', className: 'text-end', render: lpgInventoryQuantity },
@@ -155,6 +157,7 @@ function initLpgInventoryTables() {
 
     LpgDeliveryTable = createLpgInventoryTable('#LpgDeliveryTable', 'DELIVERY', [
         { data: null, className: 'text-center', orderable: false, render: function (data, type, row, meta) { return meta.row + 1; } },
+        { data: 'transaction_no', className: 'text-nowrap fw-semibold' },
         { data: 'supplier_name', defaultContent: '-' },
         { data: 'delivery_reference_no', defaultContent: '-' },
         { data: null, render: function (data, type, row) { return lpgInventoryProductLabel(row); } },
@@ -165,6 +168,7 @@ function initLpgInventoryTables() {
 
     LpgBoReplacementTable = createLpgInventoryTable('#LpgBoReplacementTable', 'BO_REPLACEMENT', [
         { data: null, className: 'text-center', orderable: false, render: function (data, type, row, meta) { return meta.row + 1; } },
+        { data: 'transaction_no', className: 'text-nowrap fw-semibold' },
         { data: 'supplier_name', defaultContent: '-' },
         { data: 'delivery_reference_no', defaultContent: '-' },
         { data: null, render: function (data, type, row) { return lpgInventoryProductLabel(row); } },
@@ -212,8 +216,10 @@ function lpgInventoryActionColumn(mode) {
         render: function (data, type, row) {
             const item = lpgInventoryProductLabel(row).replace(/"/g, '&quot;');
             if (mode === 'BEGINNING' && LpgStartingAuditLocked) return '<span class="badge text-bg-secondary">' + (LpgStartingAuditStatus || 'Locked') + '</span>';
-            return `<button type="button" class="btn btn-sm btn-primary EditLpgInventory" data-id="${row.cashiers_report_lpg_inventory_id}" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                    <button type="button" class="btn btn-sm btn-danger DeleteLpgInventory" data-id="${row.cashiers_report_lpg_inventory_id}" data-item="${item}" title="Delete"><i class="bi bi-trash3-fill"></i></button>`;
+            if (row.revoke_request_pending) return '<span class="badge text-bg-warning">Revoke pending</span>';
+            const editButton = `<button type="button" class="btn btn-sm btn-primary EditLpgInventory" data-id="${row.cashiers_report_lpg_inventory_id}" title="Edit"><i class="bi bi-pencil-square"></i></button>`;
+            if (mode === 'BEGINNING') return editButton;
+            return `${editButton} <button type="button" class="btn btn-sm btn-outline-danger RequestRevokeLpgInventory" data-id="${row.cashiers_report_lpg_inventory_id}" data-number="${row.transaction_no}" data-item="${item}" title="Request to revoke"><i class="bi bi-arrow-counterclockwise me-1"></i>Request Revoke</button>`;
         }
     };
 }
@@ -288,11 +294,13 @@ function loadLpgStartingAuditStatus() {
             const audit = response.audit;
             LpgStartingAuditStatus = audit?.status || 'NOT_STARTED';
             LpgStartingAuditLocked = ['PENDING', 'APPROVED'].includes(LpgStartingAuditStatus);
+            $(document).trigger('lpg:starting-audit-status-changed', [LpgStartingAuditStatus]);
             const labels = {NOT_STARTED: 'No starting audit has been encoded yet.', DRAFT: 'Draft — only this report can use these counts until submitted and approved.', PENDING: 'Pending approval — future reports will continue using the latest approved audit.', APPROVED: 'Approved — this audit carries forward from ' + (audit?.audit_date || ''), RETURNED: 'Returned for correction — edit the counts and submit again.'};
             panel.find('.lpg-audit-status-label').text(labels[LpgStartingAuditStatus] || LpgStartingAuditStatus);
             panel.removeClass('alert-info alert-warning alert-success').addClass(LpgStartingAuditStatus === 'APPROVED' ? 'alert-success' : (LpgStartingAuditStatus === 'RETURNED' ? 'alert-warning' : 'alert-info'));
             $('.lpg-inventory-add[data-inventory-mode="BEGINNING"]').prop('disabled', LpgStartingAuditLocked).attr('title', LpgStartingAuditLocked ? 'Submitted audits are read-only until returned for correction.' : '');
             $('#lpg-submit-starting-audit').toggleClass('d-none', !audit || !['DRAFT', 'RETURNED'].includes(LpgStartingAuditStatus)).prop('disabled', false).html('<i class="bi bi-send me-1"></i>' + (LpgStartingAuditStatus === 'RETURNED' ? 'Resubmit for Approval' : 'Submit for Approval'));
+            $('#lpg-review-starting-audit').toggleClass('d-none', !audit || !['PENDING', 'APPROVED'].includes(LpgStartingAuditStatus)).attr('href', audit?.audit_id ? '/lpg-starting-audits/' + audit.audit_id : '#');
             const reason = audit?.return_reason;
             $('#lpg-starting-audit-return-reason').toggleClass('d-none', !(LpgStartingAuditStatus === 'RETURNED' && reason)).text(reason ? 'Returned for correction: ' + reason : '');
             if (LpgBeginningInventoryTable) LpgBeginningInventoryTable.ajax.reload(null, false);

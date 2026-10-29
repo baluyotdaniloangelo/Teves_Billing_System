@@ -56,6 +56,17 @@
 .sms-page .sms-full-message { white-space: pre-wrap; overflow-wrap: anywhere; padding: 18px; border-radius: 8px; background: #f7f9f4; font-size: 13px; color: #52654b; }
 .sms-page dialog { border: 1px solid var(--sms-line); border-radius: 14px; padding: 28px; width: min(520px,90vw); color: #52654b; }
 .sms-page dialog::backdrop { background: #162d3a66; }
+.sms-page .sms-history-dialog { width: min(1200px,95vw); max-width: 95vw; max-height: 88vh; padding: 0; overflow: hidden; }
+.sms-history-open { overflow: hidden; }
+.sms-history-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 23px; border-bottom: 1px solid #e3e8df; background: #fff; }
+.sms-page .sms-history-dialog-head h2 { margin: 0; font-size: 18px; }
+.sms-history-content { overflow-y: auto; max-height: calc(88vh - 78px); overscroll-behavior: contain; }
+.sms-page .sms-history-summary h3 { font-size: 15px; color: #40583e; margin: 0 0 10px; }
+.sms-history-totals { display: flex; flex-wrap: wrap; gap: 20px; margin: 0 0 18px; font-size: 12px; color: #718368; }
+.sms-history-totals strong { color: #40583e; margin-right: 4px; }
+.sms-history-summary .sms-help:last-child { margin-bottom: 0; }
+.sms-history-state { padding: 25px; color: #718368; font-size: 13px; }
+.sms-history-content > .fuel-button { margin: 0 25px 25px; }
 .sms-page dialog h2 { font-size: 21px; margin-bottom: 20px; }
 .sms-page dialog p { margin: 14px 0; font-size: 13px; }
 .sms-confirm-message { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 35vh; overflow: auto; background: #f7f9f4; padding: 16px; border-radius: 8px; }

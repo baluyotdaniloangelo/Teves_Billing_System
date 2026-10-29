@@ -176,9 +176,9 @@
     .lpg-report-theme #LPGTab .nav-link.active { color: var(--lpg-highlight); background-color: var(--lpg-primary); border-color: var(--lpg-primary); box-shadow: 0 .2rem .6rem rgba(27, 66, 66, .18) !important; }
 
     .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs) { gap: .25rem; padding: .35rem; border: 1px solid var(--lpg-border); border-radius: .9rem; background-color: var(--lpg-accent-soft); }
-    .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs) .nav-link { color: var(--lpg-primary); border: 1px solid transparent; border-radius: .7rem; font-weight: 600; }
-    .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs) .nav-link:hover:not(.active) { color: var(--lpg-dark); background-color: var(--lpg-surface); }
-    .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs) .nav-link.active { color: var(--lpg-highlight); background-color: var(--lpg-primary); border-color: var(--lpg-primary); }
+    .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs, #lpgKitchenSubTabs) .nav-link { color: var(--lpg-primary); border: 1px solid transparent; border-radius: .7rem; font-weight: 600; }
+    .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs, #lpgKitchenSubTabs) .nav-link:hover:not(.active) { color: var(--lpg-dark); background-color: var(--lpg-surface); }
+    .lpg-report-theme :is(#lpgCollectionReportSubTabs, #lpgInventorySubTabs, #lpgKitchenSubTabs) .nav-link.active { color: var(--lpg-highlight); background-color: var(--lpg-primary); border-color: var(--lpg-primary); }
 
     :is(.lpg-report-theme, .lpg-report-modal-theme) .table {
         --bs-table-bg: #fff;
@@ -207,14 +207,14 @@
     :is(.lpg-report-theme, .lpg-report-modal-theme) .table thead .btn:not(:hover) .bi { color: var(--lpg-primary) !important; }
     .lpg-report-theme .table thead .lpg-summary-actions th { padding: .5rem; vertical-align: middle; }
     .lpg-report-theme .lpg-summary-source-buttons .btn { flex: 0 0 auto; white-space: nowrap; }
-    .lpg-report-theme :is(#LpgSellOutTable, #LpgKitchenTable, #LpgEmptyInventoryTable, #LpgRegulatorInventoryTable) {
+    .lpg-report-theme :is(#LpgSellOutTable, #LpgKitchenTable, #LpgKitchenSetsTable, #LpgKitchenIndividualTable, #LpgEmptyInventoryTable, #LpgRegulatorInventoryTable) {
         --lpg-grid-border: #93A99F;
         --bs-table-border-color: var(--lpg-grid-border);
         border-collapse: collapse !important;
         border-spacing: 0;
         border: 1px solid var(--lpg-grid-border) !important;
     }
-    .lpg-report-theme :is(#LpgSellOutTable, #LpgKitchenTable, #LpgEmptyInventoryTable, #LpgRegulatorInventoryTable) :is(th, td) {
+    .lpg-report-theme :is(#LpgSellOutTable, #LpgKitchenTable, #LpgKitchenSetsTable, #LpgKitchenIndividualTable, #LpgEmptyInventoryTable, #LpgRegulatorInventoryTable) :is(th, td) {
         border: 1px solid var(--lpg-grid-border) !important;
     }
     :is(.lpg-report-theme, .lpg-report-modal-theme) .table .table-light { --bs-table-bg: var(--lpg-surface); --bs-table-color: var(--lpg-primary); }

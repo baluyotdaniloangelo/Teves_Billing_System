@@ -309,8 +309,78 @@ class ProductController extends Controller
 
 		$productID = $request->productID;
 		$data = ProductModel::find($productID, ['product_name','product_price','product_unit_measurement','product_capacity','product_capacity_unit','product_photo_path','category_idx','product_main_idx']);
+		if ($data) {
+			$data->components = DB::table('teves_product_component_table as component')
+				->join('teves_product_table as product', 'product.product_id', '=', 'component.component_product_idx')
+				->where('component.product_idx', $productID)
+				->whereNull('product.deleted_at')
+				->orderBy('product.product_name')
+				->get([
+					'component.component_product_idx as product_idx',
+					'component.quantity',
+					'product.product_name',
+					'product.product_capacity',
+					'product.product_capacity_unit',
+					'product.product_unit_measurement',
+				]);
+		}
 		return response()->json($data);
 		
+	}
+
+	public function product_component_options(){
+		$options = ProductModel::query()
+			->orderBy('product_name')
+			->get(['product_id', 'product_name', 'product_capacity', 'product_capacity_unit', 'product_unit_measurement']);
+
+		return response()->json($options);
+	}
+
+	public function product_components_save(Request $request){
+		if (is_string($request->input('components'))) {
+			$components = json_decode($request->input('components'), true);
+			if (json_last_error() !== JSON_ERROR_NONE || !is_array($components)) {
+				return response()->json(['errors' => ['components' => ['The set components payload is invalid.']]], 422);
+			}
+			$request->merge(['components' => $components]);
+		}
+
+		$validated = $request->validate([
+			'productID' => ['required', 'integer', Rule::exists('teves_product_table', 'product_id')->whereNull('deleted_at')],
+			'components' => ['present', 'array', 'max:50'],
+			'components.*' => ['required', 'array'],
+			'components.*.product_idx' => [
+				'required', 'integer', 'distinct',
+				Rule::exists('teves_product_table', 'product_id')->whereNull('deleted_at'),
+				Rule::notIn([$request->input('productID')]),
+			],
+			'components.*.quantity' => ['required', 'numeric', 'min:0.001', 'max:999999999.999', 'regex:/^\d+(?:\.\d{1,3})?$/'],
+		], [
+			'components.*.product_idx.not_in' => 'A product cannot be listed as one of its own components.',
+			'components.*.product_idx.distinct' => 'Each component product can only be listed once.',
+			'components.*.quantity.regex' => 'Use a quantity with up to three decimal places.',
+		]);
+
+		DB::transaction(function () use ($validated) {
+			// Serialize component updates for the same product, including an empty list.
+			$product = ProductModel::query()->lockForUpdate()->findOrFail($validated['productID']);
+			DB::table('teves_product_component_table')->where('product_idx', $product->product_id)->delete();
+			$now = now();
+			$rows = collect($validated['components'])->map(function ($component) use ($product, $now) {
+				return [
+					'product_idx' => $product->product_id,
+					'component_product_idx' => $component['product_idx'],
+					'quantity' => $component['quantity'],
+					'created_by_user_idx' => Session::get('loginID'),
+					'updated_by_user_idx' => Session::get('loginID'),
+					'created_at' => $now,
+					'updated_at' => $now,
+				];
+			})->all();
+			if ($rows) DB::table('teves_product_component_table')->insert($rows);
+		});
+
+		return response()->json(['success' => 'Set components saved successfully.']);
 	}
 
 	/*Delete Product Information*/
@@ -435,6 +505,14 @@ class ProductController extends Controller
 			return response()->json(['message' => 'Product not found.'], 404);
 		}
 
+		if ($request->has('components') && is_string($request->input('components'))) {
+			$decodedComponents = json_decode($request->input('components'), true);
+			if (!is_array($decodedComponents)) {
+				return response()->json(['errors' => ['components' => ['The set components payload is invalid.']]], 422);
+			}
+			$request->merge(['components' => $decodedComponents]);
+		}
+
 		$hasCapacityInput = $request->has('product_capacity') || $request->has('product_capacity_unit');
 		$productCapacity = $hasCapacityInput
 			? ($request->filled('product_capacity') ? $request->input('product_capacity') : null)
@@ -469,6 +547,9 @@ class ProductController extends Controller
           'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
           'product_photo'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
           'remove_product_photo'   => 'sometimes|boolean',
+		  'components' => 'sometimes|array|max:50',
+		  'components.*.product_idx' => ['required', 'integer', 'distinct', Rule::exists('teves_product_table', 'product_id')->whereNull('deleted_at')],
+		  'components.*.quantity' => 'required|numeric|gt:0|max:999999999.999',
         ], 
         [
 			'product_name.required' => 'Product Name is required',
@@ -476,6 +557,13 @@ class ProductController extends Controller
 			'product_price.required' => 'Price is Required'
         ]
 		);
+		if ($request->has('components')) {
+			foreach ($request->input('components', []) as $component) {
+				if ((int) $component['product_idx'] === (int) $Product->product_id) {
+					return response()->json(['errors' => ['components' => ['A product cannot be listed as one of its own components.']]], 422);
+				}
+			}
+		}
 	
 			$mainProductIdx = $request->has('product_main_idx')
 				? ($request->product_main_idx ?: null)
@@ -530,7 +618,27 @@ class ProductController extends Controller
 				$Product->product_photo_path = null;
 			}
 						
-			$result = $Product->update();
+			$result = DB::transaction(function () use ($Product, $request) {
+				$updated = $Product->update();
+				if ($updated && $request->has('components')) {
+					DB::table('teves_product_component_table')->where('product_idx', $Product->product_id)->delete();
+					$now = now();
+					$rows = collect($request->input('components', []))->map(function ($component) use ($Product, $now) {
+						return [
+							'product_idx' => $Product->product_id,
+							'component_product_idx' => $component['product_idx'],
+							'quantity' => $component['quantity'],
+							'created_by_user_idx' => Session::get('loginID'),
+							'updated_by_user_idx' => Session::get('loginID'),
+							'created_at' => $now,
+							'updated_at' => $now,
+						];
+					})->all();
+					if ($rows) DB::table('teves_product_component_table')->insert($rows);
+				}
+
+				return $updated;
+			});
 			if ($result && $oldProductPhotoPath && $oldProductPhotoPath !== $Product->product_photo_path) {
 				Storage::disk('public')->delete($oldProductPhotoPath);
 			} elseif (!$result && $newProductPhotoPath) {

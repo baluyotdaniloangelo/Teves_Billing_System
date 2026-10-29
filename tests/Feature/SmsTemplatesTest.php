@@ -320,4 +320,31 @@ class SmsTemplatesTest extends TestCase
         $this->get('/sms_blast/clients?q=Maria')->assertRedirect('/');
         $this->withSession(['loginID' => 1])->get('/sms_blast')->assertOk()->assertSee('Individual client')->assertSee('sms-client-search', false)->assertSee('sms-client-results', false);
     }
+
+    public function test_history_view_opens_details_in_a_dialog_and_supports_existing_campaign_links()
+    {
+        $this->client(1);
+        $campaign = app(SmsBirthdayService::class)->prepare(now(), config('sms.templates.birthday.message'), 1);
+        $this->withSession(['loginID' => 1])->get('/sms_blast?tab=history&status=Pending')
+            ->assertOk()->assertSee('id="sms-history-dialog"', false)->assertSee('aria-haspopup="dialog"', false)
+            ->assertSee('data-sms-campaign-url=', false)->assertSee('data-auto-open="0"', false);
+        $this->withSession(['loginID' => 1])->get('/sms_blast?tab=history&campaign_id='.$campaign->campaign_id)
+            ->assertOk()->assertSee('data-auto-open="1"', false)->assertSee('Happy Birthday, Juan,');
+        Http::assertNothingSent();
+    }
+
+    public function test_campaign_popup_endpoint_is_authenticated_paginated_and_read_only()
+    {
+        $this->get('/sms_blast/campaigns/1')->assertRedirect('/');
+        for ($id = 1; $id <= 26; $id++) $this->client($id, ['client_contact_number' => '0917'.str_pad((string) $id, 7, '0', STR_PAD_LEFT), 'client_first_name' => 'Client'.$id]);
+        $campaign = app(SmsBirthdayService::class)->prepare(now(), config('sms.templates.birthday.message'), 1);
+        $this->withSession(['loginID' => 1])->get('/sms_blast/campaigns/'.$campaign->campaign_id)
+            ->assertOk()->assertSee('Personalized message')->assertSee('Happy Birthday, Client1,')
+            ->assertDontSee('Happy Birthday, Client26,')->assertSee('recipients_page=2', false)->assertDontSee('<main', false);
+        $this->withSession(['loginID' => 1])->get('/sms_blast/campaigns/'.$campaign->campaign_id.'?recipients_page=2')
+            ->assertOk()->assertSee('Happy Birthday, Client26,')->assertDontSee('Happy Birthday, Client1,');
+        $this->withSession(['loginID' => 1])->get('/sms_blast/campaigns/999999')->assertNotFound();
+        $this->assertSame(26, DB::table('teves_sms_logs_table')->where('sms_status', 'Pending')->count());
+        Http::assertNothingSent();
+    }
 }

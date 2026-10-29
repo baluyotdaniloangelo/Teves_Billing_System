@@ -78,12 +78,10 @@
         return array_sum(array_slice($widths, $index, $span)) / $widthTotal * 100;
     };
     $groups = $sellOutRows->groupBy('print_group_key');
-    $kitchenGroups = $kitchenRows->groupBy('print_group_key');
-    $kitchenWidths = [4, 17, 8, 5.5, 5.5, 6, 4.5, 5, 6.5, 6.5, 5, 5, 6, 6.5, 7, 6, 5];
-    $kitchenWidthTotal = array_sum($kitchenWidths);
-    $kitchenColumnWidth = static function ($index, $span = 1) use ($kitchenWidths, $kitchenWidthTotal) {
-        return array_sum(array_slice($kitchenWidths, $index, $span)) / $kitchenWidthTotal * 100;
-    };
+    $kitchenSections = [
+        'SET' => $kitchenRows->filter(function ($row) { return !empty($row['is_set']); })->groupBy('main_product_name'),
+        'PRODUCT SOLD INDIVIDUALLY' => $kitchenRows->filter(function ($row) { return empty($row['is_set']); })->groupBy('main_product_name'),
+    ];
 @endphp
 <table>
     <colgroup>
@@ -149,34 +147,23 @@
     </tbody>
 </table>
 <div class="kitchen-report">
-    <table>
-        <colgroup>
-            @foreach ($kitchenWidths as $width)
-                <col style="width: {{ $width / $kitchenWidthTotal * 100 }}%">
-            @endforeach
-        </colgroup>
+    @foreach ($kitchenSections as $sectionTitle => $kitchenGroups)
+    <table style="margin-top: 5pt;">
+        @if ($sectionTitle === 'PRODUCT SOLD INDIVIDUALLY')
+        <colgroup><col style="width: 5%"><col style="width: 27%"><col style="width: 8%"><col style="width: 8%"><col style="width: 7%"><col style="width: 7%"><col style="width: 8%"><col style="width: 10%"><col style="width: 10%"><col style="width: 10%"></colgroup>
+        @else
+        <colgroup><col style="width: 5%"><col style="width: 31%"><col style="width: 9%"><col style="width: 8%"><col style="width: 8%"><col style="width: 9%"><col style="width: 10%"><col style="width: 10%"><col style="width: 10%"></colgroup>
+        @endif
         <thead>
+            <tr><th colspan="{{ $sectionTitle === 'PRODUCT SOLD INDIVIDUALLY' ? 10 : 9 }}" class="title">{{ $sectionTitle }}</th></tr>
             <tr>
-                <th style="width: {{ $kitchenColumnWidth(0, 2) }}%" colspan="2" rowspan="2" class="title">KITCHEN PRODUCTS &amp; ACCESSORIES</th>
-                <th style="width: {{ $kitchenColumnWidth(2) }}%" rowspan="2">BEGINNING<br>INVENTORY</th>
-                <th style="width: {{ $kitchenColumnWidth(3, 3) }}%" colspan="3">ADD (+)</th>
-                <th style="width: {{ $kitchenColumnWidth(6, 5) }}%" colspan="5">LESS (-)</th>
-                <th style="width: {{ $kitchenColumnWidth(11) }}%" rowspan="2">TOTAL<br>SOLD</th>
-                <th style="width: {{ $kitchenColumnWidth(12) }}%" rowspan="2">UNIT<br>PRICE</th>
-                <th style="width: {{ $kitchenColumnWidth(13) }}%" rowspan="2">TOTAL SALES<br>IN PESO</th>
-                <th style="width: {{ $kitchenColumnWidth(14) }}%" rowspan="2" class="small">THEORETICAL<br>ENDING INV.</th>
-                <th style="width: {{ $kitchenColumnWidth(15) }}%" rowspan="2">ACTUAL<br>END. INV.</th>
-                <th style="width: {{ $kitchenColumnWidth(16) }}%" rowspan="2" class="small">VARIANCE</th>
-            </tr>
-            <tr>
-                <th style="width: {{ $kitchenColumnWidth(3) }}%">DELIVERY</th>
-                <th style="width: {{ $kitchenColumnWidth(4) }}%">DAMAGED</th>
-                <th style="width: {{ $kitchenColumnWidth(5) }}%">B.O.<br>REPLACEMENT</th>
-                <th style="width: {{ $kitchenColumnWidth(6) }}%">SWAP</th>
-                <th style="width: {{ $kitchenColumnWidth(7) }}%">ON-LOAN</th>
-                <th style="width: {{ $kitchenColumnWidth(8) }}%">CONSIGNMENT</th>
-                <th style="width: {{ $kitchenColumnWidth(9) }}%">RAFFLE /<br>PRODUCT EXPENSES</th>
-                <th style="width: {{ $kitchenColumnWidth(10) }}%">WALK-IN</th>
+                <th colspan="2" class="title">KITCHEN PRODUCTS &amp; ACCESSORIES</th>
+                <th>BEGINNING<br>INVENTORY</th><th>DELIVERY</th>
+                @if ($sectionTitle === 'PRODUCT SOLD INDIVIDUALLY')
+                    <th>SOLD FROM<br>SET</th>
+                @endif
+                <th>TOTAL SOLD</th><th>UNIT PRICE</th>
+                <th>TOTAL SALES<br>IN PESOS</th><th>THEORETICAL ENDING<br>INVENTORY</th><th>ACTUAL ENDING<br>INVENTORY</th>
             </tr>
         </thead>
         <tbody>
@@ -185,32 +172,45 @@
                 @foreach ($chunk as $row)
                     <tr>
                         @if ($loop->first)
-                            <td style="width: {{ $kitchenColumnWidth(0) }}%" class="group" rowspan="{{ $chunk->count() }}"><span class="group-label">{{ $row['print_group_name'] ?? 'Kitchen Products & Accessories' }}</span></td>
+                            <td class="group" rowspan="{{ $chunk->count() }}"><span class="{{ $chunk->count() >= 5 ? 'group-label' : '' }}">{{ $row['main_product_name'] ?? 'Kitchen Products & Accessories' }}</span></td>
                         @endif
-                        <td style="width: {{ $kitchenColumnWidth(1) }}%">{{ $row['product_name'] }}</td>
-                        <td class="number">{{ !empty($row['beginning_count']) ? $quantity($row['beginning_quantity']) : '' }}</td>
+                        <td>
+                            {{ $row['product_name'] }}
+                            @if (!empty($row['product_capacity']))
+                                {{ $quantity($row['product_capacity']) }}{{ strtoupper($row['product_capacity_unit'] ?? '') }}
+                            @endif
+                            @foreach ($row['components'] ?? [] as $component)
+                                <div>
+                                    {{ $quantity($component['quantity']) }} x {{ $component['product_name'] }}
+                                    @if (!empty($component['product_capacity']))
+                                        {{ $quantity($component['product_capacity']) }}{{ strtoupper($component['product_capacity_unit'] ?? '') }}
+                                    @endif
+                                    @if (empty($component['is_active'])) (inactive) @endif
+                                </div>
+                            @endforeach
+                        </td>
+                        <td class="number">{{ !empty($row['beginning_count']) ? $quantity($row['beginning_quantity']) : '-' }}</td>
                         <td class="number">{{ !empty($row['delivery_count']) ? $quantity($row['delivery_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['damaged_count']) ? $quantity($row['damaged_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['bo_replacement_count']) ? $quantity($row['bo_replacement_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['swap_count']) ? $quantity($row['swap_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['on_loan_count']) ? $quantity($row['on_loan_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['consignment_count']) ? $quantity($row['consignment_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['raffle_count']) ? $quantity($row['raffle_quantity']) : '' }}</td>
-                        <td class="number">{{ !empty($row['walk_in_count']) ? $quantity($row['walk_in_quantity']) : '' }}</td>
-                        <td class="number">{{ number_format((float) ($row['total_sold_quantity'] ?? 0), 2) }}</td>
-                        <td class="number">{{ !empty($row['mixed_prices']) ? 'Mixed' : ((float) ($row['unit_price'] ?? 0) > 0 ? $money($row['unit_price']) : '') }}</td>
-                        <td class="number">{{ $money($row['total_sales'] ?? 0) }}</td>
-                        <td class="number">{{ $quantity($row['theoretical_ending_quantity'] ?? null) }}</td>
-                        <td class="number">{{ $quantity($row['actual_quantity'] ?? null) }}</td>
-                        <td class="number">{{ $quantity($row['variance_quantity'] ?? null) }}</td>
+                        @if ($sectionTitle === 'PRODUCT SOLD INDIVIDUALLY')
+                            <td class="number">{{ ($row['sold_per_set_quantity'] ?? 0) > 0 ? rtrim(rtrim(number_format((float) $row['sold_per_set_quantity'], 5, '.', ','), '0'), '.') : '' }}</td>
+                        @endif
+                        <td class="number">{{ !empty($row['report_only']) ? '' : $quantity($row['total_sold_quantity'] ?? 0) }}</td>
+                        <td class="number">{{ !empty($row['report_only']) ? '' : (!empty($row['mixed_prices']) ? 'Mixed' : $money($row['unit_price'] ?? null)) }}</td>
+                        <td class="number">{{ !empty($row['report_only']) ? '' : $money($row['total_sales'] ?? 0) }}</td>
+                        <td class="number">{{ $quantity($row['template_ending_quantity'] ?? null) }}</td>
+                        <td class="number">{{ $quantity($row['template_actual_quantity'] ?? null) }}</td>
                     </tr>
                 @endforeach
             @endforeach
         @empty
-            <tr><td colspan="17" class="empty">No Kitchen Products &amp; Accessories are configured.</td></tr>
+            <tr><td colspan="{{ $sectionTitle === 'PRODUCT SOLD INDIVIDUALLY' ? 10 : 9 }}" class="empty">{{ $sectionTitle === 'SET' ? 'No kitchen sets are configured.' : 'No individual kitchen products are configured.' }}</td></tr>
         @endforelse
         </tbody>
     </table>
+    @endforeach
+    @if ($kitchenUnknownSetSales > 0)
+        <p class="small">Some older sales have no saved component list. Sold from Set quantities do not include those sales.</p>
+    @endif
 </div>
 <div class="detail-report">
     <table>

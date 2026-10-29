@@ -44,7 +44,13 @@
                 <div class="tab-pane fade show active" id="lpg-beginning-inventory" role="tabpanel" aria-labelledby="lpg-beginning-inventory-tab">
                     <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between gap-3" id="lpg-starting-audit-status" data-report-id="{{ $CashiersReportId ?? ($cashiers_report_id ?? 0) }}">
                         <span><i class="bi bi-info-circle me-2"></i><strong>Starting Audit:</strong> <span class="lpg-audit-status-label">Checking status…</span></span>
-                        <button type="button" class="btn btn-sm btn-primary d-none" id="lpg-submit-starting-audit"><i class="bi bi-send me-1"></i>Submit for Approval</button>
+                        <div class="d-flex gap-2">
+                            @if(in_array(session('UserType'), ['Admin', 'SUAdmin', 'Accounting_Staff'], true))
+                                <a class="btn btn-sm btn-outline-danger" href="{{ route('lpg.starting-audits.index') }}"><i class="bi bi-clipboard-check me-1"></i>Audit / Revoke Approvals</a>
+                                <a class="btn btn-sm btn-outline-primary d-none" id="lpg-review-starting-audit" href="#"><i class="bi bi-clipboard-check me-1"></i>Review Audit</a>
+                            @endif
+                            <button type="button" class="btn btn-sm btn-primary d-none" id="lpg-submit-starting-audit"><i class="bi bi-send me-1"></i>Submit for Approval</button>
+                        </div>
                     </div>
                     <div class="alert alert-warning d-none" id="lpg-starting-audit-return-reason"></div>
                     <div class="d-flex justify-content-end mb-3">
@@ -57,6 +63,7 @@
                             <thead>
                                 <tr class="report">
                                     <th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
+                                    <th>Transaction No.</th>
                                     <th><i class="bi bi-box-seam" aria-hidden="true"></i>Item</th>
                                     <th><i class="bi bi-123" aria-hidden="true"></i>Filled Cylinders</th>
                                     <th>B.O. Returned from Customers</th>
@@ -82,6 +89,7 @@
                             <thead>
                                 <tr class="report">
                                     <th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
+                                    <th>Transaction No.</th>
                                     <th><i class="bi bi-truck" aria-hidden="true"></i>Supplier</th>
                                     <th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>DR / Reference No.</th>
                                     <th><i class="bi bi-box-seam" aria-hidden="true"></i>Item</th>
@@ -105,6 +113,7 @@
                             <thead>
                                 <tr class="report">
                                     <th><i class="bi bi-hash" aria-hidden="true"></i>#</th>
+                                    <th>Transaction No.</th>
                                     <th><i class="bi bi-truck" aria-hidden="true"></i>Supplier</th>
                                     <th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>DR / Reference No.</th>
                                     <th><i class="bi bi-box-seam" aria-hidden="true"></i>Replacement Item</th>
@@ -118,7 +127,6 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="lpg-swapping" role="tabpanel" aria-labelledby="lpg-swapping-tab">
-                    @include('pages.cashiers_report_form_lpg.partials.regulator_inventory')
                     <h6 class="fw-bold mb-2">Swapping Transactions</h6>
                     <p class="small text-muted mb-2">Grouped by customer and item. Received and replaced quantities are totaled separately; use View Entries to manage the individual records.</p>
                     <div class="d-flex justify-content-end flex-wrap gap-2 mb-3">

@@ -16,6 +16,11 @@
         </button>
     </li>
     <li class="nav-item" role="presentation">
+        <button class="nav-link" id="product-components-tab" data-bs-toggle="tab" data-bs-target="#product-components" type="button" role="tab" aria-controls="product-components" aria-selected="false">
+            <i class="bi bi-boxes" aria-hidden="true"></i><span>Set Components</span>
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
         <button class="nav-link @if($tab === 'branchprice') active @endif" id="branchprice-tab" data-bs-toggle="tab" data-bs-target="#branchprice" type="button" role="tab" aria-controls="branchprice" aria-selected="{{ $tab === 'branchprice' ? 'true' : 'false' }}" title="Product Prices per branch">
             <i class="bi bi-building" aria-hidden="true"></i><span>Price per Branch</span>
         </button>
@@ -163,6 +168,37 @@
                 <div class="col-auto">
                     <button type="submit" class="btn btn-success btn-sm rounded-3 px-3" id="update-product">
                         <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab-pane fade" id="product-components" role="tabpanel" aria-labelledby="product-components-tab" tabindex="0">
+        <form id="productComponentsForm" novalidate>
+            <section class="rounded-4 border bg-white p-3" aria-labelledby="productComponentsHeading">
+                <div class="alert alert-success d-none" id="productComponentsSuccess" role="status">Set components saved successfully.</div>
+                <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
+                    <div>
+                        <h6 class="fw-bold mb-1" id="productComponentsHeading"><i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Set Components <span class="text-muted fw-normal">(Optional)</span></h6>
+                        <small class="text-muted">For assembled sets stocked as their own product, list the component products and quantity per set. This records the set composition only; it does not change component inventory when the set is sold.</small>
+                    </div>
+                    <button type="button" class="btn btn-outline-success btn-sm flex-shrink-0" id="addProductComponent" disabled><i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Add Component</button>
+                </div>
+                <div class="small text-muted py-2" id="productComponentsEmpty">No components added. Add components if this product is an assembled set.</div>
+                <div class="table-responsive d-none" id="productComponentsTableWrap">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th>Component Product</th><th style="width: 170px;">Quantity per Set</th><th class="text-end" style="width: 80px;">Action</th></tr></thead>
+                        <tbody id="productComponentsRows"></tbody>
+                    </table>
+                </div>
+                <div class="small text-danger d-none" id="productComponentsError"></div>
+            </section>
+
+            <div class="row justify-content-end mt-3">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success btn-sm rounded-3 px-3" id="saveProductComponents" disabled>
+                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Save Components
                     </button>
                 </div>
             </div>

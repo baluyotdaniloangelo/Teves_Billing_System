@@ -75,19 +75,18 @@
     </form>
     <section class="fuel-panel"><div class="fuel-panel-head"><div><h2>Campaign history</h2><p>{{ number_format($campaigns->total()) }} campaigns found. Open a campaign to view individual recipient results.</p></div></div>
         <div class="sms-table-wrap"><table class="sms-table"><thead><tr><th>Campaign / Message</th><th>Customer type</th><th>Created</th><th>Recipients</th><th>Accepted</th><th>Failed</th><th>Status</th><th></th></tr></thead><tbody>
-        @forelse($campaigns as $campaign)<tr><td><strong>#{{ $campaign->campaign_id }} · {{ $campaign->campaign_title }}</strong><span class="sms-excerpt">{{ \Illuminate\Support\Str::limit($campaign->sms_message, 95) }}</span></td><td>{{ $campaign->customer_type }}</td><td>{{ $campaign->created_at->format('M d, Y H:i') }}</td><td>{{ number_format($campaign->total_recipients) }}</td><td>{{ number_format($campaign->total_sent) }}</td><td>{{ number_format($campaign->total_failed) }}</td><td><span class="sms-status {{ $campaign->total_failed ? 'sms-status-error' : '' }}">{{ $campaign->campaign_status }}</span></td><td><a class="fuel-button fuel-button-small" href="{{ route('sms_blast', array_merge(request()->except('recipients_page'), ['tab' => 'history', 'campaign_id' => $campaign->campaign_id])) }}#campaign-details">View<span class="visually-hidden"> campaign {{ $campaign->campaign_id }}</span></a></td></tr>
+        @forelse($campaigns as $campaign)<tr><td><strong>#{{ $campaign->campaign_id }} · {{ $campaign->campaign_title }}</strong><span class="sms-excerpt">{{ \Illuminate\Support\Str::limit($campaign->sms_message, 95) }}</span></td><td>{{ $campaign->customer_type }}</td><td>{{ $campaign->created_at->format('M d, Y H:i') }}</td><td>{{ number_format($campaign->total_recipients) }}</td><td>{{ number_format($campaign->total_sent) }}</td><td>{{ number_format($campaign->total_failed) }}</td><td><span class="sms-status {{ $campaign->total_failed ? 'sms-status-error' : '' }}">{{ $campaign->campaign_status }}</span></td><td><a class="fuel-button fuel-button-small" data-sms-campaign-url="{{ route('sms_campaign_details', ['campaignId' => $campaign->campaign_id]) }}" aria-haspopup="dialog" aria-controls="sms-history-dialog" href="{{ route('sms_blast', array_merge(request()->except('recipients_page'), ['tab' => 'history', 'campaign_id' => $campaign->campaign_id])) }}">View<span class="visually-hidden"> campaign {{ $campaign->campaign_id }}</span></a></td></tr>
         @empty<tr><td colspan="8" class="sms-empty"><i class="bi bi-inbox"></i><strong>No campaigns found</strong><span>Compose a broadcast or adjust your filters.</span></td></tr>@endforelse
         </tbody></table></div>
         <div class="sms-pagination">{{ $campaigns->links('pagination::bootstrap-4') }}</div>
     </section>
-    @if($selected)
-    <section class="fuel-panel sms-details" id="campaign-details"><div class="fuel-panel-head"><div><h2>Campaign #{{ $selected->campaign_id }} · Recipient details</h2><p>{{ $selected->campaign_status }} · {{ $selected->provider }} · {{ $selected->customer_type }}</p></div><a class="fuel-button fuel-button-small" href="{{ route('sms_blast', request()->except('campaign_id', 'recipients_page')) }}">Close details</a></div>
-        <div class="sms-body"><p class="sms-full-message">{{ $selected->sms_message }}</p><p class="sms-help">Sent = accepted by provider. Delivered appears only when a delivery confirmation is recorded. Pending records may require investigation if a broadcast was interrupted.</p></div>
-        <div class="sms-table-wrap"><table class="sms-table"><thead><tr><th>Customer</th><th>Mobile number</th><th>Personalized message</th><th>Status</th><th>Accepted at</th><th>Delivered at</th></tr></thead><tbody>
-        @forelse($logs as $log)<tr><td>{{ $log->client_name }}</td><td>{{ $log->mobile_number }}</td><td><span class="sms-recipient-message">{{ $log->sms_message }}</span></td><td><span class="sms-status {{ $log->sms_status === 'Failed' ? 'sms-status-error' : '' }}">{{ $log->sms_status }}</span></td><td>{{ $log->sent_at ?: '—' }}</td><td>{{ $log->delivered_at ?: '—' }}</td></tr>@empty<tr><td colspan="6" class="sms-empty">No recipient records.</td></tr>@endforelse
-        </tbody></table></div><div class="sms-pagination">{{ $logs->fragment('campaign-details')->links('pagination::bootstrap-4') }}</div>
-    </section>
-    @endif
+    <dialog id="sms-history-dialog" class="sms-history-dialog" aria-labelledby="sms-history-title" data-auto-open="{{ $selected ? '1' : '0' }}">
+        <div class="sms-history-dialog-head"><h2 id="sms-history-title">Campaign details</h2><button class="fuel-button fuel-button-small" type="button" id="sms-history-close" autofocus aria-label="Close campaign details"><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button></div>
+        <div id="sms-history-content" class="sms-history-content" aria-busy="false">
+            @if($selected) @include('pages.sms_blast_for_client.partials.campaign_details') @endif
+        </div>
+    </dialog>
+
     @endif
     @include('pages.user_account_settings.modals.logout_modal')
 </main>
@@ -98,4 +97,5 @@
 <script src="{{ asset('NiceAdmin-pro/assets/js/main.js') }}"></script>
 <script src="{{ asset('js/sms-blast.js') }}?v={{ filemtime(public_path('js/sms-blast.js')) }}" defer></script>
 <script src="{{ asset('js/sms-template-editor.js') }}?v={{ filemtime(public_path('js/sms-template-editor.js')) }}" defer></script>
+<script src="{{ asset('js/sms-campaign-history.js') }}?v={{ filemtime(public_path('js/sms-campaign-history.js')) }}" defer></script>
 @endpush

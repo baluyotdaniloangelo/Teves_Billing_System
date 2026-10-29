@@ -19,6 +19,10 @@ class CashiersReportModel_LPG_AR_SO extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $casts = [
+        'set_components_snapshot' => 'array',
+    ];
+
     protected $fillable = [
         'cashiers_report_id',
         'ar_date',
@@ -27,6 +31,7 @@ class CashiersReportModel_LPG_AR_SO extends Model
         'dr_number',
         'item_description',
         'sale_stock_type',
+        'set_components_snapshot',
         'empty_received_product_idx',
         'empty_received_quantity',
         'empty_swapping_idx',

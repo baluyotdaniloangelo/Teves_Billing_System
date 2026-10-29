@@ -11,7 +11,7 @@ return [
     // Existing COMPACT VALVE - REGULATOR product. Add regulator variants here,
     // or a regulator-only main product ID below; never classify by a name substring.
     'regulator_product_ids' => [218],
-    'regulator_main_product_ids' => [],
+    'regulator_main_product_ids' => [7], // Regulator family: Compact Valve, Pull Valve, RIR, High Pressure.
     'regulator_inventory_details_enabled' => false,
     'show_unclassified_sales' => false,
 ];

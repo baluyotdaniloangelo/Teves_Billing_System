@@ -69,6 +69,16 @@ class SMSBlastController extends Controller
         return view('pages.sms_blast_for_client.index', compact('data', 'title', 'types', 'statuses', 'summary', 'campaigns', 'selected', 'logs', 'templates', 'birthdayReady', 'birthdayEnabled', 'templatesReady', 'templateLibrary', 'editingTemplate'));
     }
 
+    public function campaign_details(Request $request, int $campaignId)
+    {
+        $request->validate(['recipients_page' => 'nullable|integer|min:1']);
+        $selected = SmsCampaign::findOrFail($campaignId);
+        $logs = SmsLog::where('campaign_id', $selected->campaign_id)->orderBy('sms_log_id')
+            ->paginate(25, ['client_name', 'mobile_number', 'sms_message', 'sms_status', 'sent_at', 'delivered_at'], 'recipients_page');
+        return response()->view('pages.sms_blast_for_client.partials.campaign_details', compact('selected', 'logs'))
+            ->header('Cache-Control', 'no-store, private');
+    }
+
     private function recipients(string $type)
     {
         return DB::table('teves_client_table')->select('client_id', 'client_name', 'client_first_name', 'client_gender', 'client_contact_number', 'customer_type')

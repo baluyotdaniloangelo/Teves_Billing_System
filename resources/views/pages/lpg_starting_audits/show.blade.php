@@ -28,6 +28,11 @@
                     <div class="alert alert-info mb-0">You submitted this audit. Another approver must review it.</div>
                 @elseif($audit->status === 'RETURNED')
                     <div class="alert alert-warning mb-0">Returned: {{ $audit->return_reason }}</div>
+                @elseif($audit->status === 'APPROVED' && in_array(session('UserType'), ['Admin', 'SUAdmin', 'Accounting_Staff'], true) && (int) $audit->approved_by !== (int) $data->user_id)
+                    <div class="alert alert-warning">If this approved count is incorrect, revoke its approval and return it to the encoder. It will stop carrying forward until corrected and approved again.</div>
+                    <div class="d-flex justify-content-end mt-3"><button type="button" class="btn btn-outline-danger" id="return-lpg-audit"><i class="bi bi-arrow-counterclockwise me-1"></i>Revoke Approval / Return for Correction</button></div>
+                @elseif($audit->status === 'APPROVED')
+                    <div class="alert alert-success mb-0">Approved and carrying forward. Another approver must revoke this approval if correction is needed.</div>
                 @endif
                 <div class="alert d-none mt-3" id="lpg-audit-action-result" role="alert"></div>
             </div>
@@ -43,7 +48,8 @@ $(function () {
         $.post("{{ route('lpg.starting-audits.approve', $audit->audit_id) }}").done(showResult).fail(showError);
     });
     $('#return-lpg-audit').on('click', function () {
-        const reason = window.prompt('Reason for returning this audit for correction:');
+        const approved = @json($audit->status === 'APPROVED');
+        const reason = window.prompt(approved ? 'Reason for revoking approval and returning this audit for correction:' : 'Reason for returning this audit for correction:');
         if (reason === null) return;
         if (!reason.trim()) { window.alert('Please enter a reason.'); return; }
         $.post("{{ route('lpg.starting-audits.return', $audit->audit_id) }}", { reason: reason }).done(showResult).fail(showError);

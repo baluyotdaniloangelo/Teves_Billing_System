@@ -88,7 +88,6 @@
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_sell_out_script')
     @include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_swapping_returns_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_container_script')
-    @include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_regulator_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_empty_inventory_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_expenses_script')
 	@include('pages.cashiers_report_form_lpg.scripts.cashier_report_lpg_kitchen_script')

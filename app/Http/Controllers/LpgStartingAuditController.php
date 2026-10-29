@@ -18,7 +18,10 @@ class LpgStartingAuditController extends Controller
         $title = 'LPG Starting Audit Approvals';
         $audits = $this->visibleAudits()->where('audit.status', 'PENDING')
             ->where('audit.submitted_by', '<>', Session::get('loginID'))->orderBy('audit.submitted_at')->get();
-        return view('pages.lpg_starting_audits.index', compact('data', 'title', 'audits'));
+        $approvedAudits = $this->visibleAudits()->where('audit.status', 'APPROVED')
+            ->orderByDesc('audit.approved_at')->limit(100)->get();
+        $inventoryRevokeRequests = LpgInventoryRevokeController::pendingForCurrentApprover();
+        return view('pages.lpg_starting_audits.index', compact('data', 'title', 'audits', 'approvedAudits', 'inventoryRevokeRequests'));
     }
 
     public function show(int $auditId)
@@ -37,7 +40,7 @@ class LpgStartingAuditController extends Controller
 
     public function status(Request $request)
     {
-        $reportId = $this->accessibleReportId($request->integer('report_id'));
+        $reportId = $this->accessibleReportId((int) $request->input('report_id'));
         $audit = DB::table('teves_cashiers_report_lpg_starting_audits as audit')
             ->leftJoin('user_tb as submitter', 'submitter.user_id', '=', 'audit.submitted_by')
             ->where('audit.report_id', $reportId)->first(['audit.*', 'submitter.user_real_name as submitted_by_name']);
@@ -47,7 +50,7 @@ class LpgStartingAuditController extends Controller
 
     public function submit(Request $request)
     {
-        $reportId = $this->accessibleReportId($request->integer('report_id'));
+        $reportId = $this->accessibleReportId((int) $request->input('report_id'));
         $audit = DB::transaction(function () use ($reportId) {
             $audit = DB::table('teves_cashiers_report_lpg_starting_audits')->where('report_id', $reportId)->lockForUpdate()->first();
             abort_unless($audit, 422, 'Encode at least one Starting Audit item before submitting.');
@@ -103,16 +106,25 @@ class LpgStartingAuditController extends Controller
         $audit = DB::transaction(function () use ($auditId, $data) {
             $audit = $this->visibleAudits()->where('audit.audit_id', $auditId)->lockForUpdate()->first();
             abort_unless($audit, 404, 'Starting audit not found or you do not have access.');
-            abort_unless($audit->status === 'PENDING', 422, 'Only pending audits can be returned.');
-            abort_unless((int) $audit->submitted_by !== (int) Session::get('loginID'), 403, 'You cannot review your own Starting Audit.');
+            abort_unless(in_array($audit->status, ['PENDING', 'APPROVED'], true), 422, 'Only pending or approved audits can be returned for correction.');
+            if ($audit->status === 'PENDING') {
+                abort_unless((int) $audit->submitted_by !== (int) Session::get('loginID'), 403, 'You cannot review your own Starting Audit.');
+            } else {
+                abort_unless((int) $audit->approved_by !== (int) Session::get('loginID'), 403, 'A different approver must revoke this approval.');
+            }
             DB::table('teves_cashiers_report_lpg_starting_audits')->where('audit_id', $auditId)->update([
                 'status' => 'RETURNED', 'returned_by' => Session::get('loginID'), 'returned_at' => now(),
                 'return_reason' => $data['reason'], 'updated_at' => now(),
             ]);
             return $audit;
         });
-        $this->notifyOutcome($audit, 'RETURNED', 'LPG Starting Audit returned for correction', 'Your LPG Starting Audit for ' . $audit->branch_name . ' on ' . $audit->report_date . ' needs correction: ' . $data['reason']);
-        return response()->json(['status' => true, 'message' => 'Starting Audit returned to the encoder for correction.']);
+        $revoked = $audit->status === 'APPROVED';
+        $title = $revoked ? 'LPG Starting Audit approval revoked' : 'LPG Starting Audit returned for correction';
+        $message = 'Your LPG Starting Audit for ' . $audit->branch_name . ' on ' . $audit->report_date . ($revoked ? ' had its approval revoked and needs correction: ' : ' needs correction: ') . $data['reason'];
+        $this->notifyOutcome($audit, $revoked ? 'REVOKED' : 'RETURNED', $title, $message);
+        return response()->json(['status' => true, 'message' => $revoked
+            ? 'Approval revoked. The audit no longer carries forward; the encoder can correct it and submit it again.'
+            : 'Starting Audit returned to the encoder for correction.']);
     }
 
     public function notifications()

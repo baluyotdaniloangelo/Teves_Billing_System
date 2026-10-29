@@ -150,10 +150,36 @@ class LpgEmptyInventorySummary
         DB::transaction(function () use ($kind, $record) {
             $this->lockReport((int) $record->cashiers_report_id);
             if ($kind === 'swap') app(LpgSwappingBalance::class)->assertChange($record);
+            if ($kind === 'sale' && (!$record->exists || $record->isDirty('product_idx'))) {
+                $record->set_components_snapshot = $this->snapshotSetComponents((int) $record->product_idx);
+            }
             $this->adopt($kind, $record->getRawOriginal());
             $record->save();
             $this->adopt($kind, $record->getAttributes());
         });
+    }
+
+    private function snapshotSetComponents(int $productId): array
+    {
+        // Product component editors lock/update this parent row before changing its composition.
+        DB::table('teves_product_table')->where('product_id', $productId)->lockForUpdate()->first();
+
+        return DB::table('teves_product_component_table as component')
+            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'component.component_product_idx')
+            ->where('component.product_idx', $productId)
+            ->orderBy('component.component_product_idx')
+            ->get(['component.component_product_idx', 'component.quantity', 'product.product_name',
+                'product.product_capacity', 'product.product_capacity_unit', 'product.product_unit_measurement'])
+            ->map(function ($component) {
+                return [
+                    'product_idx' => (int) $component->component_product_idx,
+                    'quantity' => (string) $component->quantity,
+                    'product_name' => $component->product_name,
+                    'product_capacity' => $component->product_capacity,
+                    'product_capacity_unit' => $component->product_capacity_unit,
+                    'product_unit_measurement' => $component->product_unit_measurement,
+                ];
+            })->all();
     }
 
     public function deleteSource(string $kind, Model $record): void

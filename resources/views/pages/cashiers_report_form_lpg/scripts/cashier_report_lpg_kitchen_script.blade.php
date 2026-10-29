@@ -25,6 +25,35 @@ $(function () {
         return '<td class="text-end text-nowrap"><button type="button" class="btn btn-sm btn-link lpg-kitchen-view" data-source-mode="' + mode + '" data-product-id="' + productId + '" title="View source records">' + (value == null ? 'Not set' : quantity(value)) + '</button>' +
             '<button type="button" class="btn btn-sm btn-light lpg-kitchen-add" data-source-mode="' + mode + '" data-product-id="' + productId + '" aria-label="Add ' + escape(modes[mode]) + ' for ' + escape(label(row)) + '"><i class="bi bi-plus" aria-hidden="true"></i></button></td>';
     }
+    function renderTemplateRows(selector, rows, emptyMessage) {
+        let group = null;
+        const individual = selector === '#LpgKitchenIndividualTable';
+        const columnCount = individual ? 9 : 8;
+        $(selector + ' tbody').html(rows.length ? rows.map(row => {
+            let html = '';
+            if (row.main_product_name !== group) {
+                group = row.main_product_name;
+                html += '<tr><td colspan="' + columnCount + '" class="fw-bold">' + escape(group || 'Kitchen Products & Accessories') + '</td></tr>';
+            }
+            const capacity = row.product_capacity ? ' ' + Number(row.product_capacity) + ' ' + (row.product_capacity_unit || '') : '';
+            const components = (row.components || []).map(component => {
+                const componentCapacity = component.product_capacity ? ' ' + Number(component.product_capacity) + ' ' + (component.product_capacity_unit || '') : '';
+                return Number(component.quantity || 0).toLocaleString('en-PH', {maximumFractionDigits: 3}) + ' × ' + escape((component.product_name || 'Unavailable product') + componentCapacity) + (component.is_active ? '' : ' (inactive)');
+            }).join(', ');
+            const item = escape((row.product_name || 'Unavailable product') + capacity) + (components ? '<div class="small text-muted">' + components + '</div>' : '');
+            const ending = row.template_ending_quantity == null ? '—' : quantity(row.template_ending_quantity);
+            const actual = row.template_actual_quantity == null ? '—' : quantity(row.template_actual_quantity);
+            const beginningCell = row.report_only ? '<td class="text-center">—</td>' : sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null);
+            const deliveryCell = row.report_only ? '<td class="text-center">—</td>' : sourceCell(row, 'DELIVERY', row.delivery_quantity);
+            const soldFromSet = Number(row.sold_per_set_quantity || 0);
+            const soldFromSetCell = individual ? '<td class="text-end">' + soldFromSet.toLocaleString('en-PH', {maximumFractionDigits: 5}) + '</td>' : '';
+            const mainRow = '<tr><td>' + item + '</td>' + beginningCell
+                + deliveryCell + soldFromSetCell + '<td class="text-end fw-semibold">' + (row.report_only ? '' : quantity(row.total_sold_quantity)) + '</td>'
+                + '<td class="text-end">' + (row.report_only ? '' : (row.mixed_prices ? 'Mixed' : (row.unit_price == null ? '—' : money(row.unit_price)))) + '</td>'
+                + '<td class="text-end">' + (row.report_only ? '' : money(row.total_sales)) + '</td><td class="text-end fw-bold">' + ending + '</td><td class="text-end fw-bold">' + actual + '</td></tr>';
+            return html + mainRow;
+        }).join('') : '<tr><td colspan="' + columnCount + '" class="text-center text-muted py-3">' + escape(emptyMessage) + '</td></tr>');
+    }
     function reload() {
         clearTimeout(reloadTimer);
         const version = ++summaryVersion;
@@ -36,7 +65,11 @@ $(function () {
                 if (version !== summaryVersion) return;
                 let group = null;
                 const rows = response.data || [];
-                $('#LpgKitchenTable tbody').html(rows.length ? rows.map(row => {
+                $('#lpg-kitchen-set-snapshot-warning').toggleClass('d-none', !response.unknown_set_sale_snapshots);
+                renderTemplateRows('#LpgKitchenSetsTable', rows.filter(row => row.is_set), 'No sets configured. Add components to a kitchen product in Product Details.');
+                renderTemplateRows('#LpgKitchenIndividualTable', rows.filter(row => !row.is_set), 'No individual kitchen products configured.');
+                const legacyRows = rows.filter(row => !row.report_only);
+                $('#LpgKitchenTable tbody').html(legacyRows.length ? legacyRows.map(row => {
                     let html = '';
                     if (row.main_product_name !== group) {
                         group = row.main_product_name;
@@ -45,11 +78,13 @@ $(function () {
                     html += '<tr><td>' + escape(label(row)) + '</td>' + sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null);
                     ['DELIVERY','DAMAGED','BO_REPLACEMENT','SWAP','ON_LOAN','RAFFLE','WALK_IN'].forEach(mode => html += sourceCell(row, mode, row[mode.toLowerCase() + '_quantity']));
                     html += '<td class="text-end fw-semibold" title="Sales Order quantity plus Cash Sales quantity">' + quantity(row.total_sold_quantity) + '</td>';
-                    return html + '<td class="text-end">' + (row.mixed_prices ? 'Mixed' : (row.unit_price == null ? '—' : money(row.unit_price))) + '</td><td class="text-end" title="Net after discounts: ' + money(row.net_sales) + '">' + money(row.total_sales) + '</td><td class="text-end fw-bold ' + (row.ending_quantity < 0 ? 'text-danger' : '') + '">' + (row.ending_quantity == null ? 'Set beginning stock' : quantity(row.ending_quantity)) + '</td>' + window.LpgActualInventoryUI.cells(row) + '</tr>';
+                    return html + '<td class="text-end">' + (row.mixed_prices ? 'Mixed' : (row.unit_price == null ? '—' : money(row.unit_price))) + '</td><td class="text-end" title="Net after discounts: ' + money(row.net_sales) + '">' + money(row.total_sales) + '</td><td class="text-end fw-bold ' + (row.ending_quantity < 0 ? 'text-danger' : '') + '">' + (row.ending_quantity == null ? 'Set beginning stock' : quantity(row.ending_quantity)) + '</td><td class="text-end">' + (row.actual_quantity == null ? '—' : quantity(row.actual_quantity)) + '</td><td class="text-end">' + (row.variance_quantity == null ? '—' : quantity(row.variance_quantity)) + '</td></tr>';
                 }).join('') : '<tr><td colspan="15" class="text-center text-muted py-4">No kitchen stock records yet. Use Add to select a kitchen product.</td></tr>');
             }).fail((xhr, status) => {
                 if (version !== summaryVersion || status === 'abort') return;
                 $('#LpgKitchenTable tbody').html('<tr><td colspan="15" class="text-center py-4">Kitchen stock could not be loaded.</td></tr>');
+                $('#LpgKitchenSetsTable tbody').html('<tr><td colspan="8" class="text-center py-3">Kitchen products could not be loaded.</td></tr>');
+                $('#LpgKitchenIndividualTable tbody').html('<tr><td colspan="9" class="text-center py-3">Kitchen products could not be loaded.</td></tr>');
                 error('#lpg-kitchen-error', xhr, 'Unable to load kitchen stock.');
             }).always(() => { if (version === summaryVersion) { summaryRequest = null; $('#refresh-lpg-kitchen').prop('disabled', false); } });
     }

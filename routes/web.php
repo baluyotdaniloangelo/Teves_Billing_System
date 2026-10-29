@@ -34,6 +34,7 @@ use App\Http\Controllers\CashiersReportLPGController;
 use App\Services\SmsService;
 
 Route::get('/sms_blast', [SMSBlastController::class,'sms_blast'])->name('sms_blast')->middleware('isLoggedIn');
+Route::get('/sms_blast/campaigns/{campaignId}', [SMSBlastController::class, 'campaign_details'])->name('sms_campaign_details')->where('campaignId', '[0-9]+')->middleware('isLoggedIn');
 Route::post('/send_sms_blast', [SMSBlastController::class,'send_sms_blast'])->name('send_sms_blast')->middleware('isLoggedIn');
 Route::get('/sms_blast/recipient-count', [SMSBlastController::class,'recipient_count'])->name('sms_recipient_count')->middleware('isLoggedIn');
 Route::get('/sms_blast/clients', [SMSBlastController::class,'search_clients'])->name('sms_client_search')->middleware('isLoggedIn');
@@ -245,6 +246,8 @@ Route::post('/unlink_product_variant', [ProductController::class, 'unlink_produc
 Route::post('/create_product_post', [ProductController::class,'create_product_post'])->name('create_product_post')->middleware('isLoggedIn');
 /*GET Product Info*/
 Route::post('/product_info', [ProductController::class, 'product_info'])->name('product_info')->middleware('isLoggedIn');
+Route::get('/product_component_options', [ProductController::class, 'product_component_options'])->name('product_component_options')->middleware('isLoggedIn');
+Route::post('/product_components_save', [ProductController::class, 'product_components_save'])->name('product_components_save')->middleware('isLoggedIn');
 /*Update Product*/
 Route::post('/update_product_post', [ProductController::class,'update_product_post'])->name('update_product_post')->middleware('isLoggedIn');
 /*Confirm Delete Product*/
@@ -808,6 +811,7 @@ Route::post('/cashiers-report/lpg-non-cash-payments/delete', [
 use App\Http\Controllers\CashiersReport_LPG_Inventory_Controller;
 use App\Http\Controllers\CashiersReport_LPG_EmptyInventory_Controller;
 use App\Http\Controllers\LpgStartingAuditController;
+use App\Http\Controllers\LpgInventoryRevokeController;
 
 Route::get('/lpg-starting-audits', [LpgStartingAuditController::class, 'index'])->name('lpg.starting-audits.index')->middleware('isLoggedIn');
 Route::get('/lpg-starting-audits/{auditId}', [LpgStartingAuditController::class, 'show'])->name('lpg.starting-audits.show')->middleware('isLoggedIn');
@@ -815,6 +819,9 @@ Route::post('/lpg-starting-audits/status', [LpgStartingAuditController::class, '
 Route::post('/lpg-starting-audits/submit', [LpgStartingAuditController::class, 'submit'])->name('lpg.starting-audits.submit')->middleware('isLoggedIn');
 Route::post('/lpg-starting-audits/{auditId}/approve', [LpgStartingAuditController::class, 'approve'])->name('lpg.starting-audits.approve')->middleware('isLoggedIn');
 Route::post('/lpg-starting-audits/{auditId}/return', [LpgStartingAuditController::class, 'returnForCorrection'])->name('lpg.starting-audits.return')->middleware('isLoggedIn');
+Route::post('/cashiers-report/lpg-inventory/revoke-request', [LpgInventoryRevokeController::class, 'request'])->name('lpg.inventory.revoke-request')->middleware('isLoggedIn');
+Route::post('/lpg-inventory-revoke-requests/{requestId}/approve', [LpgInventoryRevokeController::class, 'approve'])->name('lpg.inventory.revoke-requests.approve')->middleware('isLoggedIn');
+Route::post('/lpg-inventory-revoke-requests/{requestId}/reject', [LpgInventoryRevokeController::class, 'reject'])->name('lpg.inventory.revoke-requests.reject')->middleware('isLoggedIn');
 Route::get('/lpg-audit-notifications', [LpgStartingAuditController::class, 'notifications'])->name('lpg.starting-audits.notifications')->middleware('isLoggedIn');
 Route::get('/lpg-audit-notifications/count', [LpgStartingAuditController::class, 'unreadCount'])->name('lpg.starting-audits.notifications.count')->middleware('isLoggedIn');
 Route::post('/lpg-audit-notifications/{notificationId}/read', [LpgStartingAuditController::class, 'markRead'])->name('lpg.starting-audits.notifications.read')->middleware('isLoggedIn');

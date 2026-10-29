@@ -751,58 +751,11 @@ class CashiersReportLPGController extends Controller
             return ($row['print_group_name'] ?? '') . ' ' . $row['product_name'];
         }, SORT_NATURAL | SORT_FLAG_CASE)->values();
 
-        // The Kitchen section uses its own source summary, but prints every active
-        // Kitchen-category item so the printable matches the full inventory sheet.
+        // Use the same configured catalog, set components and totals as the Kitchen screen.
         $kitchenSummary = app(\App\Services\LpgKitchenSummary::class);
-        $kitchenRows = $kitchenSummary->rows($kitchenSummary->records($reportId));
-        $kitchenProductIds = \App\Services\LpgKitchenProducts::ids();
-        $kitchenCatalog = DB::table('teves_product_table as product')
-            ->leftJoin('teves_product_main_table as main', function ($join) {
-                $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
-            })
-            ->leftJoin('teves_product_branch_price_table as branch_price', function ($join) use ($report) {
-                $join->on('branch_price.product_idx', '=', 'product.product_id')
-                    ->where('branch_price.branch_idx', '=', $report->teves_branch);
-            })
-            ->whereIn('product.product_id', $kitchenProductIds)->whereNull('product.deleted_at')
-            ->orderBy('main.product_name')->orderBy('product.product_name')
-            ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
-                'product.product_unit_measurement', 'main.product_name as group_name',
-                DB::raw('COALESCE(branch_price.branch_price, product.product_price) as catalog_unit_price')]);
-        $kitchenRowsByProduct = $kitchenRows->keyBy('product_idx');
-        foreach ($kitchenCatalog as $product) {
-            $row = $kitchenRowsByProduct->get((int) $product->product_id);
-            if (!$row) {
-                $row = [
-                    'product_idx' => (int) $product->product_id,
-                    'product_name' => $product->product_name,
-                    'product_unit_measurement' => $product->product_unit_measurement,
-                ];
-                foreach (array_diff(\App\Services\LpgKitchenSummary::MODES, ['TOTAL_SOLD']) as $mode) {
-                    $key = strtolower($mode);
-                    $row[$key . '_quantity'] = 0;
-                    $row[$key . '_count'] = 0;
-                }
-                $row['total_sold_quantity'] = 0;
-                $row['total_sales'] = 0;
-                $row['net_sales'] = 0;
-                $row['unit_price'] = null;
-                $row['mixed_prices'] = false;
-                $row['ending_quantity'] = null;
-            }
-            $row['product_name'] = $product->product_name;
-            $row['product_unit_measurement'] = $product->product_unit_measurement;
-            if (($row['unit_price'] ?? null) === null && empty($row['mixed_prices'])) {
-                $row['unit_price'] = $product->catalog_unit_price;
-            }
-            $row['print_group_name'] = $product->group_name ?: 'Kitchen Products & Accessories';
-            $row['print_group_key'] = 'group:' . mb_strtolower($row['print_group_name']);
-            $kitchenRowsByProduct->put((int) $product->product_id, $row);
-        }
-        $kitchenRows = $kitchenRowsByProduct->sortBy(function ($row) {
-            return ($row['print_group_name'] ?? 'Kitchen Products & Accessories') . ' ' . $row['product_name'];
-        }, SORT_NATURAL | SORT_FLAG_CASE)->values();
+        $kitchenRows = $kitchenSummary->withCatalog($reportId, $kitchenSummary->rows($kitchenSummary->records($reportId)));
         $kitchenRows = app(\App\Services\LpgActualInventorySummary::class)->rows($reportId, $kitchenRows);
+        $kitchenUnknownSetSales = app(\App\Services\LpgSetComponentSales::class)->forReport($reportId)['unknown_sales'];
 
         // Supporting sections from the cashier's report workbook.
         $arCollectionRows = DB::table('teves_cashiers_report_lpg_ar as ar')
@@ -950,7 +903,7 @@ class CashiersReportLPGController extends Controller
                 'loan.return_alum_quantity', 'loan.remarks']);
 
         return PDF::loadView('printables.cashier_report_lpg_pdf', compact(
-            'report', 'sellOutRows', 'kitchenRows', 'arCollectionRows', 'miscellaneousRows', 'expenseRows', 'discountRows',
+            'report', 'sellOutRows', 'kitchenRows', 'kitchenUnknownSetSales', 'arCollectionRows', 'miscellaneousRows', 'expenseRows', 'discountRows',
             'cashDenominations', 'cashRecord', 'cashOnHand', 'cashDrop', 'actualCash', 'nonCashRows', 'nonCashTotals',
             'nonCashTotal', 'arCollectionsTotal', 'lpgSalesTotal', 'kitchenSalesTotal', 'totalSales',
             'miscellaneousTotal', 'expensesTotal', 'discountsTotal', 'theoreticalSales', 'totalCashAndNonCash',

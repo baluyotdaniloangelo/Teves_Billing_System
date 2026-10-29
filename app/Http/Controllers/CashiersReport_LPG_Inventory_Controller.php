@@ -63,6 +63,14 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
                 'teves_cashiers_report_lpg_inventory.remarks',
             ]);
 
+        $pendingInventoryIds = DB::table('teves_lpg_inventory_revoke_requests')
+            ->whereIn('inventory_id', $data->pluck('cashiers_report_lpg_inventory_id'))
+            ->where('status', 'PENDING')->pluck('inventory_id')->map(fn ($id) => (int) $id)->flip();
+        foreach ($data as $record) {
+            $record->transaction_no = $this->transactionNumber((int) $record->cashiers_report_lpg_inventory_id);
+            $record->revoke_request_pending = $pendingInventoryIds->has((int) $record->cashiers_report_lpg_inventory_id);
+        }
+
         return response()->json($data);
     }
 
@@ -94,6 +102,8 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
                 'teves_product_table.product_unit_measurement',
             ]);
 
+        $record->transaction_no = $this->transactionNumber((int) $record->cashiers_report_lpg_inventory_id);
+
         return response()->json(['status' => true, 'data' => $record]);
     }
 
@@ -111,6 +121,9 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
                 ? CashiersReportModel_LPG_Inventory::where('cashiers_report_id', $data['cashiers_report_id'])
                     ->where('product_idx', $data['product_idx'])->where('inventory_mode', 'BEGINNING')->first()
                 : null;
+            if ($record) {
+                abort_if(DB::table('teves_lpg_inventory_revoke_requests')->where('inventory_id', $record->cashiers_report_lpg_inventory_id)->where('status', 'PENDING')->exists(), 422, 'This inventory transaction has a pending revoke request and cannot be edited.');
+            }
             $isNewRecord = !$record;
             $record = $record ?: new CashiersReportModel_LPG_Inventory();
             if ($isBeginning) $this->assertAuditEditable((int) $data['cashiers_report_id'], $data['audit_date']);
@@ -142,6 +155,7 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
         )
             ->where('cashiers_report_id', $data['cashiers_report_id'])
             ->firstOrFail();
+        abort_if(DB::table('teves_lpg_inventory_revoke_requests')->where('inventory_id', $record->cashiers_report_lpg_inventory_id)->where('status', 'PENDING')->exists(), 422, 'This inventory transaction has a pending revoke request and cannot be edited.');
 
         if ($data['inventory_mode'] === 'BEGINNING') {
             $exists = CashiersReportModel_LPG_Inventory::where('cashiers_report_id', $data['cashiers_report_id'])
@@ -188,23 +202,15 @@ class CashiersReport_LPG_Inventory_Controller extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
         }
-
-        $record = CashiersReportModel_LPG_Inventory::findOrFail(
-            $request->cashiers_report_lpg_inventory_id
-        );
-        DB::transaction(function () use ($record) {
-            if ($record->inventory_mode === 'BEGINNING') {
-                $this->assertAuditEditable((int) $record->cashiers_report_id);
-                $audit = DB::table('teves_cashiers_report_lpg_starting_audits')->where('report_id', $record->cashiers_report_id)->first();
-                if ($audit) DB::table('teves_cashiers_report_lpg_starting_audit_items')->where('audit_id', $audit->audit_id)->where('product_idx', $record->product_idx)->delete();
-            }
-            $record->delete();
-        });
-
         return response()->json([
-            'status' => true,
-            'message' => $this->modeMessage($record->inventory_mode, 'deleted'),
-        ]);
+            'status' => false,
+            'message' => 'LPG inventory transactions cannot be deleted directly. Submit a revoke request for approval.',
+        ], 422);
+    }
+
+    private function transactionNumber(int $id): string
+    {
+        return 'LPG-INV-' . str_pad((string) $id, 8, '0', STR_PAD_LEFT);
     }
 
     private function validator(Request $request, bool $isUpdate = false)

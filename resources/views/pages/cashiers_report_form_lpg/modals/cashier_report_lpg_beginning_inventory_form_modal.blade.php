@@ -110,20 +110,23 @@
     </div>
 </div>
 
-<div class="modal fade" id="CashierReportLpgInventoryDeleteModal" tabindex="-1" aria-labelledby="CashierReportLpgInventoryDeleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="CashierReportLpgInventoryRevokeModal" tabindex="-1" aria-labelledby="CashierReportLpgInventoryRevokeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
             <div class="modal-header border-0 px-4 py-3">
-                <h5 class="modal-title fw-bold" id="CashierReportLpgInventoryDeleteModalLabel"><i class="bi bi-trash3 me-2" aria-hidden="true"></i>Delete Inventory Record</h5>
+                <h5 class="modal-title fw-bold" id="CashierReportLpgInventoryRevokeModalLabel"><i class="bi bi-arrow-counterclockwise me-2" aria-hidden="true"></i>Request to Revoke Inventory Transaction</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body px-4 py-4">
-                <p class="mb-0">Delete <strong id="lpg_inventory_delete_item"></strong> from this report?</p>
-                <input type="hidden" id="lpg_inventory_delete_id" value="0">
+                <input type="hidden" id="lpg_inventory_revoke_id" value="0">
+                <div class="alert alert-light border"><div class="fw-semibold" id="lpg_inventory_revoke_number"></div><div id="lpg_inventory_revoke_item"></div></div>
+                <label for="lpg_inventory_revoke_reason" class="form-label">Reason for request <span class="text-danger">*</span></label>
+                <textarea id="lpg_inventory_revoke_reason" class="form-control form-select-sm" rows="3" maxlength="2000" placeholder="Explain why this transaction should be voided."></textarea>
+                <div class="form-text">The transaction stays active until an approver reviews and approves this request.</div>
             </div>
             <div class="modal-footer border-0 bg-light px-4 py-3">
                 <button type="button" class="btn btn-light border rounded-3" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger rounded-3" id="confirm-delete-lpg-inventory"><i class="bi bi-trash3-fill me-2" aria-hidden="true"></i>Delete</button>
+                <button type="button" class="btn btn-danger rounded-3" id="submit-lpg-inventory-revoke"><i class="bi bi-send me-2" aria-hidden="true"></i>Request Revoke</button>
             </div>
         </div>
     </div>
