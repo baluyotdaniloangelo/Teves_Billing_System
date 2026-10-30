@@ -6,10 +6,9 @@
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-lpg-empty-inventory"><i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>Refresh</button>
     </div>
-    <p class="small text-muted mb-2">Ending Inventory = Beginning + Additions − Deductions − linked receipt overlap. Refill receipts linked to Swapping appear in both columns and count once in stock.</p>
-    <p class="small text-muted mb-3">Auto quantities follow source records. Existing manual totals are used until a source takes over that product and column. Beginning and branch/truck movements remain manual.</p>
+    <p class="small text-muted mb-2">Ending Inventory = Beginning + Return (On-Loan) + Swap In + Advance Pull-Out − Cylinder Sold − Borrow (On-Loan) − Delivery from Advance Pull-Out − Delivery Truck.</p>
+    <p class="small text-muted mb-3">Return, Swap In, Cylinder Sold, and Borrow follow their source transactions. Advance Pull-Out, its delivery, and Delivery Truck are entered manually. Refill / Sell-out and the removed branch/swap-out columns are hidden from this template.</p>
     <div class="alert alert-warning small d-none" id="lpg-empty-pending-notice"><span id="lpg-empty-pending-message"></span> <button type="button" class="btn btn-sm btn-light" id="lpg-empty-review-sources">Review Sources</button></div>
-    <div class="small text-muted mb-2" id="lpg-empty-overlap-note"></div>
     <div class="alert alert-danger d-none" id="lpg_empty_table_error" role="alert"></div>
     <div class="table-responsive">
         <table class="table table-sm table-bordered align-middle cell-border" id="LpgEmptyInventoryTable" style="width:100%;min-width:1800px;">

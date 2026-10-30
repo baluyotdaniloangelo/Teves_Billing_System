@@ -41,8 +41,6 @@ $(function () {
                     const pending = Number(response.pending_sources || 0);
                     $('#lpg-empty-pending-notice').toggleClass('d-none', pending === 0);
                     $('#lpg-empty-pending-message').text(pending + ' source item(s) need classification or empty-receipt details. Auto totals exclude these items until reviewed.');
-                    const overlap = rows.reduce((sum, row) => sum + Number(row.duplicate_received_quantity || 0), 0);
-                    $('#lpg-empty-overlap-note').text(overlap ? 'Linked receipt overlap: ' + number(overlap) + ' pcs already excluded once from ending stock.' : '');
                     callback({data: rows});
                 })
                 .fail(xhr => {
@@ -53,7 +51,7 @@ $(function () {
         columns: [
             {data: 'product_name', defaultContent: '-', render: $.fn.dataTable.render.text()},
             ...quantityFields.map(field => ({data: field, className: 'text-end', render: (value, type, row) => quantityCell(field, value, type, row)})),
-            {data: 'ending_quantity', className: 'text-end fw-bold', render: (value, type, row) => type === 'display' ? '<span class="' + (Number(value) < 0 ? 'text-danger' : '') + '" title="Linked receipt overlap: ' + number(row.duplicate_received_quantity) + ' pcs">' + number(value) + '</span>' : Number(value)},
+            {data: 'ending_quantity', className: 'text-end fw-bold', render: (value, type) => type === 'display' ? '<span class="' + (Number(value) < 0 ? 'text-danger' : '') + '">' + number(value) + '</span>' : Number(value)},
             {data: 'remarks', defaultContent: '-', render: $.fn.dataTable.render.text()}
         ],
         language: {emptyTable: 'No empty-stock rows recorded. Add a product to begin.'},
@@ -73,7 +71,7 @@ $(function () {
                     if (lastNode) $(lastNode).after(subtotal());
                     group = row.capacity_group;
                     totals = {};
-                    $(node).before($('<tr class="lpg-empty-group-row">').append($('<td colspan="13">').text(group)));
+                    $(node).before($('<tr class="lpg-empty-group-row">').append($('<td colspan="' + (quantityFields.length + 3) + '">').text(group)));
                 }
                 quantityFields.concat(['ending_quantity']).forEach(field => totals[field] = (totals[field] || 0) + Number(row[field] || 0));
                 lastNode = node;
@@ -107,9 +105,8 @@ $(function () {
         const beginning = Number(quantities.beginning_quantity || 0);
         const additions = additionFields.reduce((sum, field) => sum + Number(quantities[field] || 0), 0);
         const deductions = deductionFields.reduce((sum, field) => sum + Number(quantities[field] || 0), 0);
-        const overlap = Number(state.saved.duplicate_received_quantity || 0);
-        const ending = beginning + additions - deductions - overlap;
-        Object.entries({beginning, additions, deductions, overlap, ending}).forEach(([field, value]) => {
+        const ending = beginning + additions - deductions;
+        Object.entries({beginning, additions, deductions, ending}).forEach(([field, value]) => {
             $(state.form).find('[data-summary-field="' + field + '"]').text(number(value));
         });
         $(state.form).find('[data-summary-field="ending"]').toggleClass('text-danger', ending < 0);
@@ -232,18 +229,16 @@ $(function () {
     }
     function addSource(field, productId) {
         if (!automaticFields.includes(field)) { openEntry(fieldMode(field), productId, field); return; }
-        if (field === 'refill_sell_out_quantity' || field === 'sold_quantity') {
+        if (field === 'sold_quantity') {
             resetLpgArSoForm();
             $('#ar_so_type').val('Sales Order').trigger('change');
-            $('#ar_so_stock_type').val(field === 'sold_quantity' ? 'EMPTY_CONTAINER' : 'REFILL_SWAP').trigger('change');
+            $('#ar_so_stock_type').val('EMPTY_CONTAINER').trigger('change');
             fillSaleProduct(productId);
-            if (field === 'refill_sell_out_quantity') $('#ar_so_empty_received_product_idx').val(productId || '').trigger('change');
             lpgArSoShowModal('#CashierReportLpgArSoModal');
-        } else if (field === 'swap_in_quantity' || field === 'swap_out_quantity') {
-            window.LpgSwappingEditor.add(productId, field === 'swap_in_quantity' ? 'RECEIVED' : 'REPLACED');
-            const prefix = field === 'swap_in_quantity' ? 'received' : 'replaced';
-            $('#' + prefix + '_product_idx').val(productId || '').trigger('change');
-            $('#' + prefix + '_stock_state').val('EMPTY').trigger('change');
+        } else if (field === 'swap_in_quantity') {
+            window.LpgSwappingEditor.add(productId, 'RECEIVED');
+            $('#received_product_idx').val(productId || '').trigger('change');
+            $('#received_stock_state').val('EMPTY').trigger('change');
         } else {
             window.LpgOnLoanEditor.add(field === 'borrow_quantity' ? productId : 0);
             const prefix = field === 'return_quantity' ? 'return' : 'borrow';

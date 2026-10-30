@@ -82,7 +82,7 @@ class LpgRegulatorSummary
         $setSales = (new LpgSetComponentSales())->forReport($reportId)['quantities'];
         $products = DB::table('teves_product_table')->whereIn('product_id', LpgRegulatorProducts::ids())
             ->where(function ($query) use ($records) { $query->whereNull('deleted_at')->orWhereIn('product_id', $records->pluck('product_idx')->all()); })
-            ->orderBy('product_name')->get(['product_id', 'product_name', 'product_unit_measurement', 'product_price']);
+            ->orderBy('product_name')->get(['product_id', 'product_name', 'product_unit_measurement', 'product_capacity', 'product_capacity_unit', 'product_price']);
         return $products->map(function ($product) use ($records, $setSales, $openingBalances) {
             $entries = $records->where('product_idx', $product->product_id);
             $sum = fn (string $mode) => round($entries->where('mode', $mode)->sum('quantity'), 2);
@@ -96,6 +96,8 @@ class LpgRegulatorSummary
                 'product_idx' => (int) $product->product_id,
                 'product_name' => $product->product_name,
                 'product_unit_measurement' => $product->product_unit_measurement,
+                'product_capacity' => $product->product_capacity,
+                'product_capacity_unit' => $product->product_capacity_unit,
                 'beginning_quantity' => round($beginningEntries->isNotEmpty() ? $currentBeginning : ($opening['quantity'] ?? 0), 2),
                 'set_sold_quantity' => round((float) ($setSales[(int) $product->product_id] ?? 0), 2),
                 'delivery_quantity' => $sum('DELIVERY'),

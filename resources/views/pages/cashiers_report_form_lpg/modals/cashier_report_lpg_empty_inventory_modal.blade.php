@@ -49,7 +49,6 @@
                         <div class="d-flex justify-content-between"><span>Beginning</span><output data-summary-field="beginning">0</output></div>
                         <div class="d-flex justify-content-between"><span>Additions (+)</span><output data-summary-field="additions">0</output></div>
                         <div class="d-flex justify-content-between"><span>Deductions (-)</span><output data-summary-field="deductions">0</output></div>
-                        <div class="d-flex justify-content-between"><span>Linked receipt overlap (−)</span><output data-summary-field="overlap">0</output></div>
                         <div class="d-flex justify-content-between border-top mt-2 pt-2 fw-bold"><span>Computed Ending Inventory</span><output data-summary-field="ending">0</output></div>
                     </div>
                     <div class="mb-3">

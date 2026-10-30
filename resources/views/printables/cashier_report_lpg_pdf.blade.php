@@ -28,6 +28,12 @@
         .kitchen-report td.group { font-size: 4.8pt; }
         .kitchen-report td.number { font-size: 4.9pt; }
         .kitchen-report th, .kitchen-report td { border-color: #222; }
+        .regulator-report { margin-top: 9pt; page-break-inside: avoid; }
+        .regulator-report th { background: #8bd36f; color: #111; font-size: 4.2pt; }
+        .regulator-report th.title { font-size: 6pt; }
+        .regulator-report td { font-size: 4.8pt; padding: 2.1pt 1.2pt; }
+        .regulator-report td.number { font-size: 4.6pt; }
+        .regulator-report .total-row { background: #e6b9b8; font-weight: bold; }
         .detail-report { margin-top: 8pt; page-break-inside: avoid; }
         .detail-report th { background: #8bd36f; color: #111; font-size: 5.2pt; }
         .detail-report th.title { font-size: 6.2pt; }
@@ -211,6 +217,69 @@
     @if ($kitchenUnknownSetSales > 0)
         <p class="small">Some older sales have no saved component list. Sold from Set quantities do not include those sales.</p>
     @endif
+</div>
+<div class="regulator-report">
+    @php
+        $regulatorHeaders = [
+            'Regulator', 'Beginning', 'Set Sold', 'Delivered', 'Swap', 'On-Loan',
+            'B.O. Returned by Customer', 'B.O. During Delivery', 'Returned to Supplier',
+            'B.O. Replacement from Supplier', 'Total Sold', 'Unit Price', 'Total Sales in Peso',
+            'Theoretical Ending Inventory', 'Actual Ending Inventory', 'Variance',
+        ];
+        $regulatorFields = [
+            'beginning_quantity', 'set_sold_quantity', 'delivery_quantity', 'swap_quantity', 'on_loan_quantity',
+            'bo_customer_quantity', 'bo_delivery_quantity', 'returned_supplier_quantity', 'bo_replacement_quantity',
+            'total_sold_quantity', 'unit_price', 'total_sales', 'theoretical_ending_quantity', 'actual_ending_quantity', 'variance_quantity',
+        ];
+    @endphp
+    <table>
+        <colgroup>
+            <col style="width: 12%"><col style="width: 5%"><col style="width: 5%"><col style="width: 5%">
+            <col style="width: 4%"><col style="width: 5%"><col style="width: 7%"><col style="width: 7%">
+            <col style="width: 6%"><col style="width: 7%"><col style="width: 5%"><col style="width: 6%">
+            <col style="width: 7%"><col style="width: 7%"><col style="width: 7%"><col style="width: 5%">
+        </colgroup>
+        <thead>
+            <tr><th colspan="16" class="title">NEW REGULATORS</th></tr>
+            <tr>@foreach ($regulatorHeaders as $header)<th>{{ $header }}</th>@endforeach</tr>
+        </thead>
+        <tbody>
+        @forelse ($regulatorRows as $row)
+            <tr>
+                <td>{{ $row['product_name'] }}@if (!empty($row['product_capacity'])) {{ $quantity($row['product_capacity']) }}{{ strtoupper($row['product_capacity_unit'] ?? '') }}@elseif (!empty($row['product_unit_measurement'])) {{ $row['product_unit_measurement'] }}@endif</td>
+                @foreach ($regulatorFields as $field)
+                    <td class="number">
+                        @if ($field === 'unit_price')
+                            {{ $money($row[$field] ?? null) }}
+                        @elseif ($field === 'total_sales')
+                            {{ $money($row[$field] ?? 0) }}
+                        @else
+                            {{ $quantity($row[$field] ?? 0) }}
+                        @endif
+                    </td>
+                @endforeach
+            </tr>
+        @empty
+            <tr><td colspan="16" class="empty">No regulator products are configured.</td></tr>
+        @endforelse
+        @if ($regulatorRows->isNotEmpty())
+            <tr class="total-row">
+                <td>Total</td>
+                @foreach ($regulatorFields as $field)
+                    <td class="number">
+                        @if ($field === 'unit_price')
+                            —
+                        @elseif ($field === 'total_sales')
+                            {{ $money($regulatorRows->sum($field)) }}
+                        @else
+                            {{ $quantity($regulatorRows->sum($field)) }}
+                        @endif
+                    </td>
+                @endforeach
+            </tr>
+        @endif
+        </tbody>
+    </table>
 </div>
 <div class="detail-report">
     <table>
@@ -426,15 +495,14 @@
 <div class="empty-report">
     <table>
         @php
-            $emptyWidths = [20, 6, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 17];
+            $emptyWidths = [20, 6, 7, 7, 8, 8, 7, 11, 10, 6, 10];
             $emptyWidthTotal = array_sum($emptyWidths);
             $emptyColWidth = static function ($index, $span = 1) use ($emptyWidths, $emptyWidthTotal) {
                 return array_sum(array_slice($emptyWidths, $index, $span)) / $emptyWidthTotal * 100;
             };
             $emptyQuantityFields = [
-                'beginning_quantity', 'refill_sell_out_quantity', 'return_quantity', 'swap_in_quantity',
-                'from_other_branch_quantity', 'sold_quantity', 'swap_out_quantity', 'borrow_quantity',
-                'pull_out_branch_quantity', 'pull_out_truck_quantity',
+                'beginning_quantity', 'return_quantity', 'swap_in_quantity', 'advance_pull_out_quantity',
+                'sold_quantity', 'borrow_quantity', 'delivery_from_advance_pull_out_quantity', 'pull_out_truck_quantity',
             ];
         @endphp
         <colgroup>
@@ -443,34 +511,31 @@
             @endforeach
         </colgroup>
         <thead>
-            <tr><th colspan="13" class="title">EMPTY CYLINDERS / CANISTERS</th></tr>
+            <tr><th colspan="11" class="title">EMPTY CYLINDERS / CANISTERS</th></tr>
             <tr>
                 <th rowspan="3" style="width: {{ $emptyColWidth(0) }}%">Item</th>
                 <th rowspan="3" style="width: {{ $emptyColWidth(1) }}%">Beg.<br>Inv.</th>
-                <th colspan="4" style="width: {{ $emptyColWidth(2, 4) }}%">Add (+)</th>
-                <th colspan="5" style="width: {{ $emptyColWidth(6, 5) }}%">Less (-)</th>
-                <th rowspan="3" style="width: {{ $emptyColWidth(11) }}%">Ending Inventory</th>
-                <th rowspan="3" style="width: {{ $emptyColWidth(12) }}%">Remarks</th>
+                <th colspan="3" style="width: {{ $emptyColWidth(2, 3) }}%">Add (+)</th>
+                <th colspan="4" style="width: {{ $emptyColWidth(5, 4) }}%">Less (-)</th>
+                <th rowspan="3" style="width: {{ $emptyColWidth(9) }}%">Ending Inventory</th>
+                <th rowspan="3" style="width: {{ $emptyColWidth(10) }}%">Remarks</th>
             </tr>
             <tr>
-                <th colspan="4" style="width: {{ $emptyColWidth(2, 4) }}%">Empty From:</th>
-                <th rowspan="2" style="width: {{ $emptyColWidth(6) }}%">Sold<br>Cylinder</th>
-                <th rowspan="2" style="width: {{ $emptyColWidth(7) }}%">Swap<br>Out</th>
-                <th rowspan="2" style="width: {{ $emptyColWidth(8) }}%">Borrow</th>
-                <th colspan="2" style="width: {{ $emptyColWidth(9, 2) }}%">Pull Out</th>
+                <th rowspan="2" style="width: {{ $emptyColWidth(2) }}%">Return<br>(On-Loan)</th>
+                <th rowspan="2" style="width: {{ $emptyColWidth(3) }}%">Swap In</th>
+                <th rowspan="2" style="width: {{ $emptyColWidth(4) }}%">Advance<br>Pull-Out</th>
+                <th style="width: {{ $emptyColWidth(5) }}%">Sold</th>
+                <th rowspan="2" style="width: {{ $emptyColWidth(6) }}%">Borrow<br>(On-Loan)</th>
+                <th rowspan="2" style="width: {{ $emptyColWidth(7) }}%">Delivery from<br>Advance Pull-Out</th>
+                <th rowspan="2" style="width: {{ $emptyColWidth(8) }}%">Delivery<br>Truck</th>
             </tr>
             <tr>
-                <th style="width: {{ $emptyColWidth(2) }}%">Refill /<br>Sell-out</th>
-                <th style="width: {{ $emptyColWidth(3) }}%">Return</th>
-                <th style="width: {{ $emptyColWidth(4) }}%">Swap In</th>
-                <th style="width: {{ $emptyColWidth(5) }}%">From Other<br>Branch</th>
-                <th style="width: {{ $emptyColWidth(9) }}%">From Other<br>Branch</th>
-                <th style="width: {{ $emptyColWidth(10) }}%">Delivery<br>Truck</th>
+                <th style="width: {{ $emptyColWidth(5) }}%">Cylinder</th>
             </tr>
         </thead>
         <tbody>
         @forelse ($emptyInventoryGroups as $capacityGroup => $groupRows)
-            <tr class="capacity-row"><td colspan="13">{{ $capacityGroup }}</td></tr>
+            <tr class="capacity-row"><td colspan="11">{{ $capacityGroup }}</td></tr>
             @foreach ($groupRows as $row)
                 <tr>
                     <td>{{ $row->product_name }}</td>
@@ -490,7 +555,7 @@
                 <td></td>
             </tr>
         @empty
-            <tr><td colspan="13" class="empty">No LPG empty-cylinder products are configured.</td></tr>
+            <tr><td colspan="11" class="empty">No LPG empty-cylinder products are configured.</td></tr>
         @endforelse
         </tbody>
     </table>
@@ -583,7 +648,7 @@
 @if ($sellOutRows->contains(function ($row) { return $row['refill_swap_mixed_prices'] || $row['cylinder_with_content_mixed_prices']; }))
     <div class="note">Mixed = more than one unit price. Amounts use the recorded SRP before discounts.</div>
 @endif
-<div class="note">Kitchen ending inventory = beginning + delivery + damaged + B.O. replacement + return - swap - on-loan - consignment - raffle / product expenses - total sold. Walk-in sales are included in Total Sold.</div>
+<div class="note">Kitchen set and individually sold product ending inventory = beginning + delivery - total sold. Sold from Set is informational; its component quantities appear in the individual product table.</div>
 @if ($kitchenRows->contains(function ($row) { return empty($row['beginning_count']); }))
     <div class="note">Kitchen theoretical and actual ending inventory are blank until beginning inventory is recorded for that item.</div>
 @endif

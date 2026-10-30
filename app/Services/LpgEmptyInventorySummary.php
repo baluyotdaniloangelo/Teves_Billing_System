@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class LpgEmptyInventorySummary
 {
-    public const AUTO_FIELDS = ['refill_sell_out_quantity', 'return_quantity', 'swap_in_quantity', 'sold_quantity', 'swap_out_quantity', 'borrow_quantity'];
+    public const AUTO_FIELDS = ['return_quantity', 'swap_in_quantity', 'sold_quantity', 'borrow_quantity'];
     private $sources = [];
     private $pending = [];
 
@@ -30,26 +30,12 @@ class LpgEmptyInventorySummary
                 'reference' => $row['dr_number'] ?? null, 'remarks' => $row['remarks'] ?? ($row['item_description'] ?? null)];
         };
         if ($kind === 'sale' && in_array($row['item_description'] ?? null, ['Sales Order', 'Cash Sales'], true)) {
-            if (($row['sale_stock_type'] ?? null) === 'REFILL_SWAP') {
-                if (!empty($row['empty_swapping_idx'])) {
-                    $swap = $row['_linked_swap'] ?? DB::table('teves_cashiers_report_lpg_swapping')->where('cashiers_report_lpg_swapping_id', $row['empty_swapping_idx'])
-                        ->where('cashiers_report_id', $row['cashiers_report_id'])->where('client_idx', $row['client_idx'])->whereNull('deleted_at')->first();
-                    $swap = $swap ? (array) $swap : [];
-                    if (($swap['received_stock_state'] ?? null) === 'EMPTY') {
-                        $push('refill_sell_out_quantity', $swap['received_product_idx'], $swap['received_quantity']);
-                        $entries[count($entries) - 1]['duplicate_swap_id'] = (int) $row['empty_swapping_idx'];
-                    } else $push('refill_sell_out_quantity', $row['product_idx'] ?? null, 0, 'UNSPECIFIED');
-                } elseif (array_key_exists('empty_received_quantity', $row) && $row['empty_received_quantity'] !== null) {
-                    $push('refill_sell_out_quantity', $row['empty_received_product_idx'] ?? null, $row['empty_received_quantity']);
-                } else $push('refill_sell_out_quantity', $row['product_idx'] ?? null, 0, 'UNSPECIFIED');
-            } elseif (($row['sale_stock_type'] ?? null) === 'EMPTY_CONTAINER') {
+            if (($row['sale_stock_type'] ?? null) === 'EMPTY_CONTAINER') {
                 $push('sold_quantity', $row['product_idx'] ?? null, $row['order_quantity'] ?? null);
-            } elseif (!in_array($row['sale_stock_type'] ?? null, ['CYLINDER_WITH_CONTENT', 'KITCHEN_ITEM'], true)) $push('refill_sell_out_quantity', $row['product_idx'] ?? null, 0, 'UNSPECIFIED');
-        } elseif ($kind === 'swap') {
-            foreach (['received' => 'swap_in_quantity', 'replaced' => 'swap_out_quantity'] as $prefix => $field) {
-                $state = $row[$prefix . '_stock_state'] ?? null;
-                if ($state !== 'FILLED') $push($field, $row[$prefix . '_product_idx'] ?? null, $row[$prefix . '_quantity'] ?? null, $state ?: 'UNSPECIFIED');
             }
+        } elseif ($kind === 'swap') {
+            $state = $row['received_stock_state'] ?? null;
+            if ($state !== 'FILLED') $push('swap_in_quantity', $row['received_product_idx'] ?? null, $row['received_quantity'] ?? null, $state ?: 'UNSPECIFIED');
         } elseif ($kind === 'loan') {
             foreach (['return' => 'return_quantity', 'borrow' => 'borrow_quantity'] as $prefix => $field) {
                 $state = $row[$prefix . '_stock_state'] ?? null;
@@ -67,16 +53,11 @@ class LpgEmptyInventorySummary
         $entries = collect();
         $swaps = DB::table('teves_cashiers_report_lpg_swapping as source')->leftJoin('teves_client_table as client', 'client.client_id', '=', 'source.client_idx')
             ->where('source.cashiers_report_id', $reportId)->whereNull('source.deleted_at')->get(['source.*', 'client.client_name']);
-        $swapsById = $swaps->keyBy('cashiers_report_lpg_swapping_id');
         foreach (['sale' => 'teves_cashiers_report_lpg_ar_so', 'swap' => 'teves_cashiers_report_lpg_swapping', 'loan' => 'teves_cashiers_report_lpg_on_loan'] as $kind => $table) {
             $rows = $kind === 'swap' ? $swaps : DB::table($table . ' as source')->leftJoin('teves_client_table as client', 'client.client_id', '=', 'source.client_idx')
                 ->where('source.cashiers_report_id', $reportId)->whereNull('source.deleted_at')->get(['source.*', 'client.client_name']);
             foreach ($rows as $row) {
                 $attributes = (array) $row;
-                if ($kind === 'sale' && !empty($attributes['empty_swapping_idx'])) {
-                    $swap = $swapsById->get($attributes['empty_swapping_idx']);
-                    $attributes['_linked_swap'] = $swap && (int) $swap->client_idx === (int) $row->client_idx ? (array) $swap : [];
-                }
                 foreach ($this->entries($kind, $attributes) as $entry) $entries->push($entry);
             }
         }
@@ -140,8 +121,6 @@ class LpgEmptyInventorySummary
         }
         $view->setAttribute('automatic_fields', array_keys(array_filter($flags)));
         $view->setAttribute('manual_totals', $manual);
-        $duplicates = $sources->filter(function ($source) { return !empty($source['duplicate_swap_id']); })->unique('duplicate_swap_id')->sum('quantity');
-        $view->setAttribute('duplicate_received_quantity', (int) $duplicates);
         return $view;
     }
 

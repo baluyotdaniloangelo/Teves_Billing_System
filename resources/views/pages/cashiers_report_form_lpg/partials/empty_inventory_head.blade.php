@@ -6,26 +6,22 @@
     <tr>
         <th rowspan="{{ $emptyHeaderRows }}">Item</th>
         <th rowspan="3">Beg.<br>Inv.</th>
-        <th colspan="4">Add (+)</th>
-        <th colspan="5">Less (-)</th>
+        <th colspan="3">Add (+)</th>
+        <th colspan="4">Less (-)</th>
         <th rowspan="{{ $emptyHeaderRows }}">Ending<br>Inventory</th>
         <th rowspan="{{ $emptyHeaderRows }}">Remarks</th>
     </tr>
     <tr>
-        <th colspan="4">Empty From</th>
+        <th rowspan="2">Return<br>(On-Loan)</th>
+        <th rowspan="2">Swap In</th>
+        <th rowspan="2">Advance<br>Pull-Out</th>
         <th>Sold</th>
-        <th rowspan="2">Swap<br>Out</th>
-        <th rowspan="2">Borrow</th>
-        <th colspan="2">Pull Out</th>
+        <th rowspan="2">Borrow<br>(On-Loan)</th>
+        <th rowspan="2">Delivery from<br>Advance Pull-Out</th>
+        <th rowspan="2">Delivery<br>Truck</th>
     </tr>
     <tr>
-        <th>Refill /<br>Sell-out</th>
-        <th>Return</th>
-        <th>Swap In</th>
-        <th>From Other<br>Branch</th>
         <th>Cylinder</th>
-        <th>Other<br>Branch</th>
-        <th>Delivery<br>Truck</th>
     </tr>
     @if($showEmptyColumnActions)
         <tr class="lpg-summary-actions" data-dt-order="disable">

@@ -756,6 +756,7 @@ class CashiersReportLPGController extends Controller
         $kitchenRows = $kitchenSummary->withCatalog($reportId, $kitchenSummary->rows($kitchenSummary->records($reportId)));
         $kitchenRows = app(\App\Services\LpgActualInventorySummary::class)->rows($reportId, $kitchenRows);
         $kitchenUnknownSetSales = app(\App\Services\LpgSetComponentSales::class)->forReport($reportId)['unknown_sales'];
+        $regulatorRows = app(\App\Services\LpgRegulatorSummary::class)->rows($reportId);
 
         // Supporting sections from the cashier's report workbook.
         $arCollectionRows = DB::table('teves_cashiers_report_lpg_ar as ar')
@@ -852,10 +853,9 @@ class CashiersReportLPGController extends Controller
             if (!$row) {
                 $row = new \App\Models\CashiersReportModel_LPG_EmptyInventory([
                     'cashiers_report_id' => $reportId, 'product_idx' => (int) $product->product_id,
-                    'beginning_quantity' => 0, 'refill_sell_out_quantity' => 0, 'return_quantity' => 0,
-                    'swap_in_quantity' => 0, 'from_other_branch_quantity' => 0, 'sold_quantity' => 0,
-                    'swap_out_quantity' => 0, 'borrow_quantity' => 0, 'pull_out_branch_quantity' => 0,
-                    'pull_out_truck_quantity' => 0, 'remarks' => null,
+                    'beginning_quantity' => 0, 'return_quantity' => 0, 'swap_in_quantity' => 0,
+                    'advance_pull_out_quantity' => 0, 'sold_quantity' => 0, 'borrow_quantity' => 0,
+                    'delivery_from_advance_pull_out_quantity' => 0, 'pull_out_truck_quantity' => 0, 'remarks' => null,
                 ]);
                 $row->cashiers_report_lpg_empty_inventory_id = 0;
             }
@@ -903,7 +903,7 @@ class CashiersReportLPGController extends Controller
                 'loan.return_alum_quantity', 'loan.remarks']);
 
         return PDF::loadView('printables.cashier_report_lpg_pdf', compact(
-            'report', 'sellOutRows', 'kitchenRows', 'kitchenUnknownSetSales', 'arCollectionRows', 'miscellaneousRows', 'expenseRows', 'discountRows',
+            'report', 'sellOutRows', 'kitchenRows', 'kitchenUnknownSetSales', 'regulatorRows', 'arCollectionRows', 'miscellaneousRows', 'expenseRows', 'discountRows',
             'cashDenominations', 'cashRecord', 'cashOnHand', 'cashDrop', 'actualCash', 'nonCashRows', 'nonCashTotals',
             'nonCashTotal', 'arCollectionsTotal', 'lpgSalesTotal', 'kitchenSalesTotal', 'totalSales',
             'miscellaneousTotal', 'expensesTotal', 'discountsTotal', 'theoreticalSales', 'totalCashAndNonCash',

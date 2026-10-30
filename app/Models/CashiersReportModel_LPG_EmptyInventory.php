@@ -13,18 +13,16 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
     use LogsActivity, SoftDeletes;
 
     public const ADDITIONS = [
-        'refill_sell_out_quantity' => 'Refill / Sell-out',
-        'return_quantity' => 'Return',
+        'return_quantity' => 'Return (On-Loan)',
         'swap_in_quantity' => 'Swap In',
-        'from_other_branch_quantity' => 'From Other Branch',
+        'advance_pull_out_quantity' => 'Advance Pull-Out',
     ];
 
     public const DEDUCTIONS = [
         'sold_quantity' => 'Cylinder Sold',
-        'swap_out_quantity' => 'Swap Out',
-        'borrow_quantity' => 'Borrow',
-        'pull_out_branch_quantity' => 'Pull Out — Other Branch',
-        'pull_out_truck_quantity' => 'Pull Out — Delivery Truck',
+        'borrow_quantity' => 'Borrow (On-Loan)',
+        'delivery_from_advance_pull_out_quantity' => 'Delivery from Advance Pull-Out',
+        'pull_out_truck_quantity' => 'Delivery Truck',
     ];
 
     public const QUANTITY_FIELDS = ['beginning_quantity' => 'Beginning Inventory'] + self::ADDITIONS + self::DEDUCTIONS;
@@ -39,8 +37,8 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
     protected static $logOnlyDirty = true;
     protected static $logAttributes = [
         'cashiers_report_id', 'product_idx', 'beginning_quantity', 'refill_sell_out_quantity',
-        'return_quantity', 'swap_in_quantity', 'from_other_branch_quantity', 'sold_quantity',
-        'swap_out_quantity', 'borrow_quantity', 'pull_out_branch_quantity', 'pull_out_truck_quantity',
+        'return_quantity', 'swap_in_quantity', 'from_other_branch_quantity', 'advance_pull_out_quantity', 'sold_quantity',
+        'swap_out_quantity', 'borrow_quantity', 'pull_out_branch_quantity', 'delivery_from_advance_pull_out_quantity', 'pull_out_truck_quantity',
         'remarks', 'created_by_user_idx', 'updated_by_user_idx', 'deleted_by_user_id', 'deleted_at',
         'auto_fields',
     ];
@@ -50,7 +48,6 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
         $ending = (int) $this->beginning_quantity;
         foreach (self::ADDITIONS as $field => $label) $ending += (int) $this->{$field};
         foreach (self::DEDUCTIONS as $field => $label) $ending -= (int) $this->{$field};
-        $ending -= (int) ($this->attributes['duplicate_received_quantity'] ?? 0);
         return $ending;
     }
 
