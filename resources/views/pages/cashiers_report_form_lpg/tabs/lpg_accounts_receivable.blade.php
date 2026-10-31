@@ -13,7 +13,7 @@
                     <small class="text-muted text-uppercase fw-semibold">LPG Cashier Report</small>
                     <h5 class="fw-bold mb-0">
                         <i class="bi bi-person-lines-fill text-success me-2" aria-hidden="true"></i>
-                        Accounts Receivable
+                        Accounts Receivable Collection
                     </h5>
                 </div>
 
@@ -43,6 +43,7 @@ FUEL CASHIER REPORT TABS
 								<!--<th>Account Name</th>-->
 								<th><i class="bi bi-person" aria-hidden="true"></i>Account Name</th>
 								<th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>DR Number</th>
+								<th><i class="bi bi-receipt" aria-hidden="true"></i>C.R. Number</th>
 								<th><i class="bi bi-chat-left-text" aria-hidden="true"></i>Remarks</th>
 								<th><i class="bi bi-cash-stack" aria-hidden="true"></i>Amount</th>
 								<th><i class="bi bi-three-dots" aria-hidden="true"></i>Action</th>

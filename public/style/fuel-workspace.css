@@ -7,7 +7,7 @@ body.fuel-app-shell {
     --fuel-green: #20836d;
     --fuel-red: #c95a57;
     --fuel-navy: #172d32;
-    --fuel-table-font-size: 12px;
+    --fuel-table-font-size: 14px;
     background: #f6f7f4;
 }
 /* Shared table text size, including nested labels and responsive detail rows.
@@ -47,7 +47,7 @@ body.fuel-app-shell #main table thead :is(th, td) :where(a, b, strong, em, small
 body.fuel-dashboard-shell, body.fuel-products-shell {
     color: var(--fuel-ink) !important;
     font-family: 'Nunito', 'Segoe UI', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
 }
 .fuel-app-shell #header {
     left: 224px; right: 0; height: 76px; padding: 0 36px;
@@ -61,11 +61,11 @@ body.fuel-dashboard-shell, body.fuel-products-shell {
 .fuel-app-shell #header > .d-flex { min-width: 0; }
 .fuel-app-shell #header .logo { min-width: 0; overflow: hidden; }
 .fuel-app-shell #header .header-nav { flex-shrink: 0; margin-left: auto !important; padding-left: 16px; }
-.fuel-app-shell .logo .fuel-header-context { color: #8d978f; font-size: 12px; font-weight: 500; letter-spacing: 0; white-space: nowrap; display: flex; align-items: center; min-width: 0; }
+.fuel-app-shell .logo .fuel-header-context { color: #8d978f; font-size: 14px; font-weight: 500; letter-spacing: 0; white-space: nowrap; display: flex; align-items: center; min-width: 0; }
 .fuel-header-context > span { margin: 0 14px; color: #c0c8be; }
 .fuel-header-context strong { color: #4d5d51; font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
 .fuel-app-shell .header-nav .nav-icon { color: #799085; font-size: 20px; }
-.fuel-app-shell .header-nav .nav-profile { color: #647764 !important; font-size: 11px; }
+.fuel-app-shell .header-nav .nav-profile { color: #647764 !important; font-size: 12px; }
 .fuel-app-shell .header-nav .nav-profile > span.bi { color: #8c9e7b !important; }
 .fuel-app-shell #header .navbar_white_text { color: #647764 !important; }
 .fuel-app-shell #sidebar {
@@ -79,9 +79,9 @@ body.fuel-dashboard-shell, body.fuel-products-shell {
 .fuel-brand-logo { width: 64px; height: 60px; flex-shrink: 0; display: grid; place-items: center; background: #fff; border-radius: 10px; padding: 6px; }
 .fuel-brand-logo img { width: 100%; height: 100%; object-fit: contain; }
 .fuel-brand-dot { color: var(--fuel-orange); }
-.fuel-workspace-label { color: #fff3cd !important; font-size: 9px; letter-spacing: 1.6px; margin: 30px 8px 14px; }
+.fuel-workspace-label { color: #fff3cd !important; font-size: 10px; letter-spacing: 1.6px; margin: 30px 8px 14px; }
 .fuel-app-shell .sidebar-nav .nav-item { margin-bottom: 4px; }
-.fuel-app-shell .sidebar-nav .fuel-nav-section { color: #fff3cd !important; font-size: 8px; font-weight: 700; letter-spacing: 1.4px; padding: 10px 11px 7px; }
+.fuel-app-shell .sidebar-nav .fuel-nav-section { color: #fff3cd !important; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; padding: 10px 11px 7px; }
 .fuel-app-shell .sidebar-nav .nav-link,
 .fuel-app-shell .sidebar-nav .nav-link.collapsed {
     background: transparent !important; color: #fff3cd !important;
@@ -97,8 +97,8 @@ body.fuel-dashboard-shell, body.fuel-products-shell {
 .fuel-app-shell .sidebar-nav .nav-content a:hover { color: #fff3cd !important; background: #253e42 !important; }
 .fuel-sidebar-note { margin-top: auto; padding: 34px 8px 0; color: #fff3cd !important; }
 .fuel-sidebar-note > i { display: block; font-size: 33px; color: var(--bs-cyan) !important; margin-bottom: 16px; }
-.fuel-sidebar-note strong { display: block; font-size: 11px; color: #fff3cd !important; }
-.fuel-sidebar-note p { font-size: 11px; color: #fff3cd !important; line-height: 1.8; margin: 10px 0 24px; }
+.fuel-sidebar-note strong { display: block; font-size: 12px; color: #fff3cd !important; }
+.fuel-sidebar-note p { font-size: 12px; color: #fff3cd !important; line-height: 1.8; margin: 10px 0 24px; }
 .fuel-sidebar-note small { font-size: 8px; color: #fff3cd !important; letter-spacing: 1.4px; }
 .fuel-app-shell #main { margin: 76px 0 0 224px; padding: 34px 36px 0; min-height: calc(100vh - 76px); }
 .fuel-app-shell #footer { margin-left: 224px; }
@@ -123,7 +123,7 @@ body.fuel-dashboard-shell, body.fuel-products-shell {
 @media (max-width: 760px) {
     .fuel-app-shell #header { padding-inline: 18px; height: 64px; }
     .fuel-app-shell #sidebar { top: 64px; }
-    .fuel-app-shell .logo .fuel-header-context { font-size: 10px; }
+    .fuel-app-shell .logo .fuel-header-context { font-size: 12px; }
     .fuel-header-context > span { margin-inline: 8px; }
     .fuel-app-shell #header .toggle-sidebar-btn { padding-right: 12px; }
     .fuel-app-shell #main { margin-top: 64px; padding: 25px 16px 0; }

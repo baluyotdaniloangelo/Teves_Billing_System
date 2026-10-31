@@ -40,22 +40,50 @@
     </section>
 </main>
 <script>
-$(function () {
-    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" } });
-    const auditId = {{ (int) $audit->audit_id }};
-    $('#approve-lpg-audit').on('click', function () {
-        if (!window.confirm('Approve this physical count? Approved counts will carry forward to subsequent LPG reports.')) return;
-        $.post("{{ route('lpg.starting-audits.approve', $audit->audit_id) }}").done(showResult).fail(showError);
-    });
-    $('#return-lpg-audit').on('click', function () {
-        const approved = @json($audit->status === 'APPROVED');
-        const reason = window.prompt(approved ? 'Reason for revoking approval and returning this audit for correction:' : 'Reason for returning this audit for correction:');
-        if (reason === null) return;
-        if (!reason.trim()) { window.alert('Please enter a reason.'); return; }
-        $.post("{{ route('lpg.starting-audits.return', $audit->audit_id) }}", { reason: reason }).done(showResult).fail(showError);
-    });
-    function showResult(response) { $('#lpg-audit-action-result').removeClass('d-none alert-danger').addClass('alert-success').text(response.message); window.setTimeout(() => window.location.href = "{{ route('lpg.starting-audits.index') }}", 700); }
-    function showError(xhr) { $('#lpg-audit-action-result').removeClass('d-none alert-success').addClass('alert-danger').text(xhr.responseJSON?.message || 'Unable to save the audit decision.'); }
+const csrfToken = "{{ csrf_token() }}";
+const resultAlert = document.getElementById('lpg-audit-action-result');
+
+document.getElementById('approve-lpg-audit')?.addEventListener('click', async function () {
+    if (!window.confirm('Approve this physical count? Approved counts will carry forward to subsequent LPG reports.')) return;
+    await submitAuditDecision(this, "{{ route('lpg.starting-audits.approve', $audit->audit_id) }}");
 });
+
+document.getElementById('return-lpg-audit')?.addEventListener('click', async function () {
+    const approved = @json($audit->status === 'APPROVED');
+    const reason = window.prompt(approved ? 'Reason for revoking approval and returning this audit for correction:' : 'Reason for returning this audit for correction:');
+    if (reason === null) return;
+    if (!reason.trim()) { window.alert('Please enter a reason.'); return; }
+    await submitAuditDecision(this, "{{ route('lpg.starting-audits.return', $audit->audit_id) }}", { reason: reason.trim() });
+});
+
+async function submitAuditDecision(button, url, payload = {}) {
+    const originalContent = button.innerHTML;
+    button.disabled = true;
+    button.textContent = 'Saving…';
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: new URLSearchParams(payload).toString()
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.message || 'Unable to save the audit decision.');
+        resultAlert.classList.remove('d-none', 'alert-danger');
+        resultAlert.classList.add('alert-success');
+        resultAlert.textContent = data.message || 'Audit decision saved.';
+        window.setTimeout(() => { window.location.href = "{{ route('lpg.starting-audits.index') }}"; }, 700);
+    } catch (error) {
+        resultAlert.classList.remove('d-none', 'alert-success');
+        resultAlert.classList.add('alert-danger');
+        resultAlert.textContent = error.message || 'Unable to save the audit decision.';
+        button.disabled = false;
+        button.innerHTML = originalContent;
+    }
+}
 </script>
 @endsection

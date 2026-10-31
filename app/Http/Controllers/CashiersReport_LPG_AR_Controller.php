@@ -49,6 +49,7 @@ class CashiersReport_LPG_AR_Controller extends Controller
 				'teves_cashiers_report_lpg_ar.client_idx',
 				'teves_client_table.client_name',
 				'teves_cashiers_report_lpg_ar.dr_number',
+				'teves_cashiers_report_lpg_ar.cr_number',
 				'teves_cashiers_report_lpg_ar.remarks',
 				'teves_cashiers_report_lpg_ar.amount_received',
 			]);
@@ -79,6 +80,7 @@ class CashiersReport_LPG_AR_Controller extends Controller
 				'teves_cashiers_report_lpg_ar.client_idx',
 				'teves_client_table.client_name',
 				'teves_cashiers_report_lpg_ar.dr_number',
+				'teves_cashiers_report_lpg_ar.cr_number',
 				'teves_cashiers_report_lpg_ar.remarks',
 				'teves_cashiers_report_lpg_ar.amount_received',
 			]);
@@ -94,6 +96,7 @@ class CashiersReport_LPG_AR_Controller extends Controller
 			'ar_date'            => ['nullable', 'date'],
 			'client_idx'         => ['required', 'integer', 'exists:teves_client_table,client_id'],
 			'dr_number'          => ['required', 'string', 'max:100'],
+			'cr_number'          => ['nullable', 'string', 'max:100'],
 			'remarks'            => ['nullable', 'string'],
 			'amount_received'    => ['required', 'numeric', 'min:0'],
 		]);
@@ -115,6 +118,7 @@ class CashiersReport_LPG_AR_Controller extends Controller
 		$ar->ar_date = now();
 		$ar->client_idx = $data['client_idx'];
 		$ar->dr_number = $data['dr_number'];
+		$ar->cr_number = $data['cr_number'] ?? null;
 		$ar->remarks = $data['remarks'] ?? null;
 		$ar->amount_received = $data['amount_received'];
 		$ar->created_at = $now;
@@ -138,6 +142,7 @@ class CashiersReport_LPG_AR_Controller extends Controller
 			'ar_date'                   => ['nullable', 'date'],
 			'client_idx'                => ['required', 'integer', 'exists:teves_client_table,client_id'],
 			'dr_number'                 => ['required', 'string', 'max:100'],
+			'cr_number'                 => ['nullable', 'string', 'max:100'],
 			'remarks'                   => ['nullable', 'string'],
 			'amount_received'           => ['required', 'numeric', 'min:0'],
 		]);
@@ -160,6 +165,7 @@ class CashiersReport_LPG_AR_Controller extends Controller
 		
 		$ar->client_idx = $data['client_idx'];
 		$ar->dr_number = $data['dr_number'];
+		$ar->cr_number = $data['cr_number'] ?? null;
 		$ar->remarks = $data['remarks'] ?? null;
 		$ar->amount_received = $data['amount_received'];
 		$ar->updated_at = now();

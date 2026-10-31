@@ -284,12 +284,13 @@
 <div class="detail-report">
     <table>
         <thead>
-            <tr><th colspan="5" class="title">ACCOUNTS RECEIVABLES COLLECTION</th></tr>
+            <tr><th colspan="6" class="title">ACCOUNTS RECEIVABLES COLLECTION</th></tr>
             <tr>
-                <th style="width: 23%">Account Name</th>
-                <th style="width: 17%">Account Number</th>
-                <th style="width: 19%">DR Number's</th>
-                <th style="width: 25%">Remarks</th>
+                <th style="width: 20%">Account Name</th>
+                <th style="width: 14%">Account Number</th>
+                <th style="width: 14%">DR Number</th>
+                <th style="width: 14%">C.R. Number</th>
+                <th style="width: 22%">Remarks</th>
                 <th style="width: 16%">Amount Received</th>
             </tr>
         </thead>
@@ -299,11 +300,12 @@
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td>{{ $row->client_account_number ?? '' }}</td>
                 <td>{{ $row->dr_number ?? '' }}</td>
+                <td>{{ $row->cr_number ?? '' }}</td>
                 <td>{{ $row->remarks ?? '' }}</td>
                 <td class="number">{{ $money($row->amount_received) }}</td>
             </tr>
         @empty
-            <tr><td colspan="5" class="empty">No accounts receivable collections recorded.</td></tr>
+            <tr><td colspan="6" class="empty">No accounts receivable collections recorded.</td></tr>
         @endforelse
         </tbody>
     </table>

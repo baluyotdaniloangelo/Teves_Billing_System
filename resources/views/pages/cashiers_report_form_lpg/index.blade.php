@@ -72,7 +72,7 @@
     </section>
 
 
-    <div class="fuel-cashiers-footer"><span><strong>TEVES.</strong> Clarity for every collection.</span><span>LPG cashier report</span></div>
+    <div class="fuel-cashiers-footer"><span><strong</strong></span><span>LPG cashier report</span></div>
 </main>
 
 	@include('pages.cashiers_report_form_lpg.scripts.plugins_script')

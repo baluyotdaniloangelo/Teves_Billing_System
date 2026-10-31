@@ -460,7 +460,7 @@
     </section>
 
 
-    <div class="fuel-cashiers-footer"><span><strong>TEVES.</strong> Clarity for every collection.</span><span>FUEL cashier report</span></div>
+    <div class="fuel-cashiers-footer"><span><strong></strong></span><span>FUEL cashier report</span></div>
 </main>
 
 

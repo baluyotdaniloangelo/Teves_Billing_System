@@ -88,6 +88,18 @@ ADD / EDIT MODAL
                             </div>
                         </div>
                         <div class="col-md-12">
+                            <label for="cr_number" class="form-label fw-semibold">
+                                <i class="bi bi-receipt me-2 text-success"></i>C.R. Number <span class="text-muted fw-normal">(optional)</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control form-control-sm rounded-3"
+                                   id="cr_number"
+                                   name="cr_number"
+                                   maxlength="100"
+                                   autocomplete="off"
+                                   placeholder="Enter C.R. number">
+                        </div>
+                        <div class="col-md-12">
                             <label for="ar_account_id" class="form-label fw-semibold">
                                 <i class="bi bi-person-lines-fill me-2 text-success"></i>Account Name
                             </label>
@@ -236,6 +248,11 @@ ADD / EDIT MODAL
                         <div class="d-flex justify-content-between border-bottom py-2">
                             <span class="text-muted small">DR Number</span>
                             <span class="fw-semibold small text-end" id="lpg_ar_delete_dr_number">-</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-bottom py-2">
+                            <span class="text-muted small">C.R. Number</span>
+                            <span class="fw-semibold small text-end" id="lpg_ar_delete_cr_number">-</span>
                         </div>
 
                         <div class="d-flex justify-content-between border-bottom py-2">

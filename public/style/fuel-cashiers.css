@@ -22,7 +22,7 @@ body.fuel-cashiers-shell .fuel-report-theme { background: transparent; }
 .fuel-cashiers-heading { display: flex; align-items: center; justify-content: space-between; gap: 22px; margin-bottom: 27px; }
 .fuel-cashiers-heading h1 { color: var(--fuel-ink); font: 850 clamp(26px, 2.25vw, 37px)/1.3 'Nunito', sans-serif; letter-spacing: -1.3px; margin: 8px 0 10px; }
 .fuel-cashiers-heading h1 > span { color: var(--fuel-orange); }
-.fuel-cashiers-eyebrow { margin: 0; color: #7d8c80; font-size: 9px; font-weight: 800; letter-spacing: 1.8px; }
+.fuel-cashiers-eyebrow { margin: 0; color: #7d8c80; font-size: 12px; font-weight: 800; letter-spacing: 1.8px; }
 .fuel-cashiers-subtitle { color: #85917f; font-size: 12px; margin: 0; }
 .fuel-cashiers-chip { display: inline-flex; align-items: center; gap: 7px; color: #7c9270; background: #eef3e9; border: 1px solid #e1e9da; border-radius: 6px; padding: 8px 12px; font-size: 10px; white-space: nowrap; }
 .fuel-report-back { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #dfe7d9; background: white; color: #768b68; padding: 10px 13px; border-radius: 5px; font-size: 11px; font-weight: 700; white-space: nowrap; }
@@ -30,18 +30,18 @@ body.fuel-cashiers-shell .fuel-report-theme { background: transparent; }
 body.fuel-cashiers-shell .card { border: 1px solid #e4e9e1 !important; border-radius: 9px !important; box-shadow: none !important; background-color: white; }
 body.fuel-cashiers-shell .card-header { box-shadow: none; border-bottom-color: #e7ede0; }
 body.fuel-cashiers-shell .card-header :is(h4, h5, h6) { font-family: inherit; color: #20332f; font-size: 15px; font-weight: 800 !important; letter-spacing: -.2px; }
-body.fuel-cashiers-shell .card-header :is(small, p) { font-size: 10px; line-height: 1.7; }
+body.fuel-cashiers-shell .card-header :is(small, p) { font-size: 12px; line-height: 1.7; }
 body.fuel-cashiers-shell .fuel-report-list-panel > .card-header { padding: 22px 23px !important; }
 body.fuel-cashiers-shell .fuel-report-list-panel > .card-header .rounded-circle { width: 39px !important; height: 41px !important; border-radius: 6px !important; background: #f0f5e9 !important; }
 body.fuel-cashiers-shell .fuel-report-list-panel > .card-header .rounded-circle i { color: #809872 !important; font-size: 19px !important; }
 body.fuel-cashiers-shell .fuel-report-list-panel > .card-body { padding: 0 22px 20px !important; }
 body.fuel-cashiers-shell .fuel-cashier-filters { background: #f8faf5; border: 1px solid #e6ecdf !important; border-radius: 7px !important; margin-bottom: 20px !important; }
 body.fuel-cashiers-shell .fuel-cashier-filters > .card-body { padding: 17px !important; }
-body.fuel-cashiers-shell .fuel-cashier-filters .form-label { color: #809275; font-size: 9px; font-weight: 700 !important; letter-spacing: .5px; }
+body.fuel-cashiers-shell .fuel-cashier-filters .form-label { color: #809275; font-size: 12px; font-weight: 700 !important; letter-spacing: .5px; }
 body.fuel-cashiers-shell .fuel-cashier-filters .form-label i { display: none; }
 body.fuel-cashiers-shell .fuel-cashier-filters .input-group-text { border-radius: 5px 0 0 5px; background: white; color: #91a382; border-color: #dfe7d7; }
 body.fuel-cashiers-shell .fuel-cashier-filters .input-group .form-control { border-left: 0; border-radius: 0 5px 5px 0; }
-body.fuel-cashiers-shell .btn { font-family: inherit; border-radius: 5px !important; font-size: 11px; font-weight: 700; padding: 9px 12px; box-shadow: none !important; }
+body.fuel-cashiers-shell .btn { font-family: inherit; border-radius: 5px !important; font-size: 14px; font-weight: 700; padding: 9px 12px; box-shadow: none !important; }
 body.fuel-cashiers-shell .btn :is(.bi) { color: inherit !important; }
 body.fuel-cashiers-shell :is(.btn-primary, .btn-success) {
     --bs-btn-color: #fff; --bs-btn-bg: #e66b3e; --bs-btn-border-color: #e66b3e;
@@ -54,13 +54,13 @@ body.fuel-cashiers-shell .btn-dark { --bs-btn-bg: #172d32; --bs-btn-border-color
 body.fuel-cashiers-shell .btn-danger { --bs-btn-color: #fff; --bs-btn-bg: #c95a57; --bs-btn-border-color: #c95a57; --bs-btn-hover-color: #fff; --bs-btn-hover-bg: #aa4744; --bs-btn-hover-border-color: #aa4744; }
 body.fuel-cashiers-shell :is(.btn-light, .btn-secondary) { --bs-btn-color: #718566; --bs-btn-bg: #f3f7ed; --bs-btn-border-color: #e0e8d6; --bs-btn-hover-color: #4c673d; --bs-btn-hover-bg: #eaf1e1; --bs-btn-hover-border-color: #d5e0ca; }
 body.fuel-cashiers-shell :is(.btn-outline-primary, .btn-outline-success, .btn-outline-secondary) { --bs-btn-color: #718565; --bs-btn-border-color: #dee7d5; --bs-btn-hover-color: #4e683e; --bs-btn-hover-bg: #f0f5e8; --bs-btn-hover-border-color: #d1dec3; --bs-btn-active-color: #4e683e; --bs-btn-active-bg: #edf3e4; --bs-btn-active-border-color: #d1dec3; }
-body.fuel-cashiers-shell .fuel-report-action-btn { width: auto; min-width: 100px; height: 36px; padding-inline: 13px; font-size: 11px; }
+body.fuel-cashiers-shell .fuel-report-action-btn { width: auto; min-width: 100px; height: 36px; padding-inline: 13px; font-size: 14px; }
 body.fuel-cashiers-shell .fuel-report-header-actions { gap: 8px !important; }
-body.fuel-cashiers-shell :is(.form-control, .form-select, .input-group-text) { color: #49613e; background-color: white; border-color: #dfe7d7; border-radius: 5px; font-family: inherit; font-size: 12px; min-height: 36px; }
+body.fuel-cashiers-shell :is(.form-control, .form-select, .input-group-text) { color: #49613e; background-color: white; border-color: #dfe7d7; border-radius: 5px; font-family: inherit; font-size: 14px; min-height: 36px; }
 body.fuel-cashiers-shell :is(.form-control, .form-select):focus { border-color: #e8a17f; box-shadow: 0 0 0 .17rem #e66b3e18; }
 body.fuel-cashiers-shell :is(.form-control, .form-select):disabled { color: #8c9d80; background-color: #f0f4e9; }
 body.fuel-cashiers-shell .form-control::placeholder { color: #a0ad95; }
-body.fuel-cashiers-shell .form-label { font-size: 11px; color: #748b65; }
+body.fuel-cashiers-shell .form-label { font-size: 12px; color: #748b65; }
 body.fuel-cashiers-shell .text-muted { color: #8a9982 !important; }
 body.fuel-cashiers-shell :is(.text-primary, .text-info, .text-body) { color: #526b44 !important; }
 body.fuel-cashiers-shell .text-success { color: #20836d !important; }
@@ -71,7 +71,7 @@ body.fuel-cashiers-shell .card-header.bg-light { background: #f5f8ef !important;
 body.fuel-cashiers-shell .bg-light { background-color: #f7f9f3 !important; }
 body.fuel-cashiers-shell .table { --bs-table-bg: #fff; --bs-table-color: #526a46; --bs-table-border-color: #e8ede2; --bs-table-hover-bg: #f8fbf3; --bs-table-hover-color: #526a46; --bs-table-striped-bg: white; color: #526a46; font-size: 11px; font-variant-numeric: tabular-nums; border-color: #e8ede2; }
 body.fuel-cashiers-shell .table :is(th, td) { padding: 13px 12px !important; border-left: 0 !important; border-right: 0 !important; vertical-align: middle; }
-body.fuel-cashiers-shell .table thead th { background: #f7f9f2 !important; color: #819575 !important; border-bottom: 1px solid #e1e9d8 !important; font-size: 10px; font-weight: 600; white-space: nowrap; }
+body.fuel-cashiers-shell .table thead th { background: #f7f9f2 !important; color: #819575 !important; border-bottom: 1px solid #e1e9d8 !important; font-size: 12px; font-weight: 600; white-space: nowrap; }
 body.fuel-cashiers-shell .table thead th i { display: none; }
 /* DataTables keeps a zero-height header copy inside the scrolling body. */
 body.fuel-cashiers-shell .dt-scroll-body > table > thead > tr > :is(th, td) { padding-block: 0 !important; border-block-width: 0 !important; }
@@ -81,7 +81,7 @@ body.fuel-cashiers-shell .table tfoot :is(td, th) { background: #f5f9ee !importa
 body.fuel-cashiers-shell .table-responsive { border-radius: 6px; }
 body.fuel-cashiers-shell .dt-container { color: #8b9e7e; font-size: 10px; }
 body.fuel-cashiers-shell .dt-container .dt-input { background: white; color: #6b8458; font-size: 11px; border: 1px solid #e0e8d7; border-radius: 5px; padding: 6px 9px; }
-body.fuel-cashiers-shell .dt-container .dt-paging .dt-paging-button { color: #839b70 !important; background: white !important; border: 1px solid #e3ebd9 !important; border-radius: 4px; font-size: 10px; min-width: 27px; padding: 5px 8px; }
+body.fuel-cashiers-shell .dt-container .dt-paging .dt-paging-button { color: #839b70 !important; background: white !important; border: 1px solid #e3ebd9 !important; border-radius: 4px; font-size: 12px; min-width: 27px; padding: 5px 8px; }
 body.fuel-cashiers-shell .dt-container .dt-paging .dt-paging-button.current { color: white !important; background: #172d32 !important; border-color: #172d32 !important; }
 body.fuel-cashiers-shell .dt-container .dt-paging .dt-paging-button:not(.current):not(.disabled):hover { color: #61794e !important; background: #f0f5e8 !important; }
 body.fuel-cashiers-shell #getCashierReport { border-collapse: separate; border-spacing: 0 12px; border: 0; margin: 0 !important; }
@@ -90,7 +90,7 @@ body.fuel-cashiers-shell .cashier-report-card { border: 1px solid #e4ebdc; borde
 body.fuel-cashiers-shell .cashier-report-card > .d-flex:first-child > .d-flex > div:last-child { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; row-gap: 6px; }
 body.fuel-cashiers-shell .cashier-report-icon { color: #829e6f; background: #f1f6e9; border: 1px solid #e4ecda; border-radius: 6px; width: 35px; height: 38px; display: grid; place-items: center; flex-shrink: 0; }
 body.fuel-cashiers-shell .cashier-report-title { color: #455f39; font-size: 12px; }
-body.fuel-cashiers-shell .cashier-report-sub { color: #7a8e6b; font-size: 11px; }
+body.fuel-cashiers-shell .cashier-report-sub { color: #7a8e6b; font-size: 12px; }
 body.fuel-cashiers-shell .cashier-report-sub strong, body.fuel-cashiers-shell .cashier-report-title strong { font-weight: 700; }
 body.fuel-cashiers-shell .cashier-report-card hr { border-top-color: #e5eddb; margin: 14px 0 10px; opacity: 1; }
 body.fuel-cashiers-shell .cashier-report-meta { color: #a0af92; font-size: 9px; }
@@ -110,21 +110,21 @@ body.fuel-cashiers-shell .fuel-report-editor > .card > .card-header h5 { font-si
 body.fuel-cashiers-shell .fuel-report-editor > .card > .card-header small { display: block; margin-top: 5px; }
 body.fuel-cashiers-shell #cashierReportOverview .list-group-item { border-color: #e6eddf; padding-block: 10px !important; font-size: 11px; }
 body.fuel-cashiers-shell #cashierReportOverview .card { border-radius: 7px !important; }
-body.fuel-cashiers-shell #cashierReportOverview .card-header h6 { color: #627c51; font-size: 11px; }
-body.fuel-cashiers-shell #cashierReportOverview .card-body small { font-size: 10px; }
+body.fuel-cashiers-shell #cashierReportOverview .card-header h6 { color: #627c51; font-size: 12px; }
+body.fuel-cashiers-shell #cashierReportOverview .card-body small { font-size: 12px; }
 body.fuel-cashiers-shell #PurchaseOrderTab { background: white !important; border: 1px solid #e4e9e1; border-radius: 8px !important; padding: 5px !important; gap: 4px !important; box-shadow: none !important; }
 body.fuel-cashiers-shell #PurchaseOrderTab .nav-item { flex-basis: 0; }
-body.fuel-cashiers-shell #PurchaseOrderTab .nav-link { font-size: 12px; font-weight: 700 !important; border: 0; border-radius: 5px !important; color: #83917a; padding: 12px 14px !important; box-shadow: none !important; min-height: 100%; }
+body.fuel-cashiers-shell #PurchaseOrderTab .nav-link { font-size: 14px; font-weight: 700 !important; border: 0; border-radius: 5px !important; color: #83917a; padding: 12px 14px !important; box-shadow: none !important; min-height: 100%; }
 body.fuel-cashiers-shell #PurchaseOrderTab .nav-link.active { color: white; background: #172d32; border-color: #172d32; }
 body.fuel-cashiers-shell #PurchaseOrderTab .nav-link.active i { color: #efb493; }
 body.fuel-cashiers-shell #PurchaseOrderTab .nav-link:hover:not(.active) { background: #f2f6eb; color: #5b754a; }
 body.fuel-cashiers-shell .fuel-report-subtabs { border-color: #e4ebdb; background: #f5f8f0; border-radius: 7px; padding: 5px; gap: 5px; }
-body.fuel-cashiers-shell .fuel-report-subtabs .nav-link { border: 1px solid transparent; background: transparent; color: #8b9c80; font-size: 11px; min-height: 40px; border-radius: 5px; padding: 7px 10px; }
+body.fuel-cashiers-shell .fuel-report-subtabs .nav-link { border: 1px solid transparent; background: transparent; color: #8b9c80; font-size: 14px; min-height: 40px; border-radius: 5px; padding: 7px 10px; }
 body.fuel-cashiers-shell .fuel-report-subtabs .nav-link.active { color: #4b6840; background: white; border-color: #e0e8d6; box-shadow: 0 1px 3px #21362e08; }
 body.fuel-cashiers-shell .fuel-report-subtabs .subtab-icon { background: #edf3e5; color: #7d986b; width: 27px; height: 27px; flex-basis: 27px; border-radius: 5px; }
 body.fuel-cashiers-shell .fuel-report-subtabs .nav-link.active .subtab-icon { background: #fbefe8; color: #d77a50; }
 body.fuel-cashiers-shell .misc-sales-subtabs { border-color: #e1ead7; }
-body.fuel-cashiers-shell .misc-sales-subtabs .nav-link { color: #8b9c80; font-size: 10px; border-radius: 5px 5px 0 0; }
+body.fuel-cashiers-shell .misc-sales-subtabs .nav-link { color: #8b9c80; font-size: 12px; border-radius: 5px 5px 0 0; }
 body.fuel-cashiers-shell .misc-sales-subtabs .nav-link.active { background: #f4f8ed; color: #6b8559; border-bottom-color: #e19a75; }
 body.fuel-cashiers-shell .misc-sales-subtabs .subtab-icon, body.fuel-cashiers-shell .misc-sales-subtabs .nav-link.active .subtab-icon { background: #edf3e5; color: #8aa176; }
 body.fuel-cashiers-shell #fuelCashReportSubTabs { border-color: #e2ead9; gap: 5px; }
@@ -140,13 +140,13 @@ body.fuel-cashiers-shell .fuel-cash-actual-row { border-top-color: #d7e5ca !impo
 body.fuel-cashiers-shell .modal .modal-content { background: white; color: #526a46; border: 1px solid #e2e9d9; border-radius: 10px !important; box-shadow: 0 24px 80px #172d3229 !important; }
 body.fuel-cashiers-shell .modal .modal-header { background: #172d32 !important; color: white; border: 0; padding: 19px 22px !important; }
 body.fuel-cashiers-shell .modal .modal-header :is(h4, h5, h6, .text-white) { color: white !important; font-size: 16px; }
-body.fuel-cashiers-shell .modal .modal-header :is(small, .text-white-50) { color: #a9bdb9 !important; font-size: 11px; }
+body.fuel-cashiers-shell .modal .modal-header :is(small, .text-white-50) { color: #a9bdb9 !important; font-size: 12px; }
 body.fuel-cashiers-shell .modal .modal-footer { background: #f7faf2 !important; border-top: 1px solid #e3ebd9; padding: 14px 20px; }
 body.fuel-cashiers-shell .modal .bg-dark { background: #172d32 !important; color: white; }
 body.fuel-cashiers-shell .modal :is(.bg-light, .modal-footer.bg-light) { background: #f7faf2 !important; }
-body.fuel-cashiers-shell .modal .form-label { color: #748d64; font-size: 11px; }
-body.fuel-cashiers-shell .modal .form-text { color: #96a48c; font-size: 10px; }
-.fuel-cashiers-footer { display: flex; justify-content: space-between; gap: 20px; padding: 23px 0; color: #9caf8e; font-size: 9px; }
+body.fuel-cashiers-shell .modal .form-label { color: #748d64; font-size: 14px; }
+body.fuel-cashiers-shell .modal .form-text { color: #96a48c; font-size: 14px; }
+.fuel-cashiers-footer { display: flex; justify-content: space-between; gap: 20px; padding: 23px 0; color: #9caf8e; font-size: 12px; }
 .fuel-cashiers-footer strong { color: #728b62; letter-spacing: 1px; margin-right: 8px; }
 @media (max-width: 1200px) {
     .fuel-report-stat { padding: 17px 14px; }
@@ -158,12 +158,12 @@ body.fuel-cashiers-shell .modal .form-text { color: #96a48c; font-size: 10px; }
     .fuel-cashiers-heading h1 { font-size: 28px; }
     .fuel-cashiers-subtitle { font-size: 11px; line-height: 1.8; }
     .fuel-cashiers-chip { display: none; }
-    .fuel-report-back { margin-top: 16px; font-size: 10px; }
+    .fuel-report-back { margin-top: 16px; font-size: 12px; }
     .fuel-report-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
     .fuel-report-stat { padding: 16px 13px; }
-    .fuel-report-stat-label { font-size: 10px; }
+    .fuel-report-stat-label { font-size: 12px; }
     .fuel-report-stat-value { font-size: 22px; margin: 15px 0 11px; }
-    .fuel-report-stat p { font-size: 8px; }
+    .fuel-report-stat p { font-size: 12px; }
     body.fuel-cashiers-shell .fuel-report-list-panel > .card-header { padding: 18px 15px !important; }
     body.fuel-cashiers-shell .fuel-report-list-panel > .card-body { padding: 0 15px 16px !important; }
     body.fuel-cashiers-shell .fuel-cashier-filters > .card-body { padding: 14px !important; }
@@ -180,15 +180,15 @@ body.fuel-cashiers-shell .modal .form-text { color: #96a48c; font-size: 10px; }
     body.fuel-cashiers-shell .fuel-report-header-actions { width: 100%; }
     body.fuel-cashiers-shell .fuel-report-header-actions .fuel-report-action-btn { min-width: 0; min-height: 40px; height: auto; flex: 1; font-size: 10px; padding: 7px 9px; white-space: normal; }
     body.fuel-cashiers-shell #PurchaseOrderTab { flex-wrap: nowrap; gap: 2px !important; }
-    body.fuel-cashiers-shell #PurchaseOrderTab .nav-link { height: 100%; padding: 10px 5px !important; font-size: 10px; }
+    body.fuel-cashiers-shell #PurchaseOrderTab .nav-link { height: 100%; padding: 10px 5px !important; font-size: 14px; }
     body.fuel-cashiers-shell #PurchaseOrderTab .nav-link i { display: block; margin: 0 0 4px !important; font-size: 16px; }
     body.fuel-cashiers-shell #cashiers_report_fuel > .card > .card-body { padding: 14px !important; }
     body.fuel-cashiers-shell .fuel-report-subtabs { flex-wrap: nowrap; gap: 2px; }
     body.fuel-cashiers-shell .fuel-report-subtabs .nav-item { flex: 1 1 0; min-width: 0; }
-    body.fuel-cashiers-shell .fuel-report-subtabs .nav-link { height: 100%; flex-direction: column; gap: 5px; padding: 7px 4px; font-size: 9px; line-height: 1.5; }
-    body.fuel-cashiers-shell .misc-sales-subtabs .nav-link { font-size: 10px; }
+    body.fuel-cashiers-shell .fuel-report-subtabs .nav-link { height: 100%; flex-direction: column; gap: 5px; padding: 7px 4px; font-size: 14px; line-height: 1.5; }
+    body.fuel-cashiers-shell .misc-sales-subtabs .nav-link { font-size: 12px; }
     body.fuel-cashiers-shell .fuel-report-editor > .tab-content > .tab-pane > .card > .card-body { padding: 14px !important; }
-    .fuel-cashiers-footer { font-size: 8px; }
+    .fuel-cashiers-footer { font-size: 12px; }
 }
 @media print {
     .fuel-cashiers-heading, .fuel-report-stats { break-inside: avoid; }

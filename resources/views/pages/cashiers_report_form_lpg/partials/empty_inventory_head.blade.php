@@ -5,7 +5,7 @@
 <thead>
     <tr>
         <th rowspan="{{ $emptyHeaderRows }}">Item</th>
-        <th rowspan="3">Beg.<br>Inv.</th>
+        <th rowspan="3">Beginning Inventory</th>
         <th colspan="3">Add (+)</th>
         <th colspan="4">Less (-)</th>
         <th rowspan="{{ $emptyHeaderRows }}">Ending<br>Inventory</th>

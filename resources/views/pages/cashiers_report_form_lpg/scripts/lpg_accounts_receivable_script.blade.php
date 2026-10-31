@@ -47,6 +47,7 @@ function initLpgArTable() {
             /*{ data: 'ar_date', defaultContent: '-' },*/
             { data: 'client_name', defaultContent: '-' },
             { data: 'dr_number', defaultContent: '-' },
+            { data: 'cr_number', defaultContent: '-' },
             { data: 'remarks', defaultContent: '-' },
             {
                 data: 'amount_received',
@@ -320,6 +321,7 @@ $(document).on('click', '#EditLpgAr', function (event) {
         $('#client_idx').val(row.client_idx || '');
         $('#ar_account_id').val(row.client_name || '');
         $('#dr_number').val(row.dr_number || '');
+        $('#cr_number').val(row.cr_number || '');
         $('#remarks').val(row.remarks || '');
         $('#amount_received').val(row.amount_received || '');
         $('#CashierReportLpgArModalLabel').text('Edit AR Collection');
@@ -345,6 +347,7 @@ $(document).on('click', '#DeleteLpgAr', function (event) {
         $('#lpg_ar_delete_date').text(formatLpgArDate(row.ar_date));
         $('#lpg_ar_delete_client').text(row.client_name || '-');
         $('#lpg_ar_delete_dr_number').text(row.dr_number || '-');
+        $('#lpg_ar_delete_cr_number').text(row.cr_number || '-');
         $('#lpg_ar_delete_remarks').text(row.remarks || '-');
         $('#lpg_ar_delete_amount_received').text(Number(row.amount_received || 0).toLocaleString('en-PH', {
             minimumFractionDigits: 2,

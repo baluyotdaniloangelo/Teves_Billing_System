@@ -167,6 +167,7 @@
         width: 100%;
         height: 100%;
         padding: .8rem 1rem !important;
+        font-size: 18px;
         color: var(--lpg-primary);
         background-color: transparent;
         border: 1px solid transparent;
@@ -213,6 +214,7 @@
         border-collapse: collapse !important;
         border-spacing: 0;
         border: 1px solid var(--lpg-grid-border) !important;
+        font-size: 18px;
     }
     .lpg-report-theme :is(#LpgSellOutTable, #LpgKitchenTable, #LpgKitchenSetsTable, #LpgKitchenIndividualTable, #LpgEmptyInventoryTable, #LpgRegulatorInventoryTable) :is(th, td) {
         border: 1px solid var(--lpg-grid-border) !important;

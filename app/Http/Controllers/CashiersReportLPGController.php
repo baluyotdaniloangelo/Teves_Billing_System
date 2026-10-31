@@ -763,7 +763,7 @@ class CashiersReportLPGController extends Controller
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'ar.client_idx')
             ->where('ar.cashiers_report_id', $reportId)->whereNull('ar.deleted_at')
             ->orderBy('ar.cashiers_report_lpg_ar_id')
-            ->get(['client.client_name', 'client.client_account_number', 'ar.dr_number', 'ar.remarks', 'ar.amount_received']);
+            ->get(['client.client_name', 'client.client_account_number', 'ar.dr_number', 'ar.cr_number', 'ar.remarks', 'ar.amount_received']);
 
         $miscellaneousRows = DB::table('teves_cashiers_report_lpg_ar_so as sale')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
