@@ -420,7 +420,7 @@ class ProductController extends Controller
 		  'product_unit_measurement' => 'required|string|max:50',
 		  'product_main_idx'  		=> 'nullable|integer|exists:teves_product_main_table,product_main_id',
           'product_capacity'       => 'nullable|required_with:product_capacity_unit|numeric|min:0.001|max:9999999.999',
-          'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
+          'product_capacity_unit'  => ['nullable', 'required_with:product_capacity', Rule::in(['mg', 'g', 'kg', 'mL', 'L', 'fl oz', 'oz', 'lb', 'gal'])],
                   'product_photo'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ], 
         [
@@ -544,7 +544,7 @@ class ProductController extends Controller
 		  'product_unit_measurement' => 'required|string|max:50',
 		  'product_main_idx'         => 'sometimes|nullable|integer|exists:teves_product_main_table,product_main_id',
           'product_capacity'       => 'nullable|required_with:product_capacity_unit|numeric|min:0.001|max:9999999.999',
-          'product_capacity_unit'  => 'nullable|required_with:product_capacity|in:kg,g',
+          'product_capacity_unit'  => ['nullable', 'required_with:product_capacity', Rule::in(['mg', 'g', 'kg', 'mL', 'L', 'fl oz', 'oz', 'lb', 'gal'])],
           'product_photo'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
           'remove_product_photo'   => 'sometimes|boolean',
 		  'components' => 'sometimes|array|max:50',

@@ -11,8 +11,9 @@ function renderProductCapacity(value, type, row) {
     const capacity = Number(value);
     if (!Number.isFinite(capacity)) return '-';
     if (type === 'sort' || type === 'type') return capacity;
-    const unit = ['kg', 'g'].includes(row.product_capacity_unit) ? row.product_capacity_unit : '';
-    return capacity.toLocaleString('en-PH', { maximumFractionDigits: 3 }) + (unit ? ' ' + unit : '');
+    const unit = String(row.product_capacity_unit || '').trim();
+    const safeUnit = unit ? $.fn.dataTable.render.text().display(unit) : '';
+    return capacity.toLocaleString('en-PH', { maximumFractionDigits: 3 }) + (safeUnit ? ' ' + safeUnit : '');
 }
 
 window.productPhotoUrl = function (photoPath) {
