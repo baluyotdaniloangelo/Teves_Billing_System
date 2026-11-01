@@ -7,7 +7,7 @@
             <tr><td colspan="13" style="background:#fff3cd;font-weight:bold;">{{ $capacity }}</td></tr>
             @foreach($rows as $row)
                 <tr>
-                    <td>{{ $row->product_name ?: '-' }}</td>
+                    <td>{{ $row->product_name ?: '-' }}@if (!empty($row->product_code))<small style="display:block;color:#555;">Code: {{ $row->product_code }}</small>@endif</td>
                     @foreach(\App\Models\CashiersReportModel_LPG_EmptyInventory::QUANTITY_FIELDS as $field => $label)
                         <td class="num">{{ number_format((int) $row->{$field}) }}</td>
                     @endforeach

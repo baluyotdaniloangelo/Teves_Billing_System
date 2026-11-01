@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (current !== version) return;
                 const rows = response.data || [];
                 $('#LpgRegulatorInventoryTable tbody').html(rows.length ? rows.map(row => '<tr>'
-                    + '<td>' + escape(row.product_name || 'Unavailable product') + '</td>'
+                    + '<td>' + escape(row.product_name || 'Unavailable product') + (row.product_code ? '<small class="d-block text-muted">Code: ' + escape(row.product_code) + '</small>' : '') + '</td>'
                     + sourceCell(row, 'BEGINNING', row.beginning_quantity)
                     + '<td class="text-end" title="Informational quantity from sold set components">' + qty(row.set_sold_quantity) + '</td>'
                     + sourceCell(row, 'DELIVERY', row.delivery_quantity)

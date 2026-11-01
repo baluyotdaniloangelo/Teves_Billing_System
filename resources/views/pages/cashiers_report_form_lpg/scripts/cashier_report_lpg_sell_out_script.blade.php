@@ -30,6 +30,7 @@ $(function () {
         return row.product_unit_measurement || '';
     };
     const productLabel = row => [row.product_name || 'Unavailable product', productCapacityLabel(row)].filter(Boolean).join(' ');
+    const productCell = row => escape(productLabel(row)) + (row.product_code ? '<small class="d-block text-muted">Code: ' + escape(row.product_code) + '</small>' : '');
 
     function sourceCell(row, mode, value) {
         const id = Number(row.product_idx);
@@ -54,7 +55,7 @@ $(function () {
                 if (version !== summaryVersion) return;
                 const rows = response.data || [];
                 summaryBody.html(rows.length ? rows.map(function (row) {
-                    return '<tr><td>' + escape(productLabel(row)) + '</td>' +
+                    return '<tr><td>' + productCell(row) + '</td>' +
                         sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_filled_quantity : null) +
                         sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_bo_returned_customer_quantity : null) +
                         sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_bo_during_delivery_quantity : null) +

@@ -12,6 +12,7 @@ $(function () {
     const escape = value => $('<div>').text(value == null ? '' : String(value)).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const quantity = value => Number(value || 0).toLocaleString('en-PH', {maximumFractionDigits: 2});
     const label = row => row.product_name || 'Unavailable product';
+    const productCell = row => escape(label(row)) + (row.product_code ? '<small class="d-block text-muted">Code: ' + escape(row.product_code) + '</small>' : '');
     let summaryRequest = null, sourceRequest = null, summaryVersion = 0, sourceVersion = 0, reloadTimer = null, sourceRows = [];
 
     function error(selector, xhr, fallback) {
@@ -33,7 +34,7 @@ $(function () {
                 const rows = response.data || [];
                 $('#LpgRegulatorInventoryTable tbody').html(rows.length ? rows.map(row => {
                     const endingCell = showInventoryDetails ? '<td class="text-end fw-bold ' + (row.ending_quantity < 0 ? 'text-danger' : '') + '">' + (row.ending_quantity == null ? 'Set beginning stock' : quantity(row.ending_quantity)) + '</td>' : '';
-                    return '<tr><td>' + escape(label(row)) + '</td>' + Object.keys(filters).map(mode => sourceCell(row, mode)).join('') + endingCell + '</tr>';
+                    return '<tr><td>' + productCell(row) + '</td>' + Object.keys(filters).map(mode => sourceCell(row, mode)).join('') + endingCell + '</tr>';
                 }).join('') : '<tr><td colspan="' + columnCount + '" class="text-center text-muted py-3">No regulator products configured.</td></tr>');
             }).fail((xhr, status) => {
                 if (version !== summaryVersion || status === 'abort') return;

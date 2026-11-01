@@ -20,11 +20,11 @@ class CashiersReport_LPG_SellOut_Controller extends Controller
         $products = DB::table('teves_product_table as product')
             ->whereIn('product.category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
             ->whereNull('product.deleted_at')->orderBy('product.product_name')
-            ->get(['product.product_id', 'product.product_name', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit']);
+            ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit']);
         foreach ($products as $product) {
             $id = (int) $product->product_id;
             $row = $rows->get($id) ?: [
-                'product_idx' => $id, 'product_name' => $product->product_name,
+                'product_idx' => $id, 'product_name' => $product->product_name, 'product_code' => $product->product_code,
                 'product_unit_measurement' => $product->product_unit_measurement,
                 'product_capacity' => $product->product_capacity, 'product_capacity_unit' => $product->product_capacity_unit,
             ];

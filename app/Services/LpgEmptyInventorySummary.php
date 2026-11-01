@@ -64,11 +64,12 @@ class LpgEmptyInventorySummary
         $products = DB::table('teves_product_table')->whereIn('product_id', $entries->pluck('product_idx')->unique()->all())
             ->whereIn('category_idx', self::categoryIds())
             ->whereNotIn('product_id', LpgRegulatorProducts::ids())
-            ->get(['product_id', 'product_name', 'product_capacity', 'product_capacity_unit'])->keyBy('product_id');
+            ->get(['product_id', 'product_name', 'product_code', 'product_capacity', 'product_capacity_unit'])->keyBy('product_id');
         $entries = $entries->filter(function ($entry) use ($products) { return $products->has($entry['product_idx']); })
             ->map(function ($entry) use ($products) {
                 $product = $products->get($entry['product_idx']);
                 $entry['product_name'] = $product->product_name;
+                $entry['product_code'] = $product->product_code;
                 $entry['product_capacity'] = $product->product_capacity;
                 $entry['product_capacity_unit'] = $product->product_capacity_unit;
                 return $entry;
@@ -95,6 +96,7 @@ class LpgEmptyInventorySummary
             $row = new EmptyInventory(['cashiers_report_id' => $reportId, 'product_idx' => $productId]);
             $row->cashiers_report_lpg_empty_inventory_id = 0;
             $row->product_name = $source['product_name'];
+            $row->product_code = $source['product_code'] ?? null;
             $row->product_capacity = $source['product_capacity'];
             $row->product_capacity_unit = $source['product_capacity_unit'];
             $rows->put($productId, $row);

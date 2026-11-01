@@ -70,12 +70,13 @@ class LpgSellOutSummary
         }
 
         $products = DB::table('teves_product_table')->whereIn('product_id', $records->pluck('product_idx')->unique()->all())
-            ->get(['product_id', 'product_name', 'category_idx', 'product_unit_measurement', 'product_capacity', 'product_capacity_unit'])->keyBy('product_id');
+            ->get(['product_id', 'product_name', 'product_code', 'category_idx', 'product_unit_measurement', 'product_capacity', 'product_capacity_unit'])->keyBy('product_id');
         $regulatorIds = LpgRegulatorProducts::ids();
         $kitchenProductIds = LpgKitchenProducts::ids();
         return $records->map(function ($entry) use ($products) {
             $product = $products->get($entry['product_idx']);
             $entry['product_name'] = $product->product_name ?? 'Unavailable product';
+            $entry['product_code'] = $product->product_code ?? null;
             $entry['category_idx'] = (int) ($product->category_idx ?? 0);
             $entry['product_unit_measurement'] = $product->product_unit_measurement ?? null;
             $entry['product_capacity'] = $product->product_capacity ?? null;
@@ -94,7 +95,7 @@ class LpgSellOutSummary
         $openings = $reportId ? $this->openingBalances($reportId) : collect();
         return $records->groupBy('product_idx')->map(function ($entries, $productId) use ($openings) {
             $first = $entries->first();
-            $row = array_intersect_key($first, array_flip(['product_idx', 'product_name', 'product_unit_measurement', 'product_capacity', 'product_capacity_unit']));
+            $row = array_intersect_key($first, array_flip(['product_idx', 'product_name', 'product_code', 'product_unit_measurement', 'product_capacity', 'product_capacity_unit']));
             foreach (self::MODES as $mode) {
                 $source = $entries->where('mode', $mode);
                 $key = strtolower($mode);

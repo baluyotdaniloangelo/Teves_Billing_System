@@ -63,7 +63,7 @@ class CashiersReportModel_LPG_EmptyInventory extends Model
     {
         return $query->leftJoin('teves_product_table as empty_product', 'empty_product.product_id', '=', $this->table . '.product_idx')
             ->where($this->table . '.cashiers_report_id', $reportId)
-            ->select([$this->table . '.*', 'empty_product.product_name', 'empty_product.product_capacity', 'empty_product.product_capacity_unit'])
+            ->select([$this->table . '.*', 'empty_product.product_name', 'empty_product.product_code', 'empty_product.product_capacity', 'empty_product.product_capacity_unit'])
             ->orderByRaw("CASE empty_product.product_capacity_unit WHEN 'kg' THEN 0 WHEN 'g' THEN 1 ELSE 2 END")
             ->orderBy('empty_product.product_capacity')
             ->orderBy('empty_product.product_name');

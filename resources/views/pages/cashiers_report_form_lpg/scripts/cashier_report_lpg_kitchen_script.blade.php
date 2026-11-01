@@ -14,6 +14,7 @@ $(function () {
     const quantity = value => Number(value || 0).toLocaleString('en-PH', {maximumFractionDigits: 2});
     const money = value => Number(value || 0).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     const label = row => [row.product_name || 'Unavailable product', row.product_unit_measurement].filter(Boolean).join(' ');
+    const productCell = row => escape(label(row)) + (row.product_code ? '<small class="d-block text-muted">Code: ' + escape(row.product_code) + '</small>' : '');
     const show = element => bootstrap.Modal.getOrCreateInstance(element).show();
     const hide = element => bootstrap.Modal.getOrCreateInstance(element).hide();
 
@@ -38,9 +39,9 @@ $(function () {
             const capacity = row.product_capacity ? ' ' + Number(row.product_capacity) + ' ' + (row.product_capacity_unit || '') : '';
             const components = (row.components || []).map(component => {
                 const componentCapacity = component.product_capacity ? ' ' + Number(component.product_capacity) + ' ' + (component.product_capacity_unit || '') : '';
-                return Number(component.quantity || 0).toLocaleString('en-PH', {maximumFractionDigits: 3}) + ' × ' + escape((component.product_name || 'Unavailable product') + componentCapacity) + (component.is_active ? '' : ' (inactive)');
+                return Number(component.quantity || 0).toLocaleString('en-PH', {maximumFractionDigits: 3}) + ' × ' + escape((component.product_name || 'Unavailable product') + componentCapacity) + (component.product_code ? ' <span class="text-muted">(' + escape(component.product_code) + ')</span>' : '') + (component.is_active ? '' : ' (inactive)');
             }).join(', ');
-            const item = escape((row.product_name || 'Unavailable product') + capacity) + (components ? '<div class="small text-muted">' + components + '</div>' : '');
+            const item = escape((row.product_name || 'Unavailable product') + capacity) + (row.product_code ? '<small class="d-block text-muted">Code: ' + escape(row.product_code) + '</small>' : '') + (components ? '<div class="small text-muted">' + components + '</div>' : '');
             const ending = row.template_ending_quantity == null ? '—' : quantity(row.template_ending_quantity);
             const actual = row.template_actual_quantity == null ? '—' : quantity(row.template_actual_quantity);
             const beginningCell = row.report_only ? '<td class="text-center">—</td>' : sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null);
@@ -75,7 +76,7 @@ $(function () {
                         group = row.main_product_name;
                         html += '<tr><td colspan="15" class="fw-bold">' + escape(group) + '</td></tr>';
                     }
-                    html += '<tr><td>' + escape(label(row)) + '</td>' + sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null);
+                    html += '<tr><td>' + productCell(row) + '</td>' + sourceCell(row, 'BEGINNING', row.beginning_count ? row.beginning_quantity : null);
                     ['DELIVERY','DAMAGED','BO_REPLACEMENT','SWAP','ON_LOAN','RAFFLE','WALK_IN'].forEach(mode => html += sourceCell(row, mode, row[mode.toLowerCase() + '_quantity']));
                     html += '<td class="text-end fw-semibold" title="Sales Order quantity plus Cash Sales quantity">' + quantity(row.total_sold_quantity) + '</td>';
                     return html + '<td class="text-end">' + (row.mixed_prices ? 'Mixed' : (row.unit_price == null ? '—' : money(row.unit_price))) + '</td><td class="text-end" title="Net after discounts: ' + money(row.net_sales) + '">' + money(row.total_sales) + '</td><td class="text-end fw-bold ' + (row.ending_quantity < 0 ? 'text-danger' : '') + '">' + (row.ending_quantity == null ? 'Set beginning stock' : quantity(row.ending_quantity)) + '</td><td class="text-end">' + (row.actual_quantity == null ? '—' : quantity(row.actual_quantity)) + '</td><td class="text-end">' + (row.variance_quantity == null ? '—' : quantity(row.variance_quantity)) + '</td></tr>';

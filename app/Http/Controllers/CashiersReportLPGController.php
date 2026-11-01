@@ -701,7 +701,7 @@ class CashiersReportLPGController extends Controller
             })
             ->whereIn('product.category_idx', $lpgCategoryIds)->whereNull('product.deleted_at')
             ->orderBy('main.product_name')->orderBy('product.product_name')
-            ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
+            ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_main_idx',
                 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
                 'main.product_name as group_name']);
         $rowsByProduct = $sellOutRows->keyBy('product_idx');
@@ -709,7 +709,7 @@ class CashiersReportLPGController extends Controller
             $row = $rowsByProduct->get((int) $product->product_id);
             if (!$row) {
                 $row = [
-                    'product_idx' => (int) $product->product_id, 'product_name' => $product->product_name,
+                    'product_idx' => (int) $product->product_id, 'product_name' => $product->product_name, 'product_code' => $product->product_code,
                     'product_unit_measurement' => $product->product_unit_measurement,
                     'product_capacity' => $product->product_capacity, 'product_capacity_unit' => $product->product_capacity_unit,
                 ];
@@ -772,7 +772,7 @@ class CashiersReportLPGController extends Controller
             ->whereIn('sale.item_description', ['Sales Order', 'Return'])
             ->orderBy('sale.cashiers_report_lpg_ar_so_id')
             ->get(['client.client_name', 'client.client_account_number', 'sale.dr_number', 'sale.item_description',
-                'product.product_name', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
+                'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
                 'sale.order_quantity', 'sale.unit_price', 'sale.order_total_amount']);
 
         $expenseRows = DB::table('teves_cashiers_report_lpg_expenses as expense')
@@ -781,7 +781,7 @@ class CashiersReportLPGController extends Controller
             ->where('expense.cashiers_report_id', $reportId)->whereNull('expense.deleted_at')
             ->orderBy('expense.cashiers_report_lpg_expenses_id')
             ->get(['client.client_name', 'expense.expense_type', 'expense.purpose',
-                'product.product_name', 'product.product_unit_measurement', 'expense.item_description',
+                'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'expense.item_description',
                 'expense.order_quantity', 'expense.unit_price', 'expense.amount']);
 
         $discountRows = DB::table('teves_cashiers_report_lpg_ar_so as sale')
@@ -791,7 +791,7 @@ class CashiersReportLPGController extends Controller
             ->where('sale.discount_per_unit', '>', 0)
             ->orderBy('sale.cashiers_report_lpg_ar_so_id')
             ->get(['client.client_name', 'client.client_account_number', 'sale.dr_number', 'sale.item_description',
-                'product.product_name', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
+                'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
                 'sale.order_quantity', 'sale.unit_price', 'sale.discount_per_unit',
                 DB::raw('(sale.unit_price - sale.discount_per_unit) as discounted_unit_price'),
                 DB::raw('(sale.order_quantity * sale.discount_per_unit) as total_discount')]);
@@ -847,7 +847,7 @@ class CashiersReportLPGController extends Controller
             ->whereNull('product.deleted_at')
             ->orderByRaw("CASE product.product_capacity_unit WHEN 'kg' THEN 0 WHEN 'g' THEN 1 ELSE 2 END")
             ->orderBy('product.product_capacity')->orderBy('product.product_name')
-            ->get(['product.product_id', 'product.product_name', 'product.product_capacity', 'product.product_capacity_unit']);
+            ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_capacity', 'product.product_capacity_unit']);
         foreach ($emptyProductCatalog as $product) {
             $row = $emptyInventoryRowsByProduct->get((int) $product->product_id);
             if (!$row) {
@@ -860,6 +860,7 @@ class CashiersReportLPGController extends Controller
                 $row->cashiers_report_lpg_empty_inventory_id = 0;
             }
             $row->product_name = $product->product_name;
+            $row->product_code = $product->product_code;
             $row->product_capacity = $product->product_capacity;
             $row->product_capacity_unit = $product->product_capacity_unit;
             $emptyInventoryRowsByProduct->put((int) $product->product_id, $emptyInventorySummary->decorate($row, $emptyInventorySources));
@@ -878,9 +879,9 @@ class CashiersReportLPGController extends Controller
             ->where(function ($query) { $query->where('swap.received_quantity', '>', 0)->orWhere('swap.replaced_quantity', '>', 0); })
             ->orderBy('swap.cashiers_report_lpg_swapping_id')
             ->get(['client.client_name', 'swap.received_quantity', 'swap.received_stock_state',
-                'received.product_name as received_product_name', 'received.product_capacity as received_product_capacity',
+                'received.product_name as received_product_name', 'received.product_code as received_product_code', 'received.product_capacity as received_product_capacity',
                 'received.product_capacity_unit as received_product_capacity_unit', 'received.product_unit_measurement as received_product_unit_measurement',
-                'swap.replaced_quantity', 'swap.replaced_stock_state', 'replaced.product_name as replaced_product_name',
+                'swap.replaced_quantity', 'swap.replaced_stock_state', 'replaced.product_name as replaced_product_name', 'replaced.product_code as replaced_product_code',
                 'replaced.product_capacity as replaced_product_capacity', 'replaced.product_capacity_unit as replaced_product_capacity_unit',
                 'replaced.product_unit_measurement as replaced_product_unit_measurement', 'swap.remarks']);
 
@@ -895,10 +896,10 @@ class CashiersReportLPGController extends Controller
             })
             ->orderBy('loan.cashiers_report_lpg_on_loan_id')
             ->get(['client.client_name', 'loan.dr_number', 'loan.borrow_quantity', 'loan.borrow_stock_state',
-                'borrowed.product_name as borrow_product_name', 'borrowed.product_capacity as borrow_product_capacity',
+                'borrowed.product_name as borrow_product_name', 'borrowed.product_code as borrow_product_code', 'borrowed.product_capacity as borrow_product_capacity',
                 'borrowed.product_capacity_unit as borrow_product_capacity_unit', 'borrowed.product_unit_measurement as borrow_product_unit_measurement',
                 'loan.borrow_alum_quantity', 'loan.return_quantity', 'loan.return_stock_state',
-                'returned.product_name as return_product_name', 'returned.product_capacity as return_product_capacity',
+                'returned.product_name as return_product_name', 'returned.product_code as return_product_code', 'returned.product_capacity as return_product_capacity',
                 'returned.product_capacity_unit as return_product_capacity_unit', 'returned.product_unit_measurement as return_product_unit_measurement',
                 'loan.return_alum_quantity', 'loan.remarks']);
 

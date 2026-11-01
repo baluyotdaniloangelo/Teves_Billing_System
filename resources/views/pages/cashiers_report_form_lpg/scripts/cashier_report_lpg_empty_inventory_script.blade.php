@@ -49,7 +49,10 @@ $(function () {
                 });
         },
         columns: [
-            {data: 'product_name', defaultContent: '-', render: $.fn.dataTable.render.text()},
+            {data: 'product_name', defaultContent: '-', render: (value, type, row) => {
+                if (type !== 'display') return value || '-';
+                return escape(value || '-') + (row.product_code ? '<small class="d-block text-muted">Code: ' + escape(row.product_code) + '</small>' : '');
+            }},
             ...quantityFields.map(field => ({data: field, className: 'text-end', render: (value, type, row) => quantityCell(field, value, type, row)})),
             {data: 'ending_quantity', className: 'text-end fw-bold', render: (value, type) => type === 'display' ? '<span class="' + (Number(value) < 0 ? 'text-danger' : '') + '">' + number(value) + '</span>' : Number(value)},
             {data: 'remarks', defaultContent: '-', render: $.fn.dataTable.render.text()}

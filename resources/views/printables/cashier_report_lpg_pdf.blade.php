@@ -21,6 +21,7 @@
         td.empty { text-align: center; padding: 12pt; }
         .note { margin-top: 5pt; font-size: 6pt; color: #444; line-height: 1.4; }
         .preview { font-weight: bold; }
+        .product-code { display: block; font-size: 4.2pt; color: #555; }
         .kitchen-report { margin-top: 9pt; }
         .kitchen-report th { background: #8bd36f; color: #111; font-size: 4.35pt; }
         .kitchen-report th.title { font-size: 6pt; }
@@ -127,7 +128,7 @@
                     @if ($loop->first)
                         <td style="width: {{ $columnWidth(0) }}%" class="group" rowspan="{{ $chunk->count() }}"><span class="{{ $chunk->count() >= 5 ? 'group-label' : '' }}">{{ $row['print_group_name'] ?? '' }}</span></td>
                     @endif
-                    <td style="width: {{ $columnWidth(1) }}%">{{ $row['product_name'] }}</td>
+                    <td style="width: {{ $columnWidth(1) }}%">{{ $row['product_name'] }}@if (!empty($row['product_code']))<span class="product-code">Code: {{ $row['product_code'] }}</span>@endif</td>
                     <td style="width: {{ $columnWidth(2) }}%" class="capacity">{{ $capacity($row) }}</td>
                     <td class="number">{{ $row['beginning_count'] ? $quantity($row['beginning_quantity']) : '-' }}</td>
                     <td class="number">{{ $quantity($row['delivery_quantity']) }}</td>
@@ -185,12 +186,14 @@
                             @if (!empty($row['product_capacity']))
                                 {{ $quantity($row['product_capacity']) }}{{ strtoupper($row['product_capacity_unit'] ?? '') }}
                             @endif
+                            @if (!empty($row['product_code']))<span class="product-code">Code: {{ $row['product_code'] }}</span>@endif
                             @foreach ($row['components'] ?? [] as $component)
                                 <div>
                                     {{ $quantity($component['quantity']) }} x {{ $component['product_name'] }}
                                     @if (!empty($component['product_capacity']))
                                         {{ $quantity($component['product_capacity']) }}{{ strtoupper($component['product_capacity_unit'] ?? '') }}
                                     @endif
+                                    @if (!empty($component['product_code'])) <span class="product-code">Code: {{ $component['product_code'] }}</span>@endif
                                     @if (empty($component['is_active'])) (inactive) @endif
                                 </div>
                             @endforeach
@@ -246,7 +249,7 @@
         <tbody>
         @forelse ($regulatorRows as $row)
             <tr>
-                <td>{{ $row['product_name'] }}@if (!empty($row['product_capacity'])) {{ $quantity($row['product_capacity']) }}{{ strtoupper($row['product_capacity_unit'] ?? '') }}@elseif (!empty($row['product_unit_measurement'])) {{ $row['product_unit_measurement'] }}@endif</td>
+                <td>{{ $row['product_name'] }}@if (!empty($row['product_capacity'])) {{ $quantity($row['product_capacity']) }}{{ strtoupper($row['product_capacity_unit'] ?? '') }}@elseif (!empty($row['product_unit_measurement'])) {{ $row['product_unit_measurement'] }}@endif @if (!empty($row['product_code']))<span class="product-code">Code: {{ $row['product_code'] }}</span>@endif</td>
                 @foreach ($regulatorFields as $field)
                     <td class="number">
                         @if ($field === 'unit_price')
@@ -332,7 +335,7 @@
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td>{{ $row->client_account_number ?? '' }}</td>
                 <td>{{ $row->dr_number ?? '' }}</td>
-                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}</td>
+                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif</td>
                 <td class="number">{{ $quantity($row->order_quantity) }}</td>
                 <td class="number">{{ $money($row->unit_price) }}</td>
                 <td class="number">{{ $money($row->order_total_amount) }}</td>
@@ -365,7 +368,7 @@
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td>{{ $row->expense_type ?? '' }}</td>
                 <td>{{ $row->purpose ?? '' }}</td>
-                <td>{{ $row->product_name ?? $row->item_description ?? '' }}{{ $row->product_name && $row->product_unit_measurement ? ' ' . $row->product_unit_measurement : '' }}</td>
+                <td>{{ $row->product_name ?? $row->item_description ?? '' }}{{ $row->product_name && $row->product_unit_measurement ? ' ' . $row->product_unit_measurement : '' }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif</td>
                 <td class="number">{{ $quantity($row->order_quantity) }}</td>
                 <td class="number">{{ $money($row->unit_price) }}</td>
                 <td class="number">{{ $money($row->amount) }}</td>
@@ -401,7 +404,7 @@
                 <td>{{ $row->client_account_number ?? '' }}</td>
                 <td>{{ $row->dr_number ?? '' }}</td>
                 <td>{{ $row->item_description === 'Sales Order' ? 'A.R.' : ($row->item_description === 'Cash Sales' ? 'Cash' : 'Return') }}</td>
-                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}</td>
+                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif</td>
                 <td class="number">{{ $quantity($row->order_quantity) }}</td>
                 <td class="number">{{ $money($row->unit_price) }}</td>
                 <td class="number">{{ $money($row->discounted_unit_price) }}</td>
@@ -540,7 +543,7 @@
             <tr class="capacity-row"><td colspan="11">{{ $capacityGroup }}</td></tr>
             @foreach ($groupRows as $row)
                 <tr>
-                    <td>{{ $row->product_name }}</td>
+                    <td>{{ $row->product_name }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif</td>
                     @foreach ($emptyQuantityFields as $field)
                         <td class="number">{{ (float) $row->{$field} > 0 ? $quantity($row->{$field}) : '' }}</td>
                     @endforeach
@@ -584,9 +587,9 @@
             <tr>
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td class="number">{{ (float) $row->received_quantity > 0 ? $quantity($row->received_quantity) : '' }}</td>
-                <td>{{ $containerItem($row->received_product_name, $row->received_product_capacity, $row->received_product_capacity_unit, $row->received_product_unit_measurement, $row->received_stock_state) }}</td>
+                <td>{{ $containerItem($row->received_product_name, $row->received_product_capacity, $row->received_product_capacity_unit, $row->received_product_unit_measurement, $row->received_stock_state) }}@if (!empty($row->received_product_code))<span class="product-code">Code: {{ $row->received_product_code }}</span>@endif</td>
                 <td class="number">{{ (float) $row->replaced_quantity > 0 ? $quantity($row->replaced_quantity) : '' }}</td>
-                <td>{{ $containerItem($row->replaced_product_name, $row->replaced_product_capacity, $row->replaced_product_capacity_unit, $row->replaced_product_unit_measurement, $row->replaced_stock_state) }}</td>
+                <td>{{ $containerItem($row->replaced_product_name, $row->replaced_product_capacity, $row->replaced_product_capacity_unit, $row->replaced_product_unit_measurement, $row->replaced_stock_state) }}@if (!empty($row->replaced_product_code))<span class="product-code">Code: {{ $row->replaced_product_code }}</span>@endif</td>
                 <td>{{ $row->remarks ?? '' }}</td>
             </tr>
         @empty
@@ -624,10 +627,10 @@
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td>{{ $row->dr_number ?? '' }}</td>
                 <td class="number">{{ (float) $row->borrow_quantity > 0 ? $quantity($row->borrow_quantity) : '' }}</td>
-                <td>{{ $containerItem($row->borrow_product_name, $row->borrow_product_capacity, $row->borrow_product_capacity_unit, $row->borrow_product_unit_measurement, $row->borrow_stock_state) }}</td>
+                <td>{{ $containerItem($row->borrow_product_name, $row->borrow_product_capacity, $row->borrow_product_capacity_unit, $row->borrow_product_unit_measurement, $row->borrow_stock_state) }}@if (!empty($row->borrow_product_code))<span class="product-code">Code: {{ $row->borrow_product_code }}</span>@endif</td>
                 <td class="number">{{ (float) $row->borrow_alum_quantity > 0 ? $quantity($row->borrow_alum_quantity) : '' }}</td>
                 <td class="number">{{ (float) $row->return_quantity > 0 ? $quantity($row->return_quantity) : '' }}</td>
-                <td>{{ $containerItem($row->return_product_name, $row->return_product_capacity, $row->return_product_capacity_unit, $row->return_product_unit_measurement, $row->return_stock_state) }}</td>
+                <td>{{ $containerItem($row->return_product_name, $row->return_product_capacity, $row->return_product_capacity_unit, $row->return_product_unit_measurement, $row->return_stock_state) }}@if (!empty($row->return_product_code))<span class="product-code">Code: {{ $row->return_product_code }}</span>@endif</td>
                 <td class="number">{{ (float) $row->return_alum_quantity > 0 ? $quantity($row->return_alum_quantity) : '' }}</td>
                 <td>{{ $row->remarks ?? '' }}</td>
             </tr>

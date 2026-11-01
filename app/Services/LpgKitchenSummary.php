@@ -106,7 +106,7 @@ class LpgKitchenSummary
                 $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
             })
             ->whereIn('product.product_id', $productIds)->whereNull('product.deleted_at')
-            ->get(['product.product_id', 'product.product_name', 'product.product_main_idx',
+            ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_main_idx',
                 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
                 'product.product_price', 'main.product_name as main_product_name']);
         $components = DB::table('teves_product_component_table as component')
@@ -114,7 +114,7 @@ class LpgKitchenSummary
             ->whereIn('component.product_idx', $productIds)
             ->orderBy('product.product_name')->orderBy('component.component_product_idx')
             ->get(['component.product_idx as parent_product_idx', 'component.component_product_idx', 'component.quantity',
-                'product.product_name', 'product.product_capacity', 'product.product_capacity_unit',
+                'product.product_name', 'product.product_code', 'product.product_capacity', 'product.product_capacity_unit',
                 'product.product_unit_measurement', 'product.deleted_at'])->groupBy('parent_product_idx');
 
         $rowsByProduct = $rows->keyBy('product_idx');
@@ -136,6 +136,7 @@ class LpgKitchenSummary
                 ->map(function ($price) { return (float) $price; })->unique()->values();
             $catalogPrice = $branchPrices->count() === 1 ? $branchPrices->first() : $product->product_price;
             $row['product_name'] = $product->product_name;
+            $row['product_code'] = $product->product_code;
             $row['main_product_name'] = $product->main_product_name ?: 'Kitchen Products & Accessories';
             $row['product_main_idx'] = $product->product_main_idx;
             $row['product_unit_measurement'] = $product->product_unit_measurement;
@@ -152,6 +153,7 @@ class LpgKitchenSummary
             $row['components'] = $components->get($productId, collect())->map(function ($component) {
                 return ['product_idx' => (int) $component->component_product_idx,
                     'product_name' => $component->product_name ?: 'Unavailable product',
+                    'product_code' => $component->product_code,
                     'product_capacity' => $component->product_capacity,
                     'product_capacity_unit' => $component->product_capacity_unit,
                     'product_unit_measurement' => $component->product_unit_measurement,
