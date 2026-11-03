@@ -23,6 +23,38 @@ use App\Models\ProductCategoryModel;
 use PDF;
 class SalesOrderController extends Controller
 {
+	private function assertOrderHasNoPayments($orderId): void
+	{
+		$hasPayments = ReceivablesPaymentModel::whereIn('receivable_idx',
+			ReceivablesModel::where('sales_order_idx', $orderId)->select('receivable_id')
+		)->exists();
+		if ($hasPayments) {
+			throw \Illuminate\Validation\ValidationException::withMessages([
+				'payment_lock' => 'This Sales Order has payment entries. Its information and products can no longer be changed.',
+			]);
+		}
+	}
+	/** Keep a changed order total consistent with payments already recorded. */
+	private function syncReceivablePaymentBalance(ReceivablesModel $receivable): void
+	{
+		// Match payment posting: post-dated checks count only after their mode changes.
+		$paid = (float) ReceivablesPaymentModel::where('receivable_idx', $receivable->getKey())
+			->where(function ($query) {
+				$query->where('receivable_mode_of_payment', '<>', 'Post-Dated Check')
+					->orWhereNull('receivable_mode_of_payment');
+			})->sum('receivable_payment_amount');
+		$due = (float) $receivable->receivable_amount;
+		$percentage = $due > 0 ? round($paid / $due * 100, 2) : 0;
+		$status = $percentage >= 0.01 ? number_format($percentage, 2, '.', '').'%' : 'Pending';
+		// Preserve negative balances as credits when payments exceed the revised total.
+		$receivable->receivable_remaining_balance = number_format($due - $paid, 2, '.', '');
+		$receivable->receivable_status = $status;
+		$order = SalesOrderModel::find($receivable->sales_order_idx);
+		if ($order && $order->sales_order_payment_status !== $status) {
+			$order->sales_order_payment_status = $status;
+			$order->save();
+		}
+	}
 	
 	/*Load Product Interface*/
 	public function salesorder(){
@@ -627,6 +659,7 @@ class SalesOrderController extends Controller
 	}
 
 	public function update_sales_order_post(Request $request){	
+		$this->assertOrderHasNoPayments($request->sales_order_id);
 
 		$request->validate([
 			'client_idx'  	=> 'required',
@@ -745,7 +778,7 @@ class SalesOrderController extends Controller
 				$Receivables->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
 				$Receivables->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
 				$Receivables->receivable_amount 			= number_format($sales_order_total_due,2, '.', '');
-				$Receivables->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
+				$this->syncReceivablePaymentBalance($Receivables);
 				$Receivables->updated_by_user_id 			= Session::get('loginID');
 				$Receivables->update();
 				
@@ -992,6 +1025,12 @@ class SalesOrderController extends Controller
 	}
 
 	public function sales_order_component_compose(Request $request){		
+		$this->assertOrderHasNoPayments($request->sales_order_id);
+		if ($request->sales_order_component_id) {
+			$component = SalesOrderComponentModel::findOrFail($request->sales_order_component_id);
+			$this->assertOrderHasNoPayments($component->sales_order_idx);
+			abort_unless((int) $component->sales_order_idx === (int) $request->sales_order_id, 422);
+		}
 
 		$request->validate([
 		  'item_description'      	=> 'required',
@@ -1119,7 +1158,7 @@ class SalesOrderController extends Controller
 						$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');				
 						$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');
 						$Receivables_ACTION->receivable_amount			 	= number_format($sales_order_total_due,2, '.', '');
-						$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
+						$this->syncReceivablePaymentBalance($Receivables_ACTION);
 						
 						$Receivables_ACTION->update();
 									
@@ -1135,6 +1174,9 @@ class SalesOrderController extends Controller
 	
 	/*Delete Product Information*/
 	public function delete_sales_order_component_confirmed(Request $request){
+		$component = SalesOrderComponentModel::findOrFail($request->sales_order_component_id);
+		$this->assertOrderHasNoPayments($component->sales_order_idx);
+		abort_unless((int) $component->sales_order_idx === (int) $request->sales_order_id, 422);
 
 		/*Delete on Sales Order Table*/
 		$sales_order_component_id = $request->sales_order_component_id;
@@ -1175,7 +1217,7 @@ class SalesOrderController extends Controller
 				$Receivables_ACTION->receivable_gross_amount 		= number_format($gross_amount,2, '.', '');
 				$Receivables_ACTION->receivable_withholding_tax 	= number_format($receivable_withholding_tax,2, '.', '');				
 				$Receivables_ACTION->receivable_amount 				= number_format($sales_order_total_due,2, '.', '');
-				$Receivables_ACTION->receivable_remaining_balance 	= number_format($sales_order_total_due,2, '.', '');
+				$this->syncReceivablePaymentBalance($Receivables_ACTION);
 				
 				$Receivables_ACTION->update();
 	

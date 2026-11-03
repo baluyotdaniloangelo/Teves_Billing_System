@@ -24,7 +24,7 @@ class SalesOrderEditorTest extends TestCase
             'teves_branch_table' => ['branch_id', 'branch_code', 'branch_name'],
             'teves_product_category' => ['category_id', 'category_name', 'deleted_at'],
             'teves_product_table' => ['product_id', 'category_idx', 'deleted_at'],
-            'teves_receivable_payment' => ['receivable_mode_of_payment', 'deleted_at'],
+            'teves_receivable_payment' => ['receivable_idx', 'receivable_mode_of_payment', 'deleted_at'],
             'teves_receivable_table' => ['receivable_id', 'sales_order_idx', 'control_number', 'client_idx', 'deleted_at'],
         ] as $table => $fields) {
             Schema::create($table, function (Blueprint $schema) use ($fields) {

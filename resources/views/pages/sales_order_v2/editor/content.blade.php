@@ -1,9 +1,17 @@
-<div class="so-order-editor-content"
+@php
+    $paymentLocked = \App\Models\ReceivablesPaymentModel::whereIn('receivable_idx',
+        \App\Models\ReceivablesModel::where('sales_order_idx', $SalesOrderID)->select('receivable_id')
+    )->exists();
+@endphp
+<div class="so-order-editor-content {{ $paymentLocked ? 'so-order-payment-locked' : '' }}"
      data-sales-order-id="{{ $SalesOrderID }}"
      data-client-id="{{ $sales_order_data[0]['sales_order_client_idx'] }}"
      data-receivable-id="{{ $receivables_details['receivable_id'] ?? '' }}"
      data-category-id="{{ $category_idx ?? 0 }}">
 <div class="so-editor-main">
+    @if($paymentLocked)
+        <div class="alert alert-info" role="status">This Sales Order has payment entries. Information and products are locked. Payments, deliveries, and printing remain available.</div>
+    @endif
 
     <section class="section">
 		<div class="card">

@@ -13,7 +13,7 @@
 .so-orders-panel { padding: 0 20px 18px; }
 .so-panel-heading { padding: 19px 4px 12px; }
 .so-page .nav-tabs-bordered { gap: 5px; border-color: var(--so-line); }
-.so-page .nav-tabs-bordered .nav-link { padding: 12px 15px; color: #82907c; font-size: 11px; font-weight: 750; border: 0; border-bottom: 2px solid transparent; }
+.so-page .nav-tabs-bordered .nav-link { padding: 12px 15px; color: #82907c; font-size: 14px; font-weight: 750; border: 0; border-bottom: 2px solid transparent; }
 .so-page .nav-tabs-bordered .nav-link:hover { color: #536e4d; }
 .so-page .nav-tabs-bordered .nav-link.active { color: #4e774d; background: transparent; border-bottom-color: #72976a; }
 .so-page .nav-tabs-bordered .nav-link .badge { margin-left: 5px; background: #f0f4ec; color: #75896b; font-size: 9px; }
@@ -178,3 +178,9 @@
     #sales-order-edit-content #so-editor-myTab .nav-link { padding: 10px 8px; font-size: 10px; }
 }
 @media (max-width: 600px) { .so-form-grid { grid-template-columns: 1fr; } .so-field-wide { grid-column: auto; } .so-modal .modal-header, .so-modal .modal-body, .so-modal .modal-footer { padding-inline: 18px; } }
+.so-order-payment-locked #so-editor-UpdateSalesOrderBTN,
+.so-order-payment-locked #so-editor-AddSalesOrderProductBTN,
+.so-order-payment-locked [data-so-editor-action="product-edit"],
+.so-order-payment-locked [data-so-editor-action="product-delete"] {
+    display: none !important;
+}
