@@ -2,7 +2,9 @@
 $(function () {
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" } });
     const reportId = {{ $CashiersReportId ?? ($cashiers_report_id ?? 0) }};
-    const nonContainerProductIds = @json(\App\Services\LpgKitchenProducts::ids());
+    const nonContainerProductIds = @json(array_values(array_unique(array_merge(\App\Services\LpgKitchenProducts::ids(), \App\Services\LpgRegulatorProducts::ids()))));
+    const filledProductIds = new Set(@json(\App\Services\LpgProductTracking::ids('sell_out')));
+    const emptyProductIds = new Set(@json(\App\Services\LpgProductTracking::ids('empty_inventory')));
     const swappingEntriesModal = document.getElementById('LpgSwappingEntriesModal');
     const escapeText = value => $('<div>').text(value == null ? '' : String(value)).html();
 
@@ -10,10 +12,18 @@ $(function () {
         ['received', 'replaced', 'borrow', 'return'].forEach(prefix => {
             const productId = Number($('#' + prefix + '_product_idx').val() || 0);
             const select = $('#' + prefix + '_stock_state');
-            const relevant = productId > 0 && !$('#' + prefix + '_product_idx').prop('disabled') && !nonContainerProductIds.includes(productId);
+            const productSelect = $('#' + prefix + '_product_idx');
+            const relevant = !productSelect.prop('disabled') && (!productId || !nonContainerProductIds.includes(productId));
             select.closest('.lpg-container-stock-state-field').toggleClass('d-none', !relevant);
             select.prop('disabled', !relevant).prop('required', relevant && Number($('#' + prefix + '_quantity').val() || 0) > 0);
             $('#' + prefix + '_quantity').attr('step', relevant && select.val() === 'EMPTY' ? '1' : '0.01');
+            const state = select.val();
+            const allowed = id => nonContainerProductIds.includes(id) || (state === 'EMPTY' ? emptyProductIds.has(id) : (state === 'FILLED' ? filledProductIds.has(id) : (emptyProductIds.has(id) || filledProductIds.has(id))));
+            productSelect.find('option').each(function () {
+                if (this.value) { this.hidden = !allowed(Number(this.value)); this.disabled = this.hidden; }
+            });
+            select.get(0).setCustomValidity(relevant && productId > 0 && !allowed(productId) ? 'This product is not enabled for the selected stock state in LPG Settings.' : '');
+            window.LpgProductAutocomplete?.sync(productSelect.get(0));
         });
     }
     function applyStockStates(kind, record) {

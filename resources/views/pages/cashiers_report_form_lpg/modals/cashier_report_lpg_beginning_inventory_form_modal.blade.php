@@ -30,10 +30,11 @@
                     @php
                         $lpgInventoryKitchenProductIds = \App\Services\LpgKitchenProducts::ids();
                         $lpgInventoryRegulatorProductIds = \App\Services\LpgRegulatorProducts::ids();
+                        $lpgInventorySellOutProductIds = \App\Services\LpgProductTracking::ids('sell_out');
                     @endphp
                             <select class="form-select form-select-sm rounded-3 lpg-product-picker" id="lpg_inventory_product_idx" name="product_idx" required>
                                 <option value="">Select product</option>
-                                @foreach ($product_data->filter(function ($product) use ($lpgInventoryKitchenProductIds, $lpgInventoryRegulatorProductIds) { return in_array((int) $product->category_idx, \App\Services\LpgEmptyInventorySummary::categoryIds(), true) || in_array((int) $product->product_id, $lpgInventoryKitchenProductIds, true) || in_array((int) $product->product_id, $lpgInventoryRegulatorProductIds, true); })->unique('product_id') as $product)
+                                @foreach ($product_data->whereIn('product_id', array_merge($lpgInventorySellOutProductIds, $lpgInventoryKitchenProductIds, $lpgInventoryRegulatorProductIds))->unique('product_id') as $product)
                                     @php
                                         $capacityLabel = ($product->product_capacity ?? null) !== null && $product->product_capacity !== ''
                                             ? rtrim(rtrim(number_format((float) $product->product_capacity, 2, '.', ''), '0'), '.') . strtoupper($product->product_capacity_unit ?? '')

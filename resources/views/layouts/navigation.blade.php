@@ -9,6 +9,7 @@
         'purchaseorder' => ['purchaseorder', 'purchase_order_form', 'purchase_order_forms'],
         'cashierReport' => ['cashierReport', 'cashiers_report_form', 'cashiers_report_form_fuel'],
         'cashierReportLPG' => ['cashierReportLPG', 'cashiers_report_form_lpg'],
+        'lpgSettings' => ['lpg.settings.index', 'lpg.settings.update'],
         'lpgStartingAudits' => ['lpg.starting-audits.index', 'lpg.starting-audits.show'],
         'lpgAuditNotifications' => ['lpg.starting-audits.notifications'],
         'fuel_sales_volume_dashboard' => ['fuel_sales_volume_dashboard', 'fuel_sales_volume_dashboard.filter'],
@@ -27,7 +28,7 @@
         return false;
     };
     $workspaceBillingOpen = $workspaceNavGroupOpen(['so', 'billing']);
-    $workspaceCashierOpen = $workspaceNavGroupOpen(['cashierReport', 'cashierReportLPG']);
+    $workspaceCashierOpen = $workspaceNavGroupOpen(['cashierReport', 'cashierReportLPG', 'lpgSettings']);
     $workspaceBillingReportsOpen = $workspaceNavGroupOpen(['report', 'soa_summary_history']);
     $workspaceSalesReportsOpen = $workspaceNavGroupOpen(['salesordersummary', 'daily_sales', 'cash_report_page', 'sales_report', 'MonthlySalesSummary']);
     $workspacePurchaseReportsOpen = $workspaceNavGroupOpen(['purchaseordersummary']);
@@ -235,6 +236,9 @@
 	      <li>
 			<a class="nav-link navbar_bg {{ $workspaceNavClass('cashierReport') }}" href="{{ route('cashierReport') }}" title="Fuel Cashier Report" @if($workspaceNavActive('cashierReport')) aria-current="page" @endif><i class="bi bi-fuel-pump navbar_icon"></i><span>Fuel</span></a>
 			<a class="nav-link navbar_bg {{ $workspaceNavClass('cashierReportLPG') }}" href="{{ route('cashierReportLPG') }}" title="LPG Cashier Report" @if($workspaceNavActive('cashierReportLPG')) aria-current="page" @endif><i class="bi bi-fire navbar_icon"></i><span>LPG</span></a>
+            @if(in_array($data->user_type ?? null, ['Admin', 'SUAdmin'], true))
+                <a class="nav-link navbar_bg {{ $workspaceNavClass('lpgSettings') }}" href="{{ route('lpg.settings.index') }}" title="LPG Settings" @if($workspaceNavActive('lpgSettings')) aria-current="page" @endif><i class="bi bi-sliders navbar_icon"></i><span>LPG Settings</span></a>
+            @endif
 		  </li>
 		</ul>
       </li>

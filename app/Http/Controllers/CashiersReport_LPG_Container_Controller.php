@@ -287,6 +287,10 @@ class CashiersReport_LPG_Container_Controller extends Controller
             $productId = (int) $request->input($prefix . '_product_idx');
             if ($quantity <= 0 || !$productId || LpgKitchenProducts::isProduct($productId) || LpgRegulatorProducts::isProduct($productId)) continue;
             if (!$request->filled($prefix . '_stock_state')) $validator->errors()->add($prefix . '_stock_state', 'Select Empty or Filled for this item.');
+            $state = $request->input($prefix . '_stock_state');
+            if (in_array($state, ['EMPTY', 'FILLED'], true) && !\App\Services\LpgProductTracking::enabled($productId, $state === 'EMPTY' ? 'empty_inventory' : 'sell_out')) {
+                $validator->errors()->add($prefix . '_product_idx', 'This product is not enabled for ' . ($state === 'EMPTY' ? 'Empty Cylinders / Canisters' : 'LPG Sell-out') . ' in LPG Settings.');
+            }
             if ($request->input($prefix . '_stock_state') === 'EMPTY' && ($quantity !== floor($quantity) || $quantity > 2147483647)) {
                 $validator->errors()->add($prefix . '_quantity', 'Empty containers must be a whole number of pieces, up to 2,147,483,647.');
             }

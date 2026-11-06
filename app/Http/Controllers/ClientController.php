@@ -8,6 +8,7 @@ use Session;
 use Validator;
 use DataTables;
 use App\Models\SalesAgentModel;
+use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
@@ -22,7 +23,64 @@ class ClientController extends Controller
 
 			$data = User::where('user_id', '=', Session::get('loginID'))->first();
 			$sales_agent_data = SalesAgentModel::all();		
-			return view("pages.client.index", compact('data','title','sales_agent_data'));
+			$clientSummaryQuery = ClientModel::query();
+			if (Session::get('UserType') == "Encoder") {
+				$clientSummaryQuery->where('created_by_user_idx', Session::get('loginID'));
+			}
+			$clientCount = $clientSummaryQuery->count();
+
+			$receivablesSummaryQuery = DB::table('teves_receivable_table as r')
+				->join('teves_client_table as c', 'c.client_id', '=', 'r.client_idx')
+				->whereNull('r.deleted_at')
+				->whereNull('c.deleted_at')
+				->where('r.receivable_remaining_balance', '>', 0);
+			if (Session::get('UserType') == "Encoder") {
+				$receivablesSummaryQuery->where('c.created_by_user_idx', Session::get('loginID'));
+			}
+			$receivablesSummary = $receivablesSummaryQuery
+				->selectRaw('COALESCE(SUM(r.receivable_remaining_balance), 0) as outstanding_balance, COUNT(DISTINCT r.client_idx) as accounts_with_balance')
+				->first();
+
+			$largestBalanceQuery = DB::table('teves_receivable_table as r')
+				->join('teves_client_table as c', 'c.client_id', '=', 'r.client_idx')
+				->whereNull('r.deleted_at')
+				->whereNull('c.deleted_at')
+				->where('r.receivable_remaining_balance', '>', 0);
+			if (Session::get('UserType') == "Encoder") {
+				$largestBalanceQuery->where('c.created_by_user_idx', Session::get('loginID'));
+			}
+			$largestBalance = $largestBalanceQuery
+				->select('c.client_name')
+				->selectRaw('SUM(r.receivable_remaining_balance) as balance')
+				->groupBy('c.client_id', 'c.client_name')
+				->orderByDesc('balance')
+				->first();
+
+			$topClientQuery = DB::table('teves_billing_table as b')
+				->join('teves_client_table as c', 'c.client_id', '=', 'b.client_idx')
+				->whereNull('b.deleted_at')
+				->whereNull('c.deleted_at')
+				->whereBetween('b.order_date', [now()->startOfMonth()->toDateString(), now()->toDateString()]);
+			if (Session::get('UserType') == "Encoder") {
+				$topClientQuery->where('c.created_by_user_idx', Session::get('loginID'));
+			}
+			$topClient = $topClientQuery
+				->select('c.client_name')
+				->selectRaw('SUM(b.order_total_amount) as sales_total')
+				->groupBy('c.client_id', 'c.client_name')
+				->orderByDesc('sales_total')
+				->first();
+
+			$clientSummary = [
+				'client_count' => $clientCount,
+				'outstanding_balance' => (float) ($receivablesSummary->outstanding_balance ?? 0),
+				'accounts_with_balance' => (int) ($receivablesSummary->accounts_with_balance ?? 0),
+				'largest_balance' => $largestBalance,
+				'top_client' => $topClient,
+				'month_label' => now()->format('F Y'),
+			];
+
+			return view("pages.client.index", compact('data','title','sales_agent_data','clientSummary'));
 	
 		}
 		

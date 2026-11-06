@@ -137,7 +137,7 @@ let LpgCurrentInventoryProductScope = 'LPG';
 let LpgStartingAuditLocked = false;
 let LpgStartingAuditStatus = null;
 const LpgInventoryProductScopes = {
-    LPG: new Set(@json($product_data->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())->pluck('product_id')->map(fn($id) => (int) $id)->values())),
+    LPG: new Set(@json(\App\Services\LpgProductTracking::ids('sell_out'))),
     KITCHEN: new Set(@json(\App\Services\LpgKitchenProducts::ids())),
     REGULATOR: new Set(@json(\App\Services\LpgRegulatorProducts::ids()))
 };

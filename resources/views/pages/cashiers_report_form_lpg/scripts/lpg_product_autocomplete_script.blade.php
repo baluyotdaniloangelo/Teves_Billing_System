@@ -62,7 +62,7 @@
     function getItems(state) {
         if (state.select) {
             return Array.from(state.select.options)
-                .filter(option => option.value !== '')
+                .filter(option => option.value !== '' && !option.hidden && !option.disabled)
                 .map(option => ({
                     value: option.value,
                     label: option.textContent.trim(),
@@ -71,7 +71,7 @@
                 }));
         }
 
-        return Array.from(state.datalist?.options || []).map(option => ({
+        return Array.from(state.datalist?.options || []).filter(option => !option.hidden && !option.disabled).map(option => ({
             value: option.value,
             label: option.value,
             details: optionDetails(option, option.value),
@@ -137,7 +137,7 @@
         const hasValue = state.select.value !== '';
         const hasTypedText = state.input.value.trim() !== '';
         const required = state.input.required;
-        const validSelection = hasValue && Array.from(state.select.options).some(option => option.value === state.select.value);
+        const validSelection = hasValue && Array.from(state.select.options).some(option => option.value === state.select.value && !option.hidden && !option.disabled);
         state.input.setCustomValidity((required && !validSelection) || (hasTypedText && !validSelection)
             ? 'Choose a product from the suggestions.'
             : '');

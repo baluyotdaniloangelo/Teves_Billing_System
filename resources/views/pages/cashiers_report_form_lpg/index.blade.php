@@ -13,7 +13,12 @@
 <main id="main" class="main lpg-report-theme fuel-page fuel-cashiers-page">
     <div class="fuel-cashiers-heading">
         <div><p class="fuel-cashiers-eyebrow"></p><h1><span>Cashiers Report - LPG</span></h1><p class="fuel-cashiers-subtitle">Keep sales, stock movements, and collections in one clear view.</p></div>
-        <a class="fuel-report-back" href="{{ route('cashierReportLPG') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> All LPG reports</a>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            @if(in_array($data->user_type ?? null, ['Admin', 'SUAdmin'], true))
+                <a class="fuel-report-back" href="{{ route('lpg.settings.index') }}"><i class="bi bi-sliders" aria-hidden="true"></i> LPG Settings</a>
+            @endif
+            <a class="fuel-report-back" href="{{ route('cashierReportLPG') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> All LPG reports</a>
+        </div>
     </div>
     @include('pages.cashiers_report_form_lpg.partials.workspace_summary')
 

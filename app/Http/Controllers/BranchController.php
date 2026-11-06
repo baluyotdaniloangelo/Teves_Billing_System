@@ -90,7 +90,7 @@ class BranchController extends Controller
           'branch_code'      		=> 'required|unique:teves_branch_table,branch_code',
 		  'branch_name'   			=> 'required',
 		  'branch_initial'   		=> 'required|unique:teves_branch_table,branch_initial',
-		  'branch_tin'   	 		=> 'required|unique:teves_branch_table,branch_tin'
+		  'branch_tin'   	 		=> 'required'
         ], 
         [
 			'branch_code.required' 		=> 'Branch Code is required',
@@ -138,7 +138,7 @@ class BranchController extends Controller
           'branch_code'      	=> 'required|unique:teves_branch_table,branch_code,'.$request->branchID.',branch_id',
 		  'branch_name'   		=> 'required',
 		  'branch_initial'   	=> 'required|unique:teves_branch_table,branch_initial,'.$request->branchID.',branch_id',
-		  'branch_tin'   	 	=> 'required|unique:teves_branch_table,branch_tin,'.$request->branchID.',branch_id'
+		  'branch_tin'   	 	=> 'required'
         ], 
         [
 			'branch_code.required' => 'Branch Code is required',

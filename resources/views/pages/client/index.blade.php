@@ -26,6 +26,56 @@ div.dataTables_wrapper {
         <span class="fuel-client-page-chip"><i class="bi bi-people" aria-hidden="true"></i> Client accounts</span>
     </div>
 
+    <section class="row g-3 mb-4 fuel-client-summary" aria-label="Client account summary">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body d-flex align-items-center gap-3 py-3">
+                    <span class="fuel-client-heading-icon flex-shrink-0"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+                    <div class="min-w-0">
+                        <div class="small text-muted">Total client accounts</div>
+                        <div class="fs-4 fw-bold">{{ number_format($clientSummary['client_count']) }}</div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body d-flex align-items-center gap-3 py-3">
+                    <span class="fuel-client-heading-icon flex-shrink-0"><i class="bi bi-wallet2" aria-hidden="true"></i></span>
+                    <div class="min-w-0">
+                        <div class="small text-muted">Outstanding balances</div>
+                        <div class="fs-4 fw-bold">₱{{ number_format($clientSummary['outstanding_balance'], 2) }}</div>
+                        <div class="small text-muted">{{ number_format($clientSummary['accounts_with_balance']) }} clients with balance</div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body d-flex align-items-center gap-3 py-3">
+                    <span class="fuel-client-heading-icon flex-shrink-0"><i class="bi bi-exclamation-circle" aria-hidden="true"></i></span>
+                    <div class="min-w-0">
+                        <div class="small text-muted">Highest client balance</div>
+                        <div class="fw-bold text-truncate">{{ $clientSummary['largest_balance']->client_name ?? 'No open balance' }}</div>
+                        <div class="small text-muted">₱{{ number_format((float) ($clientSummary['largest_balance']->balance ?? 0), 2) }}</div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body d-flex align-items-center gap-3 py-3">
+                    <span class="fuel-client-heading-icon flex-shrink-0"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
+                    <div class="min-w-0">
+                        <div class="small text-muted">Top customer · {{ $clientSummary['month_label'] }}</div>
+                        <div class="fw-bold text-truncate">{{ $clientSummary['top_client']->client_name ?? 'No orders this month' }}</div>
+                        <div class="small text-muted">₱{{ number_format((float) ($clientSummary['top_client']->sales_total ?? 0), 2) }} order value</div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
     <section class="section fuel-client-section">
 		<!-- PURCHASE ORDER LIST -->
 		<div class="card border-0 shadow-sm rounded-4 overflow-hidden fuel-client-panel">

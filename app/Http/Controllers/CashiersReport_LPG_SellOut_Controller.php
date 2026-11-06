@@ -17,9 +17,8 @@ class CashiersReport_LPG_SellOut_Controller extends Controller
         $records = $summary->records($reportId);
         $rows = $summary->rows($records, $reportId)->keyBy('product_idx');
         $openings = $summary->openingBalances($reportId);
-        $products = DB::table('teves_product_table as product')
-            ->whereIn('product.category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
-            ->whereNull('product.deleted_at')->orderBy('product.product_name')
+        $products = \App\Services\LpgProductTracking::queryFor('sell_out')
+            ->orderBy('product.product_name')
             ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit']);
         foreach ($products as $product) {
             $id = (int) $product->product_id;
@@ -79,8 +78,10 @@ class CashiersReport_LPG_SellOut_Controller extends Controller
         if (!empty($data['product_idx'])) $records = $records->where('product_idx', $data['product_idx']);
         if ($data['mode'] === 'BEGINNING') {
             $openings = $summary->openingBalances($reportId);
+            $trackedProducts = \App\Services\LpgProductTracking::ids('sell_out', true);
             $recordedProducts = $records->pluck('product_idx')->map(fn ($id) => (int) $id)->all();
             foreach ($openings as $productId => $opening) {
+                if (!in_array((int) $productId, $trackedProducts, true)) continue;
                 if (in_array((int) $productId, $recordedProducts, true)) continue;
                 if (!empty($data['product_idx']) && (int) $data['product_idx'] !== (int) $productId) continue;
                 $product = DB::table('teves_product_table')->where('product_id', $productId)
@@ -107,7 +108,10 @@ class CashiersReport_LPG_SellOut_Controller extends Controller
     {
         $reportId = $this->reportId($request);
         $data = $request->validate([
-            'product_idx' => ['required', 'integer', Rule::exists('teves_product_table', 'product_id')],
+            'product_idx' => ['required', 'integer', Rule::in(array_merge(
+                \App\Services\LpgProductTracking::ids('sell_out'),
+                \App\Services\LpgKitchenProducts::ids(), \App\Services\LpgRegulatorProducts::ids()
+            ))],
             'actual_quantity' => ['required', 'numeric', 'min:0', 'max:9999999999.99', 'regex:/^\d+(\.\d{1,2})?$/'],
             'remarks' => ['nullable', 'string', 'max:5000'],
         ]);

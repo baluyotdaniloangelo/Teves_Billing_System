@@ -25,7 +25,7 @@
                         <label for="lpg_empty_{{ $mode }}_product_idx" class="form-label fw-semibold">Product / Item</label>
                         <select class="form-select form-select-sm lpg-empty-product lpg-product-picker" id="lpg_empty_{{ $mode }}_product_idx" name="product_idx" required>
                             <option value="">Select product</option>
-                            @foreach($product_data->whereNotIn('product_id', \App\Services\LpgRegulatorProducts::ids()) as $product)
+                            @foreach($product_data->whereIn('product_id', \App\Services\LpgProductTracking::ids('empty_inventory')) as $product)
                                 @php
                                     $capacityLabel = $product->product_capacity && $product->product_capacity_unit
                                         ? rtrim(rtrim(number_format((float) $product->product_capacity, 3, '.', ''), '0'), '.') . ' ' . $product->product_capacity_unit

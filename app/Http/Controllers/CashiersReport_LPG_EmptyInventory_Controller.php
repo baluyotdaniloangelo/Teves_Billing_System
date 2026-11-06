@@ -167,7 +167,7 @@ class CashiersReport_LPG_EmptyInventory_Controller extends Controller
     {
         $rules = [
             'product_idx' => ['required', 'integer', Rule::exists('teves_product_table', 'product_id')->where(function ($query) {
-                $query->whereNull('deleted_at')->whereNotIn('product_id', \App\Services\LpgRegulatorProducts::ids());
+                $query->whereNull('deleted_at')->whereIn('product_id', \App\Services\LpgProductTracking::ids('empty_inventory'));
             })],
             'remarks' => ['sometimes', 'nullable', 'string', 'max:5000'],
         ];

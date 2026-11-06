@@ -694,12 +694,11 @@ class CashiersReportLPGController extends Controller
             ->rows($reportId, $sellOut->rows($lpgRecords, $reportId));
         $openingBalances = $sellOut->openingBalances($reportId);
 
-        // Include every active product in the LPG category, even with no report entries.
-        $productCatalog = DB::table('teves_product_table as product')
+        // Use the same product tracking settings as the encoding tables.
+        $productCatalog = \App\Services\LpgProductTracking::queryFor('sell_out')
             ->leftJoin('teves_product_main_table as main', function ($join) {
                 $join->on('main.product_main_id', '=', 'product.product_main_idx')->whereNull('main.deleted_at');
             })
-            ->whereIn('product.category_idx', $lpgCategoryIds)->whereNull('product.deleted_at')
             ->orderBy('main.product_name')->orderBy('product.product_name')
             ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_main_idx',
                 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
@@ -841,10 +840,7 @@ class CashiersReportLPGController extends Controller
         $emptyInventorySummary = app(\App\Services\LpgEmptyInventorySummary::class);
         $emptyInventoryRowsByProduct = $emptyInventorySummary->rows($reportId)->keyBy('product_idx');
         $emptyInventorySources = $emptyInventorySummary->sources($reportId);
-        $emptyProductCatalog = DB::table('teves_product_table as product')
-            ->whereIn('product.category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())
-            ->whereNotIn('product.product_id', \App\Services\LpgRegulatorProducts::ids())
-            ->whereNull('product.deleted_at')
+        $emptyProductCatalog = \App\Services\LpgProductTracking::queryFor('empty_inventory')
             ->orderByRaw("CASE product.product_capacity_unit WHEN 'kg' THEN 0 WHEN 'g' THEN 1 ELSE 2 END")
             ->orderBy('product.product_capacity')->orderBy('product.product_name')
             ->get(['product.product_id', 'product.product_name', 'product.product_code', 'product.product_capacity', 'product.product_capacity_unit']);

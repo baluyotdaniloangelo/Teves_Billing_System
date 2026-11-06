@@ -812,6 +812,10 @@ use App\Http\Controllers\CashiersReport_LPG_Inventory_Controller;
 use App\Http\Controllers\CashiersReport_LPG_EmptyInventory_Controller;
 use App\Http\Controllers\LpgStartingAuditController;
 use App\Http\Controllers\LpgInventoryRevokeController;
+use App\Http\Controllers\LpgSettingsController;
+
+Route::get('/lpg-settings', [LpgSettingsController::class, 'index'])->name('lpg.settings.index')->middleware('isLoggedIn');
+Route::post('/lpg-settings', [LpgSettingsController::class, 'update'])->name('lpg.settings.update')->middleware('isLoggedIn');
 
 Route::get('/lpg-starting-audits', [LpgStartingAuditController::class, 'index'])->name('lpg.starting-audits.index')->middleware('isLoggedIn');
 Route::get('/lpg-starting-audits/{auditId}', [LpgStartingAuditController::class, 'show'])->name('lpg.starting-audits.show')->middleware('isLoggedIn');

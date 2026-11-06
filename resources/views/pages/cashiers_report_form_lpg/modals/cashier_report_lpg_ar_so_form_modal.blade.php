@@ -4,6 +4,8 @@
 @php
     $lpgRegulatorProductIds = \App\Services\LpgRegulatorProducts::ids();
     $lpgKitchenProductIds = \App\Services\LpgKitchenProducts::ids();
+    $lpgSellOutProductIds = \App\Services\LpgProductTracking::ids('sell_out');
+    $lpgEmptyProductIds = \App\Services\LpgProductTracking::ids('empty_inventory');
 @endphp
 
 <div class="modal fade"
@@ -144,6 +146,8 @@
                                             data-id="{{ $product_data_cols->product_id }}"
                                             data-kitchen="{{ in_array((int) $product_data_cols->product_id, $lpgKitchenProductIds, true) ? '1' : '0' }}"
                                             data-lpg="{{ in_array((int) $product_data_cols->category_idx, \App\Services\LpgEmptyInventorySummary::categoryIds(), true) ? '1' : '0' }}"
+                                            data-sell-out="{{ in_array((int) $product_data_cols->product_id, $lpgSellOutProductIds, true) ? '1' : '0' }}"
+                                            data-empty-inventory="{{ in_array((int) $product_data_cols->product_id, $lpgEmptyProductIds, true) ? '1' : '0' }}"
                                             data-regulator="{{ in_array((int) $product_data_cols->product_id, $lpgRegulatorProductIds, true) ? '1' : '0' }}"
                                             data-price="{{ $product_data_cols->product_price ?? 0 }}"
                                             data-product-code="{{ $product_data_cols->product_code ?? '' }}"

@@ -62,8 +62,7 @@ class LpgEmptyInventorySummary
             }
         }
         $products = DB::table('teves_product_table')->whereIn('product_id', $entries->pluck('product_idx')->unique()->all())
-            ->whereIn('category_idx', self::categoryIds())
-            ->whereNotIn('product_id', LpgRegulatorProducts::ids())
+            ->whereIn('product_id', LpgProductTracking::ids(LpgProductTracking::EMPTY_INVENTORY, true))
             ->get(['product_id', 'product_name', 'product_code', 'product_capacity', 'product_capacity_unit'])->keyBy('product_id');
         $entries = $entries->filter(function ($entry) use ($products) { return $products->has($entry['product_idx']); })
             ->map(function ($entry) use ($products) {
@@ -89,7 +88,9 @@ class LpgEmptyInventorySummary
     public function rows(int $reportId): Collection
     {
         $sources = $this->sources($reportId);
-        $rows = EmptyInventory::forReport($reportId)->whereNotIn('teves_cashiers_report_lpg_empty_inventory.product_idx', LpgRegulatorProducts::ids())->get()->keyBy('product_idx');
+        $rows = EmptyInventory::forReport($reportId)
+            ->whereIn('teves_cashiers_report_lpg_empty_inventory.product_idx', LpgProductTracking::ids(LpgProductTracking::EMPTY_INVENTORY, true))
+            ->get()->keyBy('product_idx');
         foreach ($sources->groupBy('product_idx') as $productId => $entries) {
             if ($rows->has($productId)) continue;
             $source = $entries->first();
@@ -184,7 +185,7 @@ class LpgEmptyInventorySummary
         if (empty($source['cashiers_report_id'])) return;
         foreach ($this->entries($kind, $source) as $entry) {
             if ($entry['stock_state'] !== 'EMPTY') continue;
-            $product = DB::table('teves_product_table')->where('product_id', $entry['product_idx'])->whereIn('category_idx', self::categoryIds())->whereNotIn('product_id', LpgRegulatorProducts::ids())->exists();
+            $product = LpgProductTracking::enabled((int) $entry['product_idx'], LpgProductTracking::EMPTY_INVENTORY);
             if (!$product) continue;
             $row = EmptyInventory::withTrashed()->firstOrNew(['cashiers_report_id' => $source['cashiers_report_id'], 'product_idx' => $entry['product_idx']]);
             if (!$row->exists) $row->created_by_user_idx = Session::get('loginID', 0);

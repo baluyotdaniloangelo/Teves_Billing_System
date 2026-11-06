@@ -429,32 +429,30 @@ function syncLpgSaleStockType() {
     if (isRegulator && !isReturn) $('#ar_so_stock_type').val('REGULATOR');
     else if (isKitchen && !isReturn) $('#ar_so_stock_type').val('KITCHEN_ITEM');
     else if (['KITCHEN_ITEM', 'REGULATOR'].includes($('#ar_so_stock_type').val())) $('#ar_so_stock_type').val('');
+    if (!isReturn && !isKitchen && !isRegulator && !$('#ar_so_stock_type').val() && product?.attr('data-empty-inventory') === '1' && product?.attr('data-sell-out') !== '1') $('#ar_so_stock_type').val('EMPTY_CONTAINER');
     $('#ar-so-stock-type-field').toggleClass('d-none', isReturn || isKitchen || isRegulator);
     $('#ar_so_stock_type').prop('required', !isReturn && !isKitchen && !isRegulator).prop('disabled', isReturn);
     const forcedCategory = productInput.attr('data-product-category-filter');
     const stockType = $('#ar_so_stock_type').val();
+    function allowedProduct(option) {
+        const kitchen = option.attr('data-kitchen') === '1';
+        const regulator = option.attr('data-regulator') === '1';
+        const filled = option.attr('data-sell-out') === '1';
+        const empty = option.attr('data-empty-inventory') === '1';
+        if (forcedCategory === 'lpg' && (option.attr('data-lpg') !== '1' || kitchen || regulator)) return false;
+        if (forcedCategory === 'kitchen' && !kitchen) return false;
+        if (isReturn) return filled || kitchen || regulator;
+        if (stockType === 'KITCHEN_ITEM') return kitchen;
+        if (stockType === 'REGULATOR') return regulator;
+        if (stockType === 'EMPTY_CONTAINER') return empty;
+        if (['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'].includes(stockType)) return filled;
+        return filled || empty || kitchen || regulator;
+    }
     $('#lpgArSoProductList option').each(function () {
         const option = $(this);
-        if (!option.attr('data-id')) return;
-        const isLpg = option.attr('data-lpg') === '1';
-        const isKitchenProduct = option.attr('data-kitchen') === '1';
-        const isAllowed = forcedCategory === 'lpg' ? isLpg
-            : (forcedCategory === 'kitchen' ? isKitchenProduct
-            : (stockType === 'KITCHEN_ITEM' ? isKitchenProduct
-            : (['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'EMPTY_CONTAINER', 'UNCLASSIFIED'].includes(stockType)
-                ? isLpg : (isLpg || isKitchenProduct))));
-        option.prop('hidden', !isAllowed);
+        if (option.attr('data-id')) option.prop('hidden', !allowedProduct(option));
     });
-    if (product && productInput.val() && product.attr('data-id')) {
-        const selectedIsLpg = product.attr('data-lpg') === '1';
-        const selectedIsKitchen = product.attr('data-kitchen') === '1';
-        if ((forcedCategory === 'lpg' && !selectedIsLpg) ||
-            (forcedCategory === 'kitchen' && !selectedIsKitchen) ||
-            (!forcedCategory && stockType !== 'KITCHEN_ITEM' && stockType !== 'REGULATOR' &&
-                !isReturn && ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'EMPTY_CONTAINER', 'UNCLASSIFIED'].includes(stockType) && !selectedIsLpg)) {
-            productInput.val('');
-        }
-    }
+    if (product && productInput.val() && product.attr('data-id') && !allowedProduct(product)) productInput.val('');
     const emptyOnly = !isReturn && $('#ar_so_stock_type').val() === 'EMPTY_CONTAINER';
     // Use 1 as the step base for piece counts; min 0.01 with step 1 rejects integer quantities.
     const quantityInput = $('#ar_so_quantity')

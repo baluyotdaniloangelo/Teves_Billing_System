@@ -20,7 +20,7 @@
                 <label for="ar_so_empty_received_product_idx" class="form-label">Received Empty Product / Brand</label>
                 <select class="form-select form-select-sm lpg-product-picker" name="empty_received_product_idx" id="ar_so_empty_received_product_idx">
                     <option value="">Select received empty product</option>
-                    @foreach($product_data->whereIn('category_idx', \App\Services\LpgEmptyInventorySummary::categoryIds())->whereNotIn('product_id', \App\Services\LpgRegulatorProducts::ids())->unique('product_id') as $product)
+                    @foreach($product_data->whereIn('product_id', \App\Services\LpgProductTracking::ids('empty_inventory'))->unique('product_id') as $product)
                         <option value="{{ $product->product_id }}" data-product-code="{{ $product->product_code ?? '' }}">{{ trim(($product->product_name ?? '') . ' ' . ($product->product_unit_measurement ?? '')) }}</option>
                     @endforeach
                 </select>

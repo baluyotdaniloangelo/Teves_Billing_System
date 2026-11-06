@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class LpgEmptyReceipt
@@ -16,11 +15,11 @@ class LpgEmptyReceipt
         $rules = [
             'empty_swapping_idx' => ['nullable', 'integer', Rule::exists('teves_cashiers_report_lpg_swapping', 'cashiers_report_lpg_swapping_id')->where(function ($query) use ($request) {
                 $query->where('cashiers_report_id', $request->cashiers_report_id)->where('client_idx', $request->client_idx)->where('received_stock_state', 'EMPTY')->whereNull('deleted_at');
-                $query->whereIn('received_product_idx', DB::table('teves_product_table')->select('product_id')->whereIn('category_idx', LpgEmptyInventorySummary::categoryIds())->whereNotIn('product_id', LpgRegulatorProducts::ids()));
+                $query->whereIn('received_product_idx', LpgProductTracking::ids('empty_inventory'));
             })],
             'empty_received_quantity' => [$refill && !$linked ? 'required' : 'nullable', 'integer', 'min:0', 'max:2147483647'],
             'empty_received_product_idx' => [$refill && !$linked && $quantity > 0 ? 'required' : 'nullable', 'integer', Rule::exists('teves_product_table', 'product_id')->where(function ($query) {
-                $query->whereIn('category_idx', LpgEmptyInventorySummary::categoryIds())->whereNotIn('product_id', LpgRegulatorProducts::ids())->whereNull('deleted_at');
+                $query->whereIn('product_id', LpgProductTracking::ids('empty_inventory'))->whereNull('deleted_at');
             })],
         ];
         if (!$isKitchen && $request->sale_stock_type === 'EMPTY_CONTAINER') $rules['unit_price'] = ['required', 'numeric', 'min:0', 'max:9999999999.99'];
