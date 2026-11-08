@@ -37,7 +37,8 @@ class LpgSellOutSummary
             ->orderBy('s.cashiers_report_lpg_ar_so_id')->get(['s.*', 'client.client_name']);
         foreach ($sales as $row) {
             $mode = $row->item_description === 'Return' ? 'RETURN' :
-                (in_array($row->sale_stock_type, ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'], true) ? $row->sale_stock_type : 'UNCLASSIFIED');
+                (!empty($row->is_on_loan) ? 'ON_LOAN' :
+                    (in_array($row->sale_stock_type, ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'], true) ? $row->sale_stock_type : 'UNCLASSIFIED'));
             $entry = $this->entry($mode, 'sales', $row->cashiers_report_lpg_ar_so_id, $row->product_idx, $row->order_quantity, $row->client_name, $row->dr_number, $row->item_description);
             // The workbook's sell-out amounts use SRP; discounts stay visible in the sales/discount records.
             $entry['unit_price'] = (float) $row->unit_price;
@@ -102,7 +103,7 @@ class LpgSellOutSummary
                 $key = strtolower($mode);
                 $row[$key . '_quantity'] = round($source->sum('quantity'), 2);
                 $row[$key . '_count'] = $source->count();
-                if (in_array($mode, ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'], true)) {
+                if (in_array($mode, ['ON_LOAN', 'REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'], true)) {
                     $prices = $source->pluck('unit_price')->unique()->values();
                     $row[$key . '_unit_price'] = $prices->count() === 1 ? $prices->first() : null;
                     $row[$key . '_mixed_prices'] = $prices->count() > 1;
@@ -110,8 +111,9 @@ class LpgSellOutSummary
                 }
             }
             $sales = $entries->whereIn('mode', ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED']);
-            $row['total_sales'] = round($sales->sum('amount'), 2);
-            $row['net_sales'] = round($sales->sum('net_amount'), 2);
+            $salesForRevenue = $entries->whereIn('mode', ['ON_LOAN', 'REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED']);
+            $row['total_sales'] = round($salesForRevenue->sum('amount'), 2);
+            $row['net_sales'] = round($salesForRevenue->sum('net_amount'), 2);
             $beginning = $entries->where('mode', 'BEGINNING');
             $row['beginning_filled_quantity'] = round($beginning->sum('quantity'), 2);
             $row['beginning_bo_returned_customer_quantity'] = round($beginning->sum('bo_returned_customer_quantity'), 2);

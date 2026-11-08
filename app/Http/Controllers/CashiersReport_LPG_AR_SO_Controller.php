@@ -47,6 +47,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
                 'teves_cashiers_report_lpg_ar_so.dr_number',
                 'teves_cashiers_report_lpg_ar_so.item_description',
                 'teves_cashiers_report_lpg_ar_so.sale_stock_type',
+                'teves_cashiers_report_lpg_ar_so.is_on_loan',
                 'teves_cashiers_report_lpg_ar_so.empty_received_product_idx',
                 'teves_cashiers_report_lpg_ar_so.empty_received_quantity',
                 'teves_cashiers_report_lpg_ar_so.empty_swapping_idx',
@@ -94,6 +95,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
                 'teves_cashiers_report_lpg_ar_so.dr_number',
                 'teves_cashiers_report_lpg_ar_so.item_description',
                 'teves_cashiers_report_lpg_ar_so.sale_stock_type',
+                'teves_cashiers_report_lpg_ar_so.is_on_loan',
                 'teves_cashiers_report_lpg_ar_so.empty_received_product_idx',
                 'teves_cashiers_report_lpg_ar_so.empty_received_quantity',
                 'teves_cashiers_report_lpg_ar_so.empty_swapping_idx',
@@ -125,6 +127,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
             'dr_number' => ['nullable', 'string', 'max:100'],
             'item_description' => ['required', 'in:Sales Order,Cash Sales,Return'],
             'sale_stock_type' => ['required_if:item_description,Sales Order,Cash Sales', 'nullable', $isRegulator ? 'in:REGULATOR' : ($isKitchen ? 'in:KITCHEN_ITEM' : 'in:REFILL_SWAP,CYLINDER_WITH_CONTENT,EMPTY_CONTAINER')],
+            'is_on_loan' => ['nullable', 'boolean'],
             'order_quantity' => ['required', 'numeric', 'min:0.01'],
             'discount_per_unit' => ['required', 'numeric', 'min:0'],
         ], LpgEmptyReceipt::rules($request, $isKitchen || $isRegulator)));
@@ -133,6 +136,10 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
                 ->where('product_id', $request->input('product_idx'))
                 ->whereIn('product_id', $allowedProductIds)->whereNull('deleted_at')->exists()) {
                 $validator->errors()->add('product_idx', 'Select a product enabled for this sale classification in LPG Settings, or a Kitchen product / Regulator.');
+            }
+            if ($request->boolean('is_on_loan') && ($request->input('item_description') !== 'Sales Order'
+                || !in_array($request->input('sale_stock_type'), ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'], true))) {
+                $validator->errors()->add('is_on_loan', 'On-Loan / Pautang is available for filled LPG Sales Orders only.');
             }
             LpgEmptyReceipt::validateQuantity($validator, $request);
         });
@@ -170,6 +177,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         $record->dr_number = $data['dr_number'] ?? null;
         $record->item_description = $data['item_description'] ?? 'n/a';
         $record->sale_stock_type = $data['item_description'] === 'Return' ? null : $data['sale_stock_type'];
+        $record->is_on_loan = $request->boolean('is_on_loan');
         LpgEmptyReceipt::fill($record, $data);
         $record->order_quantity = $data['order_quantity'];
         $record->unit_price = $unitPrice;
@@ -208,6 +216,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
             'dr_number' => ['nullable', 'string', 'max:100'],
             'item_description' => ['required', 'in:Sales Order,Cash Sales,Return'],
             'sale_stock_type' => ['required_if:item_description,Sales Order,Cash Sales', 'nullable', $isRegulator ? 'in:REGULATOR' : ($isKitchen ? 'in:KITCHEN_ITEM' : 'in:REFILL_SWAP,CYLINDER_WITH_CONTENT,EMPTY_CONTAINER')],
+            'is_on_loan' => ['nullable', 'boolean'],
             'order_quantity' => ['required', 'numeric', 'min:0.01'],
             'discount_per_unit' => ['required', 'numeric', 'min:0'],
         ], LpgEmptyReceipt::rules($request, $isKitchen || $isRegulator)));
@@ -216,6 +225,10 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
                 ->where('product_id', $request->input('product_idx'))
                 ->whereIn('product_id', $allowedProductIds)->whereNull('deleted_at')->exists()) {
                 $validator->errors()->add('product_idx', 'Select a product enabled for this sale classification in LPG Settings, or a Kitchen product / Regulator.');
+            }
+            if ($request->boolean('is_on_loan') && ($request->input('item_description') !== 'Sales Order'
+                || !in_array($request->input('sale_stock_type'), ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'], true))) {
+                $validator->errors()->add('is_on_loan', 'On-Loan / Pautang is available for filled LPG Sales Orders only.');
             }
             LpgEmptyReceipt::validateQuantity($validator, $request);
         });
@@ -251,6 +264,7 @@ class CashiersReport_LPG_AR_SO_Controller extends Controller
         $record->dr_number = $data['dr_number'] ?? null;
         $record->item_description = $data['item_description'] ?? 'n/a';
         $record->sale_stock_type = $data['item_description'] === 'Return' ? null : $data['sale_stock_type'];
+        $record->is_on_loan = $request->boolean('is_on_loan');
         LpgEmptyReceipt::fill($record, $data);
         $record->order_quantity = $data['order_quantity'];
         $record->unit_price = $unitPrice;

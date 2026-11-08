@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\CashiersReport_LPG_SellOut_Controller;
 use App\Http\Controllers\CashiersReport_LPG_Inventory_Controller;
+use App\Http\Controllers\CashiersReport_LPG_Container_Controller;
 use App\Http\Controllers\LpgSettingsController;
 use App\Services\LpgEmptyInventorySummary;
 use App\Services\LpgProductTracking;
@@ -83,15 +84,17 @@ class LpgProductTrackingTest extends TestCase
         Schema::create('teves_cashiers_report_lpg_ar_so', function (Blueprint $table) {
             $table->increments('cashiers_report_lpg_ar_so_id'); $table->integer('cashiers_report_id');
             $table->integer('product_idx'); $table->integer('client_idx')->nullable();
-            $table->string('item_description'); $table->string('sale_stock_type')->nullable();
+            $table->string('item_description'); $table->string('sale_stock_type')->nullable(); $table->boolean('is_on_loan')->default(false);
             $table->decimal('order_quantity'); $table->decimal('unit_price'); $table->decimal('discount_per_unit')->default(0);
             $table->string('dr_number')->nullable(); $table->softDeletes();
         });
         Schema::create('teves_cashiers_report_lpg_on_loan', function (Blueprint $table) {
             $table->increments('cashiers_report_lpg_on_loan_id'); $table->integer('cashiers_report_id'); $table->integer('client_idx')->nullable();
+            $table->string('dr_number')->nullable(); $table->text('remarks')->nullable();
             foreach (['borrow', 'return'] as $side) {
                 $table->integer($side . '_product_idx')->nullable(); $table->decimal($side . '_quantity')->default(0);
                 $table->string($side . '_stock_state')->nullable();
+                $table->decimal($side . '_alum_quantity')->default(0);
             }
             $table->softDeletes();
         });
@@ -144,6 +147,58 @@ class LpgProductTrackingTest extends TestCase
         $response = (new CashiersReport_LPG_SellOut_Controller())->index(Request::create('/', 'POST', ['cashiers_report_id' => 1]), $summary);
         $this->assertSame([1, 3], collect($response->getData(true)['data'])->pluck('product_idx')->all());
         $this->assertSame(4, DB::table('teves_cashiers_report_lpg_inventory')->count());
+    }
+
+    public function test_on_loan_sales_order_is_listed_in_both_sales_details_and_on_loan_without_double_deducting_stock(): void
+    {
+        DB::table('teves_client_table')->insert(['client_id' => 1, 'client_name' => 'On-Loan Customer']);
+        DB::table('teves_cashiers_report_lpg_inventory')->insert([
+            'cashiers_report_id' => 1, 'product_idx' => 1, 'inventory_mode' => 'BEGINNING', 'quantity' => 50,
+        ]);
+        DB::table('teves_cashiers_report_lpg_ar_so')->insert([
+            ['cashiers_report_id' => 1, 'product_idx' => 1, 'client_idx' => 1, 'item_description' => 'Sales Order',
+                'sale_stock_type' => 'CYLINDER_WITH_CONTENT', 'is_on_loan' => true, 'order_quantity' => 4,
+                'unit_price' => 32, 'discount_per_unit' => 0],
+            ['cashiers_report_id' => 1, 'product_idx' => 1, 'client_idx' => 1, 'item_description' => 'Sales Order',
+                'sale_stock_type' => 'REFILL_SWAP', 'is_on_loan' => false, 'order_quantity' => 3,
+                'unit_price' => 1290, 'discount_per_unit' => 0],
+        ]);
+        DB::table('teves_cashiers_report_lpg_on_loan')->insert([
+            'cashiers_report_id' => 1, 'client_idx' => 1, 'borrow_product_idx' => 1, 'borrow_quantity' => 2, 'borrow_stock_state' => 'FILLED',
+        ]);
+
+        $summary = new LpgSellOutSummary();
+        $records = $summary->records(1);
+        $this->assertSame(1, $records->where('kind', 'sales')->where('mode', 'ON_LOAN')->count());
+        $row = $summary->rows($records, 1)->firstWhere('product_idx', 1);
+
+        $this->assertSame(6.0, $row['on_loan_quantity']); // 4 from the Sales Order + 2 physical loan
+        $this->assertSame(3.0, $row['refill_swap_quantity']);
+        $this->assertSame(41.0, $row['theoretical_filled_quantity']); // 50 - 4 - 2 - 3
+        $this->assertSame(3998.0, $row['total_sales']); // On-Loan Sales Order value is still revenue
+    }
+
+    public function test_on_loan_sales_order_appears_in_the_inventory_on_loan_record_list(): void
+    {
+        DB::table('teves_client_table')->insert(['client_id' => 1, 'client_name' => 'On-Loan Customer']);
+        DB::table('teves_cashiers_report_lpg_ar_so')->insert([
+            'cashiers_report_id' => 1, 'product_idx' => 1, 'client_idx' => 1,
+            'item_description' => 'Sales Order', 'sale_stock_type' => 'CYLINDER_WITH_CONTENT',
+            'is_on_loan' => true, 'order_quantity' => 4, 'unit_price' => 32, 'discount_per_unit' => 0,
+            'dr_number' => 'SO-100',
+        ]);
+
+        $response = (new CashiersReport_LPG_Container_Controller())->get_lpg_on_loan_list(
+            Request::create('/', 'POST', ['CashiersReportId' => 1])
+        );
+        $rows = collect($response->getData(true));
+
+        $this->assertCount(1, $rows);
+        $this->assertSame('sales_order', $rows[0]['record_type']);
+        $this->assertSame('SO-100', $rows[0]['dr_number']);
+        $this->assertSame(1, $rows[0]['borrow_product_idx']);
+        $this->assertSame(4.0, (float) $rows[0]['borrow_quantity']);
+        $this->assertSame('Sales Order / Pautang', $rows[0]['remarks']);
     }
 
     public function test_empty_tracking_filters_automatic_sources_and_existing_manual_rows(): void

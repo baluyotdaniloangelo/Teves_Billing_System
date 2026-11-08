@@ -10,7 +10,7 @@ $(function () {
         UNCLASSIFIED: 'Unclassified Sales', EXPENSE: 'Product Expenses'
     };
     const inventoryModes = ['BEGINNING', 'DELIVERY', 'BO_REPLACEMENT', 'BO_FROM_CUSTOMER', 'BO_DURING_DELIVERY', 'BO_RETURNED_TO_SUPPLIER'];
-    const salesModes = ['RETURN', 'REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'];
+    const salesModes = ['RETURN', 'ON_LOAN', 'REFILL_SWAP', 'CYLINDER_WITH_CONTENT', 'UNCLASSIFIED'];
     const summaryBody = $('#LpgSellOutTable tbody');
     const modalElement = document.getElementById('LpgSellOutSourcesModal');
     let summaryRequest = null, sourceRequest = null;
@@ -131,10 +131,11 @@ $(function () {
                 resetLpgArSoForm();
                 $('#ar_so_product').attr('data-product-category-filter', 'lpg');
                 $('#ar_so_type').val(mode === 'RETURN' ? 'Return' : 'Sales Order').trigger('change');
-                $('#ar_so_stock_type').val(['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'].includes(mode) ? mode : '').trigger('change');
+                $('#ar_so_stock_type').val(mode === 'ON_LOAN' ? 'CYLINDER_WITH_CONTENT' : (['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'].includes(mode) ? mode : '')).trigger('change');
+                $('#ar_so_is_on_loan').prop('checked', mode === 'ON_LOAN').trigger('change');
                 fillProduct('#ar_so_product', '#lpgArSoProductList', productId);
                 lpgArSoShowModal('#CashierReportLpgArSoModal');
-            } else if (mode === 'ON_LOAN') window.LpgOnLoanEditor.add(productId);
+            }
             else if (mode === 'EXPENSE') {
                 resetLpgExpenseForm();
                 showLpgExpenseModal('#CashierReportLpgExpensesModal');

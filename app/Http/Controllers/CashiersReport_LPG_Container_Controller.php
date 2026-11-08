@@ -10,6 +10,7 @@ use App\Services\LpgRegulatorProducts;
 use App\Services\LpgSwappingGroups;
 use App\Services\LpgSwappingBalance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -97,9 +98,7 @@ class CashiersReport_LPG_Container_Controller extends Controller
     public function get_lpg_on_loan_list(Request $request)
     {
         $reportId = $this->lpgReportId($request);
-
-        return response()->json(
-            CashiersReportModel_LPG_OnLoan::query()
+        $physicalLoans = CashiersReportModel_LPG_OnLoan::query()
                 ->leftJoin('teves_client_table', 'teves_client_table.client_id', '=', 'teves_cashiers_report_lpg_on_loan.client_idx')
                 ->leftJoin('teves_product_table as borrow_product', 'borrow_product.product_id', '=', 'teves_cashiers_report_lpg_on_loan.borrow_product_idx')
                 ->leftJoin('teves_product_table as return_product', 'return_product.product_id', '=', 'teves_cashiers_report_lpg_on_loan.return_product_idx')
@@ -118,7 +117,43 @@ class CashiersReport_LPG_Container_Controller extends Controller
                     'return_product.product_capacity as return_product_capacity',
                     'return_product.product_capacity_unit as return_product_capacity_unit',
                 ])
-        );
+                ->map(function ($row) {
+                    $row->record_type = 'borrow_return';
+                    return $row;
+                });
+
+        $onLoanSales = DB::table('teves_cashiers_report_lpg_ar_so as sale')
+            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
+            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
+            ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
+            ->where('sale.item_description', 'Sales Order')->where('sale.is_on_loan', true)
+            ->whereIn('sale.sale_stock_type', ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'])
+            ->orderBy('sale.cashiers_report_lpg_ar_so_id')
+            ->get([
+                'sale.cashiers_report_lpg_ar_so_id', 'sale.client_idx', 'sale.dr_number',
+                'sale.product_idx as borrow_product_idx', 'sale.order_quantity as borrow_quantity',
+                'client.client_name', 'product.product_name as borrow_product_name',
+                'product.product_unit_measurement as borrow_product_unit_measurement',
+                'product.product_capacity as borrow_product_capacity',
+                'product.product_capacity_unit as borrow_product_capacity_unit',
+            ])
+            ->map(function ($row) {
+                $row->record_type = 'sales_order';
+                $row->borrow_stock_state = 'FILLED';
+                $row->borrow_alum_quantity = 0;
+                $row->return_product_idx = null;
+                $row->return_quantity = 0;
+                $row->return_stock_state = null;
+                $row->return_product_name = null;
+                $row->return_product_unit_measurement = null;
+                $row->return_product_capacity = null;
+                $row->return_product_capacity_unit = null;
+                $row->return_alum_quantity = 0;
+                $row->remarks = 'Sales Order / Pautang';
+                return $row;
+            });
+
+        return response()->json($physicalLoans->concat($onLoanSales)->values());
     }
 
     public function lpg_on_loan_info(Request $request)

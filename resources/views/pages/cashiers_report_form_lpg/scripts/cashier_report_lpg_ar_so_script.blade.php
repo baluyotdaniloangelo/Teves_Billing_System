@@ -46,7 +46,8 @@ function initLpgArSoTable() {
             { data: 'item_description', defaultContent: '-', render: function (value, type, row) {
                 const label = row.sale_stock_type === 'REGULATOR' ? 'Regulator' : (row.sale_stock_type === 'EMPTY_CONTAINER' ? 'Empty Cylinder / Canister' : (row.sale_stock_type === 'KITCHEN_ITEM' ? 'Kitchen Product / Accessory' : (row.sale_stock_type === 'REFILL_SWAP' ? 'Refill / Swap' : (row.sale_stock_type === 'CYLINDER_WITH_CONTENT' ? 'Cylinder with Content' : 'Unclassified'))));
                 const text = $('<div>').text(value || '-').html();
-                return type === 'display' && value !== 'Return' ? text + '<br><small class="text-muted">' + label + '</small>' : text;
+                const onLoan = Number(row.is_on_loan) === 1 ? '<br><span class="badge text-bg-warning">On-Loan / Pautang</span>' : '';
+                return type === 'display' && value !== 'Return' ? text + '<br><small class="text-muted">' + label + '</small>' + onLoan : text;
             } },
             { data: 'client_name', defaultContent: '-' },
             { data: 'dr_number', defaultContent: '-' },
@@ -400,6 +401,8 @@ function editLpgArSoRecord(recordId) {
         $('#ar_so_dr_number').val(row.dr_number || '');
         $('#ar_so_type').val(row.item_description || '');
         $('#ar_so_stock_type').val(row.sale_stock_type || '');
+        $('#ar_so_is_on_loan').prop('checked', Boolean(Number(row.is_on_loan || 0)));
+        $('#ar_so_is_on_loan_value').val(row.is_on_loan ? '1' : '0');
         $('#ar_so_account_id').val(row.client_name || '').get(0).setCustomValidity('');
         $('#ar_so_product').val(productOption?.val() || '').get(0).setCustomValidity('');
         syncLpgSaleStockType();
@@ -432,6 +435,11 @@ function syncLpgSaleStockType() {
     if (!isReturn && !isKitchen && !isRegulator && !$('#ar_so_stock_type').val() && product?.attr('data-empty-inventory') === '1' && product?.attr('data-sell-out') !== '1') $('#ar_so_stock_type').val('EMPTY_CONTAINER');
     $('#ar-so-stock-type-field').toggleClass('d-none', isReturn || isKitchen || isRegulator);
     $('#ar_so_stock_type').prop('required', !isReturn && !isKitchen && !isRegulator).prop('disabled', isReturn);
+    const canBeOnLoan = $('#ar_so_type').val() === 'Sales Order'
+        && ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'].includes($('#ar_so_stock_type').val());
+    $('#ar-so-on-loan-field').toggleClass('d-none', !canBeOnLoan);
+    if (!canBeOnLoan) $('#ar_so_is_on_loan').prop('checked', false);
+    $('#ar_so_is_on_loan_value').val(canBeOnLoan && $('#ar_so_is_on_loan').is(':checked') ? '1' : '0');
     const forcedCategory = productInput.attr('data-product-category-filter');
     const stockType = $('#ar_so_stock_type').val();
     function allowedProduct(option) {
@@ -466,6 +474,7 @@ function syncLpgSaleStockType() {
 }
 $('#ar_so_type').on('change', syncLpgSaleStockType);
 $('#ar_so_stock_type').on('change', syncLpgSaleStockType);
+$('#ar_so_is_on_loan').on('change', function () { $('#ar_so_is_on_loan_value').val(this.checked ? '1' : '0'); });
 $('#CashierReportLpgArSoModal').on('hidden.bs.modal', function () {
     $('#ar_so_product').removeAttr('data-product-category-filter');
     syncLpgSaleStockType();

@@ -21,6 +21,7 @@ class CashiersReportModel_LPG_AR_SO extends Model
 
     protected $casts = [
         'set_components_snapshot' => 'array',
+        'is_on_loan' => 'boolean',
     ];
 
     protected $fillable = [
@@ -31,6 +32,7 @@ class CashiersReportModel_LPG_AR_SO extends Model
         'dr_number',
         'item_description',
         'sale_stock_type',
+        'is_on_loan',
         'set_components_snapshot',
         'empty_received_product_idx',
         'empty_received_quantity',
@@ -59,6 +61,7 @@ class CashiersReportModel_LPG_AR_SO extends Model
         'dr_number',
         'item_description',
         'sale_stock_type',
+        'is_on_loan',
         'empty_received_product_idx',
         'empty_received_quantity',
         'empty_swapping_idx',

@@ -772,7 +772,7 @@ class CashiersReportLPGController extends Controller
             ->orderBy('sale.cashiers_report_lpg_ar_so_id')
             ->get(['client.client_name', 'client.client_account_number', 'sale.dr_number', 'sale.item_description',
                 'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
-                'sale.order_quantity', 'sale.unit_price', 'sale.order_total_amount']);
+                'sale.order_quantity', 'sale.unit_price', 'sale.order_total_amount', 'sale.is_on_loan']);
 
         $expenseRows = DB::table('teves_cashiers_report_lpg_expenses as expense')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'expense.client_idx')
@@ -898,6 +898,40 @@ class CashiersReportLPGController extends Controller
                 'returned.product_name as return_product_name', 'returned.product_code as return_product_code', 'returned.product_capacity as return_product_capacity',
                 'returned.product_capacity_unit as return_product_capacity_unit', 'returned.product_unit_measurement as return_product_unit_measurement',
                 'loan.return_alum_quantity', 'loan.remarks']);
+
+        $onLoanSalesRows = DB::table('teves_cashiers_report_lpg_ar_so as sale')
+            ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
+            ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
+            ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
+            ->where('sale.item_description', 'Sales Order')->where('sale.is_on_loan', true)
+            ->whereIn('sale.sale_stock_type', ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'])
+            ->orderBy('sale.cashiers_report_lpg_ar_so_id')
+            ->get(['client.client_name', 'sale.dr_number', 'sale.order_quantity', 'product.product_name',
+                'product.product_code', 'product.product_capacity', 'product.product_capacity_unit', 'product.product_unit_measurement'])
+            ->map(function ($row) {
+                return (object) [
+                    'client_name' => $row->client_name,
+                    'dr_number' => $row->dr_number,
+                    'borrow_quantity' => $row->order_quantity,
+                    'borrow_stock_state' => 'FILLED',
+                    'borrow_product_name' => $row->product_name,
+                    'borrow_product_code' => $row->product_code,
+                    'borrow_product_capacity' => $row->product_capacity,
+                    'borrow_product_capacity_unit' => $row->product_capacity_unit,
+                    'borrow_product_unit_measurement' => $row->product_unit_measurement,
+                    'borrow_alum_quantity' => 0,
+                    'return_quantity' => 0,
+                    'return_stock_state' => null,
+                    'return_product_name' => null,
+                    'return_product_code' => null,
+                    'return_product_capacity' => null,
+                    'return_product_capacity_unit' => null,
+                    'return_product_unit_measurement' => null,
+                    'return_alum_quantity' => 0,
+                    'remarks' => 'Sales Order / Pautang',
+                ];
+            });
+        $onLoanRows = $onLoanRows->concat($onLoanSalesRows)->values();
 
         return PDF::loadView('printables.cashier_report_lpg_pdf', compact(
             'report', 'sellOutRows', 'kitchenRows', 'kitchenUnknownSetSales', 'regulatorRows', 'arCollectionRows', 'miscellaneousRows', 'expenseRows', 'discountRows',

@@ -7,7 +7,7 @@
         <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-lpg-sell-out"><i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>Refresh</button>
     </div>
     <p class="small text-muted mb-2">Filled stock and B.O. stock are tracked separately. B.O. Replacement and B.O. Returned to Supplier reduce the combined B.O. balance; delivery B.O. is reduced first.</p>
-    <p class="small text-muted mb-2">Refill / Swap, Cylinder Sold with Content, and On-Loan are deducted from Filled Cylinders. Sales amounts use SRP before discounts.</p>
+    <p class="small text-muted mb-2">On-Loan / Pautang Sales Orders stay in the Sales Order details and appear in the On-Loan subtotal. On-Loan and regular sales are deducted once each from Filled Cylinders. Use the separate On-Loan transaction tab only for physical cylinder / regulator borrow-and-return records.</p>
     <div class="alert alert-danger d-none" role="alert" id="lpg-sell-out-error"></div>
     <div class="table-responsive">
         <table class="table table-sm table-bordered align-middle mb-0" id="LpgSellOutTable" style="min-width:3100px;">

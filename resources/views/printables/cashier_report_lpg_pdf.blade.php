@@ -335,7 +335,7 @@
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td>{{ $row->client_account_number ?? '' }}</td>
                 <td>{{ $row->dr_number ?? '' }}</td>
-                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif</td>
+                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif @if (!empty($row->is_on_loan))<span class="product-code">On-Loan / Pautang</span>@endif</td>
                 <td class="number">{{ $quantity($row->order_quantity) }}</td>
                 <td class="number">{{ $money($row->unit_price) }}</td>
                 <td class="number">{{ $money($row->order_total_amount) }}</td>

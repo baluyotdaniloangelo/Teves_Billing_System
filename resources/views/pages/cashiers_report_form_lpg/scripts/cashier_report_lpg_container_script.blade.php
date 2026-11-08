@@ -37,7 +37,7 @@ $(function () {
             indexColumn(), {data:'client_name', defaultContent:'-', render:$.fn.dataTable.render.text()}, productColumn('received'), quantityColumn('received_quantity'), productColumn('replaced'), quantityColumn('replaced_quantity'), {data:'remarks', defaultContent:'-', render:$.fn.dataTable.render.text()}, actionColumn('Swapping')
         ], 'No swapping records.'),
         onLoan: createContainerTable('#LpgOnLoanTable', "{{ route('GetLpgOnLoanList') }}", [
-            indexColumn(), {data:'client_name', defaultContent:'-'}, {data:'dr_number', defaultContent:'-'}, movementColumn('borrow'), movementColumn('return'), {data:'remarks', defaultContent:'-'}, actionColumn('OnLoan')
+            indexColumn(), {data:'client_name', defaultContent:'-'}, {data:'dr_number', defaultContent:'-'}, loanMovementColumn('borrow'), loanMovementColumn('return'), {data:'remarks', defaultContent:'-'}, actionColumn('OnLoan')
         ], 'No on-loan records.')
     };
 
@@ -107,6 +107,7 @@ $(function () {
     $(document).on('click', '.EditLpgSwappingDamaged', function () { const id = Number(this.dataset.id); afterSwappingEntriesClose(() => window.LpgKitchenMovementEditor.edit(id)); });
     $(document).on('click', '.DeleteLpgSwappingDamaged', function () { const id = Number(this.dataset.id); afterSwappingEntriesClose(() => window.LpgKitchenMovementEditor.remove(id)); });
     $(document).on('lpg:kitchen-movement-changed', () => { if (tables.swapping) tables.swapping.ajax.reload(null, false); });
+    $(document).on('click', '.EditLpgOnLoanSalesOrder', function () { $('#ar_so_product').attr('data-product-category-filter', 'lpg'); editLpgArSoRecord($(this).data('id')); });
     $(document).on('click', '.EditLpgOnLoan', function () { $.post("{{ route('LpgOnLoanInfo') }}", {cashiers_report_lpg_on_loan_id: $(this).data('id')}).done(r => openOnLoan(r.data || r)); });
     $(document).on('click', '.DeleteLpgSwapping', function () {
         const id = $(this).data('id'), paired = this.dataset.paired === '1';
@@ -120,6 +121,7 @@ $(function () {
     $(document).on('click', '.DeleteLpgOnLoan', function () { $('#lpg_on_loan_delete_id').val($(this).data('id')); showContainerModal('#CashierReportLpgOnLoanDeleteModal'); });
     $('#confirm-delete-lpg-swapping').on('click', () => deleteContainerRecord($('#lpg_swapping_delete_id').val(), "{{ route('DeleteLpgSwapping') }}", 'cashiers_report_lpg_swapping_id', '#CashierReportLpgSwappingDeleteModal', tables.swapping, 'Swapping record'));
     $('#confirm-delete-lpg-on-loan').on('click', () => deleteContainerRecord($('#lpg_on_loan_delete_id').val(), "{{ route('DeleteLpgOnLoan') }}", 'cashiers_report_lpg_on_loan_id', '#CashierReportLpgOnLoanDeleteModal', tables.onLoan, 'On-loan record'));
+    $(document).on('lpg:inventory-changed', () => tables.onLoan?.ajax.reload(null, false));
 
     function createContainerTable(selector, url, columns, emptyMessage) {
         if (!$(selector).length) return null;
@@ -129,6 +131,7 @@ $(function () {
     function productColumn(prefix){ return {data:null,render:(r,t)=>{const value=[r[prefix+'_product_name'],r[prefix+'_product_unit_measurement']].filter(Boolean).join(' ')||'-'; return t === 'display' ? escapeText(value) : value; }}; }
     function quantityColumn(field){ return {data:field,className:'text-end fw-semibold',render:(v,t,r)=>r[field.replace('_quantity','_product_idx')] ? formatQty(v) : '—'}; }
     function movementColumn(prefix){ return {data:null,render:r=>{const capacity = r[prefix+'_product_capacity']; const unit = r[prefix+'_product_capacity_unit']; const description = capacity !== null && capacity !== undefined && capacity !== '' && unit ? Number(capacity).toLocaleString('en-PH', {maximumFractionDigits:3}) + ' ' + unit : r[prefix+'_product_unit_measurement']; const product=[r[prefix+'_product_name'],description].filter(Boolean).join(' ') || '-'; return `${escapeText(product)}<br><small>Qty: ${formatQty(r[prefix+'_quantity'])} &nbsp; Alum: ${formatQty(r[prefix+'_alum_quantity'])}</small>`;}}; }
+    function loanMovementColumn(prefix){ return {data:null,render:r=>{if(prefix==='return'&&r.record_type==='sales_order')return '—'; const capacity=r[prefix+'_product_capacity']; const unit=r[prefix+'_product_capacity_unit']; const description=capacity!==null&&capacity!==undefined&&capacity!==''&&unit?Number(capacity).toLocaleString('en-PH',{maximumFractionDigits:3})+' '+unit:r[prefix+'_product_unit_measurement']; const product=[r[prefix+'_product_name'],description].filter(Boolean).join(' ')||'-'; const qty=Number(r[prefix+'_quantity']||0); return `${escapeText(product)}<br><small>Qty: ${formatQty(qty)}${r.record_type==='sales_order'?'':' &nbsp; Alum: '+formatQty(r[prefix+'_alum_quantity'])}</small>`;}}; }
     function swappingRecordActions(row) {
         if (row.source_kind === 'kitchen_damaged') {
             const id = Number(row.source_id);
@@ -149,6 +152,7 @@ $(function () {
             if (Number(r.entry_count || 0) > 1) return `<button type="button" class="btn btn-sm btn-primary ViewLpgSwappingEntries" data-group-key="${r.group_key}"><i class="bi bi-eye me-1"></i>View Entries (${Number(r.entry_count)})</button>`;
             return swappingRecordActions(r.entries?.[0] || r);
         }
+        if (type === 'OnLoan' && r.record_type === 'sales_order') return `<button type="button" class="btn btn-sm btn-primary EditLpgOnLoanSalesOrder" data-id="${r.cashiers_report_lpg_ar_so_id}" title="Edit Sales Order"><i class="bi bi-pencil-square me-1"></i>Edit Order</button>`;
         return `<button type="button" class="btn btn-sm btn-primary EditLpg${type}" data-id="${r.cashiers_report_lpg_on_loan_id}" title="Edit"><i class="bi bi-pencil-square"></i></button> <button type="button" class="btn btn-sm btn-danger DeleteLpg${type}" data-id="${r.cashiers_report_lpg_on_loan_id}" title="Delete"><i class="bi bi-trash3-fill"></i></button>`;
     }}; }
     function formatQty(v){ return Number(v||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2}); }

@@ -86,6 +86,15 @@
                             <div class="form-text">Determines which sell-out column receives this quantity.</div>
                             <div class="invalid-feedback" id="sale_stock_typeError">Please select a sale classification.</div>
                         </div>
+
+                        <div class="col-12 d-none" id="ar-so-on-loan-field">
+                            <input type="hidden" name="is_on_loan" id="ar_so_is_on_loan_value" value="0">
+                            <div class="form-check border rounded-3 p-3 ps-5 bg-warning bg-opacity-10">
+                                <input class="form-check-input" type="checkbox" id="ar_so_is_on_loan" value="1">
+                                <label class="form-check-label fw-semibold" for="ar_so_is_on_loan">On-Loan / Pautang</label>
+                                <div class="form-text">Remains a Sales Order and appears in the On-Loan quantity. Stock is deducted only once.</div>
+                            </div>
+                        </div>
 						
                         <div class="col-12">
                             <label for="ar_so_dr_number" class="form-label fw-semibold">
