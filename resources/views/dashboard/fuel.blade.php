@@ -27,7 +27,7 @@
     <div class="fuel-title-row">
         <div>
             <p class="fuel-eyebrow">STATION PERFORMANCE</p>
-            <h1><span>Cashier Dashboard</span></h1>
+            <h1><span>Dashboard</span></h1>
             <p class="fuel-subtitle">Sales, cash position, and report activity by cashier report type.</p>
         </div>
         <div class="fuel-actions">

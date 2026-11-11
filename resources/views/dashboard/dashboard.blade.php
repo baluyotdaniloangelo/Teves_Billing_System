@@ -111,7 +111,7 @@ $total_short_over = $result->sum('short_over');
 
               </div>
             </div>
-
+ 
         </div>
       </div>
 

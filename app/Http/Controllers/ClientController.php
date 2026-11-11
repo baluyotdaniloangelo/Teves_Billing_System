@@ -123,6 +123,7 @@ class ClientController extends Controller
 			if (Session::get('UserType') == "Encoder") {
 				$query->where('created_by_user_idx', Session::get('loginID'));
 			}
+			$totalRecords = (clone $query)->count();
 
 			$customerType = trim((string) $request->input('customer_type', ''));
 			$allowedCustomerTypes = [
@@ -151,6 +152,10 @@ class ClientController extends Controller
 			$data = $query->get();
 			
 			return DataTables::of($data)
+					// Search and customer type are already applied to the query above.
+					->filter(function () {}, false)
+					->setTotalRecords($totalRecords)
+					->setFilteredRecords($data->count())
 					->addIndexColumn()
 					->addColumn('referred_by_name', function($row){
 						return $row->referrer->sales_agent_name ?? 'None';
