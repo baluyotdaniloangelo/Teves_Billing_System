@@ -230,7 +230,7 @@
 
 										<label class="form-label fw-semibold">
 											<i class="bi bi-person-fill text-warning me-2"></i>
-											Sold To
+											Supplier's Name
 										</label>
 
 										<input class="form-control rounded-3"
