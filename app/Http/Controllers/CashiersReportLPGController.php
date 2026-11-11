@@ -768,11 +768,15 @@ class CashiersReportLPGController extends Controller
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
             ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
             ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
-            ->whereIn('sale.item_description', ['Sales Order', 'Return'])
+            ->where(function ($query) {
+                $query->where('sale.item_description', 'Return')
+                    ->orWhere('sale.transaction_type', 'A.R.')
+                    ->orWhere('sale.is_on_loan', true);
+            })
             ->orderBy('sale.cashiers_report_lpg_ar_so_id')
             ->get(['client.client_name', 'client.client_account_number', 'sale.dr_number', 'sale.item_description',
                 'product.product_name', 'product.product_code', 'product.product_unit_measurement', 'product.product_capacity', 'product.product_capacity_unit',
-                'sale.order_quantity', 'sale.unit_price', 'sale.order_total_amount', 'sale.is_on_loan']);
+                'sale.order_quantity', 'sale.unit_price', 'sale.order_total_amount', 'sale.is_on_loan', 'sale.transaction_type']);
 
         $expenseRows = DB::table('teves_cashiers_report_lpg_expenses as expense')
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'expense.client_idx')
@@ -832,7 +836,10 @@ class CashiersReportLPGController extends Controller
         $miscellaneousTotal = round((float) $miscellaneousRows->sum('order_total_amount'), 2);
         $expensesTotal = round((float) $expenseRows->sum('amount'), 2);
         $discountsTotal = round((float) $discountRows->sum('total_discount'), 2);
-        $theoreticalSales = round($totalSales - $miscellaneousTotal - $expensesTotal - $discountsTotal, 2);
+        $arAndReturnTotal = round((float) $miscellaneousRows->filter(function ($row) {
+            return $row->item_description === 'Return' || $row->transaction_type === 'A.R.';
+        })->sum('order_total_amount'), 2);
+        $theoreticalSales = round($totalSales - $arAndReturnTotal - $expensesTotal - $discountsTotal, 2);
         $totalCashAndNonCash = round($actualCash + $nonCashTotal, 2);
         $cashBeforeArCollections = round($totalCashAndNonCash - $arCollectionsTotal, 2);
         $salesVariance = round($cashBeforeArCollections - $theoreticalSales, 2);
@@ -903,10 +910,10 @@ class CashiersReportLPGController extends Controller
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
             ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
             ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
-            ->where('sale.item_description', 'Sales Order')->where('sale.is_on_loan', true)
+            ->whereIn('sale.item_description', ['Sales Order', 'Cash Sales'])->where('sale.is_on_loan', true)
             ->whereIn('sale.sale_stock_type', ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'])
             ->orderBy('sale.cashiers_report_lpg_ar_so_id')
-            ->get(['client.client_name', 'sale.dr_number', 'sale.order_quantity', 'product.product_name',
+            ->get(['client.client_name', 'sale.dr_number', 'sale.order_quantity', 'sale.transaction_type', 'product.product_name',
                 'product.product_code', 'product.product_capacity', 'product.product_capacity_unit', 'product.product_unit_measurement'])
             ->map(function ($row) {
                 return (object) [
@@ -928,7 +935,7 @@ class CashiersReportLPGController extends Controller
                     'return_product_capacity_unit' => null,
                     'return_product_unit_measurement' => null,
                     'return_alum_quantity' => 0,
-                    'remarks' => 'Sales Order / Pautang',
+                    'remarks' => 'Sales Order / ' . ($row->transaction_type ?: 'A.R.') . ' / On-Loan',
                 ];
             });
         $onLoanRows = $onLoanRows->concat($onLoanSalesRows)->values();

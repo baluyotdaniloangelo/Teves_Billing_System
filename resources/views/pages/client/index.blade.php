@@ -26,6 +26,7 @@ div.dataTables_wrapper {
         <span class="fuel-client-page-chip"><i class="bi bi-people" aria-hidden="true"></i> Client accounts</span>
     </div>
 
+    @if($showClientSummary && $clientSummary)
     <section class="row g-3 mb-4 fuel-client-summary" aria-label="Client account summary">
         <div class="col-12 col-sm-6 col-xl-3">
             <article class="card h-100 border-0 shadow-sm rounded-4">
@@ -75,6 +76,7 @@ div.dataTables_wrapper {
             </article>
         </div>
     </section>
+    @endif
 
     <section class="section fuel-client-section">
 		<!-- PURCHASE ORDER LIST -->

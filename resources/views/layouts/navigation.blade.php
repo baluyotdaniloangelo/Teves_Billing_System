@@ -200,14 +200,16 @@
         </ul>
       </li>
 	  
+
+	  
+	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
 	  <li class="nav-item ">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('receivables') }}" href="{{ route('receivables') }}" title="Receivable List" @if($workspaceNavActive('receivables')) aria-current="page" @endif>
           <i class="bi bi-cash-stack navbar_icon"></i>
           <span title="Create Billing Transaction">Receivable</span>
         </a>
-      </li>
-	  
-	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
+      </li>	   
+	   
 	   <li class="nav-item ">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('salesorder') }}" href="{{ route('salesorder') }}" title="Ship To" @if($workspaceNavActive('salesorder')) aria-current="page" @endif>
           <i class="bi bi-cart-check navbar_icon"></i>

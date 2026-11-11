@@ -126,11 +126,11 @@ class CashiersReport_LPG_Container_Controller extends Controller
             ->leftJoin('teves_client_table as client', 'client.client_id', '=', 'sale.client_idx')
             ->leftJoin('teves_product_table as product', 'product.product_id', '=', 'sale.product_idx')
             ->where('sale.cashiers_report_id', $reportId)->whereNull('sale.deleted_at')
-            ->where('sale.item_description', 'Sales Order')->where('sale.is_on_loan', true)
+            ->whereIn('sale.item_description', ['Sales Order', 'Cash Sales'])->where('sale.is_on_loan', true)
             ->whereIn('sale.sale_stock_type', ['REFILL_SWAP', 'CYLINDER_WITH_CONTENT'])
             ->orderBy('sale.cashiers_report_lpg_ar_so_id')
             ->get([
-                'sale.cashiers_report_lpg_ar_so_id', 'sale.client_idx', 'sale.dr_number',
+                'sale.cashiers_report_lpg_ar_so_id', 'sale.client_idx', 'sale.dr_number', 'sale.transaction_type',
                 'sale.product_idx as borrow_product_idx', 'sale.order_quantity as borrow_quantity',
                 'client.client_name', 'product.product_name as borrow_product_name',
                 'product.product_unit_measurement as borrow_product_unit_measurement',
@@ -149,7 +149,7 @@ class CashiersReport_LPG_Container_Controller extends Controller
                 $row->return_product_capacity = null;
                 $row->return_product_capacity_unit = null;
                 $row->return_alum_quantity = 0;
-                $row->remarks = 'Sales Order / Pautang';
+                $row->remarks = 'Sales Order / ' . ($row->transaction_type ?: 'A.R.') . ' / On-Loan';
                 return $row;
             });
 

@@ -318,14 +318,15 @@
     <table>
         <thead>
             <tr><th colspan="7" class="title">MISCELLANEOUS</th></tr>
-            <tr><th colspan="7">Sales Order - Account Receivable / Returned</th></tr>
+            <tr><th colspan="8">Sales Order - Account Receivable / Cash On-Loan / Returned</th></tr>
             <tr>
                 <th style="width: 20%">Account Name</th>
-                <th style="width: 14%">Account Number</th>
-                <th style="width: 10%">DR Nos.</th>
-                <th style="width: 28%">Item</th>
-                <th style="width: 8%">QTY.</th>
-                <th style="width: 10%">SRP</th>
+                <th style="width: 12%">Account Number</th>
+                <th style="width: 8%">DR Nos.</th>
+                <th style="width: 10%">Transaction Type</th>
+                <th style="width: 24%">Item</th>
+                <th style="width: 7%">QTY.</th>
+                <th style="width: 9%">SRP</th>
                 <th style="width: 10%">Amount</th>
             </tr>
         </thead>
@@ -335,13 +336,14 @@
                 <td>{{ $row->client_name ?? '' }}</td>
                 <td>{{ $row->client_account_number ?? '' }}</td>
                 <td>{{ $row->dr_number ?? '' }}</td>
-                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif @if (!empty($row->is_on_loan))<span class="product-code">On-Loan / Pautang</span>@endif</td>
+                <td>{{ $row->transaction_type ?? '—' }}</td>
+                <td>{{ $row->product_name ?? '' }} {{ $row->product_capacity !== null ? $quantity($row->product_capacity) . strtoupper($row->product_capacity_unit ?? '') : ($row->product_unit_measurement ?? '') }}@if (!empty($row->product_code))<span class="product-code">Code: {{ $row->product_code }}</span>@endif @if (!empty($row->is_on_loan))<span class="product-code">On-Loan</span>@endif</td>
                 <td class="number">{{ $quantity($row->order_quantity) }}</td>
                 <td class="number">{{ $money($row->unit_price) }}</td>
                 <td class="number">{{ $money($row->order_total_amount) }}</td>
             </tr>
         @empty
-            <tr><td colspan="7" class="empty">No sales order or return records.</td></tr>
+            <tr><td colspan="8" class="empty">No sales order or return records.</td></tr>
         @endforelse
         </tbody>
     </table>
@@ -430,7 +432,7 @@
                             <tr><td>KITCHEN PRODUCTS &amp; ACCESSORIES</td><td class="number">{{ $money($kitchenSalesTotal) }}</td></tr>
                             <tr><td class="grand">TOTAL</td><td class="number grand">{{ $money($totalSales) }}</td></tr>
                             <tr><td colspan="2" class="grand">MISCELLANEOUS</td></tr>
-                            <tr><td>SALES ORDER - ACCOUNTS RECEIVABLE / RETURNED</td><td class="number">{{ $money($miscellaneousTotal) }}</td></tr>
+                            <tr><td>SALES ORDER - A.R. / CASH ON-LOAN / RETURNED</td><td class="number">{{ $money($miscellaneousTotal) }}</td></tr>
                             <tr><td>EXPENSES</td><td class="number">{{ $money($expensesTotal) }}</td></tr>
                             <tr><td>DISCOUNTS</td><td class="number">{{ $money($discountsTotal) }}</td></tr>
                             <tr><td class="grand">TOTAL</td><td class="number grand">{{ $money($miscellaneousTotal + $expensesTotal + $discountsTotal) }}</td></tr>

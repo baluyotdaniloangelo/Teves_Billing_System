@@ -39,6 +39,7 @@
                         <tr class="report">
                             <th><i class="bi bi-hash" aria-hidden="true"></i>Item</th>
                             <th><i class="bi bi-tag" aria-hidden="true"></i>Type</th>
+                            <th><i class="bi bi-cash-coin" aria-hidden="true"></i>Transaction Type</th>
                             <th><i class="bi bi-person" aria-hidden="true"></i>Account Name</th>
                             <th><i class="bi bi-file-earmark-text" aria-hidden="true"></i>DR Number</th>
                             <th><i class="bi bi-box-seam" aria-hidden="true"></i>Item</th>

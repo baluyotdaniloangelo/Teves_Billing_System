@@ -84,7 +84,7 @@ class LpgProductTrackingTest extends TestCase
         Schema::create('teves_cashiers_report_lpg_ar_so', function (Blueprint $table) {
             $table->increments('cashiers_report_lpg_ar_so_id'); $table->integer('cashiers_report_id');
             $table->integer('product_idx'); $table->integer('client_idx')->nullable();
-            $table->string('item_description'); $table->string('sale_stock_type')->nullable(); $table->boolean('is_on_loan')->default(false);
+            $table->string('item_description'); $table->string('transaction_type')->nullable(); $table->string('sale_stock_type')->nullable(); $table->boolean('is_on_loan')->default(false);
             $table->decimal('order_quantity'); $table->decimal('unit_price'); $table->decimal('discount_per_unit')->default(0);
             $table->string('dr_number')->nullable(); $table->softDeletes();
         });
@@ -185,7 +185,13 @@ class LpgProductTrackingTest extends TestCase
             'cashiers_report_id' => 1, 'product_idx' => 1, 'client_idx' => 1,
             'item_description' => 'Sales Order', 'sale_stock_type' => 'CYLINDER_WITH_CONTENT',
             'is_on_loan' => true, 'order_quantity' => 4, 'unit_price' => 32, 'discount_per_unit' => 0,
-            'dr_number' => 'SO-100',
+            'dr_number' => 'SO-100', 'transaction_type' => 'A.R.',
+        ]);
+        DB::table('teves_cashiers_report_lpg_ar_so')->insert([
+            'cashiers_report_id' => 1, 'product_idx' => 1, 'client_idx' => 1,
+            'item_description' => 'Cash Sales', 'sale_stock_type' => 'CYLINDER_WITH_CONTENT',
+            'is_on_loan' => true, 'order_quantity' => 1, 'unit_price' => 32, 'discount_per_unit' => 0,
+            'dr_number' => 'SO-101', 'transaction_type' => 'Cash',
         ]);
 
         $response = (new CashiersReport_LPG_Container_Controller())->get_lpg_on_loan_list(
@@ -193,12 +199,14 @@ class LpgProductTrackingTest extends TestCase
         );
         $rows = collect($response->getData(true));
 
-        $this->assertCount(1, $rows);
-        $this->assertSame('sales_order', $rows[0]['record_type']);
-        $this->assertSame('SO-100', $rows[0]['dr_number']);
-        $this->assertSame(1, $rows[0]['borrow_product_idx']);
-        $this->assertSame(4.0, (float) $rows[0]['borrow_quantity']);
-        $this->assertSame('Sales Order / Pautang', $rows[0]['remarks']);
+        $this->assertCount(2, $rows);
+        $arRow = $rows->firstWhere('dr_number', 'SO-100');
+        $cashRow = $rows->firstWhere('dr_number', 'SO-101');
+        $this->assertSame('sales_order', $arRow['record_type']);
+        $this->assertSame(1, $arRow['borrow_product_idx']);
+        $this->assertSame(4.0, (float) $arRow['borrow_quantity']);
+        $this->assertSame('Sales Order / A.R. / On-Loan', $arRow['remarks']);
+        $this->assertSame('Sales Order / Cash / On-Loan', $cashRow['remarks']);
     }
 
     public function test_empty_tracking_filters_automatic_sources_and_existing_manual_rows(): void

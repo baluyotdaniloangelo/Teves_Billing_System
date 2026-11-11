@@ -72,6 +72,16 @@
                             </select>
                             <div class="invalid-feedback" id="item_descriptionError">Please select Sales Order, Cash Sales, or Return.</div>
                         </div>
+
+                        <div class="col-md-6" id="ar-so-transaction-type-field">
+                            <label for="ar_so_transaction_type" class="form-label fw-semibold">Transaction Type</label>
+                            <select class="form-select form-select-sm rounded-3" id="ar_so_transaction_type" name="transaction_type" required>
+                                <option value="A.R.">A.R.</option>
+                                <option value="Cash">Cash</option>
+                            </select>
+                            <div class="form-text">Cash or Account Receivable. On-Loan status is tracked separately.</div>
+                            <div class="invalid-feedback" id="transaction_typeError">Select A.R. or Cash.</div>
+                        </div>
 						
 						<div class="col-6" id="ar-so-stock-type-field">
                             <label for="ar_so_stock_type" class="form-label fw-semibold">Sale Classification</label>
@@ -92,7 +102,7 @@
                             <div class="form-check border rounded-3 p-3 ps-5 bg-warning bg-opacity-10">
                                 <input class="form-check-input" type="checkbox" id="ar_so_is_on_loan" value="1">
                                 <label class="form-check-label fw-semibold" for="ar_so_is_on_loan">On-Loan / Pautang</label>
-                                <div class="form-text">Remains a Sales Order and appears in the On-Loan quantity. Stock is deducted only once.</div>
+                                <div class="form-text">Appears in the On-Loan quantity regardless of A.R. or Cash. Stock is deducted only once.</div>
                             </div>
                         </div>
 						

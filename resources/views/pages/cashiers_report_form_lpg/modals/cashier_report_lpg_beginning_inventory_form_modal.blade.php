@@ -68,10 +68,10 @@
                             <div class="invalid-feedback" id="client_idxError">Please select a customer.</div>
                         </div>
 
-                        <div class="col-md-12 lpg-beginning-audit-field">
+                        <div class="col-md-12 lpg-inventory-quantity-field">
                             <label for="lpg_inventory_quantity" class="form-label fw-semibold"><i class="bi bi-123 me-2 text-success" aria-hidden="true"></i>Filled Cylinders</label>
                             <input type="number" min="0" step="0.01" class="form-control form-control-sm rounded-3" id="lpg_inventory_quantity" name="quantity" placeholder="Enter quantity" required>
-                            <div class="invalid-feedback" id="quantityError">Please enter the filled cylinder count.</div>
+                            <div class="invalid-feedback" id="quantityError">Please enter a quantity.</div>
                         </div>
 
                         <div class="col-md-6 lpg-beginning-audit-field">
