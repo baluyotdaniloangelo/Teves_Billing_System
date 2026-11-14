@@ -6,8 +6,8 @@ return [
     'online_status' => true,
     'activity_center' => true,
     'dashboards' => [
-        'sales_receivables' => true,
-        'fuel_sales_volume' => true,
-        'procurement_expenses' => true,
+        'sales_receivables' => false,
+        'fuel_sales_volume' => false,
+        'procurement_expenses' => false,
     ],
 ];

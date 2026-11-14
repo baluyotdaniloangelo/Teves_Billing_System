@@ -140,10 +140,13 @@
 											<option value="Vendor">Vendor</option>
 											<option value="Household">Household</option>
 											<option value="Outlet">Outlet</option>
+											<option value="Fuel Retail Bulk">Fuel Bulk</option>
+											<option value="Fuel Retail Bulk">Fuel Retail</option>
 											<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
 											<option value="Industrial – Fuel">Industrial – Fuel</option>
 											<option value="Industrial – LPG">Industrial – LPG</option>
 											<option value="Government">Government</option>
+											<option value="Employee">Employee</option>
 
 										</select>
 
@@ -349,7 +352,7 @@
                    id="client_barangay"
                    placeholder="Barangay"
                    autocomplete="off"
-                   required>
+                   >
 
             <div class="invalid-feedback"
                  id="client_barangay_error">
