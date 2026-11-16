@@ -17,7 +17,7 @@
 				<div class="p-d3">
 				
 				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
-                <?php if($data->user_type=="SUAdmin"){ ?>
+                <?php if($data->user_type=="SUAdmin" || $data->user_type=="Admin" ){ ?>
 				<li class="nav-item" role="presentation">
                   <button class="nav-link active" id="unbilled-client-tab" data-bs-toggle="tab" data-bs-target="#bordered-unbilled-client" type="button" role="tab" aria-controls="home" aria-selected="true" title="Unbilled Summary per Client">Client</button>
                 </li>
@@ -32,7 +32,7 @@
 				</ul>					
 				
 				<div class="tab-content pt-2" id="borderedTabContent">
-				 <?php if($data->user_type=="SUAdmin"){ ?>
+				 <?php if($data->user_type=="SUAdmin" || $data->user_type=="Admin" ){ ?>
                 <div class="tab-pane fade show active" id="bordered-unbilled-client" role="tabpanel" aria-labelledby="unbilled-client-tab">
 											<div class="table-responsive">
 											<table class="table dataTable display nowrap cell-border" id="getUnbilledClientList" width="100%" cellspacing="0">
@@ -54,7 +54,7 @@
 									</div>
 				</div>				
 				<?php } ?>
-                <div class="tab-pane fade <?php if($data->user_type!="SUAdmin"){ ?>  show active <?php } ?>" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
+                <div class="tab-pane fade <?php if($data->user_type!="SUAdmin" || $data->user_type=="Admin" ){ ?>  show active <?php } ?>" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
 				<div class="d-flex justify-content-end" id="">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -58px; position: absolute;">
 						<button type="button" class="btn btn-primary new_item bi bi-input-cursor-text" data-bs-toggle="modal" data-bs-target="#UnbilledModal"> Options</button>

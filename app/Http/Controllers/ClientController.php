@@ -291,147 +291,6 @@ class ClientController extends Controller
 
 	}
 	
-	public function client_info_OLDsd(Request $request)
-	{
-		
-		$clientID = $request->clientID;
-
-		$data = ClientModel::with('referrer')
-			->find($clientID, [
-				'client_id',
-				'client_name',
-				'customer_type',
-				'client_account_number',
-				'client_address',
-				'client_id_type',
-				'client_tin',
-				'client_email_address',
-				'client_contact_number',
-
-				// Owner Information
-				'client_title',
-				'client_gender',
-				'client_first_name',
-				'client_middle_name',
-				'client_last_name',
-				'client_name_extension',
-				'client_birthday',
-
-				// Tax & Payment
-				'default_less_percentage',
-				'default_net_percentage',
-				'default_vat_percentage',
-				'default_withholding_tax_percentage',
-				'default_payment_terms',
-
-				// Referral
-				'sales_agent_idx'
-			]);
-
-		if (!$data) {
-			return response()->json([
-				'success' => false,
-				'message' => 'Client not found.'
-			], 404);
-		}
-
-		return response()->json([
-
-			/*
-			|--------------------------------------------------------------------------
-			| ACCOUNT INFORMATION
-			|--------------------------------------------------------------------------
-			*/
-
-			'client_name' =>
-				$data->client_name,
-
-			'customer_type' =>
-				$data->customer_type,
-
-			'client_account_number' =>
-				$data->client_account_number,
-
-			'client_address' =>
-				$data->client_address,
-
-			'client_email_address' =>
-				$data->client_email_address,
-
-			'client_contact_number' =>
-				$data->client_contact_number,
-
-
-			/*
-			|--------------------------------------------------------------------------
-			| OWNER INFORMATION
-			|--------------------------------------------------------------------------
-			*/
-
-			'client_title' =>
-				$data->client_title,
-				
-			'client_gender' =>
-				$data->client_gender,
-
-			'client_first_name' =>
-				$data->client_first_name,
-
-			'client_middle_name' =>
-				$data->client_middle_name,
-
-			'client_last_name' =>
-				$data->client_last_name,
-
-			'client_name_extension' =>
-				$data->client_name_extension,
-
-			'client_birthday' =>
-				$data->client_birthday,
-
-
-			/*
-			|--------------------------------------------------------------------------
-			| REFERRAL
-			|--------------------------------------------------------------------------
-			*/
-
-			'sales_agent_idx' =>
-				$data->sales_agent_idx,
-
-			'sales_agent_name' =>
-				$data->referrer->sales_agent_name ?? null,
-
-
-			/*
-			|--------------------------------------------------------------------------
-			| TAX & PAYMENT SETTINGS
-			|--------------------------------------------------------------------------
-			*/
-
-			'client_id_type' =>
-				$data->client_id_type,			
-				
-			'client_tin' =>
-				$data->client_tin,
-
-			'default_less_percentage' =>
-				$data->default_less_percentage,
-
-			'default_net_percentage' =>
-				$data->default_net_percentage,
-
-			'default_vat_percentage' =>
-				$data->default_vat_percentage,
-
-			'default_withholding_tax_percentage' =>
-				$data->default_withholding_tax_percentage,
-
-			'default_payment_terms' =>
-				$data->default_payment_terms
-
-		]);
-	}	
 
 	/*Delete client Information*/
 	public function delete_client_confirmed(Request $request){
@@ -669,7 +528,6 @@ public function client_info(Request $request)
 				'client_middle_name'    => 'nullable|string|max:100',
 				'client_last_name'      => 'required|string|max:100',
 				'client_name_extension' => 'nullable|string|max:20',
-				'client_birthday'       => 'required|date',
 
 				// Tax & Payment
 				'default_less_percentage'            => 'nullable|numeric',
@@ -919,7 +777,6 @@ public function client_info(Request $request)
 				'client_middle_name'    => 'nullable|string|max:100',
 				'client_last_name'      => 'required|string|max:100',
 				'client_name_extension' => 'nullable|string|max:20',
-				'client_birthday'       => 'required|date',
 
 				// Tax & Payment
 				'default_less_percentage'             => 'nullable|numeric',

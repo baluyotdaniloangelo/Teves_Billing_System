@@ -841,10 +841,6 @@ class ReceivablesController extends Controller
 			$Receivables->less_per_liter 				= $request->less_per_liter;
 			$Receivables->company_header 				= $request->company_header;
 			
-			
-			
-			
-			
 			if(Session::get('UserType')=="Admin"||Session::get('UserType')=="SUAdmin"){
 				
 					$result = $Receivables->update();

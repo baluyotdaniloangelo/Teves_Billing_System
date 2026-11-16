@@ -94,12 +94,12 @@
                                 <div class="row g-2 mb-2">
                                     <div class="col-12">
                                         <label for="product_main_idx" class="form-label small fw-semibold mb-1">
-                                            <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Main Product
+                                            <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Variant Group
                                         </label>
                                         <select class="form-select form-select-sm rounded-3" name="product_main_idx" id="product_main_idx">
                                             <option value="">Unassigned variant</option>
                                         </select>
-                                        <div class="form-text">Choose a main product to group this variant. Leave blank to assign it later.</div>
+                                        <div class="form-text">Choose a variant group for this product. Leave blank to keep it unassigned.</div>
                                     </div>
                                 </div>
                                 <div class="row g-2 mb-2">
@@ -127,6 +127,26 @@
                                 </div>
                                 <div class="row g-2 mb-2">
                                     <div class="col-12">
+                                        <label for="product_unit_measurement" class="form-label small fw-semibold mb-1">
+                                            <i class="bi bi-rulers me-1 text-success" aria-hidden="true"></i>Unit of Measurement
+                                        </label>
+                                        <select class="form-select form-select-sm rounded-3" name="product_unit_measurement" id="product_unit_measurement" required>
+                                            <option value="L">Liter | L</option>
+                                            <option value="mL">Milliliter | mL</option>
+                                            <option value="g">Gram | g</option>
+                                            <option value="kg">Kilo | kg</option>
+                                            <option value="PC">Piece | PC</option>
+                                            <option value="Pail">Pail</option>
+                                            <option value="Drum">Drum</option>
+                                            <option value="Case">Case</option>
+                                            <option value="Set">Set</option>
+                                            <option value="oz">Ounce | oz</option>
+                                        </select>
+                                        <div class="invalid-feedback" id="product_unit_measurementError"></div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mb-2">
+                                    <div class="col-12">
                                         <label for="product_price" class="form-label small fw-semibold mb-1">
                                             <i class="bi bi-currency-exchange me-1 text-success" aria-hidden="true"></i>Default Price
                                         </label>
@@ -136,26 +156,6 @@
                                 </div>
 
                                 @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => '', 'capacityColumnClass' => 'col-12'])
-
-                                <div class="row g-2">
-                                    <div class="col-12">
-                                        <label for="product_unit_measurement" class="form-label small fw-semibold mb-1">
-                                            <i class="bi bi-rulers me-1 text-success" aria-hidden="true"></i>Unit of Measurement
-                                        </label>
-                                        <select class="form-select form-select-sm rounded-3" name="product_unit_measurement" id="product_unit_measurement" required>
-                                            <option value="L">Liter | L</option>
-                                            <option value="mL">Milliliter | mL</option>
-                                            <option value="g">Gram | g</option>
-                                            <option value="kg">Kilo | kg</option>
-                                            <option value="PC">Pieces | PC</option>
-                                            <option value="oz">Ounce | oz</option>
-                                            <option value="Pail">Pail</option>
-                                            <option value="Drum">Drum</option>
-                                            <option value="Case">Case</option>
-                                        </select>
-                                        <div class="invalid-feedback" id="product_unit_measurementError"></div>
-                                    </div>
-                                </div>
                             </section>
                         </div>
                         <div class="col-12 col-lg-5">

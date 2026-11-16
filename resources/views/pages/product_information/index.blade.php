@@ -353,6 +353,37 @@
         white-space: pre-line;
     }
 
+    .fuel-products-heading .product-manual-trigger {
+        border-color: #5C8374;
+        color: #1B4242;
+        background: #fff;
+        font-size: .8rem;
+        font-weight: 700;
+    }
+
+    .fuel-products-heading .product-manual-trigger:hover,
+    .fuel-products-heading .product-manual-trigger:focus-visible {
+        border-color: #1B4242;
+        color: #fff;
+        background: #1B4242;
+    }
+
+    @media (max-width: 1100px) {
+        .fuel-products-heading {
+            flex-wrap: wrap;
+        }
+
+        .fuel-products-heading > div:last-child {
+            margin-left: auto;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .fuel-products-heading > div:last-child {
+            margin-left: 0;
+        }
+    }
+
     @media (max-width: 575.98px) {
         .product-information-theme #CreateProductModal .create-product-modal-header,
         .product-information-theme #ProductInformationModal .product-information-modal-header {
@@ -362,8 +393,13 @@
 </style>
 <main id="main" class="main fuel-page fuel-products">
     <div class="fuel-products-heading">
-        <div><p class="fuel-products-eyebrow"></p><h1><span>Product Management</span></h1><p class="fuel-products-subtitle">Manage your main products, variants, and categories in one place.</p></div>
-        <span class="fuel-catalog-label"><i class="bi bi-grid" aria-hidden="true"></i> Products &amp; services</span>
+        <div><p class="fuel-products-eyebrow"></p><h1><span>Product Management</span></h1><p class="fuel-products-subtitle">Manage variant groups, product variants, and categories in one place.</p></div>
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <button type="button" class="btn btn-sm rounded-3 px-3 d-inline-flex align-items-center gap-2 product-manual-trigger" data-bs-toggle="modal" data-bs-target="#ProductUserManualModal" aria-haspopup="dialog">
+                <i class="bi bi-question-circle" aria-hidden="true"></i><span>User Manual</span>
+            </button>
+            <span class="fuel-catalog-label"><i class="bi bi-grid" aria-hidden="true"></i> Products &amp; services</span>
+        </div>
     </div>
     <section class="section product-information-theme">
         <div class="row g-3">
@@ -383,6 +419,7 @@
         @include('pages.product_information.modals.selling_price_modals')
         @include('pages.product_information.modals.pump_modals')
         @include('pages.product_information.modals.product_notice_modals')
+        @include('pages.product_information.modals.product_user_manual_modal')
         @if(in_array($data->user_type ?? null, ['SUAdmin', 'Admin']))
             @include('pages.product_category.modals.product_category_create_edit_modal')
             @include('pages.product_category.modals.product_category_delete_modal')

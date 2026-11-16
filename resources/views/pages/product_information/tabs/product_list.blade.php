@@ -189,7 +189,7 @@ div.dataTables_wrapper {
     <ul class="nav nav-pills product-catalog-tabs" id="productCatalogTabs" role="tablist" aria-label="Product catalog views">
         <li class="nav-item flex-fill" role="presentation">
             <button class="nav-link active w-100" id="main-products-tab" data-bs-toggle="tab" data-bs-target="#mainProductsPane" type="button" role="tab" aria-controls="mainProductsPane" aria-selected="true">
-                <i class="bi bi-box-seam me-2" aria-hidden="true"></i>Main Products
+                <i class="bi bi-box-seam me-2" aria-hidden="true"></i>Variant Groups
             </button>
         </li>
         <li class="nav-item flex-fill" role="presentation">
@@ -217,7 +217,7 @@ div.dataTables_wrapper {
                     <i class="bi bi-box-seam text-success fs-4" aria-hidden="true"></i>
                 </div>
                 <div>
-                    <h4 class="fw-bold mb-0">Main products</h4>
+                    <h4 class="fw-bold mb-0">Variant groups</h4>
                     <small class="text-muted">Manage product information, pricing, and equipment.</small>
                 </div>
             </div>
@@ -226,7 +226,7 @@ div.dataTables_wrapper {
             <button type="button" class="btn btn-outline-primary rounded-3 shadow-sm px-3 d-inline-flex align-items-center"
                     data-bs-toggle="modal" data-bs-target="#MainProductModal">
                 <i class="bi bi-folder-plus me-2" aria-hidden="true"></i>
-                Add Main Product
+                Add Variant Group
             </button>
             </div>
         </div>
@@ -239,14 +239,14 @@ div.dataTables_wrapper {
                     <div class="col-lg-5 col-md-6">
                         <label for="product_list_search" class="form-label small fw-semibold mb-1">
                             <i class="bi bi-search text-primary me-1" aria-hidden="true"></i>
-                            Search Main Products
+                            Search Variant Groups
                         </label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white">
                                 <i class="bi bi-search text-muted" aria-hidden="true"></i>
                             </span>
                             <input type="search" id="product_list_search" class="form-control"
-                                   placeholder="Search main product or category..." autocomplete="off">
+                                   placeholder="Search variant group or category..." autocomplete="off">
                         </div>
                     </div>
 
@@ -293,7 +293,7 @@ div.dataTables_wrapper {
                 <thead>
                     <tr>
                         <th class="text-center"><i class="bi bi-hash text-muted me-1" aria-hidden="true"></i>#</th>
-                        <th><i class="bi bi-box-seam text-muted me-1" aria-hidden="true"></i>Main Product</th>
+                        <th><i class="bi bi-box-seam text-muted me-1" aria-hidden="true"></i>Variant Group</th>
                         <th><i class="bi bi-tag text-muted me-1" aria-hidden="true"></i>Category</th>
                         <th class="text-center"><i class="bi bi-boxes text-muted me-1" aria-hidden="true"></i>Variants</th>
                         <th class="text-center text-nowrap"><i class="bi bi-three-dots text-muted me-1" aria-hidden="true"></i>Actions</th>
@@ -316,7 +316,7 @@ div.dataTables_wrapper {
                 </div>
                 <div>
                     <h4 class="fw-bold mb-0">Product Variants</h4>
-                    <small class="text-muted">Browse all product variants and see which main product each one belongs to.</small>
+                    <small class="text-muted">Browse all product variants and see which variant group each one belongs to.</small>
                 </div>
             </div>
             <div class="d-flex align-items-center flex-wrap gap-2">
@@ -342,7 +342,7 @@ div.dataTables_wrapper {
                                 <i class="bi bi-search text-muted" aria-hidden="true"></i>
                             </span>
                             <input type="search" id="unassigned_variant_search" class="form-control"
-                                   placeholder="Search variant, code, main product, or category..." autocomplete="off">
+                                   placeholder="Search variant, code, variant group, or category..." autocomplete="off">
                         </div>
                     </div>
 
@@ -391,7 +391,7 @@ div.dataTables_wrapper {
                         <th class="text-center"><i class="bi bi-hash me-1" aria-hidden="true"></i>#</th>
                         <th class="text-center"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>Product Code</th>
                         <th><i class="bi bi-box me-1" aria-hidden="true"></i>Product Variant</th>
-                        <th><i class="bi bi-boxes me-1" aria-hidden="true"></i>Main Product</th>
+                        <th><i class="bi bi-boxes me-1" aria-hidden="true"></i>Variant Group</th>
                         <th><i class="bi bi-tag me-1" aria-hidden="true"></i>Category</th>
                         <th class="text-end"><i class="bi bi-currency-exchange me-1" aria-hidden="true"></i>Default Price</th>
                         <th class="text-center"><i class="bi bi-rulers me-1" aria-hidden="true"></i>Unit</th>

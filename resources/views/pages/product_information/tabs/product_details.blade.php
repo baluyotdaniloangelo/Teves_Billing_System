@@ -15,7 +15,7 @@
             <i class="bi bi-card-text" aria-hidden="true"></i><span>Product Information</span>
         </button>
     </li>
-    <li class="nav-item" role="presentation">
+    <li class="nav-item d-none" id="product-components-tab-item" role="presentation" hidden>
         <button class="nav-link" id="product-components-tab" data-bs-toggle="tab" data-bs-target="#product-components" type="button" role="tab" aria-controls="product-components" aria-selected="false">
             <i class="bi bi-boxes" aria-hidden="true"></i><span>Set Components</span>
         </button>
@@ -87,13 +87,13 @@
                         <div class="row g-2 mb-2">
                             <div class="col-12">
                                 <label for="update_product_main_idx" class="form-label small fw-semibold mb-1">
-                                    <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Main Product (Variant Group)
+                                    <i class="bi bi-boxes me-1 text-success" aria-hidden="true"></i>Variant Group
                                 </label>
                                 <select class="form-select form-select-sm rounded-3" name="product_main_idx" id="update_product_main_idx">
-                                    <option value="">No main product (unassigned)</option>
+                                    <option value="">No variant group (unassigned)</option>
                                 </select>
-                                <div class="form-text">Choose a main product in the same category, or leave this unassigned.</div>
-                                <div class="invalid-feedback" id="update_product_main_idxError">Choose a main product in the selected category.</div>
+                                <div class="form-text">Choose a variant group in the same category, or leave this unassigned.</div>
+                                <div class="invalid-feedback" id="update_product_main_idxError">Choose a variant group in the selected category.</div>
                             </div>
                         </div>
                         <div class="row g-2 mb-2">
@@ -107,16 +107,6 @@
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-12">
-                                <label for="update_product_price" class="form-label small fw-semibold mb-1">
-                                    <i class="bi bi-currency-exchange me-1 text-success" aria-hidden="true"></i>Default Price
-                                </label>
-                                <input type="number" class="form-control form-control-sm rounded-3" name="update_product_price" id="update_product_price" required step="0.01" min="0">
-                                <div class="invalid-feedback" id="update_product_priceError">Please enter a valid price.</div>
-                            </div>
-                        </div>
-                        @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => 'update_', 'capacityColumnClass' => 'col-12'])
-                        <div class="row g-2">
-                            <div class="col-12">
                                 <label for="update_product_unit_measurement" class="form-label small fw-semibold mb-1">
                                     <i class="bi bi-rulers me-1 text-success" aria-hidden="true"></i>Unit of Measurement
                                 </label>
@@ -125,15 +115,26 @@
                                     <option value="mL">Milliliter | mL</option>
                                     <option value="g">Gram | g</option>
                                     <option value="kg">Kilo | kg</option>
-                                    <option value="PC">Pieces | PC</option>
-                                    <option value="oz">Ounce | oz</option>
+                                    <option value="PC">Piece | PC</option>
                                     <option value="Pail">Pail</option>
                                     <option value="Drum">Drum</option>
                                     <option value="Case">Case</option>
+                                    <option value="Set">Set</option>
+                                    <option value="oz">Ounce | oz</option>
                                 </select>
                                 <div class="invalid-feedback" id="update_product_unit_measurementError">Please select a unit.</div>
                             </div>
                         </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-12">
+                                <label for="update_product_price" class="form-label small fw-semibold mb-1">
+                                    <i class="bi bi-currency-exchange me-1 text-success" aria-hidden="true"></i>Default Price
+                                </label>
+                                <input type="number" class="form-control form-control-sm rounded-3" name="update_product_price" id="update_product_price" required step="0.01" min="0">
+                                <div class="invalid-feedback" id="update_product_priceError">Please enter a valid price.</div>
+                            </div>
+                        </div>
+                        @include('pages.product_information.partials.capacity_fields', ['capacityPrefix' => 'update_', 'capacityColumnClass' => 'col-12'])
                     </section>
                 </div>
 

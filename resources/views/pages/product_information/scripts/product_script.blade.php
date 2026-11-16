@@ -66,15 +66,39 @@ window.renderProductPhotoColumn = function (_data, type, row) {
 function syncProductCapacityFields(prefix) {
     const capacity = document.getElementById(prefix + 'product_capacity');
     const unit = document.getElementById(prefix + 'product_capacity_unit');
+    const measurement = document.getElementById(prefix + 'product_unit_measurement');
+    const capacityGroup = document.getElementById(prefix + 'capacity_fields_group');
     if (!capacity || !unit) return;
-    capacity.required = unit.value !== '';
-    unit.required = capacity.value !== '';
+
+    const isSet = Boolean(measurement && measurement.value === 'Set');
+    if (capacityGroup) {
+        capacityGroup.hidden = isSet;
+        capacityGroup.classList.toggle('d-none', isSet);
+    }
+
+    capacity.disabled = isSet;
+    unit.disabled = isSet;
+    if (isSet) {
+        capacity.value = '';
+        unit.value = '';
+        window.ProductFormValidation.clearField(capacity);
+        window.ProductFormValidation.clearField(unit);
+    }
+
+    capacity.required = !isSet && unit.value !== '';
+    unit.required = !isSet && capacity.value !== '';
 }
 
 $('#product_capacity, #product_capacity_unit').on('input change', function () {
     syncProductCapacityFields('');
 });
+$('#product_unit_measurement').on('change', function () {
+    syncProductCapacityFields('');
+});
 $('#update_product_capacity, #update_product_capacity_unit').on('input change', function () {
+    syncProductCapacityFields('update_');
+});
+$('#update_product_unit_measurement').on('change', function () {
     syncProductCapacityFields('update_');
 });
 
@@ -547,7 +571,7 @@ $('#ProductformNew').on('submit', function (event) {
     saveButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Saving...';
 
     const formData = new FormData(productForm);
-    // Disabled controls are omitted from FormData, but category is disabled when a main product sets it.
+    // Disabled controls are omitted from FormData, but category is disabled when a variant group sets it.
     formData.set('category_idx', $('#category_idx').val() || '');
     formData.append('_token', "{{ csrf_token() }}");
 

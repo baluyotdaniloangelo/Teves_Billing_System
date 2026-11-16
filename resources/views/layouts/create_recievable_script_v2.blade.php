@@ -130,6 +130,7 @@
 							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 
 							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
+							document.getElementById("receivable_description").value = start_date_new_format + ' - ' +end_date_new_format;							
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 								
 							if(total_amount_payable==0){
@@ -309,6 +310,8 @@
 							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 
 							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
+							document.getElementById("receivable_description").value = start_date_new_format + ' - ' +end_date_new_format;
+							
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
 							//Temporary Removed Excel
@@ -465,7 +468,10 @@
 							var end_date_new  = new Date(end_date);
 							end_date_new_format = (end_date_new.toLocaleDateString("en-PH")); // 9/17/2016
 
-							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);	
+							$('#po_info').text(start_date_new_format + ' - ' +end_date_new_format);
+
+							document.getElementById("receivable_description").value = start_date_new_format + ' - ' +end_date_new_format;
+							
 							$('#billing_date_info').text('<?php echo strtoupper(date('M/d/Y')); ?>');	
 							
 							$("#download_options").html('<div class="btn-group" role="group" aria-label="Basic outlined example" style="">'+
@@ -583,6 +589,11 @@
 					document.getElementById("vat_value_percentage").value = response.default_vat_percentage;
 					document.getElementById("withholding_tax_percentage").value = response.default_withholding_tax_percentage;					
 					
+					document.getElementById("withholding_tax_percentage").value = response.default_withholding_tax_percentage;					
+					
+					document.getElementById("payment_term").value = response.default_payment_terms;
+					
+						
 				  }
 				},
 				error: function(error) {

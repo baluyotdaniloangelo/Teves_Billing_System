@@ -1,6 +1,23 @@
 <script type="text/javascript">
 let productComponentOptions = null;
 
+window.syncProductComponentsTab = function (unitOfMeasurement) {
+    const tabItem = document.getElementById('product-components-tab-item');
+    const tabButton = document.getElementById('product-components-tab');
+    const componentPane = document.getElementById('product-components');
+    if (!tabItem || !tabButton) return;
+
+    const isSetProduct = unitOfMeasurement === 'Set';
+    if (!isSetProduct && (tabButton.classList.contains('active') || (componentPane && componentPane.classList.contains('show')))) {
+        $('#product-info-tab').tab('show');
+    }
+
+    tabItem.hidden = !isSetProduct;
+    tabItem.classList.toggle('d-none', !isSetProduct);
+    tabButton.disabled = !isSetProduct;
+    tabButton.setAttribute('aria-disabled', String(!isSetProduct));
+};
+
 function fetchProductComponentOptions() {
     if (productComponentOptions) return $.Deferred().resolve(productComponentOptions).promise();
     return $.getJSON("{{ route('product_component_options') }}").then(function (options) {
@@ -106,6 +123,7 @@ function ProductInfo(productId, options) {
     if (!productID) return;
     const isNewlyCreated = Boolean(options && options.newlyCreated);
     hideProductUpdateSuccessNotice();
+    window.syncProductComponentsTab('');
 
     window.selectedProductId = productID;
     $('#saveProductComponents, #addProductComponent').prop('disabled', true);
@@ -122,6 +140,7 @@ function ProductInfo(productId, options) {
             document.getElementById("update_product_name").value = response.product_name || '';
             document.getElementById("update_product_price").value = response.product_price || '';
             document.getElementById("update_product_unit_measurement").value = response.product_unit_measurement || '';
+            window.syncProductComponentsTab(response.product_unit_measurement || '');
             document.getElementById("update_product_capacity").value = response.product_capacity ?? '';
             document.getElementById("update_product_capacity_unit").value = response.product_capacity_unit || '';
             const componentOptionsRequest = renderProductComponentRows(productID, response.components || []);
@@ -181,6 +200,10 @@ function ProductInfo(productId, options) {
         }
     });
 }
+
+$('#update_product_unit_measurement').on('change', function () {
+    window.syncProductComponentsTab(this.value);
+});
 
 $('#ProductformEdit').on('submit', function (event) {
     event.preventDefault();

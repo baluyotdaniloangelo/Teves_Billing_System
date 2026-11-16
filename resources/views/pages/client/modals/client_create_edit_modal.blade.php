@@ -645,7 +645,7 @@
 										   class="form-control rounded-3"
 										   name="client_birthday"
 										   id="client_birthday"
-										   required>
+										   >
 
 									<div class="invalid-feedback"
 										 id="client_birthday_error">

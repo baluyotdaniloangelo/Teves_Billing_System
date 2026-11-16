@@ -3,8 +3,8 @@
         <div class="modal-content product-settings-modal-content">
             <div class="modal-header">
                 <div>
-                    <h5 class="modal-title fw-bold mb-1" id="MainProductModalLabel">Add Main Product</h5>
-                    <small class="text-white-50">Create the parent product used to group variants.</small>
+                    <h5 class="modal-title fw-bold mb-1" id="MainProductModalLabel">Add Variant Group</h5>
+                    <small class="text-white-50">Create a group for related product variants.</small>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -13,7 +13,7 @@
                 <div class="modal-body product-settings-modal-body">
                     <div class="product-settings-form-card">
                         <div class="mb-3">
-                            <label for="main_product_name" class="form-label small fw-semibold">Main Product Name</label>
+                            <label for="main_product_name" class="form-label small fw-semibold">Variant Group Name</label>
                             <input type="text" class="form-control" id="main_product_name" name="product_name" maxlength="255" required autocomplete="off">
                         </div>
                         <div>
@@ -24,14 +24,14 @@
                                     <option value="{{ $categoryOption->category_id }}">{{ $categoryOption->category_name }}</option>
                                 @endforeach
                             </select>
-                            <div class="form-text">Variants assigned to this main product must use the same category.</div>
+                            <div class="form-text">Variants assigned to this group must use the same category.</div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer product-settings-modal-footer">
                     <button type="button" class="btn btn-light border btn-sm rounded-3" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary btn-sm rounded-3" id="save-main-product">
-                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Save Main Product
+                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>Save Variant Group
                     </button>
                 </div>
             </form>
@@ -45,7 +45,7 @@
             <div class="modal-header">
                 <div>
                     <h5 class="modal-title fw-bold mb-1" id="ManageMainProductModalLabel">Product Variants</h5>
-                    <small class="text-white-50" id="manageMainProductCategory">Manage variants linked to this main product.</small>
+                    <small class="text-white-50" id="manageMainProductCategory">Manage variants linked to this group.</small>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -88,7 +88,7 @@
         <div class="modal-content product-settings-modal-content">
             <div class="modal-header">
                 <div>
-                    <h5 class="modal-title fw-bold mb-1" id="DeleteMainProductModalLabel">Delete Main Product?</h5>
+                    <h5 class="modal-title fw-bold mb-1" id="DeleteMainProductModalLabel">Delete Variant Group?</h5>
                     <small class="text-white-50">This is allowed only when it has no variants.</small>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -119,7 +119,7 @@
             </div>
             <div class="modal-body product-settings-modal-body">
                 <input type="hidden" id="unlink_product_id">
-                <p class="mb-0">Remove <strong id="unlinkProductName"></strong> from this main product?</p>
+                <p class="mb-0">Remove <strong id="unlinkProductName"></strong> from this variant group?</p>
             </div>
             <div class="modal-footer product-settings-modal-footer">
                 <button type="button" class="btn btn-light border btn-sm rounded-3" data-bs-dismiss="modal">Cancel</button>

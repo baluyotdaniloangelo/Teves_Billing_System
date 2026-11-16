@@ -115,11 +115,11 @@ class ProductController extends Controller
                 ->addColumn('action', function($row){
 					$mainId = (int) $row->product_main_id;
 					$hasVariants = (int) $row->variants_count > 0;
-					$deleteState = $hasVariants ? ' disabled title="Remove its variants before deleting"' : ' title="Delete main product"';
+					$deleteState = $hasVariants ? ' disabled title="Remove its variants before deleting"' : ' title="Delete variant group"';
 					$actionBtn = '<div class="d-flex justify-content-center gap-2 product-list-actions">
 					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border manage-main-product" title="Manage variants" aria-label="Manage variants"><i class="bi bi-boxes" aria-hidden="true"></i></button>
-					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border edit-main-product" title="Edit main product" aria-label="Edit main product"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
-					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-main-product"'.$deleteState.' aria-label="Delete main product"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border edit-main-product" title="Edit variant group" aria-label="Edit variant group"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$mainId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border delete-main-product"'.$deleteState.' aria-label="Delete variant group"><i class="bi bi-trash3" aria-hidden="true"></i></button>
 					</div>';
 					
                     return $actionBtn;
@@ -191,7 +191,7 @@ class ProductController extends Controller
 				return '<div class="d-flex justify-content-center gap-2 product-list-actions">
 					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border select-product" title="Manage variant details" aria-label="Manage variant details"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
 					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border manage-variant-branch-pricing" title="Manage price per branch" aria-label="Manage price per branch"><i class="bi bi-building-gear text-success" aria-hidden="true"></i></button>
-					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border unlink-product-variant" title="Remove from main product" aria-label="Remove from main product"><i class="bi bi-link-45deg" aria-hidden="true"></i></button>
+					<button type="button" data-id="'.$productId.'" class="btn btn-light btn-sm rounded-3 shadow-sm border unlink-product-variant" title="Remove from variant group" aria-label="Remove from variant group"><i class="bi bi-link-45deg" aria-hidden="true"></i></button>
 				</div>';
 			})
 			->rawColumns(['action'])
@@ -227,7 +227,7 @@ class ProductController extends Controller
 			'updated_by_user_idx' => Session::get('loginID'),
 		]);
 
-		return response()->json(['success' => 'Main product created successfully.', 'productMainID' => $mainProduct->product_main_id]);
+		return response()->json(['success' => 'Variant group created successfully.', 'productMainID' => $mainProduct->product_main_id]);
 	}
 
 	public function update_product_main_post(Request $request)
@@ -240,7 +240,7 @@ class ProductController extends Controller
 
 		$mainProduct = ProductMainModel::findOrFail($request->product_main_id);
 		if ((int) $mainProduct->category_idx !== (int) $request->category_idx && $mainProduct->variants()->exists()) {
-			return response()->json(['errors' => ['category_idx' => ['Unlink its variants before changing the main product category.']]], 422);
+			return response()->json(['errors' => ['category_idx' => ['Unlink its variants before changing the variant group category.']]], 422);
 		}
 
 		$mainProduct->product_name = trim($request->product_name);
@@ -248,7 +248,7 @@ class ProductController extends Controller
 		$mainProduct->updated_by_user_idx = Session::get('loginID');
 		$mainProduct->save();
 
-		return response()->json(['success' => 'Main product updated successfully.']);
+		return response()->json(['success' => 'Variant group updated successfully.']);
 	}
 
 	public function delete_product_main_confirmed(Request $request)
@@ -257,11 +257,11 @@ class ProductController extends Controller
 		$mainProduct = ProductMainModel::findOrFail($request->product_main_id);
 
 		if ($mainProduct->variants()->exists()) {
-			return response()->json(['message' => 'Remove or assign its variants before deleting this main product.'], 422);
+			return response()->json(['message' => 'Remove or assign its variants before deleting this variant group.'], 422);
 		}
 
 		$mainProduct->delete();
-		return response()->json(['success' => 'Main product deleted successfully.']);
+		return response()->json(['success' => 'Variant group deleted successfully.']);
 	}
 
 	public function assign_product_variant(Request $request)
@@ -275,11 +275,11 @@ class ProductController extends Controller
 		$mainProduct = ProductMainModel::findOrFail($request->product_main_idx);
 
 		if ($variant->product_main_idx !== null) {
-			return response()->json(['message' => 'This variant is already assigned to a main product. Remove its current link before assigning it again.'], 422);
+			return response()->json(['message' => 'This variant is already assigned to a variant group. Remove its current link before assigning it again.'], 422);
 		}
 
 		if ((int) $variant->category_idx !== (int) $mainProduct->category_idx) {
-			return response()->json(['message' => 'The variant category must match the main product category.'], 422);
+			return response()->json(['message' => 'The variant category must match the variant group category.'], 422);
 		}
 
 		$variant->product_main_idx = $mainProduct->product_main_id;
@@ -301,7 +301,7 @@ class ProductController extends Controller
 		$variant->updated_by_user_idx = Session::get('loginID');
 		$variant->save();
 
-		return response()->json(['success' => 'Product variant removed from the main product.']);
+		return response()->json(['success' => 'Product variant removed from the variant group.']);
 	}
 
 	/*Fetch Product Information*/
@@ -396,6 +396,9 @@ class ProductController extends Controller
 		if (is_string($request->input('product_name'))) {
 			$request->merge(['product_name' => trim($request->input('product_name'))]);
 		}
+		if ($request->input('product_unit_measurement') === 'Set') {
+			$request->merge(['product_capacity' => null, 'product_capacity_unit' => null]);
+		}
 		$productCapacity = $request->input('product_capacity');
 		$productCapacityUnit = $request->input('product_capacity_unit');
 		$productNameRule = Rule::unique('teves_product_table', 'product_name')
@@ -434,7 +437,7 @@ class ProductController extends Controller
 		if ($request->filled('product_main_idx')) {
 			$mainProduct = ProductMainModel::findOrFail($request->product_main_idx);
 			if ((int) $mainProduct->category_idx !== (int) $request->category_idx) {
-				return response()->json(['errors' => ['category_idx' => ['The variant category must match the main product category.']]], 422);
+				return response()->json(['errors' => ['category_idx' => ['The variant category must match the variant group category.']]], 422);
 			}
 		}
 
@@ -505,6 +508,10 @@ class ProductController extends Controller
 			return response()->json(['message' => 'Product not found.'], 404);
 		}
 
+		if ($request->input('product_unit_measurement') === 'Set') {
+			$request->merge(['product_capacity' => null, 'product_capacity_unit' => null]);
+		}
+
 		if ($request->has('components') && is_string($request->input('components'))) {
 			$decodedComponents = json_decode($request->input('components'), true);
 			if (!is_array($decodedComponents)) {
@@ -571,7 +578,7 @@ class ProductController extends Controller
 			if ($mainProductIdx) {
 				$mainProduct = ProductMainModel::find($mainProductIdx);
 				if (!$mainProduct || (int) $mainProduct->category_idx !== (int) $request->category_idx) {
-					return response()->json(['errors' => ['product_main_idx' => ['The main product must use the same category as this product variant.']]], 422);
+					return response()->json(['errors' => ['product_main_idx' => ['The variant group must use the same category as this product variant.']]], 422);
 				}
 			}
 			

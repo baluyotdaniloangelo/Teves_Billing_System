@@ -19,12 +19,12 @@
     }
 
     function loadMainOptions($select, selectedId, categoryId) {
-        $select.prop('disabled', true).empty().append(new Option('Loading main products…', ''));
+        $select.prop('disabled', true).empty().append(new Option('Loading variant groups…', ''));
         return $.get("{{ route('getMainProductOptions') }}")
             .done(function (options) {
                 $select.empty();
                 const isUpdateField = $select.attr('id') === 'update_product_main_idx';
-                $select.append(new Option(isUpdateField ? 'No main product (unassigned)' : 'Select a main product', ''));
+                $select.append(new Option(isUpdateField ? 'No variant group (unassigned)' : 'Select a variant group', ''));
                 let matchingOptions = 0;
                 (options || []).forEach(function (option) {
                     if (categoryId && String(option.category_idx) !== String(categoryId)) return;
@@ -35,7 +35,7 @@
                     matchingOptions += 1;
                 });
                 if (categoryId && matchingOptions === 0) {
-                    const emptyOption = new Option('No main products in this category', '', false, false);
+                    const emptyOption = new Option('No variant groups in this category', '', false, false);
                     emptyOption.disabled = true;
                     $select.append(emptyOption);
                 }
@@ -45,8 +45,8 @@
                 $select.prop('disabled', false);
             })
             .fail(function (xhr) {
-                $select.empty().append(new Option('Unable to load main products', '')).prop('disabled', false);
-                window.showProductRequestError(xhr, 'Unable to load the main product list. Please try again.');
+                $select.empty().append(new Option('Unable to load variant groups', '')).prop('disabled', false);
+                window.showProductRequestError(xhr, 'Unable to load the variant group list. Please try again.');
             });
     }
 
@@ -108,7 +108,7 @@
         activeMainProductId = mainProduct.product_main_id;
         activeMainProductName = mainProduct.product_name || '';
         $('#ManageMainProductModalLabel').text(activeMainProductName + ' — Product Variants');
-        $('#manageMainProductCategory').text(mainProduct.category_name || 'Manage variants linked to this main product.');
+        $('#manageMainProductCategory').text(mainProduct.category_name || 'Manage variants linked to this group.');
         $('#ManageMainProductModal').modal('show');
     }
 
@@ -123,7 +123,7 @@
             if (event.relatedTarget && !$(event.relatedTarget).hasClass('edit-main-product')) {
                 $('#MainProductForm')[0].reset();
                 $('#product_main_id').val('');
-                $('#MainProductModalLabel').text('Add Main Product');
+                $('#MainProductModalLabel').text('Add Variant Group');
             }
         });
 
@@ -145,14 +145,14 @@
                 type: 'POST',
                 data: $(form).serialize() + '&_token={{ csrf_token() }}'
             }).done(function (response) {
-                const message = response.success || 'Main product saved successfully.';
+                const message = response.success || 'Variant group saved successfully.';
                 form.reset();
                 $('#product_main_id').val('');
                 refreshProductTables();
                 loadMainOptions($('#product_main_idx'), null, null);
                 showProductSuccessAfterModalClose(document.getElementById('MainProductModal'), message);
             }).fail(function (xhr) {
-                window.showProductRequestError(xhr, 'Unable to save the main product. Please review the details and try again.', form);
+                window.showProductRequestError(xhr, 'Unable to save the variant group. Please review the details and try again.', form);
             }).always(function () {
                 $button.prop('disabled', false).html(originalHtml);
             });
@@ -161,7 +161,7 @@
         $('#MainProductModal').on('hidden.bs.modal', function () {
             $('#MainProductForm')[0].reset();
             $('#product_main_id').val('');
-            $('#MainProductModalLabel').text('Add Main Product');
+            $('#MainProductModalLabel').text('Add Variant Group');
         });
 
         $('#getProductList').on('click', '.manage-main-product', function () {
@@ -174,14 +174,14 @@
             $('#product_main_id').val(row.product_main_id || '');
             $('#main_product_name').val(row.product_name || '');
             $('#main_category_idx').val(row.category_idx || '');
-            $('#MainProductModalLabel').text('Edit Main Product');
+            $('#MainProductModalLabel').text('Edit Variant Group');
             $('#MainProductModal').modal('show');
         });
 
         $('#getProductList').on('click', '.delete-main-product', function () {
             const row = getProductRowData(this, window.ProductListTable);
             $('#delete_product_main_id').val(row.product_main_id || '');
-            $('#deleteMainProductName').text(row.product_name || 'this main product');
+            $('#deleteMainProductName').text(row.product_name || 'this variant group');
             $('#DeleteMainProductModal').modal('show');
         });
 
@@ -196,9 +196,9 @@
                 _token: "{{ csrf_token() }}"
             }).done(function (response) {
                 refreshProductTables();
-                showProductSuccessAfterModalClose(document.getElementById('DeleteMainProductModal'), response.success || 'Main product deleted successfully.');
+                showProductSuccessAfterModalClose(document.getElementById('DeleteMainProductModal'), response.success || 'Variant group deleted successfully.');
             }).fail(function (xhr) {
-                window.showProductRequestError(xhr, 'Unable to delete this main product. Remove or assign its variants first.');
+                window.showProductRequestError(xhr, 'Unable to delete this variant group. Remove or assign its variants first.');
             }).always(function () {
                 button.disabled = false;
                 button.innerHTML = originalHtml;
@@ -327,7 +327,7 @@
                             reloadAjaxTable(window.productMainVariantsDataTable, false);
                         }, { once: true });
                     }
-                    showProductSuccessModal(response.success || 'Product variant removed from the main product.');
+                    showProductSuccessModal(response.success || 'Product variant removed from the variant group.');
                 });
                 $('#UnlinkProductVariantModal').modal('hide');
             }).fail(function (xhr) {
