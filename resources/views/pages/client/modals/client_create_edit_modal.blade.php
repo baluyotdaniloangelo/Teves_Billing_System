@@ -140,9 +140,8 @@
 											<option value="Vendor">Vendor</option>
 											<option value="Household">Household</option>
 											<option value="Outlet">Outlet</option>
-											<option value="Fuel Retail Bulk">Fuel Bulk</option>
-											<option value="Fuel Retail Bulk">Fuel Retail</option>
-											<option value="Fuel Retail Bulk">Fuel Retail Bulk</option>
+											<option value="Fuel Bulk">Fuel Bulk</option>
+											<option value="Fuel Retail">Fuel Retail</option>
 											<option value="Industrial – Fuel">Industrial – Fuel</option>
 											<option value="Industrial – LPG">Industrial – LPG</option>
 											<option value="Government">Government</option>
