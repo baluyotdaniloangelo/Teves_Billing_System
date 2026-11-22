@@ -156,6 +156,7 @@
 
 
 function LoadProductListDelivery() {
+		window.SalesOrderFormTables?.beforeLoad('deliveries');
 
 		$("#so-editor-product_list_delivery_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#so-editor-product_list_delivery_data');
@@ -249,6 +250,7 @@ function LoadProductListDelivery() {
 							/*No Result Found or Error*/
 				  }
 				},
+				complete: function() { window.SalesOrderFormTables?.afterLoad('deliveries'); },
 				error: function(error) {
 				 console.log(error);
 				}

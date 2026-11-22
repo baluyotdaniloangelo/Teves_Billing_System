@@ -82,6 +82,7 @@
         });
         var editor = document.importNode(roots[0], true);
         document.getElementById('sales-order-edit-content').replaceChildren(editor);
+        $('#sales-order-edit-number').text(editor.querySelector('#so-editor-control_no')?.textContent.trim() || '#' + orderId);
         // Child forms are siblings of the editor modal, with a separate Bootstrap lifecycle.
         var host = document.createElement('div');
         host.id = 'sales-order-editor-dialogs';
@@ -99,6 +100,14 @@
         var modal = document.getElementById(modalId);
         if (!modal || !orderId) return;
         cleanup();
+        var newTab = document.getElementById('sales-order-edit-new-tab');
+        if (newTab) {
+            var fullPage = new URL(modal.dataset.editorUrl, window.location.origin);
+            fullPage.searchParams.set('sales_order_id', orderId);
+            fullPage.searchParams.set('tab', 'product');
+            newTab.href = fullPage.toString();
+            newTab.removeAttribute('aria-disabled');
+        }
         var sequence = state.sequence;
         $('#sales-order-edit-number').text(number || '#' + orderId);
         var loading = document.getElementById('sales-order-edit-loading');
@@ -187,6 +196,15 @@
     $(document).on('click.soEditor', '#EditSalesOrder', function (event) {
         event.preventDefault();
         open($(this).data('id'), $(this).data('control-number'));
+    });
+    $(document).on('click.soEditor', '#sales-order-edit-new-tab', function (event) {
+        var current = root();
+        if (!current || this.getAttribute('aria-disabled') === 'true') { event.preventDefault(); return; }
+        var active = current.querySelector('#so-editor-myTab .nav-link.active');
+        var tab = active?.id.replace(/^so-editor-/, '').replace(/-tab$/, '') || 'product';
+        var url = new URL(this.href);
+        url.searchParams.set('tab', tab);
+        this.href = url.toString();
     });
     $(document).on('hidden.bs.modal.soEditor', '#' + modalId, function (event) {
         if (event.target !== this || state.child) return;

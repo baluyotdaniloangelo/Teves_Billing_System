@@ -24,8 +24,10 @@ class SalesOrderEditorTest extends TestCase
             'teves_branch_table' => ['branch_id', 'branch_code', 'branch_name'],
             'teves_product_category' => ['category_id', 'category_name', 'deleted_at'],
             'teves_product_table' => ['product_id', 'category_idx', 'deleted_at'],
-            'teves_receivable_payment' => ['receivable_idx', 'receivable_mode_of_payment', 'deleted_at'],
-            'teves_receivable_table' => ['receivable_id', 'sales_order_idx', 'control_number', 'client_idx', 'deleted_at'],
+            'teves_receivable_payment' => ['receivable_idx', 'receivable_mode_of_payment', 'receivable_payment_amount', 'deleted_at'],
+            'teves_receivable_table' => ['receivable_id', 'sales_order_idx', 'control_number', 'client_idx', 'receivable_amount', 'deleted_at'],
+            'teves_sales_order_component_table' => ['sales_order_idx', 'product_idx', 'order_quantity', 'order_total_amount'],
+            'teves_sales_order_delivery_details' => ['sales_order_idx', 'sales_order_component_product_idx', 'sales_order_delivery_quantity'],
         ] as $table => $fields) {
             Schema::create($table, function (Blueprint $schema) use ($fields) {
                 foreach ($fields as $field) $schema->string($field)->nullable();
@@ -114,10 +116,10 @@ class SalesOrderEditorTest extends TestCase
 
     public function test_every_tab_targets_one_panel_and_only_requested_tab_is_active()
     {
-        foreach (['sales_order_information','product','delivery','payment','receivable'] as $selected) {
+        foreach (['product','delivery','payment','receivable'] as $selected) {
             $dom = $this->document($this->editorView(762, $selected)->render());
             $tabs = $dom->query('//*[@id="so-editor-myTab"]//*[@data-bs-toggle="tab"]');
-            $this->assertSame(5, $tabs->length);
+            $this->assertSame(4, $tabs->length);
             $active = 0;
             foreach ($tabs as $tab) {
                 $target = ltrim($tab->getAttribute('data-bs-target'), '#');
@@ -136,6 +138,25 @@ class SalesOrderEditorTest extends TestCase
     {
         $this->assertSame('pages.sales_order_form', $this->editorView(762, 'product', false)->name());
         $this->assertSame('product', $this->editorView(762, 'not-a-tab')->getData()['tab']);
+        $this->assertSame('product', $this->editorView(762, 'sales_order_information')->getData()['tab']);
+    }
+
+    public function test_order_details_start_collapsed_and_keep_edit_and_print_actions()
+    {
+        $dom = $this->document($this->editorView()->render());
+        $toggle = $dom->query('//*[@data-bs-target="#so-editor-order-details-collapse"]')->item(0);
+        $details = $dom->query('//*[@id="so-editor-order-details-collapse"]')->item(0);
+
+        $this->assertNotNull($toggle);
+        $this->assertNotNull($details);
+        $this->assertSame('false', $toggle->getAttribute('aria-expanded'));
+        $this->assertSame('so-editor-order-details-collapse', $toggle->getAttribute('aria-controls'));
+        $this->assertMatchesRegularExpression('/\\bcollapse\\b/', $details->getAttribute('class'));
+        $this->assertDoesNotMatchRegularExpression('/\\bshow\\b/', $details->getAttribute('class'));
+        $this->assertSame(0, $dom->query('//*[@id="so-editor-sales_order_information-tab"]')->length);
+        $this->assertSame(1, $dom->query('//*[@id="so-editor-UpdateSalesOrderBTN"]')->length);
+        $this->assertSame(1, $dom->query('//*[@id="so-editor-PrintSalesOrder"]')->length);
+        $this->assertSame(20, $dom->query('//*[@id="so-editor-order-details-collapse"]//li')->length);
     }
 
     public function test_entry_forms_keep_submit_controls_and_validation_inside_each_form()
@@ -156,5 +177,28 @@ class SalesOrderEditorTest extends TestCase
         }
         $this->assertSame(1, $dom->query('//form[@data-so-editor-form="payment"]//input[@type="file"]')->length);
         $this->assertSame('multipart/form-data', $dom->query('//form[@data-so-editor-form="payment"]')->item(0)->getAttribute('enctype'));
+    }
+
+    public function test_dashboard_summary_uses_posted_payments_and_delivered_item_value()
+    {
+        DB::table('teves_receivable_table')->where('sales_order_idx', 762)->update(['receivable_amount' => '1000.00']);
+        DB::table('teves_sales_order_component_table')->insert([
+            ['sales_order_idx' => 762, 'product_idx' => 10, 'order_quantity' => 10, 'order_total_amount' => 800],
+            ['sales_order_idx' => 762, 'product_idx' => 20, 'order_quantity' => 2, 'order_total_amount' => 200],
+        ]);
+        DB::table('teves_sales_order_delivery_details')->insert([
+            'sales_order_idx' => 762, 'sales_order_component_product_idx' => 10, 'sales_order_delivery_quantity' => 5,
+        ]);
+        DB::table('teves_receivable_payment')->insert([
+            ['receivable_idx' => 20, 'receivable_mode_of_payment' => 'Cash', 'receivable_payment_amount' => 200],
+            ['receivable_idx' => 20, 'receivable_mode_of_payment' => 'Post-Dated Check', 'receivable_payment_amount' => 300],
+        ]);
+
+        $summary = $this->editorView()->getData()['formSummary'];
+        $this->assertSame(1000.0, $summary['order_total']);
+        $this->assertSame(200.0, $summary['payments_received']);
+        $this->assertSame(800.0, $summary['balance_due']);
+        $this->assertSame(40.0, $summary['delivery_progress']);
+        $this->assertSame('Partially paid', $summary['status']);
     }
 }

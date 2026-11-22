@@ -10,6 +10,7 @@ use App\Models\ReceivablesPaymentModel;
 use App\Models\ClientModel;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
+use App\Services\BillingReceivablesDashboard;
 use Session;
 use Validator;
 use DataTables;
@@ -20,45 +21,18 @@ use Illuminate\Validation\Rule;
 class ReceivablesController extends Controller
 {
 	
-	/*Load Product Interface*/
-	public function receivables(){
-		
-		if(Session::has('loginID')){
-			
-			$title = 'Receivable';
-			$data = array();
-			
-			$data = User::where('user_id', '=', Session::get('loginID'))->first();
-			
-			if($data->user_branch_access_type=='ALL'){
-				
-				$teves_branch = TevesBranchModel::all();
-			
-			}else{
-				
-				$userID = Session::get('loginID');
-				
-				$teves_branch = TevesBranchModel::leftJoin('teves_user_branch_access', function($q) use ($userID)
-				{
-					$q->on('teves_branch_table.branch_id', '=', 'teves_user_branch_access.branch_idx');
-				})
-							
-							->where('teves_user_branch_access.user_idx', '=', $userID)
-							->get([
-							'teves_branch_table.branch_id',
-							'teves_user_branch_access.user_idx',
-							'teves_user_branch_access.branch_idx',
-							'teves_branch_table.branch_code',
-							'teves_branch_table.branch_name'
-							]);
-				
-			}	
-			
-			return view("pages.receivables", compact('data','title','teves_branch'));
-			
+	/*Load Billing Receivables Interface*/
+	public function receivables(BillingReceivablesDashboard $dashboard){
+		if (!Session::has('loginID')) {
+			return;
 		}
-		
-	}   
+
+		$title = 'Billing Receivables';
+		$data = User::where('user_id', Session::get('loginID'))->first();
+		$branches = $dashboard->branches($data);
+
+		return view('pages.receivables', compact('data', 'title', 'branches'));
+	}
 
 	/*Load Report Interface*/
 	public function create_recievable(){
@@ -110,130 +84,46 @@ class ReceivablesController extends Controller
 	
 	/*Fetch Receivables List using Datatable*/
 	/*Recievable from Billing*/
-	public function getReceivablesList_billing(Request $request)
+	public function getReceivablesList_billing(Request $request, BillingReceivablesDashboard $dashboard)
     {
 		
 		if(Session::has('loginID')){
 			
-			$current_user = Session::get('loginID');
 			if ($request->ajax()) {
-
-			$data = ReceivablesModel::WHERE('teves_receivable_table.sales_order_idx', '=', '0')
-						->whereNull('teves_receivable_table.deleted_at') 
-						//->join('teves_client_table', 'teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-						->join('teves_client_table', function ($join) {
-							$join->on('teves_client_table.client_id', '=', 'teves_receivable_table.client_idx')
-								 ->whereNull('teves_client_table.deleted_at'); // Filter soft-deleted products
-						})
-						->WHERE(function ($r) use($current_user) {
-							if (Session::get('user_branch_access_type')=="BYBRANCH") {
-									$r->whereRaw("teves_receivable_table.company_header IN (SELECT branch_idx FROM teves_user_branch_access WHERE user_idx=?)", $current_user);
-						}
-						})	
-						->get([
+			$user = User::where('user_id', Session::get('loginID'))->firstOrFail();
+			$filters = $dashboard->filters($request);
+			$data = $dashboard->query($user, $filters)->select([
 						'teves_receivable_table.receivable_id',
 						'teves_receivable_table.sales_order_idx',
 						'teves_receivable_table.billing_date',
-						'teves_receivable_table.billing_period_start',
-						'teves_receivable_table.billing_period_end',
 						'teves_client_table.client_name',
 						'teves_receivable_table.control_number',		
-						'teves_receivable_table.receivable_description',
-						'teves_receivable_table.receivable_gross_amount',
-						'teves_receivable_table.receivable_vatable_sales',
-						'teves_receivable_table.receivable_vat_amount',
-						'teves_receivable_table.receivable_withholding_tax',
 						'teves_receivable_table.receivable_amount',
 						'teves_receivable_table.receivable_remaining_balance',
 						'teves_receivable_table.receivable_status',
 						'teves_receivable_table.receivable_lock_status',
-						'teves_receivable_table.created_at']);
+						'teves_receivable_table.created_at',
+						'teves_branch_table.branch_code',
+						'teves_branch_table.branch_name',
+						]);
 											
 					return DataTables::of($data)
 					->addIndexColumn()
-					->addColumn('action', function($row){	
-					
-						if($row->sales_order_idx==0){
-							$menu_for_update = 'editReceivables';
-						}else{
-							$menu_for_update = 'editReceivablesFromSalesOrder';
-						}
-									
-						$startTimeStamp = strtotime($row->created_at);
-						$endTimeStamp = strtotime(date('y-m-d'));
-						$timeDiff = abs($endTimeStamp - $startTimeStamp);
-						$numberDays = $timeDiff/86400;  // 86400 seconds in one day
-						// and you might want to convert to integer
-						$numberDays = intval($numberDays);
-						
-						$receivable_lock_status = $row->receivable_lock_status;
-						
-						$receivable_lock_items = str_split((string)$receivable_lock_status);
-						
-						$lock_billing_information 		= $receivable_lock_items[0];
-						
-						
-						$actionBtn_SUadmin = '<div align="center" class="action_table_menu_Product">
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-lock btn_icon_table btn_icon_table_lock" title="Lock Settings" id="LockReceivables" onclick="LockReceivable('.$row->receivable_id.')"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
-									</div>';
-						
-						if($lock_billing_information!=1){
-						//allow to delete
-							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-										<a href="#" data-id="'.$row->receivable_id.'" class="btn-danger btn-circle btn-sm bi-trash3-fill btn_icon_table btn_icon_table_delete" id="deleteReceivables" title="Delete"></a>
-									</div>';
-									
-							$actionBtn_user = '<div align="center" class="action_table_menu_Product">
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-										</div>';
-						}else{
-						//disallowed		
-							$actionBtn_admin = '<div align="center" class="action_table_menu_Product">
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=payment" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-cash-stack btn_icon_table btn_icon_table_view" title="Add Payment"></a>
-										<a href="receivable_from_billing_form?receivable_id='.$row->receivable_id.'&tab=product" data-id="'.$row->receivable_id.'" class="btn-warning btn-circle bi bi-pencil-fill btn_icon_table btn_icon_table_edit" title="Update"></a>
-								</div>';
-									
-							$actionBtn_user = '';
-						
-						}
-							
-							if(Session::get('UserType')=="SUAdmin"){
-										return $actionBtn_SUadmin;
-							}
-							else if(Session::get('UserType')=="Admin"){
-										return $actionBtn_admin;
-							}
-							else if(Session::get('UserType')=="Supervisor"){
-										return '';/*View and Print Only*/
-							}
-							else if(Session::get('UserType')=="Accounting_Staff"){
-										
-										/*Access within 24 Hrs*/
-										if($numberDays>=1){
-											return '';/*View and Print Only*/
-										}else{
-											return $actionBtn_admin;
-										}
-										
-							}else{
-										return '';/*View and Print Only*/
-							}
-						
-					})
-					
-					->addColumn('action_print', function($row){
-						
-						if($row->sales_order_idx==0){
-							$print_sales_or_billing = '<option value="PrintBilling">Billing</option>';
-						}else{
-							$print_sales_or_billing = '<option value="PrintSalesOrder">Sales Order</option>';
-						}
+					->addColumn('action', function ($row) {
+                        $userType = Session::get('UserType');
+                        $locked = substr((string) ($row->receivable_lock_status ?: '00000'), 0, 1) === '1';
+                        $withinDay = $row->created_at
+                            && \Carbon\Carbon::parse($row->created_at)->greaterThan(now()->subDay());
+                        $canManage = in_array($userType, ['SUAdmin', 'Admin'], true)
+                            || ($userType === 'Accounting_Staff' && $withinDay);
+                        $canDelete = $userType === 'SUAdmin'
+                            || ($canManage && !$locked);
+
+                        return view('pages.receivables.partials.row_actions', compact(
+                            'row', 'userType', 'canManage', 'canDelete'
+                        ))->render();
+                    })
+                    ->addColumn('action_print', function($row){
 						
 						$action_print = '
 						<div align="center" class="action_table_menu_Product">
@@ -241,7 +131,7 @@ class ReceivablesController extends Controller
 							<option disabled="" selected value="">Choose...</option>
 							<option value="PrintAll_Billing" title="All">All - Test in Portrait</option>
 							<option value="PrintStatement" title="Statement of Account">SOA</option>
-							'.$print_sales_or_billing.'
+							<option value="PrintBilling">Billing</option>
 							<option value="PrintReceivables">Receivable</option>
 							</select>
 						</div>';
@@ -250,6 +140,7 @@ class ReceivablesController extends Controller
 					
 					
 					->rawColumns(['action','action_print'])
+					->with('summary', $dashboard->summary($user, $filters))
 					->make(true);
 			}	
 		}			
@@ -999,6 +890,10 @@ class ReceivablesController extends Controller
 					->ignore($request->receivable_payment_id, 'receivable_payment_id')
 			],
 			'receivable_payment_amount' => 'required',
+			'pdc_drawee_bank' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|string|max:150',
+			'pdc_payee' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|string|max:150',
+			'pdc_check_number' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|string|max:80',
+			'pdc_check_date' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|date',
 		], [
 			'receivable_mode_of_payment.required' => 'Bank Details is Required',
 			'receivable_date_of_payment.required' => 'Date of Payment is Required',
@@ -1032,6 +927,10 @@ class ReceivablesController extends Controller
 							$PaymentComponent->receivable_reference 		= $request->receivable_reference;
 							$PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
 							$PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							$PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+							$PaymentComponent->pdc_payee = $request->pdc_payee;
+							$PaymentComponent->pdc_check_number = $request->pdc_check_number;
+							$PaymentComponent->pdc_check_date = $request->pdc_check_date;
 							$PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
 							$PaymentComponent->image_reference 				= $image_blob;
 							$PaymentComponent->created_by_user_id			= Session::get('loginID');
@@ -1050,6 +949,10 @@ class ReceivablesController extends Controller
 							$PaymentComponent->receivable_reference 		= $request->receivable_reference;
 							$PaymentComponent->receivable_payment_amount 	= $request->receivable_payment_amount;
 							$PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							$PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+							$PaymentComponent->pdc_payee = $request->pdc_payee;
+							$PaymentComponent->pdc_check_number = $request->pdc_check_number;
+							$PaymentComponent->pdc_check_date = $request->pdc_check_date;
 							$PaymentComponent->image_reference 				= $image_blob;
 							$PaymentComponent->updated_by_user_id			= Session::get('loginID');
 							$result = $PaymentComponent->update();
@@ -1073,6 +976,10 @@ class ReceivablesController extends Controller
 							  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 							  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 							  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							  $PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+							  $PaymentComponent->pdc_payee = $request->pdc_payee;
+							  $PaymentComponent->pdc_check_number = $request->pdc_check_number;
+							  $PaymentComponent->pdc_check_date = $request->pdc_check_date;
 							  $PaymentComponent->created_by_user_id				= Session::get('loginID');
 							  $result = $PaymentComponent->save();
 							  $result_type = 'Saved';
@@ -1088,6 +995,10 @@ class ReceivablesController extends Controller
 							  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 							  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 							  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+							  $PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+							  $PaymentComponent->pdc_payee = $request->pdc_payee;
+							  $PaymentComponent->pdc_check_number = $request->pdc_check_number;
+							  $PaymentComponent->pdc_check_date = $request->pdc_check_date;
 							  $PaymentComponent->updated_by_user_id				= Session::get('loginID');
 							  $result = $PaymentComponent->update();
 							  $result_type = 'Updated';
@@ -1207,6 +1118,10 @@ class ReceivablesController extends Controller
 				  'receivable_reference',
 				  'receivable_payment_amount',
 				  'receivable_payment_remarks',
+				  'pdc_drawee_bank',
+				  'pdc_payee',
+				  'pdc_check_number',
+				  'pdc_check_date',
 				  'image_reference',
 				  'created_at',
 				  'created_at'
@@ -1228,6 +1143,10 @@ class ReceivablesController extends Controller
 				  'receivable_reference',
 				  'receivable_payment_amount',
 				  'receivable_payment_remarks',
+				  'pdc_drawee_bank',
+				  'pdc_payee',
+				  'pdc_check_number',
+				  'pdc_check_date',
 				  'image_reference',
 				  'receivable_payment_remarks'
 				  ]);
@@ -1251,6 +1170,10 @@ class ReceivablesController extends Controller
             ->ignore($request->receivable_payment_id, 'receivable_payment_id')
     ],
 			'receivable_payment_amount' => 'required',
+			'pdc_drawee_bank' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|string|max:150',
+			'pdc_payee' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|string|max:150',
+			'pdc_check_number' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|string|max:80',
+			'pdc_check_date' => 'required_if:receivable_mode_of_payment,Post-Dated Check - Cleared|nullable|date',
 		], [
 			'receivable_mode_of_payment.required' => 'Bank Details is Required',
 			'receivable_date_of_payment.required' => 'Date of Payment is Required',
@@ -1286,6 +1209,10 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->image_reference 				= $image_blob;
 						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+						  $PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+						  $PaymentComponent->pdc_payee = $request->pdc_payee;
+						  $PaymentComponent->pdc_check_number = $request->pdc_check_number;
+						  $PaymentComponent->pdc_check_date = $request->pdc_check_date;
 						  $result = $PaymentComponent->save();
 						  $result_type = 'Saved';
 					  
@@ -1302,6 +1229,10 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->image_reference 				= $image_blob;
 						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+						  $PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+						  $PaymentComponent->pdc_payee = $request->pdc_payee;
+						  $PaymentComponent->pdc_check_number = $request->pdc_check_number;
+						  $PaymentComponent->pdc_check_date = $request->pdc_check_date;
 						  $result = $PaymentComponent->update();
 						  $result_type = 'Updated';
 
@@ -1323,6 +1254,10 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+						  $PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+						  $PaymentComponent->pdc_payee = $request->pdc_payee;
+						  $PaymentComponent->pdc_check_number = $request->pdc_check_number;
+						  $PaymentComponent->pdc_check_date = $request->pdc_check_date;
 						  $result = $PaymentComponent->save();
 						  $result_type = 'Saved';
 					  
@@ -1337,6 +1272,10 @@ class ReceivablesController extends Controller
 						  $PaymentComponent->receivable_reference 			= $request->receivable_reference;
 						  $PaymentComponent->receivable_payment_amount 		= $request->receivable_payment_amount;
 						  $PaymentComponent->receivable_payment_remarks 	= $request->receivable_payment_remarks;
+						  $PaymentComponent->pdc_drawee_bank = $request->pdc_drawee_bank;
+						  $PaymentComponent->pdc_payee = $request->pdc_payee;
+						  $PaymentComponent->pdc_check_number = $request->pdc_check_number;
+						  $PaymentComponent->pdc_check_date = $request->pdc_check_date;
 						  
 						  $result = $PaymentComponent->update();
 						  $result_type = 'Updated';

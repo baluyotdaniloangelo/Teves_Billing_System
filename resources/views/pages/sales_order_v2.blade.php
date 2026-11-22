@@ -60,6 +60,8 @@
 
 @push('page_scripts')
     @include('pages.sales_order_v2.scripts.index')
+    <script src="{{ asset('js/sales-order-form-summary.js') }}?v={{ filemtime(public_path('js/sales-order-form-summary.js')) }}"></script>
+    <script src="{{ asset('js/sales-order-form-tables.js') }}?v={{ filemtime(public_path('js/sales-order-form-tables.js')) }}"></script>
     @include('pages.sales_order_v2.scripts.edit_modal')
     @include('layouts.sales_order_form_delivery_script')
     @include('layouts.sales_order_form_script')

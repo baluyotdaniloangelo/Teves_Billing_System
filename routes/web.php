@@ -442,6 +442,7 @@ Route::get('/generate_sales_order_summary_report_per_client_pdf', [SalesOrderCon
 
 /*New Version for Sales Order*/
 Route::get('/sales_order_form', [SalesOrderController::class, 'sales_order_form'])->name('sales_order_form')->middleware('isLoggedIn');
+Route::get('/sales_order_form/summary', [SalesOrderController::class, 'sales_order_form_summary'])->name('sales_order_form_summary')->middleware('isLoggedIn');
 Route::post('/sales_order_component_info', [SalesOrderController::class,'sales_order_component_info'])->name('sales_order_component_info')->middleware('isLoggedIn');
 Route::post('/sales_order_component_compose', [SalesOrderController::class,'sales_order_component_compose'])->name('SalesOrderComponentCompose')->middleware('isLoggedIn');
 Route::post('/delete_sales_order_component_confirmed', [SalesOrderController::class,'delete_sales_order_component_confirmed'])->name('SalesOrderDeleteComponent')->middleware('isLoggedIn');

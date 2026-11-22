@@ -1,4 +1,23 @@
    <script type="text/javascript">
+	$(function () {
+		function toggleSalesOrderPdcFields() {
+			var cleared = $('#so-editor-receivable_mode_of_payment').val() === 'Post-Dated Check - Cleared';
+			$('#so-editor-payment-pdc-tab-item').prop('hidden', !cleared);
+			$('#so-editor-pdc-cleared-fields').find('input').prop('required', cleared);
+			if (cleared) $('#so-editor-pdc-check-amount').val($('#so-editor-receivable_payment_amount').val());
+			if (!cleared && $('#so-editor-payment-pdc-tab').hasClass('active')) {
+				bootstrap.Tab.getOrCreateInstance(document.getElementById('so-editor-payment-details-tab')).show();
+			}
+		}
+		$(document).on('change', '#so-editor-receivable_mode_of_payment', toggleSalesOrderPdcFields);
+		$(document).on('shown.bs.modal', '#so-editor-AddPaymentModal', function () {
+			toggleSalesOrderPdcFields();
+			bootstrap.Tab.getOrCreateInstance(document.getElementById('so-editor-payment-details-tab')).show();
+		});
+		$(document).on('reset', '#so-editor-AddPayment', function () { window.setTimeout(toggleSalesOrderPdcFields, 0); });
+		$(document).on('input', '#so-editor-receivable_payment_amount', function () { $('#so-editor-pdc-check-amount').val(this.value); });
+		$(document).on('input', '#so-editor-pdc-check-amount', function () { $('#so-editor-receivable_payment_amount').val(this.value); });
+	});
 
 	<!--Update Sales Order-->
 
@@ -406,6 +425,7 @@ function LoadSellingPriceList() {
 
 	/*Load Product Under Sales Order*/
 	function LoadProduct_under_sales_order() {
+		window.SalesOrderFormTables?.beforeLoad('products');
 
 		$("#so-editor-table_sales_order_product_body_data tr").remove();
 		$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#so-editor-table_sales_order_product_body_data');
@@ -530,6 +550,7 @@ function LoadSellingPriceList() {
 							/*No Result Found or Error*/
 				  }
 				},
+				complete: function() { window.SalesOrderFormTables?.afterLoad('products'); },
 				error: function(error) {
 				 console.log(error);
 				}
@@ -748,6 +769,7 @@ function LoadSellingPriceList() {
 
 
 function LoadPayment() {
+			  window.SalesOrderFormTables?.beforeLoad('payments');
 
 			  let receivable_id = salesOrderEditorReceivableId();
 
@@ -897,6 +919,7 @@ function LoadPayment() {
 							$('<tr style="display: none;"><td>HIDDEN</td></tr>').appendTo('#so-editor-update_table_payment_body_data');
 				  }
 				},
+				complete: function() { window.SalesOrderFormTables?.afterLoad('payments'); },
 				error: function(error) {
 				 console.log(error);
 				}
@@ -928,6 +951,10 @@ function LoadPayment() {
 					document.getElementById("so-editor-receivable_time_of_payment").value 	= response[0].receivable_time_of_payment;
 					document.getElementById("so-editor-receivable_reference").value 			= response[0].receivable_reference;
 					document.getElementById("so-editor-receivable_payment_amount").value 		= response[0].receivable_payment_amount;
+					$('#so-editor-pdc_drawee_bank').val(response[0].pdc_drawee_bank || '');
+					$('#so-editor-pdc_payee').val(response[0].pdc_payee || '');
+					$('#so-editor-pdc_check_number').val(response[0].pdc_check_number || '');
+					$('#so-editor-pdc_check_date').val(response[0].pdc_check_date || '');
 					document.getElementById("so-editor-receivable_payment_remarks").value 	= response[0].receivable_payment_remarks;
 
 					window.SalesOrderEditorForms.setPaymentImage(response[0].image_reference);

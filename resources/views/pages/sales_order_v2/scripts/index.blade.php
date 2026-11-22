@@ -345,18 +345,10 @@
 					$('#sales_order_dateError').text('');		
 					$('#client_idxError').text('');
 					
-					sales_order_id = response.sales_order_id;
-					/*Close Modal*/
-					$('#CreateSalesOrderModal').modal('toggle');
-					/*Open PDF for Printing*/
-					var query = {
-						sales_order_id:response.sales_order_id,
-						_token: "{{ csrf_token() }}"
-					}
-
-					/*Open Cashier's Report*/
-					var url = "{{URL::to('sales_order_form')}}";
-					window.location.href = url+'?sales_order_id='+sales_order_id+'&tab=product';
+					var salesOrderId = Number(response.sales_order_id);
+					$('#CreateSalesOrderModal').one('hidden.bs.modal', function () {
+						if (salesOrderId && window.SalesOrderEditor) window.SalesOrderEditor.open(salesOrderId);
+					}).modal('hide');
 					
 				  }
 				},

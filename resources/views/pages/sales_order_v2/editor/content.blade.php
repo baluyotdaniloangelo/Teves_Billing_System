@@ -3,11 +3,12 @@
         \App\Models\ReceivablesModel::where('sales_order_idx', $SalesOrderID)->select('receivable_id')
     )->exists();
 @endphp
-<div class="so-order-editor-content {{ $paymentLocked ? 'so-order-payment-locked' : '' }}"
+<div class="so-order-editor-content so-page {{ $paymentLocked ? 'so-order-payment-locked' : '' }}"
      data-sales-order-id="{{ $SalesOrderID }}"
      data-client-id="{{ $sales_order_data[0]['sales_order_client_idx'] }}"
      data-receivable-id="{{ $receivables_details['receivable_id'] ?? '' }}"
      data-category-id="{{ $category_idx ?? 0 }}">
+@include('pages.sales_order_v2.editor.summary')
 <div class="so-editor-main">
     @if($paymentLocked)
         <div class="alert alert-info" role="status">This Sales Order has payment entries. Information and products are locked. Payments, deliveries, and printing remain available.</div>
@@ -17,31 +18,7 @@
 		<div class="card">
 
             <div class="card-body">
-
-				<h5 class="card-title" align="center">Sales Order Information</h5>
-				<div class="row mb-2">
-					<div class="col-sm-6">
-					<h6>S.O. No : <span class="badge" id='so-editor-control_no' style="background-color: orange !important; color:#000 !important; font-weight:bold;">{{ $sales_order_data[0]['sales_order_control_number'] }}</span></h6>
-					</div>
-					<div class="col-sm-6">
-						<div class="d-flex justify-content-end">
-							<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -35px; position: absolute;">
-								@if(!request()->boolean('embedded') && !request()->boolean('modal'))
-									<a class="btn btn-secondary new_item bi bi-chevron-double-left form_button_icon" href="{{ route('salesorder') }}" title="Back to Sales Order List">
-										<span>Back</span>
-									</a>
-								@endif
-								<button type="button" class="so-btn-secondary so-editor-print" id="so-editor-PrintSalesOrder"><i class="bi bi-printer" aria-hidden="true"></i> Print order</button>
-								<!--<button type="button" class="btn btn-success new_item bi bi-printer" onclick="#"></button>-->
-
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-				<hr>
-				<div class="row mb-2">
+                <div class="row mb-2">
 				<?php
 							$sales_order_invoice = $sales_order_data[0]->sales_order_invoice;
 
@@ -65,23 +42,20 @@
 			@include('pages.sales_order_form_update_modal')
 
 			<div class="col-sm-12">
-					 <!-- Default Tabs -->
+              @include('pages.sales_order_v2.editor.order_details')
               <ul class="nav nav-tabs" id="so-editor-myTab" role="tablist">
-                <!-- nav-link active -->
+
+
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='sales_order_information') { echo 'active'; } ?>" id="so-editor-sales_order_information-tab" data-bs-toggle="tab" data-bs-target="#so-editor-sales_order_information" type="button" role="tab" aria-controls="so-editor-sales_order_information" aria-selected="{{ $tab === 'sales_order_information' ? 'true' : 'false' }}" title='View Sales Order Information'>Sales Order Information</button>
+                  <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="so-editor-product-tab" data-bs-toggle="tab" data-bs-target="#so-editor-product" type="button" role="tab" aria-controls="so-editor-product" aria-selected="{{ $tab === 'product' ? 'true' : 'false' }}" title='Product List, Create, Update and Delete Product'>Products</button>
                 </li>
 
 				<li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='product') { echo 'active'; } ?>" id="so-editor-product-tab" data-bs-toggle="tab" data-bs-target="#so-editor-product" type="button" role="tab" aria-controls="so-editor-product" aria-selected="{{ $tab === 'product' ? 'true' : 'false' }}" title='Product List, Create, Update and Delete Product'>Product</button>
-                </li>
-
-				<li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='delivery') { echo 'active'; } ?>" id="so-editor-delivery-tab" data-bs-toggle="tab" data-bs-target="#so-editor-delivery" type="button" role="tab" aria-controls="so-editor-delivery" aria-selected="{{ $tab === 'delivery' ? 'true' : 'false' }}" title='Product Delivery List, Create, Update and Delete Delivery' <?=$sales_order_disabled_tab;?>>Delivery</button>
+                  <button class="nav-link <?php if($tab=='delivery') { echo 'active'; } ?>" id="so-editor-delivery-tab" data-bs-toggle="tab" data-bs-target="#so-editor-delivery" type="button" role="tab" aria-controls="so-editor-delivery" aria-selected="{{ $tab === 'delivery' ? 'true' : 'false' }}" title='Product Delivery List, Create, Update and Delete Delivery' <?=$sales_order_disabled_tab;?>>Deliveries</button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="so-editor-payment-tab" data-bs-toggle="tab" data-bs-target="#so-editor-payment" type="button" role="tab" aria-controls="so-editor-payment" aria-selected="{{ $tab === 'payment' ? 'true' : 'false' }}" title='Payment List, Create, Update and Delete Payment' <?=$sales_order_disabled_tab;?>>Payment</button>
+                  <button class="nav-link <?php if($tab=='payment') { echo 'active'; } ?>" id="so-editor-payment-tab" data-bs-toggle="tab" data-bs-target="#so-editor-payment" type="button" role="tab" aria-controls="so-editor-payment" aria-selected="{{ $tab === 'payment' ? 'true' : 'false' }}" title='Payment List, Create, Update and Delete Payment' <?=$sales_order_disabled_tab;?>>Payments</button>
                 </li>
 
 				<li class="nav-item" role="presentation">
@@ -92,42 +66,7 @@
 
               <div class="tab-content pt-2" id="so-editor-myTabContent">
 
-			   	<div class="tab-pane fade  <?php if($tab=='sales_order_information') { echo ' show active'; } ?>" id="so-editor-sales_order_information" role="tabpanel" aria-labelledby="so-editor-sales_order_information-tab">
-				<div class="d-flex justify-content-end">
-					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
-						<button type="button" class="btn btn-success bi bi-pencil-fill so-entry-action" data-bs-toggle="modal" data-bs-target="#so-editor-UpdateSalesOrderModal" id="so-editor-UpdateSalesOrderBTN">Edit information</button>
-
-					</div>
-
-					</div>
-					<!--Information Here-->
-					<ul class="list-group list-group-flush">
-							<li class="list-group-item"><b>Date:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_date'] }}</span></li>
-							<li class="list-group-item"><b>Branch:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['branch_code'] }} - {{ $sales_order_data[0]['branch_name'] }}</span></li>
-							<li class="list-group-item"><b>Sold To:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['client_name'] }}</span></li>
-							<li class="list-group-item"><b>Payment Type:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_payment_type'] }}</span></li>
-							<li class="list-group-item"><b>With Sales Invoice:</b><span style="font-weight: normal;">&nbsp;<?php if($sales_order_invoice=='1'){ echo "YES";} else{ echo "NO";} ?></span></li>
-							<li class="list-group-item"><b>Net Value:</b><span style="font-weight: normal;"></span>&nbsp;&nbsp;{{ $sales_order_data[0]['sales_order_net_percentage'] }}</li>
-							<li class="list-group-item"><b>Withholding Tax:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_withholding_tax'] }}</span></li>
-							<li class="list-group-item"><b>D.R Number:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_dr_number'] }}</span></li>
-							<li class="list-group-item"><b>P.O Number:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_po_number'] }}</span></li>
-							<li class="list-group-item"><b>Sales Invoice:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_or_number'] }}</span></li>
-							<li class="list-group-item"><b>Charge Invoice:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_charge_invoice'] }}</span></li>
-							<li class="list-group-item"><b>Collection Receipt:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_collection_receipt'] }}</span></li>
-							<li class="list-group-item"><b>Payment Term:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_payment_term'] }}</span></li>
-							<li class="list-group-item"><b>Delivered To:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_delivered_to'] }}</span></li>
-							<li class="list-group-item"><b>Delivered To Address:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_delivered_to_address'] }}</span></li>
-							<li class="list-group-item"><b>Delivery Method:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_delivery_method'] }}</span></li>
-							<li class="list-group-item"><b>Hauler:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_hauler'] }}</span></li>
-							<li class="list-group-item"><b>Required Date:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_required_date'] }}</span></li>
-							<li class="list-group-item"><b>Instructions:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_instructions'] }}</span></li>
-							<li class="list-group-item"><b>Notes:</b><span style="font-weight: normal;">&nbsp;{{ $sales_order_data[0]['sales_order_note'] }}</span></li>
-					</ul>
-
-
-                </div>
-
-			   <div class="tab-pane fade  <?php if($tab=='product') { echo ' show active'; } ?>" id="so-editor-product" role="tabpanel" aria-labelledby="so-editor-product-tab">
+				<div class="tab-pane fade <?php if($tab=='product') { echo 'show active'; } ?>" id="so-editor-product" role="tabpanel" aria-labelledby="so-editor-product-tab">
 				<div class="d-flex justify-content-end">
 					<div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top: -50px; position: absolute;">
 						<button type="button" class="btn btn-success bi bi-plus-lg so-entry-action" data-bs-toggle="modal" data-bs-target="#so-editor-AddProductModal" id="so-editor-AddSalesOrderProductBTN">Add product</button>
@@ -135,7 +74,7 @@
 					</div>
 					</div>
 
-						<table class="table table-striped">
+                        <table class="table table-striped so-editor-data-table" id="so-editor-products-table" data-so-table="products">
 						<thead>
 						<tr class='report'>
 							<th style="text-align:center !important;" class="action_column_class">Action</th>
@@ -162,7 +101,7 @@
 					</div>
 					</div>
 
-						<table class="table table-striped">
+                        <table class="table table-striped so-editor-data-table" id="so-editor-deliveries-table" data-so-table="deliveries">
 						<thead>
 						<tr class='report'>
 							<th style="text-align:center !important;" class="">Action</th>
@@ -188,7 +127,7 @@
 					</div>
 					</div>
 
-						<table class="table table-striped">
+                        <table class="table table-striped so-editor-data-table" id="so-editor-payments-table" data-so-table="payments">
 						<thead>
 						<tr class='report'>
 							<th style="text-align:center !important;">#</th>

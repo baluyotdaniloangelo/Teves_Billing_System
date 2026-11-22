@@ -8,7 +8,10 @@
                     <p class="so-modal-subtitle">Sales Order Information, products, delivery, payment, and receivable details.</p>
                     <span class="so-edit-reference" id="sales-order-edit-number"></span>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Sales Order editor"></button>
+                <div class="so-edit-header-actions">
+                    <a class="so-btn-secondary" id="sales-order-edit-new-tab" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Open in new tab</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close Sales Order editor"></button>
+                </div>
             </div>
             <div class="so-edit-body">
                 <div class="so-edit-loading" id="sales-order-edit-loading">

@@ -27,7 +27,7 @@
         }
         return false;
     };
-    $workspaceBillingOpen = $workspaceNavGroupOpen(['so', 'billing']);
+    $workspaceBillingOpen = $workspaceNavGroupOpen(['so', 'billing', 'receivables']);
     $workspaceCashierOpen = $workspaceNavGroupOpen(['cashierReport', 'cashierReportLPG', 'lpgSettings']);
     $workspaceBillingReportsOpen = $workspaceNavGroupOpen(['report', 'soa_summary_history']);
     $workspaceSalesReportsOpen = $workspaceNavGroupOpen(['salesordersummary', 'daily_sales', 'cash_report_page', 'sales_report', 'MonthlySalesSummary']);
@@ -196,6 +196,13 @@
           <span title="iew Billing Transaction History">Billing Transaction</span>
         </a>
 
+        @if(in_array($data->user_type, ['Admin', 'SUAdmin', 'Accounting_Staff'], true))
+        <a class="nav-link navbar_bg sidebar_li_a {{ $workspaceNavClass('receivables') }}" href="{{ route('receivables') }}" title="Billing Receivables" @if($workspaceNavActive('receivables')) aria-current="page" @endif>
+          <i class="bi bi-cash-stack navbar_icon"></i>
+          <span>Receivables</span>
+        </a>
+        @endif
+
           </li>
         </ul>
       </li>
@@ -203,13 +210,6 @@
 
 	  
 	  <?php if($data->user_type=="Admin" || $data->user_type=="SUAdmin" || $data->user_type=="Accounting_Staff"){ ?>
-	  <li class="nav-item ">
-        <a class="nav-link navbar_bg {{ $workspaceNavClass('receivables') }}" href="{{ route('receivables') }}" title="Receivable List" @if($workspaceNavActive('receivables')) aria-current="page" @endif>
-          <i class="bi bi-cash-stack navbar_icon"></i>
-          <span title="Create Billing Transaction">Receivable</span>
-        </a>
-      </li>	   
-	   
 	   <li class="nav-item ">
         <a class="nav-link navbar_bg {{ $workspaceNavClass('salesorder') }}" href="{{ route('salesorder') }}" title="Ship To" @if($workspaceNavActive('salesorder')) aria-current="page" @endif>
           <i class="bi bi-cart-check navbar_icon"></i>

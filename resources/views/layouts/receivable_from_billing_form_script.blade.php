@@ -1,5 +1,15 @@
 
    <script type="text/javascript">
+	$(function () {
+		function toggleBillingPdcFields() {
+			var cleared = $('#receivable_mode_of_payment').val() === 'Post-Dated Check - Cleared';
+			$('#billing-pdc-cleared-fields').prop('hidden', !cleared).find('input').prop('required', cleared);
+			$('label[for="receivable_payment_amount"]').text(cleared ? 'Check Amount' : 'Amount');
+		}
+		$('#receivable_mode_of_payment').on('change', toggleBillingPdcFields);
+		$('#AddPaymentModal').on('shown.bs.modal', toggleBillingPdcFields);
+		$('#AddPayment').on('reset', function () { window.setTimeout(toggleBillingPdcFields, 0); });
+	});
 	<?php
 		if($receivable_unlock_expiration!=''){
 	?>
@@ -998,6 +1008,10 @@
 					document.getElementById("receivable_reference").value 		= response[0].receivable_reference;
 					document.getElementById("receivable_payment_remarks").value = response[0].receivable_payment_remarks;
 					document.getElementById("receivable_payment_amount").value 	= response[0].receivable_payment_amount;
+					$('#pdc_drawee_bank').val(response[0].pdc_drawee_bank || '');
+					$('#pdc_payee').val(response[0].pdc_payee || '');
+					$('#pdc_check_number').val(response[0].pdc_check_number || '');
+					$('#pdc_check_date').val(response[0].pdc_check_date || '');
 					
 					/*Display Image*/
 					if(response[0].image_reference != null){

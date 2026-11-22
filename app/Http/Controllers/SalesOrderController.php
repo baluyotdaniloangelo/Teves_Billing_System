@@ -11,6 +11,7 @@ use App\Models\SalesOrderComponentModel;
 use App\Models\SalesOrderDeliveryModel;
 use App\Models\ReceivablesModel;
 use App\Models\ReceivablesPaymentModel;
+use App\Services\SalesOrderFormSummary;
 use Session;
 use Validator;
 use DataTables;
@@ -879,7 +880,7 @@ class SalesOrderController extends Controller
 		if(Session::has('loginID')){
 
 		$SalesOrderID = $request->sales_order_id;
-		$tab = in_array($request->tab, ['sales_order_information', 'product', 'delivery', 'payment', 'receivable'], true)
+		$tab = in_array($request->tab, ['product', 'delivery', 'payment', 'receivable'], true)
 			? $request->tab : 'product';
 		
 		$title = 'Sales Order Form';
@@ -996,16 +997,25 @@ class SalesOrderController extends Controller
 				}	
 		
 		$category_idx = $sales_order_data[0]->category_idx;
+		$formSummary = app(SalesOrderFormSummary::class)->forOrder($sales_order_data[0], $receivables_details);
 		
 		$formView = $request->boolean('modal')
 			? 'pages.sales_order_v2.editor.content'
 			: 'pages.sales_order_form';
 
-		return view($formView, compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','category_idx','sales_order_data','receivables_payment_suggestion','receivables_details','tab','product_category_data'));
+		return view($formView, compact('data','title','product_data','client_data','teves_branch', 'sales_order_delivered_to','sales_order_delivered_to_address', 'SalesOrderID','category_idx','sales_order_data','receivables_payment_suggestion','receivables_details','tab','product_category_data','formSummary'));
 		
 		}
 		
 	}  	
+
+	public function sales_order_form_summary(Request $request)
+	{
+		$request->validate(['sales_order_id' => 'required|integer']);
+		$order = SalesOrderModel::findOrFail($request->sales_order_id);
+		$receivable = ReceivablesModel::where('sales_order_idx', $order->getKey())->first();
+		return response()->json(app(SalesOrderFormSummary::class)->forOrder($order, $receivable));
+	}
 
 	public function sales_order_component_info(Request $request){
 

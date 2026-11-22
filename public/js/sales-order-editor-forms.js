@@ -24,6 +24,21 @@
         var element = form.querySelector('[data-form-alert]');
         element.textContent = message;
         element.hidden = false;
+        var popup = document.getElementById('so-validation-popup');
+        if (!popup) {
+            popup = document.createElement('div');
+            popup.id = 'so-validation-popup';
+            popup.className = 'so-validation-popup';
+            popup.setAttribute('role', 'alert');
+            popup.setAttribute('aria-live', 'assertive');
+            document.body.appendChild(popup);
+        }
+        popup.innerHTML = '<i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i><span></span><button type="button" aria-label="Dismiss">&times;</button>';
+        popup.querySelector('span').textContent = message;
+        popup.classList.add('is-visible');
+        window.clearTimeout(popup.dismissTimer);
+        popup.dismissTimer = window.setTimeout(function () { popup.classList.remove('is-visible'); }, 5000);
+        popup.querySelector('button').onclick = function () { popup.classList.remove('is-visible'); };
     }
     function invalid(input, message) {
         if (!input) return;
@@ -33,6 +48,16 @@
         var errorId = input.getAttribute('aria-describedby');
         var error = errorId && document.getElementById(errorId);
         if (error) error.textContent = message;
+    }
+    function focusInvalid(form) {
+        var input = form.querySelector('.is-invalid');
+        if (!input) return;
+        var pane = input.closest('.tab-pane');
+        var tab = pane && form.querySelector('[data-bs-target="#' + pane.id + '"]');
+        if (tab && window.bootstrap?.Tab) {
+            window.bootstrap.Tab.getOrCreateInstance(tab).show();
+            window.setTimeout(function () { input.focus(); }, 0);
+        } else input.focus();
     }
     function busy(form, saving) {
         form.dataset.saving = saving ? '1' : '0';
@@ -127,7 +152,10 @@
             valid = false;
         }
         if (form.dataset.soEditorForm === 'payment' && !receiptValid(form)) valid = false;
-        if (!valid) form.querySelector('.is-invalid')?.focus();
+        if (!valid) {
+            focusInvalid(form);
+            showAlert(form, 'Please correct the highlighted fields before saving.');
+        }
         return valid;
     }
     function payload(form) {
@@ -181,13 +209,14 @@
             ? 'Please check the highlighted fields.'
             : xhr.status === 419 ? 'Your session expired. Refresh this page before saving again.'
             : 'Unable to save. Your entries are still here; please try again.');
-        form.querySelector('.is-invalid')?.focus();
+        focusInvalid(form);
     }
     function refresh(type) {
         var names = type === 'delivery' ? ['LoadProductListDelivery']
             : type === 'payment' ? ['LoadPayment', 'LoadReceivables', 'LoadProduct_under_sales_order']
             : ['LoadProduct_under_sales_order', 'LoadReceivables'];
         names.forEach(function (name) { if (typeof window[name] === 'function') window[name](); });
+        window.SalesOrderFormSummary?.schedule();
     }
     $(document).on('submit.soEditorForms', selector, function (event) {
         event.preventDefault();
@@ -239,7 +268,7 @@
     $(document).on('change.soEditorForms', selector + ' [data-payment-image]', function () {
         var form = this.closest(selector);
         clearErrors(form);
-        if (!receiptValid(form)) { preview(form, ''); return; }
+        if (!receiptValid(form)) { preview(form, ''); showAlert(form, 'Choose a JPG, PNG, or SVG image up to 10 MB.'); focusInvalid(form); return; }
         var file = this.files[0];
         if (!file) { preview(form, ''); return; }
         var input = this;

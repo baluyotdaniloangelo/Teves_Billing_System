@@ -1,271 +1,107 @@
-@extends('layouts.layout')  
-@section('content')  
+@extends('layouts.layout')
+@section('body_class', 'br-receivables-shell')
 
-<main id="main" class="main">	
-    <section class="section">	  
-          <div class="card">
-		  
-			  <div class="card">
-			  
-				<div class="card-header ">
-				  <h5 class="card-title">&nbsp;{{ $title }}</h5>
-					<div class="d-flex justify-content-end" id="receivable_option"></div>					  
-				  </div>
-				</div>			  
-		 
-            <div class="card-body">			
-				<div class="p-d3">
-									
-				<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="billing-tab" data-bs-toggle="tab" data-bs-target="#bordered-billing" type="button" role="tab" aria-controls="home" aria-selected="true" title="From Billing">Billing</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="salesorder-tab" data-bs-toggle="tab" data-bs-target="#bordered-salesorder" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1" title="From Sales Oder">Sales Order</button>
-                </li>
-              
-				</ul>					
-				
-				<div class="tab-content pt-2" id="borderedTabContent">
-				
-                <div class="tab-pane fade show active" id="bordered-billing" role="tabpanel" aria-labelledby="billing-tab">
-											<div class="table-responsive" style="">
-												<table class="table dataTable display nowrap cell-border" id="getReceivablesListBilling" width="100%" cellspacing="0">
-												<thead>
-													<tr>
-														<th class="all">No.</th>
-														<th class="all">Date</th>
-														<th class="none">Start Date:</th>
-														<th class="none">End Date:</th>
-														<th class="all">Control Number</th>
-														<th class="all">Account Name</th>
-														<th class="none">Description : </th>
-														<th class="none">Total Sales : </th>
-														<th class="none">Withholding Tax : </th>
-														<th class="none">Total Amount Due : </th>
-														<th class="none">Total Amount Rendered : </th>
-														<th class="none">Remaining Balance : </th>
-														<th class="all">Status</th>
-														<th class="all">Generate</th>
-														<th class="all">Action</th>
-													</tr>
-												</thead>				
-												
-												<tbody>
-													
-												</tbody>
-												
-												</table>  
-											</div>
-				</div>
-				
-                <div class="tab-pane fade" id="bordered-salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
-											<div class="table-responsive" style="">
-												<table class="table dataTable display  cell-border" id="getReceivablesListSales" width="100%" cellspacing="0">
-												<thead>
-													<tr>
-														<th class="all">No.</th>
-														<th class="all">Date</th>
-														<th class="all">Control Number</th>
-														<th class="all">Account Name</th>
-														<th class="none">Description : </th>
-														<th class="none">Total Sales : </th>
-														<th class="none">Withholding Tax : </th>
-														<th class="none">Total Amount Due : </th>
-														<th class="none">Total Amount Rendered : </th>
-														<th class="none">Remaining Balance : </th>
-														<th class="all">Payment Status</th>
-														<th class="all">Delivery Status</th>
-														<th class="all">Generate</th>
-														<th class="all" nowrap>Action</th>
-													</tr>
-												</thead>				
-												
-												<tbody>
-													
-												</tbody>
-												
-												
-											</table>
-										</div>
-				</div>
-				
-				</div>
-						
-				</div>									
-            </div>
-          </div>
+@push('page_styles')
+<link href="{{ asset('style/billing-receivables.css') }}?v={{ filemtime(public_path('style/billing-receivables.css')) }}" rel="stylesheet">
+@endpush
 
-	<!-- Site Delete Modal-->
-    <div class="modal fade" id="ReceivableDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header header_modal_bg">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
- 					<div class="btn-sm btn-warning btn-circle bi bi-exclamation-circle btn_icon_modal"></div>
-                </div>
-				
-                <div class="modal-body warning_modal_bg" id="modal-body">
-				Are you sure you want to Delete This Receivable?<br>
-				</div>
-				
-				<div align="left"style="margin: 10px;">
-				
-				Billing Date: <span id="confirm_delete_billing_date"></span><br>
-				Control Number: <span id="confirm_delete_control_number"></span><br>
-				<!--OR Number: <span id="confirm_delete_or_no"></span><br>-->
-				Client: <span id="confirm_delete_client_info"></span><br>
-				Description: <span id="confirm_delete_description"></span><br>
-				Amount: <span id="confirm_delete_amount"></span><br>
-				
-				</div>
-                <div class="modal-footer footer_modal_bg">
-                    
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteReceivableConfirmed" value=""><i class="bi bi-trash3 form_button_icon"></i> Delete</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-x-circle form_button_icon"></i> Cancel</button>
-                  
+@section('content')
+<main id="main" class="main br-receivables-page" data-detail-url="{{ route('receivable_from_billing_form') }}">
+    <header class="br-page-heading">
+        <div>
+            <p class="br-eyebrow">BILLING / COLLECTIONS</p>
+            <h1>Billing <span>Receivables</span></h1>
+            <p>Track invoices, payments, and outstanding balances in one place.</p>
+        </div>
+        @if(in_array($data->user_type, ['Admin', 'SUAdmin', 'Accounting_Staff'], true))
+            <a class="btn br-btn-primary" href="{{ route('create_recievable') }}">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i> New receivable
+            </a>
+        @endif
+    </header>
+
+    @include('pages.receivables.partials.summary')
+
+    <section class="br-list-panel" aria-labelledby="br-list-title">
+        <div class="br-list-heading">
+            <div class="br-list-title">
+                <span class="br-list-icon"><i class="bi bi-list-ul" aria-hidden="true"></i></span>
+                <div>
+                    <h2 id="br-list-title">Receivable history</h2>
+                    <p>Billing records only</p>
                 </div>
             </div>
         </div>
-    </div>	
 
-			
-	<!-- View Payment Gallery Modal-->
-    <div class="modal fade" id="ViewPaymentGalery" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="height: 900px;">
-                <div class="modal-header header_modal_bg">
-                    <h5 class="modal-title" id="exampleModalLabel">Payment Information</h5>
- 					<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
+        <div class="br-list-body">
+            <div class="br-filters" role="search" aria-label="Filter billing receivables">
+                <div class="br-filter-field">
+                    <label for="br-filter-branch">Branch</label>
+                    <select id="br-filter-branch" class="form-select">
+                        <option value="">All branches</option>
+                        @foreach($branches as $branch)
+                            <option value="{{ $branch->branch_id }}">{{ $branch->branch_code }} — {{ $branch->branch_name }}</option>
+                        @endforeach
+                    </select>
                 </div>
-				
-				<br>
-				
-					<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" align="center">
-					
-					
-					<div class="carousel-indicators">
-				
-					</div>
-					<div class="carousel-inner" style="height: 700px;">
-					 
-					</div>
-					
-					
-					
-					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-					  <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
-					  <span class="visually-hidden" >Previous</span>
-					</button>
-					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-					  <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: magenta; border-radius: 15px;"></span>
-					  <span class="visually-hidden">Next</span>
-					</button>
-
-					</div>
-					
-				<br>
-				
+                <div class="br-filter-field">
+                    <label for="br-filter-status">Status</label>
+                    <select id="br-filter-status" class="form-select">
+                        <option value="">All statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="partial">Partial</option>
+                        <option value="paid">Paid</option>
+                    </select>
+                </div>
+                <div class="br-filter-field">
+                    <label for="br-filter-period">Period</label>
+                    <select id="br-filter-period" class="form-select">
+                        <option value="">All dates</option>
+                        <option value="today">Today</option>
+                        <option value="last_7_days">Last 7 days</option>
+                        <option value="this_month">This month</option>
+                    </select>
+                </div>
+                <div class="br-filter-field br-filter-search">
+                    <label for="br-filter-search">Search</label>
+                    <input id="br-filter-search" class="form-control" type="search" placeholder="Control number or account">
+                </div>
+                <button type="button" class="btn br-btn-secondary br-reset" id="br-reset-filters">
+                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset
+                </button>
             </div>
+
+            <div class="br-table-scroll">
+                <table class="table br-table" id="getReceivablesListBilling" data-list-url="{{ route('getReceivablesList_billing') }}">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Control number</th>
+                            <th>Account name</th>
+                            <th class="br-numeric">Amount due</th>
+                            <th class="br-numeric">Balance</th>
+                            <th>Status</th>
+                            <th>Generate</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="br-list-feedback" id="br-list-feedback" role="status" hidden></div>
         </div>
-    </div>	
+    </section>
 
-	<!-- Billing/Receivable Lock -->	
-	<div class="modal fade" id="BillingReceivableLockModal" tabindex="-1">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header modal-header_form">
-                      <h5 class="modal-title">Lock Status</h5>
-					  <div class="btn-group" role="group" aria-label="Basic outlined example">		
-						<button type="button" class="btn btn-danger bi bi-x-circle form_button_icon" data-bs-dismiss="modal"></button>
-					  </div>
-                    </div>
-                    <div class="modal-body">
-					
-					   <form class="g-3 needs-validation" id="BillingReceivableLockStatusForm">
-					  
-						<ul class="list-group list-group-flush">
-						
-							<li class="list-group-item"><b>Date:</b>&nbsp;<span id="lock_receivable_billing_date" style="font-weight: normal;"></span></li>
-							<li class="list-group-item"><b>Control Number:</b>&nbsp;<span id="lock_receivable_confirm_control_number" style="font-weight: normal;"></span></li>
-							<li class="list-group-item"><b>Client:</b>&nbsp;<span id="lock_receivable_client_info" style="font-weight: normal;"></span></li>
-							<li class="list-group-item"><b>Amount:</b>&nbsp;<span id="lock_receivable_amount" style="font-weight: normal;"></span></li>
-						
-						</ul>
-						<br>
-						<div class="row mb-2">
-						  <div class="col-sm-12">
-							<div class="form-check form-switch">
-							  <input class="form-check-input lock_billing_information" type="checkbox" id="lock_billing_information" name="lock_billing_information">
-							  <label class="form-check-label" for="lock_billing_information">Receivable Information</label>
-							</div>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <div class="col-sm-12">
-							<div class="form-check form-switch">
-							  <input class="form-check-input lock_billing_item" type="checkbox" id="lock_billing_item" name="lock_billing_item">
-							  <label class="form-check-label" for="lock_billing_item">Product</label>
-							</div>
-						  </div>
-						</div>
-
-						<div class="row mb-2">
-						  <div class="col-sm-12">
-							<div class="form-check form-switch">
-							  <input class="form-check-input lock_billing_payment_item" type="checkbox" id="lock_billing_payment_item" name="lock_billing_payment_item">
-							  <label class="form-check-label" for="lock_billing_payment_item">Payment</label>
-							</div>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <div class="col-sm-12">
-							<div class="form-check form-switch">
-							  <input class="form-check-input lock_sales_order_information" type="checkbox" id="lock_sales_order_information" name="lock_sales_order_information">
-							  <label class="form-check-label" for="lock_sales_order_information">Sales Order Information</label>
-							</div>
-						  </div>
-						</div>
-						
-						<div class="row mb-2">
-						  <div class="col-sm-12">
-							<div class="form-check form-switch">
-							  <input class="form-check-input lock_sales_order_delivery" type="checkbox" id="lock_sales_order_delivery" name="lock_sales_order_delivery">
-							  <label class="form-check-label" for="lock_sales_order_delivery">Delivery</label>
-							</div>
-						  </div>
-						</div>
-						
-						<div class="col-sm-12">
-						
-							<div class="form-floating mb-3">
-								<input type="datetime-local" class="form-control" id="receivable_unlock_expiration" name="receivable_unlock_expiration" value="" required>
-								<label for="receivable_unlock_expiration">Auto Lock at</label>
-								<span class="valid-feedback" id="receivable_unlock_expirationError"></span>
-							</div>
-						 
-						</div>
-						
-                    <div class="modal-footer modal-footer_form">
-						
-						  <b>Take Note:Upon unlocking the above setting, this may prevent the user from editing or deleting those items.</b>
-						  <button type="submit" class="btn btn-success btn-sm bi bi-save-fill form_button_icon" id="LockConfirmed" value=""> Confirm</button>	
-						  
-					</div>
-					</form><!-- End Multi Columns Form -->
-                  </div>
-                </div>
-             </div>	
-	
-	
-	
-	
-	</section>
+    @include('pages.receivables.modals.view')
+    @include('pages.receivables.modals.delete')
+    @include('pages.receivables.modals.lock')
 </main>
 @endsection
 
 @push('page_scripts')
-    @include('layouts.receivables_script')
+<script src="{{ asset('Datatables/2.0.8/js/dataTables.js') }}"></script>
+<script src="{{ asset('Datatables/responsive/3.0.2/js/dataTables.responsive.js') }}"></script>
+<script src="{{ asset('Datatables/responsive/3.0.2/js/responsive.dataTables.js') }}"></script>
+@include('pages.receivables.scripts.actions')
+<script src="{{ asset('js/billing-receivables.js') }}?v={{ filemtime(public_path('js/billing-receivables.js')) }}"></script>
 @endpush

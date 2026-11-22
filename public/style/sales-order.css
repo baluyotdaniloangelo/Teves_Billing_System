@@ -147,6 +147,10 @@
 .so-entry-saving { display: inline-flex; align-items: center; gap: 7px; margin-right: auto; color: #71876a; font-size: 11px; }
 .so-entry-saving[hidden], .so-payment-preview[hidden], .so-form-alert[hidden] { display: none !important; }
 .so-payment-upload { margin-top: 20px; padding: 17px; border: 1px dashed #d5e1cc; border-radius: 9px; background: #fafcf8; }
+.so-payment-layout { display: grid; grid-template-columns: minmax(230px, .78fr) minmax(0, 1.6fr); gap: 22px; align-items: start; }
+.so-payment-layout .so-payment-upload { margin-top: 0; min-width: 0; }
+.so-payment-details { min-width: 0; grid-column: 1; grid-row: 1; }
+.so-payment-layout .so-payment-upload { grid-column: 2; grid-row: 1; }
 .so-payment-upload input[type="file"] { height: auto; min-height: 40px; background: #fff; }
 .so-payment-preview { margin-top: 14px; padding-top: 14px; border-top: 1px solid #e4ebde; text-align: center; }
 .so-payment-preview img { display: block; max-width: 100%; max-height: 220px; margin: auto; border-radius: 7px; object-fit: contain; }
@@ -177,6 +181,118 @@
     #sales-order-edit-content #so-editor-myTabContent .list-group { grid-template-columns: 1fr; }
     #sales-order-edit-content #so-editor-myTab .nav-link { padding: 10px 8px; font-size: 10px; }
 }
+@media (max-width: 760px) { .so-payment-layout { grid-template-columns: 1fr; } .so-payment-details, .so-payment-layout .so-payment-upload { grid-column: 1; grid-row: auto; } }
+
+/* Sales Order detail workspace */
+.so-order-editor-content.so-page { max-width: 1500px; margin: 0 auto; padding: 0 12px 28px; color: #344638; }
+.so-order-editor-content .so-editor-main .card { overflow: hidden; border: 1px solid #e3e9df; border-radius: 12px; box-shadow: 0 8px 25px rgba(40, 58, 42, .06); }
+.so-order-editor-content .so-editor-main .card-body { padding: 24px; }
+.so-order-editor-content .card-title { margin: 0 0 17px; color: #324a38; font-size: 20px; font-weight: 800; }
+.so-order-editor-content #so-editor-control_no { padding: 7px 11px; border-radius: 6px; background: #fff1df !important; color: #a35f2e !important; }
+.so-order-editor-content .so-editor-top-actions { position: static !important; margin: 0 !important; flex-wrap: wrap; gap: 7px; }
+.so-order-editor-content .nav-tabs { gap: 4px; border-bottom: 1px solid #e3e9df; }
+.so-order-editor-content .nav-tabs .nav-link { padding: 12px 15px; border: 0; border-bottom: 2px solid transparent; color: #788776; font-weight: 700; }
+.so-order-editor-content .nav-tabs .nav-link.active { border-bottom-color: #dd7a43; background: transparent; color: #38533f; }
+.so-order-editor-content .tab-pane > .d-flex.justify-content-end { min-height: 42px; margin: 4px 0 9px; }
+.so-order-editor-content .tab-pane > .d-flex.justify-content-end .btn-group { position: static !important; margin: 0 !important; flex-wrap: wrap; gap: 7px; }
+.so-order-editor-content .so-editor-data-table { width: 100% !important; min-width: 720px; border-color: #e7ece4; font-size: 12px; }
+.so-order-editor-content .so-editor-data-table thead th { padding: 12px 10px; border: 0; background: #183337; color: #f8fbf5; font-size: 10px; font-weight: 800; letter-spacing: .35px; text-transform: uppercase; white-space: nowrap; }
+.so-order-editor-content .so-editor-data-table tbody td { padding: 11px 10px; border-color: #edf1eb; color: #4d604e; vertical-align: middle; }
+.so-order-editor-content .dataTables_wrapper .dt-search input,
+.so-order-editor-content .dataTables_wrapper .dt-length select { min-height: 35px; margin-left: 6px; border: 1px solid #dfe7db; border-radius: 7px; padding: 5px 9px; background: #fff; color: #455844; }
+.so-order-editor-content .dataTables_wrapper .dt-info,
+.so-order-editor-content .dataTables_wrapper .dt-paging { color: #82917d; font-size: 11px; }
+.so-order-editor-content .dataTables_wrapper .dt-paging button { border-radius: 6px !important; }
+.so-validation-popup { position: fixed; z-index: 20000; top: 20px; right: 22px; display: flex; align-items: center; gap: 10px; max-width: min(440px, calc(100vw - 32px)); padding: 13px 15px; border: 1px solid #f0c9bb; border-left: 4px solid #dc704b; border-radius: 9px; background: #fff; box-shadow: 0 12px 35px rgba(39, 53, 42, .18); color: #8f4b38; font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(-8px); transition: opacity .18s ease, transform .18s ease; }
+.so-validation-popup.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.so-validation-popup > i { color: #dc704b; font-size: 17px; }
+.so-validation-popup button { margin-left: auto; border: 0; background: transparent; color: #8f4b38; font-size: 20px; line-height: 1; }
+@media (max-width: 760px) { .so-order-editor-content .so-editor-main .card-body { padding: 15px; } .so-order-editor-content .nav-tabs { flex-wrap: nowrap; overflow-x: auto; } .so-order-editor-content .nav-tabs .nav-link { white-space: nowrap; } .so-validation-popup { top: 12px; right: 12px; } }
+
+/* Dashboard summary for the Sales Order form and its editor workspace. */
+.so-order-editor-content.so-page { max-width: none; padding: 4px 0 24px; }
+.so-form-heading { display: flex; justify-content: space-between; align-items: center; gap: 22px; margin-bottom: 23px; }
+.so-form-heading h1 { margin: 6px 0 4px; color: #20332f; font-size: clamp(26px, 2.3vw, 36px); font-weight: 850; letter-spacing: -.8px; }
+.so-form-heading p:last-child { margin: 0; color: #7d8d79; font-size: 13px; }
+.so-form-eyebrow { margin: 12px 0 0; color: #8b9c82; font-size: 10px; font-weight: 800; letter-spacing: 1.1px; }
+.so-form-back { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid #cbdcc5; border-radius: 7px; color: #526e49; background: #fff; font-size: 12px; font-weight: 750; text-decoration: none; }
+.so-form-back:hover { color: #2e523b; background: #f2f7ef; }
+.so-form-number { flex: none; padding: 12px 16px; border: 1px solid #f5d5b5; border-radius: 9px; color: #d9642e; background: #fff1e5; font-size: 19px; font-weight: 850; }
+.so-form-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; margin-bottom: 20px; }
+.so-form-stat { min-width: 0; padding: 18px 19px; border: 1px solid #e2e9df; border-radius: 10px; background: #fff; box-shadow: 0 3px 12px rgba(37, 58, 41, .03); }
+.so-form-stat-heading { display: flex; align-items: center; gap: 10px; color: #52604f; font-size: 12px; font-weight: 800; }
+.so-form-stat-icon { display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 8px; color: #638454; background: #edf4e9; font-size: 17px; }
+.so-form-stat strong { display: block; margin: 13px 0 7px; color: #20332f; font-size: clamp(20px, 1.8vw, 29px); font-weight: 850; letter-spacing: -.6px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.so-form-stat p { margin: 0; color: #91a08b; font-size: 11px; line-height: 1.45; }
+.so-form-stat-delivery strong { margin: 9px 0 5px; }
+.so-form-progress { height: 8px; overflow: hidden; margin: 0 0 8px; border-radius: 50px; background: #e8efe2; }
+.so-form-progress > span { display: block; height: 100%; border-radius: inherit; background: #e76c36; }
+.so-form-overview { display: grid; grid-template-columns: 1.4fr 1.2fr .95fr .9fr; gap: 0; margin-bottom: 20px; padding: 14px 0; border: 1px solid #e2e9df; border-radius: 10px; background: #fff; }
+.so-form-overview > div { display: flex; align-items: center; min-width: 0; gap: 8px; padding: 6px 18px; border-right: 1px solid #e9eee6; font-size: 12px; }
+.so-form-overview > div:last-child { border-right: 0; }
+.so-form-overview i { color: #718d60; font-size: 17px; }
+.so-form-overview span { flex: none; color: #5e7753; font-weight: 800; }
+.so-form-overview strong { min-width: 0; color: #2c3f31; font-weight: 700; overflow-wrap: anywhere; }
+.so-form-status { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 7px; color: #a85325 !important; background: #fff0df; white-space: nowrap; }
+.so-order-editor-content .so-editor-main .card { margin: 0; border-radius: 10px; box-shadow: none; }
+.so-order-editor-content #so-editor-myTab { flex-wrap: wrap; gap: 5px; margin-bottom: 14px; border: 0; background: #f4f7f1; border-radius: 8px; padding: 5px; }
+.so-order-editor-content #so-editor-myTab .nav-link { border: 0; border-radius: 6px; padding: 11px 16px; color: #60745b; background: transparent; font-size: 12px; font-weight: 800; }
+.so-order-editor-content #so-editor-myTab .nav-link.active { color: #fff; background: #e96d35; box-shadow: 0 3px 9px rgba(213, 99, 49, .16); }
+.so-order-editor-content #so-editor-myTab .nav-link:disabled { color: #a5afa1; }
+.so-order-editor-content .so-entry-action, .so-order-editor-content .so-btn-primary { border-color: #e76c36 !important; background: #e76c36 !important; color: #fff !important; }
+#sales-order-edit-content .so-order-editor-content.so-page { padding: 18px 20px 24px; }
+#sales-order-edit-content .so-editor-main .card-body { padding: 19px 22px !important; }
+#sales-order-edit-content .card-body > .row.mb-2:first-of-type { display: block; margin: 0 !important; padding: 0; border: 0; }
+#sales-order-edit-content .so-form-heading h1 { font-size: 27px; }
+.so-edit-workspace .modal-dialog { width: min(1450px, calc(100vw - 28px)); max-width: 1450px; }
+.so-edit-workspace > .modal-dialog > .modal-content { height: min(910px, calc(100vh - 28px)); }
+.so-edit-header-actions { display: flex; align-items: center; gap: 15px; margin-left: auto; }
+.so-edit-header-actions .so-btn-secondary { text-decoration: none; white-space: nowrap; }
+.so-edit-header-actions .btn-close { flex: none; }
+@media (max-width: 660px) { .so-edit-header-actions { align-items: flex-end; flex-direction: column-reverse; gap: 10px; } .so-edit-header-actions .so-btn-secondary { font-size: 10px; } }
+@media (max-width: 1130px) { .so-form-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .so-form-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); } .so-form-overview > div:nth-child(2) { border-right: 0; } }
+@media (max-width: 660px) { .so-form-heading { align-items: flex-start; flex-direction: column; gap: 10px; } .so-form-number { font-size: 16px; } .so-form-stats { gap: 9px; } .so-form-stat { padding: 13px; } .so-form-stat strong { font-size: 19px; } .so-form-overview { grid-template-columns: 1fr; } .so-form-overview > div { border-right: 0; border-bottom: 1px solid #e9eee6; } .so-form-overview > div:last-child { border-bottom: 0; } #sales-order-edit-content .so-order-editor-content.so-page { padding: 13px; } }
+.so-form-page { background: #f7f9f5; }
+.so-order-details-panel { margin: 0 0 18px; overflow: hidden; border: 1px solid #e1e8df; border-radius: 10px; background: #fff; }
+.so-order-details-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 20px; }
+.so-order-details-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.so-order-details-icon { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 8px; color: #267f78; background: #edf7f4; font-size: 17px; }
+.so-order-details-title h2 { margin: 0 0 3px; color: #173036; font-size: 15px; font-weight: 800; }
+.so-order-details-title p { margin: 0; color: #8b9985; font-size: 11px; }
+.so-order-details-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.so-order-details-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; padding: 8px 13px; border-radius: 6px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+.so-order-details-actions button:focus-visible { outline: 2px solid #237d76; outline-offset: 2px; }
+.so-order-details-toggle { border: 1px solid #d6e3d3; color: #60785a; background: #fff; }
+.so-order-details-toggle:hover { border-color: #b6ccb0; background: #f4f8f1; }
+.so-order-details-toggle .so-order-details-label-open { display: none; }
+.so-order-details-toggle[aria-expanded="true"] .so-order-details-label-open { display: inline; }
+.so-order-details-toggle[aria-expanded="true"] .so-order-details-label-closed { display: none; }
+.so-order-details-toggle[aria-expanded="true"] .bi-chevron-down { transform: rotate(180deg); }
+.so-order-details-toggle .bi-chevron-down { transition: transform .2s ease; }
+.so-order-details-edit { border: 1px solid #e76c36; }
+.so-order-details-print { border: 1px solid #173036; color: #fff; background: #173036; }
+.so-order-details-print:hover { border-color: #244c52; color: #fff; background: #244c52; }
+.so-order-details-body { padding: 18px 20px 20px; border-top: 1px solid #e8eee7; background: #fbfcfa; }
+.so-order-editor-content #so-editor-order-details-collapse .list-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.so-order-editor-content #so-editor-order-details-collapse .list-group-item { min-width: 0; padding: 11px 13px; border: 1px solid #e4ebe2; border-radius: 7px; background: #fff; color: #344638; font-size: 12px; overflow-wrap: anywhere; }
+.so-order-editor-content #so-editor-order-details-collapse .list-group-item b { color: #758671; }
+.so-order-editor-content #so-editor-myTab { background: #fff; border: 1px solid #e3e9df; }
+.so-order-editor-content #so-editor-myTab > .nav-item { flex: 1 1 0; }
+.so-order-editor-content #so-editor-myTab .nav-link { width: 100%; }
+.so-order-editor-content #so-editor-myTab .nav-link.active,
+#sales-order-edit-content .so-order-editor-content #so-editor-myTab .nav-link.active { color: #fff; background: #173036; border: 0; box-shadow: none; }
+#sales-order-edit-content .so-order-editor-content #so-editor-myTab { margin-bottom: 14px !important; padding: 5px; border: 1px solid #e3e9df; border-radius: 8px; }
+#sales-order-edit-content .so-order-editor-content #so-editor-myTab > .nav-item { flex: 1 1 0; }
+@media (max-width: 660px) { .so-order-details-toolbar { align-items: flex-start; flex-direction: column; } .so-order-details-actions { width: 100%; } .so-order-details-actions button { flex: 1; } .so-order-editor-content #so-editor-order-details-collapse .list-group { grid-template-columns: 1fr; } .so-order-editor-content #so-editor-myTab > .nav-item { flex-basis: calc(50% - 5px); } }
+.so-payment-tabs { display: flex; gap: 6px; margin-bottom: 20px; border: 0; border-radius: 9px; background: #f4f7f1; padding: 5px; }
+.so-payment-tabs > [hidden] { display: none !important; }
+.so-payment-tabs .nav-link { display: inline-flex; align-items: center; gap: 7px; padding: 10px 13px; border: 0; border-radius: 7px; color: #60745b; background: transparent; font-size: 12px; font-weight: 800; }
+.so-payment-tabs .nav-link.active { color: #fff; background: #e96d35; }
+.so-payment-tab-content { min-height: 275px; }
+.so-payment-tab-note { margin: 0 0 16px; color: #82917d; font-size: 12px; }
+.so-payment-tab-content .so-payment-upload { max-width: 590px; margin: 0; }
+.so-payment-tab-content .so-payment-preview img { max-height: 270px; }
+@media (max-width: 600px) { .so-payment-tabs { flex-wrap: nowrap; overflow-x: auto; } .so-payment-tabs .nav-link { white-space: nowrap; } }
 @media (max-width: 600px) { .so-form-grid { grid-template-columns: 1fr; } .so-field-wide { grid-column: auto; } .so-modal .modal-header, .so-modal .modal-body, .so-modal .modal-footer { padding-inline: 18px; } }
 .so-order-payment-locked #so-editor-UpdateSalesOrderBTN,
 .so-order-payment-locked #so-editor-AddSalesOrderProductBTN,

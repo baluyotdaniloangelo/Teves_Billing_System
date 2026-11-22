@@ -6,66 +6,43 @@
                 <input type="hidden" id="so-editor-receivable_idx_payment" name="receivable_idx_payment" value="{{ $receivables_details['receivable_id'] ?? '' }}">
                 <input type="hidden" id="so-editor-receivable_payment_id" name="receivable_payment_id" value="0" data-record-id>
                 <div class="modal-header">
-                    <div class="so-entry-heading">
-                        <span class="so-entry-icon"><i class="bi bi-credit-card" aria-hidden="true"></i></span>
-                        <div><p class="so-modal-eyebrow">SALES ORDER / PAYMENT</p><h2 class="modal-title" id="so-editor-payment-form-title" data-record-title data-create-title="Record payment" data-edit-title="Edit payment">Record payment</h2><p class="so-modal-subtitle">Enter the payment reference and attach a receipt if available.</p></div>
-                    </div>
+                    <div class="so-entry-heading"><span class="so-entry-icon"><i class="bi bi-credit-card" aria-hidden="true"></i></span><div><p class="so-modal-eyebrow">SALES ORDER / PAYMENT</p><h2 class="modal-title" id="so-editor-payment-form-title" data-record-title data-create-title="Record payment" data-edit-title="Edit payment">Record payment</h2><p class="so-modal-subtitle">Record the payment, cleared check details, and receipt.</p></div></div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close payment form"></button>
                 </div>
                 <div class="modal-body">
                     <div class="so-form-alert" data-form-alert role="alert" hidden></div>
-                    <div class="so-form-grid">
-                        <div class="so-field">
-                            <label for="so-editor-receivable_mode_of_payment">Payment method <em>*</em></label>
-                            <select class="form-select" name="receivable_mode_of_payment" id="so-editor-receivable_mode_of_payment" data-errors="receivable_mode_of_payment" aria-describedby="so-editor-receivable_mode_of_paymentError" required>
-                                @foreach (['Cash','Bank Transfer','Cash Deposit','Credit Card','Debit Card','E-Wallet/Mobile Payments','Dated Check','Post-Dated Check','Post-Dated Check - Cleared','Overpayment','Payroll Deduction'] as $method)
-                                    <option value="{{ $method }}">{{ $method }}</option>
-                                @endforeach
-                            </select>
-                            <span class="invalid-feedback" id="so-editor-receivable_mode_of_paymentError"></span>
+                    <ul class="nav nav-tabs so-payment-tabs" id="so-editor-payment-tabs" role="tablist">
+                        <li class="nav-item" role="presentation"><button class="nav-link active" id="so-editor-payment-details-tab" data-bs-toggle="tab" data-bs-target="#so-editor-payment-details-pane" type="button" role="tab" aria-controls="so-editor-payment-details-pane" aria-selected="true"><i class="bi bi-credit-card" aria-hidden="true"></i> Payment Details</button></li>
+                        <li class="nav-item" role="presentation" id="so-editor-payment-pdc-tab-item" hidden><button class="nav-link" id="so-editor-payment-pdc-tab" data-bs-toggle="tab" data-bs-target="#so-editor-payment-pdc-pane" type="button" role="tab" aria-controls="so-editor-payment-pdc-pane" aria-selected="false"><i class="bi bi-calendar-check" aria-hidden="true"></i> Post-Dated Check</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" id="so-editor-payment-receipt-tab" data-bs-toggle="tab" data-bs-target="#so-editor-payment-receipt-pane" type="button" role="tab" aria-controls="so-editor-payment-receipt-pane" aria-selected="false"><i class="bi bi-image" aria-hidden="true"></i> Picture / Receipt</button></li>
+                    </ul>
+                    <div class="tab-content so-payment-tab-content">
+                        <div class="tab-pane fade show active" id="so-editor-payment-details-pane" role="tabpanel" aria-labelledby="so-editor-payment-details-tab">
+                            <div class="so-form-grid">
+                                <div class="so-field so-field-wide"><label for="so-editor-receivable_mode_of_payment">Payment method <em>*</em></label><select class="form-select" name="receivable_mode_of_payment" id="so-editor-receivable_mode_of_payment" data-errors="receivable_mode_of_payment" aria-describedby="so-editor-receivable_mode_of_paymentError" required>@foreach (['Cash','Bank Transfer','Cash Deposit','Credit Card','Debit Card','E-Wallet/Mobile Payments','Dated Check','Post-Dated Check','Post-Dated Check - Cleared','Overpayment','Payroll Deduction'] as $method)<option value="{{ $method }}">{{ $method }}</option>@endforeach</select><span class="invalid-feedback" id="so-editor-receivable_mode_of_paymentError"></span></div>
+                                <div class="so-field so-field-wide"><label for="so-editor-receivable_reference">Reference number <em>*</em></label><input class="form-control" id="so-editor-receivable_reference" name="receivable_reference" data-errors="receivable_reference" aria-describedby="so-editor-receivable_referenceError" required placeholder="Receipt, bank, or transaction reference"><span class="invalid-feedback" id="so-editor-receivable_referenceError"></span></div>
+                                <div class="so-field"><label for="so-editor-receivable_date_of_payment">Payment date <em>*</em></label><input type="date" class="form-control" id="so-editor-receivable_date_of_payment" name="receivable_date_of_payment" data-errors="receivable_date_of_payment" aria-describedby="so-editor-receivable_date_of_paymentError" value="{{ date('Y-m-d') }}" required><span class="invalid-feedback" id="so-editor-receivable_date_of_paymentError"></span></div>
+                                <div class="so-field"><label for="so-editor-receivable_time_of_payment">Payment time <span class="so-label-optional">Optional</span></label><input type="time" class="form-control" id="so-editor-receivable_time_of_payment" name="receivable_time_of_payment" data-errors="receivable_time_of_payment" aria-describedby="so-editor-receivable_time_of_paymentError" value="{{ date('H:i') }}"><span class="invalid-feedback" id="so-editor-receivable_time_of_paymentError"></span></div>
+                                <div class="so-field so-field-wide"><label for="so-editor-receivable_payment_amount">Amount <em>*</em></label><div class="so-input-money"><span>₱</span><input type="number" class="form-control" id="so-editor-receivable_payment_amount" name="receivable_payment_amount" data-errors="receivable_payment_amount" aria-describedby="so-editor-receivable_payment_amountError" min="0.01" step="0.01" placeholder="0.00" required></div><span class="invalid-feedback" id="so-editor-receivable_payment_amountError"></span></div>
+                                <div class="so-field so-field-wide"><label for="so-editor-receivable_payment_remarks">Payment notes <span class="so-label-optional">Optional</span></label><textarea class="form-control" id="so-editor-receivable_payment_remarks" name="receivable_payment_remarks" data-errors="receivable_payment_remarks" aria-describedby="so-editor-receivable_payment_remarksError" rows="3" placeholder="Additional payment details"></textarea><span class="invalid-feedback" id="so-editor-receivable_payment_remarksError"></span></div>
+                            </div>
                         </div>
-                        <div class="so-field">
-                            <label for="so-editor-receivable_payment_amount">Amount received <em>*</em></label>
-                            <div class="so-input-money"><span>₱</span><input type="number" class="form-control" id="so-editor-receivable_payment_amount" name="receivable_payment_amount" data-errors="receivable_payment_amount" aria-describedby="so-editor-receivable_payment_amountError" min="0.01" step="0.01" placeholder="0.00" required></div>
-                            <span class="invalid-feedback" id="so-editor-receivable_payment_amountError"></span>
+                        <div class="tab-pane fade" id="so-editor-payment-pdc-pane" role="tabpanel" aria-labelledby="so-editor-payment-pdc-tab">
+                            <p class="so-payment-tab-note">Enter the details of the cleared post-dated check.</p>
+                            <div class="so-form-grid" id="so-editor-pdc-cleared-fields">
+                                <div class="so-field"><label for="so-editor-pdc_drawee_bank">Drawee Bank <em>*</em></label><input class="form-control" id="so-editor-pdc_drawee_bank" name="pdc_drawee_bank" maxlength="150" autocomplete="off" data-errors="pdc_drawee_bank" aria-describedby="so-editor-pdc_drawee_bankError"><span class="invalid-feedback" id="so-editor-pdc_drawee_bankError"></span></div>
+                                <div class="so-field"><label for="so-editor-pdc_payee">Payee <em>*</em></label><input class="form-control" id="so-editor-pdc_payee" name="pdc_payee" maxlength="150" autocomplete="off" data-errors="pdc_payee" aria-describedby="so-editor-pdc_payeeError"><span class="invalid-feedback" id="so-editor-pdc_payeeError"></span></div>
+                                <div class="so-field"><label for="so-editor-pdc_check_number">Check Number <em>*</em></label><input class="form-control" id="so-editor-pdc_check_number" name="pdc_check_number" maxlength="80" autocomplete="off" data-errors="pdc_check_number" aria-describedby="so-editor-pdc_check_numberError"><span class="invalid-feedback" id="so-editor-pdc_check_numberError"></span></div>
+                                <div class="so-field"><label for="so-editor-pdc_check_date">Check Date <em>*</em></label><input class="form-control" type="date" id="so-editor-pdc_check_date" name="pdc_check_date" data-errors="pdc_check_date" aria-describedby="so-editor-pdc_check_dateError"><span class="invalid-feedback" id="so-editor-pdc_check_dateError"></span></div>
+                                <div class="so-field so-field-wide"><label for="so-editor-pdc-check-amount">Check Amount <em>*</em></label><div class="so-input-money"><span>₱</span><input class="form-control" type="number" id="so-editor-pdc-check-amount" min="0.01" step="0.01" placeholder="0.00" aria-describedby="so-editor-pdc-check-amount-hint"></div><small class="so-field-hint" id="so-editor-pdc-check-amount-hint">Matches the amount on the Payment Details tab.</small></div>
+                            </div>
                         </div>
-                        <div class="so-field">
-                            <label for="so-editor-receivable_date_of_payment">Payment date <em>*</em></label>
-                            <input type="date" class="form-control" id="so-editor-receivable_date_of_payment" name="receivable_date_of_payment" data-errors="receivable_date_of_payment" aria-describedby="so-editor-receivable_date_of_paymentError" value="{{ date('Y-m-d') }}" required>
-                            <span class="invalid-feedback" id="so-editor-receivable_date_of_paymentError"></span>
-                        </div>
-                        <div class="so-field">
-                            <label for="so-editor-receivable_time_of_payment">Payment time <span class="so-label-optional">Optional</span></label>
-                            <input type="time" class="form-control" id="so-editor-receivable_time_of_payment" name="receivable_time_of_payment" data-errors="receivable_time_of_payment" aria-describedby="so-editor-receivable_time_of_paymentError" value="{{ date('H:i') }}">
-                            <span class="invalid-feedback" id="so-editor-receivable_time_of_paymentError"></span>
-                        </div>
-                        <div class="so-field so-field-wide">
-                            <label for="so-editor-receivable_reference">Reference number <em>*</em></label>
-                            <input class="form-control" id="so-editor-receivable_reference" name="receivable_reference" data-errors="receivable_reference" aria-describedby="so-editor-receivable_referenceError" required placeholder="Receipt, bank, or transaction reference">
-                            <span class="invalid-feedback" id="so-editor-receivable_referenceError"></span>
-                        </div>
-                        <div class="so-field so-field-wide">
-                            <label for="so-editor-receivable_payment_remarks">Payment notes <span class="so-label-optional">Optional</span></label>
-                            <textarea class="form-control" id="so-editor-receivable_payment_remarks" name="receivable_payment_remarks" data-errors="receivable_payment_remarks" aria-describedby="so-editor-receivable_payment_remarksError" rows="2" placeholder="Additional payment details"></textarea>
-                            <span class="invalid-feedback" id="so-editor-receivable_payment_remarksError"></span>
+                        <div class="tab-pane fade" id="so-editor-payment-receipt-pane" role="tabpanel" aria-labelledby="so-editor-payment-receipt-tab">
+                            <div class="so-payment-upload"><div class="so-field"><label for="so-editor-payment_image_reference"><i class="bi bi-paperclip" aria-hidden="true"></i> Payment receipt <span class="so-label-optional">Optional</span></label><input class="form-control" type="file" id="so-editor-payment_image_reference" name="payment_image_reference" accept=".jpg,.jpeg,.png,.svg" data-payment-image data-errors="payment_image_reference" aria-describedby="so-editor-payment_image_referenceError"><span class="invalid-feedback" id="so-editor-payment_image_referenceError"></span><small class="so-field-hint">JPG, PNG, or SVG. Maximum 10 MB. An existing receipt is kept unless replaced.</small></div><div class="img-holder so-payment-preview" id="so-editor-image_payment_div" hidden></div></div>
                         </div>
                     </div>
-                    <div class="so-payment-upload">
-                        <div class="so-field">
-                            <label for="so-editor-payment_image_reference"><i class="bi bi-paperclip" aria-hidden="true"></i> Payment receipt <span class="so-label-optional">Optional</span></label>
-                            <input class="form-control" type="file" id="so-editor-payment_image_reference" name="payment_image_reference" accept=".jpg,.jpeg,.png,.svg" data-payment-image data-errors="payment_image_reference" aria-describedby="so-editor-payment_image_referenceError">
-                            <span class="invalid-feedback" id="so-editor-payment_image_referenceError"></span>
-                            <small class="so-field-hint">JPG, PNG, or SVG. Maximum 10 MB. An existing receipt is kept unless replaced.</small>
-                        </div>
-                        <div class="img-holder so-payment-preview" id="so-editor-image_payment_div" hidden></div>
-                    </div>
                 </div>
-                <div class="modal-footer">
-                    <span class="so-entry-saving" data-submit-status role="status" hidden><span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Saving payment…</span>
-                    <button type="button" class="so-btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="reset" class="so-btn-secondary">Reset changes</button>
-                    <button type="submit" class="so-btn-primary" id="so-editor-save-payment"><i class="bi bi-check2" aria-hidden="true"></i> Save payment</button>
-                </div>
+                <div class="modal-footer"><span class="so-entry-saving" data-submit-status role="status" hidden><span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Saving payment…</span><button type="button" class="so-btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="reset" class="so-btn-secondary">Reset changes</button><button type="submit" class="so-btn-primary" id="so-editor-save-payment"><i class="bi bi-check2" aria-hidden="true"></i> Save payment</button></div>
             </form>
         </div>
     </div>

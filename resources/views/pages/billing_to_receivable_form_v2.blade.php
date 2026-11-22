@@ -489,8 +489,18 @@
 	</datalist>		
 	
 	<!--Modal to Product-->
+	<style>
+		#AddPayment.billing-payment-form { display: grid; grid-template-columns: minmax(230px, .8fr) minmax(0, 1.6fr); gap: 0 22px; align-items: start; }
+		#AddPayment.billing-payment-form > .col-sm-12 { grid-column: 1; width: 100%; }
+		#AddPayment.billing-payment-form > .billing-payment-upload,
+		#AddPayment.billing-payment-form > .billing-payment-preview { grid-column: 2; }
+		#AddPayment .billing-payment-upload { grid-column: 2; grid-row: 1; align-self: start; padding: 16px; border: 1px dashed #d5e1cc; border-radius: 9px; background: #fafcf8; }
+		#AddPayment .billing-payment-preview { grid-column: 2; grid-row: 2; min-height: 190px; margin-top: 14px; padding: 12px; border: 1px solid #e4ebde; border-radius: 9px; }
+		#AddPayment .billing-payment-preview img { max-width: 100%; max-height: 300px; object-fit: contain; }
+		@media (max-width: 760px) { #AddPayment.billing-payment-form { grid-template-columns: 1fr; } #AddPayment.billing-payment-form > .col-sm-12, #AddPayment.billing-payment-form > .billing-payment-upload, #AddPayment.billing-payment-form > .billing-payment-preview { grid-column: 1; grid-row: auto; } }
+	</style>
 	<div class="modal fade" id="AddPaymentModal" tabindex="-1">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header modal-header_form">
                       <h5 class="modal-title">Payment</h5>
@@ -501,7 +511,7 @@
                     </div>
                     <div class="modal-body">
 					
-					  <form class="g-3 needs-validation" id="AddPayment" enctype="multipart/form-data" action="{{route('billing_receivable_payment_post')}}"  method="post" >
+					  <form class="g-3 needs-validation billing-payment-form" id="AddPayment" enctype="multipart/form-data" action="{{route('billing_receivable_payment_post')}}"  method="post" >
 						@csrf
 						<div class="col-sm-12">
 						
@@ -525,6 +535,12 @@
 							</select>
 							<label for="receivable_mode_of_payment">Mode of Payment</label>
 						</div>
+						</div>
+						<div class="row g-3 mb-3" id="billing-pdc-cleared-fields" hidden>
+							<div class="col-md-6"><label class="form-label" for="pdc_drawee_bank">Drawee Bank</label><input class="form-control" id="pdc_drawee_bank" name="pdc_drawee_bank" maxlength="150" autocomplete="off"></div>
+							<div class="col-md-6"><label class="form-label" for="pdc_payee">Payee</label><input class="form-control" id="pdc_payee" name="pdc_payee" maxlength="150" autocomplete="off"></div>
+							<div class="col-md-6"><label class="form-label" for="pdc_check_number">Check Number</label><input class="form-control" id="pdc_check_number" name="pdc_check_number" maxlength="80" autocomplete="off"></div>
+							<div class="col-md-6"><label class="form-label" for="pdc_check_date">Check Date</label><input class="form-control" type="date" id="pdc_check_date" name="pdc_check_date"></div>
 						</div>
 						
 						
@@ -578,7 +594,7 @@
 							 
 						</div>
 						
-						<div class="row mb-3">
+						<div class="row mb-3 billing-payment-upload">
 							<div class="col-sm-12">
 							<label for="payment_image_reference" class="form-label">Upload</label>
 							<input class="form-control" type="file" id="payment_image_reference" name="payment_image_reference">
@@ -589,7 +605,7 @@
 						 <input type="hidden" id="receivable_payment_id" name="receivable_payment_id" value="">		
 						</div>
 						
-						<div class="row mb-3">
+						<div class="row mb-3 billing-payment-preview">
 							<div class="col-sm-12">
 								<div class="img-holder" align="center" id="image_payment_div"></div>
 							</div>
