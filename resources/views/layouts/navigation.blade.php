@@ -8,6 +8,7 @@
         'salesorder' => ['salesorder', 'sales_order_form'],
         'purchaseorder' => ['purchaseorder', 'purchase_order_form', 'purchase_order_forms'],
         'cashierReport' => ['cashierReport', 'cashiers_report_form', 'cashiers_report_form_fuel'],
+        'cash_deposits' => ['cash_deposits.index'],
         'cashierReportLPG' => ['cashierReportLPG', 'cashiers_report_form_lpg'],
         'lpgSettings' => ['lpg.settings.index', 'lpg.settings.update'],
         'lpgStartingAudits' => ['lpg.starting-audits.index', 'lpg.starting-audits.show'],
@@ -226,8 +227,14 @@
         </a>
       </li>
 		<?php } ?>
+		@if(in_array($data->user_type ?? null, \App\Services\CashDepositAccess::ROLES, true))
+        <li class="nav-item">
+            <a class="nav-link navbar_bg {{ $workspaceNavClass('cash_deposits') }}" href="{{ route('cash_deposits.index') }}" title="Cash Deposits" @if($workspaceNavActive('cash_deposits')) aria-current="page" @endif>
+                <i class="bi bi-bank navbar_icon" aria-hidden="true"></i><span>Cash Deposits</span>
+            </a>
+        </li>
+        @endif
 		
-
 
 	  <li class="fuel-nav-section" role="presentation">REPORTS</li>
 	  <li class="nav-item">

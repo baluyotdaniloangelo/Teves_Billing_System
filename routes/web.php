@@ -20,7 +20,7 @@ use App\Http\Controllers\CashiersReportController;
 use App\Http\Controllers\CashiersReport_Dipstick_Inventory_Controller;
 use App\Http\Controllers\CashiersReportDipstickInventoryController;
 use App\Http\Controllers\CashiersReport_Payment_Controller;
-use App\Http\Controllers\CashiersReport_CashDeposit_Controller;
+use App\Http\Controllers\CashDepositPageController;
 use App\Http\Controllers\UserBranchAccessController;
 use App\Http\Controllers\SalesSummaryController;
 use App\Http\Controllers\EmailController;
@@ -365,6 +365,13 @@ Route::get('user_product_access', [UserProductAccessController::class, 'user_pro
 /*Add Product Access*/
 Route::post('/add_user_product_access_post', [UserProductAccessController::class,'add_user_product_access_post'])->name('add_user_product_access_post')->middleware('isLoggedIn');
 
+/*Standalone Cash Deposits*/
+Route::get('/cash-deposits', [CashDepositPageController::class, 'index'])->name('cash_deposits.index')->middleware('isLoggedIn');
+Route::get('/cash-deposits/{depositId}/photo', [CashDepositPageController::class, 'photo'])->name('cash_deposits.photo')->middleware('isLoggedIn');
+Route::post('/cash-deposits', [CashDepositPageController::class, 'store'])->name('cash_deposits.store')->middleware('isLoggedIn');
+Route::put('/cash-deposits/{depositId}', [CashDepositPageController::class, 'update'])->name('cash_deposits.update')->middleware('isLoggedIn');
+Route::delete('/cash-deposits/{depositId}', [CashDepositPageController::class, 'destroy'])->name('cash_deposits.destroy')->middleware('isLoggedIn');
+
 /*Receivables*/
 /*December 17, 2022*/
 /*Load Create Receivable Interface June 18, 2023*/
@@ -675,14 +682,6 @@ Route::post('/cashiers-report/non-cash-payments/list', [CashiersReport_Payment_C
 Route::post('/cashiers-report/non-cash-payments/info', [CashiersReport_Payment_Controller::class, 'getNonCashPaymentInfo'])->name('cashiers_report_non_cash_payment.info')->middleware('isLoggedIn');
 Route::post('/cashiers-report/non-cash-payments/save', [CashiersReport_Payment_Controller::class, 'saveNonCashPayment'])->name('cashiers_report_non_cash_payment.save')->middleware('isLoggedIn');
 Route::post('/cashiers-report/non-cash-payments/delete', [CashiersReport_Payment_Controller::class, 'deleteNonCashPayment'])->name('cashiers_report_non_cash_payment.delete')->middleware('isLoggedIn');
-
-/*Cashiers Report Part - Cash Deposit*/
-Route::post('/save_cash_deposit_cashiers_report_p9', [CashiersReport_CashDeposit_Controller::class,'save_cash_deposit_cashiers_report_p9'])->name('SAVE_CHR_PH9')->middleware('isLoggedIn');
-Route::post('/get_cash_deposit_list', [CashiersReport_CashDeposit_Controller::class,'get_cash_deposit_list'])->name('GetCashiersP9')->middleware('isLoggedIn');
-Route::post('/delete_cash_deposit_report', [CashiersReport_CashDeposit_Controller::class,'delete_cash_deposit_report'])->name('DeleteCashDeposit')->middleware('isLoggedIn');
-Route::post('/cashiers_report_p9_info', [CashiersReport_CashDeposit_Controller::class, 'cashiers_report_p9_info'])->name('CRP9_info')->middleware('isLoggedIn');
-
-
 
 /*
 Dev Date August 23, 2026
