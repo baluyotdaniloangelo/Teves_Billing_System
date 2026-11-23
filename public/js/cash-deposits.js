@@ -52,6 +52,7 @@
             currentId = data.id;
             form.reset();
             clearErrors();
+            form.elements.branch_idx.value = data.branchId;
             form.elements.bank_idx.value = data.bankId;
             form.elements.cash_deposit_date.value = data.date;
             form.elements.cash_deposit_amount.value = data.amount;
@@ -66,6 +67,7 @@
     document.querySelectorAll('.cd-view').forEach(function (button) {
         button.addEventListener('click', function () {
             var data = button.dataset;
+            setText('branch', data.branch);
             setText('bank', data.bank);
             setText('date', data.date);
             setText('reference', data.reference);

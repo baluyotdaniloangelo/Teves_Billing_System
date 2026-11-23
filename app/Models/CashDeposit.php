@@ -15,7 +15,7 @@ class CashDeposit extends Model
     protected $primaryKey = 'cash_deposit_id';
 
     protected $fillable = [
-        'bank_idx', 'cash_deposit_bank', 'cash_deposit_date', 'cash_deposit_amount',
+        'bank_idx', 'branch_idx', 'cash_deposit_bank', 'cash_deposit_date', 'cash_deposit_amount',
         'cash_deposit_reference', 'cash_deposit_remarks', 'cash_deposit_photo',
         'created_by_user_id', 'updated_by_user_id', 'deleted_by_user_id',
     ];
@@ -24,7 +24,7 @@ class CashDeposit extends Model
     protected static $logName = 'Cash Deposits';
     protected static $logOnlyDirty = true;
     protected static $logAttributes = [
-        'bank_idx', 'cash_deposit_bank', 'cash_deposit_date', 'cash_deposit_amount',
+        'bank_idx', 'branch_idx', 'cash_deposit_bank', 'cash_deposit_date', 'cash_deposit_amount',
         'cash_deposit_reference', 'cash_deposit_remarks', 'cash_deposit_photo',
         'created_by_user_id', 'updated_by_user_id', 'deleted_by_user_id',
     ];

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 ini_set('memory_limit', '1000M');
 
 use Illuminate\Http\Request;
+use App\Services\CashDepositVarianceReport;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\ProductModel;
 use App\Models\TevesBranchModel;
@@ -39,7 +41,7 @@ class CashReportController extends Controller
 {
 	
 	/*Load Report Interface*/
-	public function cash_report_page(){
+	public function cash_report_page(Request $request, CashDepositVarianceReport $varianceReport){
 		
 		if(Session::has('loginID')){
 			
@@ -75,7 +77,34 @@ class CashReportController extends Controller
 				
 			}
 
-			return view("pages.non-cash_report", compact('data','title','teves_branch'));
+			$cashDepositCanView = in_array($data->user_type, ['SUAdmin', 'Admin', 'Accounting_Staff'], true);
+			$cashDepositActive = $request->query('tab') === 'cash-deposits';
+			$cashDepositReport = null;
+			$cashDepositPeriod = [
+				'start_date' => now()->startOfMonth()->toDateString(),
+				'end_date' => now()->toDateString(),
+				'branch' => 'All',
+			];
+
+			if ($cashDepositActive) {
+				abort_unless($cashDepositCanView, 403);
+				$cashDepositPeriod = $request->validate([
+					'start_date' => ['required', 'date_format:Y-m-d'],
+					'end_date' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_date'],
+					'branch' => ['required', Rule::in(array_merge(['All'], $teves_branch->pluck('branch_id')->map(function ($id) { return (string) $id; })->all()))],
+				]);
+				$selectedBranches = $cashDepositPeriod['branch'] === 'All'
+					? $teves_branch
+					: $teves_branch->where('branch_id', (int) $cashDepositPeriod['branch']);
+				$cashDepositReport = $varianceReport->build(
+					$selectedBranches,
+					$cashDepositPeriod['start_date'],
+					$cashDepositPeriod['end_date'],
+					$cashDepositPeriod['branch'] === 'All' && $data->user_branch_access_type === 'ALL'
+				);
+			}
+
+			return view("pages.non-cash_report", compact('data','title','teves_branch', 'cashDepositCanView', 'cashDepositActive', 'cashDepositReport', 'cashDepositPeriod'));
 		
 		}
 	}  	

@@ -1,4 +1,8 @@
 @extends('layouts.layout')  
+@section('body_class', 'cash-report-shell')
+@push('page_styles')
+<link href="{{ asset('style/cash-deposit-report.css') }}?v={{ filemtime(public_path('style/cash-deposit-report.css')) }}" rel="stylesheet">
+@endpush
 @section('content')  
 
 <main id="main" class="main">	
@@ -9,17 +13,22 @@
     <!-- Tabs -->
     <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
         <li class="nav-item">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#noncash">Non-Cash Report</button>
+            <button class="nav-link {{ $cashDepositActive ? '' : 'active' }}" data-bs-toggle="tab" data-bs-target="#noncash">Non-Cash Report</button>
         </li>
         <li class="nav-item">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cashdrop">Cash Drop</button>
         </li>
+        @if($cashDepositCanView)
+        <li class="nav-item">
+            <button class="nav-link {{ $cashDepositActive ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#cashdeposits" aria-controls="cashdeposits" aria-selected="{{ $cashDepositActive ? 'true' : 'false' }}">Cash Deposits</button>
+        </li>
+        @endif
     </ul>
 
     <div class="tab-content pt-3">
 
         <!-- ================= NON CASH ================= -->
-        <div class="tab-pane fade show active" id="noncash">
+        <div class="tab-pane fade {{ $cashDepositActive ? '' : 'show active' }}" id="noncash">
 
             <div class="card">
 			
@@ -153,6 +162,12 @@
             </div>
 
         </div>
+
+        @if($cashDepositCanView)
+        <div class="tab-pane fade {{ $cashDepositActive ? 'show active' : '' }}" id="cashdeposits">
+            @include('pages.cash_deposit_report')
+        </div>
+        @endif
 
     </div>
 </div>

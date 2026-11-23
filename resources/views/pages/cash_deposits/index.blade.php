@@ -35,7 +35,7 @@
         </div>
         <div class="cd-table-scroll">
             <table class="table cd-table">
-                <thead><tr><th>Deposit date</th><th>Bank</th><th>Reference</th><th class="text-end">Amount</th><th>Deposited by</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>Deposit date</th><th>Site branch</th><th>Bank</th><th>Reference</th><th class="text-end">Amount</th><th>Deposited by</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
                     @forelse($deposits as $deposit)
                         @php
@@ -44,6 +44,7 @@
                         @endphp
                         <tr>
                             <td>{{ $deposit->cash_deposit_date ? \Carbon\Carbon::parse($deposit->cash_deposit_date)->format('M d, Y') : '—' }}</td>
+                            <td>{{ $deposit->site_branch_code ?? 'Unassigned' }}</td>
                             <td><strong>{{ $deposit->bank_name ?? $deposit->cash_deposit_bank ?? 'Bank unavailable' }}</strong><small>{{ $deposit->bank_account_number }}</small></td>
                             <td>{{ $deposit->cash_deposit_reference }}</td>
                             <td class="text-end cd-amount">₱{{ number_format((float) $deposit->cash_deposit_amount, 2) }}</td>
@@ -52,7 +53,7 @@
                             <td>
                                 <div class="cd-row-actions">
                                     <button type="button" class="btn cd-icon cd-view" title="View" aria-label="View deposit"
-                                        data-id="{{ $deposit->cash_deposit_id }}" data-bank-id="{{ $deposit->bank_idx }}"
+                                        data-id="{{ $deposit->cash_deposit_id }}" data-branch-id="{{ $deposit->branch_idx }}" data-branch="{{ $deposit->site_branch_code ?? 'Unassigned' }}" data-bank-id="{{ $deposit->bank_idx }}"
                                         data-bank="{{ $deposit->bank_name ?? $deposit->cash_deposit_bank }}" data-date="{{ $deposit->cash_deposit_date ? \Carbon\Carbon::parse($deposit->cash_deposit_date)->format('Y-m-d') : '' }}"
                                         data-reference="{{ $deposit->cash_deposit_reference }}" data-amount="{{ $deposit->cash_deposit_amount }}"
                                         data-remarks="{{ $deposit->cash_deposit_remarks }}" data-photo="{{ $photoUrl }}" data-encoder="{{ $deposit->encoder_name }}">
@@ -66,7 +67,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="cd-empty">No cash deposits found.</td></tr>
+                        <tr><td colspan="8" class="cd-empty">No cash deposits found.</td></tr>
                     @endforelse
                 </tbody>
             </table>
